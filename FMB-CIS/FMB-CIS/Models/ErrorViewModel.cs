@@ -1,4 +1,4 @@
-namespace FMBCIS.Models
+namespace FMB_CIS.Models
 {
     public class ErrorViewModel
     {

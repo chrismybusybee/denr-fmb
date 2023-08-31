@@ -1,8 +1,8 @@
-﻿using FMBCIS.Models;
+﻿using FMB_CIS.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace FMBCIS.Controllers
+namespace FMB_CIS.Controllers
 {
     public class HomeController : Controller
     {
