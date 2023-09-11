@@ -91,6 +91,11 @@ button {
     height: 15px;
     width: 15px;
 }
+
+.backBtn:hover {
+    color: green !important;
+    transition: all 0.15s ease-in-out;
+}
 /* CUSTOM CSS END */
 
 /* BOOTSTRAP OVERRIDE */
@@ -119,7 +124,7 @@ button {
     border-color: #14984a;
 }
 
-.form-check-input:focus {
+.form-check-input:focus, .form-select:focus {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #14984a;
     border-color: #14984a;
 }
