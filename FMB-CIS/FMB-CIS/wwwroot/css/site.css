@@ -106,7 +106,6 @@ button {
 
 .form-label, a, .form-check-label, p {
     color: #5c5c5c;
-    font-size: small;
 }
 
 .form-control:focus {
