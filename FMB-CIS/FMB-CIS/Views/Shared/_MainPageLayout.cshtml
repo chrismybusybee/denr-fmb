@@ -1,0 +1,196 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FMB-CIS @ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/FMB_CIS.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/main-page-layout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.css">
+</head>
+<body>
+    <div id="header">
+        <div id="header-top-container">
+            <div class="row h-100 d-flex align-items-center ps-2 ms-2 pe-1 me-3">
+                <div class="col-md-1">
+                    <span id="toggle-btn" class="cursor-pointer" title="toggle menu"><i data-feather="align-justify"></i></span>
+                </div>
+                <div class="col-md-11 d-flex justify-content-end d-flex align-items-center gap-2">
+                    <span class="fw-bold">MICHAEL GREG RABANO</span>
+                    <span>(Information System Analyst III)</span>
+                    <span><img src="/assets/images/default-avatar.png" class="border rounded-circle bg-white" height="40" width="40" /></span>
+                </div>
+            </div>
+        </div>
+        <div id="header-bottom-container">
+            <div class="ps-4 ms-1 py-2">
+                <h4>@ViewBag.Title</h4>
+                <div class="small fw-bold d-flex gap-3">
+                    <span>Main</span> 
+                    <span class="d-flex gap-3">
+                        <span>&rsaquo;</span>
+                        <span>@ViewBag.Title</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="side-bar">
+        <div class="side-bar-container">
+            <div class="side-bar-header w-100 p-2">
+                <div class="row">
+                    <div class="col-md-6 pe-0 text-center">
+                        <img src="~/assets/images/logo-only.png" />
+                    </div>
+                    <div class="col-md-6 lh-1 small fw-bold text-secondary pt-1 ps-0">
+                        CHAINSAW INFORMATION SYSTEM (CIS)
+                    </div>
+                    <div id="menu-items">
+                        <ul class="list-unstyled text-secondary fw-bold">
+                            <li id="dashboardMenuItem">
+                                <a href="@Url.Action("Index", "Dashboard")" class="d-flex gap-2 text-decoration-none fs-6">
+                                    <div>
+                                        <img src="~/assets/images/menu-icons/dashboard.png" />
+                                    </div>
+                                    <span>Dashboard</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="d-flex gap-2 text-decoration-none fs-6">
+                                    <div>
+                                        <img src="~/assets/images/menu-icons/application.png" />
+                                    </div>
+                                    <span>Application</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "ChainsawImporter")" class="d-flex gap-2 text-decoration-none fs-6">
+                                    <div>
+                                        <img src="~/assets/images/menu-icons/chainsaw-importer.png" />
+                                    </div>
+                                    <span>Chainsaw Importer</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "NewChainsawRegistration")" class="d-flex gap-2 text-decoration-none fs-6">
+                                    <div>
+                                        <img src="~/assets/images/menu-icons/new-chainsaw-registration.png" />
+                                    </div>
+                                    <span>New Chainsaw Registration</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "Renewal")" class="d-flex gap-2 text-decoration-none fs-6">
+                                    <div>
+                                        <img src="~/assets/images/menu-icons/renewal.png" />
+                                    </div>
+                                    <span>Renewal</span>
+                                </a>
+                            </li>
+                            <li id="profileManagementMenuItem">
+                                <a href="@Url.Action("Index", "ProfileManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                    <div>
+                                        <img src="~/assets/images/menu-icons/profile-management.png" />
+                                    </div>
+                                    <span>Profile Management</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "AccountManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                    <div>
+                                        <img src="~/assets/images/menu-icons/account-management.png" />
+                                    </div>
+                                    <span>Account Management</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "Monitoring")" class="d-flex gap-2 text-decoration-none fs-6">
+                                    <div>
+                                        <img src="~/assets/images/menu-icons/monitoring.png" />
+                                    </div>
+                                    <span>Monitoring</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "CreationNewOffice")" class="d-flex gap-2 text-decoration-none fs-6">
+                                    <div>
+                                        <img src="~/assets/images/menu-icons/creation-of-new-denr-office.png" />
+                                    </div>
+                                    <span>Creation of New DENR Office</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "AnnoucementTemplate")" class="d-flex gap-2 text-decoration-none fs-6">
+                                    <div>
+                                        <img src="~/assets/images/menu-icons/announcement-templates.png" />
+                                    </div>
+                                    <span>Announcement Templates</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "EmailTemplate")" class="d-flex gap-2 text-decoration-none fs-6">
+                                    <div>
+                                        <img src="~/assets/images/menu-icons/email-templates.png" />
+                                    </div>
+                                    <span>Email Templates</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <main id="main">
+        @RenderBody()
+    </main>
+    <footer>
+        © 2023 DENR-FMB CIS. All rights reserved.
+    </footer>
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        feather.replace();
+
+        function setActiveMenuItem(menuItemId) {
+            const menuItems = document.querySelectorAll('#menu-items ul li');
+            menuItems.forEach((item) => {
+                item.classList.remove('active-menu-item');
+            });
+
+            document.getElementById(menuItemId).classList.add('active-menu-item');
+        }
+
+        const currentPage = window.location.pathname;
+
+        const pageToMenuItemMap = {
+            "/Dashboard": "dashboardMenuItem",
+            "/ProfileManagement": "profileManagementMenuItem",
+        };
+
+        if (pageToMenuItemMap[currentPage]) {
+            setActiveMenuItem(pageToMenuItemMap[currentPage]);
+        }
+
+        const activeMenuItemId = document.querySelector('.active-menu-item').id;
+        localStorage.setItem('activeMenuItem', activeMenuItemId);
+
+        const storedActiveMenuItem = localStorage.getItem('activeMenuItem');
+        if (storedActiveMenuItem) {
+            setActiveMenuItem(storedActiveMenuItem);
+        }
+
+    });
+</script>

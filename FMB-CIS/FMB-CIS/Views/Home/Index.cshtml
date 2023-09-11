@@ -19,7 +19,7 @@
                         <i data-feather="eye" class="data-feather" ></i>
                     </span>
                 </div>
-                <div class="d-flex justify-content-between w-100 mb-5">
+                <div class="d-flex justify-content-between w-100 mb-5 small">
                     <div>
                         @Html.ActionLink("Forgot Password?", "ForgotPassword", "Account")
                     </div>
@@ -30,7 +30,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-primary w-100 mb-4">Login</button>
+                <button class="btn btn-primary w-100 mb-4" onclick="window.location.href = '@Url.Action("Index", "Dashboard")'">Login</button>
                 <button class="btn btn-secondary w-100">Register</button>
             </div>
         </div>
