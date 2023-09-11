@@ -10,6 +10,11 @@ namespace FMB_CIS.Controllers
             return View();
         }
 
+        public IActionResult EmailConfirmation()
+        {
+            return View();
+        }
+
         public IActionResult ForgotPassword()
         {
             return View();
