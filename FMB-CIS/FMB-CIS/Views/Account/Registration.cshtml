@@ -1,0 +1,179 @@
+﻿@{
+    ViewBag.Title = "Registration";
+}
+
+<div class="container-fluid d-flex flex-column align-items-center justify-content-center">
+    <div class="col-md-12 p-md-2 text-start">
+        <img src="~/assets/images/logo.png" height="100"  />
+    </div>
+    <hr class="hr" />
+    <div class="col-md-12 d-flex flex-column my-auto px-md-4">
+        <a href="@Url.Action("Index", "Home")" class="me-auto my-4" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
+        <h2 class="text-secondary mb-4">Personal Information</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group mb-2">
+                    <label class="form-label small">User Type</label>
+                    <select class="form-select" aria-label="User Type">
+                        <option selected>- Select User Type -</option>
+                        <option value="1">User Type 1</option>
+                        <option value="2">User Type 2</option>
+                        <option value="3">User Type 3</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <hr class="my-4" />
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label small">First Name</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label small">Middle Name</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label small">Last Name</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="form-label small">Suffix</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label class="form-label small">Email (Please use official email address)</label>
+                    <input type="email" class="form-control" placeholder="name@address.com">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="form-label small">Contact Number (11 Digits)</label>
+                    <input type="text" class="form-control" placeholder="09XX XXX XXXX">
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="form-label small">Birth Date (Must be 18 years old and above)</label>
+                    <input type="date" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="form-label small">Valid ID</label>
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="form-label small">Valid ID Number</label>
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label small">Address Line 1</label>
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label small">Address Line 2</label>
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="form-label small">Barangay</label>
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="form-label small">City/Municipality</label>
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="form-label small">Province</label>
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label small">Attached Form</label>
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label small text-white">Attached Form</label>
+                    <input type="file" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-md-4 d-flex flex-column">
+                <small class="text-secondary mb-4">
+                    By submitting this form, you agree to our <a href="#" target="_blank">Terms and Conditions</a> & <a href="#" target="_blank">Privacy Policy</a>
+                </small>
+                <button id="submitBtn" class="btn btn-primary w-75 mw-75">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="~/Views/Modals/RegistrationModal.cshtml" />
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        feather.replace();
+
+        $("#submitBtn").click(function () {
+            $("#confirmSubmitModal").modal("show");
+        });
+
+        $("#backBtn").click(function () {
+            $("#confirmSubmitModal").modal("hide");
+        });
+
+        $("#confirmBtn").click(function () {
+            $("#confirmSubmitModal").modal("hide");
+            $("#confirmSuccessModal").modal("show");
+        });
+    });
+</script>

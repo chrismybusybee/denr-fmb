@@ -5,6 +5,16 @@ namespace FMB_CIS.Controllers
 {
     public class AccountController : Controller
     {
+        public IActionResult Registration()
+        {
+            return View();
+        }
+
+        public IActionResult EmailConfirmation()
+        {
+            return View();
+        }
+
         public IActionResult ForgotPassword()
         {
             return View();
