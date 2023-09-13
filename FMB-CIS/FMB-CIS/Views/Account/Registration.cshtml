@@ -1,4 +1,5 @@
-﻿@{
+﻿@model FMB_CIS.Models.UserRegistrationViewModel
+@{
     ViewBag.Title = "Registration";
 }
 
@@ -24,134 +25,172 @@
             </div>
         </div>
         <hr class="my-4" />
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-10">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="form-label small">First Name</label>
-                                    <input type="text" class="form-control">
+        <form asp-action="Registration">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="first_name" class="form-label small">First Name</label>
+                                        <input asp-for="first_name" class="form-control" />
+                                        <span asp-validation-for="first_name" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="middle_name" class="form-label small">Middle Name</label>
+                                        <input asp-for="middle_name" class="form-control" />
+                                        <span asp-validation-for="middle_name" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="last_name" class="form-label small">Last Name</label>
+                                        <input asp-for="last_name" class="form-control" />
+                                        <span asp-validation-for="last_name" class="text-danger"></span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="form-label small">Middle Name</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="form-label small">Last Name</label>
-                                    <input type="text" class="form-control">
+                        </div>
+                        <div class="col-md-2">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="suffix" class="form-label small">Suffix</label>
+                                        <input asp-for="suffix" class="form-control" />
+                                        <span asp-validation-for="suffix" class="text-danger"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="form-label small">Suffix</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-                        </div>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="email" class="form-label small">Email (Please use official email address)</label>
+                        <input asp-for="email" class="form-control" placeholder="name@address.com" />
+                        <span asp-validation-for="email" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="password" class="form-label small">Password</label>
+                        <input asp-for="password" class="form-control" placeholder="Password" />
+                        <span asp-validation-for="password" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="contact_no" class="form-label small">Contact Number (11 Digits)</label>
+                        <input asp-for="contact_no" class="form-control" placeholder="09XX XXX XXXX" />
+                        <span asp-validation-for="contact_no" class="text-danger"></span>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-8">
-                <div class="form-group">
-                    <label class="form-label small">Email (Please use official email address)</label>
-                    <input type="email" class="form-control" placeholder="name@address.com">
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="birth_date" class="form-label small">Birth Date (Must be 18 years old and above)</label>
+                        <input asp-for="birth_date" type="date" class="form-control" />
+                        <span asp-validation-for="birth_date" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="valid_id" class="form-label small">Valid ID</label>
+                        <input asp-for="valid_id" class="form-control" />
+                        <span asp-validation-for="valid_id" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="valid_id_no" class="form-label small">Valid ID Number</label>
+                        <input asp-for="valid_id_no" class="form-control" />
+                        <span asp-validation-for="valid_id_no" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label class="form-label small">Contact Number (11 Digits)</label>
-                    <input type="text" class="form-control" placeholder="09XX XXX XXXX">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="street_address" class="form-label small">(TEMP street_address) Address Line 1</label>
+                        <input asp-for="street_address" class="form-control" />
+                        <span asp-validation-for="street_address" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="tbl_division_id" class="form-label small">DIVISION ID</label>
+                        <input asp-for="tbl_division_id" class="form-control" />
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label class="form-label small">Birth Date (Must be 18 years old and above)</label>
-                    <input type="date" class="form-control">
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="tbl_region_id" class="form-label small">Region (ID)</label>
+                        <input asp-for="tbl_province_id" class="form-control" />
+                        @* <select asp-for="tbl_region_id" class="form-control">
+                            <option Selected>--Select Region--</option>
+                        </select> *@
+                        <span asp-validation-for="tbl_region_id" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="tbl_province_id" class="form-label small">Province</label>
+                        <input asp-for="tbl_province_id" class="form-control" />
+                        <span asp-validation-for="tbl_province_id" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="tbl_city_id" class="form-label small">City/Municipality</label>
+                        <input asp-for="tbl_city_id" class="form-control" />
+                        <span asp-validation-for="tbl_city_id" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="tbl_brgy_id" class="form-label small">Barangay(ID)</label>
+                        <input asp-for="tbl_brgy_id" class="form-control" />
+                        <span asp-validation-for="tbl_brgy_id" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label class="form-label small">Valid ID</label>
-                    <input type="text" class="form-control">
+            <div class="row mb-5">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="comment" class="form-label small">Attached Form</label>
+                        <input asp-for="comment" class="form-control" />
+                        <span asp-validation-for="comment" class="text-danger"></span>
+                    </div>
+                </div>
+                @* <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label small text-white">Attached Form</label>
+                        <input type="file" class="form-control" />
+                    </div>
+                </div> *@
+            </div>
+            <div class="row mb-5">
+                <div class="col-md-4 d-flex flex-column">
+                    <small class="text-secondary mb-4">
+                        By submitting this form, you agree to our <a href="#" target="_blank">Terms and Conditions</a> & <a href="#" target="_blank">Privacy Policy</a>
+                    </small>
+                    @* <button id="submitBtn" value="Submit" class="btn btn-primary w-75 mw-75">Submit</button> *@
+                
+                    <div class="form-group">
+                        <input type="submit" value="Submit" class="btn btn-primary w-75 mw-75" />
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label class="form-label small">Valid ID Number</label>
-                    <input type="text" class="form-control">
-                </div>
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="form-label small">Address Line 1</label>
-                    <input type="text" class="form-control">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="form-label small">Address Line 2</label>
-                    <input type="text" class="form-control">
-                </div>
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label class="form-label small">Barangay</label>
-                    <input type="text" class="form-control">
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label class="form-label small">City/Municipality</label>
-                    <input type="text" class="form-control">
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label class="form-label small">Province</label>
-                    <input type="text" class="form-control">
-                </div>
-            </div>
-        </div>
-        <div class="row mb-5">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="form-label small">Attached Form</label>
-                    <input type="text" class="form-control">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="form-label small text-white">Attached Form</label>
-                    <input type="file" class="form-control">
-                </div>
-            </div>
-        </div>
-        <div class="row mb-5">
-            <div class="col-md-4 d-flex flex-column">
-                <small class="text-secondary mb-4">
-                    By submitting this form, you agree to our <a href="#" target="_blank">Terms and Conditions</a> & <a href="#" target="_blank">Privacy Policy</a>
-                </small>
-                <button id="submitBtn" class="btn btn-primary w-75 mw-75">Submit</button>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 
