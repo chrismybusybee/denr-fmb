@@ -11,21 +11,26 @@
     <div class="col-md-12 d-flex flex-column my-auto px-md-4">
         <a href="@Url.Action("Index", "Home")" class="me-auto my-4" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
         <h2 class="text-secondary mb-4">Personal Information</h2>
+        <form asp-action="Registration">
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group mb-2">
                     <label class="form-label small">User Type</label>
-                    <select class="form-select" aria-label="User Type">
+                        <select asp-for="tbl_user_types_id" class="form-select" aria-label="User Type">
                         <option selected>- Select User Type -</option>
-                        <option value="1">User Type 1</option>
-                        <option value="2">User Type 2</option>
-                        <option value="3">User Type 3</option>
+                        <option value="1">Chainsaw Importer Only</option>
+                        <option value="2">Chainsaw Seller Only</option>
+                        <option value="3">Chainsaw Owner Only</option>
+                        <option value="4">Chainsaw Importer and Seller</option>
+                        <option value="5">Chainsaw Importer and Owner</option>
+                        <option value="6">Chainsaw Seller and Owner</option>
+                        <option value="7">Chainsaw Importer, Owner, and Seller</option>
                     </select>
+                        <span asp-validation-for="tbl_user_types_id" class="text-danger"></span>
                 </div>
             </div>
         </div>
         <hr class="my-4" />
-        <form asp-action="Registration">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="row mb-4">
                 <div class="col-md-12">
@@ -70,21 +75,28 @@
                 </div>
             </div>
             <div class="row mb-4">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label asp-for="email" class="form-label small">Email (Please use official email address)</label>
                         <input asp-for="email" class="form-control" placeholder="name@address.com" />
                         <span asp-validation-for="email" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label asp-for="password" class="form-label small">Password</label>
                         <input asp-for="password" class="form-control" placeholder="Password" />
                         <span asp-validation-for="password" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="confirmPassword" class="form-label small">Confirm Password</label>
+                        <input asp-for="confirmPassword" class="form-control" placeholder="Confirm Password" />
+                        <span asp-validation-for="confirmPassword" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-3">
                     <div class="form-group">
                         <label asp-for="contact_no" class="form-label small">Contact Number (11 Digits)</label>
                         <input asp-for="contact_no" class="form-control" placeholder="09XX XXX XXXX" />
@@ -184,9 +196,8 @@
                         By submitting this form, you agree to our <a href="#" target="_blank">Terms and Conditions</a> & <a href="#" target="_blank">Privacy Policy</a>
                     </small>
                     @* <button id="submitBtn" value="Submit" class="btn btn-primary w-75 mw-75">Submit</button> *@
-                
                     <div class="form-group">
-                        <input type="submit" value="Submit" class="btn btn-primary w-75 mw-75" />
+                        <input type="button" id="submitBtn" value="Submit" class="btn btn-primary w-75 mw-75" />
                     </div>
                 </div>
             </div>

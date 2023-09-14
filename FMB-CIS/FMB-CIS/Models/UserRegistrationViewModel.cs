@@ -8,7 +8,6 @@ namespace FMB_CIS.Models
         public string first_name { get; set; }
         public string middle_name { get; set; }
         public string last_name { get; set; }
-        //[Required(AllowEmptyStrings = true)]
         public string? suffix { get; set; }
         public string contact_no { get; set; }
         public string valid_id { get; set; }
@@ -25,9 +24,13 @@ namespace FMB_CIS.Models
         [DataType(DataType.Password)]
         //[Required]
         public string password { get; set; }
+        [DataType(DataType.Password)]
+        public string confirmPassword { get; set; }
         //public string status { get; set; }
         //public string photo { get; set; }
         public string comment { get; set; }
+        [Required]
+        public string tbl_user_types_id { get; set; }
         //public DateTime date_created { get; set; }
 
         //public DateTime date_modified { get; set; }

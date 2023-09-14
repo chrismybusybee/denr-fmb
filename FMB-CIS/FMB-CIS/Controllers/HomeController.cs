@@ -9,6 +9,7 @@ using FMB_CIS.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FMB_CIS.Controllers
 {
@@ -83,7 +84,9 @@ namespace FMB_CIS.Controllers
                         var claims = new List<Claim>
                         {
                             new Claim(ClaimTypes.Name, credentials.email),
-                            new Claim("FullName", dal.selectFirstNameFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng"))),
+                            new Claim("FullName", dal.selectFullNameFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng"))),
+                            new Claim("userID", dal.selectUserIDFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng"))),
+                            new Claim("userRole", dal.selectUserRoleFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng"))),
                             //new Claim(ClaimTypes.Role, "Administrator"),
                         };
 
@@ -91,7 +94,7 @@ namespace FMB_CIS.Controllers
 
                         var authProperties = new AuthenticationProperties
                         {
-                            //AllowRefresh = <bool>,
+                            AllowRefresh = true,
                             // Refreshing the authentication session should be allowed.
 
                             ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
@@ -99,7 +102,7 @@ namespace FMB_CIS.Controllers
                             // value set here overrides the ExpireTimeSpan option of 
                             // CookieAuthenticationOptions set with AddCookie.
 
-                            //IsPersistent = true,
+                            IsPersistent = true,
                             // Whether the authentication session is persisted across 
                             // multiple requests. When used with cookies, controls
                             // whether the cookie's lifetime is absolute (matching the
@@ -140,6 +143,33 @@ namespace FMB_CIS.Controllers
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return RedirectToAction("Index");
+        }
+
+        [AllowAnonymous, HttpGet("forgot-password")]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [AllowAnonymous, HttpPost("forgot-password")]
+        public IActionResult ForgotPassword(ForgotPasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                //
+                ModelState.Clear();
+                model.emailSent = true;
+            }
+            return View();
+        }
+
+        public async Task GenerateForgotPasswordTokenAsync(ApplicationUser user)
+        {
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            if (!string.IsNullOrEmpty(token))
+            {
+                await SendEmailConfirmationEmaail
+            }
         }
     }
 }

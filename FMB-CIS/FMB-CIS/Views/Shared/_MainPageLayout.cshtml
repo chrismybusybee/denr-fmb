@@ -21,7 +21,7 @@
                 <div class="col-md-11 d-flex justify-content-end d-flex align-items-center gap-2">
                     <span class="fw-bold">@(((ClaimsIdentity)User.Identity).FindFirst("FullName").Value)</span>
                     
-                    <span>(Information System Analyst III)</span>
+                    <span>@(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value)</span>
                     <span><img src="/assets/images/default-avatar.png" class="border rounded-circle bg-white" height="40" width="40" /></span>
                 </div>
             </div>
