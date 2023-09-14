@@ -17,10 +17,32 @@
   <ItemGroup>
     <PackageReference Include="bootstrap" Version="5.3.1" />
     <PackageReference Include="jQuery" Version="3.7.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.11" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.10" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="wwwroot\assets\images\login-cover.png" />
+    <None Include="wwwroot\js\DataTable\DataTables-1.13.6\js\dataTables.bootstrap.js" />
+    <None Include="wwwroot\js\DataTable\DataTables-1.13.6\js\dataTables.bootstrap.min.js" />
+    <None Include="wwwroot\js\DataTable\DataTables-1.13.6\js\dataTables.bootstrap4.js" />
+    <None Include="wwwroot\js\DataTable\DataTables-1.13.6\js\dataTables.bootstrap4.min.js" />
+    <None Include="wwwroot\js\DataTable\DataTables-1.13.6\js\dataTables.bootstrap5.js" />
+    <None Include="wwwroot\js\DataTable\DataTables-1.13.6\js\dataTables.bootstrap5.min.js" />
+    <None Include="wwwroot\js\DataTable\DataTables-1.13.6\js\dataTables.bulma.js" />
+    <None Include="wwwroot\js\DataTable\DataTables-1.13.6\js\dataTables.bulma.min.js" />
+    <None Include="wwwroot\js\DataTable\DataTables-1.13.6\js\dataTables.dataTables.js" />
+    <None Include="wwwroot\js\DataTable\DataTables-1.13.6\js\dataTables.dataTables.min.js" />
+    <None Include="wwwroot\js\DataTable\DataTables-1.13.6\js\dataTables.foundation.js" />
+    <None Include="wwwroot\js\DataTable\DataTables-1.13.6\js\dataTables.foundation.min.js" />
+    <None Include="wwwroot\js\DataTable\DataTables-1.13.6\js\dataTables.jqueryui.js" />
+    <None Include="wwwroot\js\DataTable\DataTables-1.13.6\js\dataTables.jqueryui.min.js" />
+    <None Include="wwwroot\js\DataTable\DataTables-1.13.6\js\dataTables.semanticui.js" />
+    <None Include="wwwroot\js\DataTable\DataTables-1.13.6\js\dataTables.semanticui.min.js" />
+    <None Include="wwwroot\js\DataTable\DataTables-1.13.6\js\jquery.dataTables.js" />
+    <None Include="wwwroot\js\DataTable\DataTables-1.13.6\js\jquery.dataTables.min.js" />
   </ItemGroup>
 
 </Project>
