@@ -67,14 +67,123 @@
                                     <span>Application</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="@Url.Action("Index", "ChainsawImporter")" class="d-flex gap-2 text-decoration-none fs-6">
-                                    <div>
-                                        <img src="~/assets/images/menu-icons/chainsaw-importer.png" />
-                                    </div>
-                                    <span>Chainsaw Importer</span>
-                                </a>
-                            </li>
+                            @switch(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value)
+                            {
+                                case "Chainsaw Importer":
+                                <li>
+                                    <a href="@Url.Action("Index", "ChainsawImporter")" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/chainsaw-importer.png" />
+                                        </div>
+                                        <span>Chainsaw Importer</span>
+                                    </a>
+                                </li>
+                                    break;
+
+                                case "Chainsaw Seller":
+                                    <li>
+                                        <a href="@Url.Action("Index", "ChainsawSeller")" class="d-flex gap-2 text-decoration-none fs-6">
+                                            <div>
+                                                <img src="~/assets/images/menu-icons/chainsaw-importer.png" />
+                                            </div>
+                                            <span>Chainsaw Seller</span>
+                                        </a>
+                                    </li>
+                                    break;
+                                case "Chainsaw Owner":
+                                    <li>
+                                        <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
+                                            <div>
+                                                <img src="~/assets/images/menu-icons/chainsaw-importer.png" />
+                                            </div>
+                                            <span>Chainsaw Owner</span>
+                                        </a>
+                                    </li>
+                                    break;
+                                case "Chainsaw Importer and Seller":
+                                    <li>
+                                        <a href="@Url.Action("Index", "ChainsawImporter")" class="d-flex gap-2 text-decoration-none fs-6">
+                                            <div>
+                                                <img src="~/assets/images/menu-icons/chainsaw-importer.png" />
+                                            </div>
+                                            <span>Chainsaw Importer</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "ChainsawSeller")" class="d-flex gap-2 text-decoration-none fs-6">
+                                            <div>
+                                                <img src="~/assets/images/menu-icons/chainsaw-importer.png" />
+                                            </div>
+                                            <span>Chainsaw Seller</span>
+                                        </a>
+                                    </li>
+                                    break;
+                                case "Chainsaw Importer and Owner":
+                                    <li>
+                                        <a href="@Url.Action("Index", "ChainsawImporter")" class="d-flex gap-2 text-decoration-none fs-6">
+                                            <div>
+                                                <img src="~/assets/images/menu-icons/chainsaw-importer.png" />
+                                            </div>
+                                            <span>Chainsaw Importer</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
+                                            <div>
+                                                <img src="~/assets/images/menu-icons/chainsaw-importer.png" />
+                                            </div>
+                                            <span>Chainsaw Owner</span>
+                                        </a>
+                                    </li>
+                                    break;
+                                case "Chainsaw Seller and Owner":
+                                    <li>
+                                        <a href="@Url.Action("Index", "ChainsawSeller")" class="d-flex gap-2 text-decoration-none fs-6">
+                                            <div>
+                                                <img src="~/assets/images/menu-icons/chainsaw-importer.png" />
+                                            </div>
+                                            <span>Chainsaw Seller</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
+                                            <div>
+                                                <img src="~/assets/images/menu-icons/chainsaw-importer.png" />
+                                            </div>
+                                            <span>Chainsaw Owner</span>
+                                        </a>
+                                    </li>
+                                    break;
+                                case "Chainsaw Importer, Owner, and Seller":
+                                    <li>
+                                        <a href="@Url.Action("Index", "ChainsawImporter")" class="d-flex gap-2 text-decoration-none fs-6">
+                                            <div>
+                                                <img src="~/assets/images/menu-icons/chainsaw-importer.png" />
+                                            </div>
+                                            <span>Chainsaw Importer</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "ChainsawSeller")" class="d-flex gap-2 text-decoration-none fs-6">
+                                            <div>
+                                                <img src="~/assets/images/menu-icons/chainsaw-importer.png" />
+                                            </div>
+                                            <span>Chainsaw Seller</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
+                                            <div>
+                                                <img src="~/assets/images/menu-icons/chainsaw-importer.png" />
+                                            </div>
+                                            <span>Chainsaw Owner</span>
+                                        </a>
+                                    </li>
+                                    break;
+                                default:
+
+                                    break;
+                            }
                             <li>
                                 <a href="@Url.Action("Index", "NewChainsawRegistration")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>

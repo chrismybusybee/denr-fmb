@@ -17,7 +17,7 @@
                 <div class="form-group mb-2">
                     <label class="form-label small">User Type</label>
                         <select asp-for="tbl_user_types_id" class="form-select" aria-label="User Type">
-                        <option selected>- Select User Type -</option>
+                        <option selected disabled>- Select User Type -</option>
                         <option value="1">Chainsaw Importer Only</option>
                         <option value="2">Chainsaw Seller Only</option>
                         <option value="3">Chainsaw Owner Only</option>
@@ -130,44 +130,44 @@
             <div class="row mb-4">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="street_address" class="form-label small">(TEMP street_address) Address Line 1</label>
+                        <label asp-for="street_address" class="form-label small">Street Address</label>
                         <input asp-for="street_address" class="form-control" />
                         <span asp-validation-for="street_address" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="tbl_division_id" class="form-label small">DIVISION ID</label>
-                        <input asp-for="tbl_division_id" class="form-control" />
-                    </div>
-                </div>
-            </div>
-            <div class="row mb-4">
-                <div class="col-md-3">
-                    <div class="form-group">
                         <label asp-for="tbl_region_id" class="form-label small">Region (ID)</label>
                         <input asp-for="tbl_province_id" class="form-control" />
                         @* <select asp-for="tbl_region_id" class="form-control">
-                            <option Selected>--Select Region--</option>
+                        <option Selected>--Select Region--</option>
                         </select> *@
                         <span asp-validation-for="tbl_region_id" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6">
+                    <div class="form-group" hidden="true">
+                        <label asp-for="tbl_division_id" class="form-label small">DIVISION ID</label>
+                        <input asp-for="tbl_division_id" class="form-control" value = " " disabled/>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label asp-for="tbl_province_id" class="form-label small">Province</label>
                         <input asp-for="tbl_province_id" class="form-control" />
                         <span asp-validation-for="tbl_province_id" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label asp-for="tbl_city_id" class="form-label small">City/Municipality</label>
                         <input asp-for="tbl_city_id" class="form-control" />
                         <span asp-validation-for="tbl_city_id" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label asp-for="tbl_brgy_id" class="form-label small">Barangay(ID)</label>
                         <input asp-for="tbl_brgy_id" class="form-control" />
@@ -176,19 +176,19 @@
                 </div>
             </div>
             <div class="row mb-5">
-                <div class="col-md-6">
+                <div class="col-md-6" hidden="true">
                     <div class="form-group">
-                        <label asp-for="comment" class="form-label small">Attached Form</label>
-                        <input asp-for="comment" class="form-control" />
+                        <label asp-for="comment" class="form-label small">Remarks</label>
+                        <input asp-for="comment" class="form-control" disabled/>
                         <span asp-validation-for="comment" class="text-danger"></span>
                     </div>
                 </div>
-                @* <div class="col-md-6">
+                <div class="col-md-6">
                     <div class="form-group">
-                        <label class="form-label small text-white">Attached Form</label>
+                        <label class="form-label small text-black">Upload Your Picture</label>
                         <input type="file" class="form-control" />
                     </div>
-                </div> *@
+                </div>
             </div>
             <div class="row mb-5">
                 <div class="col-md-4 d-flex flex-column">
@@ -197,7 +197,7 @@
                     </small>
                     @* <button id="submitBtn" value="Submit" class="btn btn-primary w-75 mw-75">Submit</button> *@
                     <div class="form-group">
-                        <input type="button" id="submitBtn" value="Submit" class="btn btn-primary w-75 mw-75" />
+                        <input type="submit" id="submitBtn" value="Submit" class="btn btn-primary w-75 mw-75" />
                     </div>
                 </div>
             </div>

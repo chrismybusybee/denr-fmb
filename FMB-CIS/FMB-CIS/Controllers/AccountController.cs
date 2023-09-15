@@ -85,12 +85,12 @@ namespace FMB_CIS.Controllers
                             sqlCmd.Parameters.AddWithValue("tbl_city_id", userRegistrationViewModel.tbl_city_id);
                             sqlCmd.Parameters.AddWithValue("tbl_brgy_id", userRegistrationViewModel.tbl_brgy_id);
                             sqlCmd.Parameters.AddWithValue("street_address", userRegistrationViewModel.street_address);
-                            sqlCmd.Parameters.AddWithValue("tbl_division_id", userRegistrationViewModel.tbl_division_id);
+                            sqlCmd.Parameters.AddWithValue("tbl_division_id", userRegistrationViewModel.tbl_division_id ?? "");
                             sqlCmd.Parameters.AddWithValue("email", userRegistrationViewModel.email);
                             sqlCmd.Parameters.AddWithValue("password", encrPw);
                             sqlCmd.Parameters.AddWithValue("status", "active"/*userRegistrationViewModel.status*/);
                             //sqlCmd.Parameters.AddWithValue("photo", userRegistrationViewModel.photo);
-                            sqlCmd.Parameters.AddWithValue("comment", userRegistrationViewModel.comment);
+                            sqlCmd.Parameters.AddWithValue("comment", userRegistrationViewModel.comment ?? "");
                             sqlCmd.Parameters.AddWithValue("date_created", DateTime.Now);
                             sqlCmd.Parameters.AddWithValue("date_modified", DateTime.Now);
                             sqlCmd.Parameters.AddWithValue("tbl_user_types_id", Convert.ToInt32(userRegistrationViewModel.tbl_user_types_id));
@@ -107,6 +107,30 @@ namespace FMB_CIS.Controllers
             }
             return View(userRegistrationViewModel);
         }
+
+        //public IActionResult EnterNewPassword()
+        //{
+        //    return View();
+
+        //}
+
+        //[HttpPost]
+        //public IActionResult EnterNewPassword(ForgotPasswordModel model, string email)
+        //{
+        //    if (model.confirmPassword == model.password)
+        //    {
+        //        string encrPw = EncryptDecrypt.ConvertToEncrypt(model.password);
+        //        using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("ConnStrng")))
+        //        {
+        //            sqlConnection.Open();
+        //            SqlCommand sqlCmd = new SqlCommand("ChangePasswordFromEmail", sqlConnection);
+        //            sqlCmd.CommandType = CommandType.StoredProcedure;
+        //            sqlCmd.Parameters.AddWithValue("email", email);
+        //            sqlCmd.Parameters.AddWithValue("password", encrPw);
+        //            sqlCmd.ExecuteNonQuery();
+        //        }
+        //        return View();
+        //}
         
         //public static List<Regions> GetRegions()
         //{

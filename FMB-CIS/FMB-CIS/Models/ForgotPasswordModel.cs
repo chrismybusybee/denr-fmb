@@ -6,7 +6,6 @@ namespace FMB_CIS.Models
     {
         //[Required, EmailAddress, Display(Name = "Registered email address")]
         [Required]
-        //[DataType(DataType.EmailAddress)]
         public string email { get; set; }
         public bool emailSent { get; set; }
 

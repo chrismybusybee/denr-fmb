@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace FMB_CIS.Controllers
 {
@@ -145,31 +147,44 @@ namespace FMB_CIS.Controllers
             return RedirectToAction("Index");
         }
 
-        [AllowAnonymous, HttpGet("forgot-password")]
-        public IActionResult ForgotPassword()
-        {
-            return View();
-        }
+        //[AllowAnonymous, HttpGet("forgot-password")]
+        //public IActionResult ForgotPassword()
+        //{
+        //    return View();
+        //}
 
-        [AllowAnonymous, HttpPost("forgot-password")]
-        public IActionResult ForgotPassword(ForgotPasswordModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                //
-                ModelState.Clear();
-                model.emailSent = true;
-            }
-            return View();
-        }
+        //[AllowAnonymous, HttpPost("forgot-password")]
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async IActionResult ForgotPassword(ForgotPasswordModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        //
+        //        //ModelState.Clear();
+        //        //model.emailSent = true;
+        //        //string modstaEmail = model.email;
+        //        var user == await UserManager.FindByEmailAsync(model.email);
+        //        if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+        //        {
+        //            return View("ForgotPasswordConfirmation");
+        //        }
 
-        public async Task GenerateForgotPasswordTokenAsync(ApplicationUser user)
-        {
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            if (!string.IsNullOrEmpty(token))
-            {
-                await SendEmailConfirmationEmaail
-            }
-        }
+        //        string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+        //        var callback Url = Url.Action("ResetPassword", "Account", new {userId = user.Id, code = code}, protocol:Request.GetDisplayUrl().Scheme);
+        //        await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+        //        return RedirectToAction("ForgotPasswordConfirmation", "Account");
+        //    }
+        //    return View(model);
+        //}
+
+        //public async Task GenerateForgotPasswordTokenAsync(ApplicationUser user)
+        //{
+        //    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        //    if (!string.IsNullOrEmpty(token))
+        //    {
+        //        await SendEmailConfirmationEmaail
+        //    }
+        //}
     }
 }
