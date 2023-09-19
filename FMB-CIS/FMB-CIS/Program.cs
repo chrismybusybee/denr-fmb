@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<LocalContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("LocalContext")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CISDB")));
 
 
 var app = builder.Build();
