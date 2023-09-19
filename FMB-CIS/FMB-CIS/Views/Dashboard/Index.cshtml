@@ -1,98 +1,64 @@
-﻿@model System.Data.DataTable
-
+@model System.Data.DataTable
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Dashboard";
+    ViewBag.Name = "Merchant Cabagnot";
+    ViewBag.UserType = "Seller";
 }
 
+<link rel="stylesheet" href="~/js/DataTable/dataTables.min.css">
+<script src="~/js/jquery/jquery-3.7.1/jquery-3.7.1.js"></script>
+<script src="~/js/DataTable/dataTables.min.js"></script>
+
 <div id="card-container">
+    
+    <!-- User History -->
     <div id="card">
-        
-        <h1>REGISTERED CHAINSAW</h1>
-        <table class="table table-bordered">
-            <thead class="thead-light">
-                <tr>
-                    <th>
-                        Brand
-                    </th>
-                    <th>
-                        Model
-                    </th>
-                    <th>
-                        Engine
-                    </th>
-                    <th>
-                        Power
-                    </th>
-                    <th>
-                        Watt
-                    </th>
-                    <th>
-                        HP
-                    </th>
-                    <th>
-                        GB
-                    </th>
-                    <th>
-                        Supplier
-                    </th>
-                    <th>
-                        Purchase Price
-                    </th>
-                    <th>
-                        Sell Price
-                    </th>
-                    <th>
-                        Date Purchased
-                    </th>
-                    <th>
-                        Remarks
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < Model.Rows.Count; i++)
-                {
-                    <tr>
-                        <td>
-                            @Model.Rows[i]["brand"]
-                        </td>
-                        <td>
-                            @Model.Rows[i]["model"]
-                        </td>
-                        <td>
-                            @Model.Rows[i]["engine"]
-                        </td>
-                        <td>
-                            @Model.Rows[i]["power"]
-                        </td>
-                        <td>
-                            @Model.Rows[i]["watt"]
-                        </td>
-                        <td>
-                            @Model.Rows[i]["hp"]
-                        </td>
-                        <td>
-                            @Model.Rows[i]["gb"]
-                        </td>
-                        <td>
-                            @Model.Rows[i]["supplier"]
-                        </td>
-                        <td>
-                            @Model.Rows[i]["purchase_price"]
-                        </td>
-                        <td>
-                            @Model.Rows[i]["sell_price"]
-                        </td>
-                        <td>
-                            @Model.Rows[i]["date_purchase"]
-                        </td>
-                        <td>
-                            @Model.Rows[i]["remarks"]
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        @Html.Partial("~/Views/Dashboard/UserHistory.cshtml")
     </div>
+
+    <!-- Owned Chainsaws -->
+    @if (ViewBag.UserType == "Owner")
+    {
+        
+        <div id="card">
+            @Html.Partial("~/Views/Owner/OwnedChainsaws.cshtml")
+        </div>
+    }
+    @if (ViewBag.UserType == "Seller")
+    {
+        <div id="card">
+            @Html.Partial("~/Views/Seller/Index.cshtml")
+        </div>
+    }
+    <!-- Owner Services -->
+    @if (ViewBag.UserType == "Owner")
+    {
+        <div id="card">
+            @Html.Partial("~/Views/Owner/OwnerServices.cshtml")
+        </div>
+    }
+    @if (ViewBag.UserType == "Seller")
+    {
+        <div id="card">
+            @Html.Partial("~/Views/Seller/SellerServices.cshtml")
+        </div>
+    }
+    
+
+    
 </div>
+<script type="text/javascript">
+    var js = jQuery.noConflict(true);
+    js(document).ready(function () {
+        
+
+        js('#ChainsawRecordTable').DataTable({
+            pageLength: 3,
+        });
+    });
+</script>
+
+
+}
+
