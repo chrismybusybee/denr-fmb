@@ -43,7 +43,7 @@ namespace FMB_CIS.Models
         [Display (Name ="Confirm Password")]
         public string confirmPassword { get; set; }
         //public string status { get; set; }
-        //public string photo { get; set; }
+        //public byte[] photo { get; set; }
         [Display (Name ="Remarks")]
         public string? comment { get; set; }
         [Required]

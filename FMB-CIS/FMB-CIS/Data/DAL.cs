@@ -8,13 +8,7 @@ namespace FMB_CIS.Data
 {
     public class DAL
     {
-        //private readonly IConfiguration _configuration;
-
-        //public DAL(IConfiguration configuration)
-        //{
-        //    this._configuration = configuration;
-        //}
-
+        
         public bool emailExist(string email, string connectString)
         {
             using (SqlConnection sqlConnection = new SqlConnection(connectString))
@@ -77,7 +71,6 @@ namespace FMB_CIS.Data
                 sqlCmd.CommandType = CommandType.StoredProcedure;
                 sqlCmd.Parameters.AddWithValue("email", email);
 
-                //return Convert.ToInt32(sqlCmd.ExecuteScalar());
                 return sqlCmd.ExecuteScalar().ToString();
 
             }
@@ -119,8 +112,6 @@ namespace FMB_CIS.Data
                         break;
                 }
                 return userRole;
-                //return Convert.ToInt32(sqlCmd.ExecuteScalar());
-                //return sqlCmd.ExecuteScalar().ToString();
 
             }
         }

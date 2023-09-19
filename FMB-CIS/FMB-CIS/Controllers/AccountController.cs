@@ -4,18 +4,31 @@ using Microsoft.Extensions.Configuration;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using FMB_CIS.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using System.Security.Claims;
 
 namespace FMB_CIS.Controllers
 {
     public class AccountController : Controller
     {
         private readonly IConfiguration _configuration;
+        //private readonly ILogger<AccountController> _logger;
+        //private readonly UserManager<ApplicationUser> _userManager;
 
-        public AccountController(IConfiguration configuration)
+        public AccountController(IConfiguration configuration/*, UserManager<ApplicationUser> userManager, ILogger<AccountController> logger*/)
         {
+            //_logger = logger;
+            //_userManager = userManager;
             this._configuration = configuration;
         }
-        
+        public class ApplicationUser : IdentityUser
+        {
+        }
+        //public class ApplicationUser : IdentityUser
+        //{
+        //    //public virtual string user { get; set; }
+        //}
         public IActionResult Registration()
         {
             return View();
@@ -58,13 +71,14 @@ namespace FMB_CIS.Controllers
                     if (eMailExist == true)
                     {
                         ModelState.AddModelError("email", "Email Address has already been used, please try a different Email Address.");
-                        return View();
+                        return View(userRegistrationViewModel);
                     }
                     else
                     {
                         //ENCRYPT PASSWORD
                         string encrPw = EncryptDecrypt.ConvertToEncrypt(userRegistrationViewModel.password);
                         //SAVE USER INFOS ON DATABASE USING CreateNewUserNoPHOTO STORED PROCEDURE
+                        int one = 1;
 
                         //DAL.RegisterNewUser(userRegistrationViewModel.first_name, userRegistrationViewModel.middle_name, userRegistrationViewModel.last_name, userRegistrationViewModel.suffix, userRegistrationViewModel.contact_no, userRegistrationViewModel.valid_id, userRegistrationViewModel.valid_id_no, userRegistrationViewModel.birth_date, userRegistrationViewModel.tbl_region_id, userRegistrationViewModel.tbl_province_id, userRegistrationViewModel.tbl_city_id, userRegistrationViewModel.tbl_brgy_id, userRegistrationViewModel.street_address, userRegistrationViewModel.tbl_division_id, userRegistrationViewModel.email, encrPw, userRegistrationViewModel.status, userRegistrationViewModel.comment);
                         using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("ConnStrng")))
@@ -88,7 +102,7 @@ namespace FMB_CIS.Controllers
                             sqlCmd.Parameters.AddWithValue("tbl_division_id", userRegistrationViewModel.tbl_division_id ?? "");
                             sqlCmd.Parameters.AddWithValue("email", userRegistrationViewModel.email);
                             sqlCmd.Parameters.AddWithValue("password", encrPw);
-                            sqlCmd.Parameters.AddWithValue("status", "active"/*userRegistrationViewModel.status*/);
+                            sqlCmd.Parameters.AddWithValue("status", one/*userRegistrationViewModel.status*/);
                             //sqlCmd.Parameters.AddWithValue("photo", userRegistrationViewModel.photo);
                             sqlCmd.Parameters.AddWithValue("comment", userRegistrationViewModel.comment ?? "");
                             sqlCmd.Parameters.AddWithValue("date_created", DateTime.Now);
@@ -102,10 +116,46 @@ namespace FMB_CIS.Controllers
                 else
                 {
                     ModelState.AddModelError("confirmPassword", "Password doesn't match! Please enter again.");
-                    return View();
+                    return View(userRegistrationViewModel);
                 }
             }
             return View(userRegistrationViewModel);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                //var user = await _userManager.FindByEmailAsync(model.email);
+                //if (user != null /*&& await userManager.IsEmailConfirmedAsync(user)*/)
+                //{
+                //    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                //    var passwordResetLink = Url.Action("ResetPassword", "Account", new { email = model.email, token = token }, Request.Scheme);
+
+                //    _logger.Log(LogLevel.Warning, passwordResetLink);
+                //    return View("EmailConfirmation");
+                //}
+                //return View(model);
+                DAL dal = new DAL();
+                bool eMailExist = dal.emailExist(model.email, _configuration.GetConnectionString("ConnStrng"));
+                if (eMailExist)
+                {
+                    //CODE TO GENERATE A LINK FOR PASSWORD RESET.
+
+                    //var token = GeneratePasswordResetTokenAsync(model.email);
+
+                    return RedirectToAction("EmailConfirmation");
+                }
+                else
+                {                    
+                    //Do not reveal if email doesn't exist.
+                    return RedirectToAction("EmailConfirmation");
+                }
+            }
+            
+            return View(model);
         }
 
         //public IActionResult EnterNewPassword()
@@ -131,7 +181,7 @@ namespace FMB_CIS.Controllers
         //        }
         //        return View();
         //}
-        
+
         //public static List<Regions> GetRegions()
         //{
         //    List<Regions> regionObj = new List<Regions>();

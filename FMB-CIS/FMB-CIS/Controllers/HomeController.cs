@@ -128,6 +128,9 @@ namespace FMB_CIS.Controllers
             }
                 return View();
         }
+
+
+
         //public async Task Signout(/*string returnUrl = null*/)
         //{
         //    //if (!string.IsNullOrEmpty(ErrorMessage))
@@ -147,44 +150,6 @@ namespace FMB_CIS.Controllers
             return RedirectToAction("Index");
         }
 
-        //[AllowAnonymous, HttpGet("forgot-password")]
-        //public IActionResult ForgotPassword()
-        //{
-        //    return View();
-        //}
 
-        //[AllowAnonymous, HttpPost("forgot-password")]
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async IActionResult ForgotPassword(ForgotPasswordModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        //
-        //        //ModelState.Clear();
-        //        //model.emailSent = true;
-        //        //string modstaEmail = model.email;
-        //        var user == await UserManager.FindByEmailAsync(model.email);
-        //        if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
-        //        {
-        //            return View("ForgotPasswordConfirmation");
-        //        }
-
-        //        string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-        //        var callback Url = Url.Action("ResetPassword", "Account", new {userId = user.Id, code = code}, protocol:Request.GetDisplayUrl().Scheme);
-        //        await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-        //        return RedirectToAction("ForgotPasswordConfirmation", "Account");
-        //    }
-        //    return View(model);
-        //}
-
-        //public async Task GenerateForgotPasswordTokenAsync(ApplicationUser user)
-        //{
-        //    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-        //    if (!string.IsNullOrEmpty(token))
-        //    {
-        //        await SendEmailConfirmationEmaail
-        //    }
-        //}
     }
 }

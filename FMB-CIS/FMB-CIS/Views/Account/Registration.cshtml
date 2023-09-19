@@ -11,7 +11,7 @@
     <div class="col-md-12 d-flex flex-column my-auto px-md-4">
         <a href="@Url.Action("Index", "Home")" class="me-auto my-4" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
         <h2 class="text-secondary mb-4">Personal Information</h2>
-        <form asp-action="Registration">
+        <form asp-action="Registration" id="RegForm">
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group mb-2">
@@ -137,12 +137,12 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="tbl_region_id" class="form-label small">Region (ID)</label>
-                        <input asp-for="tbl_province_id" class="form-control" />
+                        <label asp-for="tbl_region_id" class="form-label small">Region ID</label>
+                        <input asp-for="tbl_region_id" class="form-control" />
+                        <span asp-validation-for="tbl_region_id" class="text-danger"></span>
                         @* <select asp-for="tbl_region_id" class="form-control">
                         <option Selected>--Select Region--</option>
                         </select> *@
-                        <span asp-validation-for="tbl_region_id" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -197,7 +197,7 @@
                     </small>
                     @* <button id="submitBtn" value="Submit" class="btn btn-primary w-75 mw-75">Submit</button> *@
                     <div class="form-group">
-                        <input type="submit" id="submitBtn" value="Submit" class="btn btn-primary w-75 mw-75" />
+                        <input type="button" @* type="submit" *@ id="submitBtn" value="Submit" class="btn btn-primary w-75 mw-75" />
                     </div>
                 </div>
             </div>
@@ -205,7 +205,7 @@
     </div>
 </div>
 
-<partial name="~/Views/Modals/RegistrationModal.cshtml" />
+<partial name="~/Views/Modals/AccountModal.cshtml" />
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
@@ -225,5 +225,35 @@
             $("#confirmSubmitModal").modal("hide");
             $("#confirmSuccessModal").modal("show");
         });
+    });
+    const form = document.getElementById('RegForm');
+    const showModalButton = document.getElementById('submitBtn');
+    const confirmationModal = document.getElementById('confirmSubmitModal');
+    const confirmButton = document.getElementById('confirmBtn');
+
+    // Function to display the modal
+    function showModal() {
+        confirmationModal.style.display = 'block';
+    }
+
+    // Function to hide the modal
+    function hideModal() {
+        confirmationModal.style.display = 'none';
+    }
+
+    // Event listener for the "Submit" button
+    showModalButton.addEventListener('click', showModal);
+
+    // Event listener for the "Confirm" button
+    confirmButton.addEventListener('click', function () {
+        // Submit the form when the "Confirm" button is clicked
+        form.submit();
+    });
+
+    // Close the modal when the user clicks outside of it
+    window.addEventListener('click', function (event) {
+        if (event.target === confirmationModal) {
+            hideModal();
+        }
     });
 </script>

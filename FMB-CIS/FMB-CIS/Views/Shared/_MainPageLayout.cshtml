@@ -224,6 +224,8 @@
                                     <span>Monitoring</span>
                                 </a>
                             </li>
+                            @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw")!=true)
+                            {
                             <li>
                                 <a href="@Url.Action("Index", "CreationNewOffice")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
@@ -232,6 +234,7 @@
                                     <span>Creation of New DENR Office</span>
                                 </a>
                             </li>
+                            }
                             <li>
                                 <a href="@Url.Action("Index", "AnnoucementTemplate")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>

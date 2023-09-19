@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace FMB_CIS.Models
 {
@@ -6,8 +7,10 @@ namespace FMB_CIS.Models
     {
         //[Required, EmailAddress, Display(Name = "Registered email address")]
         [Required]
+        [DataType(DataType.EmailAddress)]
         public string email { get; set; }
-        public bool emailSent { get; set; }
+        //public bool emailSent { get; set; }
 
     }
 }
+ 
