@@ -1,4 +1,6 @@
-﻿<div class="modal fade" id="confirmSubmitModal" aria-hidden="true">
+﻿@model FMB_CIS.Models.UserRegistrationViewModel
+
+<div class="modal fade" id="confirmSubmitModal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
@@ -11,6 +13,7 @@
                     </p>
                     <div class="d-flex gap-4 w-100">
                         <button id="backBtn" class="btn btn-danger w-100">Back</button>
+                        @* <input type="submit" value="Confirm" id="confirmBtn" class="btn btn-primary w-100" /> *@
                         <button id="confirmBtn" class="btn btn-primary w-100">Confirm</button>
                     </div>
                 </div>
@@ -18,7 +21,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="confirmSuccessModal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -31,10 +33,11 @@
                         Registration submitted successfully!
                     </p>
                     <div class="d-flex justify-content-center w-100">
-                        <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("EmailConfirmation", "Account")'">Confirm</button>
+                        <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("EmailConfirmation", "Account")'">Next</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
