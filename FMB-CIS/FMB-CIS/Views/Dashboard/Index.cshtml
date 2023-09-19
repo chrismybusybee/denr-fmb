@@ -1,9 +1,9 @@
-﻿@model IEnumerable<FMB_CIS.Models.tbl_chainsaw>
+﻿
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Dashboard";
-    ViewBag.Name = "Mugen Cabagnot";
-    ViewBag.UserType = "Owner";
+    ViewBag.Name = "Merchant Cabagnot";
+    ViewBag.UserType = "Seller";
 }
 
 <link rel="stylesheet" href="~/js/DataTable/dataTables.min.css">
@@ -11,83 +11,50 @@
 <script src="~/js/DataTable/dataTables.min.js"></script>
 
 <div id="card-container">
-    <div id="card">
-        <h1>
-            History
-        </h1>
-        <p>
-        
-        What is Lorem Ipsum?
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-        </p>
-    </div>
     
+    <!-- User History -->
+    <div id="card">
+        @Html.Partial("~/Views/Dashboard/UserHistory.cshtml")
+    </div>
+
+    <!-- Owned Chainsaws -->
+    @if (ViewBag.UserType == "Owner")
+    {
+        
+        <div id="card">
+            @Html.Partial("~/Views/Owner/OwnedChainsaws.cshtml")
+        </div>
+    }
+    @if (ViewBag.UserType == "Seller")
+    {
+        <div id="card">
+            @Html.Partial("~/Views/Seller/Index.cshtml")
+        </div>
+    }
+    <!-- Owner Services -->
     @if (ViewBag.UserType == "Owner")
     {
         <div id="card">
-            <h1>
-                Chainsaw Record
-            </h1>
-            <p>
-                <table class="table" id="ChainsawRecordTable">
-                    <thead>
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Engine)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Brand)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Model)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Power)
-                            </th>
-                            
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Engine)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Brand)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Model)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Power)
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </p>
+            @Html.Partial("~/Views/Owner/OwnerServices.cshtml")
         </div>
     }
-    <div id="card">
-        <h1>
-            Services
-        </h1>
-        <p>
-            What is Lorem Ipsum?
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+    @if (ViewBag.UserType == "Seller")
+    {
+        <div id="card">
+            @Html.Partial("~/Views/Seller/SellerServices.cshtml")
+        </div>
+    }
+    
 
-
-        </p>
-    </div>
+    
 </div>
 <script type="text/javascript">
     var js = jQuery.noConflict(true);
     js(document).ready(function () {
-        console.log("This is a test");
-        js('#ChainsawRecordTable').DataTable({
+        
 
+        js('#ChainsawRecordTable').DataTable({
+            pageLength: 3,
         });
     });
 </script>

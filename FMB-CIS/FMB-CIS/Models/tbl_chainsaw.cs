@@ -12,5 +12,7 @@ namespace FMB_CIS.Models
         public string? Engine { get; set; }
         public string? Power { get; set; }
 
+        public string? status { get; set; }
+
     }
 }
