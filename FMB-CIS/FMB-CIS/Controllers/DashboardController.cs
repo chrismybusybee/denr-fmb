@@ -25,17 +25,13 @@ namespace FMB_CIS.Controllers
         private readonly LocalContext _context;
         private readonly IConfiguration _configuration;
         
-        public DashboardController(IConfiguration configuration)
+        public DashboardController(IConfiguration configuration, LocalContext context)
         {
             this._configuration = configuration;
-        }
-        [Authorize]
-        
-        public DashboardController(LocalContext context)
-        {
             _context = context;
         }
-
+        
+        [Authorize]
         // GET: Movies
         public IActionResult Index()
         {
@@ -59,7 +55,7 @@ namespace FMB_CIS.Controllers
             var ChainsawOwnedList = ChainsawList.Where(m => m.user_id == userID && m.status == userRole).ToList();
 
             var applicationlist = from a in _context.tbl_application
-                                  where a.tbl_user_id == user_id
+                                  where a.tbl_user_id == userID
                                   select a;
 
 
@@ -88,7 +84,8 @@ namespace FMB_CIS.Controllers
             int user_id = 1;
             var ChainsawOwnedList = ChainsawList.Where(m => m.user_id == user_id).ToList();
 
-            return ChainsawOwnedList;
+            //return ChainsawOwnedList;
+            return View();
         }
 
 
