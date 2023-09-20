@@ -5,11 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FMB-CIS @ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/FMB_CIS.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/main-page-layout.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.css">
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="/css/main-page-layout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="/css/datatables.min.css" />
 </head>
 <body>
     <div id="header">
@@ -276,10 +275,13 @@
         © 2023 DENR-FMB CIS. All rights reserved.
     </footer>
     
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/site.js" asp-append-version="true"></script>
+    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script src="/js/datatables.min.js"></script>
+    <script src="/js/datatables-custom.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
@@ -289,6 +291,25 @@
 <script type="text/javascript">
     $(document).ready(function () {
         feather.replace();
+
+        const chainsawImporterSubMenuItem = document.getElementById("chainsawImporterSubMenuItem");
+        const chainsawImporterDropdown = document.getElementById("chainsawImporterDropdown");
+
+        function toggleDropdown() {
+            chainsawImporterDropdown.classList.toggle("active");
+            const isOpen = chainsawImporterDropdown.classList.contains("active");
+            sessionStorage.setItem("dropdownState", isOpen ? "open" : "closed");
+        }
+
+        chainsawImporterSubMenuItem.addEventListener("click", function (e) {
+            e.preventDefault();
+            toggleDropdown();
+        });
+
+        const storedState = sessionStorage.getItem("dropdownState");
+        if (storedState === "open") {
+            chainsawImporterDropdown.classList.add("active");
+        }
 
         function setActiveMenuItem(menuItemId) {
             const menuItems = document.querySelectorAll('#menu-items ul li');
@@ -304,9 +325,17 @@
         const pageToMenuItemMap = {
             "/Dashboard": "dashboardMenuItem",
             "/ProfileManagement": "profileManagementMenuItem",
+            "/AccountManagement": "accountManagementMenuItem",
+            "/ChainsawImporter": "chainsawImporterApplication",
+            "/ChainsawImporter/ViewChainsawImporter": "chainsawImporterApplication",
+
         };
 
-        if (pageToMenuItemMap[currentPage]) {
+        if (currentPage.startsWith("/AccountManagement/ViewAccount/")) {
+            const urlParts = currentPage.split("/");
+            const id = urlParts[urlParts.length - 1];
+            setActiveMenuItem(pageToMenuItemMap["/AccountManagement"]);
+        } else if (pageToMenuItemMap[currentPage]) {
             setActiveMenuItem(pageToMenuItemMap[currentPage]);
         }
 
@@ -317,6 +346,5 @@
         if (storedActiveMenuItem) {
             setActiveMenuItem(storedActiveMenuItem);
         }
-
     });
 </script>
