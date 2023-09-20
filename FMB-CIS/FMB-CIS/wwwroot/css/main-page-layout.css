@@ -30,6 +30,7 @@
     background-color: white;
     height: min(100vh, 100%);
     z-index: 99;
+    box-shadow: 0px 0 11px 0px;
 }
 
 #toggle-btn:hover {
@@ -62,6 +63,19 @@
 
     #menu-items .active-menu-item span {
         color: #14984a;
+    }
+
+#chainsawImporterDropdown {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.15s ease-in-out;
+}
+
+    #chainsawImporterDropdown.active {
+        max-height: 100%;
+        opacity: 1;
+        margin-top: 15px;
     }
 
     #main {
@@ -100,6 +114,73 @@
 
     ::-webkit-scrollbar-thumb:hover {
         background: #636363;
+    }
+
+.table-container {
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.dataTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/*    .dataTable td:not(:nth-last-child(-n+2)) {
+        min-width: 150px;
+    }
+*/
+.dataTables_wrapper {
+    color: #5c5c5c;
+}
+
+    .dataTables_wrapper .dataTables_length {
+        margin-bottom: 15px;
+    }
+
+.table > thead {
+    color: white;
+    background-color: #282d6d;
+}
+
+tbody, td, tfoot, th, thead, tr {
+    border-style: none;
+}
+
+table tbody tr {
+    color: #5c5c5c !important;
+    vertical-align: middle;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button .current {
+    background-color: #14984a;
+    color: white;
+    padding: 0px;
+    border: none;
+}
+
+.striped-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .striped-table th,
+    .striped-table td {
+        padding: 8px;
+    }
+
+        .striped-table th:first-child,
+        .striped-table td:first-child {
+            padding-left: 5%;
+        }
+        
+        .striped-table th {
+        background-color: transparent;
+        color: black;
+    }
+
+    .striped-table tbody tr:nth-child(odd) {
+        background-color: #f2f2f2;
     }
 
 footer {
