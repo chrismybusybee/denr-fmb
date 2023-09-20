@@ -1,8 +1,8 @@
+@using System.Security.Claims;
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Dashboard";
-    ViewBag.Name = "Merchant Cabagnot";
-    ViewBag.UserType = "Seller";
+    ViewBag.UserType = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
 }
 
 <link rel="stylesheet" href="~/js/DataTable/dataTables.min.css">
@@ -17,30 +17,42 @@
     </div>
 
     <!-- Owned Chainsaws -->
-    @if (ViewBag.UserType == "Owner")
+    @if (ViewBag.UserType.Contains("Owner") == true)
     {
         
         <div id="card">
             @Html.Partial("~/Views/Owner/OwnedChainsaws.cshtml")
         </div>
     }
-    @if (ViewBag.UserType == "Seller")
+    @if (ViewBag.UserType.Contains("Seller") == true)
     {
         <div id="card">
             @Html.Partial("~/Views/Seller/Index.cshtml")
         </div>
     }
-    <!-- Owner Services -->
-    @if (ViewBag.UserType == "Owner")
+    @if (ViewBag.UserType.Contains("Importer") == true)
+    {
+        <div id="card">
+            @Html.Partial("~/Views/Importer/ImportedChainsaws.cshtml")
+        </div>
+    }
+    <!-- User Services -->
+    @if (ViewBag.UserType.Contains("Owner") == true)
     {
         <div id="card">
             @Html.Partial("~/Views/Owner/OwnerServices.cshtml")
         </div>
     }
-    @if (ViewBag.UserType == "Seller")
+    @if (ViewBag.UserType.Contains("Seller") == true)
     {
         <div id="card">
             @Html.Partial("~/Views/Seller/SellerServices.cshtml")
+        </div>
+    }
+    @if (ViewBag.UserType.Contains("Importer") == true)
+    {
+        <div id="card">
+            @Html.Partial("~/Views/Importer/ImporterServices.cshtml")
         </div>
     }
     
