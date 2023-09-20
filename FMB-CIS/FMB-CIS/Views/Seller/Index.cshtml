@@ -30,20 +30,23 @@
             <tbody>
                 @foreach (tbl_chainsaw item in Model.tbl_Chainsaws)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Engine)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Brand)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Model)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Power)
-                        </td>
-                    </tr>
+                    if (item.status == "Seller")
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Engine)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Brand)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Model)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Power)
+                            </td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>

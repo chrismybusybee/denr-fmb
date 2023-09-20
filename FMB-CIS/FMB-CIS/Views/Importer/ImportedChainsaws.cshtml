@@ -6,10 +6,10 @@
 
 <div id="card">
     <h1>
-        Owned Chainsaws
+        Imported Chainsaws
     </h1>
     <p>
-        <table class="table" id="tblOwnedChainsaws">
+        <table class="table" id="tblImportedChainsaws">
             <thead>
                 <tr>
                     <th>
@@ -30,7 +30,7 @@
             <tbody>
                 @foreach (tbl_chainsaw item in Model.tbl_Chainsaws)
                 {
-                    if (item.status == "Owner")
+                    if (item.status == "Importer")
                     {
                         <tr>
                             <td>
@@ -56,7 +56,7 @@
 <script type="text/javascript">
     var js = jQuery.noConflict(true);
     js(document).ready(function () {
-        js('#tblOwnedChainsaws').DataTable({
+        js('#tblImportedChainsaws').DataTable({
             pageLength: 3,
         });
     });
