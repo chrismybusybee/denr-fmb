@@ -50,15 +50,16 @@ namespace FMB_CIS.Controllers
                     sqlDa.SelectCommand.Parameters.AddWithValue("user_id", userID);
                     sqlDa.Fill(dtbl);
                 }*/
-                
+
+                //OWNED CHAINSAWS
                 var ChainsawList = _context.tbl_chainsaw.ToList();
-                var ChainsawOwnedList = ChainsawList.Where(m => m.user_id == userID && m.status == "Seller").ToList();
+                var ChainsawOwnedList = ChainsawList.Where(m => m.user_id == userID /*&& m.status == "Seller"*/).ToList();
 
                 var applicationlist = from a in _context.tbl_application
                                       where a.tbl_user_id == userID
                                       select a;
 
-
+                //HISTORY
                 var applicationtypelist = _context.tbl_application_type;
 
                 var applicationMod = from a in applicationlist
