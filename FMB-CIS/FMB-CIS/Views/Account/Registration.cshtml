@@ -1,67 +1,211 @@
-﻿@model FMB_CIS.Models.ResetPasswordViewModel
+﻿@model FMB_CIS.Models.UserRegistrationViewModel
 @{
-    ViewBag.Title = "Reset Password";
+    ViewBag.Title = "Registration";
 }
 
-<div class="container-fluid d-flex flex-column align-items-center justify-content-center vh-100">
+<div class="container-fluid d-flex flex-column align-items-center justify-content-center">
     <div class="col-md-12 p-md-2 text-start">
         <img src="~/assets/images/logo.png" height="100" />
     </div>
     <hr class="hr" />
-    <div class="col-md-12 d-flex flex-column align-items-center text-center my-auto pb-5">
-        <img src="~/assets/images/key.png" class="mb-2" />
-        <h2 class="text-green mb-4">Reset Your Password</h2>
-        <div style="width: min(300px, 100%);">
-            <p class="fw-bold fs-5 text-md-start mb-1">
-                New password must be:
-            </p>
-            <ul class="text-md-start text-secondary mb-4">
-                <li>At least 8 characters long</li>
-                <li>At least 1 number</li>
-                <li>At least 1 lower case character</li>
-                <li>At least 1 upper case character</li>
-                <li>Minimum of 2 special characters(s)</li>
-            </ul>
-        </div>
-        <div class="d-flex flex-column mb-5" style="width: min(400px, 100%);">
-            <div id="success-prompt" class="bg-green border rounded py-2 mb-4">
-                <div class="row">
-                    <div class="col-md-2 d-flex align-items-center justify-content-end pe-0">
-                        <img src="~/assets/images/small-check.png" />
-                    </div>
-                    <div class="col-md-10 d-flex align-items-center justify-content-center ps-0">
-                        <p class="text-white text-start m-0">
-                            Your password has been reset successfully.<br />
-                            You will be redirected to login page after 5 seconds.<br />
-                        </p>
+    <div class="col-md-12 d-flex flex-column my-auto px-md-4">
+        <a href="@Url.Action("Index", "Home")" class="me-auto my-4" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
+        <h2 class="text-secondary mb-4">Personal Information</h2>
+        <form asp-action="Registration" id="RegForm">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group mb-2">
+                        <label class="form-label small">User Type</label>
+                        <select asp-for="tbl_user_types_id" class="form-select" aria-label="User Type">
+                            <option selected disabled>- Select User Type -</option>
+                            <option value="1">Chainsaw Importer Only</option>
+                            <option value="2">Chainsaw Seller Only</option>
+                            <option value="3">Chainsaw Owner Only</option>
+                            <option value="4">Chainsaw Importer and Seller</option>
+                            <option value="5">Chainsaw Importer and Owner</option>
+                            <option value="6">Chainsaw Seller and Owner</option>
+                            <option value="7">Chainsaw Importer, Owner, and Seller</option>
+                        </select>
+                        <span asp-validation-for="tbl_user_types_id" class="text-danger"></span>
                     </div>
                 </div>
             </div>
-            <form method="post">
-                <div asp-validation-summary="All" class="text-danger"></div>
-                <input asp-for="tokencode" type="hidden" />
-                <input asp-for="email" type="hidden" />
-                <div id="credentials-input" class="d-flex flex-column align-items-start">
-                    <label class="form-label">Password</label>
-                    <div class="input-group password-toggle mb-md-2">
-                        @Html.Editor("Password", new { htmlAttributes = new { @class = "form-control", @id = "Password", @type = "password", @tabindex = "2", @style = "border-right:none;" } })
-                        <span class="input-group-text cursor-pointer show-password" title="show/hide password">
-                            <i data-feather="eye" class="data-feather"></i>
-                        </span>
+            <hr class="my-4" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="first_name" class="form-label small">First Name</label>
+                                        <input asp-for="first_name" class="form-control" />
+                                        <span asp-validation-for="first_name" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="middle_name" class="form-label small">Middle Name</label>
+                                        <input asp-for="middle_name" class="form-control" />
+                                        <span asp-validation-for="middle_name" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="last_name" class="form-label small">Last Name</label>
+                                        <input asp-for="last_name" class="form-control" />
+                                        <span asp-validation-for="last_name" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="suffix" class="form-label small">Suffix</label>
+                                        <input asp-for="suffix" class="form-control" />
+                                        <span asp-validation-for="suffix" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <label class="form-label">Confirm Password</label>
-                    <div class="input-group password-toggle mb-md-4">
-                        @Html.Editor("ConfirmPassword", new { htmlAttributes = new { @class = "form-control", @id = "ConfirmPassword", @type = "password", @tabindex = "2", @style = "border-right:none;" } })
-                        <span class="input-group-text cursor-pointer show-conf-password" title="show/hide password">
-                            <i data-feather="eye" class="data-feather"></i>
-                        </span>
-                    </div>
-                    <button type="submit" id="btnSubmit" class="btn btn-primary w-100">Submit</button>
                 </div>
-            </form>
-        </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="email" class="form-label small">Email (Please use official email address)</label>
+                        <input asp-for="email" class="form-control" placeholder="name@address.com" />
+                        <span asp-validation-for="email" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="password" class="form-label small">Password</label>
+                        <input asp-for="password" class="form-control" placeholder="Password" />
+                        <span asp-validation-for="password" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="confirmPassword" class="form-label small">Confirm Password</label>
+                        <input asp-for="confirmPassword" class="form-control" placeholder="Confirm Password" />
+                        <span asp-validation-for="confirmPassword" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="contact_no" class="form-label small">Contact Number (11 Digits)</label>
+                        <input asp-for="contact_no" class="form-control" placeholder="09XX XXX XXXX" />
+                        <span asp-validation-for="contact_no" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="birth_date" class="form-label small">Birth Date (Must be 18 years old and above)</label>
+                        <input asp-for="birth_date" type="date" class="form-control" />
+                        <span asp-validation-for="birth_date" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="valid_id" class="form-label small">Valid ID</label>
+                        <input asp-for="valid_id" class="form-control" />
+                        <span asp-validation-for="valid_id" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="valid_id_no" class="form-label small">Valid ID Number</label>
+                        <input asp-for="valid_id_no" class="form-control" />
+                        <span asp-validation-for="valid_id_no" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="street_address" class="form-label small">Street Address</label>
+                        <input asp-for="street_address" class="form-control" />
+                        <span asp-validation-for="street_address" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="tbl_region_id" class="form-label small">Region ID</label>
+                        <input asp-for="tbl_region_id" class="form-control" />
+                        <span asp-validation-for="tbl_region_id" class="text-danger"></span>
+                        @* <select asp-for="tbl_region_id" class="form-control">
+                        <option Selected>--Select Region--</option>
+                        </select> *@
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group" hidden="true">
+                        <label asp-for="tbl_division_id" class="form-label small">DIVISION ID</label>
+                        <input asp-for="tbl_division_id" class="form-control" value=" " disabled />
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="tbl_province_id" class="form-label small">Province</label>
+                        <input asp-for="tbl_province_id" class="form-control" />
+                        <span asp-validation-for="tbl_province_id" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="tbl_city_id" class="form-label small">City/Municipality</label>
+                        <input asp-for="tbl_city_id" class="form-control" />
+                        <span asp-validation-for="tbl_city_id" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="tbl_brgy_id" class="form-label small">Barangay(ID)</label>
+                        <input asp-for="tbl_brgy_id" class="form-control" />
+                        <span asp-validation-for="tbl_brgy_id" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-5">
+                <div class="col-md-6" hidden="true">
+                    <div class="form-group">
+                        <label asp-for="comment" class="form-label small">Remarks</label>
+                        <input asp-for="comment" class="form-control" disabled />
+                        <span asp-validation-for="comment" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label small text-black">Upload Your Picture</label>
+                        <input type="file" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-5">
+                <div class="col-md-4 d-flex flex-column">
+                    <small class="text-secondary mb-4">
+                        By submitting this form, you agree to our <a href="#" target="_blank">Terms and Conditions</a> & <a href="#" target="_blank">Privacy Policy</a>
+                    </small>
+                    @* <button id="submitBtn" value="Submit" class="btn btn-primary w-75 mw-75">Submit</button> *@
+                    <div class="form-group">
+                        <input type="button" @* type="submit" *@ id="submitBtn" value="Submit" class="btn btn-primary w-75 mw-75" />
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
+
+<partial name="~/Views/Modals/AccountModal.cshtml" />
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
@@ -69,47 +213,47 @@
     $(document).ready(function () {
         feather.replace();
 
-        $('#success-prompt').hide();
-
-        const passwordInput = document.getElementById('Password');
-        const confirmPasswordInput = document.getElementById('ConfirmPassword');
-        const togglePasswordElements = document.getElementsByClassName('show-password');
-        const toggleCPasswordElements = document.getElementsByClassName('show-conf-password');
-
-        for (const togglePasswordElement of togglePasswordElements) {
-            togglePasswordElement.addEventListener('click', function () {
-                if (passwordInput.type === 'password' || confirmPasswordInput.type === 'password') {
-                    passwordInput.type = 'text';
-                    confirmPasswordInput.type = 'text';
-                } else {
-                    passwordInput.type = 'password';
-                    confirmPasswordInput.type = 'password';
-                }
-            });
-        }
-
-        for (const toggleCPasswordElement of toggleCPasswordElements) {
-            toggleCPasswordElement.addEventListener('click', function () {
-                if (passwordInput.type === 'password' || confirmPasswordInput.type === 'password') {
-                    passwordInput.type = 'text';
-                    confirmPasswordInput.type = 'text';
-                } else {
-                    passwordInput.type = 'password';
-                    confirmPasswordInput.type = 'password';
-                }
-            });
-        }
-
-        var btnSubmit = document.getElementById('btnSubmit');
-
-        btnSubmit.addEventListener('click', function () {
-            $('#success-prompt').show();
-            $("#credentials-input").removeClass("d-flex");
-            $('#credentials-input').hide();
-
-            setTimeout(function () {
-                window.location.href = '@Url.Action("Index", "Home")';
-            }, 5000);
+        $("#submitBtn").click(function () {
+            $("#confirmSubmitModal").modal("show");
         });
+
+        $("#backBtn").click(function () {
+            $("#confirmSubmitModal").modal("hide");
+        });
+
+        $("#confirmBtn").click(function () {
+            $("#confirmSubmitModal").modal("hide");
+            $("#confirmSuccessModal").modal("show");
+        });
+    });
+    const form = document.getElementById('RegForm');
+    const showModalButton = document.getElementById('submitBtn');
+    const confirmationModal = document.getElementById('confirmSubmitModal');
+    const confirmButton = document.getElementById('confirmBtn');
+
+    // Function to display the modal
+    function showModal() {
+        confirmationModal.style.display = 'block';
+    }
+
+    // Function to hide the modal
+    function hideModal() {
+        confirmationModal.style.display = 'none';
+    }
+
+    // Event listener for the "Submit" button
+    showModalButton.addEventListener('click', showModal);
+
+    // Event listener for the "Confirm" button
+    confirmButton.addEventListener('click', function () {
+        // Submit the form when the "Confirm" button is clicked
+        form.submit();
+    });
+
+    // Close the modal when the user clicks outside of it
+    window.addEventListener('click', function (event) {
+        if (event.target === confirmationModal) {
+            hideModal();
+        }
     });
 </script>
