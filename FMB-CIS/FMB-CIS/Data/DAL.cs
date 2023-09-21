@@ -138,9 +138,10 @@ namespace FMB_CIS.Data
                 sqlConnection.Open();
                 SqlCommand sqlCmd = new SqlCommand("spChangePassword", sqlConnection);
                 sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@GUID", tkncode);
+                sqlCmd.Parameters.Add("@GUID", SqlDbType.UniqueIdentifier).Value = new Guid (tkncode);
                 sqlCmd.Parameters.AddWithValue("@password", encrPass);
                 sqlCmd.ExecuteNonQuery();
+                int returnedVal = Convert.ToInt32(sqlCmd.ExecuteScalar());
 
                 if (Convert.ToInt32(sqlCmd.ExecuteScalar()) == 1)
                 {
