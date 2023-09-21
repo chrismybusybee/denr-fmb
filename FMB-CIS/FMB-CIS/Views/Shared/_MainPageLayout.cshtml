@@ -299,8 +299,10 @@
                                     <span>Email Templates</span>
                                 </a>
                             </li>
-                            @Html.ActionLink("Logout", "Signout", "Home", new { area = "" }, new { @class = "nav-link" })
-                            
+                            <hr class="me-4 my-4" />
+                            <li>
+                                @Html.ActionLink("Logout", "Signout", "Home", new { area = "" }, new { @class = "text-decoration-none" })
+                            </li>
                             @* <li>
                                 <a href="@Url.Action("Index", "EmailTemplate")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
