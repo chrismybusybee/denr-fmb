@@ -5,71 +5,322 @@
     ViewBag.UserType = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
 }
 
-<link rel="stylesheet" href="~/js/DataTable/dataTables.min.css">
-<script src="~/js/jquery/jquery-3.7.1/jquery-3.7.1.js"></script>
-<script src="~/js/DataTable/dataTables.min.js"></script>
-
-<div id="card-container">
-    
-    <!-- User History -->
-    <div id="card">
-        @Html.Partial("~/Views/Dashboard/UserHistory.cshtml")
+<div id="card-container" class="bg-none">
+    <div class="row m-0">
+        <div class="col-md-3">
+            <div class="bg-green rounded box-shadow px-4 py-2">
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <h4 class="text-light-green">
+                            IMPORTER
+                        </h4>
+                    </div>
+                    <div class="col-md-6 d-flex justify-content-end">
+                        <img src="~/assets/images/dashboard-icons/dashboard-icon-importer.png" height="65" />
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col-md-4 pe-0">
+                        <div class="d-flex flex-column gap-1">
+                            <span class="text-white fw-bold fs-3">
+                                5
+                            </span>
+                            <span class="text-white fw-light">
+                                Pending
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 px-0">
+                        <div class="d-flex flex-column gap-1">
+                            <span class="text-white fw-bold fs-3">
+                                4
+                            </span>
+                            <span class="text-white fw-light">
+                                Approved
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 px-0">
+                        <div class="d-flex flex-column gap-1">
+                            <span class="text-white fw-bold fs-3">
+                                3
+                            </span>
+                            <span class="text-white fw-light">
+                                Declined
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-between mb-2">
+                    <div class="col-md-6">
+                        <h4 class="text-white fw-light">
+                            Submitted Application
+                        </h4>
+                    </div>
+                    <div class="col-md-6 d-flex justify-content-center align-items-center">
+                        <h1 class="text-white">
+                            12
+                        </h1>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-12 d-flex justify-content-end">
+                        <span class="text-light-green cursor-pointer">
+                            View more
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="bg-green rounded box-shadow px-4 py-2">
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <h4 class="text-light-green">
+                            SELLER
+                        </h4>
+                    </div>
+                    <div class="col-md-6 d-flex justify-content-end">
+                        <img src="~/assets/images/dashboard-icons/dashboard-icon-seller.png" height="65" />
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col-md-4 pe-0">
+                        <div class="d-flex flex-column gap-1">
+                            <span class="text-white fw-bold fs-3">
+                                11
+                            </span>
+                            <span class="text-white fw-light">
+                                Pending
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 px-0">
+                        <div class="d-flex flex-column gap-1">
+                            <span class="text-white fw-bold fs-3">
+                                9
+                            </span>
+                            <span class="text-white fw-light">
+                                Approved
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 px-0">
+                        <div class="d-flex flex-column gap-1">
+                            <span class="text-white fw-bold fs-3">
+                                2
+                            </span>
+                            <span class="text-white fw-light">
+                                Declined
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-between mb-2">
+                    <div class="col-md-6">
+                        <h4 class="text-white fw-light">
+                            Submitted Application
+                        </h4>
+                    </div>
+                    <div class="col-md-6 d-flex justify-content-center align-items-center">
+                        <h1 class="text-white">
+                            22
+                        </h1>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-12 d-flex justify-content-end">
+                        <span class="text-light-green cursor-pointer">
+                            View more
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="bg-green rounded box-shadow px-4 py-2">
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <h4 class="text-light-green">
+                            OWNER
+                        </h4>
+                    </div>
+                    <div class="col-md-6 d-flex justify-content-end">
+                        <img src="~/assets/images/dashboard-icons/dashboard-icon-owner.png" height="65" />
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col-md-4 pe-0">
+                        <div class="d-flex flex-column gap-1">
+                            <span class="text-white fw-bold fs-3">
+                                15
+                            </span>
+                            <span class="text-white fw-light">
+                                Pending
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 px-0">
+                        <div class="d-flex flex-column gap-1">
+                            <span class="text-white fw-bold fs-3">
+                                18
+                            </span>
+                            <span class="text-white fw-light">
+                                Approved
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 px-0">
+                        <div class="d-flex flex-column gap-1">
+                            <span class="text-white fw-bold fs-3">
+                                4
+                            </span>
+                            <span class="text-white fw-light">
+                                Declined
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-between mb-2">
+                    <div class="col-md-6">
+                        <h4 class="text-white fw-light">
+                            Submitted Application
+                        </h4>
+                    </div>
+                    <div class="col-md-6 d-flex justify-content-center align-items-center">
+                        <h1 class="text-white">
+                           37
+                        </h1>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-12 d-flex justify-content-end">
+                        <span class="text-light-green cursor-pointer">
+                            View more
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="bg-green rounded box-shadow px-4 py-2">
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <h4 class="text-light-green">
+                            RENEWAL
+                        </h4>
+                    </div>
+                    <div class="col-md-6 d-flex justify-content-end">
+                        <img src="~/assets/images/dashboard-icons/dashboard-icon-renewal.png" height="65" />
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col-md-4 pe-0">
+                        <div class="d-flex flex-column gap-1">
+                            <span class="text-white fw-bold fs-3">
+                                6
+                            </span>
+                            <span class="text-white fw-light">
+                                Pending
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 px-0">
+                        <div class="d-flex flex-column gap-1">
+                            <span class="text-white fw-bold fs-3">
+                                9
+                            </span>
+                            <span class="text-white fw-light">
+                                Approved
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 px-0">
+                        <div class="d-flex flex-column gap-1">
+                            <span class="text-white fw-bold fs-3">
+                                3
+                            </span>
+                            <span class="text-white fw-light">
+                                Declined
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-between mb-2">
+                    <div class="col-md-6">
+                        <h4 class="text-white fw-light">
+                            Submitted Application
+                        </h4>
+                    </div>
+                    <div class="col-md-6 d-flex justify-content-center align-items-center">
+                        <h1 class="text-white">
+                            18
+                        </h1>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-12 d-flex justify-content-end">
+                        <span class="text-light-green cursor-pointer">
+                            View more
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <!-- Owned Chainsaws -->
-    @if (ViewBag.UserType.Contains("Owner") == true)
-    {
-        
-        <div id="card">
-            @Html.Partial("~/Views/Owner/OwnedChainsaws.cshtml")
-        </div>
-    }
-    @if (ViewBag.UserType.Contains("Seller") == true)
-    {
-        <div id="card">
-            @Html.Partial("~/Views/Seller/Index.cshtml")
-        </div>
-    }
-    @if (ViewBag.UserType.Contains("Importer") == true)
-    {
-        <div id="card">
-            @Html.Partial("~/Views/Importer/ImportedChainsaws.cshtml")
-        </div>
-    }
-    <!-- User Services -->
-    @if (ViewBag.UserType.Contains("Owner") == true)
-    {
-        <div id="card">
-            @Html.Partial("~/Views/Owner/OwnerServices.cshtml")
-        </div>
-    }
-    @if (ViewBag.UserType.Contains("Seller") == true)
-    {
-        <div id="card">
-            @Html.Partial("~/Views/Seller/SellerServices.cshtml")
-        </div>
-    }
-    @if (ViewBag.UserType.Contains("Importer") == true)
-    {
-        <div id="card">
-            @Html.Partial("~/Views/Importer/ImporterServices.cshtml")
-        </div>
-    }
-    
-
-    
 </div>
+        
+
+@*<!-- User History -->
+<div id="card">
+    @Html.Partial("~/Views/Dashboard/UserHistory.cshtml")
+</div>
+
+<!-- Owned Chainsaws -->
+@if (ViewBag.UserType.Contains("Owner") == true)
+{
+        
+    <div id="card">
+        @Html.Partial("~/Views/Owner/OwnedChainsaws.cshtml")
+    </div>
+}
+@if (ViewBag.UserType.Contains("Seller") == true)
+{
+    <div id="card">
+        @Html.Partial("~/Views/Seller/Index.cshtml")
+    </div>
+}
+@if (ViewBag.UserType.Contains("Importer") == true)
+{
+    <div id="card">
+        @Html.Partial("~/Views/Importer/ImportedChainsaws.cshtml")
+    </div>
+}
+<!-- User Services -->
+@if (ViewBag.UserType.Contains("Owner") == true)
+{
+    <div id="card">
+        @Html.Partial("~/Views/Owner/OwnerServices.cshtml")
+    </div>
+}
+@if (ViewBag.UserType.Contains("Seller") == true)
+{
+    <div id="card">
+        @Html.Partial("~/Views/Seller/SellerServices.cshtml")
+    </div>
+}
+@if (ViewBag.UserType.Contains("Importer") == true)
+{
+    <div id="card">
+        @Html.Partial("~/Views/Importer/ImporterServices.cshtml")
+    </div>
+}*@
+
 <script type="text/javascript">
     var js = jQuery.noConflict(true);
     js(document).ready(function () {
-        
-
         js('#ChainsawRecordTable').DataTable({
             pageLength: 3,
         });
     });
 </script>
-
-
-}
-
