@@ -55,7 +55,7 @@ namespace FMB_CIS.Controllers
             if (ModelState.IsValid)
             {
                 if (userRegistrationViewModel.confirmPassword == userRegistrationViewModel.password)
-                { 
+                {
                     DAL dal = new DAL();
                     bool eMailExist = dal.emailExist(userRegistrationViewModel.email, _configuration.GetConnectionString("ConnStrng"));
 
@@ -173,12 +173,12 @@ namespace FMB_CIS.Controllers
                     return RedirectToAction("EmailConfirmation");
                 }
                 else
-                {                    
+                {
                     //Do not reveal if email doesn't exist.
                     return RedirectToAction("EmailConfirmation");
                 }
             }
-            
+
             return View(model);
         }
         

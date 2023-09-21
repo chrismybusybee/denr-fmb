@@ -8,7 +8,7 @@ namespace FMB_CIS.Data
 {
     public class DAL
     {
-        
+
         public bool emailExist(string email, string connectString)
         {
             using (SqlConnection sqlConnection = new SqlConnection(connectString))
