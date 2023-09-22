@@ -8,5 +8,10 @@ namespace FMB_CIS.Controllers
         {
             return View();
         }
+
+        public IActionResult ChainsawImporterApproval()
+        {
+            return View();
+        }
     }
 }
