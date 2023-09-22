@@ -1,4 +1,6 @@
-﻿<div class="modal fade" id="confirmSubmitModal" aria-hidden="true" style="z-index:1050 !important;">
+﻿@model FMB_CIS.Models.tbl_application;
+@*confirm submit modal*@
+<div class="modal fade" id="confirmSubmitModal" aria-hidden="true" style="z-index:1050 !important;">
     <div class="modal-dialog modal-dialog-centered" style="z-index:1050 !important;">
         <div class="modal-content">
             <div class="modal-body">
@@ -11,14 +13,14 @@
                     </p>
                     <div class="d-flex gap-4 w-100">
                         <button id="backBtn" class="btn btn-danger w-100">Back</button>
-                        <button id="confirmBtn" class="btn btn-primary w-100">Confirm</button>
+                        <button type="submit" id="confirmBtn" class="btn btn-primary w-100">Confirm</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
+@*success save modal*@
 <div class="modal fade" id="confirmSuccessModal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
