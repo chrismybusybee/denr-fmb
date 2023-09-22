@@ -399,7 +399,7 @@
         @RenderBody()
     </main>
 
-    @if (currentUrl.Contains("ChainsawImporter"))
+    @if (currentUrl.Contains("ChainsawImporter") || currentUrl.Contains("ChainsawImporter/ChainsawImporterApproval"))
     {
         <partial name="~/Views/Modals/ChainsawImporterModal.cshtml" />
     }
