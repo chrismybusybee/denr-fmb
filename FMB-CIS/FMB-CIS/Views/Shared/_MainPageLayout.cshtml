@@ -64,7 +64,7 @@
                                     <span>Dashboard</span>
                                 </a>
                             </li>
-                            <li>
+                            <li id="applicationMenuItem">
                                 <a href="@Url.Action("Index", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
                                         <img src="~/assets/images/menu-icons/application.png" />
@@ -310,7 +310,7 @@
 
                                     break;
                             }
-                            <li>
+                            <li id="newChainsawRegistrationMenuItem">
                                 <a href="@Url.Action("Index", "NewChainsawRegistration")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
                                         <img src="~/assets/images/menu-icons/new-chainsaw-registration.png" />
@@ -318,7 +318,7 @@
                                     <span>New Chainsaw Registration</span>
                                 </a>
                             </li>
-                            <li>
+                            <li id="renewalMenuItem">
                                 <a href="@Url.Action("Index", "Renewal")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
                                         <img src="~/assets/images/menu-icons/renewal.png" />
@@ -334,7 +334,7 @@
                                     <span>Profile Management</span>
                                 </a>
                             </li>
-                            <li>
+                            <li id="accountManagementMenuItem">
                                 <a href="@Url.Action("Index", "AccountManagement")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
                                         <img src="~/assets/images/menu-icons/account-management.png" />
@@ -342,7 +342,7 @@
                                     <span>Account Management</span>
                                 </a>
                             </li>
-                            <li>
+                            <li id="monitoringMenuItem">
                                 <a href="@Url.Action("Index", "Monitoring")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
                                         <img src="~/assets/images/menu-icons/monitoring.png" />
@@ -352,7 +352,7 @@
                             </li>
                             @*@if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw")!=true)
                             {*@
-                            <li>
+                            <li id="creationOfNewDenrOfficeMenuItem">
                                 <a href="@Url.Action("Index", "CreationOfNewDenrOffice")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
                                         <img src="~/assets/images/menu-icons/creation-of-new-denr-office.png" />
@@ -361,7 +361,7 @@
                                 </a>
                             </li>
                             @*}*@
-                            <li>
+                            <li id="announcementTemplatesMenuItem">
                                 <a href="@Url.Action("Index", "AnnouncementTemplates")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
                                         <img src="~/assets/images/menu-icons/announcement-templates.png" />
@@ -369,7 +369,7 @@
                                     <span>Announcement Templates</span>
                                 </a>
                             </li>
-                            <li>
+                            <li id="emailTemplatesMenuItem">
                                 <a href="@Url.Action("Index", "EmailTemplates")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
                                         <img src="~/assets/images/menu-icons/email-templates.png" />
@@ -473,14 +473,20 @@
 
         const pageToMenuItemMap = {
             "/Dashboard": "dashboardMenuItem",
+            "/Application": "applicationMenuItem",
+            "/ChainsawImporter": "chainsawImporterApplication",
+            "/ChainsawSeller": "chainsawSellerApplication",
+            "/ChainsawOwner": "chainsawOwnerApplication",
+            "/NewChainsawRegistration": "newChainsawRegistrationMenuItem",
+            "/Renewal": "renewalMenuItem",
             "/ProfileManagement": "profileManagementMenuItem",
             "/AccountManagement": "accountManagementMenuItem",
-            "/ChainsawImporter": "chainsawImporterApplication",
-            "/ChainsawImporter/ViewChainsawImporter": "chainsawImporterApplication",
-            "/ChainsawSeller": "chainsawSellerApplication",
-            "/ChainsawSeller/ViewChainsawSeller": "chainsawSellerApplication",
-            "/ChainsawOwner": "chainsawOwnerApplication",
-            "/ChainsawOwner/ViewChainsawOwner": "chainsawOwnerApplication",
+            "/Monitoring": "monitoringMenuItem",
+            "/CreationOfNewDenrOffice": "creationOfNewDenrOfficeMenuItem",
+            "/AnnouncementTemplates": "announcementTemplatesMenuItem",
+            "/EmailTemplates": "emailTemplatesMenuItem",
+            
+            
         };
 
         if (currentPage.startsWith("/AccountManagement/ViewAccount/")) {
