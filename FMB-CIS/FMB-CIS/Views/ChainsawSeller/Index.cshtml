@@ -1,14 +1,22 @@
 ﻿@model FMB_CIS.Models.tbl_application;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> Added model, controller for chainsaw seller
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Chainsaw Seller";
 }
 
 
+<<<<<<< HEAD
 <div id="card-container">
     <div id="card">
+=======
+    <div id="card-container">
+        <div id="card">
+>>>>>>> Added model, controller for chainsaw seller
         @using (Html.BeginForm("Submit", "ChainsawSeller", FormMethod.Post))
         {
             <div class="row m-0">
@@ -19,11 +27,15 @@
                             <label class="text-secondary small">
                                 Permit Type
                             </label>
+<<<<<<< HEAD
                             <select asp-for="tbl_permit_type_id" class="form-select">
                                 <option selected value="0">-- Select Permit Type --</option>
                                 <option value="2">Permit to Sell"</option>
                                 <option value="3">Permit to Purchase</option>
                             </select>
+=======
+                            <input type="Text" value="Permit to Sell" class="form-control" disabled/>
+>>>>>>> Added model, controller for chainsaw seller
                         </div>
                     </div>
                     <h4 class="text-secondary fw-bold my-4">Importer Details</h4>
@@ -154,9 +166,15 @@
                     </div>
                 </div>
             </div>
+<<<<<<< HEAD
         }
+=======
+            }
+        </div>
+>>>>>>> Added model, controller for chainsaw seller
     </div>
-</div>
+
+
 
 
 

@@ -82,12 +82,23 @@ namespace FMB_CIS.Controllers
                     mymodel.tbl_Chainsaws = ChainsawOwnedList;
                     mymodel.applicationModels = applicationMod;
 
+<<<<<<< HEAD
                     return View(mymodel);
                 }
                 else if(userRole.Contains("CENRO") == true)
                 {
                     var applicationlist = _context.tbl_application;
                     var applicationtypelist = _context.tbl_application_type;
+=======
+                var applicationMod = from a in applicationlist
+                                     join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
+                                     join pT in _context.tbl_permit_type on a.tbl_application_type_id equals pT.id
+                                     join pS in _context.tbl_permit_status on a.status equals pS.id
+                                     where a.tbl_user_id == userID
+                                     select new ApplicationModel{id = a.id, application_type = appt.name, permit_type = pT.name, permit_status = pS.status};
+                mymodel.tbl_Chainsaws = ChainsawOwnedList;
+                mymodel.applicationModels = applicationMod;
+>>>>>>> Added model, controller for chainsaw seller
 
                     var applicationMod = from a in applicationlist
                                          join appt in applicationtypelist on a.tbl_application_type_id equals appt.id

@@ -269,6 +269,7 @@
             </div>
         </div>
     </div>
+<<<<<<< HEAD
     @*Cards region end*@
 
     @if (ViewBag.UserType.Contains("CENRO") == true)
@@ -277,10 +278,13 @@
             @Html.Partial("~/Views/Cenro/CenroApplicationList.cshtml")
         </div>
     }
+=======
+>>>>>>> Added model, controller for chainsaw seller
 
         
 
 <!-- User History -->
+<<<<<<< HEAD
     @if (ViewBag.UserType.Contains("Owner") == true || ViewBag.UserType.Contains("Seller") == true || ViewBag.UserType.Contains("Importer") == true)
     {
         <div id="card">
@@ -288,6 +292,11 @@
         </div>
     }
     
+=======
+<div id="card">
+    @Html.Partial("~/Views/Dashboard/UserHistory.cshtml")
+</div>
+>>>>>>> Added model, controller for chainsaw seller
 
 <!-- Owned Chainsaws -->
 @if (ViewBag.UserType.Contains("Owner") == true)

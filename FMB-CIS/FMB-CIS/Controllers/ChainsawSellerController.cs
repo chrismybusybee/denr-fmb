@@ -15,7 +15,10 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using FMB_CIS.Data;
 using FMB_CIS.Models;
+<<<<<<< HEAD
 using System.Runtime.ConstrainedExecution;
+=======
+>>>>>>> Added model, controller for chainsaw seller
 
 namespace FMB_CIS.Controllers
 {
@@ -38,6 +41,7 @@ namespace FMB_CIS.Controllers
             return View();
         }
 
+<<<<<<< HEAD
         public IActionResult ChainsawSellerApproval(int id)
         {
             ViewModel mymodel = new();
@@ -95,11 +99,23 @@ namespace FMB_CIS.Controllers
 
             _context.tbl_application.Add(ta);
             _context.SaveChanges();
+=======
+        [HttpPost]
+        public ActionResult Submit(tbl_application sm)
+        {
+            sm.tbl_application_type_id = 3;
+            sm.tbl_user_id = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            sm.status = 1;
+            sm.tbl_permit_type_id = 3;
+
+            _context.tbl_application.Add(sm);
+>>>>>>> Added model, controller for chainsaw seller
 
             ViewBag.Status = "Save Success.";
 
             return View("Index");
         }
+<<<<<<< HEAD
         [HttpPost]
         public ActionResult FormApprove(IFormCollection ta)
         {
@@ -115,5 +131,7 @@ namespace FMB_CIS.Controllers
             return View();
         }
 
+=======
+>>>>>>> Added model, controller for chainsaw seller
     }
 }
