@@ -1,4 +1,8 @@
 @using System.Security.Claims;
+
+@{
+    var currentUrl = Context.Request.Path.ToString();
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -320,6 +324,12 @@
     <main id="main">
         @RenderBody()
     </main>
+
+    @if (currentUrl.Contains("ChainsawImporter"))
+    {
+        <partial name="~/Views/Modals/ChainsawImporterModal.cshtml" />
+    }
+
     <footer>
         © 2023 DENR-FMB CIS. All rights reserved.
     </footer>
