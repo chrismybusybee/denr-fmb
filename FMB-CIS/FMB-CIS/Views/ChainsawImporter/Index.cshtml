@@ -7,10 +7,11 @@
     <div id="card">
         <div class="row m-0">
             <div class="col-md-12">
-                <h4 class="text-secondary fw-bold mb-4">Supplier</h4>
+                <a href="@Url.Action("Index", "Dashboard")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
+                <h4 class="text-secondary fw-bold my-4">Supplier</h4>
                 <div class="row">
                     <div class="col-md-10">
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-md-4">
                                 <label class="text-secondary small">
                                     First Name
@@ -40,7 +41,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mb-3">
                     <div class="col-md-4">
                         <label class="text-secondary small">
                             Address
@@ -60,7 +61,7 @@
                         <input type="text" class="form-control" />
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="text-secondary small">
                             Number of chainsaws to be purchased/ imported
@@ -74,7 +75,7 @@
                         <input type="text" class="form-control" />
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mb-5">
                     <div class="col-md-12">
                         <label class="text-secondary small">
                             Purpose
@@ -85,7 +86,7 @@
                     </div>
                 </div>
                 <h4 class="text-secondary fw-bold mb-4">Bureau of Customs</h4>
-                <div class="row">
+                <div class="row mb-5">
                     <div class="col-md-6">
                         <label class="text-secondary small">
                             Expected time of arrival
@@ -100,15 +101,57 @@
                     </div>
                 </div>
                 <h4 class="text-secondary fw-bold mb-4">Attach Required Documents</h4>
-                <div class="row">
+                <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="text-secondary small">
                             Attach Forms
                         </label>
-                        <input type="file" />
+                        <input type="file" class="form-control" />
+                    </div>
+                    
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <input type="file" class="form-control" />
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <input type="file" class="form-control" />
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <label class="text-secondary small">
+                            Set Date of Inspection
+                        </label>
+                        <input type="date" class="form-control" />
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-12 d-flex justify-content-center">
+                        <button id="btnSubmit" class="btn btn-primary">Submit</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnSubmit").click(function () {
+            $("#confirmSubmitModal").modal("show");
+        });
+        $("#backBtn").click(function () {
+            $("#confirmSubmitModal").modal("hide");
+        });
+        $("#confirmBtn").click(function () {
+            $("#confirmSubmitModal").modal("hide");
+            $("#confirmSuccessModal").modal("show");
+        });
+    });
+</script>
