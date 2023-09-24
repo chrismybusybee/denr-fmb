@@ -50,6 +50,14 @@ namespace FMB_CIS.Models
         public string expected_time_release { get; set; }
         public string date_of_inspection { get; set; }
         public int status { get; set; }
+<<<<<<< HEAD
 >>>>>>> Added model, controller for chainsaw seller
+=======
+
+        public int is_active { get; set; }
+        public int created_by {  get; set; }
+        public int modified_by { get; set; }
+        
+>>>>>>> Created a chainsaw owner controller
     }
 }

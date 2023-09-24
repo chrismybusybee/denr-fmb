@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 using System;
 using System.Data;
 using System.Data.SqlTypes;
@@ -16,15 +17,25 @@ using Microsoft.Extensions.Configuration;
 using FMB_CIS.Data;
 using FMB_CIS.Models;
 using System.Runtime.ConstrainedExecution;
+=======
+﻿using FMB_CIS.Data;
+using FMB_CIS.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+>>>>>>> Created a chainsaw owner controller
 
 namespace FMB_CIS.Controllers
 {
     public class ChainsawOwnerController : Controller
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
     {
 >>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
+=======
+    {
+>>>>>>> Created a chainsaw owner controller
         private readonly LocalContext _context;
         private readonly IConfiguration _configuration;
 
@@ -33,6 +44,7 @@ namespace FMB_CIS.Controllers
             this._configuration = configuration;
             _context = context;
         }
+<<<<<<< HEAD
 
 
         public IActionResult Index()
@@ -97,12 +109,33 @@ namespace FMB_CIS.Controllers
 
 
             _context.tbl_application.Add(ta);
+=======
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Submit(tbl_application sm)
+        {
+            int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            sm.tbl_application_type_id = 3;
+            sm.tbl_user_id = userID;
+            sm.is_active = 1;
+            sm.modified_by = userID;
+            sm.created_by = userID;
+            sm.status = 1;
+            sm.tbl_permit_type_id = 3;
+
+            _context.tbl_application.Add(sm);
+>>>>>>> Created a chainsaw owner controller
             _context.SaveChanges();
 
             ViewBag.Status = "Save Success.";
 
             return View("Index");
         }
+<<<<<<< HEAD
         [HttpPost]
         public ActionResult FormApprove(IFormCollection ta)
         {
@@ -118,5 +151,7 @@ namespace FMB_CIS.Controllers
             return View();
         }
 
+=======
+>>>>>>> Created a chainsaw owner controller
     }
 }
