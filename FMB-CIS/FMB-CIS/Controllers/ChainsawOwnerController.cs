@@ -1,17 +1,15 @@
-<<<<<<< HEAD
+
 ﻿using FMB_CIS.Data;
 using FMB_CIS.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-=======
-﻿using Microsoft.AspNetCore.Mvc;
->>>>>>> e3daccb9689d065fc715a78e1e7e1dfe36b0ec15
+
 
 namespace FMB_CIS.Controllers
 {
     public class ChainsawOwnerController : Controller
     {
-<<<<<<< HEAD
+
         private readonly LocalContext _context;
         private readonly IConfiguration _configuration;
 
@@ -20,13 +18,12 @@ namespace FMB_CIS.Controllers
             this._configuration = configuration;
             _context = context;
         }
-=======
->>>>>>> e3daccb9689d065fc715a78e1e7e1dfe36b0ec15
+
         public IActionResult Index()
         {
             return View();
         }
-<<<<<<< HEAD
+
 
         [HttpPost]
         public ActionResult Submit(tbl_application sm)
@@ -47,7 +44,6 @@ namespace FMB_CIS.Controllers
 
             return View("Index");
         }
-=======
->>>>>>> e3daccb9689d065fc715a78e1e7e1dfe36b0ec15
+
     }
 }
