@@ -5,32 +5,32 @@
 
 <div class="container-fluid d-flex flex-column align-items-center justify-content-center">
     <div class="col-md-12 p-md-2 text-start">
-        <img src="~/assets/images/logo.png" height="100"  />
+        <img src="~/assets/images/logo.png" height="100" />
     </div>
     <hr class="hr" />
     <div class="col-md-12 d-flex flex-column my-auto px-md-4">
         <a href="@Url.Action("Index", "Home")" class="me-auto my-4" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
         <h2 class="text-secondary mb-4">Personal Information</h2>
         <form asp-action="Registration" id="RegForm">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="form-group mb-2">
-                    <label class="form-label small">User Type</label>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group mb-2">
+                        <label class="form-label small">User Type</label>
                         <select asp-for="tbl_user_types_id" class="form-select" aria-label="User Type">
-                        <option selected disabled>- Select User Type -</option>
-                        <option value="1">Chainsaw Importer Only</option>
-                        <option value="2">Chainsaw Seller Only</option>
-                        <option value="3">Chainsaw Owner Only</option>
-                        <option value="4">Chainsaw Importer and Seller</option>
-                        <option value="5">Chainsaw Importer and Owner</option>
-                        <option value="6">Chainsaw Seller and Owner</option>
-                        <option value="7">Chainsaw Importer, Owner, and Seller</option>
-                    </select>
+                            <option selected disabled>- Select User Type -</option>
+                            <option value="1">Chainsaw Importer Only</option>
+                            <option value="2">Chainsaw Seller Only</option>
+                            <option value="3">Chainsaw Owner Only</option>
+                            <option value="4">Chainsaw Importer and Seller</option>
+                            <option value="5">Chainsaw Importer and Owner</option>
+                            <option value="6">Chainsaw Seller and Owner</option>
+                            <option value="7">Chainsaw Importer, Owner, and Seller</option>
+                        </select>
                         <span asp-validation-for="tbl_user_types_id" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <hr class="my-4" />
+            <hr class="my-4" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="row mb-4">
                 <div class="col-md-12">
@@ -148,7 +148,7 @@
                 <div class="col-md-6">
                     <div class="form-group" hidden="true">
                         <label asp-for="tbl_division_id" class="form-label small">DIVISION ID</label>
-                        <input asp-for="tbl_division_id" class="form-control" value = " " disabled/>
+                        <input asp-for="tbl_division_id" class="form-control" value=" " disabled />
                     </div>
                 </div>
             </div>
@@ -179,7 +179,7 @@
                 <div class="col-md-6" hidden="true">
                     <div class="form-group">
                         <label asp-for="comment" class="form-label small">Remarks</label>
-                        <input asp-for="comment" class="form-control" disabled/>
+                        <input asp-for="comment" class="form-control" disabled />
                         <span asp-validation-for="comment" class="text-danger"></span>
                     </div>
                 </div>

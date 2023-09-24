@@ -7,28 +7,19 @@ using FMB_CIS.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
+using NuGet.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace FMB_CIS.Controllers
 {
     public class AccountController : Controller
     {
         private readonly IConfiguration _configuration;
-        //private readonly ILogger<AccountController> _logger;
-        //private readonly UserManager<ApplicationUser> _userManager;
 
-        public AccountController(IConfiguration configuration/*, UserManager<ApplicationUser> userManager, ILogger<AccountController> logger*/)
+        public AccountController(IConfiguration configuration)
         {
-            //_logger = logger;
-            //_userManager = userManager;
             this._configuration = configuration;
         }
-        public class ApplicationUser : IdentityUser
-        {
-        }
-        //public class ApplicationUser : IdentityUser
-        //{
-        //    //public virtual string user { get; set; }
-        //}
         public IActionResult Registration()
         {
             return View();
@@ -44,10 +35,10 @@ namespace FMB_CIS.Controllers
             return View();
         }
 
-        public IActionResult ResetPasswordSent()
-        {
-            return View();
-        }
+        //public IActionResult ResetPasswordSent()
+        //{
+        //    return View();
+        //}
 
         public IActionResult ResetPassword()
         {
@@ -64,7 +55,7 @@ namespace FMB_CIS.Controllers
             if (ModelState.IsValid)
             {
                 if (userRegistrationViewModel.confirmPassword == userRegistrationViewModel.password)
-                { 
+                {
                     DAL dal = new DAL();
                     bool eMailExist = dal.emailExist(userRegistrationViewModel.email, _configuration.GetConnectionString("ConnStrng"));
 
@@ -127,86 +118,121 @@ namespace FMB_CIS.Controllers
         public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
         {
             if (ModelState.IsValid)
-            {
-                //var user = await _userManager.FindByEmailAsync(model.email);
-                //if (user != null /*&& await userManager.IsEmailConfirmedAsync(user)*/)
-                //{
-                //    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                //    var passwordResetLink = Url.Action("ResetPassword", "Account", new { email = model.email, token = token }, Request.Scheme);
-
-                //    _logger.Log(LogLevel.Warning, passwordResetLink);
-                //    return View("EmailConfirmation");
-                //}
-                //return View(model);
+            {                
                 DAL dal = new DAL();
                 bool eMailExist = dal.emailExist(model.email, _configuration.GetConnectionString("ConnStrng"));
                 if (eMailExist)
                 {
                     //CODE TO GENERATE A LINK FOR PASSWORD RESET.
+                    using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("ConnStrng")))
+                    {
+                        SqlCommand cmd = new SqlCommand("spResetPassword", sqlConnection);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        SqlParameter paramEmail = new SqlParameter("@email", model.email);
+                        cmd.Parameters.Add(paramEmail);
+
+                        sqlConnection.Open();
+                        SqlDataReader rdr = cmd.ExecuteReader();
+                        while (rdr.Read())
+                        {
+                            if (Convert.ToBoolean(rdr["ReturnCode"]))
+                            {
+                                string passResetLink = "https://localhost:7270/Account/ResetPassword?email=" + rdr["email"].ToString() + "&tokencode=" + rdr["UniqueId"].ToString();
+                                //SendPasswordResetEmail(rdr["Email"].ToString(), txtUserName.Text, rdr["UniqueId"].ToString());
+                                //lblMessage.Text = "An email with instructions to reset your password is sent to your registered email";
+
+                                //Write to text file
+                                //Pass the filepath and filename to the StreamWriter Constructor
+
+                                //StreamWriter sw = new StreamWriter("C:\\Users\\John Anthony\\Desktop\\Test.txt");
+
+                                //Write a line of text
+                                //sw.WriteLine("Email: " + rdr["email"].ToString());
+
+                                //Write a second line of text
+                                //sw.WriteLine("UniqueId: " + rdr["UniqueId"].ToString());
+
+                                //sw.WriteLine(passResetLink);
+                                //Close the file
+                                //sw.Close();
+                                Console.WriteLine("Link for Password Reset:");
+                                Console.WriteLine(passResetLink);
+
+                                return RedirectToAction("EmailConfirmation");
+                            }
+                            else
+                            {
+                                //Do not reveal if email doesn't exist.
+                                return RedirectToAction("EmailConfirmation");
+                            }
+                        }
+                    }
 
                     //var token = GeneratePasswordResetTokenAsync(model.email);
 
                     return RedirectToAction("EmailConfirmation");
                 }
                 else
-                {                    
+                {
                     //Do not reveal if email doesn't exist.
                     return RedirectToAction("EmailConfirmation");
                 }
             }
-            
+
             return View(model);
         }
+        
+        [HttpGet]
+        //[Url("?email={email}&code={code}")]
+        public IActionResult ResetPassword(string email, string tokencode)
+        {
+            if (tokencode == null || email == null)
+            {
+                ModelState.AddModelError("", "Invalid password reset token");
+            }
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                string cstr = _configuration.GetConnectionString("ConnStrng");
+                //Check if token is valid
+                DAL dal = new DAL();
+                bool linkValidCheck = dal.isLinkValid(model.tokencode, cstr);
+                bool eMailExist = dal.emailExist(model.email, cstr);
+                if (linkValidCheck == true && eMailExist == true)
+                {
+                    string encrPw = EncryptDecrypt.ConvertToEncrypt(model.Password);
+                    //Code to change password
+                    bool isPWchanged = dal.changePasswordAndReturnIfChanged(model.tokencode, encrPw, cstr);
+                    if (isPWchanged == true)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        return View();
+                        //return RedirectToAction("Index", "Home");
+                    }
+                    
+                    //return View("ResetPasswordConfirmation");
+                }
+                else
+                {
+                    return View();
+                    //return RedirectToAction("Index", "Home");
+                }
+                
+            }
+            else 
+            {
+                //return RedirectToAction("Index", "Home");
+                return View();
+            }
+        }
 
-        //public IActionResult EnterNewPassword()
-        //{
-        //    return View();
-
-        //}
-
-        //[HttpPost]
-        //public IActionResult EnterNewPassword(ForgotPasswordModel model, string email)
-        //{
-        //    if (model.confirmPassword == model.password)
-        //    {
-        //        string encrPw = EncryptDecrypt.ConvertToEncrypt(model.password);
-        //        using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("ConnStrng")))
-        //        {
-        //            sqlConnection.Open();
-        //            SqlCommand sqlCmd = new SqlCommand("ChangePasswordFromEmail", sqlConnection);
-        //            sqlCmd.CommandType = CommandType.StoredProcedure;
-        //            sqlCmd.Parameters.AddWithValue("email", email);
-        //            sqlCmd.Parameters.AddWithValue("password", encrPw);
-        //            sqlCmd.ExecuteNonQuery();
-        //        }
-        //        return View();
-        //}
-
-        //public static List<Regions> GetRegions()
-        //{
-        //    List<Regions> regionObj = new List<Regions>();
-        //    string cstr = "Data Source=DESKTOP-LM30NHD\\MSSQLSERVER01;Database=denr_fmb_cis;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=true";
-        //    using (SqlConnection sqlConnection = new SqlConnection(cstr))
-        //    {
-        //        using (SqlCommand sqlCmd = new SqlCommand("SelectAllRegionNames", sqlConnection))
-        //        {
-        //            using(SqlDataAdapter sDA = new SqlDataAdapter())
-        //            {
-        //                sqlCmd.Connection=sqlConnection;
-        //                sqlConnection.Open();
-        //                sDA.SelectCommand = sqlCmd;
-        //                SqlDataReader sdr = SqlCommand.ExecuteReader();
-        //                while (sdr.Read())
-        //                {
-        //                    Regions regObj = new Regions();
-        //                    regObj.name = sdr["Name"].ToString();
-        //                    regionObj.Add(regObj);
-        //                }
-        //            }
-        //            return regionObj;
-        //        }
-        //    }
-        //}
 
     }
 }

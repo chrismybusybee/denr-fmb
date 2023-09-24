@@ -27,8 +27,6 @@ namespace FMB_CIS.Controllers
             this._configuration = configuration;
         }
 
-
-
         public IActionResult Index()
         {
             if (string.IsNullOrWhiteSpace(User.Identity.Name))
@@ -129,8 +127,6 @@ namespace FMB_CIS.Controllers
                 return View();
         }
 
-
-
         //public async Task Signout(/*string returnUrl = null*/)
         //{
         //    //if (!string.IsNullOrEmpty(ErrorMessage))
@@ -149,7 +145,5 @@ namespace FMB_CIS.Controllers
 
             return RedirectToAction("Index");
         }
-
-
     }
 }

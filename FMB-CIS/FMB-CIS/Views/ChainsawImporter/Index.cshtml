@@ -1,0 +1,157 @@
+﻿@{
+    Layout = "~/Views/Shared/_MainPageLayout.cshtml";
+    ViewBag.Title = "Chainsaw Importer";
+}
+
+<div id="card-container">
+    <div id="card">
+        <div class="row m-0">
+            <div class="col-md-12">
+                <a href="@Url.Action("Index", "Dashboard")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
+                <h4 class="text-secondary fw-bold my-4">Supplier</h4>
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="text-secondary small">
+                                    First Name
+                                </label>
+                                <input type="text" class="form-control" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="text-secondary small">
+                                    Middle Name
+                                </label>
+                                <input type="text" class="form-control" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="text-secondary small">
+                                    Last Name
+                                </label>
+                                <input type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="col-md-12">
+                            <label class="text-secondary small">
+                                Suffix
+                            </label>
+                            <input type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="text-secondary small">
+                            Address
+                        </label>
+                        <input type="text" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="text-secondary small">
+                            Email
+                        </label>
+                        <input type="text" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="text-secondary small">
+                            Contact No.
+                        </label>
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="text-secondary small">
+                            Number of chainsaws to be purchased/ imported
+                        </label>
+                        <input type="text" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="text-secondary small">
+                            Specification
+                        </label>
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col-md-12">
+                        <label class="text-secondary small">
+                            Purpose
+                        </label>
+                        <textarea class="form-control">
+
+                        </textarea>
+                    </div>
+                </div>
+                <h4 class="text-secondary fw-bold mb-4">Bureau of Customs</h4>
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <label class="text-secondary small">
+                            Expected time of arrival
+                        </label>
+                        <input type="date" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="text-secondary small">
+                            Expected time of release
+                        </label>
+                        <input type="date" class="form-control" />
+                    </div>
+                </div>
+                <h4 class="text-secondary fw-bold mb-4">Attach Required Documents</h4>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="text-secondary small">
+                            Attach Forms
+                        </label>
+                        <input type="file" class="form-control" />
+                    </div>
+                    
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <input type="file" class="form-control" />
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <input type="file" class="form-control" />
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <label class="text-secondary small">
+                            Set Date of Inspection
+                        </label>
+                        <input type="date" class="form-control" />
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-12 d-flex justify-content-center">
+                        <button id="btnSubmit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnSubmit").click(function () {
+            $("#confirmSubmitModal").modal("show");
+        });
+        $("#backBtn").click(function () {
+            $("#confirmSubmitModal").modal("hide");
+        });
+        $("#confirmBtn").click(function () {
+            $("#confirmSubmitModal").modal("hide");
+            $("#confirmSuccessModal").modal("show");
+        });
+    });
+</script>

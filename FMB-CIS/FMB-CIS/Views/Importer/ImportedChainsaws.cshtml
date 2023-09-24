@@ -1,0 +1,63 @@
+﻿@model FMB_CIS.Models.ViewModel
+
+<link rel="stylesheet" href="~/js/DataTable/dataTables.min.css">
+<script src="~/js/jquery/jquery-3.7.1/jquery-3.7.1.js"></script>
+<script src="~/js/DataTable/dataTables.min.js"></script>
+
+<div id="card">
+    <h1>
+        Imported Chainsaws
+    </h1>
+    <p>
+        <table class="table" id="tblImportedChainsaws">
+            <thead>
+                <tr>
+                    <th>
+                        Engine
+                    </th>
+                    <th>
+                        Brand
+                    </th>
+                    <th>
+                        Model
+                    </th>
+                    <th>
+                        Power
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (tbl_chainsaw item in Model.tbl_Chainsaws)
+                {
+                    if (item.status == "Importer")
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Engine)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Brand)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Model)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Power)
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </p>
+</div>
+
+<script type="text/javascript">
+    var js = jQuery.noConflict(true);
+    js(document).ready(function () {
+        js('#tblImportedChainsaws').DataTable({
+            pageLength: 3,
+        });
+    });
+</script>

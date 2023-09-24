@@ -8,7 +8,7 @@ namespace FMB_CIS.Data
 {
     public class DAL
     {
-        
+
         public bool emailExist(string email, string connectString)
         {
             using (SqlConnection sqlConnection = new SqlConnection(connectString))
@@ -116,5 +116,42 @@ namespace FMB_CIS.Data
             }
         }
 
+        public bool isLinkValid(string tkncode, string connectString)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(connectString))
+            {
+
+                sqlConnection.Open();
+                SqlCommand sqlCmd = new SqlCommand("spIsPasswordResetLinkValid", sqlConnection);
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.Parameters.AddWithValue("@GUID", tkncode);
+
+                return Convert.ToBoolean(sqlCmd.ExecuteScalar());
+
+            }
+        }
+
+        public bool changePasswordAndReturnIfChanged(string tkncode, string encrPass, string connectString)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(connectString))
+            {
+                sqlConnection.Open();
+                SqlCommand sqlCmd = new SqlCommand("spChangePassword", sqlConnection);
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.Parameters.Add("@GUID", SqlDbType.UniqueIdentifier).Value = new Guid (tkncode);
+                sqlCmd.Parameters.AddWithValue("@password", encrPass);
+                sqlCmd.ExecuteNonQuery();
+                int returnedVal = Convert.ToInt32(sqlCmd.ExecuteScalar());
+
+                if (Convert.ToInt32(sqlCmd.ExecuteScalar()) == 1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
     }
 }
