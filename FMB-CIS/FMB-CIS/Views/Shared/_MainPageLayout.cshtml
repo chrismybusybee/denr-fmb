@@ -64,8 +64,8 @@
                                     <span>Dashboard</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="#" class="d-flex gap-2 text-decoration-none fs-6">
+                            <li id="applicationMenuItem">
+                                <a href="@Url.Action("Index", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
                                         <img src="~/assets/images/menu-icons/application.png" />
                                     </div>
@@ -81,7 +81,6 @@
                                                 <img src="~/assets/images/menu-icons/chainsaw-importer.png" />
                                             </div>
                                             <span>Chainsaw Importer</span>
-                                            <div class="caret"></div>
                                         </a>
                                         <ul id="chainsawImporterDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
                                             <li id="chainsawImporterApplication" class="my-0">
@@ -103,7 +102,6 @@
                                                 <img src="~/assets/images/menu-icons/chainsaw-seller.png" />
                                             </div>
                                             <span>Chainsaw Seller</span>
-                                            <div class="caret"></div>
                                         </a>
                                         <ul id="chainsawSellerDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
                                             <li id="chainsawSellerApplication" class="my-0">
@@ -118,13 +116,23 @@
                                     </li>
                                     break;
                                 case "Chainsaw Owner":
-                                    <li>
-                                        <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
+                                    <li id="chainsawOwnerMenuItem">
+                                        <a href="#" id="chainsawOwnerSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
                                             <div>
                                                 <img src="~/assets/images/menu-icons/chainsaw-owner.png" />
                                             </div>
                                             <span>Chainsaw Owner</span>
                                         </a>
+                                        <ul id="chainsawOwnerDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
+                                            <li id="chainsawOwnerApplication" class="my-0">
+                                                <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                    <div>
+                                                        <img src="~/assets/images/menu-icons/line.png" />
+                                                    </div>
+                                                    <span>Application</span>
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </li>
                                     break;
                                 case "Chainsaw Importer and Seller":
@@ -134,7 +142,6 @@
                                                 <img src="~/assets/images/menu-icons/chainsaw-importer.png" />
                                             </div>
                                             <span>Chainsaw Importer</span>
-                                            <div class="caret"></div>
                                         </a>
 
                                         <ul id="chainsawImporterDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
@@ -154,7 +161,6 @@
                                                 <img src="~/assets/images/menu-icons/chainsaw-seller.png" />
                                             </div>
                                             <span>Chainsaw Seller</span>
-                                            <div class="caret"></div>
                                         </a>
                                         <ul id="chainsawSellerDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
                                             <li id="chainsawSellerApplication" class="my-0">
@@ -175,7 +181,6 @@
                                                 <img src="~/assets/images/menu-icons/chainsaw-importer.png" />
                                             </div>
                                             <span>Chainsaw Importer</span>
-                                            <div class="caret"></div>
                                         </a>
                                         <ul id="chainsawImporterDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
                                             <li id="chainsawImporterApplication" class="my-0">
@@ -188,13 +193,23 @@
                                             </li>
                                         </ul>
                                     </li>
-                                    <li>
-                                        <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
+                                    <li id="chainsawOwnerMenuItem">
+                                        <a href="#" id="chainsawOwnerSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
                                             <div>
                                                 <img src="~/assets/images/menu-icons/chainsaw-owner.png" />
                                             </div>
                                             <span>Chainsaw Owner</span>
                                         </a>
+                                        <ul id="chainsawOwnerDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
+                                            <li id="chainsawOwnerApplication" class="my-0">
+                                                <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                    <div>
+                                                        <img src="~/assets/images/menu-icons/line.png" />
+                                                    </div>
+                                                    <span>Application</span>
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </li>
                                     break;
                                 case "Chainsaw Seller and Owner":
@@ -204,7 +219,6 @@
                                                 <img src="~/assets/images/menu-icons/chainsaw-seller.png" />
                                             </div>
                                             <span>Chainsaw Seller</span>
-                                            <div class="caret"></div>
                                         </a>
                                         <ul id="chainsawSellerDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
                                             <li id="chainsawSellerApplication" class="my-0">
@@ -217,13 +231,23 @@
                                             </li>
                                         </ul>
                                     </li>
-                                    <li>
-                                        <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
+                                    <li id="chainsawOwnerMenuItem">
+                                        <a href="#" id="chainsawOwnerSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
                                             <div>
                                                 <img src="~/assets/images/menu-icons/chainsaw-owner.png" />
                                             </div>
                                             <span>Chainsaw Owner</span>
                                         </a>
+                                        <ul id="chainsawOwnerDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
+                                            <li id="chainsawOwnerApplication" class="my-0">
+                                                <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                    <div>
+                                                        <img src="~/assets/images/menu-icons/line.png" />
+                                                    </div>
+                                                    <span>Application</span>
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </li>
                                     break;
                                 case "Chainsaw Importer, Owner, and Seller":
@@ -233,7 +257,6 @@
                                                 <img src="~/assets/images/menu-icons/chainsaw-importer.png" />
                                             </div>
                                             <span>Chainsaw Importer</span>
-                                            <div class="caret"></div>
                                         </a>
                                         <ul id="chainsawImporterDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
                                             <li id="chainsawImporterApplication" class="my-0">
@@ -252,7 +275,6 @@
                                                 <img src="~/assets/images/menu-icons/chainsaw-seller.png" />
                                             </div>
                                             <span>Chainsaw Seller</span>
-                                            <div class="caret"></div>
                                         </a>
                                         <ul id="chainsawSellerDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
                                             <li id="chainsawSellerApplication" class="my-0">
@@ -265,20 +287,30 @@
                                             </li>
                                         </ul>
                                     </li>
-                                    <li>
-                                        <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
+                                    <li id="chainsawOwnerMenuItem">
+                                        <a href="#" id="chainsawOwnerSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
                                             <div>
                                                 <img src="~/assets/images/menu-icons/chainsaw-owner.png" />
                                             </div>
                                             <span>Chainsaw Owner</span>
                                         </a>
+                                        <ul id="chainsawOwnerDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
+                                            <li id="chainsawOwnerApplication" class="my-0">
+                                                <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                    <div>
+                                                        <img src="~/assets/images/menu-icons/line.png" />
+                                                    </div>
+                                                    <span>Application</span>
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </li>
                                     break;
                                 default:
 
                                     break;
                             }
-                            <li>
+                            <li id="newChainsawRegistrationMenuItem">
                                 <a href="@Url.Action("Index", "NewChainsawRegistration")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
                                         <img src="~/assets/images/menu-icons/new-chainsaw-registration.png" />
@@ -286,7 +318,7 @@
                                     <span>New Chainsaw Registration</span>
                                 </a>
                             </li>
-                            <li>
+                            <li id="renewalMenuItem">
                                 <a href="@Url.Action("Index", "Renewal")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
                                         <img src="~/assets/images/menu-icons/renewal.png" />
@@ -302,7 +334,7 @@
                                     <span>Profile Management</span>
                                 </a>
                             </li>
-                            <li>
+                            <li id="accountManagementMenuItem">
                                 <a href="@Url.Action("Index", "AccountManagement")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
                                         <img src="~/assets/images/menu-icons/account-management.png" />
@@ -310,7 +342,7 @@
                                     <span>Account Management</span>
                                 </a>
                             </li>
-                            <li>
+                            <li id="monitoringMenuItem">
                                 <a href="@Url.Action("Index", "Monitoring")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
                                         <img src="~/assets/images/menu-icons/monitoring.png" />
@@ -318,27 +350,27 @@
                                     <span>Monitoring</span>
                                 </a>
                             </li>
-                            @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw")!=true)
-                            {
-                            <li>
-                                <a href="@Url.Action("Index", "CreationNewOffice")" class="d-flex gap-2 text-decoration-none fs-6">
+                            @*@if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw")!=true)
+                            {*@
+                            <li id="creationOfNewDenrOfficeMenuItem">
+                                <a href="@Url.Action("Index", "CreationOfNewDenrOffice")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
                                         <img src="~/assets/images/menu-icons/creation-of-new-denr-office.png" />
                                     </div>
                                     <span>Creation of New DENR Office</span>
                                 </a>
                             </li>
-                            }
-                            <li>
-                                <a href="@Url.Action("Index", "AnnoucementTemplate")" class="d-flex gap-2 text-decoration-none fs-6">
+                            @*}*@
+                            <li id="announcementTemplatesMenuItem">
+                                <a href="@Url.Action("Index", "AnnouncementTemplates")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
                                         <img src="~/assets/images/menu-icons/announcement-templates.png" />
                                     </div>
                                     <span>Announcement Templates</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="@Url.Action("Index", "EmailTemplate")" class="d-flex gap-2 text-decoration-none fs-6">
+                            <li id="emailTemplatesMenuItem">
+                                <a href="@Url.Action("Index", "EmailTemplates")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
                                         <img src="~/assets/images/menu-icons/email-templates.png" />
                                     </div>
@@ -367,13 +399,17 @@
         @RenderBody()
     </main>
 
-    @if (currentUrl.Contains("ChainsawImporter"))
+    @if (currentUrl.Contains("ChainsawImporter") || currentUrl.Contains("ChainsawImporter/ChainsawImporterApproval"))
     {
         <partial name="~/Views/Modals/ChainsawImporterModal.cshtml" />
     }
     else if (currentUrl.Contains("ChainsawSeller"))
     {
         <partial name="~/Views/Modals/ChainsawSellerModal.cshtml" />
+    }
+    else if (currentUrl.Contains("ChainsawOwner"))
+    {
+        <partial name="~/Views/Modals/ChainsawOwnerModal.cshtml" />
     }
 
     <footer>
@@ -422,6 +458,8 @@
 
         setupDropdown("chainsawSellerSubMenuItem", "chainsawSellerDropdown");
 
+        setupDropdown("chainsawOwnerSubMenuItem", "chainsawOwnerDropdown");
+
         function setActiveMenuItem(menuItemId) {
             const menuItems = document.querySelectorAll('#menu-items ul li');
             menuItems.forEach((item) => {
@@ -435,12 +473,20 @@
 
         const pageToMenuItemMap = {
             "/Dashboard": "dashboardMenuItem",
+            "/Application": "applicationMenuItem",
+            "/ChainsawImporter": "chainsawImporterApplication",
+            "/ChainsawSeller": "chainsawSellerApplication",
+            "/ChainsawOwner": "chainsawOwnerApplication",
+            "/NewChainsawRegistration": "newChainsawRegistrationMenuItem",
+            "/Renewal": "renewalMenuItem",
             "/ProfileManagement": "profileManagementMenuItem",
             "/AccountManagement": "accountManagementMenuItem",
-            "/ChainsawImporter": "chainsawImporterApplication",
-            "/ChainsawImporter/ViewChainsawImporter": "chainsawImporterApplication",
-            "/ChainsawSeller": "chainsawSellerApplication",
-            "/ChainsawSeller/ViewChainsawSeller": "chainsawSellerApplication",
+            "/Monitoring": "monitoringMenuItem",
+            "/CreationOfNewDenrOffice": "creationOfNewDenrOfficeMenuItem",
+            "/AnnouncementTemplates": "announcementTemplatesMenuItem",
+            "/EmailTemplates": "emailTemplatesMenuItem",
+            
+            
         };
 
         if (currentPage.startsWith("/AccountManagement/ViewAccount/")) {
