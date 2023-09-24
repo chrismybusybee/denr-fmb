@@ -1,18 +1,14 @@
-<<<<<<< HEAD
-﻿using Microsoft.AspNetCore.Mvc;
-=======
+
 ﻿using FMB_CIS.Data;
 using FMB_CIS.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
->>>>>>> Created a chainsaw owner controller
+
 
 namespace FMB_CIS.Controllers
 {
     public class ChainsawOwnerController : Controller
-    {
-<<<<<<< HEAD
-=======
+
         private readonly LocalContext _context;
         private readonly IConfiguration _configuration;
 
@@ -21,13 +17,11 @@ namespace FMB_CIS.Controllers
             this._configuration = configuration;
             _context = context;
         }
->>>>>>> Created a chainsaw owner controller
+
         public IActionResult Index()
         {
             return View();
-        }
-<<<<<<< HEAD
-=======
+
 
         [HttpPost]
         public ActionResult Submit(tbl_application sm)
@@ -48,6 +42,6 @@ namespace FMB_CIS.Controllers
 
             return View("Index");
         }
->>>>>>> Created a chainsaw owner controller
+
     }
 }
