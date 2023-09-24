@@ -1,6 +1,9 @@
 ﻿@model FMB_CIS.Models.tbl_application;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> updated the chainsaw owner contrller and view.
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Chainsaw Seller";
@@ -9,7 +12,11 @@
 
 <div id="card-container">
     <div id="card">
+<<<<<<< HEAD
         @using (Html.BeginForm("Submit", "ChainsawOwner", FormMethod.Post))
+=======
+        @using (Html.BeginForm("Submit", "ChainsawSeller", FormMethod.Post))
+>>>>>>> updated the chainsaw owner contrller and view.
         {
             <div class="row m-0">
                 <div class="col-md-12">
@@ -19,11 +26,15 @@
                             <label class="text-secondary small">
                                 Permit Type
                             </label>
+<<<<<<< HEAD
                             <select asp-for="tbl_permit_type_id" class="form-select">
                                 <option selected value="0">-- Select Permit Type --</option>
                                 <option value="2">Permit to Sell"</option>
                                 <option value ="3">Permit to Purchase</option>
                                 </select>
+=======
+                            <input type="Text" value="Permit to Sell" class="form-control" disabled />
+>>>>>>> updated the chainsaw owner contrller and view.
                         </div>
                     </div>
                     <h4 class="text-secondary fw-bold my-4">Importer Details</h4>

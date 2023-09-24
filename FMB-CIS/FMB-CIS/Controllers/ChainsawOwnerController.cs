@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 using System;
 using System.Data;
 using System.Data.SqlTypes;
@@ -18,15 +19,23 @@ using FMB_CIS.Data;
 using FMB_CIS.Models;
 using System.Runtime.ConstrainedExecution;
 =======
+=======
+
+>>>>>>> updated the chainsaw owner contrller and view.
 ﻿using FMB_CIS.Data;
 using FMB_CIS.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+<<<<<<< HEAD
 >>>>>>> Created a chainsaw owner controller
+=======
+
+>>>>>>> updated the chainsaw owner contrller and view.
 
 namespace FMB_CIS.Controllers
 {
     public class ChainsawOwnerController : Controller
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -36,6 +45,10 @@ namespace FMB_CIS.Controllers
 =======
     {
 >>>>>>> Created a chainsaw owner controller
+=======
+    {
+
+>>>>>>> updated the chainsaw owner contrller and view.
         private readonly LocalContext _context;
         private readonly IConfiguration _configuration;
 
@@ -44,6 +57,7 @@ namespace FMB_CIS.Controllers
             this._configuration = configuration;
             _context = context;
         }
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 
@@ -110,10 +124,17 @@ namespace FMB_CIS.Controllers
 
             _context.tbl_application.Add(ta);
 =======
+=======
+
+>>>>>>> updated the chainsaw owner contrller and view.
         public IActionResult Index()
         {
             return View();
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> updated the chainsaw owner contrller and view.
 
         [HttpPost]
         public ActionResult Submit(tbl_application sm)
@@ -136,6 +157,7 @@ namespace FMB_CIS.Controllers
             return View("Index");
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
         [HttpPost]
         public ActionResult FormApprove(IFormCollection ta)
         {
@@ -153,5 +175,8 @@ namespace FMB_CIS.Controllers
 
 =======
 >>>>>>> Created a chainsaw owner controller
+=======
+
+>>>>>>> updated the chainsaw owner contrller and view.
     }
 }
