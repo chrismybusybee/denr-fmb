@@ -1,7 +1,5 @@
 $(document).ready(function () {
-    feather.replace();
-
-    $('.table').DataTable({
+    $('.dataTable').DataTable({
             "language": {
             "search": "",
             "searchPlaceholder": "Search"
