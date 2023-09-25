@@ -32,22 +32,22 @@ namespace FMB_CIS.Controllers
 
         public IActionResult Index()
         {
+           
+
             return View();
         }
 
         [HttpPost]
-        public ActionResult Submit(tbl_application sm)
+        public ActionResult Submit(tbl_application ta)
         {
             int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            sm.tbl_application_type_id = 3;
-            sm.tbl_user_id = userID;
-            sm.is_active = 1;
-            sm.modified_by = userID;
-            sm.created_by = userID;
-            sm.status = 1;
-            sm.tbl_permit_type_id = 3;
-
-            _context.tbl_application.Add(sm);
+            ta.tbl_application_type_id = 3;
+            ta.tbl_user_id = userID;
+            ta.is_active = 1;
+            ta.modified_by = userID;
+            ta.created_by = userID;
+            ta.status = 1;
+            _context.tbl_application.Add(ta);
             _context.SaveChanges();
 
             ViewBag.Status = "Save Success.";
