@@ -9,8 +9,10 @@ namespace FMB_CIS.Controllers
             return View();
         }
 
-        public IActionResult ChainsawImporterApproval()
+        
+        public IActionResult ChainsawImporterApproval(int id)
         {
+
             return View();
         }
     }
