@@ -381,14 +381,6 @@
                             <li>
                                 @Html.ActionLink("Logout", "Signout", "Home", new { area = "" }, new { @class = "text-decoration-none" })
                             </li>
-                            @* <li>
-                                <a href="@Url.Action("Index", "EmailTemplate")" class="d-flex gap-2 text-decoration-none fs-6">
-                                    <div>
-                                        <img src="~/assets/images/menu-icons/email-templates.png" />
-                                    </div>
-                                    <span asp-action="Signout">Logout [TEST]</span>
-                                </a>
-                            </li> *@
                         </ul>
                     </div>
                 </div>
@@ -399,7 +391,7 @@
         @RenderBody()
     </main>
 
-    @if (currentUrl.Contains("ChainsawImporter") || currentUrl.Contains("ChainsawImporter/ChainsawImporterApproval"))
+    @if (currentUrl.Contains("ChainsawImporter") || (currentUrl.Contains("ChainsawImporterApproval")))
     {
         <partial name="~/Views/Modals/ChainsawImporterModal.cshtml" />
     }
@@ -411,7 +403,7 @@
     {
         <partial name="~/Views/Modals/ChainsawOwnerModal.cshtml" />
     }
-
+ 
     <footer>
         © 2023 DENR-FMB CIS. All rights reserved.
     </footer>
