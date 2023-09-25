@@ -36,7 +36,11 @@ namespace FMB_CIS.Controllers
 
         public IActionResult Index()
         {
+<<<<<<< HEAD
 
+=======
+           
+>>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
 
             return View();
         }
@@ -101,9 +105,10 @@ namespace FMB_CIS.Controllers
             _context.SaveChanges();
 =======
         [HttpPost]
-        public ActionResult Submit(tbl_application sm)
+        public ActionResult Submit(tbl_application ta)
         {
             int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+<<<<<<< HEAD
             sm.tbl_application_type_id = 3;
             sm.tbl_user_id = userID;
             sm.is_active = 1;
@@ -116,6 +121,15 @@ namespace FMB_CIS.Controllers
 <<<<<<< HEAD
 >>>>>>> Added model, controller for chainsaw seller
 =======
+=======
+            ta.tbl_application_type_id = 3;
+            ta.tbl_user_id = userID;
+            ta.is_active = 1;
+            ta.modified_by = userID;
+            ta.created_by = userID;
+            ta.status = 1;
+            _context.tbl_application.Add(ta);
+>>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
             _context.SaveChanges();
 >>>>>>> Created a chainsaw owner controller
 

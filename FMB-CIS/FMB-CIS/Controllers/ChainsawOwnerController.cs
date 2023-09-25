@@ -1,11 +1,15 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
 using System;
 using System.Data;
 using System.Data.SqlTypes;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+<<<<<<< HEAD
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -31,6 +35,19 @@ using System.Security.Claims;
 =======
 
 >>>>>>> updated the chainsaw owner contrller and view.
+=======
+using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using FMB_CIS.Data;
+using FMB_CIS.Models;
+>>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
 
 namespace FMB_CIS.Controllers
 {
@@ -47,8 +64,11 @@ namespace FMB_CIS.Controllers
 >>>>>>> Created a chainsaw owner controller
 =======
     {
+<<<<<<< HEAD
 
 >>>>>>> updated the chainsaw owner contrller and view.
+=======
+>>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
         private readonly LocalContext _context;
         private readonly IConfiguration _configuration;
 
@@ -61,9 +81,19 @@ namespace FMB_CIS.Controllers
 <<<<<<< HEAD
 
 
+
         public IActionResult Index()
         {
+<<<<<<< HEAD
             
+=======
+            List<PermitList> permitList = new List<PermitList>{
+                new PermitList { Text = "Certificate of registration", Value = 13 },
+                new PermitList { Text = "Permit to Re-sell/Transfer Ownership", Value = 14 }
+                };
+
+            ViewBag.permits = new SelectList(permitList, "ID", "Text");
+>>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
 
             return View();
 
@@ -110,6 +140,7 @@ namespace FMB_CIS.Controllers
             return View(mymodel);
         }
 
+<<<<<<< HEAD
         [HttpPost]
         public ActionResult Submit(tbl_application ta)
         {
@@ -136,10 +167,13 @@ namespace FMB_CIS.Controllers
 
 >>>>>>> updated the chainsaw owner contrller and view.
 
+=======
+>>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
         [HttpPost]
-        public ActionResult Submit(tbl_application sm)
+        public ActionResult Submit(tbl_application ta)
         {
             int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+<<<<<<< HEAD
             sm.tbl_application_type_id = 3;
             sm.tbl_user_id = userID;
             sm.is_active = 1;
@@ -150,12 +184,24 @@ namespace FMB_CIS.Controllers
 
             _context.tbl_application.Add(sm);
 >>>>>>> Created a chainsaw owner controller
+=======
+            ta.tbl_application_type_id = 1;
+            ta.tbl_user_id = userID;
+            ta.is_active = 1;
+            ta.modified_by = userID;
+            ta.created_by = userID;
+            ta.status = 1;
+
+
+            _context.tbl_application.Add(ta);
+>>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
             _context.SaveChanges();
 
             ViewBag.Status = "Save Success.";
 
             return View("Index");
         }
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         [HttpPost]
@@ -178,5 +224,7 @@ namespace FMB_CIS.Controllers
 =======
 
 >>>>>>> updated the chainsaw owner contrller and view.
+=======
+>>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
     }
 }

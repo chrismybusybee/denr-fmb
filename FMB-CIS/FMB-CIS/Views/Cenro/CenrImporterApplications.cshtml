@@ -6,10 +6,10 @@
 
 <div id="card">
     <h1>
-        Chainsaw Owner Application
+        Chainsaw Importer Application
     </h1>
     <p>
-        <table class="table dataTable" id="tblOwnerApplications">
+        <table class="table dataTable" id="tblImporterApplications">
             <thead>
                 <tr>
                     <th>
@@ -36,7 +36,7 @@
             <tbody>
                 @foreach (ApplicationModel item in Model.applicationModels)
                 {
-                    if (item.application_type == "Chainsaw Importer")
+                    if (item.application_type == "Chainsaw Owner")
                     {
                         <tr>
                             <td>
@@ -57,13 +57,8 @@
                             </td>
                             <td>
                                 @Html.ActionLink("View",
-<<<<<<< HEAD
-                        "ChainsawOwnerApproval",
-                        "ChainsawOwner",
-=======
                         "ChainsawImporterApproval",
                         "ChainsawImporter",
->>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
                         new { id=item.id }
                         )
                             </td>
@@ -75,12 +70,10 @@
     </p>
 </div>
 
-<<<<<<< HEAD
-=======
 <script type="text/javascript">
     var js = jQuery.noConflict(true);
     js(document).ready(function () {
-        js('#tblOwnerApplications').DataTable({
+        js('#tblImporterApplications').DataTable({
             pageLength: 3,
         });
     });
@@ -89,4 +82,3 @@
 *@
 @{
 }
->>>>>>> Updated dashboard for temporary Cenro User, added application for permits.

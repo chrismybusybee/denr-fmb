@@ -12,7 +12,10 @@ namespace FMB_CIS.Models
 
         public string? FullName { get; set; }
         public string? Email {  get; set; } 
+<<<<<<< HEAD
 
         public string? comments { get; set; }
+=======
+>>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
     }
 }
