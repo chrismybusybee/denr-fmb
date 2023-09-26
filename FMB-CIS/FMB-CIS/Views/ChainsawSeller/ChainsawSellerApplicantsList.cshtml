@@ -1,0 +1,89 @@
+﻿@using System.Security.Claims;
+@model FMB_CIS.Models.ViewModel
+@* @model IEnumerable<FMB_CIS.Models.tbl_application> *@
+@{
+    Layout = "~/Views/Shared/_MainPageLayout.cshtml";
+    ViewBag.Title = "Chainsaw Seller";
+}
+
+<div id="card-container">
+    <div id="card">
+                <table class="table dataTable" id="tblUserHistory">
+            <thead>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Full Name
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Contact No.
+                    </th>
+                    <th>
+                        Address
+                    </th>
+                    <th>
+                        Application Type
+                    </th>
+                    <th>
+                        Permit Type
+                    </th>
+                    <th>
+                        Permit Status
+                    </th>
+                    <th>
+                        Action
+                    </th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (ApplicantListViewModel item in Model.applicantListViewModels)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.full_name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.contact)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.address)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.application_type)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.permit_type)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.permit_status)
+                        </td>
+                        <td>
+                            @* @Html.ActionLink("Take Action", "ChainsawImporterApproval?uid="+ item.tbl_user_id + "&appid=" + item.id) *@
+                            <a href="ChainsawSellerApproval?uid=@item.tbl_user_id&appid=@item.id">Take Action</a>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="/js/jquery-3.7.1.min.js"></script>
+
+<script type="text/javascript">
+
+</script>

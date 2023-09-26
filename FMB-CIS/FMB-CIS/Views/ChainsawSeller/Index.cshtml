@@ -48,14 +48,28 @@
                                     </label>
                                     <input asp-for="supplier_mname" type="text" class="form-control" />
                                     <span asp-validation-for="supplier_mname" class="text-danger"></span>
-
-
-
-                                    <input asp-for="supplier_lname" type="text" class="form-control" />
-                                    <span asp-validation-for="supplier_lname" class="text-danger"></span>
-
-                                    <input asp-for="supplier_suffix" type="text" class="form-control" />
+                                    /div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="supplier_lname" class="text-secondary small">
+                                            Last Name
+                                        </label>
+                                        <input type="text" asp-for="supplier_lname" class="form-control" />
+                                        <span asp-validation-for="supplier_lname" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label asp-for="supplier_suffix" class="text-secondary small">
+                                        Suffix
+                                    </label>
+                                    <input type="text" asp-for="supplier_suffix" class="form-control" />
                                     <span asp-validation-for="supplier_suffix" class="text-danger"></span>
+                                </div>
                                 </div>
                             </div>
                         </div>
