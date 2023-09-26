@@ -16,9 +16,13 @@ using Microsoft.Extensions.Configuration;
 using FMB_CIS.Data;
 using FMB_CIS.Models;
 <<<<<<< HEAD
+<<<<<<< HEAD
 using System.Runtime.ConstrainedExecution;
 =======
 >>>>>>> Added model, controller for chainsaw seller
+=======
+using System.Runtime.ConstrainedExecution;
+>>>>>>> updated approval for permits applications
 
 namespace FMB_CIS.Controllers
 {
@@ -37,15 +41,22 @@ namespace FMB_CIS.Controllers
         public IActionResult Index()
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
            
 >>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
+=======
+
+>>>>>>> updated approval for permits applications
 
             return View();
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> updated approval for permits applications
         public IActionResult ChainsawSellerApproval(int id)
         {
             ViewModel mymodel = new();
@@ -89,6 +100,7 @@ namespace FMB_CIS.Controllers
             return View(mymodel);
         }
 
+<<<<<<< HEAD
         [HttpPost]
         public ActionResult Submit(tbl_application ta)
         {
@@ -104,6 +116,8 @@ namespace FMB_CIS.Controllers
             _context.tbl_application.Add(ta);
             _context.SaveChanges();
 =======
+=======
+>>>>>>> updated approval for permits applications
         [HttpPost]
         public ActionResult Submit(tbl_application ta)
         {
@@ -124,10 +138,12 @@ namespace FMB_CIS.Controllers
 =======
             ta.tbl_application_type_id = 3;
             ta.tbl_user_id = userID;
-            ta.is_active = 1;
+            ta.is_active = true;
             ta.modified_by = userID;
             ta.created_by = userID;
             ta.status = 1;
+
+
             _context.tbl_application.Add(ta);
 >>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
             _context.SaveChanges();
@@ -138,6 +154,9 @@ namespace FMB_CIS.Controllers
             return View("Index");
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> updated approval for permits applications
         [HttpPost]
         public ActionResult FormApprove(IFormCollection ta)
         {
@@ -153,7 +172,10 @@ namespace FMB_CIS.Controllers
             return View();
         }
 
+<<<<<<< HEAD
 =======
 >>>>>>> Added model, controller for chainsaw seller
+=======
+>>>>>>> updated approval for permits applications
     }
 }

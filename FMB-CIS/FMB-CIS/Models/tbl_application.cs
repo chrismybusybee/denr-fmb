@@ -6,6 +6,9 @@ namespace FMB_CIS.Models
     public class tbl_application
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> updated approval for permits applications
         public int? id { get; set; }
         public int? tbl_user_id { get; set; }
         public int? tbl_application_type_id { get; set; }
@@ -24,6 +27,7 @@ namespace FMB_CIS.Models
         public string? expected_time_release { get; set; }
         public string? date_of_inspection { get; set; }
         public int? status { get; set; }
+<<<<<<< HEAD
 
         public string? others { get; set; }
 
@@ -53,10 +57,14 @@ namespace FMB_CIS.Models
 <<<<<<< HEAD
 >>>>>>> Added model, controller for chainsaw seller
 =======
+=======
+>>>>>>> updated approval for permits applications
 
-        public int is_active { get; set; }
-        public int created_by {  get; set; }
-        public int modified_by { get; set; }
+        public string? others { get; set; }
+
+        public bool? is_active { get; set; }
+        public int? created_by {  get; set; }
+        public int?  modified_by { get; set; }
         
 >>>>>>> Created a chainsaw owner controller
     }
