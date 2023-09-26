@@ -16,6 +16,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using FMB_CIS.Data;
 using FMB_CIS.Models;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace FMB_CIS.Controllers
 {
@@ -29,12 +30,15 @@ namespace FMB_CIS.Controllers
 
         private readonly LocalContext _context;
         private readonly IConfiguration _configuration;
+        private IEmailSender EmailSender { get; set; }
 
 
-        public ChainsawImporterController(IConfiguration configuration, LocalContext context)
+
+        public ChainsawImporterController(IConfiguration configuration, LocalContext context, IEmailSender emailSender)
         {
             this._configuration = configuration;
             _context = context;
+            EmailSender = emailSender;
         }
 
         public IActionResult Index()
@@ -101,6 +105,11 @@ namespace FMB_CIS.Controllers
                         sqlCmd.Parameters.AddWithValue("date_modified", DateTime.Now);
                         sqlCmd.ExecuteNonQuery();
                     }
+
+                    //Email
+                    var subject = "Permit to Import Application Status";
+                    var body = "Greetings! \n We would like to inform you that your Permit to Import Application has been received.";
+                    EmailSender.SendEmailAsync(((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value, subject, body);
                     return RedirectToAction("Index","Home");
                 }
                 return View(model);
@@ -122,20 +131,17 @@ namespace FMB_CIS.Controllers
             }
             else
             {
-
-
-            
-            ViewModel mymodel = new ViewModel();
-            //tbl_user user = _context.tbl_user.Find(uid);
-            if (uid == null || appid == null)
-            {
-                ModelState.AddModelError("", "Invalid Importer Application");
-                return RedirectToAction("ChainsawImporterApplicantsList", "ChainsawImporter");
-            }
-
-            else
+                           
+                ViewModel mymodel = new ViewModel();
+                //tbl_user user = _context.tbl_user.Find(uid);
+                if (uid == null || appid == null)
                 {
+                    ModelState.AddModelError("", "Invalid Importer Application");
+                    return RedirectToAction("ChainsawImporterApplicantsList", "ChainsawImporter");
+                }
 
+                else
+                {
                     int usid = Convert.ToInt32(uid);
                     int applid = Convert.ToInt32(appid);
                     //var UserList = _context.tbl_user.ToList();
@@ -148,7 +154,6 @@ namespace FMB_CIS.Controllers
 
                     //HISTORY
                     var applicationtypelist = _context.tbl_application_type;
-
                     var applicationMod = from a in applicationlist
                                          join usr in _context.tbl_user on a.tbl_user_id equals usr.id
                                          join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
@@ -197,6 +202,10 @@ namespace FMB_CIS.Controllers
                         _context.Entry(usrdet).Property(x => x.comment).IsModified = true;
                         _context.SaveChanges();
                     }
+                    //Email
+                    var subject = "Permit to Import Application Status";
+                    var body = "Greetings! \n We would like to inform you that your Permit to Import Application has been approved.\nThe officer left the following comment:\n" + viewMod.comment;
+                    EmailSender.SendEmailAsync(viewMod.email, subject, body);
                 }
                 else
                 {
@@ -211,6 +220,10 @@ namespace FMB_CIS.Controllers
                         _context.Entry(usrdet).Property(x => x.comment).IsModified = true;
                         _context.SaveChanges();
                     }
+                    //Email
+                    var subject = "Permit to Import Application Status";
+                    var body = "Greetings! \n We would like to inform you that your Permit to Import Application has been declined.\nThe officer left the following comment:\n" + viewMod.comment;
+                    EmailSender.SendEmailAsync(viewMod.email, subject, body);
                 }
                 return RedirectToAction("ChainsawImporterApplicantsList", "ChainsawImporter");
             }

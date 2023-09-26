@@ -13,6 +13,7 @@ using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Runtime.ConstrainedExecution;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 
 
@@ -24,12 +25,14 @@ namespace FMB_CIS.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly LocalContext _context;
+        private IEmailSender EmailSender { get; set; }
 
 
-        public ChainsawOwnerController(IConfiguration configuration, LocalContext context)
+        public ChainsawOwnerController(IConfiguration configuration, LocalContext context, IEmailSender emailSender)
         {
             this._configuration = configuration;
             _context = context;
+            EmailSender = emailSender;
         }
         public IActionResult Index()
         {
@@ -87,6 +90,11 @@ namespace FMB_CIS.Controllers
                     sqlCmd.Parameters.AddWithValue("date_modified", DateTime.Now);
                     sqlCmd.ExecuteNonQuery();
                 }
+
+                //Email
+                var subject = "Permit to Import Application Status";
+                var body = "Greetings! \n We would like to inform you that your Permit to Import Application has been received.";
+                EmailSender.SendEmailAsync(((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value, subject, body);
                 return RedirectToAction("Index", "Home");
             }
             return View(model);
@@ -172,6 +180,10 @@ namespace FMB_CIS.Controllers
                         _context.Entry(usrdet).Property(x => x.comment).IsModified = true;
                         _context.SaveChanges();
                     }
+                    //Email
+                    var subject = "Permit to Import Application Status";
+                    var body = "Greetings! \n We would like to inform you that your Permit to Import Application has been approved.\nThe officer left the following comment:\n" + viewMod.comment;
+                    EmailSender.SendEmailAsync(viewMod.email, subject, body);
                 }
                 else
                 {
@@ -186,6 +198,10 @@ namespace FMB_CIS.Controllers
                         _context.Entry(usrdet).Property(x => x.comment).IsModified = true;
                         _context.SaveChanges();
                     }
+                    //Email
+                    var subject = "Permit to Import Application Status";
+                    var body = "Greetings! \n We would like to inform you that your Permit to Import Application has been declined.\nThe officer left the following comment:\n" + viewMod.comment;
+                    EmailSender.SendEmailAsync(viewMod.email, subject, body);
                 }
                 return RedirectToAction("ChainsawOwnerApplicantsList", "ChainsawOwner");
             }

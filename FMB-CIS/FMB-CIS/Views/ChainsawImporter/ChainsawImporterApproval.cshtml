@@ -62,7 +62,10 @@
                                             Email Address
                                         </label>
                                         <span class="fw-bold">
-                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.email) }
+                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.email)
+                                            }
                                         </span>
                                     </div>
                                 </div>
@@ -234,11 +237,13 @@
                         @* @Html.EditorFor(model => model.applicantListViewModels.ToList(comment), new { htmlAttributes = new { @class = "form-control" } }) *@
                         @foreach (ApplicantListViewModel item in Model.applicantListViewModels)
                         {
-                            @Html.TextAreaFor(modelItem => item.comment, new { @class = "form-control", @name="newComment", @id="commentFromDB", @hidden ="true" })    
+                            @Html.TextAreaFor(modelItem => item.comment, new { @class = "form-control", @name="newComment", @id="commentFromDB", @hidden ="true" })
+                            @Html.TextAreaFor(modelItem => item.email, new { @id="myEmailAdd", @name="myEmailAddress", @hidden ="true"})
+
                             @* @Html.TextAreaFor *@
                         }
                         @Html.TextAreaFor(model => model.comment, new { @class = "form-control", @id="commentToPass"})
-
+                        @Html.TextAreaFor(model => model.email, new { @class = "form-control", @id="emailCopy", @hidden ="true"})
                     </div>
                 </div>
             </div>
@@ -279,5 +284,9 @@
     });
     var x = document.getElementById("commentFromDB").value;
     document.getElementById('commentToPass').value = x;
+
+    var y = document.getElementById("myEmailAdd").value;
+    document.getElementById('emailCopy').value = y;
+    
 
 </script>

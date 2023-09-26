@@ -16,7 +16,7 @@ namespace FMB_CIS.Controllers
     public class AccountController : Controller
     {
         private readonly IConfiguration _configuration;
-        public IEmailSender EmailSender { get; set; }
+        private IEmailSender EmailSender { get; set; }
 
         public AccountController(IConfiguration configuration, IEmailSender emailSender)
         {
@@ -107,7 +107,7 @@ namespace FMB_CIS.Controllers
                             sqlCmd.Parameters.AddWithValue("password", encrPw);
                             sqlCmd.Parameters.AddWithValue("status", one/*userRegistrationViewModel.status*/);
                             //sqlCmd.Parameters.AddWithValue("photo", userRegistrationViewModel.photo);
-                            sqlCmd.Parameters.AddWithValue("comment", userRegistrationViewModel.comment ?? "");
+                            sqlCmd.Parameters.AddWithValue("comment", userRegistrationViewModel.comment ?? " ");
                             sqlCmd.Parameters.AddWithValue("date_created", DateTime.Now);
                             sqlCmd.Parameters.AddWithValue("date_modified", DateTime.Now);
                             sqlCmd.Parameters.AddWithValue("tbl_user_types_id", Convert.ToInt32(userRegistrationViewModel.tbl_user_types_id));

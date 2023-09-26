@@ -84,6 +84,7 @@ namespace FMB_CIS.Controllers
                         var claims = new List<Claim>
                         {
                             new Claim(ClaimTypes.Name, credentials.email),
+                            new Claim("EmailAdd", credentials.email),
                             new Claim("FullName", dal.selectFullNameFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng"))),
                             new Claim("userID", dal.selectUserIDFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng"))),
                             new Claim(ClaimTypes.Role, dal.selectUserRoleFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng"))),
