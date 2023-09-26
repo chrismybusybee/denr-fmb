@@ -14,6 +14,7 @@ namespace FMB_CIS.Models
         public string? Email {  get; set; } 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         public string? comments { get; set; }
 =======
@@ -22,5 +23,9 @@ namespace FMB_CIS.Models
 
         public string? comments { get; set; }
 >>>>>>> updated approval for permits applications
+=======
+
+        public string? comments { get; set; }
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
     }
 }

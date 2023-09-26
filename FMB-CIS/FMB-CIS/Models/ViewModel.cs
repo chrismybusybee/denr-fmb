@@ -9,6 +9,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         public IEnumerable<tbl_user>? tbl_Users { get; set; }
 
 =======
@@ -17,5 +18,9 @@
         public IEnumerable<tbl_user>? tbl_Users { get; set; }
 
 >>>>>>> updated approval for permits applications
+=======
+        public IEnumerable<tbl_user>? tbl_Users { get; set; }
+
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
     }
 }

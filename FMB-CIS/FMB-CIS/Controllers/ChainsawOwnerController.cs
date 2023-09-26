@@ -1,8 +1,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
+=======
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
 using System;
 using System.Data;
 using System.Data.SqlTypes;
@@ -10,6 +13,9 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -22,6 +28,7 @@ using Microsoft.Extensions.Configuration;
 using FMB_CIS.Data;
 using FMB_CIS.Models;
 using System.Runtime.ConstrainedExecution;
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 =======
@@ -51,6 +58,8 @@ using FMB_CIS.Models;
 >>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
 =======
 >>>>>>> updated approval for permits applications
+=======
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
 
 namespace FMB_CIS.Controllers
 {
@@ -61,6 +70,7 @@ namespace FMB_CIS.Controllers
 
 =======
     {
+<<<<<<< HEAD
 >>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
 =======
     {
@@ -72,6 +82,8 @@ namespace FMB_CIS.Controllers
 >>>>>>> updated the chainsaw owner contrller and view.
 =======
 >>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
+=======
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
         private readonly LocalContext _context;
         private readonly IConfiguration _configuration;
 
@@ -80,6 +92,7 @@ namespace FMB_CIS.Controllers
             this._configuration = configuration;
             _context = context;
         }
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -165,10 +178,17 @@ namespace FMB_CIS.Controllers
 =======
 
 >>>>>>> updated the chainsaw owner contrller and view.
+=======
+
+
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
         public IActionResult Index()
         {
+            
+
             return View();
         }
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 
@@ -178,6 +198,9 @@ namespace FMB_CIS.Controllers
 =======
 >>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
 =======
+=======
+
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
         public IActionResult ChainsawOwnerApproval(int id)
         {
             ViewModel mymodel = new();
@@ -221,11 +244,15 @@ namespace FMB_CIS.Controllers
             return View(mymodel);
         }
 
+<<<<<<< HEAD
 >>>>>>> updated approval for permits applications
+=======
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
         [HttpPost]
         public ActionResult Submit(tbl_application ta)
         {
             int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+<<<<<<< HEAD
 <<<<<<< HEAD
             sm.tbl_application_type_id = 3;
             sm.tbl_user_id = userID;
@@ -238,6 +265,8 @@ namespace FMB_CIS.Controllers
             _context.tbl_application.Add(sm);
 >>>>>>> Created a chainsaw owner controller
 =======
+=======
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
             ta.tbl_application_type_id = 1;
             ta.tbl_user_id = userID;
             ta.is_active = true;
@@ -247,7 +276,10 @@ namespace FMB_CIS.Controllers
 
 
             _context.tbl_application.Add(ta);
+<<<<<<< HEAD
 >>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
+=======
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
             _context.SaveChanges();
 
             ViewBag.Status = "Save Success.";
@@ -258,8 +290,11 @@ namespace FMB_CIS.Controllers
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> updated approval for permits applications
+=======
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
         [HttpPost]
         public ActionResult FormApprove(IFormCollection ta)
         {
@@ -276,6 +311,7 @@ namespace FMB_CIS.Controllers
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> Created a chainsaw owner controller
 =======
@@ -285,5 +321,7 @@ namespace FMB_CIS.Controllers
 >>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
 =======
 >>>>>>> updated approval for permits applications
+=======
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
     }
 }

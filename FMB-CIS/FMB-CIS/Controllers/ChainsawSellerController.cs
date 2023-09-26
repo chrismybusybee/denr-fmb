@@ -17,12 +17,16 @@ using FMB_CIS.Data;
 using FMB_CIS.Models;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 using System.Runtime.ConstrainedExecution;
 =======
 >>>>>>> Added model, controller for chainsaw seller
 =======
 using System.Runtime.ConstrainedExecution;
 >>>>>>> updated approval for permits applications
+=======
+using System.Runtime.ConstrainedExecution;
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
 
 namespace FMB_CIS.Controllers
 {
@@ -42,6 +46,7 @@ namespace FMB_CIS.Controllers
         {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
            
@@ -49,14 +54,20 @@ namespace FMB_CIS.Controllers
 =======
 
 >>>>>>> updated approval for permits applications
+=======
+
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
 
             return View();
         }
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> updated approval for permits applications
+=======
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
         public IActionResult ChainsawSellerApproval(int id)
         {
             ViewModel mymodel = new();
@@ -101,6 +112,9 @@ namespace FMB_CIS.Controllers
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
         [HttpPost]
         public ActionResult Submit(tbl_application ta)
         {
@@ -115,6 +129,7 @@ namespace FMB_CIS.Controllers
 
             _context.tbl_application.Add(ta);
             _context.SaveChanges();
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> updated approval for permits applications
@@ -148,6 +163,8 @@ namespace FMB_CIS.Controllers
 >>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
             _context.SaveChanges();
 >>>>>>> Created a chainsaw owner controller
+=======
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
 
             ViewBag.Status = "Save Success.";
 
@@ -155,8 +172,11 @@ namespace FMB_CIS.Controllers
         }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> updated approval for permits applications
+=======
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
         [HttpPost]
         public ActionResult FormApprove(IFormCollection ta)
         {
@@ -173,9 +193,12 @@ namespace FMB_CIS.Controllers
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> Added model, controller for chainsaw seller
 =======
 >>>>>>> updated approval for permits applications
+=======
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
     }
 }
