@@ -9,5 +9,6 @@ namespace FMB_CIS.Models
         public string application_type { get; set; }
         public string permit_status { get; set; }
         public string permit_type { get; set; }
+        public int status { get; set; }
     }
 }

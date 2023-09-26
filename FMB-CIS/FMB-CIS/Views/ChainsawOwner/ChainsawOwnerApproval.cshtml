@@ -3,12 +3,12 @@
 @* @model FMB_CIS.Models.ApplicantListViewModel *@
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
-    ViewBag.Title = "Chainsaw Importer";
+    ViewBag.Title = "Chainsaw Owner";
 }
 
 <div id="card-container">
     <div id="card">
-        <form asp-action="ChainsawImporterApproval" method="post">
+        <form asp-action="ChainsawOwnerApproval" method="post">
             <div class="row m-0">
                 <input asp-for="uid" type="hidden" />
                 <input asp-for="appid" type="hidden" />
@@ -36,10 +36,11 @@
                                             User Type
                                         </label>
                                         <span class="fw-bold">
-                                            @* @Html.DisplayFor(model => model.user_type) *@
-                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.user_type) }
-                                            @* @Html.DisplayFor(modelItem => item.Engine) *@
-                                            @* Chainsaw Importer *@
+
+                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.user_type)
+                                            }
                                         </span>
                                     </div>
                                 </div>
