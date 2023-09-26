@@ -1,4 +1,5 @@
-﻿using FMB_CIS.Data;
+
+using FMB_CIS.Data;
 using FMB_CIS.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,12 @@ using System.Security.Claims;
 using System.Data.SqlTypes;
 using System.Linq;
 using Microsoft.AspNet.Identity;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Runtime.ConstrainedExecution;
+
+
+
 
 namespace FMB_CIS.Controllers
 {
@@ -17,6 +24,7 @@ namespace FMB_CIS.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly LocalContext _context;
+
 
         public ChainsawOwnerController(IConfiguration configuration, LocalContext context)
         {
@@ -216,6 +224,5 @@ namespace FMB_CIS.Controllers
                 //return RedirectToAction("Index", "Home");
             }
         }
-
     }
 }

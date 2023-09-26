@@ -17,6 +17,7 @@
                     <button class="btn btn-danger w-105 btnCancel">Decline</button> *@
                     <input id="ApproveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Approve" />
                     <input class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="submit" value="Decline" />
+
                 </div>
             </div>
             <hr />
@@ -242,6 +243,7 @@
                 </div>
             </div>
         </form>
+
     </div>
 </div>
 
@@ -250,7 +252,29 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $('#approveBtn').click(function () {
-            $('#confirmApproveModal').show();
+            $('#confirmApproveModal').modal("show");
+        });
+
+        $("#backApproveBtn").click(function () {
+            $("#confirmApproveModal").modal('hide');
+        });
+
+        $("#confirmApproveBtn").click(function () {
+            $("#confirmApproveModal").modal('hide');
+            $('#confirmSuccessApproveModal').modal("show");
+        });
+        
+        $('#declineBtn').click(function () {
+            $('#confirmDeclineModal').modal("show");
+        });
+
+        $('#backDeclineBtn').click(function () {
+            $('#confirmDeclineModal').modal("hide");
+        });
+
+        $("#confirmDeclineBtn").click(function () {
+            $("#confirmDeclineModal").modal('hide');
+            $('#confirmSuccessDeclineModal').modal("show");
         });
     });
     var x = document.getElementById("commentFromDB").value;

@@ -10,5 +10,15 @@ namespace FMB_CIS.Models
         public string permit_status { get; set; }
         public string permit_type { get; set; }
         public int status { get; set; }
+        public int? id { get; set; }
+        public tbl_application? application { get; set; }
+        public string? application_type { get; set; }
+        public string? permit_status { get; set; }
+        public string? permit_type { get; set; }
+
+        public string? FullName { get; set; }
+        public string? Email {  get; set; } 
+        public string? comments { get; set; }
+
     }
 }

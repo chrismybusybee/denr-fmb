@@ -5,6 +5,7 @@ using FMB_CIS.Data;
 using FMB_CIS.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,7 +13,7 @@ builder.Services.AddControllersWithViews();
 
 
 builder.Services.AddDbContext<LocalContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("LocalContext")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CISDB")));
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

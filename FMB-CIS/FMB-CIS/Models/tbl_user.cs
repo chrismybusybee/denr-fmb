@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 ﻿namespace FMB_CIS.Models
 {
     public class tbl_user
@@ -26,4 +27,4 @@
         public DateTime date_modified { get; set; }
         public int tbl_user_types_id { get; set; }
     }
-}
+ }

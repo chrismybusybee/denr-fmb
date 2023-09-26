@@ -1,0 +1,108 @@
+﻿@model FMB_CIS.Models.ViewModel
+
+<link rel="stylesheet" href="~/js/DataTable/dataTables.min.css">
+<script src="~/js/jquery/jquery-3.7.1/jquery-3.7.1.js"></script>
+<script src="~/js/DataTable/dataTables.min.js"></script>
+
+<div id="card">
+    <h1>
+        Chainsaw Seller Application
+    </h1>
+    <p>
+        <table class="table dataTable" id="tblSellerApplications">
+            <thead>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Full Name
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Permit Type
+                    </th>
+                    <th>
+                        Permit Status
+                    </th>
+                    <th>
+                        Action
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (ApplicationModel item in Model.applicationModels)
+                {
+                    if (item.application_type == "Chainsaw Seller")
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.id)
+                            </td>
+                            <td>
+
+                                @Html.DisplayFor(modelItem => item.FullName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.permit_type)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.permit_status)
+                            </td>
+                            <td>
+                                @Html.ActionLink("View",
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                        "ChainsawSellerApproval",
+                        "ChainsawSeller",
+=======
+                        "ChainsawImporterApproval",
+                        "ChainsawImporter",
+>>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
+=======
+                        "ChainsawSellerApproval",
+                        "ChainsawSeller",
+>>>>>>> updated approval for permits applications
+=======
+                        "ChainsawSellerApproval",
+                        "ChainsawSeller",
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
+                        new { id=item.id }
+                        )
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </p>
+</div>
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<script type="text/javascript">
+    var js = jQuery.noConflict(true);
+    js(document).ready(function () {
+        js('#tblSellerApplications').DataTable({
+            pageLength: 3,
+        });
+    });
+</script>@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+>>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
+=======
+>>>>>>> updated approval for permits applications
+=======
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581

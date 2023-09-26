@@ -1,23 +1,24 @@
-
-﻿@using System.Security.Claims;
-@model FMB_CIS.Models.ViewModel
+﻿@model FMB_CIS.Models.ViewModel
 
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
-    ViewBag.Title = "Chainsaw Owner";
+    ViewBag.Title = "Chainsaw Seller";
 }
 
 <div id="card-container">
     <div id="card">
-        <form asp-action="ChainsawOwnerApproval" method="post">
+        @ViewBag.Status
+        @using (Html.BeginForm("FormApprove", "ChainsawSeller", FormMethod.Post))
+        {
+            @foreach (ApplicationModel item in Model.applicationModels)
+            {
+                @Html.TextBoxFor(modelItem => item.id , new { Class="form-control" , Hidden="true"})
+            }
+
             <div class="row m-0">
-                <input asp-for="uid" type="hidden" />
-                <input asp-for="appid" type="hidden" />
                 <div class="d-flex justify-content-end gap-2">
-                    @* <button id="ApproveBtn" class="btn btn-primary w-105">Approve</button>
-                    <button class="btn btn-danger w-105 btnCancel">Decline</button> *@
-                    <input id="ApproveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Approve" />
-                    <input class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="submit" value="Decline" />
+                    <button type="submit" id="ApproveBtn" class="btn btn-primary w-105">Approve</button>
+                    <button class="btn btn-danger w-105 btnCancel">Decline</button>
                 </div>
             </div>
             <hr />
@@ -37,10 +38,9 @@
                                             User Type
                                         </label>
                                         <span class="fw-bold">
-
-                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels)
+                                            @foreach (tbl_user item in Model.tbl_Users)
                                             {
-                                                @Html.DisplayFor(modelItem => item.user_type)
+                                                @Html.DisplayFor(modelItem => item.tbl_user_types_id)
                                             }
                                         </span>
                                     </div>
@@ -51,7 +51,10 @@
                                             Name
                                         </label>
                                         <span class="fw-bold">
-                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.full_name) }
+                                            @foreach (tbl_user item in Model.tbl_Users)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.FullName)
+                                            }
                                         </span>
                                     </div>
                                 </div>
@@ -63,7 +66,10 @@
                                             Email Address
                                         </label>
                                         <span class="fw-bold">
-                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.email) }
+                                            @foreach (tbl_user item in Model.tbl_Users)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.email)
+                                            }
                                         </span>
                                     </div>
                                 </div>
@@ -73,7 +79,10 @@
                                             Contact Number
                                         </label>
                                         <span class="fw-bold">
-                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.contact) }
+                                            @foreach (tbl_user item in Model.tbl_Users)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.contact_no)
+                                            }
                                         </span>
                                     </div>
                                 </div>
@@ -85,7 +94,10 @@
                                             Valid ID
                                         </label>
                                         <span class="fw-bold">
-                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.valid_id) }
+                                            @foreach (tbl_user item in Model.tbl_Users)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.valid_id)
+                                            }
                                         </span>
                                     </div>
                                 </div>
@@ -95,7 +107,10 @@
                                             Valid ID Number
                                         </label>
                                         <span class="fw-bold">
-                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.valid_id_no) }
+                                            @foreach (tbl_user item in Model.tbl_Users)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.valid_id_no)
+                                            }
                                         </span>
                                     </div>
                                 </div>
@@ -107,7 +122,10 @@
                                             Birth Date
                                         </label>
                                         <span class="fw-bold">
-                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.birth_date) }
+                                            @foreach (tbl_user item in Model.tbl_Users)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.birth_date)
+                                            }
                                         </span>
                                     </div>
                                 </div>
@@ -117,7 +135,7 @@
                                             Street Address
                                         </label>
                                         <span class="fw-bold">
-                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.address) }
+                                            123 Mendiola St, Manila  City
                                         </span>
                                     </div>
                                 </div>
@@ -129,7 +147,7 @@
                                             Region
                                         </label>
                                         <span class="fw-bold">
-                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.tbl_region_id) }
+                                            NCR
                                         </span>
                                     </div>
                                 </div>
@@ -139,7 +157,7 @@
                                             Province
                                         </label>
                                         <span class="fw-bold">
-                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.tbl_province_id) }
+                                            Manila
                                         </span>
                                     </div>
                                 </div>
@@ -151,7 +169,7 @@
                                             City/Municipality
                                         </label>
                                         <span class="fw-bold">
-                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.tbl_city_id) }
+                                            Manila
                                         </span>
                                     </div>
                                 </div>
@@ -161,10 +179,9 @@
                                             Barangay
                                         </label>
                                         <span class="fw-bold">
-                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.tbl_brgy_id) }
+                                            Mendiola
                                         </span>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -232,19 +249,14 @@
                         <span>
                             Comments
                         </span>
-                        @* <textarea asp-for="comment" class="form-control"></textarea> *@
-                        @* @Html.EditorFor(model => model.applicantListViewModels.ToList(comment), new { htmlAttributes = new { @class = "form-control" } }) *@
-                        @foreach (ApplicantListViewModel item in Model.applicantListViewModels)
+                        @foreach (ApplicationModel item in Model.applicationModels)
                         {
-                            @Html.TextAreaFor(modelItem => item.comment, new { @class = "form-control", @name="newComment", @id="commentFromDB", @hidden ="true" })    
-                            @* @Html.TextAreaFor *@
+                            @Html.TextAreaFor(modelItem => item.application.others , new { Class="form-control" })
                         }
-                        @Html.TextAreaFor(model => model.comment, new { @class = "form-control", @id="commentToPass"})
-
                     </div>
                 </div>
             </div>
-        </form>
+        }
     </div>
 </div>
 
@@ -256,9 +268,4 @@
             $('#confirmApproveModal').show();
         });
     });
-
-    var x = document.getElementById("commentFromDB").value;
-    document.getElementById('commentToPass').value = x;
-
-
 </script>

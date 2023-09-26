@@ -1,152 +1,226 @@
-﻿@{
+﻿@model FMB_CIS.Models.tbl_application;
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
+>>>>>>> Added model, controller for chainsaw seller
+=======
+
+>>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
+=======
+
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
+@{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Chainsaw Seller";
 }
 
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
 <div id="card-container">
     <div id="card">
-        <div class="row m-0">
-            <div class="col-md-12">
-                <a href="@Url.Action("Index", "Dashboard")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
-                <div class="row my-4">
-                    <div class="col-md-4">
-                        <label class="text-secondary small">
-                            Permit Type
-                        </label>
-                        <input type="text" class="form-control" />
+=======
+    <div id="card-container">
+        <div id="card">
+>>>>>>> Added model, controller for chainsaw seller
+=======
+<div id="card-container">
+    <div id="card">
+>>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
+=======
+<div id="card-container">
+    <div id="card">
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
+        @using (Html.BeginForm("Submit", "ChainsawSeller", FormMethod.Post))
+        {
+            <div class="row m-0">
+                <div class="col-md-12">
+                    <a href="@Url.Action("Index", "Dashboard")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
+                    <div class="row my-4">
+                        <div class="col-md-4">
+                            <label class="text-secondary small">
+                                Permit Type
+                            </label>
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
+=======
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
+                            <select asp-for="tbl_permit_type_id" class="form-select">
+                                <option selected value="0">-- Select Permit Type --</option>
+                                <option value="2">Permit to Sell"</option>
+                                <option value="3">Permit to Purchase</option>
+                            </select>
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+                            <input type="Text" value="Permit to Sell" class="form-control" disabled/>
+>>>>>>> Added model, controller for chainsaw seller
+=======
+>>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
+=======
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
+                        </div>
                     </div>
-                </div>
-                <h4 class="text-secondary fw-bold my-4">Importer Details</h4>
-                <div class="row">
-                    <div class="col-md-10">
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label class="text-secondary small">
-                                    First Name
-                                </label>
-                                <input type="text" class="form-control" />
+                    <h4 class="text-secondary fw-bold my-4">Importer Details</h4>
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label class="text-secondary small">
+                                        First Name
+                                    </label>
+                                    @Html.TextBoxFor(m => m.supplier_fname , new { Class="form-control" })
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="text-secondary small">
+                                        Middle Name
+                                    </label>
+                                    @Html.TextBoxFor(m => m.supplier_mname, new { Class="form-control" })
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="text-secondary small">
+                                        Last Name
+                                    </label>
+                                    @Html.TextBoxFor(m => m.supplier_lname, new { Class="form-control" })
+                                </div>
                             </div>
-                            <div class="col-md-4">
+                        </div>
+                        <div class="col-md-2">
+                            <div class="col-md-12">
                                 <label class="text-secondary small">
-                                    Middle Name
+                                    Suffix
                                 </label>
-                                <input type="text" class="form-control" />
-                            </div>
-                            <div class="col-md-4">
-                                <label class="text-secondary small">
-                                    Last Name
-                                </label>
-                                <input type="text" class="form-control" />
+                                @Html.TextBoxFor(m => m.supplier_suffix, new { Class="form-control" })
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="text-secondary small">
+                                Address
+                            </label>
+                            @Html.TextBoxFor(m => m.supplier_address, new { Class="form-control" })
+                        </div>
+                        <div class="col-md-4">
+                            <label class="text-secondary small">
+                                Email
+                            </label>
+                            @Html.TextBoxFor(m => m.supplier_email, new { Class="form-control" })
+                        </div>
+                        <div class="col-md-4">
+                            <label class="text-secondary small">
+                                Contact No.
+                            </label>
+                            @Html.TextBoxFor(m => m.supplier_contact_no, new { Class="form-control" })
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="text-secondary small">
+                                Number of chainsaws to be purchased/ imported
+                            </label>
+                            @Html.TextBoxFor(m => m.qty, new { Class="form-control" })
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-secondary small">
+                                Specification
+                            </label>
+                            @Html.TextBoxFor(m => m.origin, new { Class="form-control" })
+                        </div>
+                    </div>
+                    <div class="row mb-5">
                         <div class="col-md-12">
                             <label class="text-secondary small">
-                                Suffix
+                                Purpose
                             </label>
-                            <input type="text" class="form-control" />
+                            @Html.TextAreaFor(m => m.purpose, new { Class="form-control" })
                         </div>
                     </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-4">
-                        <label class="text-secondary small">
-                            Address
-                        </label>
-                        <input type="text" class="form-control" />
+                    <h4 class="text-secondary fw-bold mb-4">Bureau of Customs</h4>
+                    <div class="row mb-5">
+                        <div class="col-md-6">
+                            <label class="text-secondary small">
+                                Expected time of arrival
+                            </label>
+                            @Html.TextBoxFor(m => m.expected_time_arrival, new { Class="form-control", Type="date" })
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-secondary small">
+                                Expected time of release
+                            </label>
+                            @Html.TextBoxFor(m => m.expected_time_release, new { Class="form-control", Type="date" })
+                        </div>
                     </div>
-                    <div class="col-md-4">
-                        <label class="text-secondary small">
-                            Email
-                        </label>
-                        <input type="text" class="form-control" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="text-secondary small">
-                            Contact No.
-                        </label>
-                        <input type="text" class="form-control" />
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="text-secondary small">
-                            Number of chainsaws to be purchased/ imported
-                        </label>
-                        <input type="text" class="form-control" />
-                    </div>
-                    <div class="col-md-6">
-                        <label class="text-secondary small">
-                            Specification
-                        </label>
-                        <input type="text" class="form-control" />
-                    </div>
-                </div>
-                <div class="row mb-5">
-                    <div class="col-md-12">
-                        <label class="text-secondary small">
-                            Purpose
-                        </label>
-                        <textarea class="form-control">
+                    <!--
+                    <h4 class="text-secondary fw-bold mb-4">Attach Required Documents</h4>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="text-secondary small">
+                                Attach Forms
+                            </label>
+                            <input type="file" class="form-control" />
+                        </div>
 
-                        </textarea>
                     </div>
-                </div>
-                <h4 class="text-secondary fw-bold mb-4">Bureau of Customs</h4>
-                <div class="row mb-5">
-                    <div class="col-md-6">
-                        <label class="text-secondary small">
-                            Expected time of arrival
-                        </label>
-                        <input type="date" class="form-control" />
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <input type="file" class="form-control" />
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <label class="text-secondary small">
-                            Expected time of release
-                        </label>
-                        <input type="date" class="form-control" />
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <input type="file" class="form-control" />
+                        </div>
                     </div>
-                </div>
-                <h4 class="text-secondary fw-bold mb-4">Attach Required Documents</h4>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="text-secondary small">
-                            Attach Forms
-                        </label>
-                        <input type="file" class="form-control" />
+                    -->
+                    @ViewBag.Status
+                    <div class="row mb-5">
+                        <div class="col-md-6">
+                            <label class="text-secondary small">
+                                Set Date of Inspection
+                            </label>
+                            @Html.TextBoxFor(m => m.date_of_inspection, new { Class="form-control", Type="date" })
+                        </div>
                     </div>
-                    
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <input type="file" class="form-control" />
-                    </div>
-                </div>
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <input type="file" class="form-control" />
-                    </div>
-                </div>
-                <div class="row mb-5">
-                    <div class="col-md-6">
-                        <label class="text-secondary small">
-                            Set Date of Inspection
-                        </label>
-                        <input type="date" class="form-control" />
-                    </div>
-                </div>
-                <div class="row mb-4">
-                    <div class="col-md-12 d-flex justify-content-center">
-                        <button id="btnSubmit" class="btn btn-primary">Submit</button>
+                    <div class="row mb-4">
+                        <div class="col-md-12 d-flex justify-content-center">
+                            <button id="btnSubmit" class="btn btn-primary">Submit</button>
+                        </div>
                     </div>
                 </div>
             </div>
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        }
+=======
+            }
         </div>
+>>>>>>> Added model, controller for chainsaw seller
+=======
+        }
+>>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
+=======
+        }
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
     </div>
 </div>
 
 
+
+
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <script type="text/javascript">

@@ -10,5 +10,7 @@
         public string uid { get; set; }
         public string appid { get; set; }
         public string comment { get; set; }
+
+        public IEnumerable<tbl_user>? tbl_Users { get; set; }
     }
 }

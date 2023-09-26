@@ -14,6 +14,5 @@ namespace FMB_CIS.Data
         public DbSet<FMB_CIS.Models.tbl_permit_type> tbl_permit_type { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_user> tbl_user { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_user_types> tbl_user_types { get; set; } = default!;
-
     }
 }
