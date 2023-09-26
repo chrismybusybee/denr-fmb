@@ -9,17 +9,29 @@ using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 using NuGet.Common;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace FMB_CIS.Controllers
 {
     public class AccountController : Controller
     {
         private readonly IConfiguration _configuration;
+        public IEmailSender EmailSender { get; set; }
 
-        public AccountController(IConfiguration configuration)
+        public AccountController(IConfiguration configuration, IEmailSender emailSender)
         {
             this._configuration = configuration;
+            EmailSender = emailSender;
         }
+
+
+        //public async Task<IActionResult> Send(string toAddress)
+        //{
+        //    var subject = "sample subject";
+        //    var body = "sample body";
+        //    await EmailSender.SendEmailAsync(toAddress, subject, body);
+        //    return View();
+        //}
         public IActionResult Registration()
         {
             return View();
@@ -118,7 +130,7 @@ namespace FMB_CIS.Controllers
         public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
         {
             if (ModelState.IsValid)
-            {                
+            {
                 DAL dal = new DAL();
                 bool eMailExist = dal.emailExist(model.email, _configuration.GetConnectionString("ConnStrng"));
                 if (eMailExist)
@@ -137,7 +149,9 @@ namespace FMB_CIS.Controllers
                         {
                             if (Convert.ToBoolean(rdr["ReturnCode"]))
                             {
-                                string passResetLink = "https://localhost:7270/Account/ResetPassword?email=" + rdr["email"].ToString() + "&tokencode=" + rdr["UniqueId"].ToString();
+                                string passResetLink = "https://fmb-cis.beesuite.ph/Account/ResetPassword?email=" + rdr["email"].ToString() + "&tokencode=" + rdr["UniqueId"].ToString();
+                                //string passResetLink = "https://localhost:7270/Account/ResetPassword?email=" + rdr["email"].ToString() + "&tokencode=" + rdr["UniqueId"].ToString();
+
                                 //SendPasswordResetEmail(rdr["Email"].ToString(), txtUserName.Text, rdr["UniqueId"].ToString());
                                 //lblMessage.Text = "An email with instructions to reset your password is sent to your registered email";
 
@@ -157,7 +171,9 @@ namespace FMB_CIS.Controllers
                                 //sw.Close();
                                 Console.WriteLine("Link for Password Reset:");
                                 Console.WriteLine(passResetLink);
-
+                                var subject = "Password Reset";
+                                var body = "Your Password Reset Link is: " + passResetLink;
+                                await EmailSender.SendEmailAsync(model.email, subject, body);
                                 return RedirectToAction("EmailConfirmation");
                             }
                             else
@@ -181,7 +197,7 @@ namespace FMB_CIS.Controllers
 
             return View(model);
         }
-        
+
         [HttpGet]
         //[Url("?email={email}&code={code}")]
         public IActionResult ResetPassword(string email, string tokencode)
@@ -216,7 +232,7 @@ namespace FMB_CIS.Controllers
                         return View();
                         //return RedirectToAction("Index", "Home");
                     }
-                    
+
                     //return View("ResetPasswordConfirmation");
                 }
                 else
@@ -224,9 +240,9 @@ namespace FMB_CIS.Controllers
                     return View();
                     //return RedirectToAction("Index", "Home");
                 }
-                
+
             }
-            else 
+            else
             {
                 //return RedirectToAction("Index", "Home");
                 return View();
