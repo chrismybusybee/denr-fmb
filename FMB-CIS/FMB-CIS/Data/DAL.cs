@@ -113,7 +113,6 @@ namespace FMB_CIS.Data
                     case 8:
                         userRole = "DENR CENRO";
                         break;
-
                 }
                 return userRole;
 

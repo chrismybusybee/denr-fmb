@@ -1,17 +1,7 @@
-﻿@model FMB_CIS.Models.tbl_application;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
+﻿@using System.Security.Claims;
+@model FMB_CIS.Models.OwnerPermitViewModel
 
-=======
->>>>>>> updated the chainsaw owner contrller and view.
-=======
-
->>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
-=======
-
->>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Chainsaw Seller";
@@ -20,183 +10,162 @@
 
 <div id="card-container">
     <div id="card">
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-        @using (Html.BeginForm("Submit", "ChainsawOwner", FormMethod.Post))
-=======
-        @using (Html.BeginForm("Submit", "ChainsawSeller", FormMethod.Post))
->>>>>>> updated the chainsaw owner contrller and view.
-=======
-        @using (Html.BeginForm("Submit", "ChainsawOwner", FormMethod.Post))
->>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
-=======
-        @using (Html.BeginForm("Submit", "ChainsawOwner", FormMethod.Post))
->>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
-        {
-            <div class="row m-0">
-                <div class="col-md-12">
-                    <a href="@Url.Action("Index", "Dashboard")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
-                    <div class="row my-4">
-                        <div class="col-md-4">
-                            <label class="text-secondary small">
-                                Permit Type
-                            </label>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
-=======
->>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
-                            <select asp-for="tbl_permit_type_id" class="form-select">
-                                <option selected value="0">-- Select Permit Type --</option>
-                                <option value="2">Permit to Sell"</option>
-                                <option value ="3">Permit to Purchase</option>
-                                </select>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-                            <input type="Text" value="Permit to Sell" class="form-control" disabled />
->>>>>>> updated the chainsaw owner contrller and view.
-=======
->>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
-=======
->>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
-                        </div>
-                    </div>
-                    <h4 class="text-secondary fw-bold my-4">Importer Details</h4>
-                    <div class="row">
-                        <div class="col-md-10">
-                            <div class="row mb-3">
-                                <div class="col-md-4">
-                                    <label class="text-secondary small">
-                                        First Name
-                                    </label>
-                                    @Html.TextBoxFor(m => m.supplier_fname , new { Class="form-control" })
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="text-secondary small">
-                                        Middle Name
-                                    </label>
-                                    @Html.TextBoxFor(m => m.supplier_mname, new { Class="form-control" })
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="text-secondary small">
-                                        Last Name
-                                    </label>
-                                    @Html.TextBoxFor(m => m.supplier_lname, new { Class="form-control" })
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="col-md-12">
-                                <label class="text-secondary small">
-                                    Suffix
-                                </label>
-                                @Html.TextBoxFor(m => m.supplier_suffix, new { Class="form-control" })
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label class="text-secondary small">
-                                Address
-                            </label>
-                            @Html.TextBoxFor(m => m.supplier_address, new { Class="form-control" })
-                        </div>
-                        <div class="col-md-4">
-                            <label class="text-secondary small">
-                                Email
-                            </label>
-                            @Html.TextBoxFor(m => m.supplier_email, new { Class="form-control" })
-                        </div>
-                        <div class="col-md-4">
-                            <label class="text-secondary small">
-                                Contact No.
-                            </label>
-                            @Html.TextBoxFor(m => m.supplier_contact_no, new { Class="form-control" })
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label class="text-secondary small">
-                                Number of chainsaws to be purchased/ imported
-                            </label>
-                            @Html.TextBoxFor(m => m.qty, new { Class="form-control" })
-                        </div>
-                        <div class="col-md-6">
-                            <label class="text-secondary small">
-                                Specification
-                            </label>
-                            @Html.TextBoxFor(m => m.origin, new { Class="form-control" })
-                        </div>
-                    </div>
-                    <div class="row mb-5">
-                        <div class="col-md-12">
-                            <label class="text-secondary small">
-                                Purpose
-                            </label>
-                            @Html.TextAreaFor(m => m.purpose, new { Class="form-control" })
-                        </div>
-                    </div>
-                    <h4 class="text-secondary fw-bold mb-4">Bureau of Customs</h4>
-                    <div class="row mb-5">
-                        <div class="col-md-6">
-                            <label class="text-secondary small">
-                                Expected time of arrival
-                            </label>
-                            @Html.TextBoxFor(m => m.expected_time_arrival, new { Class="form-control", Type="date" })
-                        </div>
-                        <div class="col-md-6">
-                            <label class="text-secondary small">
-                                Expected time of release
-                            </label>
-                            @Html.TextBoxFor(m => m.expected_time_release, new { Class="form-control", Type="date" })
-                        </div>
-                    </div>
-                    <!--
-                    <h4 class="text-secondary fw-bold mb-4">Attach Required Documents</h4>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label class="text-secondary small">
-                                Attach Forms
-                            </label>
-                            <input type="file" class="form-control" />
-                        </div>
 
+        <div class="row m-0">
+            <form asp-controller="ChainsawOwner" id="OwnerRegForm">
+            <div class="col-md-12">
+                <a href="@Url.Action("Index", "Dashboard")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
+                <div class="row my-4">
+                    <div class="col-md-4">
+                        <label class="text-secondary small">
+                            Permit Type
+                        </label>
+                        <select asp-for="tbl_permit_type_id" class="form-select" aria-label="Permit Type">
+                            <option selected disabled>- Select Permit Type -</option>
+                            <option value="5">Authority to Lease</option>
+                            <option value="6">Authority to Rent</option>
+                            <option value="7">Authority to Lend</option>
+                            <option value="13">Certificate of Registration</option>
+                            <option value ="14">Permit to Re-sell/Transfer Ownership</option>
+                        </select>
+                        <span asp-validation-for="tbl_permit_type_id" class="text-danger"></span>
+                        @* <input asp-for="tbl_permit_type_id" type="text" class="form-control" /> *@
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <input type="file" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <input type="file" class="form-control" />
-                        </div>
-                    </div>
-                    -->
-                    @ViewBag.Status
-                    <div class="row mb-5">
-                        <div class="col-md-6">
-                            <label class="text-secondary small">
-                                Set Date of Inspection
-                            </label>
-                            @Html.TextBoxFor(m => m.date_of_inspection, new { Class="form-control", Type="date" })
-                        </div>
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col-md-12 d-flex justify-content-center">
-                            <button id="btnSubmit" class="btn btn-primary">Submit</button>
+                </div>
+                <h4 class="text-secondary fw-bold my-4">Importer Details</h4>
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="text-secondary small">
+                                    First Name
+                                </label>
+                                <input asp-for="supplier_fname" type="text" class="form-control" />
+                                <span asp-validation-for="supplier_fname" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="text-secondary small">
+                                    Middle Name
+                                </label>
+                                <input asp-for="supplier_mname" type="text" class="form-control" />
+                                <span asp-validation-for="supplier_mname" class="text-danger"></span>
+
+
+
+                                <input asp-for="supplier_lname" type="text" class="form-control" />
+                                <span asp-validation-for="supplier_lname" class="text-danger"></span>
+
+                            <input asp-for="supplier_suffix" type="text" class="form-control" />
+                            <span asp-validation-for="supplier_suffix" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="text-secondary small">
+                            Address
+                        </label>
+                        <input asp-for="supplier_address" type="text" class="form-control" />
+                        <span asp-validation-for="supplier_address" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="text-secondary small">
+                            Email
+                        </label>
+                        <input asp-for="supplier_email" type="text" class="form-control" />
+                            <span asp-validation-for="supplier_email" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="text-secondary small">
+                            Contact No.
+                        </label>
+                        <input asp-for="supplier_contact_no" type="text" class="form-control" />
+                        <span asp-validation-for="supplier_contact_no" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="text-secondary small">
+                            Number of chainsaws to be purchased/ imported
+                        </label>
+                        <input asp-for="qty" class="form-control" />
+                        <span asp-validation-for="qty" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="text-secondary small">
+                            Specification
+                        </label>
+                        <input asp-for="tbl_specification_id" class="form-control" />
+                        <span asp-validation-for="tbl_specification_id" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col-md-12">
+                        <label class="text-secondary small">
+                            Purpose
+                        </label>
+                        <textarea asp-for="purpose" class="form-control">
+
+                        </textarea>
+                        <span asp-validation-for="purpose" class="text-danger"></span>
+                    </div>
+                </div>
+                <h4 class="text-secondary fw-bold mb-4">Bureau of Customs</h4>
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <label class="text-secondary small">
+                            Expected time of arrival
+                        </label>
+                        <input asp-for="expected_time_arrival" type="date" class="form-control" />
+                        <span asp-validation-for="expected_time_arrival" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="text-secondary small">
+                            Expected time of release
+                        </label>
+                        <input asp-for="expected_time_release" type="date" class="form-control" />
+                        <span asp-validation-for="expected_time_release" class="text-danger"></span>
+                    </div>
+                </div>
+                <h4 class="text-secondary fw-bold mb-4">Attach Required Documents</h4>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="text-secondary small">
+                            Attach Forms
+                        </label>
+                        <input type="file" class="form-control" />
+                    </div>
+                    
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <input type="file" class="form-control" />
+
+
+                </div>
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <label class="text-secondary small">
+                            Set Date of Inspection
+                        </label>
+                        <input asp-for="date_of_inspection" type="date" class="form-control" />
+                        <span asp-validation-for="date_of_inspection" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-12 d-flex justify-content-center">
+                        @* <button id="btnSubmit" class="btn btn-primary">Submit</button> *@
+                        <input type="submit" @* id="btnSubmit" *@ value="Submit" class="btn btn-primary"/>
+                    </div>
+                </div>
             </div>
-        }
+            </form>
+        </div>
+
     </div>
 </div>
 
+<partial name="~/Views/Modals/ChainsawOwnerModal.cshtml" />
 
 
 
@@ -204,15 +173,50 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        feather.replace();
+
         $("#btnSubmit").click(function () {
             $("#confirmSubmitModal").modal("show");
         });
+
         $("#backBtn").click(function () {
             $("#confirmSubmitModal").modal("hide");
         });
+
         $("#confirmBtn").click(function () {
             $("#confirmSubmitModal").modal("hide");
             $("#confirmSuccessModal").modal("show");
         });
     });
+    const form = document.getElementById('OwnerRegForm');
+    const showModalButton = document.getElementById('btnSubmit');
+    const confirmationModal = document.getElementById('confirmSubmitModal');
+    const confirmButton = document.getElementById('confirmBtn');
+
+    // Function to display the modal
+    function showModal() {
+        confirmationModal.style.display = 'block';
+    }
+
+    // Function to hide the modal
+    function hideModal() {
+        confirmationModal.style.display = 'none';
+    }
+
+    // Event listener for the "Submit" button
+    showModalButton.addEventListener('click', showModal);
+
+    // Event listener for the "Confirm" button
+    confirmButton.addEventListener('click', function () {
+        // Submit the form when the "Confirm" button is clicked
+        form.submit();
+    });
+
+    // Close the modal when the user clicks outside of it
+    window.addEventListener('click', function (event) {
+        if (event.target === confirmationModal) {
+            hideModal();
+        }
+    });
+
 </script>

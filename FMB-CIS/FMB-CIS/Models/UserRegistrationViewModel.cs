@@ -22,9 +22,9 @@ namespace FMB_CIS.Models
         public string valid_id_no { get; set; }
         [Display (Name ="Birth Date")]
         public DateTime birth_date { get; set; }
-
+        [Display(Name = "Region")]
         public int tbl_region_id { get; set; }
-        [Display (Name ="Region")]
+        [Display (Name ="Province")]
         public int tbl_province_id { get; set; }
         [Display (Name ="City")]
         public int tbl_city_id { get; set; }

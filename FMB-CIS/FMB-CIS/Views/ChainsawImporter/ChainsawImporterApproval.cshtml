@@ -1,278 +1,249 @@
-﻿@{
+﻿@using System.Security.Claims;
+@model FMB_CIS.Models.ViewModel
+@* @model FMB_CIS.Models.ApplicantListViewModel *@
+@{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Chainsaw Importer";
 }
 
 <div id="card-container">
     <div id="card">
-        <div class="row m-0">
-            <div class="d-flex justify-content-end gap-2">
-                <button id="approveBtn" class="btn btn-primary w-105">Approve</button>
-                <button id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
-            </div>
-        </div>
-        <hr />
-        <div id="profileSection" class="row m-0">
-            <div class="col-md-3">
-                <div class="d-flex justify-content-center gap-1">
-                    <img src="/assets/images/default-avatar.png" class="img-fluid rounded" />
+        <form asp-action="ChainsawImporterApproval" method="post">
+            <div class="row m-0">
+                <input asp-for="uid" type="hidden" />
+                <input asp-for="appid" type="hidden" />
+                <div class="d-flex justify-content-end gap-2">
+                    @* <button id="ApproveBtn" class="btn btn-primary w-105">Approve</button>
+                    <button class="btn btn-danger w-105 btnCancel">Decline</button> *@
+                    <input id="ApproveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Approve" />
+                    <input class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="submit" value="Decline" />
+
                 </div>
             </div>
-            <div class="col-md-9">
-                <div class="row">
-                    <div class="col-md-10">
-                        <div class="row mb-5">
-                            <div class="col-md-5">
-                                <div class="form-group d-flex flex-column gap-1">
-                                    <label class="text-secondary small">
-                                        User Type
-                                    </label>
-                                    <span class="fw-bold">
-                                        Chainsaw Importer
-                                    </span>
+            <hr />
+            <div id="profileSection" class="row m-0">
+                <div class="col-md-3">
+                    <div class="d-flex justify-content-center gap-1">
+                        <img src="/assets/images/default-avatar.png" class="img-fluid rounded" />
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="row mb-5">
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            User Type
+                                        </label>
+                                        <span class="fw-bold">
+                                            @* @Html.DisplayFor(model => model.user_type) *@
+                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.user_type) }
+                                            @* @Html.DisplayFor(modelItem => item.Engine) *@
+                                            @* Chainsaw Importer *@
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Name
+                                        </label>
+                                        <span class="fw-bold">
+                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.full_name) }
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-5">
-                                <div class="form-group d-flex flex-column gap-1">
-                                    <label class="text-secondary small">
-                                        Name
-                                    </label>
-                                    <span class="fw-bold">
-                                        Juan Dela Cruz
-                                    </span>
+                            <div class="row mb-5">
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Email Address
+                                        </label>
+                                        <span class="fw-bold">
+                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.email) }
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Contact Number
+                                        </label>
+                                        <span class="fw-bold">
+                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.contact) }
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mb-5">
-                            <div class="col-md-5">
-                                <div class="form-group d-flex flex-column gap-1">
-                                    <label class="text-secondary small">
-                                        Email Address
-                                    </label>
-                                    <span class="fw-bold">
-                                        juan@email.com
-                                    </span>
+                            <div class="row mb-5">
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Valid ID
+                                        </label>
+                                        <span class="fw-bold">
+                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.valid_id) }
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Valid ID Number
+                                        </label>
+                                        <span class="fw-bold">
+                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.valid_id_no) }
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-5">
-                                <div class="form-group d-flex flex-column gap-1">
-                                    <label class="text-secondary small">
-                                        Contact Number
-                                    </label>
-                                    <span class="fw-bold">
-                                        0916 123 3456
-                                    </span>
+                            <div class="row mb-5">
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Birth Date
+                                        </label>
+                                        <span class="fw-bold">
+                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.birth_date) }
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Street Address
+                                        </label>
+                                        <span class="fw-bold">
+                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.address) }
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mb-5">
-                            <div class="col-md-5">
-                                <div class="form-group d-flex flex-column gap-1">
-                                    <label class="text-secondary small">
-                                        Valid ID
-                                    </label>
-                                    <span class="fw-bold">
-                                        SSS
-                                    </span>
+                            <div class="row mb-5">
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Region
+                                        </label>
+                                        <span class="fw-bold">
+                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.tbl_region_id) }
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Province
+                                        </label>
+                                        <span class="fw-bold">
+                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.tbl_province_id) }
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-5">
-                                <div class="form-group d-flex flex-column gap-1">
-                                    <label class="text-secondary small">
-                                        Valid ID Number
-                                    </label>
-                                    <span class="fw-bold">
-                                        001234567
-                                    </span>
+                            <div class="row mb-5">
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            City/Municipality
+                                        </label>
+                                        <span class="fw-bold">
+                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.tbl_city_id) }
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row mb-5">
-                            <div class="col-md-5">
-                                <div class="form-group d-flex flex-column gap-1">
-                                    <label class="text-secondary small">
-                                        Birth Date
-                                    </label>
-                                    <span class="fw-bold">
-                                        December 27, 1989
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-md-5">
-                                <div class="form-group d-flex flex-column gap-1">
-                                    <label class="text-secondary small">
-                                        Street Address
-                                    </label>
-                                    <span class="fw-bold">
-                                        123 Mendiola St, Manila  City
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mb-5">
-                            <div class="col-md-5">
-                                <div class="form-group d-flex flex-column gap-1">
-                                    <label class="text-secondary small">
-                                        Region
-                                    </label>
-                                    <span class="fw-bold">
-                                        NCR
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-md-5">
-                                <div class="form-group d-flex flex-column gap-1">
-                                    <label class="text-secondary small">
-                                        Province
-                                    </label>
-                                    <span class="fw-bold">
-                                        Manila
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mb-5">
-                            <div class="col-md-5">
-                                <div class="form-group d-flex flex-column gap-1">
-                                    <label class="text-secondary small">
-                                        City/Municipality
-                                    </label>
-                                    <span class="fw-bold">
-                                        Manila
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-md-5">
-                                <div class="form-group d-flex flex-column gap-1">
-                                    <label class="text-secondary small">
-                                        Barangay
-                                    </label>
-                                    <span class="fw-bold">
-                                        Mendiola
-                                    </span>
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Barangay
+                                        </label>
+                                        <span class="fw-bold">
+                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.tbl_brgy_id) }
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <hr />
+            <hr />
 
-        <div class="row d-flex justify-content-center m-0">
-            <div class="col-md-11 mb-5">
-                <span>Attached Forms</span>
-                <table class="w-100 striped-table mb-4">
-                    <thead>
-                        <tr>
-                            <th class="text-nowrap">
-                                Name of form
-                            </th>
-                            <th class="text-nowrap text-center w-25">
-                                Action
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="text-nowrap">
-                                Form 01.doc
-                            </td>
-                            <td class="text-nowrap">
-                                <div class="d-flex justify-content-center gap-3">
-                                    <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="view">
-                                        <i data-feather="eye" class="data-feather-20"></i>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-nowrap">
-                                Form 01.doc
-                            </td>
-                            <td class="text-nowrap">
-                                <div class="d-flex justify-content-center gap-3">
-                                    <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="view">
-                                        <i data-feather="eye" class="data-feather-20"></i>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-nowrap">
-                                Form 01.doc
-                            </td>
-                            <td class="text-nowrap">
-                                <div class="d-flex justify-content-center gap-3">
-                                    <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="view">
-                                        <i data-feather="eye" class="data-feather-20"></i>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <span>Inspection Result Document attachment</span>
-                <table class="w-100 striped-table">
-                    <thead>
-                        <tr>
-                            <th class="text-nowrap">
-                                Name of form
-                            </th>
-                            <th class="text-nowrap text-center w-25">
-                                Action
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="text-nowrap">
-                                Document result.doc
-                            </td>
-                            <td class="text-nowrap">
-                                <div class="d-flex justify-content-center gap-3">
-                                    <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="view">
-                                        <i data-feather="eye" class="data-feather-20"></i>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-nowrap">
-                                Picture file 1.jpg
-                            </td>
-                            <td class="text-nowrap">
-                                <div class="d-flex justify-content-center gap-3">
-                                    <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="view">
-                                        <i data-feather="eye" class="data-feather-20"></i>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-nowrap">
-                                Picture file 2.jpg
-                            </td>
-                            <td class="text-nowrap">
-                                <div class="d-flex justify-content-center gap-3">
-                                    <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="view">
-                                        <i data-feather="eye" class="data-feather-20"></i>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="row d-flex justify-content-center px-0 mb-5">
-                <div class="col-md-11 d-flex flex-column gap-2">
-                    <span>
-                        Comments
-                    </span>
-                    <textarea class="form-control"></textarea>
+            <div class="row d-flex justify-content-center m-0">
+                <div class="col-md-11 mb-5">
+                    <span>Attached Forms</span>
+                    <table class="w-100 striped-table">
+                        <thead>
+                            <tr>
+                                <th class="text-nowrap">
+                                    Name of form
+                                </th>
+                                <th class="text-nowrap text-center">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-nowrap">
+                                    Form 01.doc
+                                </td>
+                                <td class="text-nowrap">
+                                    <div class="d-flex justify-content-center gap-3">
+                                        <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="view">
+                                            <i data-feather="eye" class="data-feather-20"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-nowrap">
+                                    Form 01.doc
+                                </td>
+                                <td class="text-nowrap">
+                                    <div class="d-flex justify-content-center gap-3">
+                                        <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="view">
+                                            <i data-feather="eye" class="data-feather-20"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-nowrap">
+                                    Form 01.doc
+                                </td>
+                                <td class="text-nowrap">
+                                    <div class="d-flex justify-content-center gap-3">
+                                        <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="view">
+                                            <i data-feather="eye" class="data-feather-20"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row d-flex justify-content-center px-0 mb-5">
+                    <div class="col-md-11 d-flex flex-column gap-2">
+                        <span>
+                            Comments
+                        </span>
+                        @* <textarea asp-for="comment" class="form-control"></textarea> *@
+                        @* @Html.EditorFor(model => model.applicantListViewModels.ToList(comment), new { htmlAttributes = new { @class = "form-control" } }) *@
+                        @foreach (ApplicantListViewModel item in Model.applicantListViewModels)
+                        {
+                            @Html.TextAreaFor(modelItem => item.comment, new { @class = "form-control", @name="newComment", @id="commentFromDB", @hidden ="true" })    
+                            @* @Html.TextAreaFor *@
+                        }
+                        @Html.TextAreaFor(model => model.comment, new { @class = "form-control", @id="commentToPass"})
+
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
+
     </div>
 </div>
 
@@ -306,4 +277,7 @@
             $('#confirmSuccessDeclineModal').modal("show");
         });
     });
+    var x = document.getElementById("commentFromDB").value;
+    document.getElementById('commentToPass').value = x;
+
 </script>

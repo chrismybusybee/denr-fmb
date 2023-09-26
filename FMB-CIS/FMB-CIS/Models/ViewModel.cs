@@ -2,25 +2,15 @@
 {
     public class ViewModel
     {
-        public IEnumerable<tbl_chainsaw>? tbl_Chainsaws { get; set; }
-        public IEnumerable<ApplicationModel>? applicationModels { get; set; }
-        public ChainsawSeller? chainsawSeller { get; set; }
-        public tbl_application? tbl_Application { get; set; }
+        public IEnumerable<tbl_chainsaw> tbl_Chainsaws { get; set; }
+        public IEnumerable<ApplicationModel> applicationModels { get; set; }
+        public IEnumerable<tbl_user> tbl_Users { get; set; }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
+        public IEnumerable<ApplicantListViewModel> applicantListViewModels { get; set; }
+        public string uid { get; set; }
+        public string appid { get; set; }
+        public string comment { get; set; }
+
         public IEnumerable<tbl_user>? tbl_Users { get; set; }
-
-=======
->>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
-=======
-        public IEnumerable<tbl_user>? tbl_Users { get; set; }
-
->>>>>>> updated approval for permits applications
-=======
-        public IEnumerable<tbl_user>? tbl_Users { get; set; }
-
->>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
     }
 }

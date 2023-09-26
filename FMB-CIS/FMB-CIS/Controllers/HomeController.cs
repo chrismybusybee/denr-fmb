@@ -86,6 +86,7 @@ namespace FMB_CIS.Controllers
                             new Claim(ClaimTypes.Name, credentials.email),
                             new Claim("FullName", dal.selectFullNameFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng"))),
                             new Claim("userID", dal.selectUserIDFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng"))),
+                            new Claim(ClaimTypes.Role, dal.selectUserRoleFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng"))),
                             new Claim("userRole", dal.selectUserRoleFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng"))),
                             //new Claim(ClaimTypes.Role, "Administrator"),
                         };
