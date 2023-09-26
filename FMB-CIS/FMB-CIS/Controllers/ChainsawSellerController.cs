@@ -15,18 +15,8 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using FMB_CIS.Data;
 using FMB_CIS.Models;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 using System.Runtime.ConstrainedExecution;
-=======
->>>>>>> Added model, controller for chainsaw seller
-=======
-using System.Runtime.ConstrainedExecution;
->>>>>>> updated approval for permits applications
-=======
-using System.Runtime.ConstrainedExecution;
->>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
+
 
 namespace FMB_CIS.Controllers
 {
@@ -44,30 +34,10 @@ namespace FMB_CIS.Controllers
 
         public IActionResult Index()
         {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
-           
->>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
-=======
-
->>>>>>> updated approval for permits applications
-=======
-
->>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
 
             return View();
         }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> updated approval for permits applications
-=======
->>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
         public IActionResult ChainsawSellerApproval(int id)
         {
             ViewModel mymodel = new();
@@ -111,10 +81,6 @@ namespace FMB_CIS.Controllers
             return View(mymodel);
         }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
         [HttpPost]
         public ActionResult Submit(tbl_application ta)
         {
@@ -129,76 +95,26 @@ namespace FMB_CIS.Controllers
 
             _context.tbl_application.Add(ta);
             _context.SaveChanges();
-<<<<<<< HEAD
-=======
-=======
->>>>>>> updated approval for permits applications
-        [HttpPost]
-        public ActionResult Submit(tbl_application ta)
-        {
-            int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-<<<<<<< HEAD
-            sm.tbl_application_type_id = 3;
-            sm.tbl_user_id = userID;
-            sm.is_active = 1;
-            sm.modified_by = userID;
-            sm.created_by = userID;
-            sm.status = 1;
-            sm.tbl_permit_type_id = 3;
 
-            _context.tbl_application.Add(sm);
-<<<<<<< HEAD
->>>>>>> Added model, controller for chainsaw seller
-=======
-=======
-            ta.tbl_application_type_id = 3;
-            ta.tbl_user_id = userID;
-            ta.is_active = true;
-            ta.modified_by = userID;
-            ta.created_by = userID;
-            ta.status = 1;
-
-
-            _context.tbl_application.Add(ta);
->>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
-            _context.SaveChanges();
->>>>>>> Created a chainsaw owner controller
-=======
->>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
-
-            ViewBag.Status = "Save Success.";
-
-            return View("Index");
-        }
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> updated approval for permits applications
-=======
->>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
-        [HttpPost]
-        public ActionResult FormApprove(IFormCollection ta)
-        {
-            string comments = ta["item.application.others"];
-            int id = Convert.ToInt32(ta["item.id"]);
-            var application = _context.tbl_application.First(a => a.id == id);
-            application.others = comments;
-            application.status = 2;
-            _context.SaveChanges();
 
             ViewBag.Status = "Approval Success.";
 
             return View();
         }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Added model, controller for chainsaw seller
-=======
->>>>>>> updated approval for permits applications
-=======
->>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
+            [HttpPost]
+            public ActionResult FormApprove(IFormCollection ta)
+            {
+                string comments = ta["item.application.others"];
+                int id = Convert.ToInt32(ta["item.id"]);
+                var application = _context.tbl_application.First(a => a.id == id);
+                application.others = comments;
+                application.status = 2;
+                _context.SaveChanges();
+
+                ViewBag.Status = "Approval Success.";
+
+                return View();
+            }
+        }
     }
-}

@@ -4,7 +4,7 @@ namespace FMB_CIS.Models
 {
     public class ApplicantListViewModel
     {
-        public int id { get; set; }
+        public int? id { get; set; }
         public tbl_application application { get; set; }
         public string application_type { get; set; }
         public string permit_status { get; set; }

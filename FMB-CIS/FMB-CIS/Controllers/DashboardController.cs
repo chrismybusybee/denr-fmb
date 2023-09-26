@@ -54,45 +54,10 @@ namespace FMB_CIS.Controllers
                 }*/
                 if(userRole.Contains("Owner") == true || userRole.Contains("Seller") == true || userRole.Contains("Importer") == true)
                 {
-                    //OWNED CHAINSAWS
-                    var ChainsawList = _context.tbl_chainsaw.ToList();
-                    var ChainsawOwnedList = ChainsawList.Where(m => m.user_id == userID).ToList();
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-<<<<<<< HEAD
 
                 //OWNED CHAINSAWS
                 var ChainsawList = _context.tbl_chainsaw.ToList();
                 var ChainsawOwnedList = ChainsawList.Where(m => m.user_id == userID /*&& m.status == "Seller"*/).ToList();
-=======
-=======
-
->>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
-                    //HISTORY
-                    var applicationlist = from a in _context.tbl_application
-                                          where a.tbl_user_id == userID
-                                          select a;
-<<<<<<< HEAD
->>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
-=======
->>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
-
-                    
-                    var applicationtypelist = _context.tbl_application_type;
-
-                    var applicationMod = from a in applicationlist
-                                         join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
-                                         join pT in _context.tbl_permit_type on a.tbl_application_type_id equals pT.id
-                                         join pS in _context.tbl_permit_status on a.status equals pS.id
-                                         where a.tbl_user_id == userID
-                                         select new ApplicationModel { id = a.id, application_type = appt.name, permit_type = pT.name, permit_status = pS.status };
-                    mymodel.tbl_Chainsaws = ChainsawOwnedList;
-                    mymodel.applicationModels = applicationMod;
-<<<<<<< HEAD
-
-<<<<<<< HEAD
-=======
 
                     //HISTORY
                     var applicationlist = from a in _context.tbl_application
@@ -111,43 +76,23 @@ namespace FMB_CIS.Controllers
                     mymodel.tbl_Chainsaws = ChainsawOwnedList;
                     mymodel.applicationModels = applicationMod;
 
->>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
+
                     return View(mymodel);
                 }
                 else if(userRole.Contains("CENRO") == true)
                 {
                     var applicationlist = _context.tbl_application;
                     var applicationtypelist = _context.tbl_application_type;
-<<<<<<< HEAD
-=======
+
                 var applicationMod = from a in applicationlist
                                      join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                      join pT in _context.tbl_permit_type on a.tbl_application_type_id equals pT.id
                                      join pS in _context.tbl_permit_status on a.status equals pS.id
                                      where a.tbl_user_id == userID
                                      select new ApplicationModel{id = a.id, application_type = appt.name, permit_type = pT.name, permit_status = pS.status};
-                mymodel.tbl_Chainsaws = ChainsawOwnedList;
+                //mymodel.tbl_Chainsaws = ChainsawOwnedList;
                 mymodel.applicationModels = applicationMod;
->>>>>>> Added model, controller for chainsaw seller
-=======
->>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
 
-                    var applicationMod = from a in applicationlist
-                                         join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
-                                         join pT in _context.tbl_permit_type on a.tbl_application_type_id equals pT.id
-                                         join pS in _context.tbl_permit_status on a.status equals pS.id
-                                         select new ApplicationModel { 
-                                             id = a.id, 
-                                             application_type = appt.name, 
-                                             permit_type = pT.name, 
-                                             permit_status = pS.status, 
-                                             FullName = a.supplier_fname + " " + a.supplier_mname + " " + a.supplier_lname + " " + a.supplier_suffix,
-                                             Email = a.supplier_email
-                                         };
-                    mymodel.applicationModels = applicationMod;
-
-<<<<<<< HEAD
-=======
 
                     return View(mymodel);
                 }
@@ -170,9 +115,6 @@ namespace FMB_CIS.Controllers
                                          };
                     mymodel.applicationModels = applicationMod;
 
->>>>>>> Updated dashboard for temporary Cenro User, added application for permits.
-=======
->>>>>>> dc59c0069fcba1de5d7f0378bef7e5eb5da5d581
                     return View(mymodel);
                 }
                 
