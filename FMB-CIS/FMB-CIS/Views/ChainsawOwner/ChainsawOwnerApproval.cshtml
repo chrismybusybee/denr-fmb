@@ -1,0 +1,270 @@
+﻿@model FMB_CIS.Models.ViewModel
+@{
+    Layout = "~/Views/Shared/_MainPageLayout.cshtml";
+    ViewBag.Title = "Chainsaw Owner";
+}
+
+<div id="card-container">
+    <div id="card">
+        @ViewBag.Status
+        @using (Html.BeginForm("FormApprove", "ChainsawOwner", FormMethod.Post))
+        {
+            @foreach (ApplicationModel item in Model.applicationModels)
+            {
+                @Html.TextBoxFor(modelItem => item.id , new { Class="form-control" , Hidden="true"})
+            }
+            
+            <div class="row m-0">
+            <div class="d-flex justify-content-end gap-2">
+                    <button type="submit" id="ApproveBtn" class="btn btn-primary w-105">Approve</button>
+                <button class="btn btn-danger w-105 btnCancel">Decline</button>
+            </div>
+        </div>
+            <hr />
+            <div id="profileSection" class="row m-0">
+            <div class="col-md-3">
+                <div class="d-flex justify-content-center gap-1">
+                    <img src="/assets/images/default-avatar.png" class="img-fluid rounded" />
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="row mb-5">
+                            <div class="col-md-5">
+                                <div class="form-group d-flex flex-column gap-1">
+                                    <label class="text-secondary small">
+                                        User Type
+                                    </label>
+                                    <span class="fw-bold">
+                                        @foreach (tbl_user item in Model.tbl_Users)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.tbl_user_types_id)
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group d-flex flex-column gap-1">
+                                    <label class="text-secondary small">
+                                        Name
+                                    </label>
+                                    <span class="fw-bold">
+                                        @foreach (tbl_user item in Model.tbl_Users)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.FullName)
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-5">
+                            <div class="col-md-5">
+                                <div class="form-group d-flex flex-column gap-1">
+                                    <label class="text-secondary small">
+                                        Email Address
+                                    </label>
+                                    <span class="fw-bold">
+                                        @foreach (tbl_user item in Model.tbl_Users)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.email)
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group d-flex flex-column gap-1">
+                                    <label class="text-secondary small">
+                                        Contact Number
+                                    </label>
+                                    <span class="fw-bold">
+                                        @foreach (tbl_user item in Model.tbl_Users)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.contact_no)
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-5">
+                            <div class="col-md-5">
+                                <div class="form-group d-flex flex-column gap-1">
+                                    <label class="text-secondary small">
+                                        Valid ID
+                                    </label>
+                                    <span class="fw-bold">
+                                        @foreach (tbl_user item in Model.tbl_Users)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.valid_id)
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group d-flex flex-column gap-1">
+                                    <label class="text-secondary small">
+                                        Valid ID Number
+                                    </label>
+                                    <span class="fw-bold">
+                                        @foreach (tbl_user item in Model.tbl_Users)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.valid_id_no)
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-5">
+                            <div class="col-md-5">
+                                <div class="form-group d-flex flex-column gap-1">
+                                    <label class="text-secondary small">
+                                        Birth Date
+                                    </label>
+                                    <span class="fw-bold">
+                                        @foreach (tbl_user item in Model.tbl_Users)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.birth_date)
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group d-flex flex-column gap-1">
+                                    <label class="text-secondary small">
+                                        Street Address
+                                    </label>
+                                    <span class="fw-bold">
+                                        123 Mendiola St, Manila  City
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-5">
+                            <div class="col-md-5">
+                                <div class="form-group d-flex flex-column gap-1">
+                                    <label class="text-secondary small">
+                                        Region
+                                    </label>
+                                    <span class="fw-bold">
+                                        NCR
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group d-flex flex-column gap-1">
+                                    <label class="text-secondary small">
+                                        Province
+                                    </label>
+                                    <span class="fw-bold">
+                                        Manila
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-5">
+                            <div class="col-md-5">
+                                <div class="form-group d-flex flex-column gap-1">
+                                    <label class="text-secondary small">
+                                        City/Municipality
+                                    </label>
+                                    <span class="fw-bold">
+                                        Manila
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group d-flex flex-column gap-1">
+                                    <label class="text-secondary small">
+                                        Barangay
+                                    </label>
+                                    <span class="fw-bold">
+                                        Mendiola
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <hr />
+
+            <div class="row d-flex justify-content-center m-0">
+            <div class="col-md-11 mb-5">
+                <span>Attached Forms</span>
+                <table class="w-100 striped-table">
+                    <thead>
+                        <tr>
+                            <th class="text-nowrap">
+                                Name of form
+                            </th>
+                            <th class="text-nowrap text-center">
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-nowrap">
+                                Form 01.doc
+                            </td>
+                            <td class="text-nowrap">
+                                <div class="d-flex justify-content-center gap-3">
+                                    <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="view">
+                                        <i data-feather="eye" class="data-feather-20"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-nowrap">
+                                Form 01.doc
+                            </td>
+                            <td class="text-nowrap">
+                                <div class="d-flex justify-content-center gap-3">
+                                    <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="view">
+                                        <i data-feather="eye" class="data-feather-20"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-nowrap">
+                                Form 01.doc
+                            </td>
+                            <td class="text-nowrap">
+                                <div class="d-flex justify-content-center gap-3">
+                                    <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="view">
+                                        <i data-feather="eye" class="data-feather-20"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row d-flex justify-content-center px-0 mb-5">
+                <div class="col-md-11 d-flex flex-column gap-2">
+                    <span>
+                        Comments
+                    </span>
+                        @foreach (ApplicationModel item in Model.applicationModels)
+                        {
+                            @Html.TextAreaFor(modelItem => item.application.others , new { Class="form-control" })
+                        }
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>
+
+<script src="/js/jquery-3.7.1.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#approveBtn').click(function () {
+            $('#confirmApproveModal').show();
+        });
+    });
+</script>
