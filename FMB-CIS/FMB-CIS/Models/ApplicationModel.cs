@@ -12,5 +12,7 @@ namespace FMB_CIS.Models
 
         public string? FullName { get; set; }
         public string? Email {  get; set; } 
+
+        public string? comments { get; set; }
     }
 }

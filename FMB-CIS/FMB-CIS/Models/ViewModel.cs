@@ -7,5 +7,7 @@
         public ChainsawSeller? chainsawSeller { get; set; }
         public tbl_application? tbl_Application { get; set; }
 
+        public IEnumerable<tbl_user>? tbl_Users { get; set; }
+
     }
 }
