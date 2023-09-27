@@ -113,7 +113,11 @@ namespace FMB_CIS.Controllers
                             sqlCmd.Parameters.AddWithValue("tbl_user_types_id", Convert.ToInt32(userRegistrationViewModel.tbl_user_types_id));
                             sqlCmd.ExecuteNonQuery();
                         }
+                        var subject = "Account has been created";
+                        var body = "We would like to inform you that you have created an account with FMB-CIS.\nIf you forgot your password or if you wish to change it, you may proceed on this link: https://fmb-cis.beesuite.ph/Account/ForgotPassword";
+                        EmailSender.SendEmailAsync(userRegistrationViewModel.email, subject, body);
                         return RedirectToAction("EmailConfirmation");
+
                     }
                 }
                 else
