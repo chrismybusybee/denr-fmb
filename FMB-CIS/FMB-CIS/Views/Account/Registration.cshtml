@@ -75,14 +75,14 @@
                 </div>
             </div>
             <div class="row mb-4">
-                <div class="col-md-3">
+                <div class="col-md-8">
                     <div class="form-group">
                         <label asp-for="email" class="form-label small">Email (Please use official email address)</label>
                         <input asp-for="email" class="form-control" placeholder="name@address.com" />
                         <span asp-validation-for="email" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-3">
+                @* <div class="col-md-3">
                     <div class="form-group">
                         <label asp-for="password" class="form-label small">Password</label>
                         <input asp-for="password" class="form-control" placeholder="Password" />
@@ -95,8 +95,8 @@
                         <input asp-for="confirmPassword" class="form-control" placeholder="Confirm Password" />
                         <span asp-validation-for="confirmPassword" class="text-danger"></span>
                     </div>
-                </div>
-                <div class="col-md-3">
+                </div> *@
+                <div class="col-md-4">
                     <div class="form-group">
                         <label asp-for="contact_no" class="form-label small">Contact Number (11 Digits)</label>
                         <input asp-for="contact_no" class="form-control" placeholder="09XX XXX XXXX" />

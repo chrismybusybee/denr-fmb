@@ -10,6 +10,7 @@
         public string uid { get; set; }
         public string appid { get; set; }
         public string comment { get; set; }
+        public string email { get; set; }
 
     }
 }

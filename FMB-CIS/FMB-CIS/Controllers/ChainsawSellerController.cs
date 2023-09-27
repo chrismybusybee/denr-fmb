@@ -16,6 +16,8 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using FMB_CIS.Data;
 using FMB_CIS.Models;
+using Microsoft.AspNetCore.Identity.UI.Services;
+
 
 namespace FMB_CIS.Controllers
 {
@@ -29,12 +31,14 @@ namespace FMB_CIS.Controllers
 
         private readonly LocalContext _context;
         private readonly IConfiguration _configuration;
+        private IEmailSender EmailSender { get; set; }
 
 
-        public ChainsawSellerController(IConfiguration configuration, LocalContext context)
+        public ChainsawSellerController(IConfiguration configuration, LocalContext context, IEmailSender emailSender)
         {
             this._configuration = configuration;
             _context = context;
+            EmailSender = emailSender;
         }
 
         public IActionResult Index()
@@ -101,6 +105,10 @@ namespace FMB_CIS.Controllers
                     sqlCmd.Parameters.AddWithValue("date_modified", DateTime.Now);
                     sqlCmd.ExecuteNonQuery();
                 }
+                //Email
+                var subject = "Permit to Import Application Status";
+                var body = "Greetings! \n We would like to inform you that your Permit to Import Application has been received.";
+                EmailSender.SendEmailAsync(((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value, subject, body);
                 return RedirectToAction("Index", "Home");
             }
             return View(model);
@@ -197,6 +205,10 @@ namespace FMB_CIS.Controllers
                         _context.Entry(usrdet).Property(x => x.comment).IsModified = true;
                         _context.SaveChanges();
                     }
+                    //Email
+                    var subject = "Permit Application Status";
+                    var body = "Greetings! \n We would like to inform you that your Permit Application has been approved.\nThe officer left the following comment:\n" + viewMod.comment;
+                    EmailSender.SendEmailAsync(viewMod.email, subject, body);
                 }
                 else
                 {
@@ -211,6 +223,10 @@ namespace FMB_CIS.Controllers
                         _context.Entry(usrdet).Property(x => x.comment).IsModified = true;
                         _context.SaveChanges();
                     }
+                    //Email
+                    var subject = "Permit Application Status";
+                    var body = "Greetings! \n We regret to inform you that your Permit Application has been declined.\nThe officer left the following comment:\n" + viewMod.comment;
+                    EmailSender.SendEmailAsync(viewMod.email, subject, body);
                 }
                 return RedirectToAction("ChainsawSellerApplicantsList", "ChainsawSeller");
             }

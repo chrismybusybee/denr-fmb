@@ -5,6 +5,8 @@ using FMB_CIS.Data;
 using FMB_CIS.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using FMB_CIS;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +39,17 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 }); //Added 2023-Sept-13 (Session)
 
+//Added 2023-Sept-26 (Email Sender)
+builder.Services.AddTransient<IEmailSender, MailKitEmailSender>();
+builder.Services.Configure<MailKitEmailSenderOptions>(options =>
+{
+    options.Host_Address = "smtp-relay.sendinblue.com";
+    options.Host_Port = 587;
+    options.Host_Username = "support@mybusybee.net";
+    options.Host_Password = "A0M26PbZUN5TYF3s";
+    options.Sender_EMail = "support@mybusybee.net";
+    options.Sender_Name = "FMB-CIS Bot";
+});
 
 var app = builder.Build();
 
