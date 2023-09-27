@@ -181,8 +181,8 @@ namespace FMB_CIS.Controllers
                         _context.SaveChanges();
                     }
                     //Email
-                    var subject = "Permit to Import Application Status";
-                    var body = "Greetings! \n We would like to inform you that your Permit to Import Application has been approved.\nThe officer left the following comment:\n" + viewMod.comment;
+                    var subject = "Chainsaw Owner Permit Application Status";
+                    var body = "Greetings! \n We would like to inform you that your Permit Application has been approved.\nThe officer left the following comment:\n" + viewMod.comment;
                     EmailSender.SendEmailAsync(viewMod.email, subject, body);
                 }
                 else
@@ -199,8 +199,8 @@ namespace FMB_CIS.Controllers
                         _context.SaveChanges();
                     }
                     //Email
-                    var subject = "Permit to Import Application Status";
-                    var body = "Greetings! \n We would like to inform you that your Permit to Import Application has been declined.\nThe officer left the following comment:\n" + viewMod.comment;
+                    var subject = "Chainsaw Owner Permit Application Status";
+                    var body = "Greetings! \n We regret to inform you that your Permit Application has been declined.\nThe officer left the following comment:\n" + viewMod.comment;
                     EmailSender.SendEmailAsync(viewMod.email, subject, body);
                 }
                 return RedirectToAction("ChainsawOwnerApplicantsList", "ChainsawOwner");
