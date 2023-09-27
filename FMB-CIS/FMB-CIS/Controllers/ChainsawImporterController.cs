@@ -60,7 +60,7 @@ namespace FMB_CIS.Controllers
         // POST: PermitToImportApplicationController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Index(PermitToImportApplicationViewModel model)
+        public IActionResult Index(PermitToImportApplicationViewModel model, IFormFile postedFile)
         {
             //try
             //{
@@ -101,7 +101,18 @@ namespace FMB_CIS.Controllers
                         sqlCmd.Parameters.AddWithValue("date_modified", DateTime.Now);
                         sqlCmd.ExecuteNonQuery();
                     }
-                    return RedirectToAction("Index","Home");
+
+                string filePath = "";
+                filePath = Path.Combine(Directory.GetCurrentDirectory(), "Files/Images/");
+
+                if (!Directory.Exists(filePath))
+                {
+                    Directory.CreateDirectory(filePath);
+                }
+
+
+
+                return RedirectToAction("Index","Home");
                 }
                 return View(model);
             //}
