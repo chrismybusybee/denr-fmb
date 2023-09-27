@@ -66,8 +66,8 @@ namespace FMB_CIS.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (userRegistrationViewModel.confirmPassword == userRegistrationViewModel.password)
-                {
+                //if (userRegistrationViewModel.confirmPassword == userRegistrationViewModel.password)
+                //{
                     DAL dal = new DAL();
                     bool eMailExist = dal.emailExist(userRegistrationViewModel.email, _configuration.GetConnectionString("ConnStrng"));
 
@@ -78,8 +78,10 @@ namespace FMB_CIS.Controllers
                     }
                     else
                     {
-                        //ENCRYPT PASSWORD
-                        string encrPw = EncryptDecrypt.ConvertToEncrypt(userRegistrationViewModel.password);
+                        //Generate Temporary Password
+                        string temPass = TempPass.Generate(32, 15);
+                        //ENCRYPT TEMPORARY PASSWORD
+                        string encrPw = EncryptDecrypt.ConvertToEncrypt(temPass);
                         //SAVE USER INFOS ON DATABASE USING CreateNewUserNoPHOTO STORED PROCEDURE
                         int one = 1;
 
@@ -112,19 +114,53 @@ namespace FMB_CIS.Controllers
                             sqlCmd.Parameters.AddWithValue("date_modified", DateTime.Now);
                             sqlCmd.Parameters.AddWithValue("tbl_user_types_id", Convert.ToInt32(userRegistrationViewModel.tbl_user_types_id));
                             sqlCmd.ExecuteNonQuery();
+
+                            sqlConnection.Close();
+
                         }
-                        var subject = "Account has been created";
-                        var body = "We would like to inform you that you have created an account with FMB-CIS.\nIf you forgot your password or if you wish to change it, you may proceed on this link: https://fmb-cis.beesuite.ph/Account/ForgotPassword";
-                        EmailSender.SendEmailAsync(userRegistrationViewModel.email, subject, body);
-                        return RedirectToAction("EmailConfirmation");
+                        //Code to set password for newly registered user
+                        using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("ConnStrng")))
+                        {
+                            SqlCommand cmd = new SqlCommand("spResetPassword", sqlConnection);
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            SqlParameter paramEmail = new SqlParameter("@email", userRegistrationViewModel.email);
+                            cmd.Parameters.Add(paramEmail);
+
+                            sqlConnection.Open();
+                            SqlDataReader rdr = cmd.ExecuteReader();
+                            while (rdr.Read())
+                            {
+                                if (Convert.ToBoolean(rdr["ReturnCode"]))
+                                {
+                                    string passResetLink = "https://fmb-cis.beesuite.ph/Account/ResetPassword?email=" + rdr["email"].ToString() + "&tokencode=" + rdr["UniqueId"].ToString();
+                                
+                                    Console.WriteLine("Link for Password Reset:");
+                                    Console.WriteLine(passResetLink);
+                                    var subject = "Password Reset";
+                                    var body = "We would like to inform you that you have created an account with FMB-CIS.\nPlease change your password on this link: " + passResetLink;
+                                    EmailSender.SendEmailAsync(userRegistrationViewModel.email, subject, body);
+                                    return RedirectToAction("EmailConfirmation");
+                                }
+                                else
+                                {
+                                    //Do not reveal if email doesn't exist.
+                                    return RedirectToAction("EmailConfirmation");
+                                }
+                            }
+                        }
+
+                    //var subject = "Account has been created";
+                    //var body = "We would like to inform you that you have created an account with FMB-CIS.\nIf you forgot your password or if you wish to change it, you may proceed on this link: https://fmb-cis.beesuite.ph/Account/ForgotPassword";
+                    //EmailSender.SendEmailAsync(userRegistrationViewModel.email, subject, body);
+                    return RedirectToAction("EmailConfirmation");
 
                     }
-                }
-                else
-                {
-                    ModelState.AddModelError("confirmPassword", "Password doesn't match! Please enter again.");
-                    return View(userRegistrationViewModel);
-                }
+                //}
+                //else
+                //{
+                //    ModelState.AddModelError("confirmPassword", "Password doesn't match! Please enter again.");
+                //    return View(userRegistrationViewModel);
+                //}
             }
             return View(userRegistrationViewModel);
         }

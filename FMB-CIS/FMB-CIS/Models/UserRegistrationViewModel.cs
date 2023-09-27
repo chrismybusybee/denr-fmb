@@ -37,11 +37,11 @@ namespace FMB_CIS.Models
         public string email { get; set; }
         [DataType(DataType.Password)]
         //[Required]
-        [Display (Name ="Password")]
-        public string password { get; set; }
-        [DataType(DataType.Password)]
-        [Display (Name ="Confirm Password")]
-        public string confirmPassword { get; set; }
+        //[Display (Name ="Password")]
+        //public string password { get; set; }
+        //[DataType(DataType.Password)]
+        //[Display (Name ="Confirm Password")]
+        //public string confirmPassword { get; set; }
         //public string status { get; set; }
         //public byte[] photo { get; set; }
         //public string photo { get; set; }
