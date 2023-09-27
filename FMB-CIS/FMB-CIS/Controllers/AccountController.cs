@@ -136,7 +136,7 @@ namespace FMB_CIS.Controllers
                                 
                                     Console.WriteLine("Link for Password Reset:");
                                     Console.WriteLine(passResetLink);
-                                    var subject = "Password Reset";
+                                    var subject = "Account Created";
                                     var body = "We would like to inform you that you have created an account with FMB-CIS.\nPlease change your password on this link: " + passResetLink;
                                     EmailSender.SendEmailAsync(userRegistrationViewModel.email, subject, body);
                                     return RedirectToAction("EmailConfirmation");
