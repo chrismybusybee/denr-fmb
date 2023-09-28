@@ -403,7 +403,11 @@
     {
         <partial name="~/Views/Modals/ChainsawOwnerModal.cshtml" />
     }
- 
+    else if (currentUrl.Contains("AccountManagement") || (currentUrl.Contains("EditAccount")))
+    {
+        <partial name="~/Views/Modals/AccountManagementModal.cshtml" />
+    }
+
     <footer>
         © 2023 DENR-FMB CIS. All rights reserved.
     </footer>
@@ -471,6 +475,7 @@
             "/Renewal": "renewalMenuItem",
             "/ProfileManagement": "profileManagementMenuItem",
             "/AccountManagement": "accountManagementMenuItem",
+            "/AccountManagement/EditAccount": "accountManagementMenuItem",
             "/Monitoring": "monitoringMenuItem",
             "/CreationOfNewDenrOffice": "creationOfNewDenrOfficeMenuItem",
             "/AnnouncementTemplates": "announcementTemplatesMenuItem",
