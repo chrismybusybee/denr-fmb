@@ -4,10 +4,12 @@
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Manage Applications";
+    ViewBag.Role = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
 }
 
 <div id="card-container">
     <div id="card">
+        <h2>@ViewBag.Role</h2>
                 <table class="table dataTable" id="tblUserHistory">
             <thead>
                 <tr>

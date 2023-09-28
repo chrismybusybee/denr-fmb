@@ -47,7 +47,7 @@ namespace FMB_CIS.Controllers
                                      join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                      join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                      join pS in _context.tbl_permit_status on a.status equals pS.id
-                                     where a.tbl_user_id == userID
+                                     //where a.tbl_user_id == userID
                                      select new ApplicantListViewModel { id = a.id, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = usr.id };
 
                 mymodel.applicantListViewModels = applicationMod;

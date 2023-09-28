@@ -51,8 +51,8 @@ namespace FMB_CIS.Controllers
             }
             else
             {
-                ViewModel model = new ViewModel();
-                return View(model);
+
+                return View();
             }
             //return RedirectToAction("Index", "Home");
         }
@@ -76,7 +76,8 @@ namespace FMB_CIS.Controllers
                 //DAL dal = new DAL();
 
                 //SAVE permit application
-                model.tbl_Application.tbl_application_type_id = 2;
+                model.tbl_Application.tbl_application_type_id = 3;
+                model.tbl_Application.status = 1;
                 model.tbl_Application.tbl_user_id = userID;
                 model.tbl_Application.is_active = true;
                 model.tbl_Application.created_by = userID;

@@ -20,9 +20,9 @@ namespace FMB_CIS.Models
         public int? qty { get; set; }
         public string? origin { get; set; }
         public string? purpose { get; set; }
-        public string? expected_time_arrival { get; set; }
-        public string? expected_time_release { get; set; }
-        public string? date_of_inspection { get; set; }
+        public DateTime? expected_time_arrival { get; set; }
+        public DateTime? expected_time_release { get; set; }
+        public DateTime? date_of_inspection { get; set; }
         public int? status { get; set; }
 
         public int? tbl_specification_id { get; set; }

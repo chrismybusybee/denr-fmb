@@ -59,7 +59,8 @@ namespace FMB_CIS.Controllers
                 //DAL dal = new DAL();
 
                 //SAVE permit application
-                model.tbl_Application.tbl_application_type_id = 2;
+                model.tbl_Application.tbl_application_type_id = 1;
+                model.tbl_Application.status = 1;
                 model.tbl_Application.tbl_user_id = userID;
                 model.tbl_Application.is_active = true;
                 model.tbl_Application.created_by = userID;
