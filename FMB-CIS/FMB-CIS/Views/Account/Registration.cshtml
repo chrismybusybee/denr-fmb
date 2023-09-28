@@ -8,217 +8,219 @@
         <img src="~/assets/images/logo.png" height="100" />
     </div>
     <hr class="hr" />
-    <div class="col-md-12 d-flex flex-column my-auto px-md-4">
+    
+
+    <div class="container"></div>,<div class="container">
         <a href="@Url.Action("Index", "Home")" class="me-auto my-4" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
-        <h2 class="text-secondary mb-4">Personal Information</h2>
-        <form asp-action="Registration" id="RegForm">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group mb-2">
-                        <label class="form-label small">User Type</label>
-                        <select asp-for="tbl_user_types_id" class="form-select" aria-label="User Type">
-                            <option selected disabled>- Select User Type -</option>
-                            <option value="1">Chainsaw Importer Only</option>
-                            <option value="2">Chainsaw Seller Only</option>
-                            <option value="3">Chainsaw Owner Only</option>
-                            <option value="4">Chainsaw Importer and Seller</option>
-                            <option value="5">Chainsaw Importer and Owner</option>
-                            <option value="6">Chainsaw Seller and Owner</option>
-                            <option value="7">Chainsaw Importer, Owner, and Seller</option>
-                        </select>
-                        <span asp-validation-for="tbl_user_types_id" class="text-danger"></span>
-                    </div>
+        <div class="stepwizard col-md-offset-3">
+            <div class="stepwizard-row setup-panel">
+                <div class="stepwizard-step">
+                    <p class="mb-1 fw-bold">Step</p>
+                    <a href="#step-1" type="button" class="btn btn-primary btn-circle fw-bold">1</a>
+                </div>
+                <div class="stepwizard-step">
+                    <p class="mb-1 fw-bold">Step</p>
+                    <a href="#step-2" type="button" class="btn btn-default btn-circle fw-bold" disabled="disabled">2</a>
+                </div>
+                <div class="stepwizard-step">
+                    <p class="mb-1 fw-bold">Step</p>
+                    <a href="#step-3" type="button" class="btn btn-default btn-circle fw-bold" disabled="disabled">3</a>
+                </div>
+                <div class="stepwizard-step">
+                    <p class="mb-1 fw-bold">Step</p>
+                    <a href="#step-4" type="button" class="btn btn-default btn-circle fw-bold" disabled="disabled">4</a>
+                </div>
+                <div class="stepwizard-step">
+                    <p class="mb-1 fw-bold">Step</p>
+                    <a href="#step-5" type="button" class="btn btn-default btn-circle fw-bold" disabled="disabled">5</a>
+                </div>
+                <div class="stepwizard-step">
+                    <p class="mb-1 fw-bold">Step</p>
+                    <a href="#step-6" type="button" class="btn btn-default btn-circle fw-bold" disabled="disabled">6</a>
                 </div>
             </div>
-            <hr class="my-4" />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="row mb-4">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-10">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="first_name" class="form-label small">First Name</label>
-                                        <input asp-for="first_name" class="form-control" />
-                                        <span asp-validation-for="first_name" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="middle_name" class="form-label small">Middle Name</label>
-                                        <input asp-for="middle_name" class="form-control" />
-                                        <span asp-validation-for="middle_name" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="last_name" class="form-label small">Last Name</label>
-                                        <input asp-for="last_name" class="form-control" />
-                                        <span asp-validation-for="last_name" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
+        </div>
+
+        <form asp-action="Registration" id="RegForm" role="form" class="w-75 mx-auto">
+            <div class="row setup-content" id="step-1">
+                <div class="col-xs-6 col-md-offset-3">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label small">User Type</label>
+                            <select asp-for="tbl_user_types_id" class="form-control" aria-label="User Type" required="required">
+                                <option value="" selected disabled>- Select User Type -</option>
+                                <option value="1">Chainsaw Importer Only</option>
+                                <option value="2">Chainsaw Seller Only</option>
+                                <option value="3">Chainsaw Owner Only</option>
+                                <option value="4">Chainsaw Importer and Seller</option>
+                                <option value="5">Chainsaw Importer and Owner</option>
+                                <option value="6">Chainsaw Seller and Owner</option>
+                                <option value="7">Chainsaw Importer, Owner, and Seller</option>
+                            </select>
+                            <span asp-validation-for="tbl_user_types_id" class="text-danger"></span>
                         </div>
-                        <div class="col-md-2">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label asp-for="suffix" class="form-label small">Suffix</label>
-                                        <input asp-for="suffix" class="form-control" />
-                                        <span asp-validation-for="suffix" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="text-center mt-4">
+                            <button class="btn btn-primary nextBtn text-center" type="button">Next</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row mb-4">
-                <div class="col-md-8">
-                    <div class="form-group">
-                        <label asp-for="email" class="form-label small">Email (Please use official email address)</label>
-                        <input asp-for="email" class="form-control" placeholder="name@address.com" />
-                        <span asp-validation-for="email" class="text-danger"></span>
-                    </div>
-                </div>
-                @* <div class="col-md-3">
-                    <div class="form-group">
-                        <label asp-for="password" class="form-label small">Password</label>
-                        <input asp-for="password" class="form-control" placeholder="Password" />
-                        <span asp-validation-for="password" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label asp-for="confirmPassword" class="form-label small">Confirm Password</label>
-                        <input asp-for="confirmPassword" class="form-control" placeholder="Confirm Password" />
-                        <span asp-validation-for="confirmPassword" class="text-danger"></span>
-                    </div>
-                </div> *@
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label asp-for="contact_no" class="form-label small">Contact Number (11 Digits)</label>
-                        <input asp-for="contact_no" class="form-control" placeholder="09XX XXX XXXX" />
-                        <span asp-validation-for="contact_no" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="row mb-4">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label asp-for="birth_date" class="form-label small">Birth Date (Must be 18 years old and above)</label>
-                        <input asp-for="birth_date" type="date" class="form-control" />
-                        <span asp-validation-for="birth_date" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label asp-for="valid_id" class="form-label small">Valid ID</label>
-                        <input asp-for="valid_id" class="form-control" />
-                        <span asp-validation-for="valid_id" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label asp-for="valid_id_no" class="form-label small">Valid ID Number</label>
-                        <input asp-for="valid_id_no" class="form-control" />
-                        <span asp-validation-for="valid_id_no" class="text-danger"></span>
+            <div class="row setup-content" id="step-2">
+                <div class="col-xs-6 col-md-offset-3">
+                    <div class="col-md-12">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group mb-3">
+                            <label asp-for="first_name" class=" control-label small">First Name</label>
+                            <input asp-for="first_name" class="form-control" required="required" />
+                            <span asp-validation-for="first_name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="middle_name" class="control-label small">Middle Name</label>
+                            <input asp-for="middle_name" class="form-control" required="required" />
+                            <span asp-validation-for="middle_name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="last_name" class="control-label small">Last Name</label>
+                            <input asp-for="last_name" class="form-control" required="required" />
+                            <span asp-validation-for="last_name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="suffix" class="form-label small">Suffix</label>
+                            <input asp-for="suffix" class="form-control" />
+                            <span asp-validation-for="suffix" class="text-danger"></span>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button class="btn btn-secondary prevBtn" type="button">Previous</button>
+                            <button class="btn btn-primary nextBtn" type="button">Next</button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="street_address" class="form-label small">Street Address</label>
-                        <input asp-for="street_address" class="form-control" />
-                        <span asp-validation-for="street_address" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="tbl_region_id" class="form-label small">Region</label>      
-                        <select asp-for="tbl_region_id" class="form-select" aria-label="User Type">
-                            <option selected disabled>- Select Region -</option>
-                            <option value="1">Region I</option>
-                            <option value="2">Region II</option>
-                            <option value="3">Region III</option>
-                            <option value="4">Region IV-A</option>
-                            <option value="5">Region IV-B</option>
-                            <option value="6">Region V</option>
-                            <option value="7">Region VI</option>
-                            <option value="8">Region VII</option>
-                            <option value="8">Region VIII</option>                            
-                            <option value="10">Region IX</option>
-                            <option value="11">Region X</option>
-                            <option value="12">Region XI</option>
-                            <option value="13">Region XII</option>
-                            <option value="14">Region XIII</option>
-                            <option value="15">NCR</option>
-                            <option value="16">CAR</option>
-                            <option value="17">BARMM</option>
-                        </select>
-                        <span asp-validation-for="tbl_region_id" class="text-danger"></span>
-                        @* <select asp-for="tbl_region_id" class="form-control">
-                        <option Selected>--Select Region--</option>
-                        </select> *@
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group" hidden="true">
-                        <label asp-for="tbl_division_id" class="form-label small">DIVISION ID</label>
-                        <input asp-for="tbl_division_id" class="form-control" value=" " disabled />
+            <div class="row setup-content" id="step-3">
+                <div class="col-xs-6 col-md-offset-3">
+                    <div class="col-md-12">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group mb-3">
+                            <label asp-for="email" class="control-label small">Email (Please use official email address)</label>
+                            <input asp-for="email" class="form-control" placeholder="name@address.com"  required="required"/>
+                            <span asp-validation-for="email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="contact_no" class="control-label small">Contact Number (11 Digits)</label>
+                            <input asp-for="contact_no" class="form-control" placeholder="09XX XXX XXXX" required="required"/>
+                            <span asp-validation-for="contact_no" class="text-danger"></span>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button class="btn btn-secondary prevBtn" type="button">Previous</button>
+                            <button class="btn btn-primary nextBtn" type="button">Next</button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="row mb-4">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label asp-for="tbl_province_name" class="form-label small">Province</label>
-                        <input asp-for="tbl_province_name" class="form-control" />
-                        @* <input asp-for="tbl_province_id" class="form-control" /> *@
-                        <span asp-validation-for="tbl_province_name" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label asp-for="tbl_city_name" class="form-label small">City/Municipality</label>
-                        <input asp-for="tbl_city_name" class="form-control" />
-                        @* <input asp-for="tbl_city_id" class="form-control" /> *@
-                        <span asp-validation-for="tbl_city_name" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label asp-for="tbl_brgy_name" class="form-label small">Barangay</label>
-                        <input asp-for="tbl_brgy_name" class="form-control" />
-                        <span asp-validation-for="tbl_brgy_name" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="row mb-5">
-                <div class="col-md-6" hidden="true">
-                    <div class="form-group">
-                        <label asp-for="comment" class="form-label small">Remarks</label>
-                        <input asp-for="comment" class="form-control" disabled />
-                        <span asp-validation-for="comment" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="form-label small text-black">Upload Your Picture</label>
-                        <input type="file" class="form-control" />
+            <div class="row setup-content" id="step-4">
+                <div class="col-xs-6 col-md-offset-3">
+                    <div class="col-md-12">
+                        <div class="form-group mb-3">
+                            <label asp-for="birth_date" class="control-label small">Birth Date (Must be 18 years old and above)</label>
+                            <input asp-for="birth_date" type="date" class="form-control" required="required" />
+                            <span asp-validation-for="birth_date" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="valid_id" class="control-label small">Valid ID</label>
+                            <input asp-for="valid_id" class="form-control" required="required" />
+                            <span asp-validation-for="valid_id" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="valid_id_no" class="control-label small">Valid ID Number</label>
+                            <input asp-for="valid_id_no" class="form-control" required="required" />
+                            <span asp-validation-for="valid_id_no" class="text-danger"></span>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button class="btn btn-secondary prevBtn" type="button">Previous</button>
+                            <button class="btn btn-primary nextBtn" type="button">Next</button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="row mb-5">
-                <div class="col-md-4 d-flex flex-column">
-                    <small class="text-secondary mb-4">
-                        By submitting this form, you agree to our <a href="#" target="_blank">Terms and Conditions</a> & <a href="#" target="_blank">Privacy Policy</a>
-                    </small>
-                    @* <button id="submitBtn" value="Submit" class="btn btn-primary w-75 mw-75">Submit</button> *@
-                    <div class="form-group">
-                        <input type="button" @* type="submit" *@ id="submitBtn" value="Submit" class="btn btn-primary w-75 mw-75" />
+            <div class="row setup-content" id="step-5">
+                <div class="col-xs-6 col-md-offset-3">
+                    <div class="col-md-12">
+                        <div class="form-group mb-3">
+                            <label asp-for="street_address" class="control-label small">Street Address</label>
+                            <input asp-for="street_address" class="form-control" required="required" />
+                            <span asp-validation-for="street_address" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="tbl_brgy_name" class="control-label small">Barangay</label>
+                            <input asp-for="tbl_brgy_name" class="form-control" required="required" />
+                            <span asp-validation-for="tbl_brgy_name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="tbl_city_name" class="control-label small">City/Municipality</label>
+                            <input asp-for="tbl_city_name" class="form-control" required="required" />
+                            <span asp-validation-for="tbl_city_name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="tbl_province_name" class="control-label small">Province</label>
+                            <input asp-for="tbl_province_name" class="form-control" required="required" />
+                            <span asp-validation-for="tbl_province_name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="tbl_region_id" class="control-label small">Region</label>
+                            <select asp-for="tbl_region_id" class="form-select" aria-label="User Type" required="required">
+                                <option selected disabled>- Select Region -</option>
+                                <option value="1">Region I</option>
+                                <option value="2">Region II</option>
+                                <option value="3">Region III</option>
+                                <option value="4">Region IV-A</option>
+                                <option value="5">Region IV-B</option>
+                                <option value="6">Region V</option>
+                                <option value="7">Region VI</option>
+                                <option value="8">Region VII</option>
+                                <option value="8">Region VIII</option>
+                                <option value="10">Region IX</option>
+                                <option value="11">Region X</option>
+                                <option value="12">Region XI</option>
+                                <option value="13">Region XII</option>
+                                <option value="14">Region XIII</option>
+                                <option value="15">NCR</option>
+                                <option value="16">CAR</option>
+                                <option value="17">BARMM</option>
+                            </select>
+                            <span asp-validation-for="tbl_region_id" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" hidden="hidden">
+                            <label asp-for="tbl_division_id" class="form-label small">DIVISION ID</label>
+                            <input asp-for="tbl_division_id" class="form-control" value=" " disabled />
+                        </div>
+                        <div class="text-center mt-4">
+                            <button class="btn btn-secondary prevBtn" type="button">Previous</button>
+                            <button class="btn btn-primary nextBtn" type="button">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row setup-content" id="step-6">
+                <div class="col-xs-6 col-md-offset-3">
+                    <div class="col-md-12">
+                        <div class="form-group" hidden="hidden">
+                            <label asp-for="comment" class="form-label small">Remarks</label>
+                            <input asp-for="comment" class="form-control" disabled />
+                            <span asp-validation-for="comment" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-5">
+                            <label class="control-label small text-black">Upload Your Picture</label>
+                            <input type="file" class="form-control" />
+                        </div>
+                        <div class="text-center mb-4">
+                            <small class="text-secondary text-center my-5 fs-5">
+                                By submitting this form, you agree to our <a href="#" target="_blank">Terms and Conditions</a> & <a href="#" target="_blank">Privacy Policy</a>
+                            </small>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button class="btn btn-secondary prevBtn" type="button">Previous</button>
+                            <button type="button" id="submitBtn" value="Submit" class="btn btn-primary submitBtn" style="width: min(100px, 100%) !important;">Submit</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -232,6 +234,58 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        // Step by step form
+        var navListItems = $('div.setup-panel div a'),
+            allWells = $('.setup-content'),
+            allNextBtn = $('.nextBtn'),
+            allPrevBtn = $('.prevBtn');
+
+        allWells.hide();
+
+        navListItems.click(function (e) {
+            e.preventDefault();
+            var $target = $($(this).attr('href')),
+                $item = $(this);
+
+            if (!$item.hasClass('disabled')) {
+                navListItems.removeClass('btn-primary').addClass('btn-default');
+                $item.addClass('btn-primary');
+                allWells.hide();
+                $target.show();
+                $target.find('input:eq(0)').focus();
+            }
+        });
+
+        allPrevBtn.click(function () {
+            var curStep = $(this).closest(".setup-content"),
+                curStepBtn = curStep.attr("id"),
+                prevStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().prev().children("a");
+
+            prevStepWizard.removeAttr('disabled').trigger('click');
+        });
+
+        allNextBtn.click(function () {
+            var curStep = $(this).closest(".setup-content"),
+                curStepBtn = curStep.attr("id"),
+                nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
+                curInputs = curStep.find("input[type='text'],input[type='url'],input[type='date']"),
+                isValid = true;
+
+            $(".form-group").removeClass("has-error");
+            for (var i = 0; i < curInputs.length; i++) {
+                if (!curInputs[i].validity.valid) {
+                    isValid = false;
+                    $(curInputs[i]).closest(".form-group").addClass("has-error");
+                }
+            }
+
+            if (isValid)
+                nextStepWizard.removeAttr('disabled').trigger('click');
+        });
+
+        $('div.setup-panel div a.btn-primary').trigger('click');
+        // Step by step form end
+
         feather.replace();
 
         $("#submitBtn").click(function () {
@@ -278,3 +332,71 @@
         }
     });
 </script>
+
+<style type="text/css">
+    /*body {
+        margin-top: 40px;
+    }*/
+
+    .stepwizard-step p {
+        margin-top: 10px;
+    }
+
+    .stepwizard-row {
+        display: table-row;
+    }
+
+    .stepwizard {
+        display: table;
+        width: 100%;
+        position: relative;
+        margin-bottom: 2rem;
+    }
+
+    .stepwizard-step a[disabled] {
+        background-color: lightgrey;
+        opacity: 1; 
+        pointer-events: none;
+        color: white;
+    }
+
+    .stepwizard-row:before {
+        top: 53px;
+        bottom: 0;
+        position: absolute;
+        content: " ";
+        width: 100%;
+        height: 1px;
+        background-color: #ccc;
+        z-index: 0;
+        opacity: 50%;
+    }
+
+    .stepwizard-step {
+        display: table-cell;
+        text-align: center;
+        position: relative;
+    }
+
+    .btn-circle {
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        padding: 6px 0;
+        font-size: 12px;
+        line-height: 1.428571429;
+        border-radius: 15px;
+    }
+
+    .has-error {
+        color: red;
+    }
+
+    .has-error .form-control {
+        border: solid 1px red;
+    }
+
+    .nextBtn, .prevBtn {
+        width: min(100px, 100%) !important;
+    }
+</style>

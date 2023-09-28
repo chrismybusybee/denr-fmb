@@ -37,6 +37,11 @@ namespace FMB_CIS.Controllers
             return View();
         }
 
+        public IActionResult RegistrationPrimary()
+        {
+            return View();
+        }
+
         public IActionResult EmailConfirmation()
         {
             return View();
