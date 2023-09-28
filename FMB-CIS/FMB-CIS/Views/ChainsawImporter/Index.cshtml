@@ -8,6 +8,7 @@
 
 <div id="card-container">
     <div id="card">
+        @ViewBag.message
         <div class="row m-0">
             <form asp-controller="ChainsawImporter" id="ImporterRegForm" method="post" enctype="multipart/form-data">
             @* @using (Html.BeginForm())

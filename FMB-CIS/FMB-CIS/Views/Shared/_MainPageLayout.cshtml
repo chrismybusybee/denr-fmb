@@ -2,6 +2,7 @@
 
 @{
     var currentUrl = Context.Request.Path.ToString();
+    ViewBag.UserType = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
 }
 <!DOCTYPE html>
 <html lang="en">
