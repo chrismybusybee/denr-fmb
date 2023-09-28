@@ -13,10 +13,15 @@
                 <input asp-for="uid" type="hidden" />
                 <input asp-for="appid" type="hidden" />
                 <div class="d-flex justify-content-end gap-2">
-                    @* <button id="ApproveBtn" class="btn btn-primary w-105">Approve</button>
-                    <button class="btn btn-danger w-105 btnCancel">Decline</button> *@
-                    <input id="ApproveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Approve" />
-                    <input class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="submit" value="Decline" />
+                    @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO") == true)
+                    {
+                        <input id="ApproveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Approve" />
+                        <input class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="submit" value="Decline" />
+                    }
+                    @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true)
+                    {
+                        <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" />
+                    }
 
                 </div>
             </div>
@@ -257,6 +262,10 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $('#approveBtn').click(function () {
+            $('#confirmApproveModal').modal("show");
+        });
+
+        $('#saveBtn').click(function () {
             $('#confirmApproveModal').modal("show");
         });
 
