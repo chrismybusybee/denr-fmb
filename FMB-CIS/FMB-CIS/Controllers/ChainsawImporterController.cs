@@ -122,8 +122,9 @@ namespace FMB_CIS.Controllers
                     var body = "Greetings! \n We would like to inform you that your Permit to Import Application has been received.";
                     EmailSender.SendEmailAsync(((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value, subject, body);
                     
-                
-                return RedirectToAction("Index","ChainsawImporter");
+                ModelState.Clear();
+                ViewBag.Message = "Save Success";
+                return View();
                 }
                 return View(model);
             //}
@@ -220,7 +221,7 @@ namespace FMB_CIS.Controllers
                     var body = "Greetings! \n We would like to inform you that your Permit to Import Application has been approved.\nThe officer left the following comment:\n" + viewMod.comment;
                     EmailSender.SendEmailAsync(viewMod.email, subject, body);
                 }
-                else
+                else if (buttonClicked == "Decline")
                 {
                     var appli = new tbl_application() { id = applid, status = 3, date_modified = DateTime.Now, modified_by = loggedUserID };
                     var usrdet = new tbl_user() { id = usid, comment = viewMod.comment };
@@ -236,6 +237,24 @@ namespace FMB_CIS.Controllers
                     //Email
                     var subject = "Permit to Import Application Status";
                     var body = "Greetings! \n We regret to inform you that your Permit to Import Application has been declined.\nThe officer left the following comment:\n" + viewMod.comment;
+                    EmailSender.SendEmailAsync(viewMod.email, subject, body);
+                }
+                else
+                {
+                    var appli = new tbl_application() { id = applid, date_modified = DateTime.Now, modified_by = loggedUserID };
+                    var usrdet = new tbl_user() { id = usid, comment = viewMod.comment };
+                    using (_context)
+                    {
+                        _context.tbl_application.Attach(appli);
+                        //_context.Entry(appli).Property(x => x.status).IsModified = true;
+                        _context.Entry(appli).Property(x => x.modified_by).IsModified = true;
+                        _context.Entry(appli).Property(x => x.date_modified).IsModified = true;
+                        _context.Entry(usrdet).Property(x => x.comment).IsModified = true;
+                        _context.SaveChanges();
+                    }
+                    //Email
+                    var subject = "Permit Application Status";
+                    var body = "Greetings! \n An inspector viewed your application.\nThe officer left the following comment:\n" + viewMod.comment;
                     EmailSender.SendEmailAsync(viewMod.email, subject, body);
                 }
                 return RedirectToAction("ChainsawImporterApplicantsList", "ChainsawImporter");

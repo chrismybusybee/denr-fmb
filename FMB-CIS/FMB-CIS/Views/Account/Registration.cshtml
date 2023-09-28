@@ -137,8 +137,27 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="tbl_region_id" class="form-label small">Region ID</label>
-                        <input asp-for="tbl_region_id" class="form-control" />
+                        <label asp-for="tbl_region_id" class="form-label small">Region</label>      
+                        <select asp-for="tbl_region_id" class="form-select" aria-label="User Type">
+                            <option selected disabled>- Select Region -</option>
+                            <option value="1">Region I</option>
+                            <option value="2">Region II</option>
+                            <option value="3">Region III</option>
+                            <option value="4">Region IV-A</option>
+                            <option value="5">Region IV-B</option>
+                            <option value="6">Region V</option>
+                            <option value="7">Region VI</option>
+                            <option value="8">Region VII</option>
+                            <option value="8">Region VIII</option>                            
+                            <option value="10">Region IX</option>
+                            <option value="11">Region X</option>
+                            <option value="12">Region XI</option>
+                            <option value="13">Region XII</option>
+                            <option value="14">Region XIII</option>
+                            <option value="15">NCR</option>
+                            <option value="16">CAR</option>
+                            <option value="17">BARMM</option>
+                        </select>
                         <span asp-validation-for="tbl_region_id" class="text-danger"></span>
                         @* <select asp-for="tbl_region_id" class="form-control">
                         <option Selected>--Select Region--</option>
@@ -157,6 +176,7 @@
                     <div class="form-group">
                         <label asp-for="tbl_province_id" class="form-label small">Province</label>
                         <input asp-for="tbl_province_id" class="form-control" />
+                        @* <input asp-for="tbl_province_id" class="form-control" /> *@
                         <span asp-validation-for="tbl_province_id" class="text-danger"></span>
                     </div>
                 </div>
@@ -164,6 +184,7 @@
                     <div class="form-group">
                         <label asp-for="tbl_city_id" class="form-label small">City/Municipality</label>
                         <input asp-for="tbl_city_id" class="form-control" />
+                        @* <input asp-for="tbl_city_id" class="form-control" /> *@
                         <span asp-validation-for="tbl_city_id" class="text-danger"></span>
                     </div>
                 </div>
@@ -171,6 +192,7 @@
                     <div class="form-group">
                         <label asp-for="tbl_brgy_id" class="form-label small">Barangay(ID)</label>
                         <input asp-for="tbl_brgy_id" class="form-control" />
+
                         <span asp-validation-for="tbl_brgy_id" class="text-danger"></span>
                     </div>
                 </div>

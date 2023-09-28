@@ -1,15 +1,14 @@
-
 ﻿@using System.Security.Claims;
 @model FMB_CIS.Models.ViewModel
-
+@* @model FMB_CIS.Models.ApplicantListViewModel *@
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
-    ViewBag.Title = "Chainsaw Owner";
+    ViewBag.Title = "Manage Applications";
 }
 
 <div id="card-container">
     <div id="card">
-        <form asp-action="ChainsawOwnerApproval" method="post">
+        <form asp-action="ChainsawImporterApproval" method="post">
             <div class="row m-0">
                 <input asp-for="uid" type="hidden" />
                 <input asp-for="appid" type="hidden" />
@@ -23,6 +22,7 @@
                     {
                         <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" />
                     }
+
                 </div>
             </div>
             <hr />
@@ -42,11 +42,10 @@
                                             User Type
                                         </label>
                                         <span class="fw-bold">
-
-                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels)
-                                            {
-                                                @Html.DisplayFor(modelItem => item.user_type)
-                                            }
+                                            @* @Html.DisplayFor(model => model.user_type) *@
+                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.user_type) }
+                                            @* @Html.DisplayFor(modelItem => item.Engine) *@
+                                            @* Chainsaw Importer *@
                                         </span>
                                     </div>
                                 </div>
@@ -68,7 +67,10 @@
                                             Email Address
                                         </label>
                                         <span class="fw-bold">
-                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.email) }
+                                            @foreach (ApplicantListViewModel item in Model.applicantListViewModels)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.email)
+                                            }
                                         </span>
                                     </div>
                                 </div>
@@ -169,7 +171,6 @@
                                             @foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.tbl_brgy_id) }
                                         </span>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -243,14 +244,16 @@
                         {
                             @Html.TextAreaFor(modelItem => item.comment, new { @class = "form-control", @name="newComment", @id="commentFromDB", @hidden ="true" })
                             @Html.TextAreaFor(modelItem => item.email, new { @id="myEmailAdd", @name="myEmailAddress", @hidden ="true"})
+
+                            @* @Html.TextAreaFor *@
                         }
                         @Html.TextAreaFor(model => model.comment, new { @class = "form-control", @id="commentToPass"})
                         @Html.TextAreaFor(model => model.email, new { @class = "form-control", @id="emailCopy", @hidden ="true"})
-
                     </div>
                 </div>
             </div>
         </form>
+
     </div>
 </div>
 
@@ -274,7 +277,7 @@
             $("#confirmApproveModal").modal('hide');
             $('#confirmSuccessApproveModal').modal("show");
         });
-
+        
         $('#declineBtn').click(function () {
             $('#confirmDeclineModal').modal("show");
         });
@@ -288,12 +291,11 @@
             $('#confirmSuccessDeclineModal').modal("show");
         });
     });
-
     var x = document.getElementById("commentFromDB").value;
     document.getElementById('commentToPass').value = x;
 
     var y = document.getElementById("myEmailAdd").value;
     document.getElementById('emailCopy').value = y;
-
+    
 
 </script>

@@ -26,10 +26,13 @@ namespace FMB_CIS.Models
         public int tbl_region_id { get; set; }
         [Display (Name ="Province")]
         public int tbl_province_id { get; set; }
+        //public string tbl_province_name { get; set; }
         [Display (Name ="City")]
         public int tbl_city_id { get; set; }
+        //public int tbl_city_name { get; set; }
         [Display (Name ="Barangay")]
         public int tbl_brgy_id { get; set; }
+        //public string tbl_brgy_name { get; set; }
         [Display (Name ="Street Address")]
         public string street_address { get; set; }
         public string? tbl_division_id { get; set; }
