@@ -1,0 +1,70 @@
+﻿<div class="modal fade" id="createNewOfficeModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p class="fw-bold fs-5 text-center">
+                    Create New Office
+                </p>
+                <div class="row px-4">
+                    <div class="col-md-12">
+                        <div class="form-group mb-3">
+                            <label class="form-label small">Office Name</label>
+                            <input class="form-control" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-label small">Department</label>
+                            <input class="form-control" />
+                        </div>
+                        <div class="form-group mb-4">
+                            <label class="form-label small">Region</label>
+                            <input class="form-control" />
+                        </div>
+                        <div class="d-flex gap-4 w-100 my-5">
+                            <button id="cancelBtn" class="btn btn-danger w-100">Cancel</button>
+                            <button id="addBtn" class="btn btn-primary w-100">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmAddModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/submit.png" />
+                    </div>
+                    <p class="fw-bold fs-5">
+                        Add new office?
+                    </p>
+                    <div class="d-flex gap-4 w-100">
+                        <button id="backAddBtn" class="btn btn-danger w-100">Back</button>
+                        <button id="confirmAddBtn" class="btn btn-primary w-100">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/jquery-3.7.1.min.js"></script>
+
+<script type="text/javascript">
+    $("#cancelBtn").click(function () {
+        $("#createNewOfficeModal").modal("hide");
+    });
+
+    $("#addBtn").click(function () {
+        $("#createNewOfficeModal").modal("hide");
+        $("#confirmAddModal").modal("show");
+    });
+
+    $("#backAddBtn").click(function () {
+        $("#confirmAddModal").modal("hide");
+        $("#createNewOfficeModal").modal("show");
+    });
+</script>               
