@@ -62,7 +62,7 @@ namespace FMB_CIS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Registration([Bind("first_name,middle_name,last_name,suffix,contact_no,valid_id,valid_id_no,birth_date,tbl_region_id,tbl_province_id,tbl_city_id,tbl_brgy_id,street_address,tbl_division_id,email,password,confirmPassword,comment,tbl_user_types_id")] UserRegistrationViewModel userRegistrationViewModel)
+        public IActionResult Registration([Bind("first_name,middle_name,last_name,suffix,contact_no,valid_id,valid_id_no,birth_date,tbl_region_id,tbl_province_name,tbl_city_name,tbl_brgy_name,street_address,tbl_division_id,email,password,confirmPassword,comment,tbl_user_types_id")] UserRegistrationViewModel userRegistrationViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -89,7 +89,7 @@ namespace FMB_CIS.Controllers
                         using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("ConnStrng")))
                         {
                             sqlConnection.Open();
-                            SqlCommand sqlCmd = new SqlCommand("CreateNewUserNoPHOTO", sqlConnection);
+                            SqlCommand sqlCmd = new SqlCommand("CreateNewUserNoPHOTOandNOTID", sqlConnection);
                             sqlCmd.CommandType = CommandType.StoredProcedure;
                             sqlCmd.Parameters.AddWithValue("first_name", userRegistrationViewModel.first_name);
                             sqlCmd.Parameters.AddWithValue("middle_name", userRegistrationViewModel.middle_name);
@@ -99,13 +99,13 @@ namespace FMB_CIS.Controllers
                             sqlCmd.Parameters.AddWithValue("valid_id", userRegistrationViewModel.valid_id);
                             sqlCmd.Parameters.AddWithValue("valid_id_no", userRegistrationViewModel.valid_id_no);
                             sqlCmd.Parameters.AddWithValue("birth_date", userRegistrationViewModel.birth_date);
-                            sqlCmd.Parameters.AddWithValue("tbl_region_id", userRegistrationViewModel.tbl_region_id);                        
-                        //    sqlCmd.Parameters.AddWithValue("tbl_province_name", userRegistrationViewModel.tbl_province_name);
-                        //    sqlCmd.Parameters.AddWithValue("tbl_city_name", userRegistrationViewModel.tbl_city_name);
-                        //sqlCmd.Parameters.AddWithValue("tbl_brgy_name", userRegistrationViewModel.tbl_brgy_name);
-                        sqlCmd.Parameters.AddWithValue("tbl_province_id", userRegistrationViewModel.tbl_province_id);
-                        sqlCmd.Parameters.AddWithValue("tbl_city_id", userRegistrationViewModel.tbl_city_id);
-                        sqlCmd.Parameters.AddWithValue("tbl_brgy_id", userRegistrationViewModel.tbl_brgy_id);
+                            sqlCmd.Parameters.AddWithValue("tbl_region_id", userRegistrationViewModel.tbl_region_id);
+                        sqlCmd.Parameters.AddWithValue("tbl_province_name", userRegistrationViewModel.tbl_province_name);
+                        sqlCmd.Parameters.AddWithValue("tbl_city_name", userRegistrationViewModel.tbl_city_name);
+                        sqlCmd.Parameters.AddWithValue("tbl_brgy_name", userRegistrationViewModel.tbl_brgy_name);
+                        //sqlCmd.Parameters.AddWithValue("tbl_province_id", userRegistrationViewModel.tbl_province_id);
+                        //sqlCmd.Parameters.AddWithValue("tbl_city_id", userRegistrationViewModel.tbl_city_id);
+                        //sqlCmd.Parameters.AddWithValue("tbl_brgy_id", userRegistrationViewModel.tbl_brgy_id);
                         sqlCmd.Parameters.AddWithValue("street_address", userRegistrationViewModel.street_address);
                             sqlCmd.Parameters.AddWithValue("tbl_division_id", userRegistrationViewModel.tbl_division_id ?? "");
                             sqlCmd.Parameters.AddWithValue("email", userRegistrationViewModel.email);
