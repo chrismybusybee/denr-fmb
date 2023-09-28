@@ -174,26 +174,25 @@
             <div class="row mb-4">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label asp-for="tbl_province_id" class="form-label small">Province</label>
-                        <input asp-for="tbl_province_id" class="form-control" />
+                        <label asp-for="tbl_province_name" class="form-label small">Province</label>
+                        <input asp-for="tbl_province_name" class="form-control" />
                         @* <input asp-for="tbl_province_id" class="form-control" /> *@
-                        <span asp-validation-for="tbl_province_id" class="text-danger"></span>
+                        <span asp-validation-for="tbl_province_name" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label asp-for="tbl_city_id" class="form-label small">City/Municipality</label>
-                        <input asp-for="tbl_city_id" class="form-control" />
+                        <label asp-for="tbl_city_name" class="form-label small">City/Municipality</label>
+                        <input asp-for="tbl_city_name" class="form-control" />
                         @* <input asp-for="tbl_city_id" class="form-control" /> *@
-                        <span asp-validation-for="tbl_city_id" class="text-danger"></span>
+                        <span asp-validation-for="tbl_city_name" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label asp-for="tbl_brgy_id" class="form-label small">Barangay(ID)</label>
-                        <input asp-for="tbl_brgy_id" class="form-control" />
-
-                        <span asp-validation-for="tbl_brgy_id" class="text-danger"></span>
+                        <label asp-for="tbl_brgy_name" class="form-label small">Barangay</label>
+                        <input asp-for="tbl_brgy_name" class="form-control" />
+                        <span asp-validation-for="tbl_brgy_name" class="text-danger"></span>
                     </div>
                 </div>
             </div>
