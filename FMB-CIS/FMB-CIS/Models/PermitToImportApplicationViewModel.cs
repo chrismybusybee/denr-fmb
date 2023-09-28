@@ -3,10 +3,10 @@ namespace FMB_CIS.Models
 {
     public class PermitToImportApplicationViewModel
     {
-        //public int id { get; set; }
-        //public int tbl_user_id { get; set; }
-        //public int tbl_application_type_id { get; set; }
-        //public int tbl_permit_type_id { get; set; }
+        public int id { get; set; }
+        public int tbl_user_id { get; set; }
+        public int tbl_application_type_id { get; set; }
+        public int tbl_permit_type_id { get; set; }
         [Display(Name = "First Name")]
         public string supplier_fname { get; set; }
         [Display(Name = "Middle Name")]
@@ -33,5 +33,8 @@ namespace FMB_CIS.Models
         public DateTime expected_time_release { get; set; }
         [Display(Name = "Date of Inspection")]
         public DateTime date_of_inspection { get; set; }
+
+        public int is_active {  get; set; }
+
     }
 }

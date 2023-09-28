@@ -1,10 +1,221 @@
-﻿@{
+﻿﻿@using System.Security.Claims;
+@model FMB_CIS.Models.ViewModel
+
+@{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "New Chainsaw Registration";
 }
 
 <div id="card-container">
     <div id="card">
-        <partial name="/Views/Shared/Underconstruction.cshtml" />
+        @ViewBag.message
+        <div class="row m-0">
+            <form asp-controller="NewChainsawRegistration" id="SellerRegForm" method="post" enctype="multipart/form-data">
+                <div class="col-md-12">
+                    <a href="@Url.Action("Index", "Dashboard")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
+                    <div class="row my-4">
+                        <div class="col-md-4">
+                            <label class="text-secondary small">
+                                Permit Type
+                            </label>
+                            <input type="text" class="form-select" value="Chainsaw Registration" disabled />
+                            <input asp-for="tbl_Application.tbl_permit_type_id" type="text" class="form-select" value="13" hidden/>
+                            <span asp-validation-for="tbl_Application.tbl_permit_type_id" class="text-danger"></span>
+                            @* <input asp-for="tbl_permit_type_id" type="text" class="form-control" /> *@
+                        </div>
+                    </div>
+                    <h4 class="text-secondary fw-bold my-4">Importer Details</h4>
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label class="text-secondary small">
+                                        First Name
+                                    </label>
+                                    <input asp-for="tbl_Application.supplier_fname" type="text" class="form-control" />
+                                    <span asp-validation-for="tbl_Application.supplier_fname" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="text-secondary small">
+                                        Middle Name
+                                    </label>
+                                    <input asp-for="tbl_Application.supplier_mname" type="text" class="form-control" />
+                                    <span asp-validation-for="tbl_Application.supplier_mname" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="tbl_Application.supplier_lname" class="text-secondary small">
+                                            Last Name
+                                        </label>
+                                        <input type="text" asp-for="tbl_Application.supplier_lname" class="form-control" />
+                                        <span asp-validation-for="tbl_Application.supplier_lname" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label asp-for="tbl_Application.supplier_suffix" class="text-secondary small">
+                                        Suffix
+                                    </label>
+                                    <input type="text" asp-for="tbl_Application.supplier_suffix" class="form-control" />
+                                    <span asp-validation-for="tbl_Application.supplier_suffix" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="text-secondary small">
+                                Address
+                            </label>
+                            <input asp-for="tbl_Application.supplier_address" type="text" class="form-control" />
+                            <span asp-validation-for="tbl_Application.supplier_address" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="text-secondary small">
+                                Email
+                            </label>
+                            <input asp-for="tbl_Application.supplier_email" type="text" class="form-control" />
+                            <span asp-validation-for="tbl_Application.supplier_email" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="text-secondary small">
+                                Contact No.
+                            </label>
+                            <input asp-for="tbl_Application.supplier_contact_no" type="text" class="form-control" />
+                            <span asp-validation-for="tbl_Application.supplier_contact_no" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="text-secondary small">
+                                Number of chainsaws to be purchased/ imported
+                            </label>
+                            <input asp-for="tbl_Application.qty" class="form-control" />
+                            <span asp-validation-for="tbl_Application.qty" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-secondary small">
+                                Specification
+                            </label>
+                            <input asp-for="tbl_Application.tbl_specification_id" class="form-control" />
+                            <span asp-validation-for="tbl_Application.tbl_specification_id" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <label class="text-secondary small">
+                                Purpose
+                            </label>
+                            <textarea asp-for="tbl_Application.purpose" class="form-control">
+
+                        </textarea>
+                            <span asp-validation-for="tbl_Application.purpose" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <h4 class="text-secondary fw-bold mb-4">Bureau of Customs</h4>
+                    <div class="row mb-5">
+                        <div class="col-md-6">
+                            <label class="text-secondary small">
+                                Expected time of arrival
+                            </label>
+                            <input asp-for="tbl_Application.expected_time_arrival" type="date" class="form-control" />
+                            <span asp-validation-for="tbl_Application.expected_time_arrival" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-secondary small">
+                                Expected time of release
+                            </label>
+                            <input asp-for="tbl_Application.expected_time_release" type="date" class="form-control" />
+                            <span asp-validation-for="tbl_Application.expected_time_release" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <h4 class="text-secondary fw-bold mb-4">Attach Required Documents</h4>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="text-secondary small">
+                                Attach Forms
+                            </label>
+                            <input type="file" asp-for="filesUpload.Files" class="form-control" multiple />
+                        </div>
+
+                    </div>
+                    <div class="row mb-5">
+                        <div class="col-md-6">
+                            <label class="text-secondary small">
+                                Set Date of Inspection
+                            </label>
+                            <input asp-for="tbl_Application.date_of_inspection" type="date" class="form-control" />
+                            <span asp-validation-for="tbl_Application.date_of_inspection" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-12 d-flex justify-content-center">
+                            @* <button id="btnSubmit" class="btn btn-primary">Submit</button> *@
+                            <input type="submit" @* id="btnSubmit" *@ value="Submit" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
     </div>
 </div>
+
+<partial name="~/Views/Modals/ChainsawOwnerModal.cshtml" />
+
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        feather.replace();
+
+        $("#btnSubmit").click(function () {
+            $("#confirmSubmitModal").modal("show");
+        });
+
+        $("#backBtn").click(function () {
+            $("#confirmSubmitModal").modal("hide");
+        });
+
+        $("#confirmBtn").click(function () {
+            $("#confirmSubmitModal").modal("hide");
+            $("#confirmSuccessModal").modal("show");
+        });
+    });
+    const form = document.getElementById('OwnerRegForm');
+    const showModalButton = document.getElementById('btnSubmit');
+    const confirmationModal = document.getElementById('confirmSubmitModal');
+    const confirmButton = document.getElementById('confirmBtn');
+
+    // Function to display the modal
+    function showModal() {
+        confirmationModal.style.display = 'block';
+    }
+
+    // Function to hide the modal
+    function hideModal() {
+        confirmationModal.style.display = 'none';
+    }
+
+    // Event listener for the "Submit" button
+    showModalButton.addEventListener('click', showModal);
+
+    // Event listener for the "Confirm" button
+    confirmButton.addEventListener('click', function () {
+        // Submit the form when the "Confirm" button is clicked
+        form.submit();
+    });
+
+    // Close the modal when the user clicks outside of it
+    window.addEventListener('click', function (event) {
+        if (event.target === confirmationModal) {
+            hideModal();
+        }
+    });
+
+</script>

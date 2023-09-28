@@ -310,6 +310,7 @@
 
                                     break;
                             }
+                            @if (ViewBag.UserType.Contains("Owner") == true){
                             <li id="newChainsawRegistrationMenuItem">
                                 <a href="@Url.Action("Index", "NewChainsawRegistration")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
@@ -317,7 +318,7 @@
                                     </div>
                                     <span>New Chainsaw Registration</span>
                                 </a>
-                            </li>
+                            </li>}
                             <li id="renewalMenuItem">
                                 <a href="@Url.Action("Index", "Renewal")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>

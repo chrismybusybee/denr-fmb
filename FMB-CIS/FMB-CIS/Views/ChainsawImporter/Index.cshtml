@@ -1,5 +1,5 @@
 ﻿@using System.Security.Claims;
-@model FMB_CIS.Models.PermitToImportApplicationViewModel
+@model FMB_CIS.Models.ViewModel
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Chainsaw Importer";
@@ -9,7 +9,7 @@
 <div id="card-container">
     <div id="card">
         <div class="row m-0">
-            <form asp-controller="ChainsawImporter" id="ImporterRegForm">
+            <form asp-controller="ChainsawImporter" id="ImporterRegForm" method="post" enctype="multipart/form-data">
             @* @using (Html.BeginForm())
             {
                 @Html.AntiForgeryToken() *@
@@ -21,29 +21,29 @@
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                <label asp-for="supplier_fname" class="text-secondary small">
+                                <label asp-for="tbl_Application.supplier_fname" class="text-secondary small">
                                     First Name
                                 </label>
-                                <input type="text" asp-for="supplier_fname" class="form-control" />
-                                <span asp-validation-for="supplier_fname" class="text-danger"></span>
+                                <input type="text" asp-for="tbl_Application.supplier_fname" class="form-control" />
+                                        <span asp-validation-for="tbl_Application.supplier_fname" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                <label asp-for="supplier_mname" class="text-secondary small">
+                                        <label asp-for="tbl_Application.supplier_mname" class="text-secondary small">
                                     Middle Name
                                 </label>
-                                <input type="text" asp-for="supplier_mname" class="form-control" />
-                                <span asp-validation-for="supplier_mname" class="text-danger"></span>
+                                        <input type="text" asp-for="tbl_Application.supplier_mname" class="form-control" />
+                                        <span asp-validation-for="tbl_Application.supplier_mname" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                <label asp-for="supplier_lname" class="text-secondary small">
+                                        <label asp-for="tbl_Application.supplier_lname" class="text-secondary small">
                                     Last Name
                                 </label>
-                                <input type="text" asp-for="supplier_lname" class="form-control" />
-                                <span asp-validation-for="supplier_lname" class="text-danger"></span>
+                                        <input type="text" asp-for="tbl_Application.supplier_lname" class="form-control" />
+                                        <span asp-validation-for="tbl_Application.supplier_lname" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -51,11 +51,11 @@
                     <div class="col-md-2">
                         <div class="col-md-12">
                             <div class="form-group">
-                            <label asp-for="supplier_suffix" class="text-secondary small">
+                                    <label asp-for="tbl_Application.supplier_suffix" class="text-secondary small">
                                 Suffix
                             </label>
-                            <input type="text" asp-for="supplier_suffix" class="form-control" />
-                            <span asp-validation-for="supplier_suffix" class="text-danger"></span>
+                                    <input type="text" asp-for="tbl_Application.supplier_suffix" class="form-control" />
+                                    <span asp-validation-for="tbl_Application.supplier_suffix" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
@@ -63,62 +63,62 @@
                 <div class="row mb-3">
                     <div class="col-md-4">
                         <div class="form-group">
-                        <label asp-for="supplier_address" class="text-secondary small">
+                                <label asp-for="tbl_Application.supplier_address" class="text-secondary small">
                             Address
                         </label>
-                        <input type="text" asp-for="supplier_address" class="form-control" />
-                        <span asp-validation-for="supplier_address" class="text-danger"></span>
+                                <input type="text" asp-for="tbl_Application.supplier_address" class="form-control" />
+                                <span asp-validation-for="tbl_Application.supplier_address" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                        <label asp-for="supplier_email" class="text-secondary small">
+                                <label asp-for="tbl_Application.supplier_email" class="text-secondary small">
                             Email
                         </label>
-                        <input type="text" asp-for="supplier_email" class="form-control" />
-                        <span asp-validation-for="supplier_email" class="text-danger"></span>
+                                <input type="text" asp-for="tbl_Application.supplier_email" class="form-control" />
+                                <span asp-validation-for="tbl_Application.supplier_email" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                        <label asp-for="supplier_contact_no" class="text-secondary small">
+                                <label asp-for="tbl_Application.supplier_contact_no" class="text-secondary small">
                             Contact No.
                         </label>
-                        <input type="text" asp-for="supplier_contact_no" class="form-control" />
-                        <span asp-validation-for="supplier_contact_no" class="text-danger"></span>
+                                <input type="text" asp-for="tbl_Application.supplier_contact_no" class="form-control" />
+                                <span asp-validation-for="tbl_Application.supplier_contact_no" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="form-group">
-                        <label asp-for="qty" class="text-secondary small">
+                                <label asp-for="tbl_Application.qty" class="text-secondary small">
                             Number of chainsaws to be purchased/ imported
                         </label>
-                        <input asp-for="qty" class="form-control" />
-                        <span asp-validation-for="qty" class="text-danger"></span>
+                                <input asp-for="tbl_Application.qty" class="form-control" />
+                                <span asp-validation-for="tbl_Application.qty" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                        <label asp-for="tbl_specification_id" class="text-secondary small">
+                                <label asp-for="tbl_Application.tbl_specification_id" class="text-secondary small">
                             Specification
                         </label>
-                        <input asp-for="tbl_specification_id" class="form-control" />
-                        <span asp-validation-for="tbl_specification_id" class="text-danger"></span>
+                                <input asp-for="tbl_Application.tbl_specification_id" class="form-control" />
+                                <span asp-validation-for="tbl_Application.tbl_specification_id" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
                 <div class="row mb-5">
                     <div class="col-md-12">
                         <div class="form-group">
-                        <label asp-for="purpose" class="text-secondary small">
+                                <label asp-for="tbl_Application.purpose" class="text-secondary small">
                             Purpose
                         </label>
-                        <textarea asp-for="purpose" class="form-control">
+                                <textarea asp-for="tbl_Application.purpose" class="form-control">
 
                         </textarea>
-                        <span asp-validation-for="purpose" class="text-danger"></span>
+                                <span asp-validation-for="tbl_Application.purpose" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
@@ -126,20 +126,20 @@
                 <div class="row mb-5">
                     <div class="col-md-6">
                         <div class="form-group">
-                        <label asp-for="expected_time_arrival" class="text-secondary small">
+                                <label asp-for="tbl_Application.expected_time_arrival" class="text-secondary small">
                             Expected time of arrival
                         </label>
-                        <input type="date" asp-for="expected_time_arrival" class="form-control" />
-                        <span asp-validation-for="expected_time_arrival" class="text-danger"></span>
+                                <input type="date" asp-for="tbl_Application.expected_time_arrival" class="form-control" />
+                                <span asp-validation-for="tbl_Application.expected_time_arrival" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                        <label asp-for="expected_time_release" class="text-secondary small">
+                                <label asp-for="tbl_Application.expected_time_release" class="text-secondary small">
                             Expected time of release
                         </label>
-                        <input type="date" asp-for="expected_time_release" class="form-control" />
-                        <span asp-validation-for="expected_time_release" class="text-danger"></span>
+                                <input type="date" asp-for="tbl_Application.expected_time_release" class="form-control" />
+                                <span asp-validation-for="tbl_Application.expected_time_release" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
@@ -150,33 +150,20 @@
                         <label class="text-secondary small">
                             Attach Forms
                         </label>
-                        <input type="file" class="form-control" />
+                                <input type="file" asp-for="filesUpload.Files" class="form-control" multiple />
                         </div>
                     </div>
                     
                 </div>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                        <input type="file" class="form-control" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                        <input type="file" class="form-control" />
-                        </div>
-                    </div>
-                </div>
+                
                 <div class="row mb-5">
                     <div class="col-md-6">
                         <div class="form-group">
-                        <label asp-for="date_of_inspection" class="text-secondary small">
+                                <label asp-for="tbl_Application.date_of_inspection" class="text-secondary small">
                             Set Date of Inspection
                         </label>
-                        <input type="date" asp-for="date_of_inspection" class="form-control" />
-                        <span asp-validation-for="date_of_inspection" class="text-danger"></span>
+                                <input type="date" asp-for="tbl_Application.date_of_inspection" class="form-control" />
+                                <span asp-validation-for="tbl_Application.date_of_inspection" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
