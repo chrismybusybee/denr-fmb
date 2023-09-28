@@ -57,6 +57,9 @@ body {
     max-width: 105px;
 }
 
+.mt-19rem {
+    margin-top: 1.9rem;
+}
 
 .cursor-pointer {
     cursor: pointer;
@@ -193,7 +196,7 @@ button {
     }
 
 .modal-dialog {
-    max-width: 500px;
+    max-width: 600px;
     margin: 0 auto;
 }
 /* BOOTSTRAP OVERRIDE END */
