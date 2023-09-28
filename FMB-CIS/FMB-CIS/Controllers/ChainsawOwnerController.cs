@@ -95,7 +95,7 @@ namespace FMB_CIS.Controllers
                 var subject = "Permit to Import Application Status";
                 var body = "Greetings! \n We would like to inform you that your Permit to Import Application has been received.";
                 EmailSender.SendEmailAsync(((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value, subject, body);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("ManageApplications", "Application");
             }
             return View(model);
             //}
