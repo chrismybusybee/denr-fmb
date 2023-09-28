@@ -5,6 +5,83 @@
 
 <div id="card-container">
     <div id="card">
-        <partial name="/Views/Shared/Underconstruction.cshtml" />
+        <a href="@Url.Action("Index", "Home")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
+        <button type="button" id="btnAdd" class="btn btn-primary float-end">Add New <i data-feather="plus" class=""></i></button>
+        <table id="denrOfficeTable" class="table table-striped dataTable">
+            <thead>
+                <tr>
+                    <th class="text-nowrap">Office Name</th>
+                    <th class="text-nowrap">Department</th>
+                    <th class="text-nowrap">Region</th>
+                    <th class="text-nowrap">Date Created</th>
+                    <th class="text-nowrap text-center">Status</th>
+                    <th class="text-nowrap text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-nowrap">CENRO</td>
+                    <td class="text-nowrap">Department 1</td>
+                    <td class="text-nowrap">Region 1</td>
+                    <td class="text-nowrap">August 10, 2023</td>
+                    <td class="text-nowrap text-center d-flex justify-content-center">
+                        <div class="bg-secondary text-white px-3 pb-2 pt-1 rounded-pill w-105">
+                            Pending
+                        </div>
+                    </td>
+                    <td class="text-nowrap">
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="view">
+                                <i data-feather="eye" class="data-feather-20"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-nowrap">PENRO</td>
+                    <td class="text-nowrap">Department 1</td>
+                    <td class="text-nowrap">Region 1</td>
+                    <td class="text-nowrap">July 10, 2023</td>
+                    <td class="text-nowrap text-center d-flex justify-content-center">
+                        <div class="bg-success text-white px-3 pb-2 pt-1 rounded-pill w-105">
+                            Approved
+                        </div>
+                    </td>
+                    <td class="text-nowrap">
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="view">
+                                <i data-feather="eye" class="data-feather-20"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-nowrap">Implimenting PENRO</td>
+                    <td class="text-nowrap">Department 1</td>
+                    <td class="text-nowrap">Region 1</td>
+                    <td class="text-nowrap">July 5, 2023</td>
+                    <td class="text-nowrap text-center d-flex justify-content-center">
+                        <div class="bg-danger text-white px-3 pb-2 pt-1 rounded-pill w-105">
+                            Denied
+                        </div>
+                    </td>
+                    <td class="text-nowrap">
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="view">
+                                <i data-feather="eye" class="data-feather-20"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
+
+<script src="/js/jquery-3.7.1.min.js"></script>
+
+<script type="text/javascript">
+    $("#btnAdd").click(function () {
+        $("#createNewOfficeModal").modal("show");
+    });
+</script>

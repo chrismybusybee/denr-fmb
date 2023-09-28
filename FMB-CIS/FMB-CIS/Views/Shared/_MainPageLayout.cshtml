@@ -407,6 +407,10 @@
     {
         <partial name="~/Views/Modals/AccountManagementModal.cshtml" />
     }
+    else if (currentUrl.Contains("CreationOfNewDenrOffice"))
+    {
+        <partial name="~/Views/Modals/CreationOfNewDenrOfficeModal.cshtml" />
+    }
 
     <footer>
         © 2023 DENR-FMB CIS. All rights reserved.
@@ -423,28 +427,30 @@
 </body>
 </html>
 
+<script src="/js/jquery-3.7.1.min.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function () {
         feather.replace();
 
         function toggleDropdown(menuItem, dropdown) {
-            dropdown.classList.toggle("active");
-            const isOpen = dropdown.classList.contains("active");
+            $(dropdown).toggleClass("active");
+            const isOpen = $(dropdown).hasClass("active");
             sessionStorage.setItem(menuItem + "DropdownState", isOpen ? "open" : "closed");
         }
 
         function setupDropdown(menuItemID, dropdownID) {
-            const menuItem = document.getElementById(menuItemID);
-            const dropdown = document.getElementById(dropdownID);
+            const menuItem = $("#" + menuItemID);
+            const dropdown = $("#" + dropdownID);
 
-            menuItem.addEventListener("click", function (e) {
+            menuItem.click(function (e) {
                 e.preventDefault();
                 toggleDropdown(menuItemID, dropdown);
             });
 
             const storedState = sessionStorage.getItem(menuItemID + "DropdownState");
             if (storedState === "open") {
-                dropdown.classList.add("active");
+                dropdown.addClass("active");
             }
         }
 
