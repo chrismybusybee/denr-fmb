@@ -5,6 +5,7 @@
 
 <div id="card-container">
     <div id="card">
+        <a href="@Url.Action("Index", "Home")" class="me-auto pb-4" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
         <table id="accountManagementTable" class="table table-striped dataTable">
             <thead>
                 <tr>
@@ -33,10 +34,10 @@
                     </td>
                     <td class="text-nowrap">
                         <div class="d-flex justify-content-center gap-3">
-                            <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="edit">
+                            <a href="@Url.Action("EditAccount", "AccountManagement")" class="bg-green text-white px-1 pb-1 rounded" title="edit">
                                 <i data-feather="edit" class="data-feather-20"></i>
                             </a>
-                            <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="deactivate">
+                            <a href="#" class="bg-green text-white px-1 pb-1 rounded btnDelete" title="delete">
                                 <i data-feather="trash-2" class="data-feather-20"></i>
                             </a>
                         </div>
@@ -56,10 +57,10 @@
                     </td>
                     <td class="text-nowrap">
                         <div class="d-flex justify-content-center gap-3">
-                            <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="edit">
+                            <a href="@Url.Action("EditAccount", "AccountManagement")" class="bg-green text-white px-1 pb-1 rounded" title="edit">
                                 <i data-feather="edit" class="data-feather-20"></i>
                             </a>
-                            <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="deativate">
+                            <a href="#" class="bg-green text-white px-1 pb-1 rounded btnDelete" title="delete">
                                 <i data-feather="trash-2" class="data-feather-20"></i>
                             </a>
                         </div>
@@ -79,10 +80,10 @@
                     </td>
                     <td class="text-nowrap">
                         <div class="d-flex justify-content-center gap-3">
-                            <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="edit">
+                            <a href="@Url.Action("EditAccount", "AccountManagement")" class="bg-green text-white px-1 pb-1 rounded" title="edit">
                                 <i data-feather="edit" class="data-feather-20"></i>
                             </a>
-                            <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="deativate">
+                            <a href="#" class="bg-green text-white px-1 pb-1 rounded btnDelete" title="delete">
                                 <i data-feather="trash-2" class="data-feather-20"></i>
                             </a>
                         </div>
@@ -92,3 +93,11 @@
         </table>
     </div>
 </div>
+
+<script src="/js/jquery-3.7.1.min.js"></script>
+
+<script type="text/javascript">
+    $(".btnDelete").click(function () {
+        $("#confirmDeleteModal").modal("show");
+    });
+</script>

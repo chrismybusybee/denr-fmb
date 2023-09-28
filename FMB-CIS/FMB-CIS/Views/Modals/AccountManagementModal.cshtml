@@ -1,0 +1,92 @@
+﻿<div class="modal fade" id="confirmSaveModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/submit.png" />
+                    </div>
+                    <p class="fw-bold fs-5">
+                        Are you sure you want to save changes?
+                    </p>
+                    <div class="d-flex gap-4 w-100">
+                        <button id="backSaveBtn" class="btn btn-danger w-100">Back</button>
+                        <button id="confirmSaveBtn" class="btn btn-primary w-100">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmSaveSuccessModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/success.png" />
+                    </div>
+                    <p class="fw-bold fs-5">
+                        Changes saved successfully!
+                    </p>
+                    <div class="d-flex justify-content-center w-100">
+                        <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("Index", "AccountManagement")'">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmDeleteModal" aria-hidden="true" style="z-index:1050 !important;">
+    <div class="modal-dialog modal-dialog-centered" style="z-index:1050 !important;">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/decline.png" />
+                    </div>
+                    <p class="fw-bold fs-5">
+                        Are you sure you want to delete?
+                    </p>
+                    <div class="d-flex gap-4 w-100">
+                        <button id="backDeleteBtn" class="btn btn-danger w-100">Back</button>
+                        <button id="confirmDeleteBtn" class="btn btn-primary w-100">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmSuccessDeleteModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/success-decline.png" />
+                    </div>
+                    <p class="fw-bold fs-5 text-center">
+                        User deleted successfully!
+                    </p>
+                    <div class="d-flex justify-content-center w-100">
+                        <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("Index", "AccountManagement")'">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#backDeleteBtn").click(function () {
+        $("#confirmDeleteModal").modal("hide");
+    });
+
+    $("#confirmDeleteBtn").click(function () {
+        $("#confirmDeleteModal").modal("hide");
+        $("#confirmSuccessDeleteModal").modal("show");
+    });
+</script>

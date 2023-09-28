@@ -1,0 +1,194 @@
+﻿@using System.Security.Claims;
+@model FMB_CIS.Models.PermitToImportApplicationViewModel
+@{
+    Layout = "~/Views/Shared/_MainPageLayout.cshtml";
+    ViewBag.Title = "Account Management";
+}
+
+<div id="card-container">
+    <div id="card">
+        <div class="row m-0">
+            <div class="col-md-12">
+                <a href="@Url.Action("Index", "AccountManagement")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <div class="form-group mb-2">
+                            <label class="form-label small">User Type</label>
+                            <select class="form-select" aria-label="User Type">
+                                <option selected disabled>- Select User Type -</option>
+                                <option value="1">Chainsaw Importer Only</option>
+                                <option value="2">Chainsaw Seller Only</option>
+                                <option value="3">Chainsaw Owner Only</option>
+                                <option value="4">Chainsaw Importer and Seller</option>
+                                <option value="5">Chainsaw Importer and Owner</option>
+                                <option value="6">Chainsaw Seller and Owner</option>
+                                <option value="7">Chainsaw Importer, Owner, and Seller</option>
+                            </select>
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-4" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="form-label small">First Name</label>
+                                            <input class="form-control" />
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="form-label small">Middle Name</label>
+                                            <input class="form-control" />
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="form-label small">Last Name</label>
+                                            <input class="form-control" />
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="form-label small">Suffix</label>
+                                            <input class="form-control" />
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label class="form-label small">Email (Please use official email address)</label>
+                            <input class="form-control" placeholder="name@address.com" />
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                    @* <div class="col-md-3">
+                    <div class="form-group">
+                    <label asp-for="password" class="form-label small">Password</label>
+                    <input asp-for="password" class="form-control" placeholder="Password" />
+                    <span asp-validation-for="password" class="text-danger"></span>
+                    </div>
+                    </div>
+                    <div class="col-md-3">
+                    <div class="form-group">
+                    <label asp-for="confirmPassword" class="form-label small">Confirm Password</label>
+                    <input asp-for="confirmPassword" class="form-control" placeholder="Confirm Password" />
+                    <span asp-validation-for="confirmPassword" class="text-danger"></span>
+                    </div>
+                    </div> *@
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="form-label small">Contact Number (11 Digits)</label>
+                            <input class="form-control" placeholder="09XX XXX XXXX" />
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label small">Valid ID</label>
+                            <input class="form-control" />
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label small">Valid ID Number</label>
+                            <input class="form-control" />
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label small">Street Address</label>
+                            <input class="form-control" />
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label small">Barangay</label>
+                            <input class="form-control" />
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label small">City/Municipality</label>
+                            <input class="form-control" />
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label small">Province</label>
+                            <input class="form-control" />
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label small">Attach Forms</label>
+                            <input type="text" class="form-control" />
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="file" class="form-control mt-19rem" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-12 d-flex justify-content-center">
+                        <button type="button" id="btnSave" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/jquery-3.7.1.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnSave").click(function () {
+            $("#confirmSaveModal").modal("show");
+        });
+
+        $("#backSaveBtn").click(function () {
+            $("#confirmSaveModal").modal("hide");
+        });
+
+        $("#confirmSaveBtn").click(function () {
+            $("#confirmSaveModal").modal("hide");
+            $("#confirmSaveSuccessModal").modal("show");
+        });
+    });
+</script>
