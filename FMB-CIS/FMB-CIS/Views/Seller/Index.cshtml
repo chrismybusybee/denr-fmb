@@ -9,7 +9,7 @@
         Chainsaws for Sale
     </h1>
     <p>
-        <table class="table" id="tblSaleChainsaws">
+        <table class="table dataTable" id="tblSaleChainsaws">
             <thead>
                 <tr>
                     <th>
@@ -52,12 +52,3 @@
         </table>
     </p>
 </div>
-
-<script type="text/javascript">
-    var js = jQuery.noConflict(true);
-    js(document).ready(function () {
-        js('#tblSaleChainsaws').DataTable({
-            pageLength: 3,
-        });
-    });
-</script>

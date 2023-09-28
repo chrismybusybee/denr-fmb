@@ -9,7 +9,7 @@
         History
     </h1>
     <p>
-        <table class="table" id="tblUserHistory">
+        <table class="table dataTable" id="tblUserHistory">
             <thead>
                 <tr>
                     <th>
@@ -56,12 +56,3 @@
         </table>
     </p>
 </div>
-
-<script type="text/javascript">
-    var js = jQuery.noConflict(true);
-    js(document).ready(function () {
-        js('#tblUserHistory').DataTable({
-            pageLength: 3,
-        });
-    });
-</script>

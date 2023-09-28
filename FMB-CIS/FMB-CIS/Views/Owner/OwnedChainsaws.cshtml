@@ -9,7 +9,7 @@
         Owned Chainsaws
     </h1>
     <p>
-        <table class="table" id="tblOwnedChainsaws">
+        <table class="table dataTable" id="tblOwnedChainsaws">
             <thead>
                 <tr>
                     <th>
@@ -53,11 +53,3 @@
     </p>
 </div>
 
-<script type="text/javascript">
-    var js = jQuery.noConflict(true);
-    js(document).ready(function () {
-        js('#tblOwnedChainsaws').DataTable({
-            pageLength: 3,
-        });
-    });
-</script>

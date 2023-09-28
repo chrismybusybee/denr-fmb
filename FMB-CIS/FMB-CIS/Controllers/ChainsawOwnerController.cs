@@ -49,7 +49,7 @@ namespace FMB_CIS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Index(OwnerPermitViewModel model)
+        public IActionResult Index(ViewModel model)
         {
             //try
             //{
@@ -58,44 +58,57 @@ namespace FMB_CIS.Controllers
                 int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
                 //DAL dal = new DAL();
 
-                //SAVE USER INFOS ON DATABASE USING CreateNewUserNoPHOTO STORED PROCEDURE
-                int one = 1;
-                int two = 2;
-                using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("ConnStrng")))
-                {
-                    sqlConnection.Open();
-                    SqlCommand sqlCmd = new SqlCommand("OwnerPermitsRegistration", sqlConnection);
-                    sqlCmd.CommandType = CommandType.StoredProcedure;
-                    sqlCmd.Parameters.AddWithValue("tbl_user_id", userID);
-                    sqlCmd.Parameters.AddWithValue("tbl_application_type_id", one); //1 - Certificate of registration, 2 - Chainsaw Importer, 3 - Chainsaw Seller
-                    sqlCmd.Parameters.AddWithValue("tbl_permit_type_id", Convert.ToInt32(model.tbl_permit_type_id)); //1 - Permit to Import, 2 - Permit to Purchase, 3 - Permit to Sell, 4 - Transfer of Ownership, 5 - Authority to Lease, 6 - Authority to Rent, 7 - Authority to Lend
-                    sqlCmd.Parameters.AddWithValue("supplier_fname", model.supplier_fname);
-                    sqlCmd.Parameters.AddWithValue("supplier_mname", model.supplier_mname);
-                    sqlCmd.Parameters.AddWithValue("supplier_lname", model.supplier_lname);
-                    sqlCmd.Parameters.AddWithValue("supplier_suffix", model.supplier_suffix ?? "");
-                    sqlCmd.Parameters.AddWithValue("supplier_contact_no", model.supplier_contact_no);
-                    sqlCmd.Parameters.AddWithValue("supplier_address", model.supplier_address);
-                    sqlCmd.Parameters.AddWithValue("supplier_email", model.supplier_email);
-                    sqlCmd.Parameters.AddWithValue("qty", model.qty);
-                    //SPECIFICATION
-                    sqlCmd.Parameters.AddWithValue("tbl_specification_id", model.tbl_specification_id);
-                    sqlCmd.Parameters.AddWithValue("purpose", model.purpose);
-                    sqlCmd.Parameters.AddWithValue("expected_time_arrival", model.expected_time_arrival.ToString());
-                    sqlCmd.Parameters.AddWithValue("expected_time_release", model.expected_time_release.ToString());
-                    sqlCmd.Parameters.AddWithValue("date_of_inspection", model.date_of_inspection.ToString());
-                    sqlCmd.Parameters.AddWithValue("is_active", one);
-                    sqlCmd.Parameters.AddWithValue("created_by", userID);
-                    sqlCmd.Parameters.AddWithValue("modified_by", userID);
-                    sqlCmd.Parameters.AddWithValue("date_created", DateTime.Now);
-                    sqlCmd.Parameters.AddWithValue("date_modified", DateTime.Now);
-                    sqlCmd.ExecuteNonQuery();
-                }
+                //SAVE permit application
+                model.tbl_Application.tbl_application_type_id = 2;
+                model.tbl_Application.tbl_user_id = userID;
+                model.tbl_Application.is_active = true;
+                model.tbl_Application.created_by = userID;
+                model.tbl_Application.modified_by = userID;
+                model.tbl_Application.date_created = DateTime.Now;
+                model.tbl_Application.date_modified = DateTime.Now;
 
+                _context.tbl_application.Add(model.tbl_Application);
+                _context.SaveChanges();
+                int? appID = model.tbl_Application.id;
+
+                //File Upload
+                foreach (var file in model.filesUpload.Files)
+                {
+                    var filesDB = new tbl_files();
+                    FileInfo fileInfo = new FileInfo(file.FileName);
+                    string path = Path.Combine(Directory.GetCurrentDirectory(), "Files/UserDocs");
+
+                    //create folder if not exist
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+
+
+                    string fileNameWithPath = Path.Combine(path, file.FileName);
+
+                    using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+                    filesDB.tbl_application_id = appID;
+                    filesDB.created_by = userID;
+                    filesDB.modified_by = userID;
+                    filesDB.date_created = DateTime.Now;
+                    filesDB.date_modified = DateTime.Now;
+                    filesDB.filename = file.FileName;
+                    filesDB.path = path;
+                    filesDB.tbl_file_type_id = fileInfo.Extension;
+                    filesDB.tbl_file_sources_id = fileInfo.Extension;
+                    _context.tbl_files.Add(filesDB);
+                    _context.SaveChanges();
+                }
                 //Email
                 var subject = "Permit to Import Application Status";
                 var body = "Greetings! \n We would like to inform you that your Permit to Import Application has been received.";
                 EmailSender.SendEmailAsync(((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value, subject, body);
-                return RedirectToAction("ManageApplications", "Application");
+
+                ModelState.Clear();
+                ViewBag.Message = "Save Success";
+                return View();
             }
             return View(model);
             //}
