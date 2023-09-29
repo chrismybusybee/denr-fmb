@@ -73,34 +73,37 @@ namespace FMB_CIS.Controllers
                 int? appID = model.tbl_Application.id;
 
                 //File Upload
-                foreach (var file in model.filesUpload.Files)
+                if (model.filesUpload != null)
                 {
-                    var filesDB = new tbl_files();
-                    FileInfo fileInfo = new FileInfo(file.FileName);
-                    string path = Path.Combine(Directory.GetCurrentDirectory(), "Files/UserDocs");
-
-                    //create folder if not exist
-                    if (!Directory.Exists(path))
-                        Directory.CreateDirectory(path);
-
-
-                    string fileNameWithPath = Path.Combine(path, file.FileName);
-
-                    using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                    foreach (var file in model.filesUpload.Files)
                     {
-                        file.CopyTo(stream);
+                        var filesDB = new tbl_files();
+                        FileInfo fileInfo = new FileInfo(file.FileName);
+                        string path = Path.Combine(Directory.GetCurrentDirectory(), "Files/UserDocs");
+
+                        //create folder if not exist
+                        if (!Directory.Exists(path))
+                            Directory.CreateDirectory(path);
+
+
+                        string fileNameWithPath = Path.Combine(path, file.FileName);
+
+                        using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                        {
+                            file.CopyTo(stream);
+                        }
+                        filesDB.tbl_application_id = appID;
+                        filesDB.created_by = userID;
+                        filesDB.modified_by = userID;
+                        filesDB.date_created = DateTime.Now;
+                        filesDB.date_modified = DateTime.Now;
+                        filesDB.filename = file.FileName;
+                        filesDB.path = path;
+                        filesDB.tbl_file_type_id = fileInfo.Extension;
+                        filesDB.tbl_file_sources_id = fileInfo.Extension;
+                        _context.tbl_files.Add(filesDB);
+                        _context.SaveChanges();
                     }
-                    filesDB.tbl_application_id = appID;
-                    filesDB.created_by = userID;
-                    filesDB.modified_by = userID;
-                    filesDB.date_created = DateTime.Now;
-                    filesDB.date_modified = DateTime.Now;
-                    filesDB.filename = file.FileName;
-                    filesDB.path = path;
-                    filesDB.tbl_file_type_id = fileInfo.Extension;
-                    filesDB.tbl_file_sources_id = fileInfo.Extension;
-                    _context.tbl_files.Add(filesDB);
-                    _context.SaveChanges();
                 }
                 //Email
                 var subject = "Permit to Import Application Status";
