@@ -82,5 +82,10 @@ namespace FMB_CIS.Controllers
             }
 
         }
+
+        public IActionResult EditApplication()
+        {
+            return View();
+        }
     }
 }

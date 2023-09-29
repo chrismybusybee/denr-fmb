@@ -76,15 +76,15 @@
                             @* <a href="ChainsawImporterApproval?uid=@item.tbl_user_id&appid=@item.id">Take Action</a> *@
                             @if (item.application_type.Contains("Importer"))
                             {
-                                <a href="../ChainsawImporter/ChainsawImporterApproval?uid=@item.tbl_user_id&appid=@item.id">Edit</a>
+                                <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">Edit</a>
                             }
                             @if (item.application_type.Contains("Seller"))
                             {
-                                <a href="../ChainsawSeller/ChainsawSellerApproval?uid=@item.tbl_user_id&appid=@item.id">Edit</a>
+                                <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">Edit</a>
                             }
                             @if (item.application_type.Contains("Owner"))
                             {
-                                <a href="../ChainsawOwner/ChainsawOwnerApproval?uid=@item.tbl_user_id&appid=@item.id">Edit</a>
+                                <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">Edit</a>
                             }
 
                         </td>
