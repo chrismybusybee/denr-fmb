@@ -80,6 +80,47 @@
     </div>
 </div>
 
+<div class="modal fade" id="confirmAddModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/submit.png" />
+                    </div>
+                    <p class="fw-bold fs-5">
+                        Are you sure you want to add this user?
+                    </p>
+                    <div class="d-flex gap-4 w-100">
+                        <button id="backAddBtn" class="btn btn-danger w-100">Back</button>
+                        <button id="confirmAddBtn" class="btn btn-primary w-100">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmAddSuccessModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/success.png" />
+                    </div>
+                    <p class="fw-bold fs-5">
+                        Account added successfully!
+                    </p>
+                    <div class="d-flex justify-content-center w-100">
+                        <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("Index", "AccountManagement")'">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
     $("#backDeleteBtn").click(function () {
         $("#confirmDeleteModal").modal("hide");
@@ -88,5 +129,14 @@
     $("#confirmDeleteBtn").click(function () {
         $("#confirmDeleteModal").modal("hide");
         $("#confirmSuccessDeleteModal").modal("show");
+    });
+
+    $("#backAddBtn").click(function () {
+        $("#confirmAddModal").modal("hide");
+    });
+
+    $("#confirmAddBtn").click(function () {
+        $("#confirmAddModal").modal("hide");
+        $("#confirmAddSuccessModal").modal("show");
     });
 </script>

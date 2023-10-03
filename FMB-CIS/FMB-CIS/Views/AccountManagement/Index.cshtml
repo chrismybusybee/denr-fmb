@@ -6,7 +6,7 @@
 <div id="card-container">
     <div id="card">
         <a href="@Url.Action("Index", "Home")" class="me-auto pb-4" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
-        <button type="button" id="btnAdd" class="btn btn-primary float-end">Add New <i data-feather="plus" class=""></i></button>
+        <button type="button" id="btnAdd" class="btn btn-primary float-end" onclick="window.location.href = '@Url.Action("AddAccount", "AccountManagement")'">Add New <i data-feather="plus"></i></button>
 
         <table id="accountManagementTable" class="table table-striped dataTable">
             <thead>
