@@ -405,7 +405,7 @@
     {
         <partial name="~/Views/Modals/ChainsawOwnerModal.cshtml" />
     }
-    else if (currentUrl.Contains("AccountManagement") || (currentUrl.Contains("EditAccount")))
+    else if (currentUrl.Contains("AccountManagement") || (currentUrl.Contains("EditAccount") || (currentUrl.Contains("AddAccount"))))
     {
         <partial name="~/Views/Modals/AccountManagementModal.cshtml" />
     }
@@ -481,6 +481,7 @@
             "/Renewal": "renewalMenuItem",
             "/ProfileManagement": "profileManagementMenuItem",
             "/AccountManagement": "accountManagementMenuItem",
+            "/AccountManagement/AddAccount": "accountManagementMenuItem",
             "/AccountManagement/EditAccount": "accountManagementMenuItem",
             "/Monitoring": "monitoringMenuItem",
             "/CreationOfNewDenrOffice": "creationOfNewDenrOfficeMenuItem",

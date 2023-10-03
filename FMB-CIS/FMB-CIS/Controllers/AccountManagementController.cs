@@ -13,5 +13,10 @@ namespace FMB_CIS.Controllers
         {
             return View();
         }
+
+        public IActionResult AddAccount()
+        {
+            return View();
+        }
     }
 }
