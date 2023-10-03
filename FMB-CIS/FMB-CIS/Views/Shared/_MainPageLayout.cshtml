@@ -3,6 +3,9 @@
 @{
     var currentUrl = Context.Request.Path.ToString();
     ViewBag.UserType = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
+    ViewBag.Cenro = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO");
+    ViewBag.Inspector = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector");
+
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -251,7 +254,7 @@
                                         </ul>
                                     </li>
                                     break;
-                                case "Chainsaw Importer, Owner, and Seller" or "DENR CENRO":
+                                case "Chainsaw Importer, Owner, and Seller" or "DENR CENRO" or "DENR Inspector":
                                     <li id="chainsawImporterMenuItem">
                                         <a href="#" id="chainsawImporterSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
                                             <div>

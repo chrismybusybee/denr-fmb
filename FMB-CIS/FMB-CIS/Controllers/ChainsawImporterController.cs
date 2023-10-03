@@ -244,10 +244,43 @@ namespace FMB_CIS.Controllers
                     var body = "Greetings! \n We regret to inform you that your Permit to Import Application has been declined.\nThe officer left the following comment:\n" + viewMod.comment;
                     EmailSender.SendEmailAsync(viewMod.email, subject, body);
                 }
+                //if save button is selected
                 else
                 {
                     var appli = new tbl_application() { id = applid, date_modified = DateTime.Now, modified_by = loggedUserID };
                     var usrdet = new tbl_user() { id = usid, comment = viewMod.comment };
+                    if (viewMod.filesUpload != null)
+                    {
+                        foreach (var file in viewMod.filesUpload.Files)
+                        {
+                            var filesDB = new tbl_files();
+                            FileInfo fileInfo = new FileInfo(file.FileName);
+                            string path = Path.Combine(Directory.GetCurrentDirectory(), "Files/UserDocs");
+
+                            //create folder if not exist
+                            if (!Directory.Exists(path))
+                                Directory.CreateDirectory(path);
+
+
+                            string fileNameWithPath = Path.Combine(path, file.FileName);
+
+                            using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                            {
+                                file.CopyTo(stream);
+                            }
+                            filesDB.tbl_application_id = appID;
+                            filesDB.created_by = usid;
+                            filesDB.modified_by = usid;
+                            filesDB.date_created = DateTime.Now;
+                            filesDB.date_modified = DateTime.Now;
+                            filesDB.filename = file.FileName;
+                            filesDB.path = path;
+                            filesDB.tbl_file_type_id = fileInfo.Extension;
+                            filesDB.tbl_file_sources_id = fileInfo.Extension;
+                            _context.tbl_files.Add(filesDB);
+                            _context.SaveChanges();
+                        }
+                    }
                     using (_context)
                     {
                         _context.tbl_application.Attach(appli);

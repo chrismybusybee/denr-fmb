@@ -4,21 +4,23 @@
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Chainsaw Importer";
+    ViewBag.Cenro = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO");
+    ViewBag.Inspector = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector");
 }
 
 <div id="card-container">
     <div id="card">
-        <form asp-action="ChainsawImporterApproval" method="post">
+        <form asp-action="ChainsawImporterApproval" method="post" enctype="multipart/form-data">
             <div class="row m-0">
                 <input asp-for="uid" type="hidden" />
                 <input asp-for="appid" type="hidden" />
                 <div class="d-flex justify-content-end gap-2">
-                    @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO") == true)
+                    @if (ViewBag.Cenro)
                     {
                         <input id="ApproveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Approve" />
                         <input class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="submit" value="Decline" />
                     }
-                    @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true)
+                    @if (ViewBag.Inspector)
                     {
                         <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" />
                     }
@@ -232,6 +234,14 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+                <div class="row d-flex justify-content-center px-0 mb-5">
+                    @if (ViewBag.Inspector)
+                    {
+                        <div class="col-md-11 d-flex flex-column gap-2">
+                            <input type="file" asp-for="filesUpload.Files" class="form-control" multiple />
+                        </div>
+                    }
                 </div>
                 <div class="row d-flex justify-content-center px-0 mb-5">
                     <div class="col-md-11 d-flex flex-column gap-2">

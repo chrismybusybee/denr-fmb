@@ -5,11 +5,13 @@
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Chainsaw Owner";
+    ViewBag.Cenro = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO");
+    ViewBag.Inspector = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector");
 }
 
 <div id="card-container">
     <div id="card">
-        <form asp-action="ChainsawOwnerApproval" method="post">
+        <form asp-action="ChainsawOwnerApproval" method="post" enctype="multipart/form-data">
             <div class="row m-0">
                 <input asp-for="uid" type="hidden" />
                 <input asp-for="appid" type="hidden" />
@@ -231,6 +233,14 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+                <div class="row d-flex justify-content-center px-0 mb-5">
+                    @if (ViewBag.Inspector)
+                    {
+                        <div class="col-md-11 d-flex flex-column gap-2">
+                            <input type="file" asp-for="filesUpload.Files" class="form-control" multiple />
+                        </div>
+                    }
                 </div>
                 <div class="row d-flex justify-content-center px-0 mb-5">
                     <div class="col-md-11 d-flex flex-column gap-2">
