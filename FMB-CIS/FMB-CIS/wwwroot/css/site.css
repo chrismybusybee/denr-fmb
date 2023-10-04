@@ -57,6 +57,10 @@ body {
     max-width: 105px;
 }
 
+.mw-18rem {
+    max-width: 18rem;
+}
+
 .mt-19rem {
     margin-top: 1.9rem;
 }
