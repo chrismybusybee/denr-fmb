@@ -38,6 +38,10 @@ body {
     color: #5c5c5c !important;
 }
 
+.text-light-gray {
+    color: #9f9f9f;
+}
+
 .bg-green {
     background-color: #14984a;
 }
