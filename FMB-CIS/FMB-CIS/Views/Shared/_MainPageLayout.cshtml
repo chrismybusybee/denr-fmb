@@ -420,9 +420,9 @@
     }
 
     <footer>
-        © 2023 DENR-FMB CIS. All rights reserved.
+        © 2023 DENR-FMB CIS. All rights reserved. <a href="@Url.Action("TermsPolicy", "Home")" target="_blank" class="text-light-gray text-decoration-none">Privacy Policy | Terms & Conditions.</a>
     </footer>
-    
+
     <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/site.js" asp-append-version="true"></script>
     <script src="/js/jquery-3.7.1.min.js"></script>
@@ -492,8 +492,6 @@
             "/CreationOfNewDenrOffice": "creationOfNewDenrOfficeMenuItem",
             "/AnnouncementTemplates": "announcementTemplatesMenuItem",
             "/EmailTemplates": "emailTemplatesMenuItem",
-            
-            
         };
 
         if (currentPage.startsWith("/AccountManagement/ViewAccount/")) {
