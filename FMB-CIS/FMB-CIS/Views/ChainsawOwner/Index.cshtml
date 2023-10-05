@@ -16,151 +16,175 @@
                 @ViewBag.message
             </div>
         }
-        <div class="row m-0">
-            <form asp-controller="ChainsawOwner" id="OwnerRegForm" method="post" enctype="multipart/form-data">
-            <div class="col-md-12">
-                <a href="@Url.Action("Index", "Dashboard")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
-                <div class="row my-4">
-                    <div class="col-md-4">
-                        <label class="text-secondary small">
-                            Permit Type
+        <a href="@Url.Action("Index", "Dashboard")" class="mx-2" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
+        <div class="row m-0 my-4">
+            <div class="col-md-6">
+                <div class="p-4 shadow h-100">
+                    <h2 class="text-secondary fw-bold mb-4">Seller Details</h2>
+                    <div class="form-group mb-3">
+                        <label class="text-secondary fw-bold">
+                            First Name
                         </label>
-                        <select asp-for="tbl_Application.tbl_permit_type_id" class="form-select" aria-label="Permit Type">
-                                <option selected disabled>- Select Permit Type -</option>
-                                <option value="5">Authority to Lease</option>
-                                <option value="6">Authority to Rent</option>
-                                <option value="7">Authority to Lend</option>
-                                <option value="13">Certificate of Registration</option>
-                                <option value="14">Permit to Re-sell/Transfer Ownership</option>
-                           
-
-                        </select>
-                            <span asp-validation-for="tbl_Application.tbl_permit_type_id" class="text-danger"></span>
-                        @* <input asp-for="tbl_permit_type_id" type="text" class="form-control" /> *@
+                        <input type="text" class="form-control" placeholder="Enter first name" />
+                        <span class="text-danger"></span>
                     </div>
-                </div>
-                <h4 class="text-secondary fw-bold my-4">Owner Details</h4>
-                <div class="row">
-                    <div class="col-md-10">
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label class="text-secondary small">
-                                    First Name
-                                </label>
-                                    <input asp-for="tbl_Application.supplier_fname" type="text" class="form-control" />
-                                    <span asp-validation-for="tbl_Application.supplier_fname" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="text-secondary small">
-                                    Middle Name
-                                </label>
-                                    <input asp-for="tbl_Application.supplier_mname" type="text" class="form-control" />
-                                    <span asp-validation-for="tbl_Application.supplier_mname" class="text-danger"></span>
-                                    /div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="tbl_Application.supplier_lname" class="text-secondary small">
-                                            Last Name
-                                        </label>
-                                        <input type="text" asp-for="tbl_Application.supplier_lname" class="form-control" />
-                                        <span asp-validation-for="tbl_Application.supplier_lname" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label asp-for="tbl_Application.supplier_suffix" class="text-secondary small">
-                                        Suffix
-                                    </label>
-                                    <input type="text" asp-for="tbl_Application.supplier_suffix" class="form-control" />
-                                    <span asp-validation-for="tbl_Application.supplier_suffix" class="text-danger"></span>
-                                </div>
-                        </div>
+                    <div class="form-group mb-3">
+                        <label class="text-secondary fw-bold">
+                            Middle Name
+                        </label>
+                        <input type="text" class="form-control" placeholder="Enter middle name" />
+                        <span class="text-danger"></span>
                     </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-4">
-                        <label class="text-secondary small">
+                    <div class="form-group mb-3">
+                        <label class="text-secondary fw-bold">
+                            Last Name
+                        </label>
+                        <input type="text" class="form-control" placeholder="Enter last name" />
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="text-secondary fw-bold">
+                            Suffix
+                        </label>
+                        <input type="text" class="form-control" placeholder="Enter suffix (if any)" />
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="text-secondary fw-bold">
                             Address
                         </label>
-                            <input asp-for="tbl_Application.supplier_address" type="text" class="form-control" />
-                            <span asp-validation-for="tbl_Application.supplier_address" class="text-danger"></span>
+                        <textarea class="form-control" placeholder="Enter address"></textarea>
+                        <span class="text-danger"></span>
                     </div>
-                    <div class="col-md-4">
-                        <label class="text-secondary small">
+                    <div class="form-group mb-3">
+                        <label class="text-secondary fw-bold">
                             Email
                         </label>
-                            <input asp-for="tbl_Application.supplier_email" type="text" class="form-control" />
-                            <span asp-validation-for="tbl_Application.supplier_email" class="text-danger"></span>
+                        <input type="text" class="form-control" placeholder="Enter email" />
+                        <span class="text-danger"></span>
                     </div>
-                    <div class="col-md-4">
-                        <label class="text-secondary small">
+                    <div class="form-group mb-3">
+                        <label class="text-secondary fw-bold">
                             Contact No.
                         </label>
-                            <input asp-for="tbl_Application.supplier_contact_no" type="text" class="form-control" />
-                            <span asp-validation-for="tbl_Application.supplier_contact_no" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="text-secondary small">
-                            Number of chainsaws to be purchased/ imported
-                        </label>
-                            <input asp-for="tbl_Application.qty" class="form-control" />
-                            <span asp-validation-for="tbl_Application.qty" class="text-danger"></span>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="text-secondary small">
-                            Specification
-                        </label>
-                            <input asp-for="tbl_Application.tbl_specification_id" class="form-control" />
-                            <span asp-validation-for="tbl_Application.tbl_specification_id" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="row mb-5">
-                    <div class="col-md-12">
-                        <label class="text-secondary small">
-                            Purpose
-                        </label>
-                            <textarea asp-for="tbl_Application.purpose" class="form-control">
-
-                        </textarea>
-                            <span asp-validation-for="tbl_Application.purpose" class="text-danger"></span>
-                    </div>
-                </div>
-                
-                <h4 class="text-secondary fw-bold mb-4">Attach Required Documents</h4>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="text-secondary small">
-                            Attach Forms
-                        </label>
-                            <input type="file" asp-for="filesUpload.Files" class="form-control" multiple />
-                    </div>
-                    
-                </div>
-                <div class="row mb-5">
-                    <div class="col-md-6">
-                        <label class="text-secondary small">
-                            Set Date of Inspection
-                        </label>
-                            <input asp-for="tbl_Application.date_of_inspection" type="date" class="form-control" />
-                            <span asp-validation-for="tbl_Application.date_of_inspection" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="row mb-4">
-                    <div class="col-md-12 d-flex justify-content-center">
-                        @* <button id="btnSubmit" class="btn btn-primary">Submit</button> *@
-                        <input type="submit" @* id="btnSubmit" *@ value="Submit" class="btn btn-primary"/>
+                        <input type="text" class="form-control" placeholder="Enter contact number" />
+                        <span class="text-danger"></span>
                     </div>
                 </div>
             </div>
-            </form>
+            <div class="col-md-6">
+                <div class="p-4 shadow h-100">
+                    <h2 class="text-secondary fw-bold mb-4">Permit</h2>
+                    <div class="form-group mb-3">
+                        <label class="text-secondary fw-bold">
+                            Permit Type
+                        </label>
+                        <select class="form-select" aria-label="Permit Type">
+                            <option selected disabled>- Select Permit Type -</option>
+                            <option value="5">Authority to Lease</option>
+                            <option value="6">Authority to Rent</option>
+                            <option value="7">Authority to Lend</option>
+                            <option value="13">Certificate of Registration</option>
+                            <option value="14">Permit to Re-sell/Transfer Ownership</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="text-secondary fw-bold">
+                            Number of chainsaws to be issued
+                        </label>
+                        <input type="text" class="form-control" placeholder="Enter number of chainsaws to be issued" />
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="text-secondary fw-bold">
+                            Specification
+                        </label>
+                        <input type="text" class="form-control" placeholder="Enter specification" />
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="text-secondary fw-bold">
+                            Purpose
+                        </label>
+                        <textarea class="form-control" placeholder="Enter purpose"></textarea>
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="text-secondary fw-bold">
+                            Set Date of Inspection
+                        </label>
+                        <input type="date" class="form-control" />
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
         </div>
-
+        <div class="row m-0 mb-4">
+            <div class="col-md-12">
+                <div class="p-4 shadow h-100">
+                    <div class="d-flex gap-4 mb-5">
+                        <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
+                        <button type="button" class="btn btn-primary"><i data-feather="upload"></i> Upload</button>
+                    </div>
+                    <div class="d-flex mb-4 gap-3">
+                        <div class="card mw-18rem">
+                            <div class="card-body">
+                                <i class="fas fa-file-pdf text-light-green fs-1 mb-3"></i>
+                                <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">View</a></li>
+                                    <li><a class="dropdown-item" href="#">Delete</a></li>
+                                    <li><a class="dropdown-item" href="#">Download</a></li>
+                                </ul>
+                                <h6 class="card-title text-secondary">DOC1.pdf</h6>
+                                <ul class="list-unstyled small mb-0">
+                                    <li><span class="text-muted">type: .pdf</span></li>
+                                    <li><span class="text-muted">size: 512kb</span></li>
+                                    <li><span class="text-muted">uploaded: 10/4/2023</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card mw-18rem">
+                            <div class="card-body">
+                                <i class="fas fa-file-word text-light-green fs-1 mb-3"></i>
+                                <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">View</a></li>
+                                    <li><a class="dropdown-item" href="#">Delete</a></li>
+                                    <li><a class="dropdown-item" href="#">Download</a></li>
+                                </ul>
+                                <h6 class="card-title text-secondary">DOC2.docx</h6>
+                                <ul class="list-unstyled small mb-0">
+                                    <li><span class="text-muted">type: .docx</span></li>
+                                    <li><span class="text-muted">size: 512kb</span></li>
+                                    <li><span class="text-muted">uploaded: 10/4/2023</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card mw-18rem">
+                            <div class="card-body">
+                                <i class="fas fa-file-image text-light-green fs-1 mb-3"></i>
+                                <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">View</a></li>
+                                    <li><a class="dropdown-item" href="#">Delete</a></li>
+                                    <li><a class="dropdown-item" href="#">Download</a></li>
+                                </ul>
+                                <h6 class="card-title text-secondary">DOC3.jpg</h6>
+                                <ul class="list-unstyled small mb-0">
+                                    <li><span class="text-muted">type: .jpg</span></li>
+                                    <li><span class="text-muted">size: 512kb</span></li>
+                                    <li><span class="text-muted">uploaded: 10/4/2023</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end pe-2 me-1">
+            <button class="btn btn-primary mb-4">Submit</button>
+        </div>
     </div>
 </div>
 
