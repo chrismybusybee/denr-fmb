@@ -5,6 +5,8 @@ namespace FMB_CIS.Models
 {
     public class UserRegistrationViewModel
     {
+        /*
+        public int id;
         //[Required]
         [Display (Name ="First Name")]
         public string first_name { get; set; }
@@ -25,19 +27,19 @@ namespace FMB_CIS.Models
         [Display(Name = "Region")]
         public int tbl_region_id { get; set; }
         [Display(Name = "Province")]
-        //public int tbl_province_id { get; set; }
-        public string tbl_province_name { get; set; }
+        public int tbl_province_id { get; set; }
+        //public string tbl_province_name { get; set; }
         [Display(Name = "City")]
-        //public int tbl_city_id { get; set; }
-        public string tbl_city_name { get; set; }
+        public int tbl_city_id { get; set; }
+        //public string tbl_city_name { get; set; }
         [Display(Name = "Barangay")]
-        //public int tbl_brgy_id { get; set; }
-        public string tbl_brgy_name { get; set; }
+        public int tbl_brgy_id { get; set; }
+        //public string tbl_brgy_name { get; set; }
         public string street_address { get; set; }
         public string? tbl_division_id { get; set; }
         [Display (Name ="Email Address")]
         public string email { get; set; }
-        [DataType(DataType.Password)]
+        //[DataType(DataType.Password)]
         //[Required]
         //[Display (Name ="Password")]
         //public string password { get; set; }
@@ -55,6 +57,16 @@ namespace FMB_CIS.Models
         //public DateTime date_created { get; set; }
 
         //public DateTime date_modified { get; set; }
+        */
+
+        public IEnumerable<tbl_region>? tbl_Regions { get; set; }
+        public IEnumerable<tbl_province>? tbl_Provinces { get; set; }
+        public IEnumerable<tbl_city>? tbl_Cities { get; set; }
+        public IEnumerable<tbl_brgy>? tbl_Brgys { get; set; }
+        public IEnumerable<tbl_files>? tbl_Files { get; set; }
+        public FileUpload? filesUpload { get; set; }
+        public tbl_user? tbl_Users { get; set; }
+        public RECaptcha? reCaptcha { get; set;}
 
     }
 }

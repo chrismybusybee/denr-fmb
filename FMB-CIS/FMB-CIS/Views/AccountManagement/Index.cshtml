@@ -22,7 +22,55 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                @foreach (AcctApprovalViewModel item in Model.acctList)
+                {
+                    <tr>
+                        <td class="text-nowrap">
+                            @Html.DisplayFor(modelItem => item.userType)
+                        </td>
+                        <td class="text-nowrap">
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </td>
+                        <td class="text-nowrap">
+                            @Html.DisplayFor(modelItem => item.email)
+                        </td>
+                        <td class="text-nowrap">
+                            @Html.DisplayFor(modelItem => item.contact_no)
+                        </td>
+                        <td class="text-nowrap">
+                            @Html.DisplayFor(modelItem => item.street_address)
+                        </td>
+                        <td class="text-nowrap">
+                            @Html.DisplayFor(modelItem => item.city)
+                        </td>
+                        <td class="text-nowrap text-center d-flex justify-content-center">
+                            @if (item.status == true)
+                            {
+                                <div class="bg-success text-white px-3 pb-2 pt-1 rounded-pill w-105">
+                                    Approved
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="bg-secondary text-white px-3 pb-2 pt-1 rounded-pill w-105">
+                                    Pending
+                                </div>
+                            }
+
+                        </td>
+                        <td class="text-nowrap">
+                            <div class="d-flex justify-content-center gap-3">
+                                <a href="AccountManagement/AccountsApproval?uid=@item.userID" class="bg-green text-white px-1 pb-1 rounded" title="edit">
+                                    <i data-feather="edit" class="data-feather-20"></i>
+                                </a>
+                                <a href="#" class="bg-green text-white px-1 pb-1 rounded btnDelete" title="delete">
+                                    <i data-feather="trash-2" class="data-feather-20"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+@*                 <tr>
                     <td class="text-nowrap">Chainsaw Importer</td>
                     <td class="text-nowrap">Juan Dela Cruz</td>
                     <td class="text-nowrap">juan@email.com</td>
@@ -90,7 +138,7 @@
                             </a>
                         </div>
                     </td>
-                </tr>
+                </tr> *@
             </tbody>
         </table>
     </div>

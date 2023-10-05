@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using FMB_CIS;
+using reCAPTCHA.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +31,11 @@ builder.Services.AddDistributedMemoryCache();
 //builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>().AddDefaultTokenProviders(); //Added 2023-09-19
 //Token Validity
 builder.Services.Configure<DataProtectionTokenProviderOptions>(opts => opts.TokenLifespan = TimeSpan.FromHours(10)); //Added 2023-09-19
-
+// Configure reCAPTCHA settings from appsettings.json
+builder.Services.Configure<RecaptchaSettings>(builder.Configuration.GetSection("RecaptchaSettings"));
+ 
+ // Add reCAPTCHA services
+builder.Services.AddRecaptcha(builder.Configuration.GetSection("RecaptchaSettings"));
 
 builder.Services.AddSession(options =>
 {

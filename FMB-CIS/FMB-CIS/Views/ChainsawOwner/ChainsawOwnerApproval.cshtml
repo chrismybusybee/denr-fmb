@@ -195,42 +195,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="text-nowrap">
-                                    Form 01.doc
-                                </td>
-                                <td class="text-nowrap">
-                                    <div class="d-flex justify-content-center gap-3">
-                                        <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="view">
-                                            <i data-feather="eye" class="data-feather-20"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-nowrap">
-                                    Form 01.doc
-                                </td>
-                                <td class="text-nowrap">
-                                    <div class="d-flex justify-content-center gap-3">
-                                        <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="view">
-                                            <i data-feather="eye" class="data-feather-20"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-nowrap">
-                                    Form 01.doc
-                                </td>
-                                <td class="text-nowrap">
-                                    <div class="d-flex justify-content-center gap-3">
-                                        <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="view">
-                                            <i data-feather="eye" class="data-feather-20"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
+                            @foreach (tbl_files file in Model.tbl_Files)
+                            {
+                                <tr>
+                                    <td class="text-nowrap">
+                                        @file.filename
+                                    </td>
+                                    <td class="text-nowrap">
+                                        <div class="d-flex justify-content-center gap-3">
+                                            @* @Html.ActionLink("Download", "DownloadFile", new { filename = file.filename }) *@
+                                            <a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="bg-green text-white px-1 pb-1 rounded" title="view">
+                                                <i data-feather="eye" class="data-feather-20"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>

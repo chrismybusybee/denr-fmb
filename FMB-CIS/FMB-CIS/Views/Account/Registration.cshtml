@@ -1,4 +1,5 @@
 ﻿@model FMB_CIS.Models.UserRegistrationViewModel
+@* @model FMB_CIS.Models.UserRegistrationViewModel *@
 @{
     ViewBag.Title = "Registration";
 }
@@ -33,14 +34,15 @@
                 </div>
             </div>
         </div>
-
-        <form asp-action="Registration" id="RegForm" role="form" class="w-75 mx-auto">
+        <h3 align="center">REGISTER YOUR ACCOUNT</h3>
+        <form asp-action="Registration" id="RegForm" role="form" class="w-75 mx-auto" enctype="multipart/form-data">
             <div class="row setup-content" id="step-1">
+                <center><label class="control-label text-align:center">Choose Your User Type</label></center>
                 <div class="col-xs-6 col-md-offset-3">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="control-label fw-bold text-secondary">USER TYPE</label>
-                            <select asp-for="tbl_user_types_id" class="form-control" aria-label="User Type" required="required">
+                            <label class="control-label small">User Type</label>
+                            <select asp-for="tbl_Users.tbl_user_types_id" class="form-control" aria-label="User Type" required="required">
                                 <option value="" selected disabled>- Select User Type -</option>
                                 <option value="1">Chainsaw Importer Only</option>
                                 <option value="2">Chainsaw Seller Only</option>
@@ -50,7 +52,7 @@
                                 <option value="6">Chainsaw Seller and Owner</option>
                                 <option value="7">Chainsaw Importer, Owner, and Seller</option>
                             </select>
-                            <span asp-validation-for="tbl_user_types_id" class="text-danger"></span>
+                            <span asp-validation-for="tbl_Users.tbl_user_types_id" class="text-danger"></span>
                         </div>
                         <div class="text-center mt-4">
                             <button class="btn btn-primary nextBtn text-center float-end" type="button">Next</button>
@@ -59,28 +61,29 @@
                 </div>
             </div>
             <div class="row setup-content" id="step-2">
+                <center><label class="control-label">User Information</label></center>
                 <div class="col-xs-6 col-md-offset-3">
                     <div class="col-md-12">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group mb-3">
-                            <label asp-for="first_name" class="control-label fw-bold text-secondary">FIRST NAME</label>
-                            <input asp-for="first_name" class="form-control" required="required" />
-                            <span asp-validation-for="first_name" class="text-danger"></span>
+                            <label asp-for="tbl_Users.first_name" class=" control-label small">First Name</label>
+                            <input asp-for="tbl_Users.first_name" class="form-control" required="required" />
+                            <span asp-validation-for="tbl_Users.first_name" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for="middle_name" class="control-label fw-bold text-secondary">MIDDLE NAME</label>
-                            <input asp-for="middle_name" class="form-control" required="required" />
-                            <span asp-validation-for="middle_name" class="text-danger"></span>
+                            <label asp-for="tbl_Users.middle_name" class="control-label small">Middle Name</label>
+                            <input asp-for="tbl_Users.middle_name" class="form-control" required="required" />
+                            <span asp-validation-for="tbl_Users.middle_name" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for="last_name" class="control-label fw-bold text-secondary">LAST NAME</label>
-                            <input asp-for="last_name" class="form-control" required="required" />
-                            <span asp-validation-for="last_name" class="text-danger"></span>
+                            <label asp-for="tbl_Users.last_name" class="control-label small">Last Name</label>
+                            <input asp-for="tbl_Users.last_name" class="form-control" required="required" />
+                            <span asp-validation-for="tbl_Users.last_name" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="suffix" class="control-label fw-bold text-secondary">SUFFIX <span class="text-muted">(if any)</span></label>
-                            <input asp-for="suffix" class="form-control" />
-                            <span asp-validation-for="suffix" class="text-danger"></span>
+                            <label asp-for="tbl_Users.suffix" class="form-label small">Suffix</label>
+                            <input asp-for="tbl_Users.suffix" class="form-control" />
+                            <span asp-validation-for="tbl_Users.suffix" class="text-danger"></span>
                         </div>
                         <div class="text-center mt-4">
                             <button class="btn btn-secondary prevBtn float-start" type="button">Previous</button>
@@ -90,18 +93,19 @@
                 </div>
             </div>
             <div class="row setup-content" id="step-3">
+                <center><label class="control-label">User Information</label></center>
                 <div class="col-xs-6 col-md-offset-3">
                     <div class="col-md-12">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group mb-3">
-                            <label asp-for="email" class="control-label text-secondary fw-bold">EMAIL <span class="text-muted">(please use official email address)</span></label>
-                            <input asp-for="email" class="form-control" placeholder="name@address.com"  required="required"/>
-                            <span asp-validation-for="email" class="text-danger"></span>
+                            <label asp-for="tbl_Users.email" class="control-label small">Email (Please use official email address)</label>
+                            <input asp-for="tbl_Users.email" class="form-control" placeholder="name@address.com" required="required" />
+                            <span asp-validation-for="tbl_Users.email" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="contact_no" class="control-label fw-bold text-secondary">CONTACT NUMBER <span class="text-muted">(11 digits)</span></label>
-                            <input asp-for="contact_no" class="form-control" placeholder="09XX XXX XXXX" required="required"/>
-                            <span asp-validation-for="contact_no" class="text-danger"></span>
+                            <label asp-for="tbl_Users.contact_no" class="control-label small">Contact Number (11 Digits)</label>
+                            <input asp-for="tbl_Users.contact_no" class="form-control" placeholder="09XX XXX XXXX" required="required" />
+                            <span asp-validation-for="tbl_Users.contact_no" class="text-danger"></span>
                         </div>
                         <div class="text-center mt-4">
                             <button class="btn btn-secondary prevBtn float-start" type="button">Previous</button>
@@ -111,22 +115,23 @@
                 </div>
             </div>
             <div class="row setup-content" id="step-4">
+                <center><label class="control-label">User Information</label></center>
                 <div class="col-xs-6 col-md-offset-3">
                     <div class="col-md-12">
                         <div class="form-group mb-3">
-                            <label asp-for="birth_date" class="control-label fw-bold text-secondary">BIRTH DATE <span class="text-muted">(must be 18 years old and above)</span></label>
-                            <input asp-for="birth_date" type="date" class="form-control" required="required" />
-                            <span asp-validation-for="birth_date" class="text-danger"></span>
+                            <label asp-for="tbl_Users.birth_date" class="control-label small">Birth Date (Must be 18 years old and above)</label>
+                            <input asp-for="tbl_Users.birth_date" type="date" class="form-control" required="required" />
+                            <span asp-validation-for="tbl_Users.birth_date" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for="valid_id" class="control-label fw-bold text-secondary">VALID I.D.</label>
-                            <input asp-for="valid_id" class="form-control" required="required" />
-                            <span asp-validation-for="valid_id" class="text-danger"></span>
+                            <label asp-for="tbl_Users.valid_id" class="control-label small">Valid ID</label>
+                            <input asp-for="tbl_Users.valid_id" class="form-control" required="required" />
+                            <span asp-validation-for="tbl_Users.valid_id" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="valid_id_no" class="control-label fw-bold text-secondary">VALID I.D. NUMBER</label>
-                            <input asp-for="valid_id_no" class="form-control" required="required" />
-                            <span asp-validation-for="valid_id_no" class="text-danger"></span>
+                            <label asp-for="tbl_Users.valid_id_no" class="control-label small">Valid ID Number</label>
+                            <input asp-for="tbl_Users.valid_id_no" class="form-control" required="required" />
+                            <span asp-validation-for="tbl_Users.valid_id_no" class="text-danger"></span>
                         </div>
                         <div class="text-center mt-4">
                             <button class="btn btn-secondary prevBtn float-start" type="button">Previous</button>
@@ -136,55 +141,62 @@
                 </div>
             </div>
             <div class="row setup-content" id="step-5">
+                <center><label class="control-label">User Information</label></center>
                 <div class="col-xs-6 col-md-offset-3">
                     <div class="col-md-12">
                         <div class="form-group mb-3">
-                            <label asp-for="street_address" class="control-label fw-bold text-secondary">STREET ADDRESS</label>
-                            <input asp-for="street_address" class="form-control" required="required" />
-                            <span asp-validation-for="street_address" class="text-danger"></span>
+                            <label asp-for="tbl_Users.street_address" class="control-label small">Street Address</label>
+                            <input asp-for="tbl_Users.street_address" class="form-control" required="required" />
+                            <span asp-validation-for="tbl_Users.street_address" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for="tbl_brgy_name" class="control-label fw-bold text-secondary">BARANGAY</label>
-                            <input asp-for="tbl_brgy_name" class="form-control" required="required" />
-                            <span asp-validation-for="tbl_brgy_name" class="text-danger"></span>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label asp-for="tbl_city_name" class="control-label fw-bold text-secondary">CITY/MUNICIPALITY</label>
-                            <input asp-for="tbl_city_name" class="form-control" required="required" />
-                            <span asp-validation-for="tbl_city_name" class="text-danger"></span>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label asp-for="tbl_province_name" class="control-label fw-bold text-secondary">PROVINCE</label>
-                            <input asp-for="tbl_province_name" class="form-control" required="required" />
-                            <span asp-validation-for="tbl_province_name" class="text-danger"></span>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label asp-for="tbl_region_id" class="control-label fw-bold text-secondary">REGION</label>
-                            <select asp-for="tbl_region_id" class="form-select" aria-label="User Type" required="required">
-                                <option selected disabled>- Select Region -</option>
-                                <option value="1">Region I</option>
-                                <option value="2">Region II</option>
-                                <option value="3">Region III</option>
-                                <option value="4">Region IV-A</option>
-                                <option value="5">Region IV-B</option>
-                                <option value="6">Region V</option>
-                                <option value="7">Region VI</option>
-                                <option value="8">Region VII</option>
-                                <option value="8">Region VIII</option>
-                                <option value="10">Region IX</option>
-                                <option value="11">Region X</option>
-                                <option value="12">Region XI</option>
-                                <option value="13">Region XII</option>
-                                <option value="14">Region XIII</option>
-                                <option value="15">NCR</option>
-                                <option value="16">CAR</option>
-                                <option value="17">BARMM</option>
+                            <label asp-for="tbl_Users.tbl_region_id" class="control-label small">Region</label>
+                            <select asp-for="tbl_Users.tbl_region_id" class="form-select" aria-label="Regions" required="required" id="regions">
+                                <option selected disabled>-- Select Region --</option>
+                                @foreach (tbl_region reg in Model.tbl_Regions)
+                                {
+                                    <option value="@reg.id" data-regcode="@reg.regCode">@reg.name</option>
+                                }
                             </select>
-                            <span asp-validation-for="tbl_region_id" class="text-danger"></span>
+                            <span asp-validation-for="tbl_Users.tbl_region_id" class="text-danger"></span>
                         </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="tbl_Users.tbl_province_id" class="control-label small">Province</label>
+                            <select asp-for="tbl_Users.tbl_province_id" class="form-select" aria-label="ProvincesList" required="required" id="ProvincesList">
+                                <option selected disabled>-- Select Province --</option>
+                                @foreach (tbl_province prov in Model.tbl_Provinces)
+                                {
+                                    <option value="@prov.id" data-regcode="@prov.regCode" data-provcode ="@prov.provCode">@prov.name</option>
+                                }
+                            </select>
+                            <span asp-validation-for="tbl_Users.tbl_province_id" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="tbl_Users.tbl_city_id" class="control-label small">City/Municipality</label>
+                            <select asp-for="tbl_Users.tbl_city_id" class="form-select" aria-label="Cities/Municipalities" required="required" id="CityList">
+                                <option selected disabled>-- Select City/Municipality --</option>
+                                @foreach (tbl_city ct in Model.tbl_Cities)
+                                {
+                                    <option value="@ct.id" data-provcode="@ct.provCode" data-ctcode="@ct.citymunCode">@ct.name</option>
+                                }
+                            </select>
+                            <span asp-validation-for="tbl_Users.tbl_city_id" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="tbl_Users.tbl_brgy_id" class="control-label small">Barangay</label>
+                            <select asp-for="tbl_Users.tbl_brgy_id" class="form-select" aria-label="Barangays" required="required" id="BrgyList">
+                                <option selected disabled>-- Select Barangay --</option>
+                                @foreach (tbl_brgy barangay in Model.tbl_Brgys)
+                                {
+                                    <option value="@barangay.id" data-ctcode="@barangay.citymunCode" data-brgycode = "@barangay.brgyCode">@barangay.name</option>
+                                }
+                            </select>
+                            <span asp-validation-for="tbl_Users.tbl_brgy_id" class="text-danger"></span>
+                        </div>
+                        
                         <div class="form-group" hidden="hidden">
-                            <label asp-for="tbl_division_id" class="form-label small">DIVISION ID</label>
-                            <input asp-for="tbl_division_id" class="form-control" value=" " disabled />
+                            <label asp-for="tbl_Users.tbl_division_id" class="form-label small">DIVISION ID</label>
+                            <input asp-for="tbl_Users.tbl_division_id" class="form-control" value=" " disabled />
                         </div>
                         <div class="text-center mt-4">
                             <button class="btn btn-secondary prevBtn float-start" type="button">Previous</button>
@@ -194,20 +206,39 @@
                 </div>
             </div>
             <div class="row setup-content" id="step-6">
+                <center><label class="control-label">Provide Documents</label></center>
                 <div class="col-xs-6 col-md-offset-3">
                     <div class="col-md-12">
                         <div class="form-group" hidden="hidden">
-                            <label asp-for="comment" class="form-label small">Remarks</label>
-                            <input asp-for="comment" class="form-control" disabled />
-                            <span asp-validation-for="comment" class="text-danger"></span>
+                            <label asp-for="tbl_Users.comment" class="form-label small">Remarks</label>
+                            <input asp-for="tbl_Users.comment" class="form-control" disabled />
+                            <span asp-validation-for="tbl_Users.comment" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-5">
-                            <label class="control-label fw-bold text-secondary">UPLOAD YOUR PICTURE</label>
-                            <input type="file" class="form-control" />
+                            <label class="control-label small text-black">Attach Forms</label>
+                            <input type="file" asp-for="filesUpload.Files" class="form-control" multiple />
                         </div>
-                        <div class="mb-5">
-                            <small class="text-secondary my-5 fs-5">
-                                By submitting this form, you agree to our <a href="#" target="_blank">Terms and Conditions</a> & <a href="#" target="_blank">Privacy Policy</a>
+
+                        @* <input type="hidden" id="hdnGoogleRecaptcha" required><br />
+                        <p>reCAPTCHA Token (Valid for 2 minutes)</p>
+                        <label id="lblValue">---</label><br /><br /> *@
+                        @* <div class="g-recaptcha" data-sitekey="@Configuration["RecaptchaSettings:SiteKey"]"></div> *@
+
+                        <div id="dvCaptcha">
+                        </div>
+                        <input type="hidden" id="hfCaptcha" />
+                        <span id="rfvCaptcha" class="error" style="display:none">Captcha validation is required.</span>
+                        <br />
+
+                        @* <div class="g-recaptcha" data-sitekey="6LfQKXkoAAAAABwcL6avWNOL0tUncx8sxrBEcrEP"></div>
+                        <br /> *@
+                        @* CAPTCHA TEST *@
+                        @* <div id="divcaptch"></div>
+                        <input id="textcaptcha" type="text" style="display:none" required /> *@
+                        <br />
+                        <div class="text-center mb-4">
+                            <small class="text-secondary text-center my-5 fs-5">
+                                By submitting this form, you agree to our <a href="@Url.Action("TermsPolicy", "Home")" target="_blank" class="text-decoration-none">Privacy Policy and Terms & Conditions.</a>
                             </small>
                         </div>
                         <div class="text-center mt-4">
@@ -224,6 +255,10 @@
 <partial name="~/Views/Modals/AccountModal.cshtml" />
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+        async defer></script>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -279,10 +314,49 @@
         $('div.setup-panel div a.btn-primary').trigger('click');
         // Step by step form end
 
+        //captcha
+        var onloadCallback = function () {
+            grecaptcha.render('dvCaptcha', {
+                'sitekey': '@Model.reCaptcha.Key',
+                'callback': function (response) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Home/AjaxMethod",
+                        data: { response: response },
+                        success: function (r) {
+                            var captchaResponse = jQuery.parseJSON(r.Response);
+                            if (captchaResponse.success) {
+                                $("#hfCaptcha").val(captchaResponse.success);
+                                $("#rfvCaptcha").hide();
+                            } else {
+                                $("#hfCaptcha").val("");
+                                $("#rfvCaptcha").show();
+                                var error = captchaResponse["error-codes"][0];
+                                $("#rfvCaptcha").html("RECaptcha error. " + error);
+                            }
+                        }
+                    });
+                }
+            });
+        };
+        $(function () {
+            $("#btnSubmit").click(function () {
+                $("#rfvCaptcha").hide();
+                if ($("#hfCaptcha").val() == "") {
+                    $("#rfvCaptcha").show();
+                }
+            });
+        });
+        //Captcha END
+
         feather.replace();
 
         $("#submitBtn").click(function () {
             $("#confirmSubmitModal").modal("show");
+            $("#rfvCaptcha").hide();
+            if ($("#hfCaptcha").val() == "") {
+                $("#rfvCaptcha").show();
+            }
         });
 
         $("#backBtn").click(function () {
@@ -324,6 +398,39 @@
             hideModal();
         }
     });
+
+    //For Location Dropdowns
+
+    // console.log(region_code);
+    $(document).ready(function () {
+        $("#regions").change(function () {
+            
+            var rcod = $("#regions option:selected").attr("data-regcode");
+            $("#ProvincesList").children("option").hide();
+            $("#ProvincesList option[data-regcode='" + rcod + "']").show();
+        });
+    });
+
+    //CITY FILTER
+    $(document).ready(function () {
+        $("#ProvincesList").change(function () {
+            //alert($("#ProvincesList option:selected").val());
+            var pcod = $("#ProvincesList option:selected").attr("data-provcode");
+            $("#CityList").children("option").hide();
+            $("#CityList option[data-provcode='" + pcod + "']").show();
+        });
+    });
+    $("#BrgyList").children("option").hide();
+    //Barangay Filter
+    $(document).ready(function () {
+        $("#CityList").change(function () {
+
+            var ccod = $("#CityList option:selected").attr("data-ctcode");
+            $("#BrgyList").children("option").hide();
+            $("#BrgyList option[data-ctcode='" + ccod + "']").show();
+        });
+    });
+
 </script>
 
 <style type="text/css">

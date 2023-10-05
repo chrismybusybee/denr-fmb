@@ -150,11 +150,23 @@ namespace FMB_CIS.Controllers
             }
             else
             {
-
-
-
                 ViewModel mymodel = new ViewModel();
                 //tbl_user user = _context.tbl_user.Find(uid);
+                //CODE FOR FILE DOWNLOAD
+                int applicID = Convert.ToInt32(appid);
+                //File Paths from Database
+                var filesFromDB = _context.tbl_files.Where(f => f.tbl_application_id == applicID).ToList();
+                List<tbl_files> files = new List<tbl_files>();
+
+                foreach (var fileList in filesFromDB)
+                {
+                    files.Add(new tbl_files { filename = fileList.filename, path = fileList.path });
+                    //files.Add(new tbl_files { filename = f });
+                }
+
+                mymodel.tbl_Files = files;
+                //END FOR FILE DOWNLOAD
+
                 if (uid == null || appid == null)
                 {
                     ModelState.AddModelError("", "Invalid Seller Application");
@@ -184,7 +196,7 @@ namespace FMB_CIS.Controllers
                                          join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                          join pS in _context.tbl_permit_status on a.status equals pS.id
                                          where a.tbl_user_id == usid && a.id == applid
-                                         select new ApplicantListViewModel { id = a.id, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, user_type = usrtyps.name, valid_id = usr.valid_id, valid_id_no = usr.valid_id_no, birth_date = usr.birth_date.ToString(), tbl_region_id = usr.tbl_region_id, tbl_province_id = usr.tbl_province_id, tbl_city_id = usr.tbl_city_id, tbl_brgy_id = usr.tbl_brgy_id, comment = usr.comment };
+                                         select new ApplicantListViewModel { id = a.id, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, user_type = usrtyps.name, valid_id = usr.valid_id, valid_id_no = usr.valid_id_no, birth_date = usr.birth_date.ToString(), tbl_region_id = (int)usr.tbl_region_id, tbl_province_id = (int)usr.tbl_province_id, tbl_city_id = (int)usr.tbl_city_id, tbl_brgy_id = (int)usr.tbl_brgy_id, comment = usr.comment };
 
                     mymodel.applicantListViewModels = applicationMod;
                     //mymodel.tbl_Users = UserInfo;
@@ -193,6 +205,20 @@ namespace FMB_CIS.Controllers
             }
 
         }
+
+        //For File Download
+        public FileResult DownloadFile(string fileName, string path)
+        {
+            //Build the File Path.
+            string pathWithFilename = path + "//" + fileName;
+            //Read the File data into Byte Array.
+            byte[] bytes = System.IO.File.ReadAllBytes(pathWithFilename);
+
+            //Send the File to Download.
+            return File(bytes, "application/octet-stream", fileName);
+        }
+
+
         [HttpPost]
         //[Url("?email={email}&code={code}")]
         public IActionResult ChainsawSellerApproval(int? appID, int? uid, string SubmitButton, ViewModel viewMod)
@@ -294,7 +320,7 @@ namespace FMB_CIS.Controllers
                                      join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                      join pS in _context.tbl_permit_status on a.status equals pS.id
                                      //where a.tbl_user_id == userID
-                                     select new ApplicantListViewModel { id = a.id, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = usr.id };
+                                     select new ApplicantListViewModel { id = a.id, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id };
 
                 mymodel.applicantListViewModels = applicationMod;
 
@@ -330,7 +356,7 @@ namespace FMB_CIS.Controllers
                                          application_type = appt.name, 
                                          permit_type = pT.name, 
                                          permit_status = pS.status, 
-                                         tbl_user_id = usr.id };
+                                         tbl_user_id = (int)usr.id };
 
                 mymodel.applicantListViewModels = applicationMod;
 

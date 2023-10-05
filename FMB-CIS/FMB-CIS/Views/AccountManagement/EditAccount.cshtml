@@ -1,5 +1,5 @@
 ﻿@using System.Security.Claims;
-@model FMB_CIS.Models.PermitToImportApplicationViewModel
+@model FMB_CIS.Models.ViewModel
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Account Management";
@@ -9,166 +9,238 @@
     <div id="card">
         <div class="row m-0">
             <div class="col-md-12">
-                <a href="@Url.Action("Index", "AccountManagement")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
-                <div class="row mt-4">
-                    <div class="col-md-4">
-                        <div class="form-group mb-2">
-                            <label class="form-label small">User Type</label>
-                            <select class="form-select" aria-label="User Type">
-                                <option selected disabled>- Select User Type -</option>
-                                <option value="1">Chainsaw Importer Only</option>
-                                <option value="2">Chainsaw Seller Only</option>
-                                <option value="3">Chainsaw Owner Only</option>
-                                <option value="4">Chainsaw Importer and Seller</option>
-                                <option value="5">Chainsaw Importer and Owner</option>
-                                <option value="6">Chainsaw Seller and Owner</option>
-                                <option value="7">Chainsaw Importer, Owner, and Seller</option>
+                <div class="alert alert-danger" role="alert">
+                    Your account is not yet approved by the CENRO Officer. 
+                    For the meantime, you will be allowed to edit your information if you wish to. 
+                    If your account has been declined, you may read the comments left by the officer. Thank you!
+                </div>
+                <form asp-action="EditAccount" id="EditAcctForm" role="form" class="w-75 mx-auto" enctype="multipart/form-data">
+                    <input asp-for="uid" type="hidden" />
+                    <a href="@Url.Action("Index", "AccountManagement")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <label class="form-label small">User Type</label>
+                                <select asp-for="tbl_User.tbl_user_types_id" class="form-select" aria-label="User Type">
+                                    <option selected disabled>- Select User Type -</option>
+                                    <option value="1">Chainsaw Importer Only</option>
+                                    <option value="2">Chainsaw Seller Only</option>
+                                    <option value="3">Chainsaw Owner Only</option>
+                                    <option value="4">Chainsaw Importer and Seller</option>
+                                    <option value="5">Chainsaw Importer and Owner</option>
+                                    <option value="6">Chainsaw Seller and Owner</option>
+                                    <option value="7">Chainsaw Importer, Owner, and Seller</option>
+                                </select>
+                                <span class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-4" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label small">First Name</label>
+                                                <input asp-for="tbl_User.first_name" class="form-control" />
+                                                <span class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label small">Middle Name</label>
+                                                <input asp-for="tbl_User.middle_name" class="form-control" />
+                                                <span class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label small">Last Name</label>
+                                                <input asp-for="tbl_User.last_name" class="form-control" />
+                                                <span class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="form-label small">Suffix</label>
+                                                <input asp-for="tbl_User.suffix" class="form-control" />
+                                                <span class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="form-label small">Email</label>
+                                <input asp-for="tbl_User.email" class="form-control" placeholder="name@address.com" readonly />
+                                @* <span class="fw-bold">
+                                    @Html.DisplayFor(model => model.tbl_User.email)
+                                </span> *@
+                                <span class="text-danger"></span>
+                            </div>
+                        </div>
+                        @* <div class="col-md-3">
+                        <div class="form-group">
+                        <label asp-for="password" class="form-label small">Password</label>
+                        <input asp-for="password" class="form-control" placeholder="Password" />
+                        <span asp-validation-for="password" class="text-danger"></span>
+                        </div>
+                        </div>
+                        <div class="col-md-3">
+                        <div class="form-group">
+                        <label asp-for="confirmPassword" class="form-label small">Confirm Password</label>
+                        <input asp-for="confirmPassword" class="form-control" placeholder="Confirm Password" />
+                        <span asp-validation-for="confirmPassword" class="text-danger"></span>
+                        </div>
+                        </div> *@
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-label small">Contact Number (11 Digits)</label>
+                                <input asp-for="tbl_User.contact_no" class="form-control" placeholder="09XX XXX XXXX" />
+                                <span class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label small">Valid ID</label>
+                                <input asp-for="tbl_User.valid_id" class="form-control" />
+                                <span class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label small">Valid ID Number</label>
+                                <input asp-for="tbl_User.valid_id_no" class="form-control" />
+                                <span class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label small">Street Address</label>
+                                <input asp-for="tbl_User.street_address" class="form-control" />
+                                <span class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="tbl_User.tbl_region_id" class="control-label small">Region</label>
+                            <select asp-for="tbl_User.tbl_region_id" class="form-select" aria-label="Regions" required="required" id="regions">
+                                <option selected disabled>-- Select Region --</option>
+                                @foreach (tbl_region reg in Model.tbl_Regions)
+                                {
+                                    <option value="@reg.id" data-regcode="@reg.regCode">@reg.name</option>
+                                }
                             </select>
-                            <span class="text-danger"></span>
+                            <span asp-validation-for="tbl_User.tbl_region_id" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="tbl_User.tbl_province_id" class="control-label small">Province</label>
+                            <select asp-for="tbl_User.tbl_province_id" class="form-select" aria-label="ProvincesList" required="required" id="ProvincesList">
+                                <option selected disabled>-- Select Province --</option>
+                                @foreach (tbl_province prov in Model.tbl_Provinces)
+                                {
+                                    <option value="@prov.id" data-regcode="@prov.regCode" data-provcode="@prov.provCode">@prov.name</option>
+                                }
+                            </select>
+                            <span asp-validation-for="tbl_User.tbl_province_id" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="tbl_User.tbl_city_id" class="control-label small">City/Municipality</label>
+                            <select asp-for="tbl_User.tbl_city_id" class="form-select" aria-label="Cities/Municipalities" required="required" id="CityList">
+                                <option selected disabled>-- Select City/Municipality --</option>
+                                @foreach (tbl_city ct in Model.tbl_Cities)
+                                {
+                                    <option value="@ct.id" data-provcode="@ct.provCode" data-ctcode="@ct.citymunCode">@ct.name</option>
+                                }
+                            </select>
+                            <span asp-validation-for="tbl_User.tbl_city_id" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="tbl_User.tbl_brgy_id" class="control-label small">Barangay</label>
+                            <select asp-for="tbl_User.tbl_brgy_id" class="form-select" aria-label="Barangays" required="required" id="BrgyList">
+                                <option selected disabled>-- Select Barangay --</option>
+                                @foreach (tbl_brgy barangay in Model.tbl_Brgys)
+                                {
+                                    <option value="@barangay.id" data-ctcode="@barangay.citymunCode" data-brgycode="@barangay.brgyCode">@barangay.name</option>
+                                }
+                            </select>
+                            <span asp-validation-for="tbl_User.tbl_brgy_id" class="text-danger"></span>
                         </div>
                     </div>
-                </div>
-                <hr class="my-4" />
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="row mb-4">
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="col-md-10">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="form-label small">First Name</label>
-                                            <input class="form-control" />
-                                            <span class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="form-label small">Middle Name</label>
-                                            <input class="form-control" />
-                                            <span class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="form-label small">Last Name</label>
-                                            <input class="form-control" />
-                                            <span class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                </div>
+                    <div class="row mb-5">
+                        <div class="col-md-6">
+                            <table class="w-100 striped-table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-nowrap">
+                                            Name of form
+                                        </th>
+                                        <th class="text-nowrap text-center">
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (tbl_files file in Model.tbl_Files)
+                                    {
+                                        <tr>
+                                            <td class="text-nowrap">
+                                                @file.filename
+                                            </td>
+                                            <td class="text-nowrap">
+                                                <div class="d-flex justify-content-center gap-3">
+                                                    @* @Html.ActionLink("Download", "DownloadFile", new { filename = file.filename }) *@
+                                                    <a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="bg-green text-white px-1 pb-1 rounded" title="view">
+                                                        <i data-feather="eye" class="data-feather-20"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            @* <div class="form-group">
+                                <label class="form-label small">Attach Forms</label>
+                                <input type="text" class="form-control" />
+                                <span class="text-danger"></span>
+                            </div> *@
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label small">Attach Additional Forms</label>
+                                <input type="file" asp-for="filesUpload.Files" class="form-control" multiple />
                             </div>
-                            <div class="col-md-2">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label class="form-label small">Suffix</label>
-                                            <input class="form-control" />
-                                            <span class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row mb-4">
-                    <div class="col-md-8">
-                        <div class="form-group">
-                            <label class="form-label small">Email (Please use official email address)</label>
-                            <input class="form-control" placeholder="name@address.com" />
-                            <span class="text-danger"></span>
+                    <div class="row d-flex justify-content-center px-0 mb-5">
+                        <div class="col-md-11 d-flex flex-column gap-2">
+                            <span>
+                                Comments from Officers
+                            </span>
+                            @* @Html.DisplayFor(model => model.acctApprovalViewModels.birth_date) *@
+                            <textarea asp-for="tbl_User.comment" class="form-control" readonly></textarea>
                         </div>
                     </div>
-                    @* <div class="col-md-3">
-                    <div class="form-group">
-                    <label asp-for="password" class="form-label small">Password</label>
-                    <input asp-for="password" class="form-control" placeholder="Password" />
-                    <span asp-validation-for="password" class="text-danger"></span>
-                    </div>
-                    </div>
-                    <div class="col-md-3">
-                    <div class="form-group">
-                    <label asp-for="confirmPassword" class="form-label small">Confirm Password</label>
-                    <input asp-for="confirmPassword" class="form-control" placeholder="Confirm Password" />
-                    <span asp-validation-for="confirmPassword" class="text-danger"></span>
-                    </div>
-                    </div> *@
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label class="form-label small">Contact Number (11 Digits)</label>
-                            <input class="form-control" placeholder="09XX XXX XXXX" />
-                            <span class="text-danger"></span>
+                    <div class="row mb-4">
+                        <div class="col-md-12 d-flex justify-content-center">
+                            <button type="button" id="btnSave" class="btn btn-primary">Save</button>
                         </div>
                     </div>
-                </div>
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="form-label small">Valid ID</label>
-                            <input class="form-control" />
-                            <span class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="form-label small">Valid ID Number</label>
-                            <input class="form-control" />
-                            <span class="text-danger"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="form-label small">Street Address</label>
-                            <input class="form-control" />
-                            <span class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="form-label small">Barangay</label>
-                            <input class="form-control" />
-                            <span class="text-danger"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="form-label small">City/Municipality</label>
-                            <input class="form-control" />
-                            <span class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="form-label small">Province</label>
-                            <input class="form-control" />
-                            <span class="text-danger"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-5">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="form-label small">Attach Forms</label>
-                            <input type="text" class="form-control" />
-                            <span class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <input type="file" class="form-control mt-19rem" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-4">
-                    <div class="col-md-12 d-flex justify-content-center">
-                        <button type="button" id="btnSave" class="btn btn-primary">Save</button>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -177,6 +249,12 @@
 <script src="/js/jquery-3.7.1.min.js"></script>
 
 <script type="text/javascript">
+
+    const form = document.getElementById('EditAcctForm');
+    const showModalButton = document.getElementById('btnSave');
+    const confirmationModal = document.getElementById('confirmSaveModal');
+    const confirmButton = document.getElementById('confirmSaveBtn');
+
     $(document).ready(function () {
         $("#btnSave").click(function () {
             $("#confirmSaveModal").modal("show");
@@ -188,7 +266,69 @@
 
         $("#confirmSaveBtn").click(function () {
             $("#confirmSaveModal").modal("hide");
+            form.submit();
             $("#confirmSaveSuccessModal").modal("show");
         });
     });
+
+    
+
+    // Function to display the modal
+    function showModal() {
+        confirmationModal.style.display = 'block';
+    }
+
+    // Function to hide the modal
+    function hideModal() {
+        confirmationModal.style.display = 'none';
+    }
+
+    // Event listener for the "Submit" button
+    showModalButton.addEventListener('click', showModal);
+
+    // Event listener for the "Confirm" button
+    confirmButton.addEventListener('click', function () {
+        // Submit the form when the "Confirm" button is clicked
+        form.submit();
+    });
+
+    // Close the modal when the user clicks outside of it
+    window.addEventListener('click', function (event) {
+        if (event.target === confirmationModal) {
+            hideModal();
+        }
+    });
+
+    //For Location Dropdowns
+
+    // console.log(region_code);
+    $(document).ready(function () {
+        $("#regions").change(function () {
+            
+            var rcod = $("#regions option:selected").attr("data-regcode");
+            $("#ProvincesList").children("option").hide();
+            $("#ProvincesList option[data-regcode='" + rcod + "']").show();
+        });
+    });
+
+    //CITY FILTER
+    $(document).ready(function () {
+        $("#ProvincesList").change(function () {
+            //alert($("#ProvincesList option:selected").val());
+            var pcod = $("#ProvincesList option:selected").attr("data-provcode");
+            $("#CityList").children("option").hide();
+            $("#CityList option[data-provcode='" + pcod + "']").show();
+        });
+    });
+    //$("#BrgyList").children("option").hide();
+    //Barangay Filter
+    $(document).ready(function () {
+        $("#CityList").change(function () {
+
+            var ccod = $("#CityList option:selected").attr("data-ctcode");
+            $("#BrgyList").children("option").hide();
+            $("#BrgyList option[data-ctcode='" + ccod + "']").show();
+        });
+    });
+
 </script>
