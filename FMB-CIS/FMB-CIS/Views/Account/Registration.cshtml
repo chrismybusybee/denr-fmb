@@ -1,7 +1,14 @@
 ﻿@model FMB_CIS.Models.UserRegistrationViewModel
 @* @model FMB_CIS.Models.UserRegistrationViewModel *@
+
+@using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Options
+@using FMB_CIS.Data
+@inject IOptions<GoogleCaptchaConfig> GoogleCaptchaConfig
+
 @{
     ViewBag.Title = "Registration";
+    // var baseurl = ViewBag.BaseUrl;
 }
 
 <div class="container-fluid d-flex flex-column align-items-center justify-content-center">
@@ -36,6 +43,7 @@
         </div>
         <h3 align="center">REGISTER YOUR ACCOUNT</h3>
         <form asp-action="Registration" id="RegForm" role="form" class="w-75 mx-auto" enctype="multipart/form-data">
+            <input type="hidden" id="LoginViewModelToken" asp-for="Token" />
             <div class="row setup-content" id="step-1">
                 <center><label class="control-label text-align:center">Choose Your User Type</label></center>
                 <div class="col-xs-6 col-md-offset-3">
@@ -158,8 +166,12 @@
                                     <option value="@reg.id" data-regcode="@reg.regCode">@reg.name</option>
                                 }
                             </select>
+                            @* <select asp-for="tbl_Users.tbl_region_id" class="form-control"
+                                    asp-items="ViewBag.RegionData"
+                                    id="RegId" onchange="loadProvince(this)"></select> *@
                             <span asp-validation-for="tbl_Users.tbl_region_id" class="text-danger"></span>
                         </div>
+                        
                         <div class="form-group mb-3">
                             <label asp-for="tbl_Users.tbl_province_id" class="control-label small">Province</label>
                             <select asp-for="tbl_Users.tbl_province_id" class="form-select" aria-label="ProvincesList" required="required" id="ProvincesList">
@@ -169,6 +181,7 @@
                                     <option value="@prov.id" data-regcode="@prov.regCode" data-provcode ="@prov.provCode">@prov.name</option>
                                 }
                             </select>
+
                             <span asp-validation-for="tbl_Users.tbl_province_id" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
@@ -224,13 +237,16 @@
                         <label id="lblValue">---</label><br /><br /> *@
                         @* <div class="g-recaptcha" data-sitekey="@Configuration["RecaptchaSettings:SiteKey"]"></div> *@
 
-                        <div id="dvCaptcha">
+                        @* <div id="dvCaptcha">
                         </div>
                         <input type="hidden" id="hfCaptcha" />
                         <span id="rfvCaptcha" class="error" style="display:none">Captcha validation is required.</span>
-                        <br />
+                        <br /> *@
 
-                        @* <div class="g-recaptcha" data-sitekey="6LfQKXkoAAAAABwcL6avWNOL0tUncx8sxrBEcrEP"></div>
+                        @* <div id="reCaptchaV2"></div>
+                        <br> *@
+
+                        @* <div class="g-recaptcha" data-sitekey="@Model.reCaptcha.Key"></div>
                         <br /> *@
                         @* CAPTCHA TEST *@
                         @* <div id="divcaptch"></div>
@@ -256,9 +272,8 @@
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
-        async defer></script>
+<script src="https://www.google.com/recaptcha/api.js?render=@GoogleCaptchaConfig.Value.SiteKey"></script>
+
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -314,40 +329,25 @@
         $('div.setup-panel div a.btn-primary').trigger('click');
         // Step by step form end
 
-        //captcha
-        var onloadCallback = function () {
-            grecaptcha.render('dvCaptcha', {
-                'sitekey': '@Model.reCaptcha.Key',
-                'callback': function (response) {
-                    $.ajax({
-                        type: "POST",
-                        url: "/Home/AjaxMethod",
-                        data: { response: response },
-                        success: function (r) {
-                            var captchaResponse = jQuery.parseJSON(r.Response);
-                            if (captchaResponse.success) {
-                                $("#hfCaptcha").val(captchaResponse.success);
-                                $("#rfvCaptcha").hide();
-                            } else {
-                                $("#hfCaptcha").val("");
-                                $("#rfvCaptcha").show();
-                                var error = captchaResponse["error-codes"][0];
-                                $("#rfvCaptcha").html("RECaptcha error. " + error);
-                            }
-                        }
-                    });
-                }
+
+
+        //CAPTCHA V3 2023-OCT-06
+        function getToken() {
+            grecaptcha.ready(function () {
+                grecaptcha.execute('@GoogleCaptchaConfig.Value.SiteKey', { action: 'submit' }).then(function (token) {
+                    // Add your logic to submit to your backend server here.
+                    console.log(token);
+                    document.getElementById("LoginViewModelToken").value = token;
+                });
             });
-        };
+        }
+        setInterval(getToken, 115000)
         $(function () {
-            $("#btnSubmit").click(function () {
-                $("#rfvCaptcha").hide();
-                if ($("#hfCaptcha").val() == "") {
-                    $("#rfvCaptcha").show();
-                }
-            });
+            getToken();
         });
-        //Captcha END
+        //CAPTCHA V3 END 2023-OCT-06
+
+
 
         feather.replace();
 
@@ -399,9 +399,11 @@
         }
     });
 
+
+
     //For Location Dropdowns
 
-    // console.log(region_code);
+    console.log(region_code);
     $(document).ready(function () {
         $("#regions").change(function () {
             
@@ -421,8 +423,9 @@
         });
     });
     $("#BrgyList").children("option").hide();
-    //Barangay Filter
+    Barangay Filter
     $(document).ready(function () {
+
         $("#CityList").change(function () {
 
             var ccod = $("#CityList option:selected").attr("data-ctcode");

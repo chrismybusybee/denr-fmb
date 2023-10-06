@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Web.Helpers;
 using System.Net;
 using reCAPTCHA.AspNetCore;
+using Newtonsoft;
 
 
 namespace FMB_CIS.Controllers
@@ -22,13 +23,15 @@ namespace FMB_CIS.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly LocalContext _context;
+        private readonly GoogleCaptchaService _captchaService;
         private IEmailSender EmailSender { get; set; }
 
-        public AccountController(IConfiguration configuration, LocalContext context, IEmailSender emailSender)
+        public AccountController(IConfiguration configuration, LocalContext context, IEmailSender emailSender, GoogleCaptchaService captchaService)
         {
             this._configuration = configuration;
             _context = context;
             EmailSender = emailSender;
+            _captchaService = captchaService;
         }
 
 
@@ -79,7 +82,26 @@ namespace FMB_CIS.Controllers
             }
             model.tbl_Brgys = brgys;
             //End for barangays
-            model.reCaptcha = new RECaptcha();
+
+            //Test for Cascading Dropdown
+            //var _regions = _context.tbl_region.ToList();
+            //var _provinces = new List<tbl_province>();
+
+            //_regions.Add(new tbl_region() { id = 0, name = "--Select Region--" });
+            //_provinces.Add(new tbl_province() { id = 0, name = "--Select Province--" });
+
+            //ViewData["RegionData"] = new SelectList(_regions.OrderBy(s => s.id), "id", "name");
+            //ViewData["ProvinceData"] = new SelectList(_provinces.OrderBy(s => s.id), "id", "name");
+
+            //model.tbl_Regions = _regions;
+            //model.tbl_Provinces = _provinces;
+
+            //string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
+            //ViewData["BaseUrl"] = host;
+
+            //return View();
+
+            //model.reCaptcha = new RECaptcha();
             return View(model);
         }
 
@@ -110,14 +132,31 @@ namespace FMB_CIS.Controllers
             return View();
         }
 
+        //FOR CAPTCHA
+
+        [HttpPost]
+        public JsonResult AjaxMethod(string response)
+        {
+            RECaptcha recaptcha = new RECaptcha();
+            string url = "https://www.google.com/recaptcha/api/siteverify?secret=" + recaptcha.Secret + "&response=" + response;
+            recaptcha.Response = (new WebClient()).DownloadString(url);
+            return Json(recaptcha);
+        }
         // POST
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Registration(UserRegistrationViewModel model)
+        public async Task<IActionResult> Registration(UserRegistrationViewModel model)
         {
             //[Bind("first_name,middle_name,last_name,suffix,contact_no,valid_id,valid_id_no,birth_date,tbl_region_id,tbl_province_id,tbl_city_id,tbl_brgy_id,street_address,tbl_division_id,email,password,confirmPassword,comment,tbl_user_types_id")]
+
+            //Verify Response Token with Google [V3]
+            var captchaResult = await _captchaService.VerifyToken(model.Token);
+            if (!captchaResult)
+            {
+                return View(model);
+            }
             if (ModelState.IsValid)
             {
                 DAL dal = new DAL();
@@ -130,19 +169,7 @@ namespace FMB_CIS.Controllers
                 }
                 else
                 {
-                    // Verify reCAPTCHA
-                    //var recaptchaResponse = Request.Form["g-recaptcha-response"];
-                    //var recaptchaSettings = _configuration.GetSection("RecaptchaSettings").Get<RecaptchaSettings>();
 
-                    //var recaptchaService = new RecaptchaService();
-                    //var recaptchaResult = recaptchaService.VerifyRecaptcha(recaptchaResponse, recaptchaSettings.SecretKey);
-
-                    //if (!recaptchaResult.Success)
-                    //{
-                    //    // Handle reCAPTCHA verification failure
-                    //    ModelState.AddModelError("Recaptcha", "reCAPTCHA verification failed.");
-                    //    return View(model);
-                    //}
                     //Generate Temporary Password
                     string temPass = TempPass.Generate(32, 15);
                     //ENCRYPT TEMPORARY PASSWORD
@@ -284,16 +311,7 @@ namespace FMB_CIS.Controllers
             return View(model);
         }
 
-        //FOR CAPTCHA
 
-        [HttpPost]
-        public JsonResult AjaxMethod(string response)
-        {
-            RECaptcha recaptcha = new RECaptcha();
-            string url = "https://www.google.com/recaptcha/api/siteverify?secret=" + recaptcha.Secret + "&response=" + response;
-            recaptcha.Response = (new WebClient()).DownloadString(url);
-            return Json(recaptcha);
-        }
 
         [HttpPost]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)

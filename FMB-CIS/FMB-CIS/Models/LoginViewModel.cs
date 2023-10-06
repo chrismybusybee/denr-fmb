@@ -11,5 +11,7 @@ namespace FMB_CIS.Models
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string password { get; set; }
+        [Required]
+        public string Token { get; set; }
     }
 }

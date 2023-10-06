@@ -32,10 +32,13 @@ builder.Services.AddDistributedMemoryCache();
 //Token Validity
 builder.Services.Configure<DataProtectionTokenProviderOptions>(opts => opts.TokenLifespan = TimeSpan.FromHours(10)); //Added 2023-09-19
 // Configure reCAPTCHA settings from appsettings.json
-builder.Services.Configure<RecaptchaSettings>(builder.Configuration.GetSection("RecaptchaSettings"));
+builder.Services.Configure<RecaptchaSettings>(builder.Configuration.GetSection("RecaptchaSettings")); //Added 2023-Oct-5
  
  // Add reCAPTCHA services
-builder.Services.AddRecaptcha(builder.Configuration.GetSection("RecaptchaSettings"));
+builder.Services.AddRecaptcha(builder.Configuration.GetSection("RecaptchaSettings")); //Added 2023-Oct-5
+
+builder.Services.Configure<GoogleCaptchaConfig>(builder.Configuration.GetSection("GoogleReCaptcha")); //Added 2023-Oct-6
+builder.Services.AddTransient(typeof(GoogleCaptchaService));
 
 builder.Services.AddSession(options =>
 {

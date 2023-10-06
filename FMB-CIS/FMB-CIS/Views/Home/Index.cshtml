@@ -1,4 +1,8 @@
 ﻿@model FMB_CIS.Models.LoginViewModel
+@using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Options
+@using FMB_CIS.Data
+@inject IOptions<GoogleCaptchaConfig> GoogleCaptchaConfig
 @{
     //ViewData["Title"] = "Home Page";
     ViewBag.Title = "Login";
@@ -6,7 +10,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-
+    <input type="hidden" id="LoginViewModelToken" asp-for="Token" />
 <div class="container-fluid d-flex justify-content-center align-items-center min-vh-100">
     <div class="col-md-6 d-flex flex-column justify-content-center align-items-center mb-5 pb-5">
         <img src="~/assets/images/logo.png" class="mb-5 pb-5" />
@@ -64,6 +68,8 @@
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
+<script src="https://www.google.com/recaptcha/api.js?render=@GoogleCaptchaConfig.Value.SiteKey"></script>
+
 <script type="text/javascript">
     $(document).ready(function () {
         feather.replace();
@@ -89,4 +95,21 @@
             }
         });
     });
+
+    //CAPTCHA V3 2023-OCT-06
+    function getToken() {
+        grecaptcha.ready(function () {
+            grecaptcha.execute('@GoogleCaptchaConfig.Value.SiteKey', { action: 'submit' }).then(function (token) {
+                // Add your logic to submit to your backend server here.
+                console.log(token);
+                document.getElementById("LoginViewModelToken").value = token;
+            });
+        });
+    }
+    setInterval(getToken, 115000)
+    $(function () {
+        getToken();
+    });
+            //CAPTCHA V3 END 2023-OCT-06
+
 </script>
