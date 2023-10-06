@@ -1,6 +1,6 @@
 
 ﻿@using System.Security.Claims;
-@model FMB_CIS.Models.ApplicantListViewModel
+@model FMB_CIS.Models.ViewModel
 
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
@@ -13,8 +13,8 @@
     <div id="card">
         <form asp-action="ChainsawOwnerApproval" method="post" enctype="multipart/form-data">
             <div class="row m-0">
-                <input asp-for="id" value ="@Model.id" type="hidden" />
-                <input asp-for="tbl_user_id" value="@Model.tbl_user_id" type="hidden" />
+                <input asp-for="applicantViewModels.id" value="@Model.applicantViewModels.id" type="hidden" />
+                <input asp-for="applicantViewModels.tbl_user_id" value="@Model.applicantViewModels.tbl_user_id" type="hidden" />
                 <div class="d-flex justify-content-end gap-2">
                     @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO") == true)
                     {
@@ -44,7 +44,7 @@
                                             User Type
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="user_type" value="@Model.user_type">@Model.user_type</label>
+                                            <label asp-for="applicantViewModels.user_type" value="@Model.applicantViewModels.user_type">@Model.applicantViewModels.user_type</label>
                                         </span>
                                     </div>
                                 </div>
@@ -54,7 +54,7 @@
                                             Name
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="full_name" value="@Model.full_name">@Model.full_name</label>
+                                            <label asp-for="applicantViewModels.full_name" value="@Model.applicantViewModels.full_name">@Model.applicantViewModels.full_name</label>
                                         </span>
                                     </div>
                                 </div>
@@ -76,7 +76,7 @@
                                             Contact Number
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="contact" value="@Model.contact">@Model.contact</label>
+                                            <label asp-for="applicantViewModels.contact" value="@Model.applicantViewModels.contact">@Model.applicantViewModels.contact</label>
                                         </span>
                                     </div>
                                 </div>
@@ -88,7 +88,7 @@
                                             Valid ID
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="valid_id" value="@Model.valid_id">@Model.valid_id</label>
+                                            <label asp-for="applicantViewModels.valid_id" value="@Model.applicantViewModels.valid_id">@Model.applicantViewModels.valid_id</label>
                                         </span>
                                     </div>
                                 </div>
@@ -98,7 +98,7 @@
                                             Valid ID Number
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="valid_id_no" value="@Model.valid_id_no">@Model.valid_id_no</label>
+                                            <label asp-for="applicantViewModels.valid_id_no" value="@Model.applicantViewModels.valid_id_no">@Model.applicantViewModels.valid_id_no</label>
                                         </span>
                                     </div>
                                 </div>
@@ -110,7 +110,7 @@
                                             Birth Date
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="birth_date" value="@Model.birth_date">@Model.birth_date</label>
+                                            <label asp-for="applicantViewModels.birth_date" value="@Model.applicantViewModels.birth_date">@Model.applicantViewModels.birth_date</label>
                                         </span>
                                     </div>
                                 </div>
@@ -120,7 +120,7 @@
                                             Street Address
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="address" value="@Model.address">@Model.address</label>
+                                            <label asp-for="applicantViewModels.address" value="@Model.applicantViewModels.address">@Model.applicantViewModels.address</label>
                                         </span>
                                     </div>
                                 </div>
@@ -132,7 +132,7 @@
                                             Region
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="tbl_region_id" value="@Model.tbl_region_id">@Model.tbl_region_id</label>
+                                            <label asp-for="applicantViewModels.tbl_region_id" value="@Model.applicantViewModels.tbl_region_id">@Model.applicantViewModels.tbl_region_id</label>
                                         </span>
                                     </div>
                                 </div>
@@ -142,7 +142,7 @@
                                             Province
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="tbl_province_id" value="@Model.tbl_province_id">@Model.tbl_province_id</label>
+                                            <label asp-for="applicantViewModels.tbl_province_id" value="@Model.applicantViewModels.tbl_province_id">@Model.applicantViewModels.tbl_province_id</label>
                                         </span>
                                     </div>
                                 </div>
@@ -154,7 +154,7 @@
                                             City/Municipality
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="tbl_city_id" value="@Model.tbl_city_id">@Model.tbl_city_id</label>
+                                            <label asp-for="applicantViewModels.tbl_city_id" value="@Model.applicantViewModels.tbl_city_id">@Model.applicantViewModels.tbl_city_id</label>
                                         </span>
                                     </div>
                                 </div>
@@ -164,7 +164,7 @@
                                             Barangay
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="tbl_brgy_id" value="@Model.tbl_brgy_id">@Model.tbl_brgy_id</label>
+                                            <label asp-for="applicantViewModels.tbl_brgy_id" value="@Model.applicantViewModels.tbl_brgy_id">@Model.applicantViewModels.tbl_brgy_id</label>
                                         </span>
                                     </div>
 

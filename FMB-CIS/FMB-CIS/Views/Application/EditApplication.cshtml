@@ -22,8 +22,11 @@
                 <input asp-for="tbl_user_id" value="@Model.tbl_user_id" type="hidden" />
                 <input asp-for="email" value="@Model.email" type="hidden" />
                 <div class="d-flex justify-content-end gap-2">
-
+                    @if (@Model.permit_status != "Approved")
+                    {
                         <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" />
+                    }
+                    
 
                 </div>
             </div>
@@ -80,7 +83,15 @@
                                             Number of Chainsaws
                                         </label>
                                         <span class="fw-bold">
-                                            <input asp-for="qty" name="qty" value="@Model.qty" class="form-control" type="text" />
+                                            @if (@Model.permit_status == "Approved")
+                                            {
+                                                <label asp-for="qty" value="@Model.qty">@Model.qty</label>
+                                            }
+                                            else
+                                            {
+                                                <input asp-for="qty" name="qty" value="@Model.qty" class="form-control" type="text" />
+                                            }
+                                            
                                         </span>
                                     </div>
                                 </div>
@@ -90,7 +101,15 @@
                                             Specification
                                         </label>
                                         <span class="fw-bold">
-                                            <input asp-for="specification" name="specification" value="@Model.specification" class="form-control" type="text" />
+                                            @if (@Model.permit_status == "Approved")
+                                            {
+                                                <label asp-for="specification" value="@Model.specification">@Model.specification</label>
+                                            }
+                                            else
+                                            {
+                                                <input asp-for="specification" name="specification" value="@Model.specification" class="form-control" type="text" />
+                                            }
+                                            
 
                                         </span>
                                     </div>
@@ -104,8 +123,14 @@
                                             Address
                                         </label>
                                         <span class="fw-bold">
+                                            @if (@Model.permit_status == "Approved")
+                                            {
+                                                <label asp-for="address" value="@Model.address">@Model.address</label>
+                                            }
+                                            else
+                                            {
                                             <input asp-for="address" name="address" value="@Model.address" class="form-control" type="text" />
-                                            
+                                            }
                                         </span>
                                     </div>
                                 </div>
@@ -115,8 +140,14 @@
                                             Inspection Date
                                         </label>
                                         <span class="fw-bold">
-
+                                            @if (@Model.permit_status == "Approved")
+                                            {
+                                                <label asp-for="inspectionDate" value="@Model.inspectionDate">@Model.inspectionDate</label>
+                                            }
+                                            else
+                                            {
                                             <input asp-for="inspectionDate" name="inspectionDate" value="@Model.inspectionDate" class="form-control" type="text" />
+                                            }
                                         </span>
                                     </div>
                                 </div>
@@ -137,7 +168,14 @@
                             <label class="text-secondary small">
                                 Expected time of arrival
                             </label>
+                            @if (@Model.permit_status == "Approved")
+                            {
+                                <label asp-for="expectedTimeArrived" value="@Model.expectedTimeArrived">@Model.expectedTimeArrived</label>
+                            }
+                            else
+                            {
                             <input type="date" asp-for="expectedTimeArrived" class="form-control" />
+                            }
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -145,28 +183,39 @@
                             <label class="text-secondary small">
                                 Expected time of release
                             </label>
+                            @if (@Model.permit_status == "Approved")
+                            {
+                            <label asp-for="expectedTimeRelease" value="@Model.expectedTimeRelease">@Model.expectedTimeRelease</label>
+                            }
+                            else
+                            {
                             <input type="date" asp-for="expectedTimeRelease" class="form-control" />
+                            }
                         </div>
                     </div>
                 </div>
             }
             
             <hr/>
-            <div class="row d-flex justify-content-center m-0">
-                <div class="row d-flex justify-content-center px-0 mb-5">
+            @if (@Model.permit_status != "Approved")
+            {
+                <div class="row d-flex justify-content-center m-0">
+                    <div class="row d-flex justify-content-center px-0 mb-5">
                         <div class="col-md-11 d-flex flex-column gap-2">
                             <input type="file" asp-for="filesUpload.Files" class="form-control" multiple />
                         </div>
-                </div>
-                <div class="row d-flex justify-content-center px-0 mb-5">
-                    <div class="col-md-11 d-flex flex-column gap-2">
-                        <span>
-                            Purpose
-                        </span>
-                        <textarea asp-for="purpose" class="form-control"></textarea>
+                    </div>
+                    <div class="row d-flex justify-content-center px-0 mb-5">
+                        <div class="col-md-11 d-flex flex-column gap-2">
+                            <span>
+                                Purpose
+                            </span>
+                            <textarea asp-for="purpose" class="form-control"></textarea>
                         </div>
+                    </div>
                 </div>
-            </div>
+            }
+            
         </form>
 
     </div>

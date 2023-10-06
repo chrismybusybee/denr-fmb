@@ -7,6 +7,8 @@
         public IEnumerable<tbl_user>? tbl_Users { get; set; }
 
         public IEnumerable<ApplicantListViewModel>? applicantListViewModels { get; set; }
+
+        public ApplicantListViewModel? applicantViewModels { get; set; }
         public IEnumerable<tbl_files>? tbl_Files { get; set; }
         public string?    uid { get; set; }
         public string? appid { get; set; }

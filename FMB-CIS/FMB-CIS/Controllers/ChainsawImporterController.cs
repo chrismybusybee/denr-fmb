@@ -192,7 +192,7 @@ namespace FMB_CIS.Controllers
 
                     //HISTORY
                     var applicationtypelist = _context.tbl_application_type;
-                    var applicationMod = from a in applicationlist
+                    var applicationMod = (from a in applicationlist
                                          join usr in _context.tbl_user on a.tbl_user_id equals usr.id
                                          join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
                                          join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
@@ -216,9 +216,9 @@ namespace FMB_CIS.Controllers
                                              tbl_province_id = usr.tbl_province_id, 
                                              tbl_city_id = usr.tbl_city_id, 
                                              tbl_brgy_id = usr.tbl_brgy_id, 
-                                             comment = usr.comment };
-
+                                             comment = usr.comment });
                     mymodel.applicantListViewModels = applicationMod;
+                    //mymodel.applicantViewModels = applicationMod;
                     //mymodel.tbl_Users = UserInfo;
                     return View(mymodel);
                 }
