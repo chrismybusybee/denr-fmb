@@ -23,15 +23,15 @@ namespace FMB_CIS.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly LocalContext _context;
-        private readonly GoogleCaptchaService _captchaService;
+       
         private IEmailSender EmailSender { get; set; }
 
-        public AccountController(IConfiguration configuration, LocalContext context, IEmailSender emailSender, GoogleCaptchaService captchaService)
+        public AccountController(IConfiguration configuration, LocalContext context, IEmailSender emailSender)
         {
             this._configuration = configuration;
             _context = context;
             EmailSender = emailSender;
-            _captchaService = captchaService;
+           
         }
 
 
@@ -40,47 +40,47 @@ namespace FMB_CIS.Controllers
             UserRegistrationViewModel model = new UserRegistrationViewModel();
 
             //Generate List of Regions from the Database
-            var regionList = _context.tbl_region.ToList();
-            List<tbl_region> regions = new List<tbl_region>();
+            //var regionList = _context.tbl_region.ToList();
+            //List<tbl_region> regions = new List<tbl_region>();
 
-            foreach (var regList in regionList)
-            {
-                regions.Add(new tbl_region { name = regList.name, id = regList.id, regCode = regList.regCode });
-            }
-            model.tbl_Regions = regions;
+            //foreach (var regList in regionList)
+            //{
+            //    regions.Add(new tbl_region { name = regList.name, id = regList.id, regCode = regList.regCode });
+            //}
+            //model.tbl_Regions = regions;
             //End for region
 
             //Generate List of Provinces from the Database
-            var provinceList = _context.tbl_province.ToList();
-            List<tbl_province> provinces = new List<tbl_province>();
+            //var provinceList = _context.tbl_province.ToList();
+            //List<tbl_province> provinces = new List<tbl_province>();
 
-            foreach (var provList in provinceList)
-            {
-                provinces.Add(new tbl_province { name = provList.name, id = provList.id, regCode = provList.regCode, provCode = provList.provCode });
-            }
-            model.tbl_Provinces = provinces;
+            //foreach (var provList in provinceList)
+            //{
+            //    provinces.Add(new tbl_province { name = provList.name, id = provList.id, regCode = provList.regCode, provCode = provList.provCode });
+            //}
+            //model.tbl_Provinces = provinces;
             //End for provinces
 
             //Generate List of City from the Database
-            var cityList = _context.tbl_city.ToList();
-            List<tbl_city> cities = new List<tbl_city>();
+            //var cityList = _context.tbl_city.ToList();
+            //List<tbl_city> cities = new List<tbl_city>();
 
-            foreach (var ctList in cityList)
-            {
-                cities.Add(new tbl_city { name = ctList.name, id = ctList.id, regCode = ctList.regCode, provCode = ctList.provCode, citymunCode = ctList.citymunCode });
-            }
-            model.tbl_Cities = cities;
+            //foreach (var ctList in cityList)
+            //{
+            //    cities.Add(new tbl_city { name = ctList.name, id = ctList.id, regCode = ctList.regCode, provCode = ctList.provCode, citymunCode = ctList.citymunCode });
+            //}
+            //model.tbl_Cities = cities;
             //End for cities
 
             //Generate List of Barangay from the Database
-            var brgyList = _context.tbl_brgy.ToList();
-            List<tbl_brgy> brgys = new List<tbl_brgy>();
+            //var brgyList = _context.tbl_brgy.ToList();
+            //List<tbl_brgy> brgys = new List<tbl_brgy>();
 
-            foreach (var bgyList in brgyList)
-            {
-                brgys.Add(new tbl_brgy { name = bgyList.name, id = bgyList.id, regCode = bgyList.regCode, provCode = bgyList.provCode, citymunCode = bgyList.citymunCode, brgyCode = bgyList.brgyCode });
-            }
-            model.tbl_Brgys = brgys;
+            //foreach (var bgyList in brgyList)
+            //{
+            //    brgys.Add(new tbl_brgy { name = bgyList.name, id = bgyList.id, regCode = bgyList.regCode, provCode = bgyList.provCode, citymunCode = bgyList.citymunCode, brgyCode = bgyList.brgyCode });
+            //}
+            //model.tbl_Brgys = brgys;
             //End for barangays
 
             //Test for Cascading Dropdown
@@ -102,10 +102,68 @@ namespace FMB_CIS.Controllers
             //return View();
 
             //model.reCaptcha = new RECaptcha();
+
+            var _regions = _context.tbl_region.ToList();
+            var _provinces = new List<tbl_province>();
+            var _cities = new List<tbl_city>();
+            var _barangays = new List<tbl_brgy>();
+
+            _regions.Add(new tbl_region() { id = 0, name = "--Select Region--" });
+            _provinces.Add(new tbl_province() { id = 0, name = "--Select Province--" });
+            _cities.Add(new tbl_city() { id = 0, name = "--Select City/Municipality--" });
+            _barangays.Add(new tbl_brgy() { id = 0, name = "-- Select Barangay --" });
+
+            ViewData["RegionData"] = new SelectList(_regions.OrderBy(s => s.id), "id", "name");
+            ViewData["ProvinceData"] = new SelectList(_provinces.OrderBy(s => s.id), "id", "name");
+            ViewData["CityData"] = new SelectList(_cities.OrderBy(s => s.id), "id", "name");
+            ViewData["BrgyData"] = new SelectList(_barangays.OrderBy(s => s.id), "id", "name");
+
+            string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
+            ViewData["BaseUrl"] = host;
+
+            //return View();
+
             return View(model);
         }
 
+        [HttpPost, ActionName("GetProvinceByRegionId")]
+        public JsonResult GetProvinceByRegionId(string tbl_region_id)
+        {
+            int regID;
+            List<tbl_province> provinceLists = new List<tbl_province>();
+            if (!string.IsNullOrEmpty(tbl_region_id))
+            {
+                regID = Convert.ToInt32(tbl_region_id);
+                provinceLists = _context.tbl_province.Where(s => s.regCode.Equals(regID)).ToList();
+            }
+            return Json(provinceLists);
+        }
 
+        [HttpPost, ActionName("GetCityByProvinceId")]
+        public JsonResult GetCityByProvinceId(string tbl_province_id)
+        {
+            int provID;
+            List<tbl_city> cityLists = new List<tbl_city>();
+            if (!string.IsNullOrEmpty(tbl_province_id))
+            {
+                provID = Convert.ToInt32(tbl_province_id);
+                cityLists = _context.tbl_city.Where(s => s.provCode.Equals(provID)).ToList();
+            }
+            return Json(cityLists);
+        }
+
+        [HttpPost, ActionName("GetBrgyByCityId")]
+        public JsonResult GetBrgyByCityId(string tbl_city_id)
+        {
+            int ctID;
+            List<tbl_brgy> brgyLists = new List<tbl_brgy>();
+            if (!string.IsNullOrEmpty(tbl_city_id))
+            {
+                ctID = Convert.ToInt32(tbl_city_id);
+                brgyLists = _context.tbl_brgy.Where(s => s.citymunCode.Equals(ctID)).ToList();
+            }
+            return Json(brgyLists);
+        }
 
         public IActionResult RegistrationPrimary()
         {
@@ -132,16 +190,6 @@ namespace FMB_CIS.Controllers
             return View();
         }
 
-        //FOR CAPTCHA
-
-        [HttpPost]
-        public JsonResult AjaxMethod(string response)
-        {
-            RECaptcha recaptcha = new RECaptcha();
-            string url = "https://www.google.com/recaptcha/api/siteverify?secret=" + recaptcha.Secret + "&response=" + response;
-            recaptcha.Response = (new WebClient()).DownloadString(url);
-            return Json(recaptcha);
-        }
         // POST
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -151,12 +199,6 @@ namespace FMB_CIS.Controllers
         {
             //[Bind("first_name,middle_name,last_name,suffix,contact_no,valid_id,valid_id_no,birth_date,tbl_region_id,tbl_province_id,tbl_city_id,tbl_brgy_id,street_address,tbl_division_id,email,password,confirmPassword,comment,tbl_user_types_id")]
 
-            //Verify Response Token with Google [V3]
-            var captchaResult = await _captchaService.VerifyToken(model.Token);
-            if (!captchaResult)
-            {
-                return View(model);
-            }
             if (ModelState.IsValid)
             {
                 DAL dal = new DAL();

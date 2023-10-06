@@ -66,9 +66,9 @@ namespace FMB_CIS.Models
         public IEnumerable<tbl_files>? tbl_Files { get; set; }
         public FileUpload? filesUpload { get; set; }
         public tbl_user? tbl_Users { get; set; }
-        public RECaptcha? reCaptcha { get; set;}
-        [Required]
-        public string Token { get; set; }
+        //public RECaptcha? reCaptcha { get; set;}
+        //[Required]
+        //public string Token { get; set; }
 
     }
 }

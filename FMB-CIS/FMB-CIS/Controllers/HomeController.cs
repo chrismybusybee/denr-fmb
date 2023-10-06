@@ -12,7 +12,6 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http.Extensions;
-using reCAPTCHA.AspNetCore;
 
 namespace FMB_CIS.Controllers
 {
@@ -21,13 +20,11 @@ namespace FMB_CIS.Controllers
         private readonly ILogger<HomeController> _logger;
 
         private readonly IConfiguration _configuration;
-        private readonly GoogleCaptchaService _captchaService;
 
-        public HomeController(ILogger<HomeController> logger, IConfiguration configuration, GoogleCaptchaService captchaService)
+        public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
         {
             _logger = logger;
             this._configuration = configuration;
-            _captchaService = captchaService;
         }
 
         public IActionResult Index()
@@ -57,12 +54,6 @@ namespace FMB_CIS.Controllers
         [HttpPost]
         public async Task<IActionResult> IndexAsync(LoginViewModel credentials)
         {
-            //Verify Response Token with Google [V3]
-            var captchaResult = await _captchaService.VerifyToken(credentials.Token);
-            if (!captchaResult)
-            {
-                return View(credentials);
-            }
             //bool isLoggedIn = new bool();
             if (ModelState.IsValid)
             {
@@ -135,7 +126,7 @@ namespace FMB_CIS.Controllers
                     }
                 }
             }
-                return View();
+            return View();
         }
 
         //public async Task Signout(/*string returnUrl = null*/)
@@ -151,7 +142,7 @@ namespace FMB_CIS.Controllers
         //    return View();
         //}
         public ActionResult Signout()
-        {          
+        {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return RedirectToAction("Index");
