@@ -150,38 +150,58 @@ namespace FMB_CIS.Controllers
                 //HISTORY
                 var applicationtypelist = _context.tbl_application_type;
 
-                var applicationMod = from a in applicationlist
+                var applicationMod = (from a in applicationlist
                                      join usr in _context.tbl_user on a.tbl_user_id equals usr.id
                                      join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
                                      join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                      join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                      join pS in _context.tbl_permit_status on a.status equals pS.id
                                      where a.tbl_user_id == usid && a.id == applid
-                                     select new ApplicantListViewModel { id = a.id, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, user_type = usrtyps.name, valid_id = usr.valid_id, valid_id_no = usr.valid_id_no, birth_date = usr.birth_date.ToString(), tbl_region_id = usr.tbl_region_id, tbl_province_id = usr.tbl_province_id, tbl_city_id = usr.tbl_city_id, tbl_brgy_id = usr.tbl_brgy_id, comment = usr.comment };
-
-                mymodel.applicantListViewModels = applicationMod;
+                                     select new ApplicantListViewModel
+                                     {
+                                         id = a.id,
+                                         tbl_user_id = usid,
+                                         full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
+                                         email = usr.email,
+                                         contact = usr.contact_no,
+                                         address = usr.street_address,
+                                         application_type = appt.name,
+                                         permit_type = pT.name,
+                                         permit_status = pS.status,
+                                         user_type = usrtyps.name,
+                                         valid_id = usr.valid_id,
+                                         valid_id_no = usr.valid_id_no,
+                                         birth_date = usr.birth_date.ToString(),
+                                         tbl_region_id = usr.tbl_region_id,
+                                         tbl_province_id = usr.tbl_province_id,
+                                         tbl_city_id = usr.tbl_city_id,
+                                         tbl_brgy_id = usr.tbl_brgy_id,
+                                         comment = usr.comment
+                                     }).FirstOrDefault();
+                //mymodel.applicantListViewModels = applicationMod;
+                
                 //mymodel.tbl_Users = UserInfo;
-                return View(mymodel);
+                return View(applicationMod);
             }
 
         }
         [HttpPost]
         //[Url("?email={email}&code={code}")]
-        public IActionResult ChainsawOwnerApproval(int? appID, int? uid, string SubmitButton, ViewModel viewMod)
+        public IActionResult ChainsawOwnerApproval(int? id, int? tbl_user_id, string SubmitButton, ApplicantListViewModel viewMod)
         {
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
 
             //viewMod.applicantListViewModels.FirstOrDefault(x=>x.comment)
             //string newComment = viewMod.applicantListViewModels.Where(x => x.tbl_user_id == uid).Select(v => v.comment).ToList().ToString();
 
-            if (appID == null)
+            if (id == null)
             {
                 return View();
             }
             else
             {
-                int usid = Convert.ToInt32(uid);
-                int applid = Convert.ToInt32(appID);
+                int usid = Convert.ToInt32(tbl_user_id);
+                int applid = Convert.ToInt32(id);
                 string buttonClicked = SubmitButton;
                 if (buttonClicked == "Approve")
                 {
@@ -243,7 +263,7 @@ namespace FMB_CIS.Controllers
                             {
                                 file.CopyTo(stream);
                             }
-                            filesDB.tbl_application_id = appID;
+                            filesDB.tbl_application_id = id;
                             filesDB.created_by = usid;
                             filesDB.modified_by = usid;
                             filesDB.date_created = DateTime.Now;

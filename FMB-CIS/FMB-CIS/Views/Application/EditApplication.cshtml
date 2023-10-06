@@ -1,27 +1,29 @@
 ﻿@using System.Security.Claims;
-@model FMB_CIS.Models.ViewModel
+@model FMB_CIS.Models.ApplicantListViewModel
 @* @model FMB_CIS.Models.ApplicantListViewModel *@
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Manage Applications";
+    ViewBag.Cenro = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO");
+    ViewBag.Inspector = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector");
 }
 
 <div id="card-container">
     <div id="card">
-        <form asp-action="ChainsawImporterApproval" method="post">
+        @if (ViewBag.message != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @ViewBag.message
+            </div>
+        }
+        <form asp-action="EditApplication" method="post" enctype="multipart/form-data">
             <div class="row m-0">
-                <input asp-for="uid" type="hidden" />
-                <input asp-for="appid" type="hidden" />
+                <input asp-for="id" value="@Model.id" type="hidden" />
+                <input asp-for="tbl_user_id" value="@Model.tbl_user_id" type="hidden" />
+                <input asp-for="email" value="@Model.email" type="hidden" />
                 <div class="d-flex justify-content-end gap-2">
-                    @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO") == true)
-                    {
-                        <input id="ApproveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Approve" />
-                        <input class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="submit" value="Decline" />
-                    }
-                    @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true)
-                    {
+
                         <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" />
-                    }
 
                 </div>
             </div>
@@ -36,231 +38,133 @@
                     <div class="row">
                         <div class="col-md-10">
                             <div class="row mb-5">
-                                <div class="col-md-5">
+                                <div class="col-md-3">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
                                             User Type
                                         </label>
                                         <span class="fw-bold">
                                             @* @Html.DisplayFor(model => model.user_type) *@
-                                            @*foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.user_type) }
+                                            <label asp-for="user_type" value="@Model.user_type">@Model.user_type</label>
                                             @* @Html.DisplayFor(modelItem => item.Engine) *@
                                             @* Chainsaw Importer *@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col-md-3">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
                                             Name
                                         </label>
                                         <span class="fw-bold">
-                                            @Html.TextBox("Name", null, new { @class = "form-control", @type = "text" })
-                                            @*@foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.full_name) }*@
+                                            <label asp-for="full_name" value="@Model.full_name">@Model.full_name</label>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Permit Type
+                                        </label>
+                                        <span class="fw-bold">
+                                            <label asp-for="permit_type" value="@Model.permit_type">@Model.permit_type</label>
                                         </span>
                                     </div>
                                 </div>
                             </div>
                             <div class="row mb-5">
+                                
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
-                                            Email Address
+                                            Number of Chainsaws
                                         </label>
                                         <span class="fw-bold">
-                                            @Html.TextBox("EmailAddress", null, new { @class = "form-control", @type = "email" })
-                                            @*@foreach (ApplicantListViewModel item in Model.applicantListViewModels)
-                                            {
-                                                @Html.DisplayFor(modelItem => item.email)
-                                            }*@
+                                            <input asp-for="qty" name="qty" value="@Model.qty" class="form-control" type="text" />
                                         </span>
                                     </div>
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
-                                            Contact Number
+                                            Specification
                                         </label>
                                         <span class="fw-bold">
-                                            @Html.TextBox("ContactNumber", null, new { @class = "form-control", @type = "text" })
-                                            @*@foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.contact) }*@
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mb-5">
-                                <div class="col-md-5">
-                                    <div class="form-group d-flex flex-column gap-1">
-                                        <label class="text-secondary small">
-                                            Valid ID
-                                        </label>
-                                        <span class="fw-bold">
-                                            @Html.TextBox("ValidID", null, new { @class = "form-control", @type = "text" })
-                                            @*@foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.valid_id) }*@
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="form-group d-flex flex-column gap-1">
-                                        <label class="text-secondary small">
-                                            Valid ID Number
-                                        </label>
-                                        <span class="fw-bold">
-                                            @Html.TextBox("ValidIDNumber", null, new { @class = "form-control", @type = "text" })
-                                            @*@foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.valid_id_no) }*@
+                                            <input asp-for="specification" name="specification" value="@Model.specification" class="form-control" type="text" />
+
                                         </span>
                                     </div>
                                 </div>
                             </div>
                             <div class="row mb-5">
+                                
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
-                                            Birth Date
+                                            Address
                                         </label>
                                         <span class="fw-bold">
-                                            @Html.TextBox("BirthDate", null, new { @class = "form-control", @type = "date" })
-                                            @*@foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.birth_date) }*@
+                                            <input asp-for="address" name="address" value="@Model.address" class="form-control" type="text" />
+                                            
                                         </span>
                                     </div>
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
-                                            Street Address
+                                            Inspection Date
                                         </label>
                                         <span class="fw-bold">
-                                            @Html.TextArea("StreetAddress", null, new { @class = "form-control", @type = "text" })
-                                            @*@foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.address) }*@
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mb-5">
-                                <div class="col-md-5">
-                                    <div class="form-group d-flex flex-column gap-1">
-                                        <label class="text-secondary small">
-                                            Region
-                                        </label>
-                                        <span class="fw-bold">
-                                            @Html.TextBox("Region", null, new { @class = "form-control", @type = "text" })
-                                            @*@foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.tbl_region_id) }*@
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="form-group d-flex flex-column gap-1">
-                                        <label class="text-secondary small">
-                                            Province
-                                        </label>
-                                        <span class="fw-bold">
-                                            @Html.TextBox("Province", null, new { @class = "form-control", @type = "text" })
-                                            @*@foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.tbl_province_id) }*@
+
+                                            <input asp-for="inspectionDate" name="inspectionDate" value="@Model.inspectionDate" class="form-control" type="text" />
                                         </span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mb-5">
-                                <div class="col-md-5">
-                                    <div class="form-group d-flex flex-column gap-1">
-                                        <label class="text-secondary small">
-                                            City/Municipality
-                                        </label>
-                                        <span class="fw-bold">
-                                            @Html.TextBox("CityMunicipality", null, new { @class = "form-control", @type = "text" })
-                                            @*@foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.tbl_city_id) }*@
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="form-group d-flex flex-column gap-1">
-                                        <label class="text-secondary small">
-                                            Barangay
-                                        </label>
-                                        <span class="fw-bold">
-                                            @Html.TextBox("Barangay", null, new { @class = "form-control", @type = "text" })
-                                            @*@foreach (ApplicantListViewModel item in Model.applicantListViewModels) { @Html.DisplayFor(modelItem => item.tbl_brgy_id) }*@
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+                            
+
                         </div>
                     </div>
                 </div>
             </div>
-            <hr />
-
+            @if (@Model.permit_type == "Permit to Import")
+            {
+                <hr />
+                <h4 class="text-secondary fw-bold mb-4">Bureau of Customs</h4>
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="text-secondary small">
+                                Expected time of arrival
+                            </label>
+                            <input type="date" asp-for="expectedTimeArrived" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="text-secondary small">
+                                Expected time of release
+                            </label>
+                            <input type="date" asp-for="expectedTimeRelease" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            }
+            
+            <hr/>
             <div class="row d-flex justify-content-center m-0">
-                <div class="col-md-11 mb-5">
-                    <span>Attached Forms</span>
-                    <table class="w-100 striped-table">
-                        <thead>
-                            <tr>
-                                <th class="text-nowrap">
-                                    Name of form
-                                </th>
-                                <th class="text-nowrap text-center">
-                                    Action
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="text-nowrap">
-                                    Form 01.doc
-                                </td>
-                                <td class="text-nowrap">
-                                    <div class="d-flex justify-content-center gap-3">
-                                        <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="view">
-                                            <i data-feather="eye" class="data-feather-20"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-nowrap">
-                                    Form 01.doc
-                                </td>
-                                <td class="text-nowrap">
-                                    <div class="d-flex justify-content-center gap-3">
-                                        <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="view">
-                                            <i data-feather="eye" class="data-feather-20"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-nowrap">
-                                    Form 01.doc
-                                </td>
-                                <td class="text-nowrap">
-                                    <div class="d-flex justify-content-center gap-3">
-                                        <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="view">
-                                            <i data-feather="eye" class="data-feather-20"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="row d-flex justify-content-center px-0 mb-5">
+                        <div class="col-md-11 d-flex flex-column gap-2">
+                            <input type="file" asp-for="filesUpload.Files" class="form-control" multiple />
+                        </div>
                 </div>
                 <div class="row d-flex justify-content-center px-0 mb-5">
                     <div class="col-md-11 d-flex flex-column gap-2">
                         <span>
-                            Comments
+                            Purpose
                         </span>
-                        @* <textarea asp-for="comment" class="form-control"></textarea> *@
-                        @* @Html.EditorFor(model => model.applicantListViewModels.ToList(comment), new { htmlAttributes = new { @class = "form-control" } }) *@
-                        @*foreach (ApplicantListViewModel item in Model.applicantListViewModels)
-                        {
-                            @Html.TextAreaFor(modelItem => item.comment, new { @class = "form-control", @name="newComment", @id="commentFromDB", @hidden ="true" })
-                            @Html.TextAreaFor(modelItem => item.email, new { @id="myEmailAdd", @name="myEmailAddress", @hidden ="true"})
-
-                            @* @Html.TextAreaFor 
-                        }
-                        @Html.TextAreaFor(model => model.comment, new { @class = "form-control", @id="commentToPass"})
-                        @*Html.TextAreaFor(model => model.email, new { @class = "form-control", @id="emailCopy", @hidden ="true"})*@
-                    </div>
+                        <textarea asp-for="purpose" class="form-control"></textarea>
+                        </div>
                 </div>
             </div>
         </form>

@@ -11,7 +11,7 @@ namespace FMB_CIS.Models
         public string permit_type { get; set; }
         public int status { get; set; }
         public string full_name { get; set; }
-        public string email { get; set; }
+        public string? email { get; set; }
         public string contact { get; set; }
         public string address { get; set; }
 
@@ -27,6 +27,15 @@ namespace FMB_CIS.Models
         //public string street_address { get; set; }
         public string comment { get; set; }
         public int tbl_user_types_id { get; set; }
+
+        public int? qty { get; set; }
+        public int? specification { get; set; }
+        
+        public string purpose { get; set; }
+        public DateTime? inspectionDate { get; set; }
+        public DateTime? expectedTimeArrived { get; set; }
+        public DateTime? expectedTimeRelease { get; set; }
+        public FileUpload? filesUpload { get; set; }
 
 
     }

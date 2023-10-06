@@ -180,7 +180,24 @@ namespace FMB_CIS.Controllers
                                          join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                          join pS in _context.tbl_permit_status on a.status equals pS.id
                                          where a.tbl_user_id == usid && a.id == applid
-                                         select new ApplicantListViewModel { id = a.id, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, user_type = usrtyps.name, valid_id = usr.valid_id, valid_id_no = usr.valid_id_no, birth_date = usr.birth_date.ToString(), tbl_region_id = usr.tbl_region_id, tbl_province_id = usr.tbl_province_id, tbl_city_id = usr.tbl_city_id, tbl_brgy_id = usr.tbl_brgy_id, comment = usr.comment };
+                                         select new ApplicantListViewModel { 
+                                             id = a.id, 
+                                             full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, 
+                                             email = usr.email, 
+                                             contact = usr.contact_no, 
+                                             address = usr.street_address, 
+                                             application_type = appt.name, 
+                                             permit_type = pT.name, 
+                                             permit_status = pS.status, 
+                                             user_type = usrtyps.name, 
+                                             valid_id = usr.valid_id, 
+                                             valid_id_no = usr.valid_id_no, 
+                                             birth_date = usr.birth_date.ToString(), 
+                                             tbl_region_id = usr.tbl_region_id, 
+                                             tbl_province_id = usr.tbl_province_id, 
+                                             tbl_city_id = usr.tbl_city_id, 
+                                             tbl_brgy_id = usr.tbl_brgy_id, 
+                                             comment = usr.comment };
 
                     mymodel.applicantListViewModels = applicationMod;
                     //mymodel.tbl_Users = UserInfo;
