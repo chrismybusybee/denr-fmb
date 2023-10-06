@@ -14,6 +14,7 @@
                 @ViewBag.message
             </div>
         }
+        <form asp-action="Index" method="post" enctype="multipart/form-data">
         <a href="@Url.Action("Index", "Dashboard")" class="mx-2" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
         <div class="row m-0 my-4">
             <div class="col-md-6">
@@ -23,49 +24,49 @@
                         <label class="text-secondary fw-bold">
                             First Name
                         </label>
-                        <input type="text" class="form-control" placeholder="Enter first name" />
+                            <input type="text" asp-for="tbl_Application.supplier_fname" class="form-control" placeholder="Enter first name" />
                         <span class="text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
                             Middle Name
                         </label>
-                        <input type="text" class="form-control" placeholder="Enter middle name" />
+                            <input type="text" asp-for="tbl_Application.supplier_mname" class="form-control" placeholder="Enter middle name" />
                         <span class="text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
                             Last Name
                         </label>
-                        <input type="text" class="form-control" placeholder="Enter last name" />
+                            <input type="text" asp-for="tbl_Application.supplier_lname" class="form-control" placeholder="Enter last name" />
                         <span class="text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
                             Suffix
                         </label>
-                        <input type="text" class="form-control" placeholder="Enter suffix (if any)" />
+                            <input type="text" asp-for="tbl_Application.supplier_suffix" class="form-control" placeholder="Enter suffix (if any)" />
                         <span class="text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
                             Address
                         </label>
-                        <textarea class="form-control" placeholder="Enter address"></textarea>
+                            <textarea class="form-control" asp-for="tbl_Application.supplier_address" placeholder="Enter address"></textarea>
                         <span class="text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
                             Email
                         </label>
-                        <input type="text" class="form-control" placeholder="Enter email" />
+                            <input type="text" asp-for="tbl_Application.supplier_email" class="form-control" placeholder="Enter email" />
                         <span class="text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
                             Contact No.
                         </label>
-                        <input type="text" class="form-control" placeholder="Enter contact number" />
+                            <input type="text" asp-for="tbl_Application.supplier_contact_no" class="form-control" placeholder="Enter contact number" />
                         <span class="text-danger"></span>
                     </div>
                 </div>
@@ -77,7 +78,7 @@
                         <label class="text-secondary fw-bold">
                             Permit Type
                         </label>
-                        <select class="form-select" aria-label="Permit Type">
+                            <select class="form-select" asp-for="tbl_Application.tbl_permit_type_id" aria-label="Permit Type">
                             <option selected disabled>- Select Permit Type -</option>
                             <option value="2">Permit to Sell</option>
                             <option value="3">Permit to Purchase</option>
@@ -87,28 +88,28 @@
                         <label class="text-secondary fw-bold">
                             Number of chainsaws to be sold/purchased
                         </label>
-                        <input type="text" class="form-control" placeholder="Enter number of chainsaws to be sold/purchased" />
+                            <input type="text" asp-for="tbl_Application.qty" class="form-control" placeholder="Enter number of chainsaws to be sold/purchased" />
                         <span class="text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
                             Specification
                         </label>
-                        <input type="text" class="form-control" placeholder="Enter specification" />
+                            <input type="text" asp-for="tbl_Application.tbl_specification_id" class="form-control" placeholder="Enter specification" />
                         <span class="text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
                             Purpose
                         </label>
-                        <textarea class="form-control" placeholder="Enter purpose"></textarea>
+                            <textarea class="form-control" asp-for="tbl_Application.purpose" placeholder="Enter purpose"></textarea>
                         <span class="text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
                             Set Date of Inspection
                         </label>
-                        <input type="date" class="form-control" />
+                            <input type="date" asp-for="tbl_Application.date_of_inspection" class="form-control" />
                         <span class="text-danger"></span>
                     </div>
                 </div>
@@ -180,6 +181,7 @@
         <div class="d-flex justify-content-end pe-2 me-1">
             <button class="btn btn-primary mb-4">Submit</button>
         </div>
+        </form>
     </div>
 </div>
 
