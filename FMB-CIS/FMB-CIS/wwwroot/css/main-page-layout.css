@@ -126,10 +126,6 @@
     border-collapse: collapse;
 }
 
-/*    .dataTable td:not(:nth-last-child(-n+2)) {
-        min-width: 150px;
-    }
-*/
 .dataTables_wrapper {
     color: #5c5c5c;
     margin-top: 1.5rem !important;
@@ -138,8 +134,6 @@
     .dataTables_wrapper .dataTables_length {
         margin-bottom: 15px;
     }
-
-
 
 .table > thead {
     color: white;

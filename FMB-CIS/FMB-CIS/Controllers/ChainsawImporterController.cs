@@ -6,6 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -31,14 +32,16 @@ namespace FMB_CIS.Controllers
         private readonly LocalContext _context;
         private readonly IConfiguration _configuration;
         private IEmailSender EmailSender { get; set; }
+        private IWebHostEnvironment Environment;
 
 
 
-        public ChainsawImporterController(IConfiguration configuration, LocalContext context, IEmailSender emailSender)
+        public ChainsawImporterController(IConfiguration configuration, LocalContext context, IEmailSender emailSender, IWebHostEnvironment _environment)
         {
             this._configuration = configuration;
             _context = context;
             EmailSender = emailSender;
+            Environment = _environment;
         }
 
         public IActionResult Index()
@@ -153,6 +156,22 @@ namespace FMB_CIS.Controllers
                            
                 ViewModel mymodel = new ViewModel();
                 //tbl_user user = _context.tbl_user.Find(uid);
+
+                //CODE FOR FILE DOWNLOAD
+                int applicID = Convert.ToInt32(appid);
+                //File Paths from Database
+                var filesFromDB = _context.tbl_files.Where(f => f.tbl_application_id == applicID).ToList();
+                List<tbl_files> files = new List<tbl_files>();
+
+                foreach (var fileList in filesFromDB)
+                {
+                    files.Add(new tbl_files { filename = fileList.filename, path = fileList.path });
+                    //files.Add(new tbl_files { filename = f });
+                }
+
+                mymodel.tbl_Files = files;
+                //END FOR FILE DOWNLOAD
+
                 if (uid == null || appid == null)
                 {
                     ModelState.AddModelError("", "Invalid Importer Application");
@@ -206,6 +225,18 @@ namespace FMB_CIS.Controllers
             }
             
         }
+        //For File Download
+        public FileResult DownloadFile(string fileName, string path)
+        {
+            //Build the File Path.
+            string pathWithFilename = path + "//" + fileName;
+            //Read the File data into Byte Array.
+            byte[] bytes = System.IO.File.ReadAllBytes(pathWithFilename);
+
+            //Send the File to Download.
+            return File(bytes, "application/octet-stream", fileName);
+        }
+
         [HttpPost]
         //[Url("?email={email}&code={code}")]
         public IActionResult ChainsawImporterApproval(int? appID, int? uid, string SubmitButton, ViewModel viewMod)
@@ -224,6 +255,8 @@ namespace FMB_CIS.Controllers
                 int usid = Convert.ToInt32(uid);
                 int applid = Convert.ToInt32(appID);
                 string buttonClicked = SubmitButton;
+
+
                 if (buttonClicked == "Approve")
                 {
                     //var applicationToUpdate = _context.tbl_application.Find(appID);
@@ -340,7 +373,7 @@ namespace FMB_CIS.Controllers
                                      join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                      join pS in _context.tbl_permit_status on a.status equals pS.id
                                      //where a.tbl_user_id == userID
-                                     select new ApplicantListViewModel { id = a.id, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = usr.id };
+                                     select new ApplicantListViewModel { id = a.id, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id };
 
                 mymodel.applicantListViewModels = applicationMod;
 

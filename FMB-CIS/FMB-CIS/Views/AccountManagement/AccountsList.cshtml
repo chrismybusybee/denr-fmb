@@ -1,0 +1,117 @@
+﻿@using System.Security.Claims;
+@model FMB_CIS.Models.ViewModel
+@* @model IEnumerable<FMB_CIS.Models.tbl_user> *@
+@{
+    Layout = "~/Views/Shared/_MainPageLayout.cshtml";
+    ViewBag.Title = "Account Management";
+}
+
+
+<div id="card-container">
+    <div id="card">
+        <a href="@Url.Action("Index", "Home")" class="me-auto pb-4" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
+        <table id="accountManagementTable" class="table table-striped dataTable">
+            <thead>
+                <tr>
+                    <th class="text-nowrap">User Type</th>
+                    <th class="text-nowrap">Name</th>
+                    <th class="text-nowrap">Email</th>
+                    <th class="text-nowrap">Contact No.</th>
+                    <th class="text-nowrap">Address</th>
+                    <th class="text-nowrap">Municipality</th>
+                    <th class="text-nowrap text-center">Status</th>
+                    <th class="text-nowrap text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+
+
+@*                 <tr>
+                    <td class="text-nowrap">Chainsaw Importer</td>
+                    <td class="text-nowrap">Juan Dela Cruz</td>
+                    <td class="text-nowrap">juan@email.com</td>
+                    <td class="text-nowrap">0916 123 3456</td>
+                    <td>123 Mendiola St, Manila  City</td>
+                    <td class="text-nowrap">Manila</td>
+                    <td class="text-nowrap text-center d-flex justify-content-center">
+                        <div class="bg-secondary text-white px-3 pb-2 pt-1 rounded-pill w-105">
+                            Pending
+                        </div>
+                    </td>
+                    <td class="text-nowrap">
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="@Url.Action("EditAccount", "AccountManagement")" class="bg-green text-white px-1 pb-1 rounded" title="edit">
+                                <i data-feather="edit" class="data-feather-20"></i>
+                            </a>
+                            <a href="#" class="bg-green text-white px-1 pb-1 rounded btnDelete" title="delete">
+                                <i data-feather="trash-2" class="data-feather-20"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr> *@
+                    @foreach (tbl_user item in Model.tbl_Users)
+                    {
+                        <tr>
+                            <td class="text-nowrap">
+                                    @Html.DisplayFor(modelItem => item.tbl_user_types_id)
+                            </td>
+                            <td class="text-nowrap">
+                                    @Html.DisplayFor(modelItem => item.first_name) 
+                                    @Html.DisplayFor(modelItem => item.middle_name) 
+                                    @Html.DisplayFor(modelItem => item.last_name) 
+                                    @Html.DisplayFor(modelItem => item.suffix) 
+                                    @* @Html.DisplayFor(modelItem => item.first_name + item.middle_name + item.last_name + item.suffix) *@
+                            </td>
+                            <td class="text-nowrap">
+                                    @Html.DisplayFor(modelItem => item.email)
+                            </td>
+                            <td class="text-nowrap">
+                                    @Html.DisplayFor(modelItem => item.contact_no)
+                            </td>
+                            <td class="text-nowrap">
+                                    @Html.DisplayFor(modelItem => item.street_address)
+                            </td>
+                            <td class="text-nowrap">
+                                    @Html.DisplayFor(modelItem => item.tbl_province_id)
+                            </td>
+                            <td class="text-nowrap text-center d-flex justify-content-center">
+                            @if(item.status == true)
+                            {
+                                <div class="bg-success text-white px-3 pb-2 pt-1 rounded-pill w-105">
+                                    Approved
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="bg-danger text-white px-3 pb-2 pt-1 rounded-pill w-105">
+                                    @Html.DisplayFor(modelItem => item.status)
+                                </div>
+                            }
+                            
+                            </td>
+                            <td class="text-nowrap">
+                                <div class="d-flex justify-content-center gap-3">
+                                    <a href="@Url.Action("EditAccount", "AccountManagement")" class="bg-green text-white px-1 pb-1 rounded" title="edit">
+                                        <i data-feather="edit" class="data-feather-20"></i>
+                                    </a>
+                                    <a href="#" class="bg-green text-white px-1 pb-1 rounded btnDelete" title="delete">
+                                        <i data-feather="trash-2" class="data-feather-20"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="/js/jquery-3.7.1.min.js"></script>
+
+<script type="text/javascript">
+    $(".btnDelete").click(function () {
+        $("#confirmDeleteModal").modal("show");
+    });
+</script>
+
+

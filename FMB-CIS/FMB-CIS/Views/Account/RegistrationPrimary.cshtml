@@ -16,7 +16,7 @@
                 <div class="col-md-4">
                     <div class="form-group mb-2">
                         <label class="form-label small">User Type</label>
-                        <select asp-for="tbl_user_types_id" class="form-select" aria-label="User Type">
+                        <select asp-for="tbl_Users.tbl_user_types_id" class="form-select" aria-label="User Type">
                             <option selected disabled>- Select User Type -</option>
                             <option value="1">Chainsaw Importer Only</option>
                             <option value="2">Chainsaw Seller Only</option>
@@ -26,7 +26,7 @@
                             <option value="6">Chainsaw Seller and Owner</option>
                             <option value="7">Chainsaw Importer, Owner, and Seller</option>
                         </select>
-                        <span asp-validation-for="tbl_user_types_id" class="text-danger"></span>
+                        <span asp-validation-for="tbl_Users.tbl_user_types_id" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -39,23 +39,23 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label asp-for="first_name" class="form-label small">First Name</label>
-                                        <input asp-for="first_name" class="form-control" />
-                                        <span asp-validation-for="first_name" class="text-danger"></span>
+                                        <label asp-for="tbl_Users.first_name" class="form-label small">First Name</label>
+                                        <input asp-for="tbl_Users.first_name" class="form-control" />
+                                        <span asp-validation-for="tbl_Users.first_name" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label asp-for="middle_name" class="form-label small">Middle Name</label>
-                                        <input asp-for="middle_name" class="form-control" />
-                                        <span asp-validation-for="middle_name" class="text-danger"></span>
+                                        <label asp-for="tbl_Users.middle_name" class="form-label small">Middle Name</label>
+                                        <input asp-for="tbl_Users.middle_name" class="form-control" />
+                                        <span asp-validation-for="tbl_Users.middle_name" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label asp-for="last_name" class="form-label small">Last Name</label>
-                                        <input asp-for="last_name" class="form-control" />
-                                        <span asp-validation-for="last_name" class="text-danger"></span>
+                                        <label asp-for="tbl_Users.last_name" class="form-label small">Last Name</label>
+                                        <input asp-for="tbl_Users.last_name" class="form-control" />
+                                        <span asp-validation-for="tbl_Users.last_name" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
@@ -64,9 +64,9 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label asp-for="suffix" class="form-label small">Suffix</label>
-                                        <input asp-for="suffix" class="form-control" />
-                                        <span asp-validation-for="suffix" class="text-danger"></span>
+                                        <label asp-for="tbl_Users.suffix" class="form-label small">Suffix</label>
+                                        <input asp-for="tbl_Users.suffix" class="form-control" />
+                                        <span asp-validation-for="tbl_Users.suffix" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
@@ -77,9 +77,9 @@
             <div class="row mb-4">
                 <div class="col-md-8">
                     <div class="form-group">
-                        <label asp-for="email" class="form-label small">Email (Please use official email address)</label>
-                        <input asp-for="email" class="form-control" placeholder="name@address.com" />
-                        <span asp-validation-for="email" class="text-danger"></span>
+                        <label asp-for="tbl_Users.email" class="form-label small">Email (Please use official email address)</label>
+                        <input asp-for="tbl_Users.email" class="form-control" placeholder="name@address.com" />
+                        <span asp-validation-for="tbl_Users.email" class="text-danger"></span>
                     </div>
                 </div>
                 @* <div class="col-md-3">
@@ -98,47 +98,47 @@
                 </div> *@
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label asp-for="contact_no" class="form-label small">Contact Number (11 Digits)</label>
-                        <input asp-for="contact_no" class="form-control" placeholder="09XX XXX XXXX" />
-                        <span asp-validation-for="contact_no" class="text-danger"></span>
+                        <label asp-for="tbl_Users.contact_no" class="form-label small">Contact Number (11 Digits)</label>
+                        <input asp-for="tbl_Users.contact_no" class="form-control" placeholder="09XX XXX XXXX" />
+                        <span asp-validation-for="tbl_Users.contact_no" class="text-danger"></span>
                     </div>
                 </div>
             </div>
             <div class="row mb-4">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label asp-for="birth_date" class="form-label small">Birth Date (Must be 18 years old and above)</label>
-                        <input asp-for="birth_date" type="date" class="form-control" />
-                        <span asp-validation-for="birth_date" class="text-danger"></span>
+                        <label asp-for="tbl_Users.birth_date" class="form-label small">Birth Date (Must be 18 years old and above)</label>
+                        <input asp-for="tbl_Users.birth_date" type="date" class="form-control" />
+                        <span asp-validation-for="tbl_Users.birth_date" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label asp-for="valid_id" class="form-label small">Valid ID</label>
-                        <input asp-for="valid_id" class="form-control" />
-                        <span asp-validation-for="valid_id" class="text-danger"></span>
+                        <label asp-for="tbl_Users.valid_id" class="form-label small">Valid ID</label>
+                        <input asp-for="tbl_Users.valid_id" class="form-control" />
+                        <span asp-validation-for="tbl_Users.valid_id" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label asp-for="valid_id_no" class="form-label small">Valid ID Number</label>
-                        <input asp-for="valid_id_no" class="form-control" />
-                        <span asp-validation-for="valid_id_no" class="text-danger"></span>
+                        <label asp-for="tbl_Users.valid_id_no" class="form-label small">Valid ID Number</label>
+                        <input asp-for="tbl_Users.valid_id_no" class="form-control" />
+                        <span asp-validation-for="tbl_Users.valid_id_no" class="text-danger"></span>
                     </div>
                 </div>
             </div>
             <div class="row mb-4">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="street_address" class="form-label small">Street Address</label>
-                        <input asp-for="street_address" class="form-control" />
-                        <span asp-validation-for="street_address" class="text-danger"></span>
+                        <label asp-for="tbl_Users.street_address" class="form-label small">Street Address</label>
+                        <input asp-for="tbl_Users.street_address" class="form-control" />
+                        <span asp-validation-for="tbl_Users.street_address" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="tbl_region_id" class="form-label small">Region</label>      
-                        <select asp-for="tbl_region_id" class="form-select" aria-label="User Type">
+                        <label asp-for="tbl_Users.tbl_region_id" class="form-label small">Region</label>
+                        <select asp-for="tbl_Users.tbl_region_id" class="form-select" aria-label="User Type">
                             <option selected disabled>- Select Region -</option>
                             <option value="1">Region I</option>
                             <option value="2">Region II</option>
@@ -158,7 +158,7 @@
                             <option value="16">CAR</option>
                             <option value="17">BARMM</option>
                         </select>
-                        <span asp-validation-for="tbl_region_id" class="text-danger"></span>
+                        <span asp-validation-for="tbl_Users.tbl_region_id" class="text-danger"></span>
                         @* <select asp-for="tbl_region_id" class="form-control">
                         <option Selected>--Select Region--</option>
                         </select> *@
@@ -166,42 +166,42 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group" hidden="true">
-                        <label asp-for="tbl_division_id" class="form-label small">DIVISION ID</label>
-                        <input asp-for="tbl_division_id" class="form-control" value=" " disabled />
+                        <label asp-for="tbl_Users.tbl_division_id" class="form-label small">DIVISION ID</label>
+                        <input asp-for="tbl_Users.tbl_division_id" class="form-control" value=" " disabled />
                     </div>
                 </div>
             </div>
             <div class="row mb-4">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label asp-for="tbl_province_name" class="form-label small">Province</label>
-                        <input asp-for="tbl_province_name" class="form-control" />
-                        @* <input asp-for="tbl_province_id" class="form-control" /> *@
-                        <span asp-validation-for="tbl_province_name" class="text-danger"></span>
+                        <label asp-for="tbl_Users.tbl_province_id" class="form-label small">Province</label>
+                        @* <input asp-for="tbl_province_name" class="form-control" /> *@
+                        <input asp-for="tbl_Users.tbl_province_id" class="form-control" />
+                        <span asp-validation-for="tbl_Users.tbl_province_id" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label asp-for="tbl_city_name" class="form-label small">City/Municipality</label>
-                        <input asp-for="tbl_city_name" class="form-control" />
-                        @* <input asp-for="tbl_city_id" class="form-control" /> *@
-                        <span asp-validation-for="tbl_city_name" class="text-danger"></span>
+                        <label asp-for="tbl_Users.tbl_city_id" class="form-label small">City/Municipality</label>
+                        @* <input asp-for="tbl_city_name" class="form-control" /> *@
+                        <input asp-for="tbl_Users.tbl_city_id" class="form-control" />
+                        <span asp-validation-for="tbl_Users.tbl_city_id" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label asp-for="tbl_brgy_name" class="form-label small">Barangay</label>
-                        <input asp-for="tbl_brgy_name" class="form-control" />
-                        <span asp-validation-for="tbl_brgy_name" class="text-danger"></span>
+                        <label asp-for="tbl_Users.tbl_brgy_id" class="form-label small">Barangay</label>
+                        <input asp-for="tbl_Users.tbl_brgy_id" class="form-control" />
+                        <span asp-validation-for="tbl_Users.tbl_brgy_id" class="text-danger"></span>
                     </div>
                 </div>
             </div>
             <div class="row mb-5">
                 <div class="col-md-6" hidden="true">
                     <div class="form-group">
-                        <label asp-for="comment" class="form-label small">Remarks</label>
-                        <input asp-for="comment" class="form-control" disabled />
-                        <span asp-validation-for="comment" class="text-danger"></span>
+                        <label asp-for="tbl_Users.comment" class="form-label small">Remarks</label>
+                        <input asp-for="tbl_Users.comment" class="form-control" disabled />
+                        <span asp-validation-for="tbl_Users.comment" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">

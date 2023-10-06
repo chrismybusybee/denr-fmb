@@ -147,5 +147,10 @@ namespace FMB_CIS.Controllers
 
             return RedirectToAction("Index");
         }
+
+        public IActionResult TermsPolicy()
+        {
+            return View();
+        }
     }
 }

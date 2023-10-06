@@ -38,6 +38,10 @@ body {
     color: #5c5c5c !important;
 }
 
+.text-light-gray {
+    color: #9f9f9f;
+}
+
 .bg-green {
     background-color: #14984a;
 }
@@ -55,6 +59,10 @@ body {
 .w-105 {
     min-width: 105px;
     max-width: 105px;
+}
+
+.mw-18rem {
+    max-width: 18rem;
 }
 
 .mt-19rem {

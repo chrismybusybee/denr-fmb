@@ -6,6 +6,7 @@
         public string filename { get; set; }
         public string tbl_file_sources_id { get; set; }
         public string tbl_file_type_id { get; set;}
+        public int? tbl_user_id { get; set; }
         public int? tbl_application_id { get; set; }
         public string path { get; set; }
         public int created_by {  get; set; }
