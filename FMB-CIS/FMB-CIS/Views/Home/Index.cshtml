@@ -1,8 +1,4 @@
 ﻿@model FMB_CIS.Models.LoginViewModel
-@using Microsoft.Extensions.Configuration
-@using Microsoft.Extensions.Options
-@using FMB_CIS.Data
-@inject IOptions<GoogleCaptchaConfig> GoogleCaptchaConfig
 @{
     //ViewData["Title"] = "Home Page";
     ViewBag.Title = "Login";
@@ -10,54 +6,54 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    <input type="hidden" id="LoginViewModelToken" asp-for="Token" />
-<div class="container-fluid d-flex justify-content-center align-items-center min-vh-100">
-    <div class="col-md-6 d-flex flex-column justify-content-center align-items-center mb-5 pb-5">
-        <img src="~/assets/images/logo.png" class="mb-5 pb-5" />
-        <h1 class="text-green mt-3 mb-2">LOGIN</h1>
-        <div class="d-flex w-50">            
-            <div class="d-flex flex-column align-items-start w-100">
-                @* @Html.ValidationSummary("") *@
-                <label class="form-label">Email Address</label>
-                @* @Html.Editor("Email", new { htmlAttributes = new { @class = "form-control mb-md-4", @id = "Username", @type = "text", @placeholder = "name@address.com", @tabindex = "1" } }) *@
-                @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control mb-md-4", @id = "Username", @type = "text", @placeholder = "name@address.com", @tabindex = "1" } })
-                @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
-                @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
-                <label class="form-label">Password</label>
-                <div class="input-group password-toggle mb-md-2">
-                    @* @Html.Editor("Password", new { htmlAttributes = new { @class = "form-control", @id = "Password", @type = "password", @placeholder = "Enter your password", @tabindex = "2", @style = "border-right:none;" } }) *@
-                    @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", @id = "Password", @placeholder = "Enter your password", @tabindex = "2", @style = "border-right:none;" } })
-                    <span class="input-group-text cursor-pointer" id="ShowPassword" title="show/hide password">
-                        <i data-feather="eye" class="data-feather" ></i>
-                    </span>
-                </div>
 
-                <div class="d-flex justify-content-between w-100 mb-5 small">
-                    <div>
-                        @Html.ActionLink("Forgot Password?", "ForgotPassword", "Account")
+    <div class="container-fluid d-flex justify-content-center align-items-center min-vh-100">
+        <div class="col-md-6 d-flex flex-column justify-content-center align-items-center mb-5 pb-5">
+            <img src="~/assets/images/logo.png" class="mb-5 pb-5" />
+            <h1 class="text-green mt-3 mb-2">LOGIN</h1>
+            <div class="d-flex w-50">
+                <div class="d-flex flex-column align-items-start w-100">
+                    @* @Html.ValidationSummary("") *@
+                    <label class="form-label">Email Address</label>
+                    @* @Html.Editor("Email", new { htmlAttributes = new { @class = "form-control mb-md-4", @id = "Username", @type = "text", @placeholder = "name@address.com", @tabindex = "1" } }) *@
+                    @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control mb-md-4", @id = "Username", @type = "text", @placeholder = "name@address.com", @tabindex = "1" } })
+                    @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                    <label class="form-label">Password</label>
+                    <div class="input-group password-toggle mb-md-2">
+                        @* @Html.Editor("Password", new { htmlAttributes = new { @class = "form-control", @id = "Password", @type = "password", @placeholder = "Enter your password", @tabindex = "2", @style = "border-right:none;" } }) *@
+                        @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", @id = "Password", @placeholder = "Enter your password", @tabindex = "2", @style = "border-right:none;" } })
+                        <span class="input-group-text cursor-pointer" id="ShowPassword" title="show/hide password">
+                            <i data-feather="eye" class="data-feather"></i>
+                        </span>
                     </div>
-                    <div class="d-flex justify-content-end">
-                        <div class="form-check">
-                            @Html.CheckBox("RememberMe", htmlAttributes: new { @class = "form-check-input", @type = "checkbox", @tabindex = "3" })
-                            <label class="form-check-label" for="remember-me">Remember Me</label>
+
+                    <div class="d-flex justify-content-between w-100 mb-5 small">
+                        <div>
+                            @Html.ActionLink("Forgot Password?", "ForgotPassword", "Account")
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <div class="form-check">
+                                @Html.CheckBox("RememberMe", htmlAttributes: new { @class = "form-check-input", @type = "checkbox", @tabindex = "3" })
+                                <label class="form-check-label" for="remember-me">Remember Me</label>
+                            </div>
                         </div>
                     </div>
-                </div>
-                @* <button class="btn btn-primary w-100 mb-4" onclick="window.location.href = '@Url.Action("Index", "Dashboard")'">Login</button> *@
-                
-                <button type="submit" class="btn btn-primary w-100 mb-4" @* onclick="window.location.href = '@Url.Action("Index", "Dashboard")'" *@>Login</button>
-                
-@*                 <div class="form-group">
-                    <input type="submit" value="Login" class="btn btn-primary w-100 mb-4" />
+                    @* <button class="btn btn-primary w-100 mb-4" onclick="window.location.href = '@Url.Action("Index", "Dashboard")'">Login</button> *@
+
+                    <button type="submit" class="btn btn-primary w-100 mb-4" @* onclick="window.location.href = '@Url.Action("Index", "Dashboard")'" *@>Login</button>
+
+                    @*                 <div class="form-group">
+                <input type="submit" value="Login" class="btn btn-primary w-100 mb-4" />
                 </div> *@
-                <button type ="button" class="btn btn-secondary w-100" onclick="window.location.href = '@Url.Action("Registration", "Account")'">Register</button>
-            </div>            
+                    <button type="button" class="btn btn-secondary w-100" onclick="window.location.href = '@Url.Action("Registration", "Account")'">Register</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 min-vh-100 d-flex align-items-md-end" style="background-image: url('assets/images/login-cover.png');background-size:cover;">
+            <img class="login-cover-overlay mx-auto" src="~/assets/images/login-cover-overlay.png" width="650" />
         </div>
     </div>
-    <div class="col-md-6 min-vh-100 d-flex align-items-md-end" style="background-image: url('assets/images/login-cover.png');background-size:cover;">
-        <img class="login-cover-overlay mx-auto" src="~/assets/images/login-cover-overlay.png" width="650" />
-    </div>
-</div>
 
 }
 
@@ -67,8 +63,6 @@
 </div>*@
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
-<script src="https://www.google.com/recaptcha/api.js?render=@GoogleCaptchaConfig.Value.SiteKey"></script>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -95,21 +89,4 @@
             }
         });
     });
-
-    //CAPTCHA V3 2023-OCT-06
-    function getToken() {
-        grecaptcha.ready(function () {
-            grecaptcha.execute('@GoogleCaptchaConfig.Value.SiteKey', { action: 'submit' }).then(function (token) {
-                // Add your logic to submit to your backend server here.
-                console.log(token);
-                document.getElementById("LoginViewModelToken").value = token;
-            });
-        });
-    }
-    setInterval(getToken, 115000)
-    $(function () {
-        getToken();
-    });
-            //CAPTCHA V3 END 2023-OCT-06
-
 </script>

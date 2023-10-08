@@ -1,14 +1,9 @@
 ﻿@model FMB_CIS.Models.UserRegistrationViewModel
 @* @model FMB_CIS.Models.UserRegistrationViewModel *@
 
-@using Microsoft.Extensions.Configuration
-@using Microsoft.Extensions.Options
-@using FMB_CIS.Data
-@inject IOptions<GoogleCaptchaConfig> GoogleCaptchaConfig
-
 @{
     ViewBag.Title = "Registration";
-    // var baseurl = ViewBag.BaseUrl;
+    var baseurl = ViewBag.BaseUrl;
 }
 
 <div class="container-fluid d-flex flex-column align-items-center justify-content-center">
@@ -16,34 +11,40 @@
         <img src="~/assets/images/logo.png" height="100" />
     </div>
     <hr class="hr" />
+
+
     <div class="container"></div>,<div class="container">
-        <a href="@Url.Action("Index", "Home")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
-        <h2 class="text-secondary fw-bold mt-4">REGISTRATION</h2>
-        <div class="stepwizard col-md-offset-3 mt-5">
+        <a href="@Url.Action("Index", "Home")" class="me-auto my-4" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
+        <div class="stepwizard col-md-offset-3">
             <div class="stepwizard-row setup-panel">
                 <div class="stepwizard-step">
+                    <p class="mb-1 fw-bold">Step</p>
                     <a href="#step-1" type="button" class="btn btn-primary btn-circle fw-bold">1</a>
                 </div>
                 <div class="stepwizard-step">
+                    <p class="mb-1 fw-bold">Step</p>
                     <a href="#step-2" type="button" class="btn btn-default btn-circle fw-bold" disabled="disabled">2</a>
                 </div>
                 <div class="stepwizard-step">
+                    <p class="mb-1 fw-bold">Step</p>
                     <a href="#step-3" type="button" class="btn btn-default btn-circle fw-bold" disabled="disabled">3</a>
                 </div>
                 <div class="stepwizard-step">
+                    <p class="mb-1 fw-bold">Step</p>
                     <a href="#step-4" type="button" class="btn btn-default btn-circle fw-bold" disabled="disabled">4</a>
                 </div>
                 <div class="stepwizard-step">
+                    <p class="mb-1 fw-bold">Step</p>
                     <a href="#step-5" type="button" class="btn btn-default btn-circle fw-bold" disabled="disabled">5</a>
                 </div>
                 <div class="stepwizard-step">
+                    <p class="mb-1 fw-bold">Step</p>
                     <a href="#step-6" type="button" class="btn btn-default btn-circle fw-bold" disabled="disabled">6</a>
                 </div>
             </div>
         </div>
         <h3 align="center">REGISTER YOUR ACCOUNT</h3>
         <form asp-action="Registration" id="RegForm" role="form" class="w-75 mx-auto" enctype="multipart/form-data">
-            <input type="hidden" id="LoginViewModelToken" asp-for="Token" />
             <div class="row setup-content" id="step-1">
                 <center><label class="control-label text-align:center">Choose Your User Type</label></center>
                 <div class="col-xs-6 col-md-offset-3">
@@ -63,7 +64,7 @@
                             <span asp-validation-for="tbl_Users.tbl_user_types_id" class="text-danger"></span>
                         </div>
                         <div class="text-center mt-4">
-                            <button class="btn btn-primary nextBtn text-center float-end" type="button">Next</button>
+                            <button class="btn btn-primary nextBtn text-center" type="button">Next</button>
                         </div>
                     </div>
                 </div>
@@ -94,8 +95,8 @@
                             <span asp-validation-for="tbl_Users.suffix" class="text-danger"></span>
                         </div>
                         <div class="text-center mt-4">
-                            <button class="btn btn-secondary prevBtn float-start" type="button">Previous</button>
-                            <button class="btn btn-primary nextBtn float-end" type="button">Next</button>
+                            <button class="btn btn-secondary prevBtn" type="button">Previous</button>
+                            <button class="btn btn-primary nextBtn" type="button">Next</button>
                         </div>
                     </div>
                 </div>
@@ -116,8 +117,8 @@
                             <span asp-validation-for="tbl_Users.contact_no" class="text-danger"></span>
                         </div>
                         <div class="text-center mt-4">
-                            <button class="btn btn-secondary prevBtn float-start" type="button">Previous</button>
-                            <button class="btn btn-primary nextBtn float-end" type="button">Next</button>
+                            <button class="btn btn-secondary prevBtn" type="button">Previous</button>
+                            <button class="btn btn-primary nextBtn" type="button">Next</button>
                         </div>
                     </div>
                 </div>
@@ -142,8 +143,8 @@
                             <span asp-validation-for="tbl_Users.valid_id_no" class="text-danger"></span>
                         </div>
                         <div class="text-center mt-4">
-                            <button class="btn btn-secondary prevBtn float-start" type="button">Previous</button>
-                            <button class="btn btn-primary nextBtn float-end" type="button">Next</button>
+                            <button class="btn btn-secondary prevBtn" type="button">Previous</button>
+                            <button class="btn btn-primary nextBtn" type="button">Next</button>
                         </div>
                     </div>
                 </div>
@@ -159,67 +160,40 @@
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="tbl_Users.tbl_region_id" class="control-label small">Region</label>
-                            <select asp-for="tbl_Users.tbl_region_id" class="form-select" aria-label="Regions" required="required" id="regions">
-                                <option selected disabled>-- Select Region --</option>
-                                @foreach (tbl_region reg in Model.tbl_Regions)
-                                {
-                                    <option value="@reg.id" data-regcode="@reg.regCode">@reg.name</option>
-                                }
-                            </select>
-                            @* <select asp-for="tbl_Users.tbl_region_id" class="form-control"
+                            <select asp-for="tbl_Users.tbl_region_id" class="form-control"
                                     asp-items="ViewBag.RegionData"
-                                    id="RegId" onchange="loadProvince(this)"></select> *@
+                                    id="RegionId" onchange="loadProvince(this)"></select>
                             <span asp-validation-for="tbl_Users.tbl_region_id" class="text-danger"></span>
                         </div>
-                        
                         <div class="form-group mb-3">
                             <label asp-for="tbl_Users.tbl_province_id" class="control-label small">Province</label>
-                            <select asp-for="tbl_Users.tbl_province_id" class="form-select" aria-label="ProvincesList" required="required" id="ProvincesList">
-                                <option selected disabled>-- Select Province --</option>
-                                @foreach (tbl_province prov in Model.tbl_Provinces)
-                                {
-                                    <option value="@prov.id" data-regcode="@prov.regCode" data-provcode ="@prov.provCode">@prov.name</option>
-                                }
-                            </select>
-
+                            <select asp-for="tbl_Users.tbl_province_id" class="form-control" asp-items="ViewBag.ProvinceData" id="ddlProvinceId" onchange="loadCity(this)"></select>
                             <span asp-validation-for="tbl_Users.tbl_province_id" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for="tbl_Users.tbl_city_id" class="control-label small">City/Municipality</label>
-                            <select asp-for="tbl_Users.tbl_city_id" class="form-select" aria-label="Cities/Municipalities" required="required" id="CityList">
-                                <option selected disabled>-- Select City/Municipality --</option>
-                                @foreach (tbl_city ct in Model.tbl_Cities)
-                                {
-                                    <option value="@ct.id" data-provcode="@ct.provCode" data-ctcode="@ct.citymunCode">@ct.name</option>
-                                }
-                            </select>
+                            <label asp-for="tbl_Users.tbl_city_id" class="control-label small">City/Municipality</label>                            
+                            <select asp-for="tbl_Users.tbl_city_id" class="form-control" asp-items="ViewBag.CityData" id="ddlCityId" onchange="loadBrgy(this)"></select>
                             <span asp-validation-for="tbl_Users.tbl_city_id" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for="tbl_Users.tbl_brgy_id" class="control-label small">Barangay</label>
-                            <select asp-for="tbl_Users.tbl_brgy_id" class="form-select" aria-label="Barangays" required="required" id="BrgyList">
-                                <option selected disabled>-- Select Barangay --</option>
-                                @foreach (tbl_brgy barangay in Model.tbl_Brgys)
-                                {
-                                    <option value="@barangay.id" data-ctcode="@barangay.citymunCode" data-brgycode = "@barangay.brgyCode">@barangay.name</option>
-                                }
-                            </select>
+                            <label asp-for="tbl_Users.tbl_brgy_id" class="control-label small">Barangay</label>                            
+                            <select asp-for="tbl_Users.tbl_brgy_id" class="form-control" asp-items="ViewBag.BrgyData" id="ddlBrgyId"></select>
                             <span asp-validation-for="tbl_Users.tbl_brgy_id" class="text-danger"></span>
                         </div>
-                        
+
                         <div class="form-group" hidden="hidden">
                             <label asp-for="tbl_Users.tbl_division_id" class="form-label small">DIVISION ID</label>
                             <input asp-for="tbl_Users.tbl_division_id" class="form-control" value=" " disabled />
                         </div>
                         <div class="text-center mt-4">
-                            <button class="btn btn-secondary prevBtn float-start" type="button">Previous</button>
-                            <button class="btn btn-primary nextBtn float-end" type="button">Next</button>
+                            <button class="btn btn-secondary prevBtn" type="button">Previous</button>
+                            <button class="btn btn-primary nextBtn" type="button">Next</button>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row setup-content" id="step-6">
-                <center><label class="control-label">Provide Documents</label></center>
+                <center><label class="control-label">Upload Proof of Company SEC Registration</label></center>
                 <div class="col-xs-6 col-md-offset-3">
                     <div class="col-md-12">
                         <div class="form-group" hidden="hidden">
@@ -232,34 +206,14 @@
                             <input type="file" asp-for="filesUpload.Files" class="form-control" multiple />
                         </div>
 
-                        @* <input type="hidden" id="hdnGoogleRecaptcha" required><br />
-                        <p>reCAPTCHA Token (Valid for 2 minutes)</p>
-                        <label id="lblValue">---</label><br /><br /> *@
-                        @* <div class="g-recaptcha" data-sitekey="@Configuration["RecaptchaSettings:SiteKey"]"></div> *@
-
-                        @* <div id="dvCaptcha">
-                        </div>
-                        <input type="hidden" id="hfCaptcha" />
-                        <span id="rfvCaptcha" class="error" style="display:none">Captcha validation is required.</span>
-                        <br /> *@
-
-                        @* <div id="reCaptchaV2"></div>
-                        <br> *@
-
-                        @* <div class="g-recaptcha" data-sitekey="@Model.reCaptcha.Key"></div>
-                        <br /> *@
-                        @* CAPTCHA TEST *@
-                        @* <div id="divcaptch"></div>
-                        <input id="textcaptcha" type="text" style="display:none" required /> *@
-                        <br />
                         <div class="text-center mb-4">
                             <small class="text-secondary text-center my-5 fs-5">
                                 By submitting this form, you agree to our <a href="@Url.Action("TermsPolicy", "Home")" target="_blank" class="text-decoration-none">Privacy Policy and Terms & Conditions.</a>
                             </small>
                         </div>
                         <div class="text-center mt-4">
-                            <button class="btn btn-secondary prevBtn float-start" type="button">Previous</button>
-                            <button type="button" id="submitBtn" value="Submit" class="btn btn-primary submitBtn float-end" style="width: min(100px, 100%) !important;">Submit</button>
+                            <button class="btn btn-secondary prevBtn" type="button">Previous</button>
+                            <button type="button" id="submitBtn" value="Submit" class="btn btn-primary submitBtn" style="width: min(100px, 100%) !important;">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -271,8 +225,6 @@
 <partial name="~/Views/Modals/AccountModal.cshtml" />
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
-<script src="https://www.google.com/recaptcha/api.js?render=@GoogleCaptchaConfig.Value.SiteKey"></script>
 
 
 <script type="text/javascript">
@@ -331,32 +283,11 @@
 
 
 
-        //CAPTCHA V3 2023-OCT-06
-        function getToken() {
-            grecaptcha.ready(function () {
-                grecaptcha.execute('@GoogleCaptchaConfig.Value.SiteKey', { action: 'submit' }).then(function (token) {
-                    // Add your logic to submit to your backend server here.
-                    console.log(token);
-                    document.getElementById("LoginViewModelToken").value = token;
-                });
-            });
-        }
-        setInterval(getToken, 115000)
-        $(function () {
-            getToken();
-        });
-        //CAPTCHA V3 END 2023-OCT-06
-
-
-
         feather.replace();
 
         $("#submitBtn").click(function () {
             $("#confirmSubmitModal").modal("show");
-            $("#rfvCaptcha").hide();
-            if ($("#hfCaptcha").val() == "") {
-                $("#rfvCaptcha").show();
-            }
+
         });
 
         $("#backBtn").click(function () {
@@ -399,44 +330,82 @@
         }
     });
 
-
-
-    //For Location Dropdowns
-
-    console.log(region_code);
+    //Location Dropdowns
     $(document).ready(function () {
-        $("#regions").change(function () {
-            
-            var rcod = $("#regions option:selected").attr("data-regcode");
-            $("#ProvincesList").children("option").hide();
-            $("#ProvincesList option[data-regcode='" + rcod + "']").show();
-        });
+        var a = 0;
     });
 
-    //CITY FILTER
-    $(document).ready(function () {
-        $("#ProvincesList").change(function () {
-            //alert($("#ProvincesList option:selected").val());
-            var pcod = $("#ProvincesList option:selected").attr("data-provcode");
-            $("#CityList").children("option").hide();
-            $("#CityList option[data-provcode='" + pcod + "']").show();
-        });
-    });
-    $("#BrgyList").children("option").hide();
-    Barangay Filter
-    $(document).ready(function () {
+    function loadProvince(obj) {
+        var value = obj.value;
+        var url = "@baseurl";
 
-        $("#CityList").change(function () {
-
-            var ccod = $("#CityList option:selected").attr("data-ctcode");
-            $("#BrgyList").children("option").hide();
-            $("#BrgyList option[data-ctcode='" + ccod + "']").show();
+        $.post(url + "Account/GetProvinceByRegionId", { tbl_region_id: value }, function (data) {
+            debugger;
+            PopulateProvinceDropDown("#ddlProvinceId", data);
         });
+    }
+
+    function PopulateProvinceDropDown(dropDownId, list, selectedId) {
+        $(dropDownId).empty();
+        $(dropDownId).append("<option>--Please Select a Province--</option>")
+        $.each(list, function (index, row) {
+            $(dropDownId).append("<option value='" + row.id + "'>" + row.name + "</option>")
+        });
+    }
+
+    //loadCity
+    $(document).ready(function () {
+        var a = 0;
     });
+
+    function loadCity(obj) {
+        var value = obj.value;
+        var url = "@baseurl";
+
+        $.post(url + "Account/GetCityByProvinceId", { tbl_province_id: value }, function (data) {
+            debugger;
+            PopulateCityDropDown("#ddlCityId", data);
+        });
+    }
+
+    function PopulateCityDropDown(ctDropDownId, list, selectedId) {
+        $(ctDropDownId).empty();
+        $(ctDropDownId).append("<option>--Please Select a City--</option>")
+        $.each(list, function (index, row) {
+            $(ctDropDownId).append("<option value='" + row.id + "'>" + row.name + "</option>")
+        });
+    }
+
+    //loadBrgy
+    $(document).ready(function () {
+        var a = 0;
+    });
+
+    function loadBrgy(obj) {
+        var value = obj.value;
+        var url = "@baseurl";
+
+        $.post(url + "Account/GetBrgyByCityId", { tbl_city_id: value }, function (data) {
+            debugger;
+            PopulateBrgyDropDown("#ddlBrgyId", data);
+        });
+    }
+
+    function PopulateBrgyDropDown(brgyDropDownId, list, selectedId) {
+        $(brgyDropDownId).empty();
+        $(brgyDropDownId).append("<option>--Please Select a Barangay--</option>")
+        $.each(list, function (index, row) {
+            $(brgyDropDownId).append("<option value='" + row.id + "'>" + row.name + "</option>")
+        });
+    }
 
 </script>
 
 <style type="text/css">
+    /*body {
+            margin-top: 40px;
+        }*/
+
     .stepwizard-step p {
         margin-top: 10px;
     }
@@ -454,13 +423,13 @@
 
     .stepwizard-step a[disabled] {
         background-color: lightgrey;
-        opacity: 1; 
+        opacity: 1;
         pointer-events: none;
         color: white;
     }
 
     .stepwizard-row:before {
-        top: 15px;
+        top: 53px;
         bottom: 0;
         position: absolute;
         content: " ";
@@ -491,9 +460,9 @@
         color: red;
     }
 
-    .has-error .form-control {
-        border: solid 1px red;
-    }
+        .has-error .form-control {
+            border: solid 1px red;
+        }
 
     .nextBtn, .prevBtn {
         width: min(100px, 100%) !important;
