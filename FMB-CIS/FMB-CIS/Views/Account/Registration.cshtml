@@ -20,16 +20,21 @@
                 <div class="stepwizard-step">
                     <p class="mb-1 fw-bold">Step</p>
                     <a href="#step-1" type="button" class="btn btn-primary btn-circle fw-bold">1</a>
+                    <br />
+                    Choose your User Type
                 </div>
                 <div class="stepwizard-step">
                     <p class="mb-1 fw-bold">Step</p>
-                    <a href="#step-2" type="button" class="btn btn-default btn-circle fw-bold" disabled="disabled">2</a>
+                    <a href="#step-2" type="button" class="btn btn-default btn-circle fw-bold" disabled="disabled">2</a> <br />
+                    Fill out your User Information
                 </div>
                 <div class="stepwizard-step">
                     <p class="mb-1 fw-bold">Step</p>
                     <a href="#step-3" type="button" class="btn btn-default btn-circle fw-bold" disabled="disabled">3</a>
+                    <br />
+                    Upload Supporting Documents
                 </div>
-                <div class="stepwizard-step">
+                @* <div class="stepwizard-step">
                     <p class="mb-1 fw-bold">Step</p>
                     <a href="#step-4" type="button" class="btn btn-default btn-circle fw-bold" disabled="disabled">4</a>
                 </div>
@@ -40,7 +45,7 @@
                 <div class="stepwizard-step">
                     <p class="mb-1 fw-bold">Step</p>
                     <a href="#step-6" type="button" class="btn btn-default btn-circle fw-bold" disabled="disabled">6</a>
-                </div>
+                </div> *@
             </div>
         </div>
         <h3 align="center">REGISTER YOUR ACCOUNT</h3>
@@ -94,18 +99,6 @@
                             <input asp-for="tbl_Users.suffix" class="form-control" />
                             <span asp-validation-for="tbl_Users.suffix" class="text-danger"></span>
                         </div>
-                        <div class="text-center mt-4">
-                            <button class="btn btn-secondary prevBtn" type="button">Previous</button>
-                            <button class="btn btn-primary nextBtn" type="button">Next</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row setup-content" id="step-3">
-                <center><label class="control-label">User Information</label></center>
-                <div class="col-xs-6 col-md-offset-3">
-                    <div class="col-md-12">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group mb-3">
                             <label asp-for="tbl_Users.email" class="control-label small">Email (Please use official email address)</label>
                             <input asp-for="tbl_Users.email" class="form-control" placeholder="name@address.com" required="required" />
@@ -116,17 +109,6 @@
                             <input asp-for="tbl_Users.contact_no" class="form-control" placeholder="09XX XXX XXXX" required="required" />
                             <span asp-validation-for="tbl_Users.contact_no" class="text-danger"></span>
                         </div>
-                        <div class="text-center mt-4">
-                            <button class="btn btn-secondary prevBtn" type="button">Previous</button>
-                            <button class="btn btn-primary nextBtn" type="button">Next</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row setup-content" id="step-4">
-                <center><label class="control-label">User Information</label></center>
-                <div class="col-xs-6 col-md-offset-3">
-                    <div class="col-md-12">
                         <div class="form-group mb-3">
                             <label asp-for="tbl_Users.birth_date" class="control-label small">Birth Date (Must be 18 years old and above)</label>
                             <input asp-for="tbl_Users.birth_date" type="date" class="form-control" required="required" />
@@ -142,17 +124,6 @@
                             <input asp-for="tbl_Users.valid_id_no" class="form-control" required="required" />
                             <span asp-validation-for="tbl_Users.valid_id_no" class="text-danger"></span>
                         </div>
-                        <div class="text-center mt-4">
-                            <button class="btn btn-secondary prevBtn" type="button">Previous</button>
-                            <button class="btn btn-primary nextBtn" type="button">Next</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row setup-content" id="step-5">
-                <center><label class="control-label">User Information</label></center>
-                <div class="col-xs-6 col-md-offset-3">
-                    <div class="col-md-12">
                         <div class="form-group mb-3">
                             <label asp-for="tbl_Users.street_address" class="control-label small">Street Address</label>
                             <input asp-for="tbl_Users.street_address" class="form-control" required="required" />
@@ -171,15 +142,77 @@
                             <span asp-validation-for="tbl_Users.tbl_province_id" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for="tbl_Users.tbl_city_id" class="control-label small">City/Municipality</label>                            
+                            <label asp-for="tbl_Users.tbl_city_id" class="control-label small">City/Municipality</label>
                             <select asp-for="tbl_Users.tbl_city_id" class="form-control" asp-items="ViewBag.CityData" id="ddlCityId" onchange="loadBrgy(this)"></select>
                             <span asp-validation-for="tbl_Users.tbl_city_id" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for="tbl_Users.tbl_brgy_id" class="control-label small">Barangay</label>                            
+                            <label asp-for="tbl_Users.tbl_brgy_id" class="control-label small">Barangay</label>
                             <select asp-for="tbl_Users.tbl_brgy_id" class="form-control" asp-items="ViewBag.BrgyData" id="ddlBrgyId"></select>
                             <span asp-validation-for="tbl_Users.tbl_brgy_id" class="text-danger"></span>
                         </div>
+                        <div class="text-center mt-4">
+                            <button class="btn btn-secondary prevBtn" type="button">Previous</button>
+                            <button class="btn btn-primary nextBtn" type="button">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row setup-content" id="step-3">
+                <center><label class="control-label">Upload Proof of Company SEC Registration</label></center>
+                <div class="col-xs-6 col-md-offset-3">
+                    <div class="col-md-12">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        @* <div class="form-group" hidden="hidden">
+                            <label asp-for="tbl_Users.comment" class="form-label small">Remarks</label>
+                            <input asp-for="tbl_Users.comment" class="form-control" disabled />
+                            <span asp-validation-for="tbl_Users.comment" class="text-danger"></span>
+                        </div> *@
+                        <div class="form-group mb-5">
+                            <label class="control-label small text-black">Attach Forms</label>
+                            <input type="file" asp-for="filesUpload.Files" class="form-control" multiple />
+                        </div>
+
+                        <div id="dvCaptcha">
+                        </div>
+                        <input type="hidden" id="hfCaptcha" />
+                        <span id="rfvCaptcha" class="error" style="display:none">Captcha validation is required.</span>
+                        <br />
+
+                        @* <br /> <br />
+                        <div id="divcaptch"></div>
+                        <input id="txtcaptcha" type="text" style="display:none" required />
+                        <br /> <br /> *@
+                        <div class="text-center mb-4">
+                            <small class="text-secondary text-center my-5 fs-5">
+                                By submitting this form, you agree to our <a href="@Url.Action("TermsPolicy", "Home")" target="_blank" class="text-decoration-none">Privacy Policy and Terms & Conditions.</a>
+                            </small>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button class="btn btn-secondary prevBtn" type="button">Previous</button>
+                            <button type="button" id="submitBtn" value="Submit" class="btn btn-primary submitBtn" style="width: min(100px, 100%) !important;">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @* <div class="row setup-content" id="step-4">
+                <center><label class="control-label">User Information</label></center>
+                <div class="col-xs-6 col-md-offset-3">
+                    <div class="col-md-12">
+                        
+                        <div class="text-center mt-4">
+                            <button class="btn btn-secondary prevBtn" type="button">Previous</button>
+                            <button class="btn btn-primary nextBtn" type="button">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row setup-content" id="step-5">
+                <center><label class="control-label">User Information</label></center>
+                <div class="col-xs-6 col-md-offset-3">
+                    <div class="col-md-12">
+                        
 
                         <div class="form-group" hidden="hidden">
                             <label asp-for="tbl_Users.tbl_division_id" class="form-label small">DIVISION ID</label>
@@ -196,28 +229,11 @@
                 <center><label class="control-label">Upload Proof of Company SEC Registration</label></center>
                 <div class="col-xs-6 col-md-offset-3">
                     <div class="col-md-12">
-                        <div class="form-group" hidden="hidden">
-                            <label asp-for="tbl_Users.comment" class="form-label small">Remarks</label>
-                            <input asp-for="tbl_Users.comment" class="form-control" disabled />
-                            <span asp-validation-for="tbl_Users.comment" class="text-danger"></span>
-                        </div>
-                        <div class="form-group mb-5">
-                            <label class="control-label small text-black">Attach Forms</label>
-                            <input type="file" asp-for="filesUpload.Files" class="form-control" multiple />
-                        </div>
-
-                        <div class="text-center mb-4">
-                            <small class="text-secondary text-center my-5 fs-5">
-                                By submitting this form, you agree to our <a href="@Url.Action("TermsPolicy", "Home")" target="_blank" class="text-decoration-none">Privacy Policy and Terms & Conditions.</a>
-                            </small>
-                        </div>
-                        <div class="text-center mt-4">
-                            <button class="btn btn-secondary prevBtn" type="button">Previous</button>
-                            <button type="button" id="submitBtn" value="Submit" class="btn btn-primary submitBtn" style="width: min(100px, 100%) !important;">Submit</button>
-                        </div>
+                        
                     </div>
                 </div>
-            </div>
+            </div> *@
+
         </form>
     </div>
 </div>
@@ -227,7 +243,41 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+        asyncdefer></script>
+
+
 <script type="text/javascript">
+
+    //captcha
+    var onloadCallback = function () {
+        grecaptcha.render('dvCaptcha', {
+            'sitekey': '@Model.reCaptcha.Key',
+            'callback': function (response) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Account/AjaxMethod",
+                    data: { response: response },
+                    success: function (r) {
+                        var captchaResponse = jQuery.parseJSON(r.Response);
+                        if (captchaResponse.success) {
+                            $("#hfCaptcha").val(captchaResponse.success);
+                            $("#rfvCaptcha").hide();
+                        } else {
+                            $("#hfCaptcha").val("");
+                            $("#rfvCaptcha").show();
+                            var error = captchaResponse["error-codes"][0];
+                            $("#rfvCaptcha").html("RECaptcha error. " + error);
+                        }
+                    }
+                });
+            }
+        });
+    };
+
+    //captcha end
+
     $(document).ready(function () {
         // Step by step form
         var navListItems = $('div.setup-panel div a'),
@@ -282,11 +332,15 @@
         // Step by step form end
 
 
-
         feather.replace();
 
         $("#submitBtn").click(function () {
             $("#confirmSubmitModal").modal("show");
+            //captcha upon submission
+            $("#rfvCaptcha").hide();
+            if ($("#hfCaptcha").val() == "") {
+                $("#rfvCaptcha").show();
+            }
 
         });
 
@@ -330,6 +384,8 @@
         }
     });
 
+
+
     //Location Dropdowns
     $(document).ready(function () {
         var a = 0;
@@ -347,7 +403,7 @@
 
     function PopulateProvinceDropDown(dropDownId, list, selectedId) {
         $(dropDownId).empty();
-        $(dropDownId).append("<option>--Please Select a Province--</option>")
+        $(dropDownId).append("<option selected disabled>--Please Select a Province--</option>")
         $.each(list, function (index, row) {
             $(dropDownId).append("<option value='" + row.id + "'>" + row.name + "</option>")
         });
@@ -370,7 +426,7 @@
 
     function PopulateCityDropDown(ctDropDownId, list, selectedId) {
         $(ctDropDownId).empty();
-        $(ctDropDownId).append("<option>--Please Select a City--</option>")
+        $(ctDropDownId).append("<option selected disabled>--Please Select a City--</option>")
         $.each(list, function (index, row) {
             $(ctDropDownId).append("<option value='" + row.id + "'>" + row.name + "</option>")
         });
@@ -393,7 +449,7 @@
 
     function PopulateBrgyDropDown(brgyDropDownId, list, selectedId) {
         $(brgyDropDownId).empty();
-        $(brgyDropDownId).append("<option>--Please Select a Barangay--</option>")
+        $(brgyDropDownId).append("<option selected disabled>--Please Select a Barangay--</option>")
         $.each(list, function (index, row) {
             $(brgyDropDownId).append("<option value='" + row.id + "'>" + row.name + "</option>")
         });

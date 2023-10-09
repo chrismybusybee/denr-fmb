@@ -36,14 +36,23 @@ namespace FMB_CIS.Controllers
         }
         public IActionResult Index()
         {
-            if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
+            //Set Roles who can access this page
+            int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+
+            if (usrRoleID == 3 || usrRoleID == 5 || usrRoleID == 6 || usrRoleID == 7) 
             {
+                return View();
+            }
+            else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
+            {
+
                 return RedirectToAction("ChainsawOwnerApplicantsList", "ChainsawOwner");
+                
             }
             else
             {
-
-                return View();
+                return RedirectToAction("Index", "Dashboard");
             }
         }
 
