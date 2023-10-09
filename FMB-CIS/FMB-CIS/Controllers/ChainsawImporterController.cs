@@ -1,5 +1,6 @@
 
 ﻿using System;
+using System.Net;
 using System.Data;
 using System.Data.SqlTypes;
 using System.Linq;
@@ -96,32 +97,53 @@ namespace FMB_CIS.Controllers
                 {
                     foreach (var file in model.filesUpload.Files)
                     {
-                        var filesDB = new tbl_files();
-                        FileInfo fileInfo = new FileInfo(file.FileName);
-                        string path = Path.Combine(Directory.GetCurrentDirectory(), "Files/UserDocs");
-
-                        //create folder if not exist
-                        if (!Directory.Exists(path))
-                            Directory.CreateDirectory(path);
-
-
-                        string fileNameWithPath = Path.Combine(path, file.FileName);
-
-                        using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                        try
                         {
-                            file.CopyTo(stream);
+                            var filesDB = new tbl_files();
+                            FileInfo fileInfo = new FileInfo(file.FileName);
+                            string path = Path.Combine(Directory.GetCurrentDirectory(), "Files/UserDocs");
+
+                            //create folder if not exist
+                            if (!Directory.Exists(path))
+                                Directory.CreateDirectory(path);
+
+
+                            string fileNameWithPath = Path.Combine(path, file.FileName);
+
+                            using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                            {
+                                file.CopyTo(stream);
+                            }
+
+                            filesDB.tbl_application_id = appID;
+                            filesDB.created_by = userID;
+                            filesDB.modified_by = userID;
+                            filesDB.date_created = DateTime.Now;
+                            filesDB.date_modified = DateTime.Now;
+                            filesDB.filename = file.FileName;
+                            filesDB.path = path;
+                            filesDB.tbl_file_type_id = fileInfo.Extension;
+                            filesDB.tbl_file_sources_id = fileInfo.Extension;
+                            _context.tbl_files.Add(filesDB);
+                            _context.SaveChanges();
                         }
-                        filesDB.tbl_application_id = appID;
-                        filesDB.created_by = userID;
-                        filesDB.modified_by = userID;
-                        filesDB.date_created = DateTime.Now;
-                        filesDB.date_modified = DateTime.Now;
-                        filesDB.filename = file.FileName;
-                        filesDB.path = path;
-                        filesDB.tbl_file_type_id = fileInfo.Extension;
-                        filesDB.tbl_file_sources_id = fileInfo.Extension;
-                        _context.tbl_files.Add(filesDB);
-                        _context.SaveChanges();
+                        catch(ArgumentNullException e)
+                        {
+                            Console.WriteLine("ArgumentNullException: " + e.Message);
+                        }
+                        catch (WebException e)
+                        {
+                            Console.WriteLine("WebException: " + e.Message);
+                        }
+                        catch (Exception e)
+
+                        {
+
+                            Console.WriteLine("Exception: " + e.Message);
+
+                        }
+
+
                     }
                 }
                 
