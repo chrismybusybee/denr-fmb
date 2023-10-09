@@ -74,7 +74,14 @@ namespace FMB_CIS.Controllers
             if (!string.IsNullOrEmpty(tbl_region_id))
             {
                 regID = Convert.ToInt32(tbl_region_id);
-                provinceLists = _context.tbl_province.Where(s => s.regCode.Equals(regID)).ToList();
+                if (regID == 13)
+                { 
+                    provinceLists = _context.tbl_province.Where(s => s.regCode.Equals(regID)).ToList(); 
+                }
+                else
+                {
+                    provinceLists = _context.tbl_province.Where(s => s.regCode.Equals(regID)).OrderBy(s => s.name).ToList();
+                }    
             }
             return Json(provinceLists);
         }
@@ -87,7 +94,7 @@ namespace FMB_CIS.Controllers
             if (!string.IsNullOrEmpty(tbl_province_id))
             {
                 provID = Convert.ToInt32(tbl_province_id);
-                cityLists = _context.tbl_city.Where(s => s.provCode.Equals(provID)).ToList();
+                cityLists = _context.tbl_city.Where(s => s.provCode.Equals(provID)).OrderBy(s => s.name).ToList();
             }
             return Json(cityLists);
         }
@@ -100,7 +107,7 @@ namespace FMB_CIS.Controllers
             if (!string.IsNullOrEmpty(tbl_city_id))
             {
                 ctID = Convert.ToInt32(tbl_city_id);
-                brgyLists = _context.tbl_brgy.Where(s => s.citymunCode.Equals(ctID)).ToList();
+                brgyLists = _context.tbl_brgy.Where(s => s.citymunCode.Equals(ctID)).OrderBy(s => s.name).ToList();
             }
             return Json(brgyLists);
         }

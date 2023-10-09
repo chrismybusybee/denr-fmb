@@ -403,7 +403,7 @@
 
     function PopulateProvinceDropDown(dropDownId, list, selectedId) {
         $(dropDownId).empty();
-        $(dropDownId).append("<option>--Please Select a Province--</option>")
+        $(dropDownId).append("<option selected disabled>--Please Select a Province--</option>")
         $.each(list, function (index, row) {
             $(dropDownId).append("<option value='" + row.id + "'>" + row.name + "</option>")
         });
@@ -426,7 +426,7 @@
 
     function PopulateCityDropDown(ctDropDownId, list, selectedId) {
         $(ctDropDownId).empty();
-        $(ctDropDownId).append("<option>--Please Select a City--</option>")
+        $(ctDropDownId).append("<option selected disabled>--Please Select a City--</option>")
         $.each(list, function (index, row) {
             $(ctDropDownId).append("<option value='" + row.id + "'>" + row.name + "</option>")
         });
@@ -449,7 +449,7 @@
 
     function PopulateBrgyDropDown(brgyDropDownId, list, selectedId) {
         $(brgyDropDownId).empty();
-        $(brgyDropDownId).append("<option>--Please Select a Barangay--</option>")
+        $(brgyDropDownId).append("<option selected disabled>--Please Select a Barangay--</option>")
         $.each(list, function (index, row) {
             $(brgyDropDownId).append("<option value='" + row.id + "'>" + row.name + "</option>")
         });
