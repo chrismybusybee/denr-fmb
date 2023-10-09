@@ -437,7 +437,10 @@
 <script type="text/javascript">
     $(document).ready(function () {
         feather.replace();
-
+        $('.dataTable').DataTable({
+            destroy: true,
+            order: [[0, 'desc']]
+        });
         function toggleDropdown(menuItem, dropdown) {
             $(dropdown).toggleClass("active");
             const isOpen = $(dropdown).hasClass("active");

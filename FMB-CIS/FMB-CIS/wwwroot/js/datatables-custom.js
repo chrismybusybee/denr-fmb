@@ -2,8 +2,9 @@ $(document).ready(function () {
     $('.dataTable').DataTable({
             "language": {
             "search": "",
-            "searchPlaceholder": "Search"
-        }
+            "searchPlaceholder": "Search",
+        },
+        
     });
 
     var tableRows = document.querySelectorAll("table tbody tr");
