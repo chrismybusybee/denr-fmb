@@ -39,74 +39,14 @@ namespace FMB_CIS.Controllers
         {
             UserRegistrationViewModel model = new UserRegistrationViewModel();
 
-            //Generate List of Regions from the Database
-            //var regionList = _context.tbl_region.ToList();
-            //List<tbl_region> regions = new List<tbl_region>();
 
-            //foreach (var regList in regionList)
-            //{
-            //    regions.Add(new tbl_region { name = regList.name, id = regList.id, regCode = regList.regCode });
-            //}
-            //model.tbl_Regions = regions;
-            //End for region
-
-            //Generate List of Provinces from the Database
-            //var provinceList = _context.tbl_province.ToList();
-            //List<tbl_province> provinces = new List<tbl_province>();
-
-            //foreach (var provList in provinceList)
-            //{
-            //    provinces.Add(new tbl_province { name = provList.name, id = provList.id, regCode = provList.regCode, provCode = provList.provCode });
-            //}
-            //model.tbl_Provinces = provinces;
-            //End for provinces
-
-            //Generate List of City from the Database
-            //var cityList = _context.tbl_city.ToList();
-            //List<tbl_city> cities = new List<tbl_city>();
-
-            //foreach (var ctList in cityList)
-            //{
-            //    cities.Add(new tbl_city { name = ctList.name, id = ctList.id, regCode = ctList.regCode, provCode = ctList.provCode, citymunCode = ctList.citymunCode });
-            //}
-            //model.tbl_Cities = cities;
-            //End for cities
-
-            //Generate List of Barangay from the Database
-            //var brgyList = _context.tbl_brgy.ToList();
-            //List<tbl_brgy> brgys = new List<tbl_brgy>();
-
-            //foreach (var bgyList in brgyList)
-            //{
-            //    brgys.Add(new tbl_brgy { name = bgyList.name, id = bgyList.id, regCode = bgyList.regCode, provCode = bgyList.provCode, citymunCode = bgyList.citymunCode, brgyCode = bgyList.brgyCode });
-            //}
-            //model.tbl_Brgys = brgys;
-            //End for barangays
-
-            //Test for Cascading Dropdown
-            //var _regions = _context.tbl_region.ToList();
-            //var _provinces = new List<tbl_province>();
-
-            //_regions.Add(new tbl_region() { id = 0, name = "--Select Region--" });
-            //_provinces.Add(new tbl_province() { id = 0, name = "--Select Province--" });
-
-            //ViewData["RegionData"] = new SelectList(_regions.OrderBy(s => s.id), "id", "name");
-            //ViewData["ProvinceData"] = new SelectList(_provinces.OrderBy(s => s.id), "id", "name");
-
-            //model.tbl_Regions = _regions;
-            //model.tbl_Provinces = _provinces;
-
-            //string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
-            //ViewData["BaseUrl"] = host;
-
-            //return View();
-
-            //model.reCaptcha = new RECaptcha();
+            model.reCaptcha = new RECaptcha();
 
             var _regions = _context.tbl_region.ToList();
             var _provinces = new List<tbl_province>();
             var _cities = new List<tbl_city>();
             var _barangays = new List<tbl_brgy>();
+
 
             _regions.Add(new tbl_region() { id = 0, name = "--Select Region--" });
             _provinces.Add(new tbl_province() { id = 0, name = "--Select Province--" });
@@ -165,6 +105,14 @@ namespace FMB_CIS.Controllers
             return Json(brgyLists);
         }
 
+        [HttpPost]
+        public JsonResult AjaxMethod(string response)
+        {
+            RECaptcha recaptcha = new RECaptcha();
+            string url = "https://www.google.com/recaptcha/api/siteverify?secret=" + recaptcha.Secret + "&response=" + response;
+            recaptcha.Response = (new WebClient()).DownloadString(url);
+            return Json(recaptcha);
+        }
         public IActionResult RegistrationPrimary()
         {
             return View();
@@ -206,8 +154,10 @@ namespace FMB_CIS.Controllers
                 
                 if (eMailExist == true)
                 {
-                        ModelState.AddModelError("email", "Email Address has already been used, please try a different Email Address.");
-                        return View(model);
+                    ModelState.AddModelError("tbl_Users.email", "Email Address has already been used, please try a different Email Address.");
+
+                    return Registration();
+                    //return View(model);
                 }
                 else
                 {
@@ -267,42 +217,6 @@ namespace FMB_CIS.Controllers
                         }
                     }
 
-                    //STORED PROCEDURE (OLD METHOD)
-                    //DAL.RegisterNewUser(userRegistrationViewModel.first_name, userRegistrationViewModel.middle_name, userRegistrationViewModel.last_name, userRegistrationViewModel.suffix, userRegistrationViewModel.contact_no, userRegistrationViewModel.valid_id, userRegistrationViewModel.valid_id_no, userRegistrationViewModel.birth_date, userRegistrationViewModel.tbl_region_id, userRegistrationViewModel.tbl_province_id, userRegistrationViewModel.tbl_city_id, userRegistrationViewModel.tbl_brgy_id, userRegistrationViewModel.street_address, userRegistrationViewModel.tbl_division_id, userRegistrationViewModel.email, encrPw, userRegistrationViewModel.status, userRegistrationViewModel.comment);
-                    //using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("ConnStrng")))
-                    //    {
-                    //    sqlConnection.Open();
-                    //    SqlCommand sqlCmd = new SqlCommand("CreateNewUserNoPHOTO", sqlConnection);
-                    //    sqlCmd.CommandType = CommandType.StoredProcedure;
-                    //    sqlCmd.Parameters.AddWithValue("first_name", userRegistrationViewModel.first_name);
-                    //    sqlCmd.Parameters.AddWithValue("middle_name", userRegistrationViewModel.middle_name);
-                    //    sqlCmd.Parameters.AddWithValue("last_name", userRegistrationViewModel.last_name);
-                    //    sqlCmd.Parameters.AddWithValue("suffix", userRegistrationViewModel.suffix ?? "");
-                    //    sqlCmd.Parameters.AddWithValue("contact_no", userRegistrationViewModel.contact_no);
-                    //    sqlCmd.Parameters.AddWithValue("valid_id", userRegistrationViewModel.valid_id);
-                    //    sqlCmd.Parameters.AddWithValue("valid_id_no", userRegistrationViewModel.valid_id_no);
-                    //    sqlCmd.Parameters.AddWithValue("birth_date", userRegistrationViewModel.birth_date);
-                    //    sqlCmd.Parameters.AddWithValue("tbl_region_id", userRegistrationViewModel.tbl_region_id);
-                    //    //sqlCmd.Parameters.AddWithValue("tbl_province_name", userRegistrationViewModel.tbl_province_id);
-                    //    //sqlCmd.Parameters.AddWithValue("tbl_city_name", userRegistrationViewModel.tbl_city_id);
-                    //    //sqlCmd.Parameters.AddWithValue("tbl_brgy_name", userRegistrationViewModel.tbl_brgy_id);
-                    //    sqlCmd.Parameters.AddWithValue("tbl_province_id", userRegistrationViewModel.tbl_province_id);
-                    //    sqlCmd.Parameters.AddWithValue("tbl_city_id", userRegistrationViewModel.tbl_city_id);
-                    //    sqlCmd.Parameters.AddWithValue("tbl_brgy_id", userRegistrationViewModel.tbl_brgy_id);
-                    //    sqlCmd.Parameters.AddWithValue("street_address", userRegistrationViewModel.street_address);
-                    //    sqlCmd.Parameters.AddWithValue("tbl_division_id", userRegistrationViewModel.tbl_division_id ?? "");
-                    //    sqlCmd.Parameters.AddWithValue("email", userRegistrationViewModel.email);
-                    //    sqlCmd.Parameters.AddWithValue("password", encrPw);
-                    //    sqlCmd.Parameters.AddWithValue("status", one/*userRegistrationViewModel.status*/);
-                    //    //sqlCmd.Parameters.AddWithValue("photo", userRegistrationViewModel.photo);
-                    //    sqlCmd.Parameters.AddWithValue("comment", userRegistrationViewModel.comment ?? " ");
-                    //    sqlCmd.Parameters.AddWithValue("date_created", DateTime.Now);
-                    //    sqlCmd.Parameters.AddWithValue("date_modified", DateTime.Now);
-                    //    sqlCmd.Parameters.AddWithValue("tbl_user_types_id", Convert.ToInt32(userRegistrationViewModel.tbl_user_types_id));
-                    //    sqlCmd.ExecuteNonQuery();
-
-                    //        sqlConnection.Close();
-                    //    }
 
                     //Code to set password for newly registered user
                     using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("ConnStrng")))
@@ -349,8 +263,8 @@ namespace FMB_CIS.Controllers
                 //}
             }
 
-
-            return View(model);
+            return Registration();
+            //return View(model);
         }
 
 

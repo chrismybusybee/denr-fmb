@@ -82,9 +82,9 @@ namespace FMB_CIS.Controllers
                 //model.tbl_User.id = uid;
 
                 var _regions = _context.tbl_region.ToList();
-                var _provinces = _context.tbl_province.Where(p => p.id == usInfo.tbl_province_id).ToList();
-                var _cities = _context.tbl_city.Where(c => c.id == usInfo.tbl_city_id).ToList();
-                var _barangays = _context.tbl_brgy.Where(b => b.id == usInfo.tbl_brgy_id).ToList();
+                var _provinces = _context.tbl_province.Where(p => p.regCode == usInfo.tbl_region_id).ToList();
+                var _cities = _context.tbl_city.Where(c => c.provCode == usInfo.tbl_province_id).ToList();
+                var _barangays = _context.tbl_brgy.Where(b => b.citymunCode == usInfo.tbl_city_id).ToList();
                 //var _provinces = new List<tbl_province>();
                 //var _cities = new List<tbl_city>();
                 //var _barangays = new List<tbl_brgy>();
