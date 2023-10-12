@@ -173,10 +173,10 @@
                             <input type="file" asp-for="filesUpload.Files" class="form-control" multiple />
                         </div>
 
-                        <div id="dvCaptcha">
+                        <div id="g-recaptcha">
                         </div>
                         <input type="hidden" id="hfCaptcha" />
-                        <span id="rfvCaptcha" class="error" style="display:none">Captcha validation is required.</span>
+                        <span id="rfvCaptcha" class="text-danger" style="display:none">Captcha validation is required.</span>
                         <br />
 
                         @* <br /> <br />
@@ -250,29 +250,12 @@
 
 <script type="text/javascript">
 
+    
+
     //captcha
     var onloadCallback = function () {
-        grecaptcha.render('dvCaptcha', {
-            'sitekey': '@Model.reCaptcha.Key',
-            'callback': function (response) {
-                $.ajax({
-                    type: "POST",
-                    url: "/Account/AjaxMethod",
-                    data: { response: response },
-                    success: function (r) {
-                        var captchaResponse = jQuery.parseJSON(r.Response);
-                        if (captchaResponse.success) {
-                            $("#hfCaptcha").val(captchaResponse.success);
-                            $("#rfvCaptcha").hide();
-                        } else {
-                            $("#hfCaptcha").val("");
-                            $("#rfvCaptcha").show();
-                            var error = captchaResponse["error-codes"][0];
-                            $("#rfvCaptcha").html("RECaptcha error. " + error);
-                        }
-                    }
-                });
-            }
+        grecaptcha.render('g-recaptcha', {
+            'sitekey': '@Model.reCaptcha.Key'
         });
     };
 
@@ -335,11 +318,17 @@
         feather.replace();
 
         $("#submitBtn").click(function () {
-            $("#confirmSubmitModal").modal("show");
+            
             //captcha upon submission
-            $("#rfvCaptcha").hide();
-            if ($("#hfCaptcha").val() == "") {
+            var response = grecaptcha.getResponse();
+            if (response.length == 0) 
+            {
                 $("#rfvCaptcha").show();
+            }
+            else
+            {
+                $("#rfvCaptcha").hide();
+                $("#confirmSubmitModal").modal("show");
             }
 
         });

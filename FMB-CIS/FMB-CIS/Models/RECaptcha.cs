@@ -1,9 +1,12 @@
-﻿using System.Net;
+﻿using FMB_CIS.Data;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Net;
 
 namespace FMB_CIS.Models
 {
     public class RECaptcha
     {
+
         //FOR fmb-cis.beesuite.ph reCaptcha V2
         public string Key = "6LfQKXkoAAAAABwcL6avWNOL0tUncx8sxrBEcrEP";
 

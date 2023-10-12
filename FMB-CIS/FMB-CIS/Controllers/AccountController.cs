@@ -112,14 +112,14 @@ namespace FMB_CIS.Controllers
             return Json(brgyLists);
         }
 
-        [HttpPost]
-        public JsonResult AjaxMethod(string response)
-        {
-            RECaptcha recaptcha = new RECaptcha();
-            string url = "https://www.google.com/recaptcha/api/siteverify?secret=" + recaptcha.Secret + "&response=" + response;
-            recaptcha.Response = (new WebClient()).DownloadString(url);
-            return Json(recaptcha);
-        }
+        //[HttpPost]
+        //public JsonResult AjaxMethod(string response)
+        //{
+        //    RECaptcha recaptcha = new RECaptcha();
+        //    string url = "https://www.google.com/recaptcha/api/siteverify?secret=" + recaptcha.Secret + "&response=" + response;
+        //    recaptcha.Response = (new WebClient()).DownloadString(url);
+        //    return Json(recaptcha);
+        //}
         public IActionResult RegistrationPrimary()
         {
             return View();
