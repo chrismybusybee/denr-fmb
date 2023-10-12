@@ -70,14 +70,17 @@
                                     <span>Dashboard</span>
                                 </a>
                             </li>
-                            <li id="applicationMenuItem">
-                                <a href="@Url.Action("Index", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
+                            @if (ViewBag.UserType.Contains("DENR") == false)
+                            {
+                                <li id="applicationMenuItem">
+                                    <a href="@Url.Action("Index", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
                                         <img src="~/assets/images/menu-icons/application.png" />
                                     </div>
                                     <span>Manage Application</span>
                                 </a>
                             </li>
+                            }
                             @switch(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value)
                             {
                                 case "Chainsaw Importer":
@@ -341,14 +344,8 @@
                                     <span>Profile Management</span>
                                 </a>
                             </li>
-                            <li id="accountManagementMenuItem">
-                                <a href="@Url.Action("Index", "AccountManagement")" class="d-flex gap-2 text-decoration-none fs-6">
-                                    <div>
-                                        <img src="~/assets/images/menu-icons/account-management.png" />
-                                    </div>
-                                    <span>Account Management</span>
-                                </a>
-                            </li>
+                            @if (ViewBag.UserType.Contains("Administration") == true)
+                            {
                             <li id="monitoringMenuItem">
                                 <a href="@Url.Action("Index", "Monitoring")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
@@ -357,33 +354,45 @@
                                     <span>Monitoring</span>
                                 </a>
                             </li>
-                            @*@if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw")!=true)
+
+                                <li id="accountManagementMenuItem">
+                                    <a href="@Url.Action("Index", "AccountManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/account-management.png" />
+                                        </div>
+                                        <span>Account Management</span>
+                                    </a>
+                                </li>
+
+
+                                @*@if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw")!=true)
                             {*@
-                            <li id="creationOfNewDenrOfficeMenuItem">
-                                <a href="@Url.Action("Index", "CreationOfNewDenrOffice")" class="d-flex gap-2 text-decoration-none fs-6">
-                                    <div>
-                                        <img src="~/assets/images/menu-icons/creation-of-new-denr-office.png" />
-                                    </div>
-                                    <span>Creation of New DENR Office</span>
-                                </a>
-                            </li>
-                            @*}*@
-                            <li id="announcementTemplatesMenuItem">
-                                <a href="@Url.Action("Index", "AnnouncementTemplates")" class="d-flex gap-2 text-decoration-none fs-6">
-                                    <div>
-                                        <img src="~/assets/images/menu-icons/announcement-templates.png" />
-                                    </div>
-                                    <span>Announcement Templates</span>
-                                </a>
-                            </li>
-                            <li id="emailTemplatesMenuItem">
-                                <a href="@Url.Action("Index", "EmailTemplates")" class="d-flex gap-2 text-decoration-none fs-6">
-                                    <div>
-                                        <img src="~/assets/images/menu-icons/email-templates.png" />
-                                    </div>
-                                    <span>Email Templates</span>
-                                </a>
-                            </li>
+                                <li id="creationOfNewDenrOfficeMenuItem">
+                                    <a href="@Url.Action("Index", "CreationOfNewDenrOffice")" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/creation-of-new-denr-office.png" />
+                                        </div>
+                                        <span>Creation of New DENR Office</span>
+                                    </a>
+                                </li>
+                                @*}*@
+                                <li id="announcementTemplatesMenuItem">
+                                    <a href="@Url.Action("Index", "AnnouncementTemplates")" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/announcement-templates.png" />
+                                        </div>
+                                        <span>Announcement Templates</span>
+                                    </a>
+                                </li>
+                                <li id="emailTemplatesMenuItem">
+                                    <a href="@Url.Action("Index", "EmailTemplates")" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/email-templates.png" />
+                                        </div>
+                                        <span>Email Templates</span>
+                                    </a>
+                                </li>
+                            }
                             <hr class="me-4 my-4" />
                             <li>
                                 @Html.ActionLink("Logout", "Signout", "Home", new { area = "" }, new { @class = "text-decoration-none" })
