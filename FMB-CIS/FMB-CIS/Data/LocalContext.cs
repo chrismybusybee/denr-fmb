@@ -19,6 +19,7 @@ namespace FMB_CIS.Data
         public DbSet<FMB_CIS.Models.tbl_province> tbl_province { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_city> tbl_city { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_brgy> tbl_brgy { get; set; } = default!;
+        public DbSet<FMB_CIS.Models.tbl_user_temp_passwords> tbl_user_temp_passwords { get; set; } = default!;
 
     }
 }

@@ -109,7 +109,7 @@ namespace FMB_CIS.Controllers
 
                 foreach (var fileList in filesFromDB)
                 {
-                    files.Add(new tbl_files { filename = fileList.filename, path = fileList.path });
+                    files.Add(new tbl_files { filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, date_created = fileList.date_created, file_size = fileList.file_size });
                     //files.Add(new tbl_files { filename = f });
                 }
 
@@ -190,6 +190,7 @@ namespace FMB_CIS.Controllers
             usrDB.last_name = model.tbl_User.last_name;
             usrDB.suffix = model.tbl_User.suffix;
             usrDB.contact_no = model.tbl_User.contact_no;
+            usrDB.birth_date = model.tbl_User.birth_date;
             usrDB.valid_id = model.tbl_User.valid_id;
             usrDB.valid_id_no = model.tbl_User.valid_id_no;
             usrDB.street_address = model.tbl_User.street_address;
@@ -229,6 +230,7 @@ namespace FMB_CIS.Controllers
                     filesDB.path = path;
                     filesDB.tbl_file_type_id = fileInfo.Extension;
                     filesDB.tbl_file_sources_id = fileInfo.Extension;
+                    filesDB.file_size = Convert.ToInt32(file.Length);
                     _context.tbl_files.Add(filesDB);
                     _context.SaveChanges();
                 }
@@ -320,7 +322,7 @@ namespace FMB_CIS.Controllers
 
                     foreach (var fileList in filesFromDB)
                     {
-                        files.Add(new tbl_files { filename = fileList.filename, path = fileList.path });
+                        files.Add(new tbl_files { filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, date_created = fileList.date_created, file_size = fileList.file_size });
                         //files.Add(new tbl_files { filename = f });
                     }
 
@@ -347,7 +349,7 @@ namespace FMB_CIS.Controllers
 
         [HttpPost]
         //[Url("?email={email}&code={code}")]
-        public IActionResult AccountsApproval(int? uid, string SubmitButton, ViewModel model)
+        public IActionResult AccountsApproval(int? uid, ViewModel model)
         {
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
 
@@ -361,7 +363,7 @@ namespace FMB_CIS.Controllers
             else
             {
                 int usid = Convert.ToInt32(uid);
-                string buttonClicked = SubmitButton;
+                string buttonClicked = model.decision;
                 if (buttonClicked == "Approve")
                 {                    
                     var usr = new tbl_user() { id = usid, status = true, date_modified = DateTime.Now, comment = model.acctApprovalViewModels.comment };
@@ -375,7 +377,7 @@ namespace FMB_CIS.Controllers
                         _context.SaveChanges();
                     }
                     //Email
-                    var subject = "Permit to Import Application Status";
+                    var subject = "Account Registration Status";
                     var body = "Greetings! \n We would like to inform your account has been approved.\nThe officer left the following comment:\n" + model.acctApprovalViewModels.comment;
                     EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
                 }
@@ -391,7 +393,7 @@ namespace FMB_CIS.Controllers
                         _context.SaveChanges();
                     }
                     //Email
-                    var subject = "Permit to Import Application Status";
+                    var subject = "Account Registration Status";
                     var body = "Greetings! \n We regret to inform you that your Account has been rejected.\nThe officer left the following comment:\n" + model.acctApprovalViewModels.comment;
                     EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
                 }

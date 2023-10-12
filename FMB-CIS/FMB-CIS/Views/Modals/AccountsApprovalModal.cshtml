@@ -31,7 +31,7 @@
                         Application submitted successfully!
                     </p>
                     <div class="d-flex justify-content-center w-100">
-                        <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("Index", "ChainsawOwner")'">Ok</button>
+                        <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("Index", "AccountManagement")'">Ok</button>
                     </div>
                 </div>
             </div>
@@ -69,11 +69,11 @@
                         <img src="~/assets/images/success.png" />
                     </div>
                     <p class="fw-bold fs-5 text-center">
-                        Application approved<br />
+                        Registration approved<br />
                         <span class="fs-6">A notification was sent to the applicant</span>
                     </p>
                     <div class="d-flex justify-content-center w-100">
-                        <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("ChainsawOwnerApplicantsList", "ChainsawOwner")'">Ok</button>
+                        <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("Index", "AccountManagement")'">Ok</button>
                     </div>
                 </div>
             </div>
@@ -92,7 +92,7 @@
                     <p class="fw-bold fs-5">
                         Are you sure you want to decline?
                     </p>
-                    <div class="d-flex gap-4 w-100">
+                    <div class="d-flex gap-4 w-100">                        
                         <button id="backDeclineBtn" class="btn btn-danger w-100">Back</button>
                         <button id="confirmDeclineBtn" class="btn btn-primary w-100">Confirm</button>
                     </div>
@@ -111,11 +111,11 @@
                         <img src="~/assets/images/success-decline.png" />
                     </div>
                     <p class="fw-bold fs-5 text-center">
-                        Application declined<br />
+                        Registration declined<br />
                         <span class="fs-6">A notification was sent to the applicant</span>
                     </p>
                     <div class="d-flex justify-content-center w-100">
-                        <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("ChainsawOwnerApplicantsList", "ChainsawOwner")'">Ok</button>
+                        <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("Index", "AccountManagement")'">Ok</button>
                     </div>
                 </div>
             </div>
@@ -123,52 +123,12 @@
     </div>
 </div>
 
-<div class="modal fade" id="confirmSaveModal" aria-hidden="true" style="z-index:1050 !important;">
-    <div class="modal-dialog modal-dialog-centered" style="z-index:1050 !important;">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="d-flex flex-column align-items-center gap-4 p-5">
-                    <div>
-                        <img src="~/assets/images/submit.png" />
-                    </div>
-                    <p class="fw-bold fs-5">
-                        Are you sure you want to save?
-                    </p>
-                    <div class="d-flex gap-4 w-100">
-                        <button id="backSaveBtn" class="btn btn-danger w-100">Back</button>
-                        <button id="confirmSaveBtn" class="btn btn-primary w-100">Confirm</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="confirmSuccessSaveModal" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="d-flex flex-column align-items-center gap-4 p-5">
-                    <div>
-                        <img src="~/assets/images/success.png" />
-                    </div>
-                    <p class="fw-bold fs-5">
-                        Application successfully saved!
-                    </p>
-                    <div class="d-flex justify-content-center w-100">
-                        <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("ChainsawOwnerApplicantsList", "ChainsawOwner")'">Ok</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script src="/js/jquery-3.7.1.min.js"></script>
 
 <script type="text/javascript">
 
-    const form = document.getElementById('ApplApprvlForm');
+    const form = document.getElementById('AcctApprvlForm');
     const showApproveModalButton = document.getElementById('approveBtn');
     const confirmationApproveModal = document.getElementById('confirmApproveModal');
     const confirmApproveButton = document.getElementById('confirmApproveBtn');
@@ -176,10 +136,6 @@
     const showDeclineModalButton = document.getElementById('declineBtn');
     const confirmationDeclineModal = document.getElementById('confirmDeclineModal');
     const confirmDeclineButton = document.getElementById('confirmDeclineBtn');
-
-    const showSaveModalButton = document.getElementById('saveBtn');
-    const confirmationSaveModal = document.getElementById('confirmSaveModal');
-    const confirmSaveButton = document.getElementById('confirmSaveBtn');
 
     //FOR APPROVE
     // Function to display the modal
@@ -232,33 +188,6 @@
     window.addEventListener('click', function (event) {
         if (event.target === confirmationDeclineModal) {
             hideDeclineModal();
-        }
-    });
-
-    //FOR Save
-    // Function to display the modal
-    function showSaveModal() {
-        confirmationSaveModal.style.display = 'block';
-    }
-
-    // Function to hide the modal
-    function hideSaveModal() {
-        confirmationSaveModal.style.display = 'none';
-    }
-
-    // Event listener for the "Submit" button
-    showSaveModalButton.addEventListener('click', showSaveModal);
-
-    // Event listener for the "Confirm" button
-    confirmSaveButton.addEventListener('click', function () {
-        // Submit the form when the "Confirm" button is clicked
-        form.submit();
-    });
-
-    // Close the modal when the user clicks outside of it
-    window.addEventListener('click', function (event) {
-        if (event.target === confirmationSaveModal) {
-            hideSaveModal();
         }
     });
 

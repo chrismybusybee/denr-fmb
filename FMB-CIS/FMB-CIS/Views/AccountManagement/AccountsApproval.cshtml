@@ -8,15 +8,18 @@
 
 <div id="card-container">
     <div id="card">
-        <form asp-controller="AccountManagement" asp-action="AccountsApproval" method="post">
+        <form asp-controller="AccountManagement" asp-action="AccountsApproval" method="post" id="AcctApprvlForm">
             <div class="row m-0">
                 <input asp-for="uid" type="hidden" />
                 <input asp-for="appid" type="hidden" />
                 <div class="d-flex justify-content-end gap-2">
                     @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO") == true)
                     {
-                        <input id="ApproveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Approve" />
-                        <input class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="submit" value="Decline" />
+                        @* <input id="approveBtn" class="btn btn-primary w-105" name="SubmitButton" type="button" value="Approve" />
+                        <input id="declineBtn" class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="button" value="Decline" /> *@
+                        <button type="button" name="SubmitButton" id="approveBtn" class="btn btn-primary w-105">Approve</button>
+                        <button type="button" name="SubmitButton" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
+                        <input asp-for="decision" id="decisionID" type="hidden" />
                     }
                     @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true)
                     {
@@ -176,38 +179,45 @@
             <hr />
 
             <div class="row d-flex justify-content-center m-0">
-                <div class="col-md-11 mb-5">
-                    <span>Attached Forms</span>
-                    <table class="w-100 striped-table">
-                        <thead>
-                            <tr>
-                                <th class="text-nowrap">
-                                    Name of form
-                                </th>
-                                <th class="text-nowrap text-center">
-                                    Action
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (tbl_files file in Model.tbl_Files)
-                            {
-                                <tr>
-                                    <td class="text-nowrap">
-                                        @file.filename
-                                    </td>
-                                    <td class="text-nowrap">
-                                        <div class="d-flex justify-content-center gap-3">
-                                            @* @Html.ActionLink("Download", "DownloadFile", new { filename = file.filename }) *@
-                                            <a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="bg-green text-white px-1 pb-1 rounded" title="view">
-                                                <i data-feather="eye" class="data-feather-20"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                <div class="d-flex gap-4 mb-5">
+                    <h2 class="text-secondary fw-bold m-0">Attached Documents</h2>
+                </div>
+                <div class="d-flex mb-4 gap-3">
+                    @foreach (tbl_files file in Model.tbl_Files)
+                     {
+                        <div class="card mw-18rem">
+                            <div class="card-body">
+                                @if(file.tbl_file_type_id == ".pdf")
+                                {
+                                    <i class="fas fa-file-pdf text-light-green fs-1 mb-3"></i>
+                                }
+                                else if (file.tbl_file_type_id == ".docx")
+                                {
+                                    <i class="fas fa-file-word text-light-green fs-1 mb-3"></i>
+                                }
+                                else if (file.tbl_file_type_id == ".jpg")
+                                {
+                                    <i class="fas fa-file-image text-light-green fs-1 mb-3"></i>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-file text-light-green fs-1 mb-3"></i>
+                                }
+                                <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                <ul class="dropdown-menu">
+                                    @* <li><a class="dropdown-item" href="#">View</a></li>
+                                    <li><a class="dropdown-item" href="#">Delete</a></li> *@
+                                    <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
+                                </ul>
+                                <h6 class="card-title text-secondary">@file.filename</h6>
+                                <ul class="list-unstyled small mb-0">
+                                    <li><span class="text-muted">type: @file.tbl_file_type_id</span></li>
+                                    <li><span class="text-muted">size: @(file.file_size/1024) kB</span></li>
+                                    <li><span class="text-muted">uploaded: @file.date_created.ToString("MMM dd yyyy")</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                     }
                 </div>
                 <div class="row d-flex justify-content-center px-0 mb-5">
                     <div class="col-md-11 d-flex flex-column gap-2">
@@ -229,12 +239,69 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#approveBtn').click(function () {
-            $('#confirmApproveModal').modal("show");
+ 
+        // Add an event listener for the 'change' event on the file input element
+        // Add an event listener for the 'change' event on the file input element
+        $("#FilesFromDB").on("load", function () {
+            // Get the selected file(s)
+            var selectedFiles = $(this).prop("files");
+            var fafile = "";
+            // Clear the previous output
+            $(".output").empty();
+
+            // Display file information in the specified format
+            for (var i = 0; i < selectedFiles.length; i++) {
+                //ifelse for fa-file type
+                if (selectedFiles[i].type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                    fafile = "fa-file-word"
+                }
+                else if (selectedFiles[i].type == "application/pdf") {
+                    fafile = "fa-file-pdf"
+                }
+                else if (selectedFiles[i].type == "image/jpeg") {
+                    fafile = "fa-file-image"
+                }
+                else {
+                    fafile = "fa-file"
+                }
+                // Create div elements and set their classes and content
+                var cardDiv = $("<div>").addClass("card mw-18rem");
+                var fileDiv = $("<div>").addClass("card-body");
+                var fileIcon = $("<i>").addClass("fas " + fafile + " text-light-green fs-1 mb-3");
+                var dropdownIcon = $("<i>").addClass("fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary").attr({
+                    "data-bs-toggle": "dropdown",
+                    "aria-expanded": "false"
+                });
+                var dropdownMenu = $("<ul>").addClass("dropdown-menu").append(
+                    $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("View")),
+                    $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("Delete")),
+                    $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("Download"))
+                );
+                var fileName = $("<h6>").addClass("card-title text-secondary").text(selectedFiles[i].name);
+                var fileInfoList = $("<ul>").addClass("list-unstyled small mb-0").append(
+                    $("<li>").append($("<span>").addClass("text-muted").text("type: " + selectedFiles[i].type)),
+                    $("<li>").append($("<span>").addClass("text-muted").text("size: " + (selectedFiles[i].size / 1024).toFixed(2) + "kb")),
+                    $("<li>").append($("<span>").addClass("text-muted").text("uploaded: " + new Date().toLocaleDateString()))
+                );
+
+                // Append created elements to the fileDiv
+                fileDiv.append(fileIcon, dropdownIcon, dropdownMenu, fileName, fileInfoList);
+
+                // Append the fileDiv to the cardDiv
+                cardDiv.append(fileDiv);
+
+                // Append the cardDiv to the output div
+                $(".output").append(cardDiv);
+            }
         });
 
-        $('#saveBtn').click(function () {
+    });
+
+
+    $(document).ready(function () {
+        $('#approveBtn').click(function () {
             $('#confirmApproveModal').modal("show");
+            document.getElementById("decisionID").value = "Approve";
         });
 
         $("#backApproveBtn").click(function () {
@@ -242,12 +309,12 @@
         });
 
         $("#confirmApproveBtn").click(function () {
-            $("#confirmApproveModal").modal('hide');
             $('#confirmSuccessApproveModal').modal("show");
         });
 
         $('#declineBtn').click(function () {
             $('#confirmDeclineModal').modal("show");
+            document.getElementById("decisionID").value = "Decline";
         });
 
         $('#backDeclineBtn').click(function () {

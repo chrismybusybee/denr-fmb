@@ -47,17 +47,30 @@ namespace FMB_CIS.Controllers
 
         public IActionResult Index()
         {
-            //return View();
-            if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
+            //Set Roles who can access this page
+            int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            bool? usrStatus = _context.tbl_user.Where(u => u.id == uid).Select(u => u.status).SingleOrDefault();
+
+            if (usrStatus != true)
             {
+                return RedirectToAction("Index", "Dashboard");
+            }
+            if (usrRoleID == 1 || usrRoleID == 4 || usrRoleID == 5 || usrRoleID == 7)
+            {
+                return View();
+            }
+            else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
+            {
+
                 return RedirectToAction("ChainsawImporterApplicantsList", "ChainsawImporter");
+
             }
             else
             {
-
-                return View();
+                return RedirectToAction("Index", "Dashboard");
             }
-            //return RedirectToAction("Index", "Home");
+            //return View();
         }
 
         //public IActionResult ChainsawImporterApproval()
@@ -187,7 +200,7 @@ namespace FMB_CIS.Controllers
 
                 foreach (var fileList in filesFromDB)
                 {
-                    files.Add(new tbl_files { filename = fileList.filename, path = fileList.path });
+                    files.Add(new tbl_files { filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, file_size = fileList.file_size, date_created = fileList.date_created });
                     //files.Add(new tbl_files { filename = f });
                 }
 

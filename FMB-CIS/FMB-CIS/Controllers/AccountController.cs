@@ -189,6 +189,14 @@ namespace FMB_CIS.Controllers
                     _context.SaveChanges();
                     
                     int? usrID = model.tbl_Users.id;
+                    var tblUsrTmpPsFB = new tbl_user_temp_passwords();
+                    tblUsrTmpPsFB.tbl_user_id = usrID;
+                    tblUsrTmpPsFB.password = encrPw;
+                    tblUsrTmpPsFB.is_active = true;
+                    tblUsrTmpPsFB.date_created = DateTime.Now;
+                    tblUsrTmpPsFB.date_modified = DateTime.Now;
+                    _context.tbl_user_temp_passwords.Add(tblUsrTmpPsFB);
+                    _context.SaveChanges();
 
                     //File Upload
                     if (model.filesUpload != null)
@@ -219,6 +227,7 @@ namespace FMB_CIS.Controllers
                             filesDB.path = path;
                             filesDB.tbl_file_type_id = fileInfo.Extension;
                             filesDB.tbl_file_sources_id = fileInfo.Extension;
+                            filesDB.file_size = Convert.ToInt32(file.Length);
                             _context.tbl_files.Add(filesDB);
                             _context.SaveChanges();
                         }
@@ -244,7 +253,7 @@ namespace FMB_CIS.Controllers
                                     Console.WriteLine("Link for Password Reset:");
                                     Console.WriteLine(passResetLink);
                                     var subject = "Account Created";
-                                    var body = "We would like to inform you that you have created an account with FMB-CIS.\nPlease change your password on this link: " + passResetLink;
+                                    var body = "We would like to inform you that you have created an account with FMB-CIS.\nPlease click the link to verify your email and set your password. " + passResetLink + "\nThank You!";
                                     EmailSender.SendEmailAsync(model.tbl_Users.email, subject, body);
                                     return RedirectToAction("EmailConfirmation");
                                 }
@@ -359,6 +368,25 @@ namespace FMB_CIS.Controllers
                     bool isPWchanged = dal.changePasswordAndReturnIfChanged(model.tokencode, encrPw, cstr);
                     if (isPWchanged == true)
                     {
+                        var usrDB = _context.tbl_user.Where(m => m.email == model.email).FirstOrDefault();
+                        var tblTempPass = _context.tbl_user_temp_passwords.Where(m => m.tbl_user_id == usrDB.id).FirstOrDefault();
+                        
+                        if(tblTempPass.is_active == true)
+                        {
+                            //Make Temporary Password Inactive
+                            tblTempPass.is_active = false;
+                            _context.Update(tblTempPass);
+                            _context.SaveChanges();
+                            var subject = "Email Verified";
+                            var body = "You have successfully verified your email and set your password! You may now login with your credentials!\nThank You!";
+                            EmailSender.SendEmailAsync(model.email, subject, body);
+                        }
+                        else
+                        {
+                            var subject = "Password changed";
+                            var body = "You have successfully changed your password! You may now login with your credentials!\nThank You!";
+                            EmailSender.SendEmailAsync(model.email, subject, body);
+                        }
                         return RedirectToAction("Index", "Home");
                     }
                     else

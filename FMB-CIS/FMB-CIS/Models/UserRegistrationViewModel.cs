@@ -69,6 +69,7 @@ namespace FMB_CIS.Models
         public RECaptcha? reCaptcha { get; set;}
         //[Required]
         //public string Token { get; set; }
+        public tbl_user_temp_passwords? tbl_User_Temp_Passwords { get; set; }
 
     }
 }

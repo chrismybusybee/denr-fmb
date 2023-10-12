@@ -5,26 +5,33 @@
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Chainsaw Owner";
-    ViewBag.Cenro = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO");
-    ViewBag.Inspector = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector");
+    // ViewBag.Cenro = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO");
+    // ViewBag.Inspector = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector");
 }
 
 <div id="card-container">
     <div id="card">
-        <form asp-action="ChainsawOwnerApproval" method="post" enctype="multipart/form-data">
+        <form asp-action="ChainsawOwnerApproval" method="post" enctype="multipart/form-data" id="ApplApprvlForm">
             <div class="row m-0">
-                <input asp-for="applicantViewModels.id" value="@Model.applicantViewModels.id" type="hidden" />
-                <input asp-for="applicantViewModels.tbl_user_id" value="@Model.applicantViewModels.tbl_user_id" type="hidden" />
+                @* <input asp-for="applicantViewModels.id" value="@Model.applicantViewModels.id" type="hidden" />
+                <input asp-for="applicantViewModels.tbl_user_id" value="@Model.applicantViewModels.tbl_user_id" type="hidden" /> *@
+                <input asp-for="uid" type="hidden" />
+                <input asp-for="appid" type="hidden" />
                 <div class="d-flex justify-content-end gap-2">
                     @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO") == true)
                     {
-                        <input id="ApproveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Approve" />
-                        <input class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="submit" value="Decline" />
+                        @* <input id="approveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Approve" />
+                        <input id="declineBtn" class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="submit" value="Decline" /> *@
+                        <button type="button" id="approveBtn" class="btn btn-primary w-105">Approve</button>
+                        <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
+
                     }
                     @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true)
                     {
-                        <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" />
+                        @* <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" /> *@
+                        <button type="button" id="saveBtn" class="btn btn-primary w-105">Save</button>
                     }
+                <input asp-for="decision" id="decisionID" type="hidden" />
                 </div>
             </div>
             <hr />
@@ -44,7 +51,8 @@
                                             User Type
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="applicantViewModels.user_type" value="@Model.applicantViewModels.user_type">@Model.applicantViewModels.user_type</label>
+                                            @* <label asp-for="applicantViewModels.user_type" value="@Model.applicantViewModels.user_type">@Model.applicantViewModels.user_type</label> *@
+                                            @Html.DisplayFor(model => model.applicantViewModels.user_type)
                                         </span>
                                     </div>
                                 </div>
@@ -54,7 +62,8 @@
                                             Name
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="applicantViewModels.full_name" value="@Model.applicantViewModels.full_name">@Model.applicantViewModels.full_name</label>
+                                            @* <label asp-for="applicantViewModels.full_name" value="@Model.applicantViewModels.full_name">@Model.applicantViewModels.full_name</label> *@
+                                            @Html.DisplayFor(model => model.applicantViewModels.full_name)
                                         </span>
                                     </div>
                                 </div>
@@ -66,7 +75,9 @@
                                             Email Address
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="email" value="@Model.email">@Model.email</label>
+                                            @* <label asp-for="email" value="@Model.email">@Model.email</label> *@
+                                            @Html.DisplayFor(model => model.applicantViewModels.email)
+                                            @Html.HiddenFor(model => model.applicantViewModels.email)
                                         </span>
                                     </div>
                                 </div>
@@ -76,7 +87,8 @@
                                             Contact Number
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="applicantViewModels.contact" value="@Model.applicantViewModels.contact">@Model.applicantViewModels.contact</label>
+                                            @* <label asp-for="applicantViewModels.contact" value="@Model.applicantViewModels.contact">@Model.applicantViewModels.contact</label> *@
+                                            @Html.DisplayFor(model => model.applicantViewModels.contact)
                                         </span>
                                     </div>
                                 </div>
@@ -88,7 +100,8 @@
                                             Valid ID
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="applicantViewModels.valid_id" value="@Model.applicantViewModels.valid_id">@Model.applicantViewModels.valid_id</label>
+                                            @* <label asp-for="applicantViewModels.valid_id" value="@Model.applicantViewModels.valid_id">@Model.applicantViewModels.valid_id</label> *@
+                                            @Html.DisplayFor(model => model.applicantViewModels.valid_id)
                                         </span>
                                     </div>
                                 </div>
@@ -98,7 +111,8 @@
                                             Valid ID Number
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="applicantViewModels.valid_id_no" value="@Model.applicantViewModels.valid_id_no">@Model.applicantViewModels.valid_id_no</label>
+                                            @* <label asp-for="applicantViewModels.valid_id_no" value="@Model.applicantViewModels.valid_id_no">@Model.applicantViewModels.valid_id_no</label> *@
+                                            @Html.DisplayFor(model => model.applicantViewModels.valid_id_no)
                                         </span>
                                     </div>
                                 </div>
@@ -110,7 +124,8 @@
                                             Birth Date
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="applicantViewModels.birth_date" value="@Model.applicantViewModels.birth_date">@Model.applicantViewModels.birth_date</label>
+                                            @* <label asp-for="applicantViewModels.birth_date" value="@Model.applicantViewModels.birth_date">@Model.applicantViewModels.birth_date</label> *@
+                                            @Html.DisplayFor(model => model.applicantViewModels.birth_date)
                                         </span>
                                     </div>
                                 </div>
@@ -120,7 +135,8 @@
                                             Street Address
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="applicantViewModels.address" value="@Model.applicantViewModels.address">@Model.applicantViewModels.address</label>
+                                            @* <label asp-for="applicantViewModels.address" value="@Model.applicantViewModels.address">@Model.applicantViewModels.address</label> *@
+                                            @Html.DisplayFor(model => model.applicantViewModels.address)
                                         </span>
                                     </div>
                                 </div>
@@ -132,7 +148,8 @@
                                             Region
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="applicantViewModels.tbl_region_id" value="@Model.applicantViewModels.tbl_region_id">@Model.applicantViewModels.tbl_region_id</label>
+                                            @* <label asp-for="applicantViewModels.tbl_region_id" value="@Model.applicantViewModels.tbl_region_id">@Model.applicantViewModels.tbl_region_id</label> *@
+                                            @Html.DisplayFor(model => model.applicantViewModels.region)
                                         </span>
                                     </div>
                                 </div>
@@ -142,7 +159,8 @@
                                             Province
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="applicantViewModels.tbl_province_id" value="@Model.applicantViewModels.tbl_province_id">@Model.applicantViewModels.tbl_province_id</label>
+                                            @* <label asp-for="applicantViewModels.tbl_province_id" value="@Model.applicantViewModels.tbl_province_id">@Model.applicantViewModels.tbl_province_id</label> *@
+                                            @Html.DisplayFor(model => model.applicantViewModels.province)
                                         </span>
                                     </div>
                                 </div>
@@ -154,7 +172,8 @@
                                             City/Municipality
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="applicantViewModels.tbl_city_id" value="@Model.applicantViewModels.tbl_city_id">@Model.applicantViewModels.tbl_city_id</label>
+                                            @* <label asp-for="applicantViewModels.tbl_city_id" value="@Model.applicantViewModels.tbl_city_id">@Model.applicantViewModels.tbl_city_id</label> *@
+                                            @Html.DisplayFor(model => model.applicantViewModels.city)
                                         </span>
                                     </div>
                                 </div>
@@ -164,7 +183,8 @@
                                             Barangay
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="applicantViewModels.tbl_brgy_id" value="@Model.applicantViewModels.tbl_brgy_id">@Model.applicantViewModels.tbl_brgy_id</label>
+                                            @* <label asp-for="applicantViewModels.tbl_brgy_id" value="@Model.applicantViewModels.tbl_brgy_id">@Model.applicantViewModels.tbl_brgy_id</label> *@
+                                            @Html.DisplayFor(model => model.applicantViewModels.brgy)
                                         </span>
                                     </div>
 
@@ -177,7 +197,8 @@
             <hr />
 
             <div class="row d-flex justify-content-center m-0">
-                <div class="col-md-11 mb-5">
+
+                @* <div class="col-md-11 mb-5">
                     <span>Attached Forms</span>
                     <table class="w-100 striped-table">
                         <thead>
@@ -199,7 +220,6 @@
                                     </td>
                                     <td class="text-nowrap">
                                         <div class="d-flex justify-content-center gap-3">
-                                            @* @Html.ActionLink("Download", "DownloadFile", new { filename = file.filename }) *@
                                             <a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="bg-green text-white px-1 pb-1 rounded" title="view">
                                                 <i data-feather="eye" class="data-feather-20"></i>
                                             </a>
@@ -209,26 +229,65 @@
                             }
                         </tbody>
                     </table>
+                </div> *@
+                <div class="d-flex gap-4 mb-5">
+                    <h2 class="text-secondary fw-bold m-0">Attached Documents</h2>
                 </div>
+                <div class="d-flex mb-4 gap-3">
+                    @foreach (tbl_files file in Model.tbl_Files)
+                    {
+                        <div class="card mw-18rem">
+                            <div class="card-body">
+                                @if (file.tbl_file_type_id == ".pdf")
+                                {
+                                    <i class="fas fa-file-pdf text-light-green fs-1 mb-3"></i>
+                                }
+                                else if (file.tbl_file_type_id == ".docx")
+                                {
+                                    <i class="fas fa-file-word text-light-green fs-1 mb-3"></i>
+                                }
+                                else if (file.tbl_file_type_id == ".jpg")
+                                {
+                                    <i class="fas fa-file-image text-light-green fs-1 mb-3"></i>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-file text-light-green fs-1 mb-3"></i>
+                                }
+                                <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                <ul class="dropdown-menu">
+                                    @* <li><a class="dropdown-item" href="#">View</a></li>
+                                <li><a class="dropdown-item" href="#">Delete</a></li> *@
+                                    <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
+                                </ul>
+                                <h6 class="card-title text-secondary">@file.filename</h6>
+                                <ul class="list-unstyled small mb-0">
+                                    <li><span class="text-muted">type: @file.tbl_file_type_id</span></li>
+                                    <li><span class="text-muted">size: @(file.file_size / 1024) kB</span></li>
+                                    <li><span class="text-muted">uploaded: @file.date_created.ToString("MMM dd yyyy")</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                </div>
+
                 <div class="row d-flex justify-content-center px-0 mb-5">
-                    @if (ViewBag.Inspector)
+                    @* @if (ViewBag.Inspector)
                     {
                         <div class="col-md-11 d-flex flex-column gap-2">
                             <input type="file" asp-for="filesUpload.Files" class="form-control" multiple />
                         </div>
-                    }
+                    } *@
                 </div>
                 <div class="row d-flex justify-content-center px-0 mb-5">
                     <div class="col-md-11 d-flex flex-column gap-2">
                         <span>
                             Comments
                         </span>
-                        <textarea asp-for="comment" value="@Model.comment"class="form-control"></textarea>
+                        @* <textarea asp-for="comment" value="@Model.comment"class="form-control"></textarea> *@
                         @* @Html.EditorFor(model => model.applicantListViewModels.ToList(comment), new { htmlAttributes = new { @class = "form-control" } }) *@
-
+                        <textarea asp-for="applicantViewModels.comment" class="form-control"></textarea>
                        
-                        
-
                     </div>
                 </div>
             </div>
@@ -242,10 +301,7 @@
     $(document).ready(function () {
         $('#approveBtn').click(function () {
             $('#confirmApproveModal').modal("show");
-        });
-
-        $('#saveBtn').click(function () {
-            $('#confirmApproveModal').modal("show");
+            document.getElementById("decisionID").value = "Approve";
         });
 
         $("#backApproveBtn").click(function () {
@@ -259,6 +315,7 @@
 
         $('#declineBtn').click(function () {
             $('#confirmDeclineModal').modal("show");
+            document.getElementById("decisionID").value = "Decline";
         });
 
         $('#backDeclineBtn').click(function () {
@@ -269,13 +326,25 @@
             $("#confirmDeclineModal").modal('hide');
             $('#confirmSuccessDeclineModal').modal("show");
         });
+
+
+
+        $('#saveBtn').click(function () {
+            $('#confirmSaveModal').modal("show");
+            document.getElementById("decisionID").value = "Save";
+        });
+
+        $("#backSaveBtn").click(function () {
+            $("#confirmSaveModal").modal('hide');
+        });
+
+        $("#confirmSaveBtn").click(function () {
+            $("#confirmSaveModal").modal('hide');
+            $('#confirmSuccessSaveModal').modal("show");
+        });
+
     });
 
-    var x = document.getElementById("commentFromDB").value;
-    document.getElementById('commentToPass').value = x;
-
-    var y = document.getElementById("myEmailAdd").value;
-    document.getElementById('emailCopy').value = y;
 
 
 </script>

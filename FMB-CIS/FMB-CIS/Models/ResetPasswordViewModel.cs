@@ -15,5 +15,6 @@ namespace FMB_CIS.Models
         [Compare("Password", ErrorMessage = "Password and Confirm Password must match!")]
         public string ConfirmPassword { get; set; }
         public string tokencode { get; set; }
+        public tbl_user_temp_passwords? tbl_User_Temp_Passwords { get; set; }
     }
 }

@@ -349,6 +349,8 @@
                                     <span>Account Management</span>
                                 </a>
                             </li>
+                            @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw") != true)
+                            {
                             <li id="monitoringMenuItem">
                                 <a href="@Url.Action("Index", "Monitoring")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
@@ -357,8 +359,6 @@
                                     <span>Monitoring</span>
                                 </a>
                             </li>
-                            @*@if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw")!=true)
-                            {*@
                             <li id="creationOfNewDenrOfficeMenuItem">
                                 <a href="@Url.Action("Index", "CreationOfNewDenrOffice")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
@@ -384,6 +384,7 @@
                                     <span>Email Templates</span>
                                 </a>
                             </li>
+                            }
                             <hr class="me-4 my-4" />
                             <li>
                                 @Html.ActionLink("Logout", "Signout", "Home", new { area = "" }, new { @class = "text-decoration-none" })
@@ -409,6 +410,10 @@
     else if (currentUrl.Contains("ChainsawOwner"))
     {
         <partial name="~/Views/Modals/ChainsawOwnerModal.cshtml" />
+    }
+    else if (currentUrl.Contains("AccountsApproval"))
+    {
+        <partial name="~/Views/Modals/AccountsApprovalModal.cshtml" />
     }
     else if (currentUrl.Contains("AccountManagement") || (currentUrl.Contains("EditAccount") || (currentUrl.Contains("AddAccount"))))
     {
