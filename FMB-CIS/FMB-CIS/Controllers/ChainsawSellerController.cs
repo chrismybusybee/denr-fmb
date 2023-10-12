@@ -157,81 +157,82 @@ namespace FMB_CIS.Controllers
         //[Url("?email={email}&code={code}")]
         public IActionResult ChainsawSellerApproval(string uid, string appid)
         {
-            if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw") == true)
+            ViewModel mymodel = new ViewModel();
+            //tbl_user user = _context.tbl_user.Find(uid);
+
+            //CODE FOR FILE DOWNLOAD
+            int applicID = Convert.ToInt32(appid);
+            //File Paths from Database
+            var filesFromDB = _context.tbl_files.Where(f => f.tbl_application_id == applicID).ToList();
+            List<tbl_files> files = new List<tbl_files>();
+
+            foreach (var fileList in filesFromDB)
             {
-                return RedirectToAction("Index", "ChainsawSeller");
+                files.Add(new tbl_files { filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, file_size = fileList.file_size, date_created = fileList.date_created });
+                //files.Add(new tbl_files { filename = f });
             }
+
+            mymodel.tbl_Files = files;
+            //END FOR FILE DOWNLOAD
+
+            if (uid == null || appid == null)
+            {
+                ModelState.AddModelError("", "Invalid Seller Application");
+                return RedirectToAction("ChainsawSellerApplicantsList", "ChainsawSeller");
+            }
+
             else
             {
-                ViewModel mymodel = new ViewModel();
-                //tbl_user user = _context.tbl_user.Find(uid);
-                //CODE FOR FILE DOWNLOAD
-                int applicID = Convert.ToInt32(appid);
-                //File Paths from Database
-                var filesFromDB = _context.tbl_files.Where(f => f.tbl_application_id == applicID).ToList();
-                List<tbl_files> files = new List<tbl_files>();
 
-                foreach (var fileList in filesFromDB)
-                {
-                    files.Add(new tbl_files { filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, file_size = fileList.file_size, date_created = fileList.date_created });
-                    //files.Add(new tbl_files { filename = f });
-                }
+                int usid = Convert.ToInt32(uid);
+                int applid = Convert.ToInt32(appid);
+                //var UserList = _context.tbl_user.ToList();
+                //var UserInfo = UserList.Where(m => m.id == usid).ToList();
 
-                mymodel.tbl_Files = files;
-                //END FOR FILE DOWNLOAD
+                //ViewModel mymodel = new ViewModel();
+                var applicationlist = from a in _context.tbl_application
+                                      where a.tbl_user_id == usid && a.id == applid
+                                      select a;
 
-                if (uid == null || appid == null)
-                {
-                    ModelState.AddModelError("", "Invalid Seller Application");
-                    return RedirectToAction("ChainsawSellerApplicantsList", "ChainsawSeller");
-                }
+                //HISTORY
+                var applicationtypelist = _context.tbl_application_type;
 
-                else
-                {
+                var applicationMod = (from a in applicationlist
+                                      join usr in _context.tbl_user on a.tbl_user_id equals usr.id
+                                      join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
+                                      join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
+                                      join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
+                                      join pS in _context.tbl_permit_status on a.status equals pS.id
+                                      join reg in _context.tbl_region on usr.tbl_region_id equals reg.id
+                                      join prov in _context.tbl_province on usr.tbl_province_id equals prov.id
+                                      join ct in _context.tbl_city on usr.tbl_city_id equals ct.id
+                                      join brngy in _context.tbl_brgy on usr.tbl_brgy_id equals brngy.id
+                                      where a.tbl_user_id == usid && a.id == applid
+                                      select new ApplicantListViewModel
+                                      {
+                                          id = a.id,
+                                          tbl_user_id = usid,
+                                          full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
+                                          email = usr.email,
+                                          contact = usr.contact_no,
+                                          address = usr.street_address,
+                                          application_type = appt.name,
+                                          permit_type = pT.name,
+                                          permit_status = pS.status,
+                                          user_type = usrtyps.name,
+                                          valid_id = usr.valid_id,
+                                          valid_id_no = usr.valid_id_no,
+                                          birth_date = usr.birth_date.ToString(),
+                                          region = reg.name,
+                                          province = prov.name,
+                                          city = ct.name,
+                                          brgy = brngy.name,
+                                          comment = usr.comment
+                                      }).FirstOrDefault();
+                mymodel.applicantViewModels = applicationMod;
 
-                    int usid = Convert.ToInt32(uid);
-                    int applid = Convert.ToInt32(appid);
-                    //var UserList = _context.tbl_user.ToList();
-                    //var UserInfo = UserList.Where(m => m.id == usid).ToList();
-
-                    //ViewModel mymodel = new ViewModel();
-                    var applicationlist = from a in _context.tbl_application
-                                          where a.tbl_user_id == usid && a.id == applid
-                                          select a;
-
-                    //HISTORY
-                    var applicationtypelist = _context.tbl_application_type;
-
-                    var applicationMod = from a in applicationlist
-                                         join usr in _context.tbl_user on a.tbl_user_id equals usr.id
-                                         join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
-                                         join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
-                                         join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
-                                         join pS in _context.tbl_permit_status on a.status equals pS.id
-                                         where a.tbl_user_id == usid && a.id == applid
-                                         select new ApplicantListViewModel { 
-                                             id = a.id, 
-                                             full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, 
-                                             email = usr.email, 
-                                             contact = usr.contact_no, 
-                                             address = usr.street_address, 
-                                             application_type = appt.name, 
-                                             permit_type = pT.name, 
-                                             permit_status = pS.status, 
-                                             user_type = usrtyps.name, 
-                                             valid_id = usr.valid_id, 
-                                             valid_id_no = usr.valid_id_no, 
-                                             birth_date = usr.birth_date.ToString(), 
-                                             tbl_region_id = usr.tbl_region_id, 
-                                             tbl_province_id = usr.tbl_province_id, 
-                                             tbl_city_id = usr.tbl_city_id, 
-                                             tbl_brgy_id = usr.tbl_brgy_id, 
-                                             comment = usr.comment };
-
-                    mymodel.applicantListViewModels = applicationMod;
-                    //mymodel.tbl_Users = UserInfo;
-                    return View(mymodel);
-                }
+                //mymodel.tbl_Users = UserInfo;
+                return View(mymodel);
             }
 
         }
@@ -251,27 +252,28 @@ namespace FMB_CIS.Controllers
 
         [HttpPost]
         //[Url("?email={email}&code={code}")]
-        public IActionResult ChainsawSellerApproval(int? appID, int? uid, string SubmitButton, ViewModel viewMod)
+        public IActionResult ChainsawSellerApproval(ViewModel viewMod)
         {
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
 
             //viewMod.applicantListViewModels.FirstOrDefault(x=>x.comment)
             //string newComment = viewMod.applicantListViewModels.Where(x => x.tbl_user_id == uid).Select(v => v.comment).ToList().ToString();
-
-            if (appID == null)
+            int? id = Convert.ToInt32(viewMod.appid);
+            int? tbl_user_id = Convert.ToInt32(viewMod.uid);
+            if (id == null)
             {
                 return View();
             }
             else
             {
-                int usid = Convert.ToInt32(uid);
-                int applid = Convert.ToInt32(appID);
-                string buttonClicked = SubmitButton;
+                int usid = Convert.ToInt32(tbl_user_id);
+                int applid = Convert.ToInt32(id);
+                string buttonClicked = viewMod.decision;
                 if (buttonClicked == "Approve")
                 {
                     //var applicationToUpdate = _context.tbl_application.Find(appID);
                     var appli = new tbl_application() { id = applid, status = 2, date_modified = DateTime.Now, modified_by = loggedUserID };
-                    var usrdet = new tbl_user() { id = usid, comment = viewMod.comment };
+                    var usrdet = new tbl_user() { id = usid, comment = viewMod.applicantViewModels.comment };
                     using (_context)
                     {
                         _context.tbl_application.Attach(appli);
@@ -282,14 +284,14 @@ namespace FMB_CIS.Controllers
                         _context.SaveChanges();
                     }
                     //Email
-                    var subject = "Permit Application Status";
-                    var body = "Greetings! \n We would like to inform you that your Permit Application has been approved.\nThe officer left the following comment:\n" + viewMod.comment;
-                    EmailSender.SendEmailAsync(viewMod.email, subject, body);
+                    var subject = "Chainsaw Seller Permit Application Status";
+                    var body = "Greetings! \n We would like to inform you that your Permit Application has been approved.\nThe officer left the following comment:\n" + viewMod.applicantViewModels.comment;
+                    EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);
                 }
                 else if (buttonClicked == "Decline")
                 {
                     var appli = new tbl_application() { id = applid, status = 3, date_modified = DateTime.Now, modified_by = loggedUserID };
-                    var usrdet = new tbl_user() { id = usid, comment = viewMod.comment };
+                    var usrdet = new tbl_user() { id = usid, comment = viewMod.applicantViewModels.comment };
                     using (_context)
                     {
                         _context.tbl_application.Attach(appli);
@@ -300,14 +302,14 @@ namespace FMB_CIS.Controllers
                         _context.SaveChanges();
                     }
                     //Email
-                    var subject = "Permit Application Status";
-                    var body = "Greetings! \n We regret to inform you that your Permit Application has been declined.\nThe officer left the following comment:\n" + viewMod.comment;
-                    EmailSender.SendEmailAsync(viewMod.email, subject, body);
+                    var subject = "Chainsaw Seller Permit Application Status";
+                    var body = "Greetings! \n We regret to inform you that your Permit Application has been declined.\nThe officer left the following comment:\n" + viewMod.applicantViewModels.comment;
+                    EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);
                 }
                 else
                 {
                     var appli = new tbl_application() { id = applid, date_modified = DateTime.Now, modified_by = loggedUserID };
-                    var usrdet = new tbl_user() { id = usid, comment = viewMod.comment };
+                    var usrdet = new tbl_user() { id = usid, comment = viewMod.applicantViewModels.comment };
                     if (viewMod.filesUpload != null)
                     {
                         foreach (var file in viewMod.filesUpload.Files)
@@ -327,7 +329,7 @@ namespace FMB_CIS.Controllers
                             {
                                 file.CopyTo(stream);
                             }
-                            filesDB.tbl_application_id = appID;
+                            filesDB.tbl_application_id = id;
                             filesDB.created_by = usid;
                             filesDB.modified_by = usid;
                             filesDB.date_created = DateTime.Now;
@@ -352,8 +354,8 @@ namespace FMB_CIS.Controllers
                     }
                     //Email
                     var subject = "Permit Application Status";
-                    var body = "Greetings! \n An inspector viewed your application.\nThe officer left the following comment:\n" + viewMod.comment;
-                    EmailSender.SendEmailAsync(viewMod.email, subject, body);
+                    var body = "Greetings! \n An inspector viewed your application.\nThe officer left the following comment:\n" + viewMod.applicantViewModels.comment;
+                    EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);
                 }
                 return RedirectToAction("ChainsawSellerApplicantsList", "ChainsawSeller");
             }

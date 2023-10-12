@@ -109,60 +109,19 @@
                 <div class="p-4 shadow h-100">
                     <div class="d-flex gap-4 mb-5">
                         <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
-                        <button type="button" class="btn btn-primary"><i data-feather="upload"></i> Upload</button>
+                        <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
+                            <i data-feather="upload"></i> Upload
+                        </label>
+                        <input type="file" asp-for="filesUpload.Files" class="form-control file" accept="application/pdf" multiple hidden />
+                        @* <button type="button" class="btn btn-primary"><i data-feather="upload"></i> Upload</button>*@
                     </div>
-                    <div class="d-flex mb-4 gap-3">
-                        <div class="card mw-18rem">
-                            <div class="card-body">
-                                <i class="fas fa-file-pdf text-light-green fs-1 mb-3"></i>
-                                <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">View</a></li>
-                                    <li><a class="dropdown-item" href="#">Delete</a></li>
-                                    <li><a class="dropdown-item" href="#">Download</a></li>
-                                </ul>
-                                <h6 class="card-title text-secondary">DOC1.pdf</h6>
-                                <ul class="list-unstyled small mb-0">
-                                    <li><span class="text-muted">type: .pdf</span></li>
-                                    <li><span class="text-muted">size: 512kb</span></li>
-                                    <li><span class="text-muted">uploaded: 10/4/2023</span></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="card mw-18rem">
-                            <div class="card-body">
-                                <i class="fas fa-file-word text-light-green fs-1 mb-3"></i>
-                                <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">View</a></li>
-                                    <li><a class="dropdown-item" href="#">Delete</a></li>
-                                    <li><a class="dropdown-item" href="#">Download</a></li>
-                                </ul>
-                                <h6 class="card-title text-secondary">DOC2.docx</h6>
-                                <ul class="list-unstyled small mb-0">
-                                    <li><span class="text-muted">type: .docx</span></li>
-                                    <li><span class="text-muted">size: 512kb</span></li>
-                                    <li><span class="text-muted">uploaded: 10/4/2023</span></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="card mw-18rem">
-                            <div class="card-body">
-                                <i class="fas fa-file-image text-light-green fs-1 mb-3"></i>
-                                <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">View</a></li>
-                                    <li><a class="dropdown-item" href="#">Delete</a></li>
-                                    <li><a class="dropdown-item" href="#">Download</a></li>
-                                </ul>
-                                <h6 class="card-title text-secondary">DOC3.jpg</h6>
-                                <ul class="list-unstyled small mb-0">
-                                    <li><span class="text-muted">type: .jpg</span></li>
-                                    <li><span class="text-muted">size: 512kb</span></li>
-                                    <li><span class="text-muted">uploaded: 10/4/2023</span></li>
-                                </ul>
-                            </div>
-                        </div>
+                    <div class="d-flex mb-4 gap-3 output">
+                        @*Cards for files*@
+                        <p id="files-area">
+                            <span id="filesList">
+                                <span id="files-names"></span>
+                            </span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -173,15 +132,91 @@
     </div>
 </div>
 
-<partial name="~/Views/Modals/ChainsawOwnerModal.cshtml" />
 
 
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="/js/jquery-3.7.1.min.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function () {
-        feather.replace();
+
+        const dt = new DataTransfer();
+        $(".file").on("change", function (e) {
+            // Get the selected file(s)
+            var selectedFiles = $(this).prop("files");
+            var fafile = "";
+            // Clear the previous output
+            //$(".output").empty();
+
+            // Display file information in the specified format
+            for (var i = 0; i < this.files.length; i++) {
+                //ifelse for fa-file type
+                if (selectedFiles[i].type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                    fafile = "fa-file-word"
+                }
+                else if (selectedFiles[i].type == "application/pdf") {
+                    fafile = "fa-file-pdf"
+                }
+                else if (selectedFiles[i].type == "image/jpeg") {
+                    fafile = "fa-file-image"
+                }
+                else {
+                    fafile = "fa-file"
+                }
+                // Create div elements and set their classes and content
+                var cardDiv = $("<div>").addClass("card mw-18rem ").attr('id', selectedFiles[i].name);
+                var fileDiv = $("<div>").addClass("card-body");
+                var fileIcon = $("<i>").addClass("fas " + fafile + " text-light-green fs-1 mb-3");
+                var dropdownIcon = $("<i>").addClass("fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary").attr({
+                    "data-bs-toggle": "dropdown",
+                    "aria-expanded": "false"
+                });
+                var dropdownMenu = $("<ul>").addClass("dropdown-menu").append(
+                    $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("View")),
+                    $("<li>").append($("<a>").addClass("dropdown-item file-delete").attr("href", "#").text("Delete")),
+                    $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("Download"))
+                );
+                var fileName = $("<h6>").addClass("card-title text-secondary").text(selectedFiles[i].name);
+                var fileInfoList = $("<ul>").addClass("list-unstyled small mb-0").append(
+                    $("<li>").append($("<span>").addClass("text-muted").text("type: " + selectedFiles[i].type)),
+                    $("<li>").append($("<span>").addClass("text-muted").text("size: " + (selectedFiles[i].size / 1024).toFixed(2) + "kb")),
+                    $("<li>").append($("<span>").addClass("text-muted").text("uploaded: " + new Date().toLocaleDateString()))
+                );
+
+                // Append created elements to the fileDiv
+                fileDiv.append(fileIcon, dropdownIcon, dropdownMenu, fileName, fileInfoList);
+
+                // Append the fileDiv to the cardDiv
+                cardDiv.append(fileDiv);
+
+                // Append the cardDiv to the output div
+                $(".output").append(cardDiv);
+            }
+            for (let file of this.files) {
+                dt.items.add(file);
+            }
+
+            selectedFiles = dt.files;
+            console.log(selectedFiles);
+            $('.file-delete').click(function () {
+                let name = $(this).closest('.card').attr('id');
+                // Supprimer l'affichage du nom de fichier
+                //$(this).parent().remove();
+                document.getElementById(name).remove()
+                for (let i = 0; i < dt.items.length; i++) {
+                    // Correspondance du fichier et du nom
+                    if (name === dt.items[i].getAsFile().name) {
+                        // Suppression du fichier dans l'objet DataTransfer
+                        dt.items.remove(i);
+                        continue;
+                    }
+                }
+                // Mise à jour des fichiers de l'input file après suppression
+                selectedFiles = dt.files;
+            });
+
+
+        });
 
         $("#btnSubmit").click(function () {
             $("#confirmSubmitModal").modal("show");

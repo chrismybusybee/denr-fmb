@@ -344,6 +344,17 @@
                                     <span>Profile Management</span>
                                 </a>
                             </li>
+                            @if (ViewBag.UserType.Contains("DENR") == true)
+                            {
+                                <li id="accountManagementMenuItem">
+                                    <a href="@Url.Action("Index", "AccountManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/account-management.png" />
+                                        </div>
+                                        <span>Account Management</span>
+                                    </a>
+                                </li>
+                            }
                             @if (ViewBag.UserType.Contains("Administration") == true)
                             {
                             <li id="monitoringMenuItem">
@@ -355,14 +366,7 @@
                                 </a>
                             </li>
 
-                                <li id="accountManagementMenuItem">
-                                    <a href="@Url.Action("Index", "AccountManagement")" class="d-flex gap-2 text-decoration-none fs-6">
-                                        <div>
-                                            <img src="~/assets/images/menu-icons/account-management.png" />
-                                        </div>
-                                        <span>Account Management</span>
-                                    </a>
-                                </li>
+                                
 
 
                                 @*@if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw")!=true)
@@ -417,7 +421,7 @@
     }
     else if (currentUrl.Contains("ChainsawOwner"))
     {
-        <partial name="~/Views/Modals/ChainsawOwnerModal.cshtml" />
+        @*<partial name="~/Views/Modals/ChainsawOwnerModal.cshtml" />*@
     }
     else if (currentUrl.Contains("AccountsApproval"))
     {
