@@ -13,5 +13,6 @@
         public int modified_by { get; set;}
         public DateTime date_created { get; set; } 
         public DateTime date_modified { get; set;}
+        public int file_size { get; set; }
     }
 }

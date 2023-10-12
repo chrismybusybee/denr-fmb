@@ -18,13 +18,15 @@ namespace FMB_CIS.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
         private readonly IConfiguration _configuration;
+        private readonly LocalContext _context;
 
-        public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
+
+        public HomeController(ILogger<HomeController> logger, IConfiguration configuration, LocalContext context)
         {
             _logger = logger;
             this._configuration = configuration;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -61,11 +63,20 @@ namespace FMB_CIS.Controllers
                 DAL dal = new DAL();
                 bool eMailExist = dal.emailExist(credentials.email, _configuration.GetConnectionString("ConnStrng"));
 
+                var usrDB = _context.tbl_user.Where(m => m.email == credentials.email).FirstOrDefault();
+                var tblTempPass = _context.tbl_user_temp_passwords.Where(m => m.tbl_user_id == usrDB.id).FirstOrDefault();
+
                 if (eMailExist == false)
                 {
                     ModelState.AddModelError("email", "Email or Password is incorrect.");
                     return View();
 
+                }
+                //Check if email is verified
+                if (tblTempPass != null && tblTempPass.is_active == true)
+                {
+                    ModelState.AddModelError("email", "Please verify your email first!");
+                    return View();                    
                 }
 
                 else

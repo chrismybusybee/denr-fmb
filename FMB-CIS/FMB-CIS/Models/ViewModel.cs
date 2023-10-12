@@ -10,7 +10,7 @@
 
         public ApplicantListViewModel? applicantViewModels { get; set; }
         public IEnumerable<tbl_files>? tbl_Files { get; set; }
-        public string?    uid { get; set; }
+        public string? uid { get; set; }
         public string? appid { get; set; }
         public string? comment { get; set; }
         public string? email { get; set; }
@@ -24,6 +24,8 @@
         public IEnumerable<tbl_province>? tbl_Provinces { get; set; }
         public IEnumerable<tbl_city>? tbl_Cities { get; set; }
         public IEnumerable<tbl_brgy>? tbl_Brgys { get; set; }
+        public tbl_user_temp_passwords? tbl_User_Temp_Passwords { get; set; }
+        public string decision { get; set; }
 
 
 

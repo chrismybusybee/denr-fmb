@@ -419,6 +419,10 @@
     {
         <partial name="~/Views/Modals/ChainsawOwnerModal.cshtml" />
     }
+    else if (currentUrl.Contains("AccountsApproval"))
+    {
+        <partial name="~/Views/Modals/AccountsApprovalModal.cshtml" />
+    }
     else if (currentUrl.Contains("AccountManagement") || (currentUrl.Contains("EditAccount") || (currentUrl.Contains("AddAccount"))))
     {
         <partial name="~/Views/Modals/AccountManagementModal.cshtml" />

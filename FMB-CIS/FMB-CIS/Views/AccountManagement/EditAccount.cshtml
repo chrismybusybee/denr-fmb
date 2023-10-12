@@ -113,6 +113,11 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group mb-4">
+                        <label asp-for="tbl_User.birth_date" class="control-label small">Birth Date (Must be 18 years old and above)</label>
+                        <input asp-for="tbl_User.birth_date" type="date" class="form-control" required="required" />
+                        <span asp-validation-for="tbl_User.birth_date" class="text-danger"></span>
+                    </div>
                     <div class="row mb-4">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -130,7 +135,7 @@
                         </div>
                     </div>
                     <div class="row mb-4">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label class="form-label small">Street Address</label>
                                 <input asp-for="tbl_User.street_address" class="form-control" />
@@ -160,51 +165,61 @@
                             <span asp-validation-for="tbl_User.tbl_brgy_id" class="text-danger"></span>
                         </div>
                     </div>
-                    <div class="row mb-5">
-                        <div class="col-md-6">
-                            <table class="w-100 striped-table">
-                                <thead>
-                                    <tr>
-                                        <th class="text-nowrap">
-                                            Name of form
-                                        </th>
-                                        <th class="text-nowrap text-center">
-                                            Action
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (tbl_files file in Model.tbl_Files)
-                                    {
-                                        <tr>
-                                            <td class="text-nowrap">
-                                                @file.filename
-                                            </td>
-                                            <td class="text-nowrap">
-                                                <div class="d-flex justify-content-center gap-3">
-                                                    @* @Html.ActionLink("Download", "DownloadFile", new { filename = file.filename }) *@
-                                                    <a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="bg-green text-white px-1 pb-1 rounded" title="view">
-                                                        <i data-feather="eye" class="data-feather-20"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                            @* <div class="form-group">
-                                <label class="form-label small">Attach Forms</label>
-                                <input type="text" class="form-control" />
-                                <span class="text-danger"></span>
-                            </div> *@
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="form-label small">Attach Additional Forms</label>
-                                <input type="file" asp-for="filesUpload.Files" class="form-control" multiple />
-                            </div>
-                        </div>
+                    <div class="d-flex gap-4 mb-5">
+                        <h2 class="text-secondary fw-bold m-0">Attached Documents</h2>
                     </div>
+                    <div class="d-flex mb-4 gap-3">
+                        @foreach (tbl_files file in Model.tbl_Files)
+                        {
+                            <div class="card mw-18rem">
+                                <div class="card-body">
+                                    @if (file.tbl_file_type_id == ".pdf")
+                                    {
+                                        <i class="fas fa-file-pdf text-light-green fs-1 mb-3"></i>
+                                    }
+                                    else if (file.tbl_file_type_id == ".docx")
+                                    {
+                                        <i class="fas fa-file-word text-light-green fs-1 mb-3"></i>
+                                    }
+                                    else if (file.tbl_file_type_id == ".jpg")
+                                    {
+                                        <i class="fas fa-file-image text-light-green fs-1 mb-3"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-file text-light-green fs-1 mb-3"></i>
+                                    }
+                                    <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#">View</a></li>
+                                        <li><a class="dropdown-item" href="#">Delete</a></li>
+                                        <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
+                                    </ul>
+                                    <h6 class="card-title text-secondary">@file.filename</h6>
+                                    <ul class="list-unstyled small mb-0">
+                                        <li><span class="text-muted">type: @file.tbl_file_type_id</span></li>
+                                        <li><span class="text-muted">size: @(file.file_size / 1024) kB</span></li>
+                                        <li><span class="text-muted">uploaded: @file.date_created.ToString("MMM dd yyyy")</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="d-flex gap-4 mb-5">
+                            <h2 class="text-secondary fw-bold m-0">Attach Additional Documents</h2>
+                            <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
+                                <i data-feather="upload"></i> Upload
+                            </label>
+                            <input type="file" asp-for="filesUpload.Files" class="form-control file" multiple hidden accept="application/pdf" />
+                            @* <button type="button" class="btn btn-primary"><i data-feather="upload"></i> Upload</button>*@
+                        </div>
+                        <div class="d-flex mb-4 gap-3 output">
+                            @*Cards for files*@
+                        </div>                                             
+                    </div>
+
                     <div class="row d-flex justify-content-center px-0 mb-5">
                         <div class="col-md-11 d-flex flex-column gap-2">
                             <span>
@@ -235,6 +250,86 @@
     const confirmButton = document.getElementById('confirmSaveBtn');
 
     $(document).ready(function () {
+
+        //FILE UPLOAD
+        const dt = new DataTransfer();
+
+        $(".file").on("change", function (e) {
+            // Get the selected file(s)
+            var selectedFiles = $(this).prop("files");
+            var fafile = "";
+            // Clear the previous output
+            //$(".output").empty();
+
+            // Display file information in the specified format
+            for (var i = 0; i < this.files.length; i++) {
+                //ifelse for fa-file type
+                if (selectedFiles[i].type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                    fafile = "fa-file-word"
+                }
+                else if (selectedFiles[i].type == "application/pdf") {
+                    fafile = "fa-file-pdf"
+                }
+                else if (selectedFiles[i].type == "image/jpeg") {
+                    fafile = "fa-file-image"
+                }
+                else {
+                    fafile = "fa-file"
+                }
+                // Create div elements and set their classes and content
+                var cardDiv = $("<div>").addClass("card mw-18rem ").attr('id', selectedFiles[i].name);
+                var fileDiv = $("<div>").addClass("card-body");
+                var fileIcon = $("<i>").addClass("fas " + fafile + " text-light-green fs-1 mb-3");
+                var dropdownIcon = $("<i>").addClass("fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary").attr({
+                    "data-bs-toggle": "dropdown",
+                    "aria-expanded": "false"
+                });
+                var dropdownMenu = $("<ul>").addClass("dropdown-menu").append(
+                    $("<li>").append($("<a>").addClass("dropdown-item file-delete").attr("href", "#").text("Delete"))
+                );
+                var fileName = $("<h6>").addClass("card-title text-secondary").text(selectedFiles[i].name);
+                var fileInfoList = $("<ul>").addClass("list-unstyled small mb-0").append(
+                    $("<li>").append($("<span>").addClass("text-muted").text("type: " + selectedFiles[i].type)),
+                    $("<li>").append($("<span>").addClass("text-muted").text("size: " + (selectedFiles[i].size / 1024).toFixed(2) + "kb")),
+                    $("<li>").append($("<span>").addClass("text-muted").text("uploaded: " + new Date().toLocaleDateString()))
+                );
+
+                // Append created elements to the fileDiv
+                fileDiv.append(fileIcon, dropdownIcon, dropdownMenu, fileName, fileInfoList);
+
+                // Append the fileDiv to the cardDiv
+                cardDiv.append(fileDiv);
+
+                // Append the cardDiv to the output div
+                $(".output").append(cardDiv);
+            }
+            for (let file of this.files) {
+                dt.items.add(file);
+            }
+
+            selectedFiles = dt.files;
+            console.log(selectedFiles);
+            $('.file-delete').click(function () {
+                let name = $(this).closest('.card').attr('id');
+                // Supprimer l'affichage du nom de fichier
+                //$(this).parent().remove();
+                document.getElementById(name).remove()
+                for (let i = 0; i < dt.items.length; i++) {
+                    // Correspondance du fichier et du nom
+                    if (name === dt.items[i].getAsFile().name) {
+                        // Suppression du fichier dans l'objet DataTransfer
+                        dt.items.remove(i);
+                        continue;
+                    }
+                }
+                // Mise à jour des fichiers de l'input file après suppression
+                selectedFiles = dt.files;
+            });
+
+
+        });
+        //END FOR FILE UPLOAD
+
         $("#btnSave").click(function () {
             $("#confirmSaveModal").modal("show");
         });

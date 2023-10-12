@@ -25,6 +25,10 @@ namespace FMB_CIS.Models
         public int tbl_city_id { get; set; }
         public int tbl_brgy_id { get; set; }
         //public string street_address { get; set; }
+        public string region { get; set; }
+        public string province { get; set; }
+        public string city { get; set; }
+        public string brgy { get; set; }
         public string comment { get; set; }
         public int tbl_user_types_id { get; set; }
 
