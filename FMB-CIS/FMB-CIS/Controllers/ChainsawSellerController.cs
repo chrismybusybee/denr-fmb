@@ -130,6 +130,7 @@ namespace FMB_CIS.Controllers
                         filesDB.path = path;
                         filesDB.tbl_file_type_id = fileInfo.Extension;
                         filesDB.tbl_file_sources_id = fileInfo.Extension;
+                        filesDB.file_size = Convert.ToInt32(file.Length);
                         _context.tbl_files.Add(filesDB);
                         _context.SaveChanges();
                     }
@@ -335,6 +336,7 @@ namespace FMB_CIS.Controllers
                             filesDB.path = path;
                             filesDB.tbl_file_type_id = fileInfo.Extension;
                             filesDB.tbl_file_sources_id = fileInfo.Extension;
+                            filesDB.file_size = Convert.ToInt32(file.Length);
                             _context.tbl_files.Add(filesDB);
                             _context.SaveChanges();
                         }

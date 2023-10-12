@@ -108,6 +108,21 @@ namespace FMB_CIS.Controllers
                                       where a.tbl_user_id == usid && a.id == applid
                                       select a;
 
+                //CODE FOR FILE DOWNLOAD
+                int applicID = Convert.ToInt32(appid);
+                //File Paths from Database
+                var filesFromDB = _context.tbl_files.Where(f => f.tbl_application_id == applicID).ToList();
+                List<tbl_files> files = new List<tbl_files>();
+
+                foreach (var fileList in filesFromDB)
+                {
+                    files.Add(new tbl_files { filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, file_size = fileList.file_size, date_created = fileList.date_created });
+                    //files.Add(new tbl_files { filename = f });
+                }
+
+                mymodel.tbl_Files = files;
+                //END FOR FILE DOWNLOAD
+
                 //HISTORY
                 var applicationtypelist = _context.tbl_application_type;
                 var applicationMod = (from a in applicationlist
@@ -136,41 +151,41 @@ namespace FMB_CIS.Controllers
                                           purpose = a.purpose
                                       }).FirstOrDefault();
                 //mymodel.email = UserList.email;
-                //mymodel.applicantListViewModels = applicationMod;
+                mymodel.applicantViewModels = applicationMod;
                 //mymodel.tbl_Users = UserInfo;
-                return View(applicationMod);
+                return View(mymodel);
             }
         }
 
         [HttpPost]
-        public IActionResult EditApplication(ApplicantListViewModel? viewMod, string id, string tbl_user_id)
+        public IActionResult EditApplication(ViewModel? viewMod)
         {
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usid = Convert.ToInt32(tbl_user_id);
-            int applid = Convert.ToInt32(id);
+            int usid = Convert.ToInt32(viewMod.applicantViewModels.tbl_user_id);
+            int applid = Convert.ToInt32(viewMod.applicantViewModels.id);
 
             //viewMod.applicantListViewModels.FirstOrDefault(x=>x.comment)
             //string newComment = viewMod.applicantListViewModels.Where(x => x.tbl_user_id == uid).Select(v => v.comment).ToList().ToString();
 
 
-            if (viewMod.id != null)
+            if (viewMod.applicantViewModels.id != null)
             {
 
                 //string buttonClicked = SubmitButton;
 
                 //updating the application
-                var appliDB = _context.tbl_application.Where(m => m.id == viewMod.id).FirstOrDefault();
+                var appliDB = _context.tbl_application.Where(m => m.id == viewMod.applicantViewModels.id).FirstOrDefault();
                 
                 //appliDB.id = applid;
-                appliDB.qty = viewMod.qty;
-                appliDB.purpose = viewMod.purpose;
-                appliDB.expected_time_arrival = viewMod.expectedTimeArrived;
-                appliDB.expected_time_release = viewMod.expectedTimeRelease;
+                appliDB.qty = viewMod.applicantViewModels.qty;
+                appliDB.purpose = viewMod.applicantViewModels.purpose;
+                appliDB.expected_time_arrival = viewMod.applicantViewModels.expectedTimeArrived;
+                appliDB.expected_time_release = viewMod.applicantViewModels.expectedTimeRelease;
                 appliDB.date_modified = DateTime.Now;
-                appliDB.modified_by = viewMod.tbl_user_id;
-                appliDB.supplier_address = viewMod.address;
-                appliDB.date_of_inspection = viewMod.inspectionDate;
-                appliDB.tbl_specification_id = viewMod.specification;
+                appliDB.modified_by = viewMod.applicantViewModels.tbl_user_id;
+                appliDB.supplier_address = viewMod.applicantViewModels.address;
+                appliDB.date_of_inspection = viewMod.applicantViewModels.inspectionDate;
+                appliDB.tbl_specification_id = viewMod.applicantViewModels.specification;
 
                 
                 _context.SaveChanges();
@@ -196,15 +211,16 @@ namespace FMB_CIS.Controllers
                             {
                                 file.CopyTo(stream);
                             }
-                            filesDB.tbl_application_id = viewMod.id;
-                            filesDB.created_by = viewMod.tbl_user_id;
-                            filesDB.modified_by = viewMod.tbl_user_id;
+                            filesDB.tbl_application_id = viewMod.applicantViewModels.id;
+                            filesDB.created_by = viewMod.applicantViewModels.tbl_user_id;
+                            filesDB.modified_by = viewMod.applicantViewModels.tbl_user_id;
                             filesDB.date_created = DateTime.Now;
                             filesDB.date_modified = DateTime.Now;
                             filesDB.filename = file.FileName;
                             filesDB.path = path;
                             filesDB.tbl_file_type_id = fileInfo.Extension;
                             filesDB.tbl_file_sources_id = fileInfo.Extension;
+                            filesDB.file_size = Convert.ToInt32(file.Length);
                             _context.tbl_files.Add(filesDB);
                             _context.SaveChanges();
                         }
@@ -212,8 +228,8 @@ namespace FMB_CIS.Controllers
                     
                     //Email
                     var subject = "Permit Application Status";
-                    var body = "Greetings! \n An inspector viewed your application.\nThe officer left the following comment:\n" + viewMod.comment;
-                    EmailSender.SendEmailAsync(viewMod.email, subject, body);
+                    var body = "Greetings! \n You have successfully edited your application.";
+                    EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);
                 
                 
                 
@@ -222,6 +238,20 @@ namespace FMB_CIS.Controllers
             var applicationlist = from a in _context.tbl_application
                                   where a.tbl_user_id == usid && a.id == applid
                                   select a;
+            //CODE FOR FILE DOWNLOAD
+            int applicID = Convert.ToInt32(viewMod.applicantViewModels.id);
+            //File Paths from Database
+            var filesFromDB = _context.tbl_files.Where(f => f.tbl_application_id == applicID).ToList();
+            List<tbl_files> files = new List<tbl_files>();
+
+            foreach (var fileList in filesFromDB)
+            {
+                files.Add(new tbl_files { filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, file_size = fileList.file_size, date_created = fileList.date_created });
+                //files.Add(new tbl_files { filename = f });
+            }
+
+            viewMod.tbl_Files = files;
+            //END FOR FILE DOWNLOAD
 
             //HISTORY
             var applicationtypelist = _context.tbl_application_type;
@@ -252,7 +282,22 @@ namespace FMB_CIS.Controllers
                                   }).FirstOrDefault();
 
             ViewBag.Message = "Save Success";
-            return View(applicationMod);
+            viewMod.applicantViewModels = applicationMod;
+
+            return View(viewMod);
+
+        }
+
+        //For File Download
+        public FileResult DownloadFile(string fileName, string path)
+        {
+            //Build the File Path.
+            string pathWithFilename = path + "//" + fileName;
+            //Read the File data into Byte Array.
+            byte[] bytes = System.IO.File.ReadAllBytes(pathWithFilename);
+
+            //Send the File to Download.
+            return File(bytes, "application/octet-stream", fileName);
         }
     }
 }

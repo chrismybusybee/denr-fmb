@@ -182,7 +182,8 @@
             <hr />
 
             <div class="row d-flex justify-content-center m-0">
-                <div class="col-md-11 mb-5">
+
+                @* <div class="col-md-11 mb-5">
                     <span>Attached Forms</span>
                     <table class="w-100 striped-table">
                         <thead>
@@ -204,7 +205,6 @@
                                     </td>
                                     <td class="text-nowrap">
                                         <div class="d-flex justify-content-center gap-3">
-                                            @* @Html.ActionLink("Download", "DownloadFile", new { filename = file.filename }) *@
                                             <a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="bg-green text-white px-1 pb-1 rounded" title="view">
                                             <i data-feather="eye" class="data-feather-20"></i>
                                         </a>
@@ -214,7 +214,49 @@
                             }
                         </tbody>
                     </table>
+                </div> *@
+
+                <div class="d-flex gap-4 mb-5">
+                    <h2 class="text-secondary fw-bold m-0">Attached Documents</h2>
                 </div>
+                <div class="d-flex mb-4 gap-3">
+                    @foreach (tbl_files file in Model.tbl_Files)
+                    {
+                        <div class="card mw-18rem">
+                            <div class="card-body">
+                                @if (file.tbl_file_type_id == ".pdf")
+                                {
+                                    <i class="fas fa-file-pdf text-light-green fs-1 mb-3"></i>
+                                }
+                                else if (file.tbl_file_type_id == ".docx")
+                                {
+                                    <i class="fas fa-file-word text-light-green fs-1 mb-3"></i>
+                                }
+                                else if (file.tbl_file_type_id == ".jpg")
+                                {
+                                    <i class="fas fa-file-image text-light-green fs-1 mb-3"></i>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-file text-light-green fs-1 mb-3"></i>
+                                }
+                                <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                <ul class="dropdown-menu">
+                                    @* <li><a class="dropdown-item" href="#">View</a></li>
+                                <li><a class="dropdown-item" href="#">Delete</a></li> *@
+                                    <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
+                                </ul>
+                                <h6 class="card-title text-secondary">@file.filename</h6>
+                                <ul class="list-unstyled small mb-0">
+                                    <li><span class="text-muted">type: @file.tbl_file_type_id</span></li>
+                                    <li><span class="text-muted">size: @(file.file_size / 1024) kB</span></li>
+                                    <li><span class="text-muted">uploaded: @file.date_created.ToString("MMM dd yyyy")</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                </div>
+
                 <div class="row d-flex justify-content-center px-0 mb-5">
                     @if (ViewBag.Inspector)
                     {

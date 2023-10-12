@@ -431,7 +431,10 @@
     {
         <partial name="~/Views/Modals/CreationOfNewDenrOfficeModal.cshtml" />
     }
-
+    else if (currentUrl.Contains("EditApplication"))
+    {
+        <partial name="~/Views/Modals/EditApplicationModal.cshtml" />
+    }
     <footer>
         © 2023 DENR-FMB CIS. All rights reserved. <a href="@Url.Action("TermsPolicy", "Home")" target="_blank" class="text-light-gray text-decoration-none">Privacy Policy | Terms & Conditions.</a>
     </footer>

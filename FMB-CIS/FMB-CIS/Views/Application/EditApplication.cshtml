@@ -1,5 +1,5 @@
 ﻿@using System.Security.Claims;
-@model FMB_CIS.Models.ApplicantListViewModel
+@model FMB_CIS.Models.ViewModel
 @* @model FMB_CIS.Models.ApplicantListViewModel *@
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
@@ -16,18 +16,21 @@
                 @ViewBag.message
             </div>
         }
-        <form asp-action="EditApplication" method="post" enctype="multipart/form-data">
+        <form asp-action="EditApplication" method="post" enctype="multipart/form-data" id="EditApplicationForm">
             <div class="row m-0">
-                <input asp-for="id" value="@Model.id" type="hidden" />
-                <input asp-for="tbl_user_id" value="@Model.tbl_user_id" type="hidden" />
-                <input asp-for="email" value="@Model.email" type="hidden" />
+                <input asp-for="applicantViewModels.id" value="@Model.applicantViewModels.id" type="hidden" />
+                <input asp-for="applicantViewModels.tbl_user_id" value="@Model.applicantViewModels.tbl_user_id" type="hidden" />
+                <input asp-for="applicantViewModels.email" value="@Model.applicantViewModels.email" type="hidden" />
+                @* @Html.HiddenFor(model => model.applicantViewModels.id)
+                @Html.HiddenFor(model => model.applicantViewModels.tbl_user_id)
+                @Html.HiddenFor(model => model.applicantViewModels.email) *@
                 <div class="d-flex justify-content-end gap-2">
-                    @if (@Model.permit_status != "Approved")
+                    @if (@Model.applicantViewModels.permit_status != "Approved")
                     {
-                        <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" />
+                        @* <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" /> *@
+                        <button id="btnSave" class="btn btn-primary w-105" type="button">Submit</button>
                     }
                     
-
                 </div>
             </div>
             <hr />
@@ -48,7 +51,7 @@
                                         </label>
                                         <span class="fw-bold">
                                             @* @Html.DisplayFor(model => model.user_type) *@
-                                            <label asp-for="user_type" value="@Model.user_type">@Model.user_type</label>
+                                            <label asp-for="applicantViewModels.user_type" value="@Model.applicantViewModels.user_type">@Model.applicantViewModels.user_type</label>
                                             @* @Html.DisplayFor(modelItem => item.Engine) *@
                                             @* Chainsaw Importer *@
                                         </span>
@@ -60,7 +63,7 @@
                                             Name
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="full_name" value="@Model.full_name">@Model.full_name</label>
+                                            <label asp-for="applicantViewModels.full_name" value="@Model.applicantViewModels.full_name">@Model.applicantViewModels.full_name</label>
                                         </span>
                                     </div>
                                 </div>
@@ -70,7 +73,7 @@
                                             Permit Type
                                         </label>
                                         <span class="fw-bold">
-                                            <label asp-for="permit_type" value="@Model.permit_type">@Model.permit_type</label>
+                                            <label asp-for="applicantViewModels.permit_type" value="@Model.applicantViewModels.permit_type">@Model.applicantViewModels.permit_type</label>
                                         </span>
                                     </div>
                                 </div>
@@ -83,13 +86,13 @@
                                             Number of Chainsaws
                                         </label>
                                         <span class="fw-bold">
-                                            @if (@Model.permit_status == "Approved")
+                                            @if (@Model.applicantViewModels.permit_status == "Approved")
                                             {
-                                                <label asp-for="qty" value="@Model.qty">@Model.qty</label>
+                                                <label asp-for="applicantViewModels.qty" value="@Model.applicantViewModels.qty">@Model.applicantViewModels.qty</label>
                                             }
                                             else
                                             {
-                                                <input asp-for="qty" name="qty" value="@Model.qty" class="form-control" type="text" />
+                                                <input asp-for="applicantViewModels.qty" value="@Model.applicantViewModels.qty" class="form-control" type="text" />
                                             }
                                             
                                         </span>
@@ -101,13 +104,13 @@
                                             Specification
                                         </label>
                                         <span class="fw-bold">
-                                            @if (@Model.permit_status == "Approved")
+                                            @if (@Model.applicantViewModels.permit_status == "Approved")
                                             {
-                                                <label asp-for="specification" value="@Model.specification">@Model.specification</label>
+                                                <label asp-for="applicantViewModels.specification" value="@Model.applicantViewModels.specification">@Model.applicantViewModels.specification</label>
                                             }
                                             else
                                             {
-                                                <input asp-for="specification" name="specification" value="@Model.specification" class="form-control" type="text" />
+                                                <input asp-for="applicantViewModels.specification" value="@Model.applicantViewModels.specification" class="form-control" type="text" />
                                             }
                                             
 
@@ -123,13 +126,13 @@
                                             Address
                                         </label>
                                         <span class="fw-bold">
-                                            @if (@Model.permit_status == "Approved")
+                                            @if (@Model.applicantViewModels.permit_status == "Approved")
                                             {
-                                                <label asp-for="address" value="@Model.address">@Model.address</label>
+                                                <label asp-for="applicantViewModels.address" value="@Model.applicantViewModels.address">@Model.applicantViewModels.address</label>
                                             }
                                             else
                                             {
-                                            <input asp-for="address" name="address" value="@Model.address" class="form-control" type="text" />
+                                                <input asp-for="applicantViewModels.address" value="@Model.applicantViewModels.address" class="form-control" type="text" />
                                             }
                                         </span>
                                     </div>
@@ -140,13 +143,13 @@
                                             Inspection Date
                                         </label>
                                         <span class="fw-bold">
-                                            @if (@Model.permit_status == "Approved")
+                                            @if (@Model.applicantViewModels.permit_status == "Approved")
                                             {
-                                                <label asp-for="inspectionDate" value="@Model.inspectionDate">@Model.inspectionDate</label>
+                                                <label asp-for="applicantViewModels.inspectionDate" value="@Model.applicantViewModels.inspectionDate">@Model.applicantViewModels.inspectionDate</label>
                                             }
                                             else
                                             {
-                                            <input asp-for="inspectionDate" name="inspectionDate" value="@Model.inspectionDate" class="form-control" type="text" />
+                                                <input asp-for="applicantViewModels.inspectionDate" value="@Model.applicantViewModels.inspectionDate" class="form-control" type="text" />
                                             }
                                         </span>
                                     </div>
@@ -158,7 +161,7 @@
                     </div>
                 </div>
             </div>
-            @if (@Model.permit_type == "Permit to Import")
+            @if (@Model.applicantViewModels.permit_type == "Permit to Import")
             {
                 <hr />
                 <h4 class="text-secondary fw-bold mb-4">Bureau of Customs</h4>
@@ -168,13 +171,13 @@
                             <label class="text-secondary small">
                                 Expected time of arrival
                             </label>
-                            @if (@Model.permit_status == "Approved")
+                            @if (@Model.applicantViewModels.permit_status == "Approved")
                             {
-                                <label asp-for="expectedTimeArrived" value="@Model.expectedTimeArrived">@Model.expectedTimeArrived</label>
+                                <label asp-for="applicantViewModels.expectedTimeArrived" value="@Model.applicantViewModels.expectedTimeArrived">@Model.applicantViewModels.expectedTimeArrived</label>
                             }
                             else
                             {
-                            <input type="date" asp-for="expectedTimeArrived" class="form-control" />
+                            <input type="date" asp-for="applicantViewModels.expectedTimeArrived" class="form-control" />
                             }
                         </div>
                     </div>
@@ -183,13 +186,13 @@
                             <label class="text-secondary small">
                                 Expected time of release
                             </label>
-                            @if (@Model.permit_status == "Approved")
+                            @if (@Model.applicantViewModels.permit_status == "Approved")
                             {
-                            <label asp-for="expectedTimeRelease" value="@Model.expectedTimeRelease">@Model.expectedTimeRelease</label>
+                                <label asp-for="applicantViewModels.expectedTimeRelease" value="@Model.applicantViewModels.expectedTimeRelease">@Model.applicantViewModels.expectedTimeRelease</label>
                             }
                             else
                             {
-                            <input type="date" asp-for="expectedTimeRelease" class="form-control" />
+                                <input type="date" asp-for="applicantViewModels.expectedTimeRelease" class="form-control" />
                             }
                         </div>
                     </div>
@@ -197,13 +200,61 @@
             }
             
             <hr/>
-            @if (@Model.permit_status != "Approved")
+            <div class="row d-flex justify-content-center m-0">
+                <div class="row d-flex justify-content-center px-0 mb-5">
+                    <div class="col-md-12 d-flex flex-column gap-2">
+                        <div class="d-flex gap-4">
+                            <h2><h2 class="text-secondary fw-bold m-0">Uploaded Documents</h2></h2>
+                        </div>
+                    </div>
+                    <br /> <br />
+                    <div class="d-flex mb-4 gap-3">
+                        @foreach (tbl_files file in Model.tbl_Files)
+                        {
+                            <div class="card mw-18rem">
+                                <div class="card-body">
+                                    @if (file.tbl_file_type_id == ".pdf")
+                                    {
+                                        <i class="fas fa-file-pdf text-light-green fs-1 mb-3"></i>
+                                    }
+                                    else if (file.tbl_file_type_id == ".docx")
+                                    {
+                                        <i class="fas fa-file-word text-light-green fs-1 mb-3"></i>
+                                    }
+                                    else if (file.tbl_file_type_id == ".jpg")
+                                    {
+                                        <i class="fas fa-file-image text-light-green fs-1 mb-3"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-file text-light-green fs-1 mb-3"></i>
+                                    }
+                                    <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                    <ul class="dropdown-menu">
+                                        @* <li><a class="dropdown-item" href="#">View</a></li>
+                                    <li><a class="dropdown-item" href="#">Delete</a></li> *@
+                                        <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
+                                    </ul>
+                                    <h6 class="card-title text-secondary">@file.filename</h6>
+                                    <ul class="list-unstyled small mb-0">
+                                        <li><span class="text-muted">type: @file.tbl_file_type_id</span></li>
+                                        <li><span class="text-muted">size: @(file.file_size / 1024) kB</span></li>
+                                        <li><span class="text-muted">uploaded: @file.date_created.ToString("MMM dd yyyy")</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            @if (@Model.applicantViewModels.permit_status != "Approved")
             {
                 <div class="row d-flex justify-content-center m-0">
                     <div class="row d-flex justify-content-center px-0 mb-5">
                         <div class="col-md-12 d-flex flex-column gap-2">
                             <div class="d-flex gap-4">
-                                <h2><h2 class="text-secondary fw-bold m-0">Attach Documents</h2></h2>
+                                <h2><h2 class="text-secondary fw-bold m-0">Attach Additional Documents</h2></h2>
                                 <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
                                     <i data-feather="upload"></i> Upload
                                 </label>
@@ -222,7 +273,7 @@
                             <span>
                                 Purpose
                             </span>
-                            <textarea asp-for="purpose" class="form-control"></textarea>
+                            <textarea asp-for="applicantViewModels.purpose" class="form-control"></textarea>
                         </div>
                     </div>
                 </div>
@@ -230,12 +281,20 @@
             
         </form>
 
+        
+
     </div>
 </div>
 
 <script src="/js/jquery-3.7.1.min.js"></script>
 
 <script type="text/javascript">
+
+    const form = document.getElementById('EditApplicationForm');
+    const showModalButton = document.getElementById('btnSave');
+    const confirmationModal = document.getElementById('confirmSaveModal');
+    const confirmButton = document.getElementById('confirmSaveBtn');
+
     $(document).ready(function () {
         const dt = new DataTransfer();
         $(".file").on("change", function (e) {
@@ -315,41 +374,46 @@
 
         });
 
-        $('#approveBtn').click(function () {
-            $('#confirmApproveModal').modal("show");
+        $("#btnSave").click(function () {
+            $("#confirmSaveModal").modal("show");
         });
 
-        $('#saveBtn').click(function () {
-            $('#confirmApproveModal').modal("show");
+        $("#backSaveBtn").click(function () {
+            $("#confirmSaveModal").modal("hide");
         });
 
-        $("#backApproveBtn").click(function () {
-            $("#confirmApproveModal").modal('hide');
-        });
-
-        $("#confirmApproveBtn").click(function () {
-            $("#confirmApproveModal").modal('hide');
-            $('#confirmSuccessApproveModal').modal("show");
-        });
-        
-        $('#declineBtn').click(function () {
-            $('#confirmDeclineModal').modal("show");
-        });
-
-        $('#backDeclineBtn').click(function () {
-            $('#confirmDeclineModal').modal("hide");
-        });
-
-        $("#confirmDeclineBtn").click(function () {
-            $("#confirmDeclineModal").modal('hide');
-            $('#confirmSuccessDeclineModal').modal("show");
+        $("#confirmSaveBtn").click(function () {
+            $("#confirmSaveModal").modal("hide");
+            form.submit();
+            $("#confirmSaveSuccessModal").modal("show");
         });
     });
-    var x = document.getElementById("commentFromDB").value;
-    document.getElementById('commentToPass').value = x;
 
-    var y = document.getElementById("myEmailAdd").value;
-    document.getElementById('emailCopy').value = y;
+    // Function to display the modal
+    function showModal() {
+        confirmationModal.style.display = 'block';
+    }
+
+    // Function to hide the modal
+    function hideModal() {
+        confirmationModal.style.display = 'none';
+    }
+
+    // Event listener for the "Submit" button
+    showModalButton.addEventListener('click', showModal);
+
+    // Event listener for the "Confirm" button
+    confirmButton.addEventListener('click', function () {
+        // Submit the form when the "Confirm" button is clicked
+        form.submit();
+    });
+
+    // Close the modal when the user clicks outside of it
+    window.addEventListener('click', function (event) {
+        if (event.target === confirmationModal) {
+            hideModal();
+        }
+    });
     
 
 </script>

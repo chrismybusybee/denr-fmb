@@ -1,0 +1,47 @@
+﻿<div class="modal fade" id="confirmSaveModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/submit.png" />
+                    </div>
+                    <p class="fw-bold fs-5">
+                        Are you sure you want to save changes?
+                    </p>
+                    <div class="d-flex gap-4 w-100">
+                        <button id="backSaveBtn" class="btn btn-danger w-100">Back</button>
+                        <button id="confirmSaveBtn" class="btn btn-primary w-100">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmSaveSuccessModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/success.png" />
+                    </div>
+                    <p class="fw-bold fs-5">
+                        Changes saved successfully!
+                    </p>
+                    <div class="d-flex justify-content-center w-100">
+                        @* <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("Index", "AccountManagement")'">Ok</button> *@
+                        <button class="btn btn-primary w-50" id="okBtn">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#okBtn").click(function () {
+        $("#confirmSaveSuccessModal").modal("hide");
+    });
+</script>
