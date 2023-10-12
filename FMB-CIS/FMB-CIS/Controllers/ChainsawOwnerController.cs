@@ -202,11 +202,11 @@ namespace FMB_CIS.Controllers
                                          tbl_city_id = usr.tbl_city_id,
                                          tbl_brgy_id = usr.tbl_brgy_id,
                                          comment = usr.comment
-                                     }).FirstOrDefault();
-                //mymodel.applicantListViewModels = applicationMod;
+                                     });
+                mymodel.applicantListViewModels = applicationMod;
                 
                 //mymodel.tbl_Users = UserInfo;
-                return View(applicationMod);
+                return View(mymodel);
             }
 
         }

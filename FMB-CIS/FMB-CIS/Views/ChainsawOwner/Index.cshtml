@@ -159,15 +159,15 @@
 
         // Add an event listener for the 'change' event on the file input element
         // Add an event listener for the 'change' event on the file input element
-        $(".file").on("change", function () {
+        $(".file").on("change", function (e) {
             // Get the selected file(s)
             var selectedFiles = $(this).prop("files");
             var fafile = "";
             // Clear the previous output
-            $(".output").empty();
+            //$(".output").empty();
 
             // Display file information in the specified format
-            for (var i = 0; i < selectedFiles.length; i++) {
+            for (var i = 0; i < this.files.length; i++) {
                 //ifelse for fa-file type
                 if (selectedFiles[i].type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
                     fafile = "fa-file-word"
@@ -182,7 +182,7 @@
                     fafile = "fa-file"
                 }
                 // Create div elements and set their classes and content
-                var cardDiv = $("<div>").addClass("card mw-18rem");
+                var cardDiv = $("<div>").addClass("card mw-18rem ").attr('id', selectedFiles[i].name);
                 var fileDiv = $("<div>").addClass("card-body");
                 var fileIcon = $("<i>").addClass("fas " + fafile + " text-light-green fs-1 mb-3");
                 var dropdownIcon = $("<i>").addClass("fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary").attr({
@@ -191,7 +191,7 @@
                 });
                 var dropdownMenu = $("<ul>").addClass("dropdown-menu").append(
                     $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("View")),
-                    $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("Delete")),
+                    $("<li>").append($("<a>").addClass("dropdown-item file-delete").attr("href", "#").text("Delete")),
                     $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("Download"))
                 );
                 var fileName = $("<h6>").addClass("card-title text-secondary").text(selectedFiles[i].name);
@@ -210,6 +210,30 @@
                 // Append the cardDiv to the output div
                 $(".output").append(cardDiv);
             }
+            for (let file of this.files) {
+                dt.items.add(file);
+            }
+
+            selectedFiles = dt.files;
+            console.log(selectedFiles);
+            $('.file-delete').click(function () {
+                let name = $(this).closest('.card').attr('id');
+                // Supprimer l'affichage du nom de fichier
+                //$(this).parent().remove();
+                document.getElementById(name).remove()
+                for (let i = 0; i < dt.items.length; i++) {
+                    // Correspondance du fichier et du nom
+                    if (name === dt.items[i].getAsFile().name) {
+                        // Suppression du fichier dans l'objet DataTransfer
+                        dt.items.remove(i);
+                        continue;
+                    }
+                }
+                // Mise à jour des fichiers de l'input file après suppression
+                selectedFiles = dt.files;
+            });
+
+
         });
 
 

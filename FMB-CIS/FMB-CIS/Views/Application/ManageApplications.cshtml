@@ -5,93 +5,54 @@
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Manage Applications";
     ViewBag.Role = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
+    ViewBag.UserType = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
 }
 
 <div id="card-container">
     <div id="card">
         <h2>@ViewBag.Role</h2>
-                <table class="table dataTable" id="tblUserHistory">
-            <thead>
-                <tr>
-                    <th>
-                        ID
-                    </th>
-                    <th>
-                        Full Name
-                    </th>
-                    <th>
-                        Email
-                    </th>
-                    <th>
-                        Contact No.
-                    </th>
-                    <th>
-                        Address
-                    </th>
-                    <th>
-                        Application Type
-                    </th>
-                    <th>
-                        Permit Type
-                    </th>
-                    <th>
-                        Permit Status
-                    </th>
-                    <th>
-                        Action
-                    </th>
+        @if (ViewBag.UserType.Contains("Owner") == true)
+        {
+            <hr>
+            <div id="card">
+                @Html.Partial("~/Views/Application/LeasePermits.cshtml")
+            </div>
+            <hr>
+            <div id="card">
+                @Html.Partial("~/Views/Application/RentPermits.cshtml")
+            </div>
+            <hr>
+            <div id="card">
+                @Html.Partial("~/Views/Application/LendPermits.cshtml")
+            </div>
+            <hr>
+            <div id="card">
+                @Html.Partial("~/Views/Application/RegistrationPermits.cshtml")
+            </div>
+            <hr>
+            <div id="card">
+                @Html.Partial("~/Views/Application/ResellPermits.cshtml")
+            </div>
+        }
+        @if (ViewBag.UserType.Contains("Seller") == true)
+        {
+            <hr>
+            <div id="card">
+                @Html.Partial("~/Views/Application/SellPermits.cshtml")
+            </div>
+            <hr>
+            <div id="card">
+                @Html.Partial("~/Views/Application/PurchasePermits.cshtml")
+            </div>
+        }
+        @if (ViewBag.UserType.Contains("Importer") == true)
+        {
+            <hr>
+            <div id="card">
+                @Html.Partial("~/Views/Application/ImportPermits.cshtml")
+            </div>
+        }
 
-
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (ApplicantListViewModel item in Model.applicantListViewModels)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.id)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.full_name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.contact)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.address)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.application_type)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.permit_type)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.permit_status)
-                        </td>
-                        <td>
-                            @* <a href="ChainsawImporterApproval?uid=@item.tbl_user_id&appid=@item.id">Take Action</a> *@
-                            @if (item.application_type.Contains("Importer"))
-                            {
-                                <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">Edit</a>
-                            }
-                            @if (item.application_type.Contains("Seller"))
-                            {
-                                <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">Edit</a>
-                            }
-                            @if (item.application_type.Contains("Owner"))
-                            {
-                                <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">Edit</a>
-                            }
-
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
     </div>
 </div>
 

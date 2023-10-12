@@ -143,22 +143,23 @@ namespace FMB_CIS.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditApplication(ApplicantListViewModel? viewMod)
+        public IActionResult EditApplication(ApplicantListViewModel? viewMod, string id, string tbl_user_id)
         {
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int usid = Convert.ToInt32(tbl_user_id);
+            int applid = Convert.ToInt32(id);
 
             //viewMod.applicantListViewModels.FirstOrDefault(x=>x.comment)
             //string newComment = viewMod.applicantListViewModels.Where(x => x.tbl_user_id == uid).Select(v => v.comment).ToList().ToString();
-            
-            
-            if(viewMod.id != null)
+
+
+            if (viewMod.id != null)
             {
-                int usid = Convert.ToInt32(viewMod.tbl_user_id);
-                int applid = Convert.ToInt32(viewMod.id);
+
                 //string buttonClicked = SubmitButton;
 
                 //updating the application
-                var appliDB = _context.tbl_application.Where(m => m.id == applid).FirstOrDefault();
+                var appliDB = _context.tbl_application.Where(m => m.id == viewMod.id).FirstOrDefault();
                 
                 //appliDB.id = applid;
                 appliDB.qty = viewMod.qty;
@@ -166,7 +167,7 @@ namespace FMB_CIS.Controllers
                 appliDB.expected_time_arrival = viewMod.expectedTimeArrived;
                 appliDB.expected_time_release = viewMod.expectedTimeRelease;
                 appliDB.date_modified = DateTime.Now;
-                appliDB.modified_by = usid;
+                appliDB.modified_by = viewMod.tbl_user_id;
                 appliDB.supplier_address = viewMod.address;
                 appliDB.date_of_inspection = viewMod.inspectionDate;
                 appliDB.tbl_specification_id = viewMod.specification;
@@ -196,8 +197,8 @@ namespace FMB_CIS.Controllers
                                 file.CopyTo(stream);
                             }
                             filesDB.tbl_application_id = viewMod.id;
-                            filesDB.created_by = usid;
-                            filesDB.modified_by = usid;
+                            filesDB.created_by = viewMod.tbl_user_id;
+                            filesDB.modified_by = viewMod.tbl_user_id;
                             filesDB.date_created = DateTime.Now;
                             filesDB.date_modified = DateTime.Now;
                             filesDB.filename = file.FileName;
@@ -217,8 +218,41 @@ namespace FMB_CIS.Controllers
                 
                 
             }
+
+            var applicationlist = from a in _context.tbl_application
+                                  where a.tbl_user_id == usid && a.id == applid
+                                  select a;
+
+            //HISTORY
+            var applicationtypelist = _context.tbl_application_type;
+            var applicationMod = (from a in applicationlist
+                                  join usr in _context.tbl_user on a.tbl_user_id equals usr.id
+                                  join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
+                                  join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
+                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
+                                  join pS in _context.tbl_permit_status on a.status equals pS.id
+                                  where a.tbl_user_id == usid && a.id == applid
+                                  select new ApplicantListViewModel
+                                  {
+                                      id = a.id,
+                                      tbl_user_id = usid,
+                                      full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
+                                      email = usr.email,
+                                      permit_type = pT.name,
+                                      permit_status = pS.status,
+                                      user_type = usrtyps.name,
+                                      comment = usr.comment,
+                                      qty = a.qty,
+                                      specification = a.tbl_specification_id,
+                                      inspectionDate = a.date_of_inspection,
+                                      address = a.supplier_address,
+                                      expectedTimeArrived = a.expected_time_arrival,
+                                      expectedTimeRelease = a.expected_time_release,
+                                      purpose = a.purpose
+                                  }).FirstOrDefault();
+
             ViewBag.Message = "Save Success";
-            return View(viewMod);
+            return View(applicationMod);
         }
     }
 }
