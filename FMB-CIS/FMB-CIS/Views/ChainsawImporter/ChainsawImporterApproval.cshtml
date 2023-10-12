@@ -10,21 +10,24 @@
 
 <div id="card-container">
     <div id="card">
-        <form asp-action="ChainsawImporterApproval" method="post" enctype="multipart/form-data">
+        <form asp-action="ChainsawImporterApproval" method="post" enctype="multipart/form-data" id="ApplApprvlForm">
             <div class="row m-0">
                 <input asp-for="uid" type="hidden" />
                 <input asp-for="appid" type="hidden" />
                 <div class="d-flex justify-content-end gap-2">
                     @if (ViewBag.Cenro)
                     {
-                        <input id="ApproveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Approve" />
-                        <input class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="submit" value="Decline" />
+                        @* <input id="ApproveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Approve" />
+                        <input class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="submit" value="Decline" /> *@
+                        <button type="button" id="approveBtn" class="btn btn-primary w-105">Approve</button>
+                        <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
                     }
                     @if (ViewBag.Inspector)
                     {
-                        <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" />
+                        @* <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" /> *@
+                        <button type="button" id="saveBtn" class="btn btn-primary w-105">Save</button>
                     }
-
+                    <input asp-for="decision" id="decisionID" type="hidden" />
                 </div>
             </div>
             <hr />
@@ -251,10 +254,7 @@
     $(document).ready(function () {
         $('#approveBtn').click(function () {
             $('#confirmApproveModal').modal("show");
-        });
-
-        $('#saveBtn').click(function () {
-            $('#confirmApproveModal').modal("show");
+            document.getElementById("decisionID").value = "Approve";
         });
 
         $("#backApproveBtn").click(function () {
@@ -265,9 +265,10 @@
             $("#confirmApproveModal").modal('hide');
             $('#confirmSuccessApproveModal').modal("show");
         });
-        
+
         $('#declineBtn').click(function () {
             $('#confirmDeclineModal').modal("show");
+            document.getElementById("decisionID").value = "Decline";
         });
 
         $('#backDeclineBtn').click(function () {
@@ -278,12 +279,25 @@
             $("#confirmDeclineModal").modal('hide');
             $('#confirmSuccessDeclineModal').modal("show");
         });
-    });
-    var x = document.getElementById("commentFromDB").value;
-    document.getElementById('commentToPass').value = x;
 
-    var y = document.getElementById("myEmailAdd").value;
-    document.getElementById('emailCopy').value = y;
+
+
+        $('#saveBtn').click(function () {
+            $('#confirmSaveModal').modal("show");
+            document.getElementById("decisionID").value = "Save";
+        });
+
+        $("#backSaveBtn").click(function () {
+            $("#confirmSaveModal").modal('hide');
+        });
+
+        $("#confirmSaveBtn").click(function () {
+            $("#confirmSaveModal").modal('hide');
+            $('#confirmSuccessSaveModal').modal("show");
+        });
+
+    });
+
     
 
 </script>
