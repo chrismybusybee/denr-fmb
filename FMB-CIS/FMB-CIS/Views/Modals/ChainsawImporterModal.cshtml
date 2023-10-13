@@ -222,4 +222,37 @@
         }
     });
 
+    //FOR index.cshtml
+    const formIndex = document.getElementById('ImporterRegForm');
+    const showModalButton = document.getElementById('btnSubmit');
+    const confirmationModal = document.getElementById('confirmSubmitModal');
+    const confirmButton = document.getElementById('confirmBtn');
+
+    // Function to display the modal
+    function showModal() {
+        confirmationModal.style.display = 'block';
+    }
+
+    // Function to hide the modal
+    function hideModal() {
+        confirmationModal.style.display = 'none';
+    }
+
+    // Event listener for the "Submit" button
+    showModalButton.addEventListener('click', showModal);
+
+    // Event listener for the "Confirm" button
+    confirmButton.addEventListener('click', function () {
+        // Submit the form when the "Confirm" button is clicked
+        console.log("test");
+        //formIndex.submit();
+    });
+
+    // Close the modal when the user clicks outside of it
+    window.addEventListener('click', function (event) {
+        if (event.target === confirmationModal) {
+            hideModal();
+        }
+    });
+
 </script>

@@ -17,5 +17,7 @@
         public string brgy { get; set; }
         public bool status { get; set; }
         public string comment { get; set; }
+        public DateTime? date_created { get; set; }
+        
     }
 }

@@ -13,7 +13,7 @@
                 @ViewBag.message
             </div>
         }
-        <form asp-action="Index" method="post" enctype="multipart/form-data">
+        <form asp-action="Index" method="post" enctype="multipart/form-data" id="ImporterRegForm">
         <a href="@Url.Action("Index", "Dashboard")" class="mx-2" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
         <div class="row m-0 my-4">
             <div class="col-md-6">
@@ -144,7 +144,7 @@
         </div>
         
         <div class="d-flex justify-content-end pe-2 me-1">
-            <button type="submit" class="btn btn-primary mb-4">Submit</button>
+                <button id="btnSubmit" type="button" class="btn btn-primary mb-4">Submit</button>
         </div>
         </form>
     </div>
@@ -153,6 +153,9 @@
 <script src="/js/jquery-3.7.1.min.js"></script>
 
 <script type="text/javascript">
+
+    
+
     $(document).ready(function () {
         const dt = new DataTransfer();
 
@@ -246,36 +249,9 @@
             $("#confirmSuccessModal").modal("show");
         });
     });
-    //const form = document.getElementById('ImporterRegForm');
-    //const showModalButton = document.getElementById('btnSubmit');
-    //const confirmationModal = document.getElementById('confirmSubmitModal');
-    //const confirmButton = document.getElementById('confirmBtn');
 
-    // Function to display the modal
-    function showModal() {
-        confirmationModal.style.display = 'block';
-    }
 
-    // Function to hide the modal
-    function hideModal() {
-        confirmationModal.style.display = 'none';
-    }
 
-    // Event listener for the "Submit" button
-    //showModalButton.addEventListener('click', showModal);
-
-    // Event listener for the "Confirm" button
-    //confirmButton.addEventListener('click', function () {
-        // Submit the form when the "Confirm" button is clicked
-        //form.submit();
-    //});
-
-    // Close the modal when the user clicks outside of it
-    //window.addEventListener('click', function (event) {
-    //    if (event.target === confirmationModal) {
-    //        hideModal();
-    //    }
-    //});
 </script>
 
  <style>

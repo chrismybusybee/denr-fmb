@@ -53,11 +53,21 @@ namespace FMB_CIS.Controllers
             _cities.Add(new tbl_city() { id = 0, name = "--Select City/Municipality--" });
             _barangays.Add(new tbl_brgy() { id = 0, name = "-- Select Barangay --" });
 
+            
             ViewData["RegionData"] = new SelectList(_regions.OrderBy(s => s.id), "id", "name");
-            ViewData["ProvinceData"] = new SelectList(_provinces.OrderBy(s => s.id), "id", "name");
-            ViewData["CityData"] = new SelectList(_cities.OrderBy(s => s.id), "id", "name");
-            ViewData["BrgyData"] = new SelectList(_barangays.OrderBy(s => s.id), "id", "name");
-
+            if (ViewData["ProvinceData"] == null)
+            {
+                ViewData["ProvinceData"] = new SelectList(_provinces.OrderBy(s => s.id), "id", "name");
+            }
+            if (ViewData["CityData"] == null)
+            {
+                ViewData["CityData"] = new SelectList(_cities.OrderBy(s => s.id), "id", "name");
+            }
+            if (ViewData["BrgyData"] == null)
+            {
+                ViewData["BrgyData"] = new SelectList(_barangays.OrderBy(s => s.id), "id", "name");
+            }
+            
             string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
             ViewData["BaseUrl"] = host;
 
@@ -112,14 +122,23 @@ namespace FMB_CIS.Controllers
             return Json(brgyLists);
         }
 
-        //[HttpPost]
-        //public JsonResult AjaxMethod(string response)
-        //{
-        //    RECaptcha recaptcha = new RECaptcha();
-        //    string url = "https://www.google.com/recaptcha/api/siteverify?secret=" + recaptcha.Secret + "&response=" + response;
-        //    recaptcha.Response = (new WebClient()).DownloadString(url);
-        //    return Json(recaptcha);
-        //}
+        [HttpPost, ActionName("CheckExistingEmailOnField")]
+        public JsonResult CheckExistingEmailOnField(string email)
+        {
+            var usrDB = _context.tbl_user.Where(m => m.email == email).FirstOrDefault();
+            
+            if (usrDB != null)
+            {
+                //true if email exist
+                return Json(true);
+            }
+            else
+            {
+                //false if email doesn't exist
+                return Json(false);
+            }
+        }
+
         public IActionResult RegistrationPrimary()
         {
             return View();
@@ -162,6 +181,14 @@ namespace FMB_CIS.Controllers
                 if (eMailExist == true)
                 {
                     ModelState.AddModelError("tbl_Users.email", "Email Address has already been used, please try a different Email Address.");
+
+                    //LOAD BACK THE SELECTED PROVINCE, CITIES, AND BRGY
+                    var _provinces = _context.tbl_province.Where(p => p.regCode == model.tbl_Users.tbl_region_id).ToList();
+                    var _cities = _context.tbl_city.Where(c => c.provCode == model.tbl_Users.tbl_province_id).ToList();
+                    var _barangays = _context.tbl_brgy.Where(b => b.citymunCode == model.tbl_Users.tbl_city_id).ToList();
+                    ViewData["ProvinceData"] = new SelectList(_provinces.OrderBy(s => s.name), "id", "name");
+                    ViewData["CityData"] = new SelectList(_cities.OrderBy(s => s.name), "id", "name");
+                    ViewData["BrgyData"] = new SelectList(_barangays.OrderBy(s => s.name), "id", "name");
 
                     return Registration();
                     //return View(model);
@@ -255,12 +282,14 @@ namespace FMB_CIS.Controllers
                                     var subject = "Account Created";
                                     var body = "We would like to inform you that you have created an account with FMB-CIS.\nPlease click the link to verify your email and set your password. " + passResetLink + "\nThank You!";
                                     EmailSender.SendEmailAsync(model.tbl_Users.email, subject, body);
-                                    return RedirectToAction("EmailConfirmation");
-                                }
+                                    //return RedirectToAction("EmailConfirmation");
+                                    return RedirectToAction("Index", "Home");
+                            }
                                 else
                                 {
                                     //Do not reveal if email doesn't exist.
-                                    return RedirectToAction("EmailConfirmation");
+                                    //return RedirectToAction("EmailConfirmation");
+                                    return RedirectToAction("Index", "Home");
                                 }
                             }
                         }
@@ -268,7 +297,8 @@ namespace FMB_CIS.Controllers
                     //var subject = "Account has been created";
                     //var body = "We would like to inform you that you have created an account with FMB-CIS.\nIf you forgot your password or if you wish to change it, you may proceed on this link: https://fmb-cis.beesuite.ph/Account/ForgotPassword";
                     //EmailSender.SendEmailAsync(userRegistrationViewModel.email, subject, body);
-                    return RedirectToAction("EmailConfirmation");
+                    //return RedirectToAction("EmailConfirmation");
+                    return RedirectToAction("Index", "Home");
 
                 }
                 //}
@@ -371,7 +401,7 @@ namespace FMB_CIS.Controllers
                         var usrDB = _context.tbl_user.Where(m => m.email == model.email).FirstOrDefault();
                         var tblTempPass = _context.tbl_user_temp_passwords.Where(m => m.tbl_user_id == usrDB.id).FirstOrDefault();
                         
-                        if(tblTempPass.is_active == true)
+                        if(tblTempPass != null && tblTempPass.is_active == true) //tblTempPass.is_active means the Temporary Password is active and not yet changing their password. It also mean that the user doesn't confirm their email. tblTempPass is null when user was created before having a code for this.
                         {
                             //Make Temporary Password Inactive
                             tblTempPass.is_active = false;

@@ -33,7 +33,7 @@ namespace FMB_CIS.Controllers
             else
             {
                 ViewModel model = new ViewModel();
-                var userinfoList = from u in _context.tbl_user
+                var userinfoList = (from u in _context.tbl_user
                                    join utype in _context.tbl_user_types on u.tbl_user_types_id equals utype.id
                                    join reg in _context.tbl_region on u.tbl_region_id equals reg.id
                                    join prov in _context.tbl_province on u.tbl_province_id equals prov.id
@@ -53,10 +53,11 @@ namespace FMB_CIS.Controllers
                                        //region = reg.name,
                                        //province = prov.name,
                                        city = ct.name,
-                                       status = (bool)u.status
+                                       status = (bool)u.status,
+                                       date_created = u.date_created
                                        //brgy = brngy.name
-                                   };
-
+                                   }).OrderBy(d => d.date_created);
+                //OrderByDescending(d => d.date_created)
                 model.acctList = userinfoList;
                 return View(model);
             }

@@ -73,7 +73,7 @@ namespace FMB_CIS.Controllers
 
                 }
                 //Check if email is verified
-                if (tblTempPass != null && tblTempPass.is_active == true)
+                if (tblTempPass != null && tblTempPass.is_active == true) //tblTempPass.is_active means the Temporary Password is active and not yet changing their password. It also mean that the user doesn't confirm their email. tblTempPass is null when user was created before having a code for this.
                 {
                     ModelState.AddModelError("email", "Please verify your email first!");
                     return View();                    

@@ -17,6 +17,7 @@
                     <th class="text-nowrap">Contact No.</th>
                     <th class="text-nowrap">Address</th>
                     <th class="text-nowrap">Municipality</th>
+                    <th class="text-nowrap">Date Registered</th>
                     <th class="text-nowrap text-center">Status</th>
                     <th class="text-nowrap text-center">Actions</th>
                 </tr>
@@ -43,6 +44,9 @@
                         <td class="text-nowrap">
                             @Html.DisplayFor(modelItem => item.city)
                         </td>
+                        <td class="text-nowrap">
+                            @Html.DisplayFor(modelItem => item.date_created)
+                        </td>
                         <td class="text-nowrap text-center d-flex justify-content-center">
                             @if (item.status == true)
                             {
@@ -60,12 +64,13 @@
                         </td>
                         <td class="text-nowrap">
                             <div class="d-flex justify-content-center gap-3">
-                                <a href="AccountManagement/AccountsApproval?uid=@item.userID" class="bg-green text-white px-1 pb-1 rounded" title="edit">
-                                    <i data-feather="edit" class="data-feather-20"></i>
+                                <a href="AccountManagement/AccountsApproval?uid=@item.userID" @* class="bg-green text-white px-1 pb-1 rounded" *@ title="edit">
+                                    @* <i data-feather="edit" class="data-feather-20"></i> *@
+                                    Take Action
                                 </a>
-                                <a href="#" class="bg-green text-white px-1 pb-1 rounded btnDelete" title="delete">
+                                @* <a href="#" class="bg-green text-white px-1 pb-1 rounded btnDelete" title="delete">
                                     <i data-feather="trash-2" class="data-feather-20"></i>
-                                </a>
+                                </a> *@
                             </div>
                         </td>
                     </tr>

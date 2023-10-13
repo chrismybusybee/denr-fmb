@@ -103,8 +103,9 @@
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="tbl_Users.email" class="control-label small">Email (Please use official email address)</label>
-                            <input asp-for="tbl_Users.email" class="form-control" placeholder="name@address.com" required="required" />
+                            <input asp-for="tbl_Users.email" class="form-control" placeholder="name@address.com" required="required" id="emailInput" onchange="checkExistingEmail()" />
                             <span asp-validation-for="tbl_Users.email" class="text-danger"></span>
+                            <span id="emailValidation" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="tbl_Users.contact_no" class="control-label small">Contact Number (11 Digits)</label>
@@ -286,6 +287,25 @@
 
     //captcha end
 
+    var emailExist = false;
+    //Check Existing Email
+    function checkExistingEmail() {
+        var emailValue = document.getElementById("emailInput").value;
+        var url = "@baseurl";
+        $.post(url + "Account/CheckExistingEmailOnField", { email: emailValue }, function (data) {
+            debugger;
+            emailExist = data;
+            if (data == true) {                
+                console.log(emailExist);
+                document.getElementById("emailValidation").innerHTML = "Email exist! Please use a different email!";
+            }
+            else 
+            {
+                document.getElementById("emailValidation").innerHTML = "";
+            }
+        });
+    }
+
     $(document).ready(function () {
 
         //FILE UPLOAD
@@ -414,8 +434,14 @@
                 }
             }
 
-            if (isValid)
+            if (isValid && curStepBtn != 'step-2') {   
+                console.log(curStepBtn);
+                nextStepWizard.removeAttr('disabled').trigger('click'); 
+            }  
+            if (isValid && curStepBtn == 'step-2' && !emailExist) {
+                console.log(curStepBtn);
                 nextStepWizard.removeAttr('disabled').trigger('click');
+            }
         });
 
         $('div.setup-panel div a.btn-primary').trigger('click');
