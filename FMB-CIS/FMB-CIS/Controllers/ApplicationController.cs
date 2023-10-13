@@ -56,6 +56,141 @@ namespace FMB_CIS.Controllers
                 return View(mymodel);
             
         }
+        public IActionResult ResellPermits()
+        {
+
+            int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            ViewModel mymodel = new ViewModel();
+
+            var applicationlist = from a in _context.tbl_application
+                                  where a.tbl_user_id == userID
+                                  //where a.tbl_application_type_id == 3
+                                  select a;
+
+            //HISTORY
+            var applicationtypelist = _context.tbl_application_type;
+
+            var applicationMod = from a in applicationlist
+                                 join usr in _context.tbl_user on a.tbl_user_id equals usr.id
+                                 join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
+                                 join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
+                                 join pS in _context.tbl_permit_status on a.status equals pS.id
+                                 where pT.name == "Permit to Re-sell/Transfer Ownership"
+                                 select new ApplicantListViewModel { id = a.id, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id };
+
+            mymodel.applicantListViewModels = applicationMod;
+
+            return View(mymodel);
+
+        }
+        public IActionResult LendPermits()
+        {
+
+            int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            ViewModel mymodel = new ViewModel();
+
+            var applicationlist = from a in _context.tbl_application
+                                  where a.tbl_user_id == userID
+                                  //where a.tbl_application_type_id == 3
+                                  select a;
+
+            //HISTORY
+            var applicationtypelist = _context.tbl_application_type;
+
+            var applicationMod = from a in applicationlist
+                                 join usr in _context.tbl_user on a.tbl_user_id equals usr.id
+                                 join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
+                                 join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
+                                 join pS in _context.tbl_permit_status on a.status equals pS.id
+                                 where pT.name == "Authority to Lend"
+                                 select new ApplicantListViewModel { id = a.id, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id };
+
+            mymodel.applicantListViewModels = applicationMod;
+
+            return View(mymodel);
+
+        }
+        public IActionResult RegistrationPermits()
+        {
+
+            int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            ViewModel mymodel = new ViewModel();
+
+            var applicationlist = from a in _context.tbl_application
+                                  where a.tbl_user_id == userID
+                                  //where a.tbl_application_type_id == 3
+                                  select a;
+
+            //HISTORY
+            var applicationtypelist = _context.tbl_application_type;
+
+            var applicationMod = from a in applicationlist
+                                 join usr in _context.tbl_user on a.tbl_user_id equals usr.id
+                                 join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
+                                 join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
+                                 join pS in _context.tbl_permit_status on a.status equals pS.id
+                                 where pT.name == "Certificate of Registration"
+                                 select new ApplicantListViewModel { id = a.id, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id };
+
+            mymodel.applicantListViewModels = applicationMod;
+
+            return View(mymodel);
+
+        }
+        public IActionResult RentPermits()
+        {
+
+            int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            ViewModel mymodel = new ViewModel();
+
+            var applicationlist = from a in _context.tbl_application
+                                  where a.tbl_user_id == userID
+                                  //where a.tbl_application_type_id == 3
+                                  select a;
+
+            //HISTORY
+            var applicationtypelist = _context.tbl_application_type;
+
+            var applicationMod = from a in applicationlist
+                                 join usr in _context.tbl_user on a.tbl_user_id equals usr.id
+                                 join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
+                                 join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
+                                 join pS in _context.tbl_permit_status on a.status equals pS.id
+                                 where pT.name == "Authority to Rent"
+                                 select new ApplicantListViewModel { id = a.id, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id };
+
+            mymodel.applicantListViewModels = applicationMod;
+
+            return View(mymodel);
+
+        }
+        public IActionResult LeasePermits()
+        {
+
+            int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            ViewModel mymodel = new ViewModel();
+
+            var applicationlist = from a in _context.tbl_application
+                                  where a.tbl_user_id == userID
+                                  //where a.tbl_application_type_id == 3
+                                  select a;
+
+            //HISTORY
+            var applicationtypelist = _context.tbl_application_type;
+
+            var applicationMod = from a in applicationlist
+                                 join usr in _context.tbl_user on a.tbl_user_id equals usr.id
+                                 join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
+                                 join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
+                                 join pS in _context.tbl_permit_status on a.status equals pS.id
+                                 where pT.name == "Authority to Lease"
+                                 select new ApplicantListViewModel { id = a.id, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id };
+
+            mymodel.applicantListViewModels = applicationMod;
+
+            return View(mymodel);
+
+        }
         public IActionResult SellPermits()
         {
 
@@ -103,7 +238,7 @@ namespace FMB_CIS.Controllers
                                  join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
-                                 where pT.name == "Permit to Sell"
+                                 where pT.name == "Permit to Purchase"
                                  select new ApplicantListViewModel { id = a.id, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id };
 
             mymodel.applicantListViewModels = applicationMod;

@@ -1,92 +1,102 @@
-﻿@model FMB_CIS.Models.ViewModel
+﻿@using System.Security.Claims;
+@model FMB_CIS.Models.ViewModel
+@{
+    Layout = "~/Views/Shared/_MainPageLayout.cshtml";
+    ViewBag.Title = "Manage Applications";
+    ViewBag.Role = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
+    ViewBag.UserType = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
+}
 
 <link rel="stylesheet" href="~/js/DataTable/dataTables.min.css">
 <script src="~/js/jquery/jquery-3.7.1/jquery-3.7.1.js"></script>
 <script src="~/js/DataTable/dataTables.min.js"></script>
 
-<h2>Authority to Rent</h2>
-<table class="table dataTable" >
-    <thead>
-        <tr>
-            <th>
-                ID
-            </th>
-            <th>
-                Full Name
-            </th>
-            <th>
-                Email
-            </th>
-            <th>
-                Contact No.
-            </th>
-            <th>
-                Address
-            </th>
-            <th>
-                Application Type
-            </th>
-            <th>
-                Permit Type
-            </th>
-            <th>
-                Permit Status
-            </th>
-            <th>
-                Action
-            </th>
-
-
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (ApplicantListViewModel item in Model.applicantListViewModels)
-        {
-            @if (item.permit_type == "Authority to Rent")
-            {
+<div id="card-container">
+    <div id="card">
+        <h2>Authority to Rent</h2>
+        <table class="table dataTable">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.id)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.full_name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.contact)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.address)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.application_type)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.permit_type)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.permit_status)
-                    </td>
-                    <td>
-                        @* <a href="ChainsawImporterApproval?uid=@item.tbl_user_id&appid=@item.id">Take Action</a> *@
-                        @if (item.application_type.Contains("Importer"))
-                        {
-                            <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">Edit</a>
-                        }
-                        @if (item.application_type.Contains("Seller"))
-                        {
-                            <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">Edit</a>
-                        }
-                        @if (item.application_type.Contains("Owner"))
-                        {
-                            <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">Edit</a>
-                        }
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Full Name
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Contact No.
+                    </th>
+                    <th>
+                        Address
+                    </th>
+                    <th>
+                        Application Type
+                    </th>
+                    <th>
+                        Permit Type
+                    </th>
+                    <th>
+                        Permit Status
+                    </th>
+                    <th>
+                        Action
+                    </th>
 
-                    </td>
+
                 </tr>
-            }
-        }
-    </tbody>
-</table>
+            </thead>
+            <tbody>
+                @foreach (ApplicantListViewModel item in Model.applicantListViewModels)
+                {
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.full_name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.contact)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.address)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.application_type)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.permit_type)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.permit_status)
+                            </td>
+                            <td>
+                                @* <a href="ChainsawImporterApproval?uid=@item.tbl_user_id&appid=@item.id">Take Action</a> *@
+                                @if (item.application_type.Contains("Importer"))
+                                {
+                                    <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">Edit</a>
+                                }
+                                @if (item.application_type.Contains("Seller"))
+                                {
+                                    <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">Edit</a>
+                                }
+                                @if (item.application_type.Contains("Owner"))
+                                {
+                                    <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">Edit</a>
+                                }
+
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
