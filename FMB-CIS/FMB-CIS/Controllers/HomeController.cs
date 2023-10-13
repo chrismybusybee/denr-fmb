@@ -63,8 +63,6 @@ namespace FMB_CIS.Controllers
                 DAL dal = new DAL();
                 bool eMailExist = dal.emailExist(credentials.email, _configuration.GetConnectionString("ConnStrng"));
 
-                var usrDB = _context.tbl_user.Where(m => m.email == credentials.email).FirstOrDefault();
-                var tblTempPass = _context.tbl_user_temp_passwords.Where(m => m.tbl_user_id == usrDB.id).FirstOrDefault();
 
                 if (eMailExist == false)
                 {
@@ -72,6 +70,9 @@ namespace FMB_CIS.Controllers
                     return View();
 
                 }
+
+                var usrDB = _context.tbl_user.Where(m => m.email == credentials.email).FirstOrDefault();
+                var tblTempPass = _context.tbl_user_temp_passwords.Where(m => m.tbl_user_id == usrDB.id).FirstOrDefault();
                 //Check if email is verified
                 if (tblTempPass != null && tblTempPass.is_active == true) //tblTempPass.is_active means the Temporary Password is active and not yet changing their password. It also mean that the user doesn't confirm their email. tblTempPass is null when user was created before having a code for this.
                 {
