@@ -84,7 +84,7 @@
                         <label class="text-secondary fw-bold">
                             Specification
                         </label>
-                        <input type="text" class="form-control" placeholder="Enter specification" />
+                        <textarea class="form-control" asp-for="tbl_Application.tbl_specification_id" placeholder="Enter specification"></textarea>
                         <span class="text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
@@ -263,3 +263,58 @@
     });
 
 </script>
+
+<style>
+    textarea {
+        resize: none;
+    }
+
+    .custom-file-upload {
+        border: 1px solid #ccc;
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+    }
+
+    .app-card {
+        position: relative;
+        background: #fff;
+        border-radius: 0.25rem;
+    }
+
+    .app-card-doc .app-card-thumb-holder {
+        background: #e9eaf1;
+        text-align: center;
+        position: relative;
+        height: 112px;
+    }
+
+        .app-card-doc .app-card-thumb-holder .icon-holder {
+            font-size: 40px;
+            display: inline-block;
+            margin: 0 auto;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #fff;
+            padding-top: 10px;
+        }
+
+    .app-card .app-card-link-mask {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: block;
+        left: 0;
+        top: 0;
+    }
+
+    .app-card .app-card-body.has-card-actions {
+        position: relative;
+        padding-right: 1rem !important;
+    }
+
+    .app-card-doc .app-doc-meta {
+        font-size: .75rem;
+    }
+</style>

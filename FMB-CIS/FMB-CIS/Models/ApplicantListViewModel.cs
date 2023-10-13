@@ -33,7 +33,7 @@ namespace FMB_CIS.Models
         public int tbl_user_types_id { get; set; }
 
         public int? qty { get; set; }
-        public int? specification { get; set; }
+        public string specification { get; set; }
         
         public string purpose { get; set; }
         public DateTime? inspectionDate { get; set; }

@@ -95,7 +95,7 @@
                         <label class="text-secondary fw-bold">
                             Specification
                         </label>
-                            <input type="text" asp-for="tbl_Application.tbl_specification_id" class="form-control" placeholder="Enter specification" />
+                            <textarea class="form-control" asp-for="tbl_Application.tbl_specification_id" placeholder="Enter specification"></textarea>
                         <span class="text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
@@ -248,7 +248,7 @@
             $("#confirmSuccessModal").modal("show");
         });
     });
-    //const form = document.getElementById('OwnerRegForm');
+    //const form = document.getElementById('SellerRegForm');
     const showModalButton = document.getElementById('btnSubmit');
     const confirmationModal = document.getElementById('confirmSubmitModal');
     const confirmButton = document.getElementById('confirmBtn');
@@ -282,6 +282,9 @@
 </script>
 
 <style>
+    textarea {
+        resize: none;
+    }
     .custom-file-upload {
         border: 1px solid #ccc;
         display: inline-block;

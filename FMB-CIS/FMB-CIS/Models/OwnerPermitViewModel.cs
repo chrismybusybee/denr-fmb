@@ -24,7 +24,7 @@ namespace FMB_CIS.Models
         [Display(Name = "Quantity")]
         public int qty { get; set; }
         [Display(Name = "Specification ID")]
-        public int tbl_specification_id { get; set; }
+        public string tbl_specification_id { get; set; }
         //public string specification { get; set; }
         [Display(Name = "Purpose")]
         public string purpose { get; set; }

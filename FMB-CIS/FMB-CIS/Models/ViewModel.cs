@@ -25,7 +25,7 @@
         public IEnumerable<tbl_city>? tbl_Cities { get; set; }
         public IEnumerable<tbl_brgy>? tbl_Brgys { get; set; }
         public tbl_user_temp_passwords? tbl_User_Temp_Passwords { get; set; }
-        public string decision { get; set; }
+        public string? decision { get; set; }
 
 
 

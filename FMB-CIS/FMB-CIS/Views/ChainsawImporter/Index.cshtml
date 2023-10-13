@@ -84,7 +84,7 @@
                         <label class="text-secondary fw-bold">
                             Specification
                         </label>
-                            <input type="text" asp-for="tbl_Application.tbl_specification_id" class="form-control" placeholder="Enter specification" />
+                            <textarea class="form-control" asp-for="tbl_Application.tbl_specification_id" placeholder="Enter specification"></textarea>
                         <span class="text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
@@ -128,7 +128,7 @@
                             <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
                                 <i data-feather="upload"></i> Upload
                             </label>
-                            <input type="file" asp-for="filesUpload.Files" class="form-control file" multiple hidden />
+                            <input type="file" asp-for="filesUpload.Files" class="form-control file" accept="application/pdf" multiple hidden />
                             @* <button type="button" class="btn btn-primary"><i data-feather="upload"></i> Upload</button>*@
                     </div>
                         <div class="d-flex mb-4 gap-3 output">
@@ -144,7 +144,7 @@
         </div>
         
         <div class="d-flex justify-content-end pe-2 me-1">
-            <button class="btn btn-primary mb-4">Submit</button>
+            <button type="submit" class="btn btn-primary mb-4">Submit</button>
         </div>
         </form>
     </div>
@@ -155,8 +155,6 @@
 <script type="text/javascript">
     $(document).ready(function () {
         const dt = new DataTransfer();
-
-
 
         $(".file").on("change", function (e) {
             // Get the selected file(s)
@@ -249,9 +247,9 @@
         });
     });
     //const form = document.getElementById('ImporterRegForm');
-    const showModalButton = document.getElementById('btnSubmit');
-    const confirmationModal = document.getElementById('confirmSubmitModal');
-    const confirmButton = document.getElementById('confirmBtn');
+    //const showModalButton = document.getElementById('btnSubmit');
+    //const confirmationModal = document.getElementById('confirmSubmitModal');
+    //const confirmButton = document.getElementById('confirmBtn');
 
     // Function to display the modal
     function showModal() {
@@ -264,13 +262,13 @@
     }
 
     // Event listener for the "Submit" button
-    showModalButton.addEventListener('click', showModal);
+    //showModalButton.addEventListener('click', showModal);
 
     // Event listener for the "Confirm" button
-    confirmButton.addEventListener('click', function () {
+    //confirmButton.addEventListener('click', function () {
         // Submit the form when the "Confirm" button is clicked
-        form.submit();
-    });
+        //form.submit();
+    //});
 
     // Close the modal when the user clicks outside of it
     //window.addEventListener('click', function (event) {
@@ -281,6 +279,9 @@
 </script>
 
  <style>
+    textarea {
+        resize: none;
+    }
     .custom-file-upload {
         border: 1px solid #ccc;
         display: inline-block;
