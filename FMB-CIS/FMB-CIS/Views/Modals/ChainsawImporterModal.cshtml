@@ -128,6 +128,14 @@
 
 <script type="text/javascript">
 
+    //FOR index.cshtml
+
+    const formIndex = document.getElementById('ImporterRegForm');
+    const showModalButton = document.getElementById('btnSubmit');
+    const confirmationModal = document.getElementById('confirmSubmitModal');
+    const confirmButton = document.getElementById('confirmBtn');
+
+    ////FOR Approval.cshtml
     const form = document.getElementById('ApplApprvlForm');
     const showApproveModalButton = document.getElementById('approveBtn');
     const confirmationApproveModal = document.getElementById('confirmApproveModal');
@@ -222,11 +230,7 @@
         }
     });
 
-    //FOR index.cshtml
-    const formIndex = document.getElementById('ImporterRegForm');
-    const showModalButton = document.getElementById('btnSubmit');
-    const confirmationModal = document.getElementById('confirmSubmitModal');
-    const confirmButton = document.getElementById('confirmBtn');
+
 
     // Function to display the modal
     function showModal() {
@@ -244,7 +248,7 @@
     // Event listener for the "Confirm" button
     confirmButton.addEventListener('click', function () {
         // Submit the form when the "Confirm" button is clicked
-        console.log("test");
+        console.log("text3");
         //formIndex.submit();
     });
 
