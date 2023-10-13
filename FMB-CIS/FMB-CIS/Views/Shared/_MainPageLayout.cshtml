@@ -73,12 +73,54 @@
                             @if (ViewBag.UserType.Contains("DENR") == false)
                             {
                                 <li id="applicationMenuItem">
-                                    <a href="@Url.Action("Index", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
-                                    <div>
-                                        <img src="~/assets/images/menu-icons/application.png" />
-                                    </div>
-                                    <span>Manage Applications</span>
-                                </a>
+                                    <a href="#" id="applicationSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/application.png" />
+                                        </div>
+                                        <span>Manage Applications</span>
+                                    </a>
+                                    <ul id="authorityToLeaseDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
+                                        <li id="authorityToLease" class="mb-3">
+                                            <a href="#" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>Authority to Lease</span>
+                                            </a>
+                                        </li>
+                                        <li id="authorityToRent" class="mb-3">
+                                            <a href="#" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>Authority to Rent</span>
+                                            </a>
+                                        </li>
+                                        <li id="authorityToLend" class="mb-3">
+                                            <a href="#" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>Authority to Lend</span>
+                                            </a>
+                                        </li>
+                                        <li id="certificationOfRegistration" class="mb-3">
+                                            <a href="#" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>Certification of Registration</span>
+                                            </a>
+                                        </li>
+                                        <li id="permitToResellTransferOwnership" class="mb-3">
+                                            <a href="#" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>Permit to Resell/Transfer Ownership</span>
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
                             }
                             @switch(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value)
@@ -91,7 +133,7 @@
                                             </div>
                                             <span>Chainsaw Importer</span>
                                         </a>
-                                        <ul id="chainsawImporterDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
+                                        <ul id="chainsawImporterDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
                                             <li id="chainsawImporterApplication" class="my-0">
                                                 <a href="@Url.Action("Index", "ChainsawImporter")" class="d-flex gap-2 text-decoration-none fs-6">
                                                     <div>
@@ -112,7 +154,7 @@
                                             </div>
                                             <span>Chainsaw Seller</span>
                                         </a>
-                                        <ul id="chainsawSellerDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
+                                        <ul id="chainsawSellerDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
                                             <li id="chainsawSellerApplication" class="my-0">
                                                 <a href="@Url.Action("Index", "ChainsawSeller")" class="d-flex gap-2 text-decoration-none fs-6">
                                                     <div>
@@ -132,7 +174,7 @@
                                             </div>
                                             <span>Chainsaw Owner</span>
                                         </a>
-                                        <ul id="chainsawOwnerDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
+                                        <ul id="chainsawOwnerDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
                                             <li id="chainsawOwnerApplication" class="my-0">
                                                 <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
                                                     <div>
@@ -153,7 +195,7 @@
                                             <span>Chainsaw Importer</span>
                                         </a>
 
-                                        <ul id="chainsawImporterDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
+                                        <ul id="chainsawImporterDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
                                             <li id="chainsawImporterApplication" class="my-0">
                                                 <a href="@Url.Action("Index", "ChainsawImporter")" class="d-flex gap-2 text-decoration-none fs-6">
                                                     <div>
@@ -171,7 +213,7 @@
                                             </div>
                                             <span>Chainsaw Seller</span>
                                         </a>
-                                        <ul id="chainsawSellerDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
+                                        <ul id="chainsawSellerDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
                                             <li id="chainsawSellerApplication" class="my-0">
                                                 <a href="@Url.Action("Index", "ChainsawSeller")" class="d-flex gap-2 text-decoration-none fs-6">
                                                     <div>
@@ -191,7 +233,7 @@
                                             </div>
                                             <span>Chainsaw Importer</span>
                                         </a>
-                                        <ul id="chainsawImporterDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
+                                        <ul id="chainsawImporterDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
                                             <li id="chainsawImporterApplication" class="my-0">
                                                 <a href="@Url.Action("Index", "ChainsawImporter")" class="d-flex gap-2 text-decoration-none fs-6">
                                                     <div>
@@ -209,7 +251,7 @@
                                             </div>
                                             <span>Chainsaw Owner</span>
                                         </a>
-                                        <ul id="chainsawOwnerDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
+                                        <ul id="chainsawOwnerDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
                                             <li id="chainsawOwnerApplication" class="my-0">
                                                 <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
                                                     <div>
@@ -229,7 +271,7 @@
                                             </div>
                                             <span>Chainsaw Seller</span>
                                         </a>
-                                        <ul id="chainsawSellerDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
+                                        <ul id="chainsawSellerDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
                                             <li id="chainsawSellerApplication" class="my-0">
                                                 <a href="@Url.Action("Index", "ChainsawSeller")" class="d-flex gap-2 text-decoration-none fs-6">
                                                     <div>
@@ -247,7 +289,7 @@
                                             </div>
                                             <span>Chainsaw Owner</span>
                                         </a>
-                                        <ul id="chainsawOwnerDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
+                                        <ul id="chainsawOwnerDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
                                             <li id="chainsawOwnerApplication" class="my-0">
                                                 <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
                                                     <div>
@@ -267,7 +309,7 @@
                                             </div>
                                             <span>Chainsaw Importer</span>
                                         </a>
-                                        <ul id="chainsawImporterDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
+                                        <ul id="chainsawImporterDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
                                             <li id="chainsawImporterApplication" class="my-0">
                                                 <a href="@Url.Action("Index", "ChainsawImporter")" class="d-flex gap-2 text-decoration-none fs-6">
                                                     <div>
@@ -285,7 +327,7 @@
                                             </div>
                                             <span>Chainsaw Seller</span>
                                         </a>
-                                        <ul id="chainsawSellerDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
+                                        <ul id="chainsawSellerDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
                                             <li id="chainsawSellerApplication" class="my-0">
                                                 <a href="@Url.Action("Index", "ChainsawSeller")" class="d-flex gap-2 text-decoration-none fs-6">
                                                     <div>
@@ -303,7 +345,7 @@
                                             </div>
                                             <span>Chainsaw Owner</span>
                                         </a>
-                                        <ul id="chainsawOwnerDropdown" class="list-unstyled text-secondary fw-bold ms-4 ps-2">
+                                        <ul id="chainsawOwnerDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
                                             <li id="chainsawOwnerApplication" class="my-0">
                                                 <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
                                                     <div>
@@ -488,6 +530,8 @@
 
         setupDropdown("chainsawOwnerSubMenuItem", "chainsawOwnerDropdown");
 
+        setupDropdown("applicationSubMenuItem", "authorityToLeaseDropdown");
+
         function setActiveMenuItem(menuItemId) {
             const menuItems = document.querySelectorAll('#menu-items ul li');
             menuItems.forEach((item) => {
@@ -502,6 +546,7 @@
         const pageToMenuItemMap = {
             "/Dashboard": "dashboardMenuItem",
             "/Application": "applicationMenuItem",
+            "/Application/ManageApplications": "applicationMenuItem",
             "/ChainsawImporter": "chainsawImporterApplication",
             "/ChainsawSeller": "chainsawSellerApplication",
             "/ChainsawOwner": "chainsawOwnerApplication",
