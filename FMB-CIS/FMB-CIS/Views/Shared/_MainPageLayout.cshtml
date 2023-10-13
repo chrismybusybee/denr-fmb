@@ -79,9 +79,10 @@
                                         </div>
                                         <span>Manage Applications</span>
                                     </a>
-                                    @if (ViewBag.UserType.Contains("Owner") == true)
-                                        {
-                                            <ul id="authorityToLeaseDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
+                                    
+                                    <ul id="authorityToLeaseDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
+                                        @if (ViewBag.UserType.Contains("Owner") == true)
+                                            {
                                                 <li id="authorityToLease" class="mb-3">
                                                 <a href="@Url.Action("LeasePermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
                                                         <div>
@@ -122,42 +123,39 @@
                                                         <span>Permit to Resell/Transfer Ownership</span>
                                                     </a>
                                                 </li>
-                                            </ul>
-                                        }
-                                    @if (ViewBag.UserType.Contains("Seller") == true)
-                                    {
-                                        <ul id="SellerDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
-                                            <li id="permitToSell" class="mb-3">
-                                                <a href="@Url.Action("SellPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
-                                                    <div>
-                                                        <img src="~/assets/images/menu-icons/line.png" />
-                                                    </div>
-                                                    <span>Permit to Sell</span>
-                                                </a>
-                                            </li>
-                                            <li id="permitToPurchase" class="mb-3">
-                                                <a href="@Url.Action("PurchasePermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
-                                                    <div>
-                                                        <img src="~/assets/images/menu-icons/line.png" />
-                                                    </div>
-                                                    <span>Permit to Purchase</span>
-                                                </a>
-                                            </li>
+                                            }
+
+                                            @if (ViewBag.UserType.Contains("Seller") == true)
+                                            {
+                                                <li id="permitToSell" class="mb-3">
+                                                    <a href="@Url.Action("SellPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                        <div>
+                                                            <img src="~/assets/images/menu-icons/line.png" />
+                                                        </div>
+                                                        <span>Permit to Sell</span>
+                                                    </a>
+                                                </li>
+                                                <li id="permitToPurchase" class="mb-3">
+                                                    <a href="@Url.Action("PurchasePermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                        <div>
+                                                            <img src="~/assets/images/menu-icons/line.png" />
+                                                        </div>
+                                                        <span>Permit to Purchase</span>
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (ViewBag.UserType.Contains("Importer") == true)
+                                            {
+                                                <li id="permitToImport" class="mb-3">
+                                                    <a href="@Url.Action("ImportPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                        <div>
+                                                            <img src="~/assets/images/menu-icons/line.png" />
+                                                        </div>
+                                                        <span>Permit to Import</span>
+                                                    </a>
+                                                </li>
+                                            }
                                         </ul>
-                                    }
-                                    @if (ViewBag.UserType.Contains("Importer") == true)
-                                    {
-                                        <ul id="ImporterDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
-                                            <li id="permitToImport" class="mb-3">
-                                                <a href="@Url.Action("ImportPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
-                                                    <div>
-                                                        <img src="~/assets/images/menu-icons/line.png" />
-                                                    </div>
-                                                    <span>Permit to Import</span>
-                                                </a>
-                                            </li>
-                                            </ul>
-                                    }
                                 </li>
                             }
                             @switch(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value)
@@ -568,6 +566,8 @@
         setupDropdown("chainsawOwnerSubMenuItem", "chainsawOwnerDropdown");
 
         setupDropdown("applicationSubMenuItem", "authorityToLeaseDropdown");
+
+        
 
         function setActiveMenuItem(menuItemId) {
             const menuItems = document.querySelectorAll('#menu-items ul li');
