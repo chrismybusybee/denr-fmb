@@ -219,19 +219,62 @@
                         </div>
                      }
                 </div>
-                <div class="row d-flex justify-content-center px-0 mb-5">
+                @* <div class="row d-flex justify-content-center px-0 mb-5">
                     <div class="col-md-11 d-flex flex-column gap-2">
                         <span>
                             Comments
                         </span>
-                        @* @Html.DisplayFor(model => model.acctApprovalViewModels.birth_date) *@
                         <textarea asp-for="acctApprovalViewModels.comment" class="form-control"></textarea>
-
+                        <button type="button" id="commentBtn" class="btn btn-primary w-105">Approve</button>
                     </div>
-                </div>
+                </div> *@
             </div>
         </form>
 
+        <form id="commentSection" asp-action="CommentSection">
+            <div class="row d-flex justify-content-center px-0 mb-5">
+                <div class="col-md-11 d-flex flex-column gap-2">
+                    <input asp-for="uid" type="hidden" />
+                    <span>
+                        Please select the file you want to address a comment.
+                    </span>
+                    @* Dropdown to select which file to comment *@
+                    <select asp-for="tbl_Comments.tbl_files_id" class="form-control" id="ddlProvinceId">
+                        @foreach (tbl_files file in Model.tbl_Files)
+                        {
+                            <option value="@file.Id">@file.filename</option>
+                        }
+                    </select>
+                    @* @Html.DisplayFor(model => model.acctApprovalViewModels.birth_date) *@
+                    <textarea asp-for="tbl_Comments.comment" class="form-control"></textarea>
+                    <button type="submit" id="commentBtn" class="btn btn-primary w-110">Add Comment</button>
+
+                </div>
+            </div>
+        </form>
+        <div class="row d-flex justify-content-center px-0 mb-5">
+            @foreach (CommentsViewModel item in Model.commentsViewModelsList)
+            {
+                <div class="col-md-11 d-flex flex-column gap-2">
+                    <div class="row mb-4 d-flex">
+                        <div class="col-md-3 fw-bold">
+                            @item.commenterName
+                        </div>
+                        <div class="col-md-3">
+                            @item.fileName
+                        </div>
+                        <div class="col-md-3">
+                            @item.date_created
+                        </div>
+                    </div>
+                    <div class="row mb-4 d-flex">
+                        <div class="col-md">
+                            @item.comment
+                        </div>
+                    </div>
+                </div>
+            }
+        </>
     </div>
 </div>
 

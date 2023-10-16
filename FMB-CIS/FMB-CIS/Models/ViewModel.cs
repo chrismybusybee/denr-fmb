@@ -28,6 +28,7 @@
         public string? decision { get; set; }
         public IEnumerable<tbl_comments>? tbl_CommentsIE { get; set; } 
         public tbl_comments? tbl_Comments { get; set; }
+        public IEnumerable<CommentsViewModel> commentsViewModelsList { get; set; }
 
 
     }

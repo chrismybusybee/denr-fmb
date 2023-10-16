@@ -111,13 +111,29 @@ namespace FMB_CIS.Controllers
 
                 foreach (var fileList in filesFromDB)
                 {
-                    files.Add(new tbl_files { filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, date_created = fileList.date_created, file_size = fileList.file_size });
+                    files.Add(new tbl_files { Id = fileList.Id, filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, date_created = fileList.date_created, file_size = fileList.file_size });
                     //files.Add(new tbl_files { filename = f });
                 }
 
                 model.tbl_Files = files;
                 //END FOR FILE DOWNLOAD
-
+                //Display List of Comments
+                model.commentsViewModelsList = (from c in _context.tbl_comments
+                                                  where c.tbl_user_id == uid
+                                                  join f in _context.tbl_files on c.tbl_files_id equals f.Id
+                                                  join usr in _context.tbl_user on c.created_by equals usr.id
+                                                  select new CommentsViewModel
+                                                  {
+                                                      tbl_user_id = c.tbl_user_id,
+                                                      tbl_files_id = c.tbl_files_id,
+                                                      fileName = f.filename,
+                                                      comment = c.comment,
+                                                      commenterName = usr.first_name + " " + usr.last_name + " " + usr.suffix,
+                                                      created_by = c.created_by,
+                                                      modified_by = c.modified_by,
+                                                      date_created = c.date_created,
+                                                      date_modified = c.date_modified
+                                                  }).OrderBy(f => f.fileName).ThenByDescending(d => d.date_created);
                 return View(model);
             }
             
@@ -324,13 +340,39 @@ namespace FMB_CIS.Controllers
 
                     foreach (var fileList in filesFromDB)
                     {
-                        files.Add(new tbl_files { filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, date_created = fileList.date_created, file_size = fileList.file_size });
+                        files.Add(new tbl_files { Id= fileList.Id, filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, date_created = fileList.date_created, file_size = fileList.file_size });
                         //files.Add(new tbl_files { filename = f });
                     }
 
                     mymodel.tbl_Files = files;
                     //END FOR FILE DOWNLOAD
-
+                    
+                    //TEST
+                    /*
+                    var commentsFromDB = _context.tbl_comments.Where(u => u.tbl_user_id == usid).ToList();
+                    List<tbl_comments> comments = new List<tbl_comments>();
+                    foreach (var commentsList in commentsFromDB)
+                    {
+                        comments.Add(new tbl_comments {id = commentsList.id  });
+                    }*/
+                    //Display List of Comments
+                    mymodel.commentsViewModelsList = (from c in _context.tbl_comments
+                                                      where c.tbl_user_id == usid
+                                              join f in _context.tbl_files on c.tbl_files_id equals f.Id
+                                              join usr in _context.tbl_user on c.created_by equals usr.id
+                                              select new CommentsViewModel
+                                              {
+                                                  tbl_user_id = c.tbl_user_id,
+                                                  tbl_files_id = c.tbl_files_id,
+                                                  fileName = f.filename,
+                                                  comment = c.comment,
+                                                  commenterName = usr.first_name + " " + usr.last_name + " " + usr.suffix,
+                                                  created_by = c.created_by,
+                                                  modified_by = c.modified_by,
+                                                  date_created = c.date_created,
+                                                  date_modified = c.date_modified
+                                              }).OrderBy(f => f.fileName).ThenByDescending(d => d.date_created);
+           
                     return View(mymodel);
                 }
             }
@@ -405,6 +447,32 @@ namespace FMB_CIS.Controllers
 
         }
 
+        [HttpPost]
+        public IActionResult CommentSection(int? uid, ViewModel model)
+        {
+            var commentsTbl = new tbl_comments();
+            //commentsTbl.id = model.tbl_Comments.id;
+            commentsTbl.tbl_user_id = Convert.ToInt32(uid);
+            commentsTbl.tbl_files_id = model.tbl_Comments.tbl_files_id;
+            commentsTbl.comment = model.tbl_Comments.comment;
+            commentsTbl.created_by = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            commentsTbl.modified_by = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            commentsTbl.date_created = DateTime.Now;
+            commentsTbl.date_modified = DateTime.Now;
+            _context.tbl_comments.Add(commentsTbl);
+            _context.SaveChanges();
+            //return RedirectToAction("AccountsApproval?uid="+uid, "AccountManagement");
+            //Url.Action("A","B",new{a="x"})
+            
+            if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw") == true)
+            {
+                return RedirectToAction("EditAccount", "AccountManagement");
+            }
+            else
+            {
+                return RedirectToAction("AccountsApproval", "AccountManagement", new { uid = uid });
+            }
+        }
 
     }
 }
