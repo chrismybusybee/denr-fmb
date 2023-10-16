@@ -413,14 +413,14 @@
                                     <span>Renewal</span>
                                 </a>
                             </li>
-                            <li id="profileManagementMenuItem">
+                            @* <li id="profileManagementMenuItem">
                                 <a href="@Url.Action("Index", "ProfileManagement")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
                                         <img src="~/assets/images/menu-icons/profile-management.png" />
                                     </div>
                                     <span>Profile Management</span>
                                 </a>
-                            </li>
+                            </li> *@
                             @if (ViewBag.UserType.Contains("DENR") == true)
                             {
                                 <li id="accountManagementMenuItem">

@@ -26,7 +26,8 @@
         public IEnumerable<tbl_brgy>? tbl_Brgys { get; set; }
         public tbl_user_temp_passwords? tbl_User_Temp_Passwords { get; set; }
         public string? decision { get; set; }
-
+        public IEnumerable<tbl_comments>? tbl_CommentsIE { get; set; } 
+        public tbl_comments? tbl_Comments { get; set; }
 
 
     }
