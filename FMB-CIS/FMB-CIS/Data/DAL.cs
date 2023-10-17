@@ -113,8 +113,23 @@ namespace FMB_CIS.Data
                     case 8:
                         userRole = "DENR CENRO";
                         break;
+                    case 9:
+                        userRole = "DENR Implementing PENRO";
+                        break;
+                    case 10:
+                        userRole = "DENR PENRO";
+                        break;
                     case 11:
                         userRole = "DENR Inspector";
+                        break;
+                    case 12:
+                        userRole = "DENR Management";
+                        break;
+                    case 13:
+                        userRole = "DENR Administration";
+                        break;
+                    case 14:
+                        userRole = "DENR Super Admin";
                         break;
                 }
                 return userRole;

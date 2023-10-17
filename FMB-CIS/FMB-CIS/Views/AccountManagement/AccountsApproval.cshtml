@@ -253,8 +253,15 @@
             </div>
         </form>
         <div class="row d-flex justify-content-center px-0 mb-5">
+            @{var prev = " ";}
             @foreach (CommentsViewModel item in Model.commentsViewModelsList)
             {
+
+                if (prev != item.fileName)
+                {
+                    <hr />
+                }
+                prev = item.fileName;
                 <div class="col-md-11 d-flex flex-column gap-2">
                     <div class="row mb-4 d-flex">
                         <div class="col-md-3 fw-bold">
@@ -274,7 +281,7 @@
                     </div>
                 </div>
             }
-        </>
+        </div>
     </div>
 </div>
 

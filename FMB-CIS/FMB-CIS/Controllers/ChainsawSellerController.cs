@@ -168,7 +168,7 @@ namespace FMB_CIS.Controllers
 
             foreach (var fileList in filesFromDB)
             {
-                files.Add(new tbl_files { filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, file_size = fileList.file_size, date_created = fileList.date_created });
+                files.Add(new tbl_files { Id = fileList.Id, filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, file_size = fileList.file_size, date_created = fileList.date_created });
                 //files.Add(new tbl_files { filename = f });
             }
 
@@ -231,7 +231,24 @@ namespace FMB_CIS.Controllers
                                       }).FirstOrDefault();
                 mymodel.applicantViewModels = applicationMod;
 
-                //mymodel.tbl_Users = UserInfo;
+                //Display List of Comments for Application Approval
+                mymodel.commentsViewModelsList = (from c in _context.tbl_comments
+                                                  where c.tbl_application_id == applid
+                                                  join f in _context.tbl_files on c.tbl_files_id equals f.Id
+                                                  join usr in _context.tbl_user on c.created_by equals usr.id
+                                                  select new CommentsViewModel
+                                                  {
+                                                      tbl_application_id = c.tbl_application_id,
+                                                      tbl_files_id = c.tbl_files_id,
+                                                      fileName = f.filename,
+                                                      comment = c.comment,
+                                                      commenterName = usr.first_name + " " + usr.last_name + " " + usr.suffix,
+                                                      created_by = c.created_by,
+                                                      modified_by = c.modified_by,
+                                                      date_created = c.date_created,
+                                                      date_modified = c.date_modified
+                                                  }).OrderBy(f => f.fileName).ThenByDescending(d => d.date_created);
+
                 return View(mymodel);
             }
 
@@ -429,6 +446,33 @@ namespace FMB_CIS.Controllers
                 //return RedirectToAction("Index", "Home");
             
 
+        }
+
+        [HttpPost]
+        public IActionResult CommentSection(int? uid, int? appid, ViewModel model)
+        {
+            var commentsTbl = new tbl_comments();
+            //commentsTbl.id = model.tbl_Comments.id;
+            commentsTbl.tbl_application_id = Convert.ToInt32(appid);
+            commentsTbl.tbl_files_id = model.tbl_Comments.tbl_files_id;
+            commentsTbl.comment = model.tbl_Comments.comment;
+            commentsTbl.created_by = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            commentsTbl.modified_by = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            commentsTbl.date_created = DateTime.Now;
+            commentsTbl.date_modified = DateTime.Now;
+            _context.tbl_comments.Add(commentsTbl);
+            _context.SaveChanges();
+            //return RedirectToAction("AccountsApproval?uid="+uid, "AccountManagement");
+            //Url.Action("A","B",new{a="x"})
+
+            if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw") == true)
+            {
+                return RedirectToAction("EditApplication", "Application", new { uid = uid, appid = appid });
+            }
+            else
+            {
+                return RedirectToAction("ChainsawSellerApproval", "ChainsawSeller", new { uid = uid, appid = model.appid });
+            }
         }
 
     }

@@ -73,7 +73,8 @@ namespace FMB_CIS.Controllers
             //bool? status = _context.tbl_user.Where(u => u.id == uid).Select(u => u.status).SingleOrDefault(); 
             if (uid == null || status == true)
             {
-                return RedirectToAction("Index", "AccountManagement");
+                //return RedirectToAction("Index", "AccountManagement");
+                return RedirectToAction("Index", "Dashboard");
             }
             else
             {

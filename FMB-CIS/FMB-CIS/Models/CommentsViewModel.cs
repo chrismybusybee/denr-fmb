@@ -4,6 +4,7 @@
     {
         //public int id { get; set; }
         public int tbl_user_id { get; set; }
+        public int tbl_application_id { get; set; }
         public int tbl_files_id { get; set; }
         public string fileName { get; set; }
         public string comment { get; set; }
