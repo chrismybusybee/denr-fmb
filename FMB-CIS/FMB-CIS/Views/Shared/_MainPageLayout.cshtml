@@ -65,7 +65,7 @@
                             <li id="dashboardMenuItem">
                                 <a href="@Url.Action("Index", "Dashboard")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
-                                        <img src="~/assets/images/menu-icons/dashboard.png" />
+                                        <img src="~/assets/images/menu-icons/dashboard.png" title="dashboard" />
                                     </div>
                                     <span>Dashboard</span>
                                 </a>
@@ -613,6 +613,46 @@
         const storedActiveMenuItem = localStorage.getItem('activeMenuItem');
         if (storedActiveMenuItem) {
             setActiveMenuItem(storedActiveMenuItem);
+        }
+
+        // toggle filter
+        var asideElement = $(".filters");
+
+        if (asideElement.length > 0) {
+            var btnToggler = $('#toggle-btn');
+            var togglerStatus = localStorage.getItem('toggler');
+
+            if (localStorage.getItem('toggler') === null || localStorage.getItem('toggler') === 'true') {
+                asideElement.removeClass("slide-left");
+                $(".main-information").css({ "margin-left": "229px", "padding": "0 0 0 30px" });
+                btnToggler.html("&lt;");
+                btnToggler.css("left", "233px");
+
+                btnToggler.css("display", "inline-block");
+            } else {
+                asideElement.addClass("slide-left");
+                $(".main-information").css({ "margin-left": "0", "padding": "0 0 0 0" });
+                btnToggler.html("&gt;");
+                btnToggler.css("left", "17px");
+            }
+
+            btnToggler.click(function () {
+                asideElement.toggleClass("slide-left");
+
+                var currentStatus = localStorage.getItem('toggler');
+                var newStatus = currentStatus === 'true' ? 'false' : 'true';
+                localStorage.setItem('toggler', newStatus);
+
+                if (newStatus === 'true') {
+                    $(".main-information").css({ "margin-left": "229px", "padding": "0 0 0 30px" });
+                    btnToggler.css("left", "233px");
+                    btnToggler.html("&lt;");
+                } else {
+                    $(".main-information").css({ "margin-left": "0", "padding": "0 0 0 0" });
+                    btnToggler.css("left", "17px");
+                    btnToggler.html("&gt;");
+                }
+            });
         }
     });
 </script>

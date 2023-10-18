@@ -6,13 +6,13 @@
     ViewBag.UserType = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
 }
 @*Cards region*@
-<div id="card-container" class="bg-none">
+<div id="card-container" class="border-0 bg-none">
     <div class="row m-0">
         @* IMPORTER COLUMN *@
         @if (ViewBag.UserType.Contains("Importer") == true)
         {
             <div class="col-md-3">
-                <div class="bg-green rounded box-shadow px-4 py-2">
+                <div class="bg-green rounded px-4 py-2">
                 <div class="row mb-5">
                     <div class="col-md-6">
                         <h4 class="text-light-green">
@@ -81,7 +81,7 @@
         @if (ViewBag.UserType.Contains("Seller") == true)
         {            
             <div class="col-md-3">
-                <div class="bg-green rounded box-shadow px-4 py-2">
+                <div class="bg-green rounded px-4 py-2">
                 <div class="row mb-5">
                     <div class="col-md-6">
                         <h4 class="text-light-green">
@@ -150,7 +150,7 @@
         @if (ViewBag.UserType.Contains("Owner") == true)
         {
             <div class="col-md-3">
-                <div class="bg-green rounded box-shadow px-4 py-2">
+                <div class="bg-green rounded px-4 py-2">
                 <div class="row mb-5">
                     <div class="col-md-6">
                         <h4 class="text-light-green">
@@ -217,7 +217,7 @@
         }
         @* RENEWAL COLUMN *@
         <div class="col-md-3">
-            <div class="bg-green rounded box-shadow px-4 py-2">
+            <div class="bg-green rounded px-4 py-2">
                 <div class="row mb-5">
                     <div class="col-md-6">
                         <h4 class="text-light-green">
