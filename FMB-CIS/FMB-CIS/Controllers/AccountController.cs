@@ -71,6 +71,12 @@ namespace FMB_CIS.Controllers
             string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
             ViewData["BaseUrl"] = host;
 
+            //Get list of required documents
+            var requirements = _context.tbl_announcement.Where(a => a.id == 1).FirstOrDefault();
+            //ViewBag.RequiredDocs = requirements.announcement_content;
+            model.soloAnnouncement = requirements;
+            //End for required documents
+
             //return View();
 
             return View(model);
@@ -259,6 +265,43 @@ namespace FMB_CIS.Controllers
                             _context.SaveChanges();
                         }
                     }
+                    //END FOR FILE UPLOAD
+
+                    //Profile Pic Upload
+                    //if (model.profilePicUpload != null)
+                    //{
+                    //    foreach (var pPicFile in model.profilePicUpload.Files)
+                    //    {
+                    //        var profilePicFilesDB = new tbl_files();
+                    //        FileInfo pPicFileInfo = new FileInfo(pPicFile.FileName);
+                    //        string path = Path.Combine(Directory.GetCurrentDirectory(), "Files/UserPhotos");
+
+                    //        //create folder if not exist
+                    //        if (!Directory.Exists(path))
+                    //            Directory.CreateDirectory(path);
+
+
+                    //        string fileNameWithPath = Path.Combine(path, pPicFile.FileName);
+
+                    //        using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                    //        {
+                    //            pPicFile.CopyTo(stream);
+                    //        }
+                    //        profilePicFilesDB.tbl_user_id = usrID;
+                    //        profilePicFilesDB.created_by = (int)usrID;
+                    //        profilePicFilesDB.modified_by = (int)usrID;
+                    //        profilePicFilesDB.date_created = DateTime.Now;
+                    //        profilePicFilesDB.date_modified = DateTime.Now;
+                    //        profilePicFilesDB.filename = pPicFile.FileName;
+                    //        profilePicFilesDB.path = path;
+                    //        profilePicFilesDB.tbl_file_type_id = pPicFileInfo.Extension;
+                    //        profilePicFilesDB.tbl_file_sources_id = pPicFileInfo.Extension;
+                    //        profilePicFilesDB.file_size = Convert.ToInt32(pPicFile.Length);
+                    //        _context.tbl_files.Add(profilePicFilesDB);
+                    //        _context.SaveChanges();
+                    //    }
+                    //}
+                    //END FOR Profile Pic UPLOAD
 
 
                     //Code to set password for newly registered user

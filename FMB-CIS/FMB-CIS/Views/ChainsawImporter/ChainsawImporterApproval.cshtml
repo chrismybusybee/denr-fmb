@@ -244,59 +244,77 @@
                 </div> *@
             </div>
         </form>
-
+        <hr />
         <form id="commentSection" asp-action="CommentSection">
-            <div class="row d-flex justify-content-center px-0 mb-5">
+            <div class="row d-flex justify-content-center px-0 mb-5 mt-3">
                 <div class="col-md-11 d-flex flex-column gap-2">
                     <input asp-for="uid" type="hidden" />
                     <input asp-for="appid" type="hidden" />
-                    <span>
-                        Please select the file you want to address a comment.
-                    </span>
-                    @* Dropdown to select which file to comment *@
-                    <select asp-for="tbl_Comments.tbl_files_id" class="form-control" id="ddlProvinceId">
-                        @foreach (tbl_files file in Model.tbl_Files)
-                        {
-                            <option value="@file.Id">@file.filename</option>
-                        }
-                    </select>
-                    @* @Html.DisplayFor(model => model.acctApprovalViewModels.birth_date) *@
-                    <textarea asp-for="tbl_Comments.comment" class="form-control"></textarea>
-                    <button type="submit" id="commentBtn" class="btn btn-primary w-110">Add Comment</button>
-
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8">
+                            <span class="text-secondary">
+                                Please select the file you want to address a comment.
+                            </span>
+                            @* Dropdown to select which file to comment *@
+                            <select asp-for="tbl_Comments.tbl_files_id" class="form-select mb-4">
+                                @foreach (tbl_files file in Model.tbl_Files)
+                                {
+                                    <option value="@file.Id">@file.filename</option>
+                                }
+                            </select>
+                            <textarea asp-for="tbl_Comments.comment" class="form-control mb-4" placeholder="Add comments here."></textarea>
+                            <button type="submit" id="commentBtn" class="btn btn-primary w-110">Add Comment</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </form>
+        <hr />
+
         <div class="row d-flex justify-content-center px-0 mb-5">
-            @{var prev = " ";}
+            @{
+                var prev = " ";
+            }
             @foreach (CommentsViewModel item in Model.commentsViewModelsList)
             {
-                if (prev != item.fileName)
-                {
-                    <hr />
-                }
+
+                @* if (prev != item.fileName)
+            {
+            <section id="@item.fileName.Trim().Replace(" ","_")"></section>
+            } *@
                 prev = item.fileName;
-                <div class="col-md-11 d-flex flex-column gap-2">
-                    <div class="row mb-4 d-flex">
-                        <div class="col-md-3 fw-bold">
-                            @item.commenterName
-                        </div>
-                        <div class="col-md-3">
-                            @item.fileName
-                        </div>
-                        <div class="col-md-3">
-                            @item.date_created
-                        </div>
-                    </div>
-                    <div class="row mb-4 d-flex">
-                        <div class="col-md">
-                            @item.comment
+
+                <div class="row">
+                    <div class="col-md-12 py-2">
+                        <div class="px-2 py-1">
+                            <div class="border px-3 py-2">
+                                <div class="row d-flex justify-content-between mb-1">
+                                    <div class="col-md-6 fs-6 fw-bold text-secondary">
+                                        @item.commenterName
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <span class="border rounded small px-2 fw-bold text-secondary">
+                                            @item.fileName
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row d-flex mb-3">
+                                    <div class="col-md-12 fst-normal fs-6">
+                                        @item.comment
+                                    </div>
+                                </div>
+                                <div class="row d-flex">
+                                    <div class="col-md-12 text-end small text-muted pe-3">
+                                        @item.date_created
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             }
         </div>
-
     </div>
 </div>
 

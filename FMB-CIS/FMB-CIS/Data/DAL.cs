@@ -131,6 +131,18 @@ namespace FMB_CIS.Data
                     case 14:
                         userRole = "DENR Super Admin";
                         break;
+                    case 15:
+                        userRole = "DENR Chief";
+                        break;
+                    case 16:
+                        userRole = "DENR Division Chief";
+                        break;
+                    case 17:
+                        userRole = "DENR Regional Executive Director (RED)";
+                        break;
+                    case 18:
+                        userRole = "DENR Enforcement Division";
+                        break;
                 }
                 return userRole;
 
