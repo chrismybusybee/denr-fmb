@@ -59,7 +59,7 @@
                         <div class="form-group">
                             <label class="control-label small">User Type</label>
                             <select asp-for="tbl_Users.tbl_user_types_id" class="form-select" aria-label="User Type" required="required">
-                                <option value="" selected disabled>- Select User Type -</option>
+                                <option value="" selected disabled>--Select User Type--</option>
                                 <option value="1">Chainsaw Importer Only</option>
                                 <option value="2">Chainsaw Seller Only</option>
                                 <option value="3">Chainsaw Owner Only</option>
@@ -73,8 +73,8 @@
                         <br /><br />
                         <div class="form-group">
                             <label class="control-label small">User Classification</label>
-                            <select asp-for="tbl_Users.user_classification" class="form-select" aria-label="User Classification" required>
-                                <option value="" selected disabled>- Select User Classification -</option>
+                            <select asp-for="tbl_Users.user_classification" class="form-select" aria-label="User Classification" onchange="userClassification(this)" required>
+                                <option value="" selected disabled>--Select User Classification--</option>
                                 <option value="Individual">Individual</option>
                                 <option value="Corporation">Corporation</option>
                             </select>
@@ -110,6 +110,11 @@
                             <label asp-for="tbl_Users.suffix" class="form-label small">Suffix</label>
                             <input asp-for="tbl_Users.suffix" class="form-control" />
                             <span asp-validation-for="tbl_Users.suffix" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" id="companyNameInpField" style="display:none">
+                            <label asp-for="tbl_Users.company_name" class="control-label small">Company Name</label>
+                            <input asp-for="tbl_Users.company_name" class="form-control" />
+                            <span asp-validation-for="tbl_Users.company_name" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="tbl_Users.email" class="control-label small">Email (Please use official email address)</label>
@@ -174,7 +179,7 @@
                             <span asp-validation-for="tbl_Users.valid_id_no" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for="tbl_Users.street_address" class="control-label small">Street Address</label>
+                            <label asp-for="tbl_Users.street_address" class="control-label small" id="strtAddLbl">Street Address</label>
                             <input asp-for="tbl_Users.street_address" class="form-control" required="required" />
                             <span asp-validation-for="tbl_Users.street_address" class="text-danger"></span>
                         </div>
@@ -337,7 +342,19 @@
 
 <script type="text/javascript">
 
-    
+    //Things to change when selected User Classification is Corporation
+    function userClassification(that) {
+        if (that.value == "Corporation") {
+            document.getElementById("companyNameInpField").style.display = "block";
+            document.getElementById("strtAddLbl").innerHTML = "Company Street Address";
+        }
+
+        else {
+            document.getElementById("companyNameInpField").style.display = "none";
+            document.getElementById("strtAddLbl").innerHTML = "Street Address";
+        }
+    }
+    //END
 
     //captcha
     var onloadCallback = function () {

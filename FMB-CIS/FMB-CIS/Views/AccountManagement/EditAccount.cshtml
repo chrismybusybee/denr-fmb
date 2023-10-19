@@ -96,44 +96,59 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-4">
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                <label class="form-label small">Email</label>
-                                <input asp-for="tbl_User.email" class="form-control" placeholder="name@address.com" readonly />
-                                @* <span class="fw-bold">
-                                    @Html.DisplayFor(model => model.tbl_User.email)
+                    @if (Model.tbl_User.user_classification == "Corporation")
+                    {
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label small">Company Name</label>
+                                    <input asp-for="tbl_User.company_name" class="form-control"/>
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label small">Email</label>
+                                    <input asp-for="tbl_User.email" class="form-control" placeholder="name@address.com" readonly />
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label small">Contact Number (11 Digits)</label>
+                                    <input asp-for="tbl_User.contact_no" type="tel" pattern="[0-9]{11}" class="form-control" placeholder="09XX XXX XXXX" />
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row mb-4">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label class="form-label small">Email</label>
+                                    <input asp-for="tbl_User.email" class="form-control" placeholder="name@address.com" readonly />
+                                    @* <span class="fw-bold">
+                                @Html.DisplayFor(model => model.tbl_User.email)
                                 </span> *@
-                                <span class="text-danger"></span>
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label small">Contact Number (11 Digits)</label>
+                                    <input asp-for="tbl_User.contact_no" type="tel" pattern="[0-9]{11}" class="form-control" placeholder="09XX XXX XXXX" />
+                                    <span class="text-danger"></span>
+                                </div>
                             </div>
                         </div>
-                        @* <div class="col-md-3">
-                        <div class="form-group">
-                        <label asp-for="password" class="form-label small">Password</label>
-                        <input asp-for="password" class="form-control" placeholder="Password" />
-                        <span asp-validation-for="password" class="text-danger"></span>
-                        </div>
-                        </div>
-                        <div class="col-md-3">
-                        <div class="form-group">
-                        <label asp-for="confirmPassword" class="form-label small">Confirm Password</label>
-                        <input asp-for="confirmPassword" class="form-control" placeholder="Confirm Password" />
-                        <span asp-validation-for="confirmPassword" class="text-danger"></span>
-                        </div>
-                        </div> *@
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label class="form-label small">Contact Number (11 Digits)</label>
-                                <input asp-for="tbl_User.contact_no" class="form-control" placeholder="09XX XXX XXXX" />
-                                <span class="text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
+                    }
                     <div class="row mb-4">
                         <div class="col-md-6">
                             <div class="form-group mb-4">
                                 <label asp-for="tbl_User.birth_date" class="control-label small">Birth Date (Must be 18 years old and above)</label>
-                                <input asp-for="tbl_User.birth_date" type="date" class="form-control" required="required" />
+                                <input asp-for="tbl_User.birth_date" type="date" max="@DateTime.Now.AddYears(-18).ToString("yyyy-MM-dd")" class="form-control" required="required" />
                                 <span asp-validation-for="tbl_User.birth_date" class="text-danger"></span>
                             </div>
                         </div>

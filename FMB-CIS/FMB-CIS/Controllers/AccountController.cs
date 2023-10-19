@@ -326,13 +326,13 @@ namespace FMB_CIS.Controllers
                                     var body = "We would like to inform you that you have created an account with FMB-CIS.\nPlease click the link to verify your email and set your password. " + passResetLink + "\nThank You!";
                                     EmailSender.SendEmailAsync(model.tbl_Users.email, subject, body);
                                     //return RedirectToAction("EmailConfirmation");
-                                    return RedirectToAction("Index", "Home");
+                                    return RedirectToAction("Index", "Home", new { success = true });
                             }
                                 else
                                 {
                                     //Do not reveal if email doesn't exist.
                                     //return RedirectToAction("EmailConfirmation");
-                                    return RedirectToAction("Index", "Home");
+                                    return RedirectToAction("Index", "Home", new { success = true });
                                 }
                             }
                         }
@@ -341,7 +341,7 @@ namespace FMB_CIS.Controllers
                     //var body = "We would like to inform you that you have created an account with FMB-CIS.\nIf you forgot your password or if you wish to change it, you may proceed on this link: https://fmb-cis.beesuite.ph/Account/ForgotPassword";
                     //EmailSender.SendEmailAsync(userRegistrationViewModel.email, subject, body);
                     //return RedirectToAction("EmailConfirmation");
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Home", new { success = true });
 
                 }
                 //}

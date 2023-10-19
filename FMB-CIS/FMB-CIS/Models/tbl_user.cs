@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
         public string? middle_name { get; set; }
         public string? last_name { get; set; }
         public string? suffix { get; set; }
+        public string? company_name { get; set; }
         public string? contact_no { get; set; }
         public string? valid_id { get; set; }
         public string? valid_id_no { get; set; }

@@ -19,6 +19,7 @@
         public string comment { get; set; }
         public string user_classification { get; set; }
         public string gender { get; set; }
+        public string company_name { get; set; }
         public DateTime? date_created { get; set; }
         
     }

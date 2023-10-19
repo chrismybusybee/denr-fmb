@@ -39,33 +39,73 @@
                 <div class="col-md-9">
                     <div class="row">
                         <div class="col-md-10">
+                           @if (Model.acctApprovalViewModels.user_classification == "Corporation")
+                            {
+                                <div class="row mb-5">
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                User Type
+                                            </label>
+                                            <span class="fw-bold">
+                                                @Html.DisplayFor(model => model.acctApprovalViewModels.userType)
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-5">
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Classification
+                                            </label>
+                                            <span class="fw-bold">
+                                                @Html.DisplayFor(model => model.acctApprovalViewModels.user_classification)
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Company Name
+                                            </label>
+                                            <span class="fw-bold">
+                                                @Html.DisplayFor(model => model.acctApprovalViewModels.company_name)
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="row mb-5">
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                User Type
+                                            </label>
+                                            <span class="fw-bold">
+                                                @Html.DisplayFor(model => model.acctApprovalViewModels.userType)
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Classification
+                                            </label>
+                                            <span class="fw-bold">
+                                                @Html.DisplayFor(model => model.acctApprovalViewModels.user_classification)
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                             <div class="row mb-5">
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
-                                            User Type
-                                        </label>
-                                        <span class="fw-bold">
-                                            @Html.DisplayFor(model => model.acctApprovalViewModels.userType)
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="form-group d-flex flex-column gap-1">
-                                        <label class="text-secondary small">
-                                            Classification
-                                        </label>
-                                        <span class="fw-bold">
-                                            @Html.DisplayFor(model => model.acctApprovalViewModels.user_classification)
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mb-5">
-                                <div class="col-md-5">
-                                    <div class="form-group d-flex flex-column gap-1">
-                                        <label class="text-secondary small">
-                                            Name
+                                            Full Name
                                         </label>
                                         <span class="fw-bold">
                                             @Html.DisplayFor(model => model.acctApprovalViewModels.FullName)
@@ -142,9 +182,14 @@
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
-                                        <label class="text-secondary small">
-                                            Street Address
-                                        </label>
+                                        @if (Model.acctApprovalViewModels.user_classification == "Corporation")
+                                        {
+                                            <label class="text-secondary small">Company Street Address</label>
+                                        }
+                                        else
+                                        {
+                                            <label class="text-secondary small">Street Address</label>
+                                        }
                                         <span class="fw-bold">
                                             @Html.DisplayFor(model => model.acctApprovalViewModels.street_address)
                                         </span>

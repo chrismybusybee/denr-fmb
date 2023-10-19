@@ -347,7 +347,8 @@ namespace FMB_CIS.Controllers
                                        brgy = brngy.name,
                                        comment = u.comment,
                                        user_classification = u.user_classification,
-                                       gender = u.gender
+                                       gender = u.gender,
+                                       company_name = u.company_name
                                    }).FirstOrDefault();
 
                     //mymodel.acctApprovalViewModels = (AcctApprovalViewModel?)userinfoList;
