@@ -32,30 +32,93 @@
             <div id="profileSection" class="row m-0">
                 <div class="col-md-3">
                     <div class="d-flex justify-content-center gap-1">
+                        @* <img src="@ViewBag.profilePhotoSource" class="img-fluid rounded" /> *@
                         <img src="/assets/images/default-avatar.png" class="img-fluid rounded" />
                     </div>
                 </div>
                 <div class="col-md-9">
                     <div class="row">
                         <div class="col-md-10">
+                           @if (Model.acctApprovalViewModels.user_classification == "Corporation")
+                            {
+                                <div class="row mb-5">
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                User Type
+                                            </label>
+                                            <span class="fw-bold">
+                                                @Html.DisplayFor(model => model.acctApprovalViewModels.userType)
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-5">
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Classification
+                                            </label>
+                                            <span class="fw-bold">
+                                                @Html.DisplayFor(model => model.acctApprovalViewModels.user_classification)
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Company Name
+                                            </label>
+                                            <span class="fw-bold">
+                                                @Html.DisplayFor(model => model.acctApprovalViewModels.company_name)
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="row mb-5">
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                User Type
+                                            </label>
+                                            <span class="fw-bold">
+                                                @Html.DisplayFor(model => model.acctApprovalViewModels.userType)
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Classification
+                                            </label>
+                                            <span class="fw-bold">
+                                                @Html.DisplayFor(model => model.acctApprovalViewModels.user_classification)
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                             <div class="row mb-5">
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
-                                            User Type
+                                            Full Name
                                         </label>
                                         <span class="fw-bold">
-                                            @Html.DisplayFor(model => model.acctApprovalViewModels.userType)
+                                            @Html.DisplayFor(model => model.acctApprovalViewModels.FullName)
                                         </span>
                                     </div>
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
-                                            Name
+                                            Gender
                                         </label>
                                         <span class="fw-bold">
-                                            @Html.DisplayFor(model => model.acctApprovalViewModels.FullName)
+                                            @Html.DisplayFor(model => model.acctApprovalViewModels.gender)
                                         </span>
                                     </div>
                                 </div>
@@ -119,9 +182,14 @@
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
-                                        <label class="text-secondary small">
-                                            Street Address
-                                        </label>
+                                        @if (Model.acctApprovalViewModels.user_classification == "Corporation")
+                                        {
+                                            <label class="text-secondary small">Company Street Address</label>
+                                        }
+                                        else
+                                        {
+                                            <label class="text-secondary small">Street Address</label>
+                                        }
                                         <span class="fw-bold">
                                             @Html.DisplayFor(model => model.acctApprovalViewModels.street_address)
                                         </span>
@@ -205,8 +273,8 @@
                                 }
                                 <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
                                 <ul class="dropdown-menu">
-                                    @* <li><a class="dropdown-item" href="#">View</a></li>
-                                    <li><a class="dropdown-item" href="#">Delete</a></li> *@
+                                    <li><a class="dropdown-item" href="@file.path/@file.filename" target="_blank">View</a></li>
+                                    @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
                                     <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
                                 </ul>
                                 <h6 class="card-title text-secondary">@file.filename</h6>
@@ -236,21 +304,23 @@
                 <div class="col-md-12 d-flex flex-column px-4 gap-2">
                     <input asp-for="uid" type="hidden" />
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8">
                             <span class="text-secondary">
                                 Please select the file you want to address a comment
                             </span>
                             @* Dropdown to select which file to comment *@
-                            <select asp-for="tbl_Comments.tbl_files_id" class="form-control mb-4" id="ddlProvinceId">
+                            <select asp-for="tbl_Comments.tbl_files_id" class="form-select mb-4">
                                 @foreach (tbl_files file in Model.tbl_Files)
                                 {
                                     <option value="@file.Id">@file.filename</option>
                                 }
                             </select>
                             @* @Html.DisplayFor(model => model.acctApprovalViewModels.birth_date) *@
-                            <textarea asp-for="tbl_Comments.comment" class="form-control mb-4"></textarea>
+                            <textarea asp-for="tbl_Comments.comment" class="form-control mb-4" placeholder="Add comments here."></textarea>
                             <button type="submit" id="commentBtn" class="btn btn-primary w-110">Add Comment</button>
                         </div>
+                        <div class="col-md-2"></div>
                     </div>
                 </div>
             </div>
@@ -261,28 +331,29 @@
             @foreach (CommentsViewModel item in Model.commentsViewModelsList)
             {
 
-                @*if (prev != item.fileName)
+                @* if (prev != item.fileName)
                 {
-                    <hr />
-                }*@
+                    <section id="@item.fileName.Trim().Replace(" ","_")"></section>
+                } *@
                 prev = item.fileName;
 
                 <div class="row">
-                    <div class="col-md-12 py-3">
-                        <div class="border rounded px-5 py-3">
-                            <div class="row d-flex justify-content-between mb-4">
-                                <div class="col-md-6 fs-5 fw-bold text-secondary">
+                    <div class="col-md-12 py-2">
+                        <div class="px-2 py-1">
+                            <div class="border px-3 py-2">
+                            <div class="row d-flex justify-content-between mb-1">
+                                <div class="col-md-6 fs-6 fw-bold text-secondary">
                                     @item.commenterName
                                 </div>
                                 <div class="col-md-6 text-end">
-                                    <span class="border rounded px-2 text-secondary">
+                                    <span class="border rounded small px-2 fw-bold text-secondary">
                                         @item.fileName
                                     </span>
                                 </div>
                             </div>
-                            <div class="row d-flex mb-4">
-                                <div class="col-md-12 fst-italic fs-4">
-                                    "@item.comment"
+                            <div class="row d-flex mb-3">
+                                <div class="col-md-12 fst-normal fs-6">
+                                    @item.comment
                                 </div>
                             </div>
                             <div class="row d-flex">
@@ -290,28 +361,10 @@
                                     @item.date_created
                                 </div>
                             </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                @*<div class="col-md-11 d-flex flex-column gap-2">
-                    <div class="row mb-4 d-flex">
-                        <div class="col-md-3 fw-bold">
-                            @item.commenterName
-                        </div>
-                        <div class="col-md-3">
-                            @item.fileName
-                        </div>
-                        <div class="col-md-3">
-                            @item.date_created
-                        </div>
-                    </div>
-                    <div class="row mb-4 d-flex">
-                        <div class="col-md">
-                            @item.comment
-                        </div>
-                    </div>
-                </div>*@
             }
         </div>
     </div>

@@ -28,11 +28,29 @@ namespace FMB_CIS.Controllers
             this._configuration = configuration;
             _context = context;
         }
-
+        
+        /*
         public IActionResult Index()
         {
             if (string.IsNullOrWhiteSpace(User.Identity.Name))
+            {             
+                return View();
+            }
+            else
             {
+                return RedirectToAction("Index", "Dashboard"); ;
+            }
+            //return View();
+        }*/
+
+        public IActionResult Index(bool success)
+        {
+            if (string.IsNullOrWhiteSpace(User.Identity.Name))
+            {
+                if (success == true)
+                {
+                    ViewBag.message = "Registration success! A confirmation link is sent to your registered email. Click the link and input your password using the link.";
+                }
                 return View();
             }
             else

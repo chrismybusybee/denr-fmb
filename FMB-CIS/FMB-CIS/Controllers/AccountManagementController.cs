@@ -107,7 +107,7 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 //File Paths from Database
-                var filesFromDB = _context.tbl_files.Where(f => f.tbl_user_id == uid).ToList();
+                var filesFromDB = _context.tbl_files.Where(f => f.tbl_user_id == uid && !f.path.Contains("UserPhotos")).ToList();
                 List<tbl_files> files = new List<tbl_files>();
 
                 foreach (var fileList in filesFromDB)
@@ -118,6 +118,20 @@ namespace FMB_CIS.Controllers
 
                 model.tbl_Files = files;
                 //END FOR FILE DOWNLOAD
+
+                //Profile Photo Source
+                bool profilePhotoExist = _context.tbl_files.Where(f => f.tbl_user_id == uid && f.path.Contains("UserPhotos")).Any();
+                if(profilePhotoExist == true)
+                {
+                    var profilePhoto = _context.tbl_files.Where(f => f.tbl_user_id == uid && f.path.Contains("UserPhotos")).FirstOrDefault();
+                    ViewBag.profilePhotoSource = profilePhoto.path.Replace("/","\\") + "\\" + profilePhoto.filename;
+                }
+                else
+                {
+                    ViewBag.profilePhotoSource = "/assets/images/default-avatar.png";
+                }
+                //END for Profile Photo Source
+                
                 //Display List of Comments
                 model.commentsViewModelsList = (from c in _context.tbl_comments
                                                   where c.tbl_user_id == uid
@@ -227,7 +241,7 @@ namespace FMB_CIS.Controllers
                 {
                     var filesDB = new tbl_files();
                     FileInfo fileInfo = new FileInfo(file.FileName);
-                    string path = Path.Combine(Directory.GetCurrentDirectory(), "Files/UserDocs");
+                    string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserDocs");
 
                     //create folder if not exist
                     if (!Directory.Exists(path))
@@ -320,18 +334,22 @@ namespace FMB_CIS.Controllers
                                    join ct in _context.tbl_city on u.tbl_city_id equals ct.id
                                    join brngy in _context.tbl_brgy on u.tbl_brgy_id equals brngy.id
                                    select new AcctApprovalViewModel {FullName = u.first_name + " " + u.middle_name + " " + u.last_name + " " + u.suffix,
-                                        userType = utype.name,
-                                        email = u.email,
-                                        contact_no = u.contact_no,
-                                        valid_id = u.valid_id,
-                                        valid_id_no = u.valid_id_no,
-                                        birth_date = u.birth_date.ToString(),
-                                        street_address = u.street_address,
-                                        region = reg.name, 
-                                        province = prov.name, 
-                                        city = ct.name, 
-                                        brgy = brngy.name,
-                                        comment = u.comment}).FirstOrDefault();
+                                       userType = utype.name,
+                                       email = u.email,
+                                       contact_no = u.contact_no,
+                                       valid_id = u.valid_id,
+                                       valid_id_no = u.valid_id_no,
+                                       birth_date = u.birth_date.ToString(),
+                                       street_address = u.street_address,
+                                       region = reg.name, 
+                                       province = prov.name, 
+                                       city = ct.name, 
+                                       brgy = brngy.name,
+                                       comment = u.comment,
+                                       user_classification = u.user_classification,
+                                       gender = u.gender,
+                                       company_name = u.company_name
+                                   }).FirstOrDefault();
 
                     //mymodel.acctApprovalViewModels = (AcctApprovalViewModel?)userinfoList;
 
@@ -347,7 +365,12 @@ namespace FMB_CIS.Controllers
 
                     mymodel.tbl_Files = files;
                     //END FOR FILE DOWNLOAD
-                    
+
+                    //Profile Photo Source
+                    //var profilePhoto = _context.tbl_files.Where(f => f.tbl_user_id == usid && f.path.Contains("UserPhotos")).FirstOrDefault();
+                    //ViewBag.profilePhotoSource = profilePhoto.path + "\\" + profilePhoto.filename;
+                    //END for Profile Photo Source
+
                     //TEST
                     /*
                     var commentsFromDB = _context.tbl_comments.Where(u => u.tbl_user_id == usid).ToList();

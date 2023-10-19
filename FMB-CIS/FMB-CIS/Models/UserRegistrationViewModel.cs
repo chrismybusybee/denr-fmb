@@ -70,6 +70,7 @@ namespace FMB_CIS.Models
         //[Required]
         //public string Token { get; set; }
         public tbl_user_temp_passwords? tbl_User_Temp_Passwords { get; set; }
-
+        //public FileUpload? profilePicUpload { get; set; }
+        public tbl_announcement? soloAnnouncement { get; set;}
     }
 }

@@ -30,12 +30,13 @@
     background-color: white;
     height: min(100vh, 100%);
     z-index: 99;
-    box-shadow: 0px 0 11px 0px;
+    /*box-shadow: 0px 0 11px 0px;*/
+    border: solid 0.5px lightgray;
 }
 
 #toggle-btn:hover {
     transition: all 0.15s ease-in-out;
-    color: #5c5c5c;
+    color: darkslategray;
 }
 
 .side-bar-container {
@@ -91,10 +92,11 @@
     max-height: 78%;
     background-color: white;
     margin: 0 330px 0 30px;
-    box-shadow: 0 0 11px 0px;
+    /*box-shadow: 0 0 11px 0px;*/
     padding: 10px;
     border-radius: 5px;
     overflow-y: auto;
+    border: solid 0.5px lightgray;
 }
 
 ::-webkit-scrollbar {

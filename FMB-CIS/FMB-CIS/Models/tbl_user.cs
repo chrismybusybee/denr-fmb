@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
         public string? middle_name { get; set; }
         public string? last_name { get; set; }
         public string? suffix { get; set; }
+        public string? company_name { get; set; }
         public string? contact_no { get; set; }
         public string? valid_id { get; set; }
         public string? valid_id_no { get; set; }
@@ -26,7 +27,8 @@ using System.ComponentModel.DataAnnotations;
         public DateTime? date_created { get; set; }
         public DateTime? date_modified { get; set; }
         public int tbl_user_types_id { get; set; }
-
+        public string user_classification { get; set; }
+        public string gender { get; set; }
         public string? FullName { get; set; }
     }
  }

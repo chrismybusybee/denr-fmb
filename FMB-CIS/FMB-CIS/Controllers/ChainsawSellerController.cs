@@ -108,7 +108,7 @@ namespace FMB_CIS.Controllers
                     {
                         var filesDB = new tbl_files();
                         FileInfo fileInfo = new FileInfo(file.FileName);
-                        string path = Path.Combine(Directory.GetCurrentDirectory(), "Files/UserDocs");
+                        string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserDocs");
 
                         //create folder if not exist
                         if (!Directory.Exists(path))
@@ -333,7 +333,7 @@ namespace FMB_CIS.Controllers
                         {
                             var filesDB = new tbl_files();
                             FileInfo fileInfo = new FileInfo(file.FileName);
-                            string path = Path.Combine(Directory.GetCurrentDirectory(), "Files/UserDocs");
+                            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserDocs");
 
                             //create folder if not exist
                             if (!Directory.Exists(path))

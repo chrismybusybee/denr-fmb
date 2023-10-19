@@ -58,8 +58,8 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="control-label small">User Type</label>
-                            <select asp-for="tbl_Users.tbl_user_types_id" class="form-control" aria-label="User Type" required="required">
-                                <option value="" selected disabled>- Select User Type -</option>
+                            <select asp-for="tbl_Users.tbl_user_types_id" class="form-select" aria-label="User Type" required="required">
+                                <option value="" selected disabled>--Select User Type--</option>
                                 <option value="1">Chainsaw Importer Only</option>
                                 <option value="2">Chainsaw Seller Only</option>
                                 <option value="3">Chainsaw Owner Only</option>
@@ -69,6 +69,16 @@
                                 <option value="7">Chainsaw Importer, Owner, and Seller</option>
                             </select>
                             <span asp-validation-for="tbl_Users.tbl_user_types_id" class="text-danger"></span>
+                        </div>
+                        <br /><br />
+                        <div class="form-group">
+                            <label class="control-label small">User Classification</label>
+                            <select asp-for="tbl_Users.user_classification" class="form-select" aria-label="User Classification" onchange="userClassification(this)" required>
+                                <option value="" selected disabled>--Select User Classification--</option>
+                                <option value="Individual">Individual</option>
+                                <option value="Corporation">Corporation</option>
+                            </select>
+                            <span asp-validation-for="tbl_Users.user_classification" class="text-danger"></span>
                         </div>
                         <div class="text-center mt-4">
                             <button class="btn btn-primary nextBtn text-center" type="button">Next</button>
@@ -101,6 +111,11 @@
                             <input asp-for="tbl_Users.suffix" class="form-control" />
                             <span asp-validation-for="tbl_Users.suffix" class="text-danger"></span>
                         </div>
+                        <div class="form-group" id="companyNameInpField" style="display:none">
+                            <label asp-for="tbl_Users.company_name" class="control-label small">Company Name</label>
+                            <input asp-for="tbl_Users.company_name" class="form-control" />
+                            <span asp-validation-for="tbl_Users.company_name" class="text-danger"></span>
+                        </div>
                         <div class="form-group mb-3">
                             <label asp-for="tbl_Users.email" class="control-label small">Email (Please use official email address)</label>
                             <input asp-for="tbl_Users.email" class="form-control" placeholder="name@address.com" required="required" id="emailInput" onchange="checkExistingEmail()" />
@@ -109,17 +124,53 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="tbl_Users.contact_no" class="control-label small">Contact Number (11 Digits)</label>
-                            <input asp-for="tbl_Users.contact_no" class="form-control" placeholder="09XX XXX XXXX" required="required" />
+                            <input asp-for="tbl_Users.contact_no" type="tel" pattern="[0-9]{11}" class="form-control" placeholder="09XX XXX XXXX" required="required" />
                             <span asp-validation-for="tbl_Users.contact_no" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="tbl_Users.birth_date" class="control-label small">Birth Date (Must be 18 years old and above)</label>
-                            <input asp-for="tbl_Users.birth_date" type="date" class="form-control" required="required" />
+                            <input asp-for="tbl_Users.birth_date" type="date" class="form-control" max="@DateTime.Now.AddYears(-18).ToString("yyyy-MM-dd")" required="required" />
                             <span asp-validation-for="tbl_Users.birth_date" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label small">Gender</label>
+                            <select asp-for="tbl_Users.gender" class="form-select" aria-label="Gender" required>
+                                <option value="" selected disabled>--Select Gender--</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                            <span asp-validation-for="tbl_Users.gender" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="tbl_Users.valid_id" class="control-label small">Valid ID</label>
-                            <input asp-for="tbl_Users.valid_id" class="form-control" required="required" />
+                            <select asp-for="tbl_Users.valid_id" class="form-select" required="required">
+                                <option selected disabled>--Select Valid ID--</option>
+                                <option value="AFP Beneficiary ID">AFP Beneficiary ID</option>
+                                <option value="AFPSLAI ID">AFPSLAI ID</option>
+                                <option value="Barangay ID">Barangay ID</option>
+                                <option value="BIR (TIN)">BIR (TIN)</option>
+                                <option value="COMELEC / Voter’s ID / COMELEC Registration Form">COMELEC / Voter’s ID / COMELEC Registration Form</option>
+                                <option value="Driver’s License">Driver’s License</option>
+                                <option value="e-Card / UMID"> e-Card / UMID</option>
+                                <option value="Employee’s ID / Office Id">Employee’s ID / Office Id</option>
+                                <option value="Firearms License">Firearms License</option>
+                                <option value="Integrated Bar of the Philippines (IBP) ID">Integrated Bar of the Philippines (IBP) ID</option>
+                                <option value="NBI Clearance">NBI Clearance</option>
+                                <option value="Pag-ibig ID">Pag-ibig ID</option>
+                                <option value="Pantawid Pamilya Pilipino Program (4Ps) ID">Pantawid Pamilya Pilipino Program (4Ps) ID</option>
+                                <option value="Passport">Passport</option>
+                                <option value="Person’s With Disability (PWD) ID">Person’s With Disability (PWD) ID</option>
+                                <option value="Phil-health ID">Phil-health ID</option>
+                                <option value="Philippine Identification (PhilID / ePhilID)">Philippine Identification (PhilID / ePhilID)</option>
+                                <option value="Philippine Postal ID">Philippine Postal ID</option>
+                                <option value="Professional Regulation Commission (PRC) ID">Professional Regulation Commission (PRC) ID</option>
+                                <option value="PVAO ID">PVAO ID</option>
+                                <option value="School ID">School ID</option>
+                                <option value="Senior Citizen ID">Senior Citizen ID</option>
+                                <option value="Solo Parent ID">Solo Parent ID</option>
+                                <option value="SSS ID">SSS ID</option>
+                                <option value="Other valid government-issued IDs">Other valid government-issued IDs</option>
+                            </select>
                             <span asp-validation-for="tbl_Users.valid_id" class="text-danger"></span>
                         </div>
                         <div class="form-group">
@@ -128,30 +179,30 @@
                             <span asp-validation-for="tbl_Users.valid_id_no" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for="tbl_Users.street_address" class="control-label small">Street Address</label>
+                            <label asp-for="tbl_Users.street_address" class="control-label small" id="strtAddLbl">Street Address</label>
                             <input asp-for="tbl_Users.street_address" class="form-control" required="required" />
                             <span asp-validation-for="tbl_Users.street_address" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="tbl_Users.tbl_region_id" class="control-label small">Region</label>
-                            <select asp-for="tbl_Users.tbl_region_id" class="form-control"
+                            <select asp-for="tbl_Users.tbl_region_id" class="form-select"
                                     asp-items="ViewBag.RegionData"
                                     id="RegionId" onchange="loadProvince(this)"></select>
                             <span asp-validation-for="tbl_Users.tbl_region_id" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="tbl_Users.tbl_province_id" class="control-label small">Province</label>
-                            <select asp-for="tbl_Users.tbl_province_id" class="form-control" asp-items="ViewBag.ProvinceData" id="ddlProvinceId" onchange="loadCity(this)"></select>
+                            <select asp-for="tbl_Users.tbl_province_id" class="form-select" asp-items="ViewBag.ProvinceData" id="ddlProvinceId" onchange="loadCity(this)"></select>
                             <span asp-validation-for="tbl_Users.tbl_province_id" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="tbl_Users.tbl_city_id" class="control-label small">City/Municipality</label>
-                            <select asp-for="tbl_Users.tbl_city_id" class="form-control" asp-items="ViewBag.CityData" id="ddlCityId" onchange="loadBrgy(this)"></select>
+                            <select asp-for="tbl_Users.tbl_city_id" class="form-select" asp-items="ViewBag.CityData" id="ddlCityId" onchange="loadBrgy(this)"></select>
                             <span asp-validation-for="tbl_Users.tbl_city_id" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="tbl_Users.tbl_brgy_id" class="control-label small">Barangay</label>
-                            <select asp-for="tbl_Users.tbl_brgy_id" class="form-control" asp-items="ViewBag.BrgyData" id="ddlBrgyId"></select>
+                            <select asp-for="tbl_Users.tbl_brgy_id" class="form-select" asp-items="ViewBag.BrgyData" id="ddlBrgyId"></select>
                             <span asp-validation-for="tbl_Users.tbl_brgy_id" class="text-danger"></span>
                         </div>
                         <div class="text-center mt-4">
@@ -162,10 +213,11 @@
                 </div>
             </div>
             <div class="row setup-content" id="step-3">
-                <center><label class="control-label">Upload Proof of Company SEC Registration</label></center>
+                <center><label class="control-label"></label></center>
                 <div class="col-xs-6 col-md-offset-3">
                     <div class="col-md-12">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        @Model.soloAnnouncement.announcement_content
                         @* <div class="form-group" hidden="hidden">
                             <label asp-for="tbl_Users.comment" class="form-label small">Remarks</label>
                             <input asp-for="tbl_Users.comment" class="form-control" disabled />
@@ -181,7 +233,7 @@
                         <div class="row m-0 mb-4">
                             <div class="col-md-12">
                                 <div class="d-flex gap-4 mb-5">
-                                    <h3 class="text-secondary fw-bold m-0">Attach Forms</h3>
+                                    <h3 class="text-secondary fw-bold m-0">Attach Documents</h3>
                                     <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
                                         <i data-feather="upload"></i> Upload
                                     </label>
@@ -198,6 +250,20 @@
                                 </div>
                             </div>
                         </div>
+
+                        @* <div class="row m-0 mb-4">
+                            <div class="col-md-12">
+                                <div class="d-flex gap-4 mb-5">
+                                    <h3 class="text-secondary fw-bold m-0">Upload Profile Photo/Company Logo</h3>
+                                    <label for="profilePicInput" class="btn btn-primary custom-file-upload">
+                                        <i data-feather="upload"></i> Upload Photo
+                                        <input type="file" asp-for="profilePicUpload.Files" class="form-control" id="profilePicInput" hidden accept="image/jpeg" onchange="profilePicInputChange()" />
+                                    </label>
+                                    
+                                </div>
+                                <img id="profilePic" src="#" height="200px" hidden/>
+                            </div>
+                        </div> *@
 
                         <div id="g-recaptcha">
                         </div>
@@ -276,7 +342,19 @@
 
 <script type="text/javascript">
 
-    
+    //Things to change when selected User Classification is Corporation
+    function userClassification(that) {
+        if (that.value == "Corporation") {
+            document.getElementById("companyNameInpField").style.display = "block";
+            document.getElementById("strtAddLbl").innerHTML = "Company Street Address";
+        }
+
+        else {
+            document.getElementById("companyNameInpField").style.display = "none";
+            document.getElementById("strtAddLbl").innerHTML = "Street Address";
+        }
+    }
+    //END
 
     //captcha
     var onloadCallback = function () {
@@ -293,10 +371,10 @@
         var emailValue = document.getElementById("emailInput").value;
         var url = "@baseurl";
         $.post(url + "Account/CheckExistingEmailOnField", { email: emailValue }, function (data) {
-            debugger;
+            //debugger;
             emailExist = data;
             if (data == true) {                
-                console.log(emailExist);
+                //console.log(emailExist);
                 document.getElementById("emailValidation").innerHTML = "Email exist! Please use a different email!";
             }
             else 
@@ -367,7 +445,7 @@
             }
 
             selectedFiles = dt.files;
-            console.log(selectedFiles);
+            //console.log(selectedFiles);
             $('.file-delete').click(function () {
                 let name = $(this).closest('.card').attr('id');
                 // Supprimer l'affichage du nom de fichier
@@ -423,7 +501,7 @@
             var curStep = $(this).closest(".setup-content"),
                 curStepBtn = curStep.attr("id"),
                 nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
-                curInputs = curStep.find("input[type='text'],input[type='url'],input[type='date']"),
+                curInputs = curStep.find("input[type='text'],input[type='url'],input[type='date'],input[type='tel']"),
                 isValid = true;
 
             $(".form-group").removeClass("has-error");
@@ -435,11 +513,11 @@
             }
 
             if (isValid && curStepBtn != 'step-2') {   
-                console.log(curStepBtn);
+                //console.log(curStepBtn);
                 nextStepWizard.removeAttr('disabled').trigger('click'); 
             }  
             if (isValid && curStepBtn == 'step-2' && !emailExist) {
-                console.log(curStepBtn);
+                //console.log(curStepBtn);
                 nextStepWizard.removeAttr('disabled').trigger('click');
             }
         });
