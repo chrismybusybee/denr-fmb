@@ -19,7 +19,7 @@
         <form asp-action="Index" method="post" enctype="multipart/form-data" id="OwnerRegForm">
         <a href="@Url.Action("Index", "Dashboard")" class="mx-2" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
         <div class="row m-0 my-4">
-            <div class="col-md-6">
+            @*<div class="col-md-6">
                 <div class="p-4 shadow h-100">
                     <h2 class="text-secondary fw-bold mb-4">Seller Details</h2>
                     <div class="form-group mb-3">
@@ -72,8 +72,8 @@
                         <span class="text-danger"></span>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6">
+                </div>*@
+            <div class="col-md-12">
                 <div class="p-4 shadow h-100">
                     <h2 class="text-secondary fw-bold mb-4">Permit</h2>
                     <div class="form-group mb-3">
@@ -85,7 +85,6 @@
                             <option value="5">Authority to Lease</option>
                             <option value="6">Authority to Rent</option>
                             <option value="7">Authority to Lend</option>
-                            <option value="13">Certificate of Registration</option>
                             <option value="14">Permit to Re-sell/Transfer Ownership</option>
                         </select>
                     </div>
@@ -110,13 +109,13 @@
                             <textarea class="form-control" asp-for="tbl_Application.purpose" placeholder="Enter purpose"></textarea>
                         <span class="text-danger"></span>
                     </div>
-                    <div class="form-group mb-3">
+                    @*<div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
                             Set Date of Inspection
                         </label>
                             <input type="date" asp-for="tbl_Application.date_of_inspection" class="form-control" />
                         <span class="text-danger"></span>
-                    </div>
+                    </div>*@
                 </div>
             </div>
         </div>

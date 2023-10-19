@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Contracts;
+using System.Security.Cryptography.X509Certificates;
 
 namespace FMB_CIS.Models
 {
@@ -40,6 +42,8 @@ namespace FMB_CIS.Models
         public DateTime? expectedTimeArrived { get; set; }
         public DateTime? expectedTimeRelease { get; set; }
         public FileUpload? filesUpload { get; set; }
+
+        public DateTime? applicationDate { get; set; }
 
 
     }

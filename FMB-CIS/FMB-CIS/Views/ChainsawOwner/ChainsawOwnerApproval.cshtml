@@ -29,7 +29,8 @@
                     @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true)
                     {
                         @* <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" /> *@
-                        <button type="button" id="saveBtn" class="btn btn-primary w-105">Save</button>
+                        <button type="button" id="approveBtn" class="btn btn-primary w-105">Approve</button>
+                        <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
                     }
                 <input asp-for="decision" id="decisionID" type="hidden" />
                 </div>
