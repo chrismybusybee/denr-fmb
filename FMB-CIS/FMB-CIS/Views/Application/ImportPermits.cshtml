@@ -26,12 +26,16 @@
             <th>
                 Email
             </th>
+                    
             <th>
                 Contact No.
             </th>
             <th>
                 Address
             </th>
+                    <th>
+                        Application Date
+                    </th>
             <th>
                 Application Type
             </th>
@@ -69,6 +73,9 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.address)
                     </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.applicationDate)
+                            </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.application_type)
                     </td>
