@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Elfie.Serialization;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Contracts;
 using System.Security.Cryptography.X509Certificates;
 
@@ -46,6 +47,17 @@ namespace FMB_CIS.Models
 
         public DateTime? applicationDate { get; set; }
 
+        //FOR CHAINSAW REGISTRATION APPROVAL
+        public string? chainsawBrand { get; set; }
+        public string? chainsawModel { get; set; }
+        public string? Engine { get; set; }
+        public string? powerSource { get; set; }
+        public int? Watt { get; set; }
+        public int? hp { get; set; }
+        public string? gb { get; set; }
+        public string? chainsaw_serial_number { get; set; }
+        public string? chainsawSupplier { get; set; }
+        public DateTime? date_purchase { get; set; }
 
     }
 }

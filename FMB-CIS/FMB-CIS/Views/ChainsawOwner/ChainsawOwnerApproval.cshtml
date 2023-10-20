@@ -115,17 +115,20 @@
                                 </div>
                             </div>
                             <div class="row mb-5">
-                                <div class="col-md-5">
-                                    <div class="form-group d-flex flex-column gap-1">
-                                        <label class="text-secondary small">
-                                            Chainsaw Quantity
-                                        </label>
-                                        <span class="fw-bold">
-                                            @* <label asp-for="applicantViewModels.birth_date" value="@Model.applicantViewModels.birth_date">@Model.applicantViewModels.birth_date</label> *@
-                                            @Html.DisplayFor(model => model.applicantViewModels.qty)
-                                        </span>
+                                @if (Model.applicantViewModels.permit_type != "Certificate of Registration")
+                                {
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Chainsaw Quantity
+                                            </label>
+                                            <span class="fw-bold">
+                                                @* <label asp-for="applicantViewModels.birth_date" value="@Model.applicantViewModels.birth_date">@Model.applicantViewModels.birth_date</label> *@
+                                                @Html.DisplayFor(model => model.applicantViewModels.qty)
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
+                                }
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
@@ -137,8 +140,137 @@
                                         </span>
                                     </div>
                                 </div>
+                                @if (Model.applicantViewModels.permit_type == "Certificate of Registration")
+                                {
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Chainsaw Brand
+                                            </label>
+                                            <span class="fw-bold">
+                                                @* <label asp-for="applicantViewModels.address" value="@Model.applicantViewModels.address">@Model.applicantViewModels.address</label> *@
+                                                @Html.DisplayFor(model => model.applicantViewModels.chainsawBrand)
+                                            </span>
+                                        </div>
+                                    </div>
+                                }
                             </div>
-
+                            @if (Model.applicantViewModels.permit_type == "Certificate of Registration")
+                            {
+                                <div class="row mb-5">
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Chainsaw Model
+                                            </label>
+                                            <span class="fw-bold">
+                                                @* <label asp-for="applicantViewModels.valid_id" value="@Model.applicantViewModels.valid_id">@Model.applicantViewModels.valid_id</label> *@
+                                                @Html.DisplayFor(model => model.applicantViewModels.chainsawModel)
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Chainsaw Engine
+                                            </label>
+                                            <span class="fw-bold">
+                                                @* <label asp-for="applicantViewModels.valid_id_no" value="@Model.applicantViewModels.valid_id_no">@Model.applicantViewModels.valid_id_no</label> *@
+                                                @Html.DisplayFor(model => model.applicantViewModels.Engine)
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-5">
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Chainsaw Power Source
+                                            </label>
+                                            <span class="fw-bold">
+                                                @* <label asp-for="applicantViewModels.valid_id" value="@Model.applicantViewModels.valid_id">@Model.applicantViewModels.valid_id</label> *@
+                                                @Html.DisplayFor(model => model.applicantViewModels.powerSource)
+                                            </span>
+                                        </div>
+                                    </div>
+                                    @if(Model.applicantViewModels.powerSource != "Gas")
+                                    {
+                                        <div class="col-md-5">
+                                            <div class="form-group d-flex flex-column gap-1">
+                                                <label class="text-secondary small">
+                                                    Watt
+                                                </label>
+                                                <span class="fw-bold">
+                                                    @* <label asp-for="applicantViewModels.valid_id_no" value="@Model.applicantViewModels.valid_id_no">@Model.applicantViewModels.valid_id_no</label> *@
+                                                    @Html.DisplayFor(model => model.applicantViewModels.Watt)
+                                                </span>
+                                            </div>
+                                        </div>
+                                    }
+                                    @if(Model.applicantViewModels.powerSource == "Gas")
+                                    {
+                                        <div class="col-md-5">
+                                            <div class="form-group d-flex flex-column gap-1">
+                                                <label class="text-secondary small">
+                                                    Horsepower
+                                                </label>
+                                                <span class="fw-bold">
+                                                    @* <label asp-for="applicantViewModels.valid_id_no" value="@Model.applicantViewModels.valid_id_no">@Model.applicantViewModels.valid_id_no</label> *@
+                                                    @Html.DisplayFor(model => model.applicantViewModels.hp)
+                                                </span>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="row mb-5">
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Length of Guidebar
+                                            </label>
+                                            <span class="fw-bold">
+                                                @* <label asp-for="applicantViewModels.valid_id" value="@Model.applicantViewModels.valid_id">@Model.applicantViewModels.valid_id</label> *@
+                                                @Html.DisplayFor(model => model.applicantViewModels.gb)
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Chainsaw Serial Number
+                                            </label>
+                                            <span class="fw-bold">
+                                                @* <label asp-for="applicantViewModels.valid_id_no" value="@Model.applicantViewModels.valid_id_no">@Model.applicantViewModels.valid_id_no</label> *@
+                                                @Html.DisplayFor(model => model.applicantViewModels.chainsaw_serial_number)
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-5">
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Chainsaw Supplier
+                                            </label>
+                                            <span class="fw-bold">
+                                                @* <label asp-for="applicantViewModels.valid_id" value="@Model.applicantViewModels.valid_id">@Model.applicantViewModels.valid_id</label> *@
+                                                @Html.DisplayFor(model => model.applicantViewModels.chainsawSupplier)
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Date of Purchase
+                                            </label>
+                                            <span class="fw-bold">
+                                                @* <label asp-for="applicantViewModels.valid_id_no" value="@Model.applicantViewModels.valid_id_no">@Model.applicantViewModels.valid_id_no</label> *@
+                                                @Html.DisplayFor(model => model.applicantViewModels.date_purchase)
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

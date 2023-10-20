@@ -180,37 +180,84 @@ namespace FMB_CIS.Controllers
 
                 //HISTORY
                 var applicationtypelist = _context.tbl_application_type;
-
-                var applicationMod = (from a in applicationlist
-                                      join usr in _context.tbl_user on a.tbl_user_id equals usr.id
-                                      join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
-                                      join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
-                                      join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
-                                      join pS in _context.tbl_permit_status on a.status equals pS.id
-                                      join reg in _context.tbl_region on usr.tbl_region_id equals reg.id
-                                      join prov in _context.tbl_province on usr.tbl_province_id equals prov.id
-                                      join ct in _context.tbl_city on usr.tbl_city_id equals ct.id
-                                      join brngy in _context.tbl_brgy on usr.tbl_brgy_id equals brngy.id
-                                      where a.tbl_user_id == usid && a.id == applid
-                                      select new ApplicantListViewModel
-                                      {
-                                          id = a.id,
-                                          tbl_user_id = usid,
-                                          full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
-                                          full_address = usr.street_address + " " + brngy.name + " " + ct.name + " " + prov.name + " " + reg.name,
-                                          email = usr.email,
-                                          contact = usr.contact_no,
-                                          application_type = appt.name,
-                                          permit_type = pT.name,
-                                          permit_status = pS.status,
-                                          qty = a.qty,
-                                          user_type = usrtyps.name,
-                                          valid_id = usr.valid_id,
-                                          valid_id_no = usr.valid_id_no,
-                                          birth_date = usr.birth_date.ToString(),
-                                          comment = usr.comment
-                                      }).FirstOrDefault();
-                mymodel.applicantViewModels = applicationMod;
+                var permitTypeOfThisApplication  = _context.tbl_application.Where(a => a.id == applid).Select(a => a.tbl_permit_type_id).FirstOrDefault();
+                if(permitTypeOfThisApplication == 13)
+                {
+                    var applicationMod = (from a in applicationlist
+                                          join usr in _context.tbl_user on a.tbl_user_id equals usr.id
+                                          join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
+                                          join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
+                                          join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
+                                          join pS in _context.tbl_permit_status on a.status equals pS.id
+                                          join reg in _context.tbl_region on usr.tbl_region_id equals reg.id
+                                          join prov in _context.tbl_province on usr.tbl_province_id equals prov.id
+                                          join ct in _context.tbl_city on usr.tbl_city_id equals ct.id
+                                          join csaw in _context.tbl_chainsaw on usr.id equals csaw.user_id
+                                          join brngy in _context.tbl_brgy on usr.tbl_brgy_id equals brngy.id
+                                          where a.tbl_user_id == usid && a.id == applid
+                                          select new ApplicantListViewModel
+                                          {
+                                              id = a.id,
+                                              tbl_user_id = usid,
+                                              full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
+                                              full_address = usr.street_address + " " + brngy.name + " " + ct.name + " " + prov.name + " " + reg.name,
+                                              email = usr.email,
+                                              contact = usr.contact_no,
+                                              application_type = appt.name,
+                                              permit_type = pT.name,
+                                              permit_status = pS.status,
+                                              qty = a.qty,
+                                              user_type = usrtyps.name,
+                                              valid_id = usr.valid_id,
+                                              valid_id_no = usr.valid_id_no,
+                                              birth_date = usr.birth_date.ToString(),
+                                              comment = usr.comment,
+                                              chainsawBrand = csaw.Brand,
+                                              chainsawModel = csaw.Model,
+                                              Engine = csaw.Engine,
+                                              powerSource = csaw.Power,
+                                              Watt = csaw.watt,
+                                              hp = csaw.hp,
+                                              gb = csaw.gb,
+                                              chainsaw_serial_number = csaw.chainsaw_serial_number,
+                                              chainsawSupplier = csaw.supplier,
+                                              date_purchase = csaw.date_purchase
+                                          }).FirstOrDefault();
+                    mymodel.applicantViewModels = applicationMod;
+                }
+                else
+                {
+                    var applicationMod = (from a in applicationlist
+                                          join usr in _context.tbl_user on a.tbl_user_id equals usr.id
+                                          join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
+                                          join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
+                                          join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
+                                          join pS in _context.tbl_permit_status on a.status equals pS.id
+                                          join reg in _context.tbl_region on usr.tbl_region_id equals reg.id
+                                          join prov in _context.tbl_province on usr.tbl_province_id equals prov.id
+                                          join ct in _context.tbl_city on usr.tbl_city_id equals ct.id
+                                          join brngy in _context.tbl_brgy on usr.tbl_brgy_id equals brngy.id
+                                          where a.tbl_user_id == usid && a.id == applid
+                                          select new ApplicantListViewModel
+                                          {
+                                              id = a.id,
+                                              tbl_user_id = usid,
+                                              full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
+                                              full_address = usr.street_address + " " + brngy.name + " " + ct.name + " " + prov.name + " " + reg.name,
+                                              email = usr.email,
+                                              contact = usr.contact_no,
+                                              application_type = appt.name,
+                                              permit_type = pT.name,
+                                              permit_status = pS.status,
+                                              qty = a.qty,
+                                              user_type = usrtyps.name,
+                                              valid_id = usr.valid_id,
+                                              valid_id_no = usr.valid_id_no,
+                                              birth_date = usr.birth_date.ToString(),
+                                              comment = usr.comment
+                                          }).FirstOrDefault();
+                    mymodel.applicantViewModels = applicationMod;
+                }
 
                 string commentType = "";
                 if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector"))
