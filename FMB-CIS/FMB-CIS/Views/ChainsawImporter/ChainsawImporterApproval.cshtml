@@ -255,13 +255,19 @@
                         <div class="col-md-2"></div>
                         <div class="col-md-8">
                             <span class="text-secondary">
-                                Please select the file you want to address a comment.
+                                Please select who you want to address a comment.
                             </span>
-                            @* Dropdown to select which file to comment *@
-                            <select asp-for="tbl_Comments.tbl_files_id" class="form-select mb-4">
-                                @foreach (tbl_files file in Model.tbl_Files)
+                            @* Dropdown to select which user is addressed in the comment *@
+                            <select asp-for="tbl_Comments.comment_to" class="form-select mb-4">                                
+                                @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO") == true)
                                 {
-                                    <option value="@file.Id">@file.filename</option>
+                                    <option value="User To CENRO">@Model.applicantViewModels.full_name</option>
+                                    <option value="Inspector to CENRO">Inspector</option>
+                                }
+                                else if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true)
+                                {
+                                    <option value="User To Inspector">@Model.applicantViewModels.full_name</option>
+                                    <option value="Inspector to CENRO">CENRO</option>
                                 }
                             </select>
                             <textarea asp-for="tbl_Comments.comment" class="form-control mb-4" placeholder="Add comments here."></textarea>
@@ -273,19 +279,11 @@
         </form>
         <hr />
 
+        @* Conversation with User *@
         <div class="row d-flex justify-content-center px-0 mb-5">
-            @{
-                var prev = " ";
-            }
+            <label class="text-secondary small">Conversation with User</label>
             @foreach (CommentsViewModel item in Model.commentsViewModelsList)
             {
-
-                @* if (prev != item.fileName)
-            {
-            <section id="@item.fileName.Trim().Replace(" ","_")"></section>
-            } *@
-                prev = item.fileName;
-
                 <div class="row">
                     <div class="col-md-12 py-2">
                         <div class="px-2 py-1">
@@ -295,19 +293,12 @@
                                         @item.commenterName
                                     </div>
                                     <div class="col-md-6 text-end">
-                                        <span class="border rounded small px-2 fw-bold text-secondary">
-                                            @item.fileName
-                                        </span>
+                                        @item.date_created
                                     </div>
                                 </div>
                                 <div class="row d-flex mb-3">
                                     <div class="col-md-12 fst-normal fs-6">
                                         @item.comment
-                                    </div>
-                                </div>
-                                <div class="row d-flex">
-                                    <div class="col-md-12 text-end small text-muted pe-3">
-                                        @item.date_created
                                     </div>
                                 </div>
                             </div>
@@ -316,6 +307,42 @@
                 </div>
             }
         </div>
+        @* Inspector to CENRO Conversations*@
+        <div class="row d-flex justify-content-center px-0 mb-5">
+            @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true)
+            {
+                <label class="text-secondary small">Conversation with CENRO</label>
+            }
+            @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO") == true)
+            {
+                <label class="text-secondary small">Conversation with Inspector</label>
+            }
+            @foreach (CommentsViewModel item in Model.commentsViewModels2ndList)
+            {
+                <div class="row">
+                    <div class="col-md-12 py-2">
+                        <div class="px-2 py-1">
+                            <div class="border px-3 py-2">
+                                <div class="row d-flex justify-content-between mb-1">
+                                    <div class="col-md-6 fs-6 fw-bold text-secondary">
+                                        @item.commenterName
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        @item.date_created
+                                    </div>
+                                </div>
+                                <div class="row d-flex mb-3">
+                                    <div class="col-md-12 fst-normal fs-6">
+                                        @item.comment
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        
     </div>
 </div>
 
