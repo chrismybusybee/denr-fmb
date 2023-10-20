@@ -215,23 +215,53 @@ namespace FMB_CIS.Controllers
                                       }).FirstOrDefault();
                 mymodel.applicantViewModels = applicationMod;
 
-                //Display List of Comments for Application Approval
+                string commentType = "";
+                if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector"))
+                {
+                    commentType = "User To Inspector";
+                }
+                else if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO"))
+                {
+                    commentType = "User To CENRO";
+                }
+                //Display List of Comments for Application Approval (comments can be seen by user)
                 mymodel.commentsViewModelsList = (from c in _context.tbl_comments
                                                   where c.tbl_application_id == applid
-                                                  join f in _context.tbl_files on c.tbl_files_id equals f.Id
+                                                  //join f in _context.tbl_files on c.tbl_files_id equals f.Id
                                                   join usr in _context.tbl_user on c.created_by equals usr.id
                                                   select new CommentsViewModel
                                                   {
                                                       tbl_application_id = c.tbl_application_id,
-                                                      tbl_files_id = c.tbl_files_id,
-                                                      fileName = f.filename,
+                                                      //tbl_files_id = c.tbl_files_id,
+                                                      //fileName = f.filename,
+                                                      comment_to = c.comment_to,
                                                       comment = c.comment,
                                                       commenterName = usr.first_name + " " + usr.last_name + " " + usr.suffix,
                                                       created_by = c.created_by,
                                                       modified_by = c.modified_by,
                                                       date_created = c.date_created,
                                                       date_modified = c.date_modified
-                                                  }).OrderBy(f => f.fileName).ThenByDescending(d => d.date_created);
+                                                  }).Where(u => u.comment_to == commentType).OrderByDescending(d => d.date_created);
+
+                //Display List of Comments for Application Approval (comments for CENRO and Inspector)
+                mymodel.commentsViewModels2ndList = (from c in _context.tbl_comments
+                                                     where c.tbl_application_id == applid
+                                                     //join f in _context.tbl_files on c.tbl_files_id equals f.Id
+                                                     join usr in _context.tbl_user on c.created_by equals usr.id
+                                                     select new CommentsViewModel
+                                                     {
+                                                         tbl_application_id = c.tbl_application_id,
+                                                         //tbl_files_id = c.tbl_files_id,
+                                                         //fileName = f.filename,
+                                                         comment_to = c.comment_to,
+                                                         comment = c.comment,
+                                                         commenterName = usr.first_name + " " + usr.last_name + " " + usr.suffix,
+                                                         created_by = c.created_by,
+                                                         modified_by = c.modified_by,
+                                                         date_created = c.date_created,
+                                                         date_modified = c.date_modified
+                                                     }).Where(u => u.comment_to == "Inspector to CENRO").OrderByDescending(d => d.date_created);
+
                 return View(mymodel);
             }
 
@@ -400,7 +430,8 @@ namespace FMB_CIS.Controllers
             var commentsTbl = new tbl_comments();
             //commentsTbl.id = model.tbl_Comments.id;
             commentsTbl.tbl_application_id = Convert.ToInt32(appid);
-            commentsTbl.tbl_files_id = model.tbl_Comments.tbl_files_id;
+            //commentsTbl.tbl_files_id = model.tbl_Comments.tbl_files_id;
+            commentsTbl.comment_to = model.tbl_Comments.comment_to;
             commentsTbl.comment = model.tbl_Comments.comment;
             commentsTbl.created_by = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             commentsTbl.modified_by = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);

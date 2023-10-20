@@ -342,23 +342,43 @@ namespace FMB_CIS.Controllers
                 mymodel.applicantViewModels = applicationMod;
                 //mymodel.tbl_Users = UserInfo;
 
-                //Display List of Comments for Application Approval
+                //Display List of Comments for Application Approval (User to Inspector Conversation)
                 mymodel.commentsViewModelsList = (from c in _context.tbl_comments
                                                   where c.tbl_application_id == applid
-                                                  join f in _context.tbl_files on c.tbl_files_id equals f.Id
+                                                  //join f in _context.tbl_files on c.tbl_files_id equals f.Id
                                                   join usr in _context.tbl_user on c.created_by equals usr.id
                                                   select new CommentsViewModel
                                                   {
                                                       tbl_application_id = c.tbl_application_id,
-                                                      tbl_files_id = c.tbl_files_id,
-                                                      fileName = f.filename,
+                                                      //tbl_files_id = c.tbl_files_id,
+                                                      //fileName = f.filename,
+                                                      comment_to = c.comment_to,
                                                       comment = c.comment,
                                                       commenterName = usr.first_name + " " + usr.last_name + " " + usr.suffix,
                                                       created_by = c.created_by,
                                                       modified_by = c.modified_by,
                                                       date_created = c.date_created,
                                                       date_modified = c.date_modified
-                                                  }).OrderBy(f => f.fileName).ThenByDescending(d => d.date_created);
+                                                  }).Where(u => u.comment_to == "User To Inspector").OrderByDescending(d => d.date_created);
+
+                //Display List of Comments for Application Approval (User to CENRO Conversation)
+                mymodel.commentsViewModels2ndList = (from c in _context.tbl_comments
+                                                  where c.tbl_application_id == applid
+                                                  //join f in _context.tbl_files on c.tbl_files_id equals f.Id
+                                                  join usr in _context.tbl_user on c.created_by equals usr.id
+                                                  select new CommentsViewModel
+                                                  {
+                                                      tbl_application_id = c.tbl_application_id,
+                                                      //tbl_files_id = c.tbl_files_id,
+                                                      //fileName = f.filename,
+                                                      comment_to = c.comment_to,
+                                                      comment = c.comment,
+                                                      commenterName = usr.first_name + " " + usr.last_name + " " + usr.suffix,
+                                                      created_by = c.created_by,
+                                                      modified_by = c.modified_by,
+                                                      date_created = c.date_created,
+                                                      date_modified = c.date_modified
+                                                  }).Where(u => u.comment_to == "User To CENRO").OrderByDescending(d => d.date_created);
 
                 return View(mymodel);
             }
@@ -513,7 +533,8 @@ namespace FMB_CIS.Controllers
             var commentsTbl = new tbl_comments();
             //commentsTbl.id = model.tbl_Comments.id;
             commentsTbl.tbl_application_id = Convert.ToInt32(appid);
-            commentsTbl.tbl_files_id = model.tbl_Comments.tbl_files_id;
+            //commentsTbl.tbl_files_id = model.tbl_Comments.tbl_files_id;
+            commentsTbl.comment_to = model.tbl_Comments.comment_to;
             commentsTbl.comment = model.tbl_Comments.comment;
             commentsTbl.created_by = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             commentsTbl.modified_by = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
