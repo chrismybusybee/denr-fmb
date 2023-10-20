@@ -600,11 +600,11 @@
             $(".form-group").removeClass("has-error");
             for (var i = 0; i < curInputs.length; i++) {
                 if (!curInputs[i].validity.valid) {
-                    isValid = true;
+                    isValid = false;
                     $(curInputs[i]).closest(".form-group").addClass("has-error");
                 }
             }
-
+            
             if (isValid && curStepBtn != 'step-2') {   
                 //console.log(curStepBtn);
                 nextStepWizard.removeAttr('disabled').trigger('click'); 

@@ -13,6 +13,18 @@ namespace FMB_CIS.Models
         public string? Power { get; set; }
 
         public string? status { get; set; }
-
+        public int? watt { get; set; }
+        public int? hp { get; set; }
+        public string? gb { get; set; }
+        public string? supplier { get; set; }
+        public DateTime? date_purchase { get; set; }
+        public bool? is_active { get; set; }
+        public DateTime? date_created { get; set; }
+        public DateTime? date_modified { get; set; }
+        public int? created_by { get; set; }
+        public int? modified_by { get; set; }
+        public string? chainsaw_serial_number { get; set; }
+        public DateTime? chainsaw_date_of_registration { get; set; }
+        public DateTime? chainsaw_date_of_expiration { get; set; }
     }
 }

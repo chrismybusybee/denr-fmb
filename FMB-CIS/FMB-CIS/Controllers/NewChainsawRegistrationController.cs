@@ -17,6 +17,8 @@ using Microsoft.Extensions.Configuration;
 using FMB_CIS.Data;
 using FMB_CIS.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Web.Helpers;
+using Microsoft.Extensions.Hosting;
 
 namespace FMB_CIS.Controllers
 {
@@ -35,6 +37,8 @@ namespace FMB_CIS.Controllers
         }
         public IActionResult Index()
         {
+            string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
+            ViewData["BaseUrl"] = host;
             return View();
         }
 
@@ -51,7 +55,7 @@ namespace FMB_CIS.Controllers
                 //DAL dal = new DAL();
 
                 //SAVE permit application
-                model.tbl_Application.tbl_application_type_id = 1;
+                model.tbl_Application.tbl_application_type_id = 3;
                 model.tbl_Application.status = 1;
                 model.tbl_Application.tbl_user_id = userID;
                 model.tbl_Application.tbl_permit_type_id = 13;
@@ -61,7 +65,28 @@ namespace FMB_CIS.Controllers
                 model.tbl_Application.date_created = DateTime.Now;
                 model.tbl_Application.date_modified = DateTime.Now;
 
+                //SAVE to tbl_chainsaw
+                model.TBL_Chainsaw.user_id = userID;
+                model.TBL_Chainsaw.status = "Owner";
+                model.TBL_Chainsaw.is_active = true;
+                model.TBL_Chainsaw.created_by = userID;
+                model.TBL_Chainsaw.modified_by = userID;
+                model.TBL_Chainsaw.date_created = DateTime.Now;
+                model.TBL_Chainsaw.date_modified = DateTime.Now;
+
+                model.TBL_Chainsaw.chainsaw_date_of_registration = DateTime.Now;
+                model.TBL_Chainsaw.chainsaw_date_of_expiration = DateTime.Now.AddYears(3);
+
+                if (model.TBL_Chainsaw.Power == "Gas")
+                {
+                    model.TBL_Chainsaw.watt = null;
+                }
+                else if (model.TBL_Chainsaw.Power == "Electric" || model.TBL_Chainsaw.Power == "Battery")
+                {
+                    model.TBL_Chainsaw.hp = null;
+                }
                 _context.tbl_application.Add(model.tbl_Application);
+                _context.tbl_chainsaw.Add(model.TBL_Chainsaw);
                 _context.SaveChanges();
                 int? appID = model.tbl_Application.id;
 
@@ -100,8 +125,8 @@ namespace FMB_CIS.Controllers
                     }
                 }
                 //Email
-                var subject = "Permit to Import Application Status";
-                var body = "Greetings! \n We would like to inform you that your Permit to Import Application has been received.";
+                var subject = "Chainsaw Registration Application Status";
+                var body = "Greetings! \n We would like to inform you that your Chainsaw Registration Application has been received.";
                 EmailSender.SendEmailAsync(((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value, subject, body);
 
                 ModelState.Clear();
@@ -115,6 +140,14 @@ namespace FMB_CIS.Controllers
             //    return View(model);
             //    //return RedirectToAction("Index", "Dashboard");
             //}
+        }
+
+        [HttpPost, ActionName("CheckExistingSerialNumOnField")]
+        public JsonResult CheckExistingSerialNumOnField(string serialNum)
+        {
+            var chainsawSerialNumExist = _context.tbl_chainsaw.Where(m => m.chainsaw_serial_number == serialNum).Any();
+            return Json(chainsawSerialNumExist);
+            
         }
     }
 }

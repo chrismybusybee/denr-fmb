@@ -4,132 +4,154 @@
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "New Chainsaw Registration";
+    var baseurl = ViewBag.BaseUrl;
 }
 
 <div id="card-container">
-    <div id="card">
-        @if(ViewBag.message != null)
-        {
-            <div class="alert alert-success" role="alert">
-                @ViewBag.message
-            </div>
-        }
-        <a href="@Url.Action("Index", "Dashboard")" class="mx-2" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
-        <div class="row m-0 my-4">
-            <div class="col-md-6">
-                <div class="p-4 shadow h-100">
-                    <h2 class="text-secondary fw-bold mb-4">Owner Details</h2>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            First Name
-                        </label>
-                        <input type="text" class="form-control" placeholder="Enter first name" />
-                        <span class="text-danger"></span>
+    <form asp-action="Index" asp-controller="NewChainsawRegistration">
+        <div id="card">
+            @if(ViewBag.message != null)
+            {
+                <div class="alert alert-success" role="alert">
+                    @ViewBag.message
+                </div>
+            }
+            <a href="@Url.Action("Index", "Dashboard")" class="mx-2" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
+            <div class="row m-0 my-4">
+                <div class="col-md-6">
+                    <div class="p-4 shadow h-100">
+                        <h2 class="text-secondary fw-bold mb-4">Chainsaw Details</h2>
+                        <div class="form-group mb-3">
+                            <label class="text-secondary fw-bold">
+                                Chainsaw Brand
+                            </label>
+                            <input asp-for="TBL_Chainsaw.Brand" type="text" class="form-control" placeholder="Enter chainsaw brand" />
+                            <span class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="text-secondary fw-bold">
+                                Chainsaw Model
+                            </label>
+                            <input asp-for="TBL_Chainsaw.Model" type="text" class="form-control" placeholder="Enter chainsaw model" />
+                            <span class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="text-secondary fw-bold">
+                                Engine
+                            </label>
+                            <input asp-for="TBL_Chainsaw.Engine" type="text" class="form-control" placeholder="Enter chainsaw engine" />
+                            <span class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="text-secondary fw-bold">
+                                Power Source
+                            </label>
+                            @* <input type="text" class="form-control" placeholder="Enter suffix (if any)" /> *@
+                            <select asp-for="TBL_Chainsaw.Power" class="form-select" onchange="powerClassification(this)">
+                                <option value="Electric">Electric</option>
+                                <option value="Gas">Gas</option>
+                                <option value="Battery">Battery</option>
+                            </select>
+                            <span class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3" id="WattDiv">
+                            <label class="text-secondary fw-bold">
+                                Watt
+                            </label>
+                            <input asp-for="TBL_Chainsaw.watt" type="number" class="form-control" placeholder="Enter chainsaw wattage"></input>
+                            <span class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3" id="HorsepowerDiv" style="display:none">
+                            <label class="text-secondary fw-bold">
+                                Horsepower
+                            </label>
+                            <input asp-for="TBL_Chainsaw.hp" type="number" class="form-control" placeholder="Enter chainsaw horsepower" />
+                            <span class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="text-secondary fw-bold">
+                                Length of Guidebar
+                            </label>
+                            <input asp-for="TBL_Chainsaw.gb" class="form-control" placeholder="Enter the length of Guidebar (ex. 30 cm)" />
+                            <span class="text-danger"></span>
+                        </div>
+                        
                     </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Middle Name
-                        </label>
-                        <input type="text" class="form-control" placeholder="Enter middle name" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Last Name
-                        </label>
-                        <input type="text" class="form-control" placeholder="Enter last name" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Suffix
-                        </label>
-                        <input type="text" class="form-control" placeholder="Enter suffix (if any)" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Address
-                        </label>
-                        <textarea class="form-control" placeholder="Enter address"></textarea>
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Email
-                        </label>
-                        <input type="text" class="form-control" placeholder="Enter email" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Contact No.
-                        </label>
-                        <input type="text" class="form-control" placeholder="Enter contact number" />
-                        <span class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-4 shadow h-100">
+                        <h2 class="text-secondary fw-bold mb-4"></h2>
+                        <div class="form-group mb-3">
+                            <label asp-for="TBL_Chainsaw.chainsaw_serial_number" class="text-secondary fw-bold">Chainsaw Serial Number</label>
+                            <input asp-for="TBL_Chainsaw.chainsaw_serial_number" class="form-control" placeholder="Enter Chainsaw Serial Number" required="required" id="chSerNumInput" onchange="checkExistingSerialNum()" />
+                            <span asp-validation-for="TBL_Chainsaw.chainsaw_serial_number" class="text-danger"></span>
+                            <span id="serialNumValidation" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="text-secondary fw-bold">
+                                Chainsaw Supplier
+                            </label>
+                            <input asp-for="TBL_Chainsaw.supplier" type="text" class="form-control" placeholder="Enter the name of supplier" />
+                            <span class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="text-secondary fw-bold">
+                                Enter Date of Purchase
+                            </label>
+                            <input asp-for="TBL_Chainsaw.date_purchase" type="date" class="form-control" />
+                            <span class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="text-secondary fw-bold">
+                                Number of chainsaws to registered
+                            </label>
+                            <input type="number" asp-for="tbl_Application.qty" class="form-control" placeholder="Enter number of chainsaws to be registered" />
+                            <span class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="text-secondary fw-bold">
+                                Specification
+                            </label>
+                            <textarea class="form-control" asp-for="tbl_Application.tbl_specification_id" placeholder="Enter specification"></textarea>
+                            <span class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="text-secondary fw-bold">
+                                Purpose
+                            </label>
+                            <textarea class="form-control" asp-for="tbl_Application.purpose" placeholder="Enter purpose"></textarea>
+                            <span class="text-danger"></span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="p-4 shadow h-100">
-                    <h2 class="text-secondary fw-bold mb-4">Chainsaw Details</h2>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Number of chainsaws to registered
-                        </label>
-                        <input type="text" class="form-control" placeholder="Enter number of chainsaws to be registered" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Specification
-                        </label>
-                        <textarea class="form-control" asp-for="tbl_Application.tbl_specification_id" placeholder="Enter specification"></textarea>
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Purpose
-                        </label>
-                        <textarea class="form-control" placeholder="Enter purpose"></textarea>
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Set Date of Inspection
-                        </label>
-                        <input type="date" class="form-control" />
-                        <span class="text-danger"></span>
+            <div class="row m-0 mb-4">
+                <div class="col-md-12">
+                    <div class="p-4 shadow h-100">
+                        <div class="d-flex gap-4 mb-5">
+                            <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
+                            <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
+                                <i data-feather="upload"></i> Upload
+                            </label>
+                            <input type="file" asp-for="filesUpload.Files" class="form-control file" accept="application/pdf" multiple hidden />
+                            @* <button type="button" class="btn btn-primary"><i data-feather="upload"></i> Upload</button>*@
+                        </div>
+                        <div class="d-flex mb-4 gap-3 output">
+                            @*Cards for files*@
+                            <p id="files-area">
+                                <span id="filesList">
+                                    <span id="files-names"></span>
+                                </span>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row m-0 mb-4">
-            <div class="col-md-12">
-                <div class="p-4 shadow h-100">
-                    <div class="d-flex gap-4 mb-5">
-                        <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
-                        <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
-                            <i data-feather="upload"></i> Upload
-                        </label>
-                        <input type="file" asp-for="filesUpload.Files" class="form-control file" accept="application/pdf" multiple hidden />
-                        @* <button type="button" class="btn btn-primary"><i data-feather="upload"></i> Upload</button>*@
-                    </div>
-                    <div class="d-flex mb-4 gap-3 output">
-                        @*Cards for files*@
-                        <p id="files-area">
-                            <span id="filesList">
-                                <span id="files-names"></span>
-                            </span>
-                        </p>
-                    </div>
-                </div>
+            <div class="d-flex justify-content-end pe-2 me-1">
+                <button class="btn btn-primary mb-4" id="submitbtnForChainsawReg">Submit</button>
             </div>
         </div>
-        <div class="d-flex justify-content-end pe-2 me-1">
-            <button class="btn btn-primary mb-4">Submit</button>
-        </div>
-    </div>
+    </form>
 </div>
 
 
@@ -231,7 +253,9 @@
             $("#confirmSuccessModal").modal("show");
         });
     });
-    const form = document.getElementById('OwnerRegForm');
+
+
+    const form = document.getElementById('ChainsawRegForm');
     const showModalButton = document.getElementById('btnSubmit');
     const confirmationModal = document.getElementById('confirmSubmitModal');
     const confirmButton = document.getElementById('confirmBtn');
@@ -261,6 +285,39 @@
             hideModal();
         }
     });
+
+
+    function powerClassification(that) {
+        if (that.value == "Gas") {
+            document.getElementById("HorsepowerDiv").style.display = "block";
+            document.getElementById("WattDiv").style.display = "none";
+        }
+
+        else {
+            document.getElementById("HorsepowerDiv").style.display = "none";
+            document.getElementById("WattDiv").style.display = "block";
+        }
+    }
+
+    var chainsawSerNumExist = false;
+    //Check Existing Email
+    function checkExistingSerialNum() {
+        var serialNumValue = document.getElementById("chSerNumInput").value;
+        var url = "@baseurl";
+        $.post(url + "NewChainsawRegistration/CheckExistingSerialNumOnField", { serialNum: serialNumValue }, function (data) {
+            //debugger;
+            chainsawSerNumExist = data;
+            if (data == true) {
+                //console.log(chainsawSerNumExist);
+                document.getElementById("serialNumValidation").innerHTML = "Serial number exists!";
+                document.getElementById("submitbtnForChainsawReg").disabled = true;
+            }
+            else {
+                document.getElementById("serialNumValidation").innerHTML = "";
+                document.getElementById("submitbtnForChainsawReg").disabled = false;
+            }
+        });
+    }
 
 </script>
 

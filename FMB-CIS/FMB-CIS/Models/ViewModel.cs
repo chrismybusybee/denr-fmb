@@ -31,6 +31,7 @@
         public IEnumerable<CommentsViewModel>? commentsViewModelsList { get; set; }
         public IEnumerable<CommentsViewModel>? commentsViewModels2ndList { get; set; }
         public FileUpload? profilePicUpload { get; set; }
+        public tbl_chainsaw? TBL_Chainsaw { get; set; }
 
     }
 }
