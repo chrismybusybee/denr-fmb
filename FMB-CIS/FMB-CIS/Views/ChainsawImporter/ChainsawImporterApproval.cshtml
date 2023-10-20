@@ -11,18 +11,21 @@
 <div id="card-container">
     <div id="card">
         <form asp-action="ChainsawImporterApproval" method="post" enctype="multipart/form-data" id="ApplApprvlForm">
-            <div class="row m-0">
+            <<div class="row m-0">
+                @* <input asp-for="applicantViewModels.id" value="@Model.applicantViewModels.id" type="hidden" />
+                <input asp-for="applicantViewModels.tbl_user_id" value="@Model.applicantViewModels.tbl_user_id" type="hidden" /> *@
                 <input asp-for="uid" type="hidden" />
                 <input asp-for="appid" type="hidden" />
                 <div class="d-flex justify-content-end gap-2">
-                    @if (ViewBag.Cenro)
+                    @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO") == true)
                     {
-                        @* <input id="ApproveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Approve" />
-                        <input class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="submit" value="Decline" /> *@
+                        @* <input id="approveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Approve" />
+                    <input id="declineBtn" class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="submit" value="Decline" /> *@
                         <button type="button" id="approveBtn" class="btn btn-primary w-105">Approve</button>
                         <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
+
                     }
-                    @if (ViewBag.Inspector)
+                    @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true)
                     {
                         @* <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" /> *@
                         <button type="button" id="approveBtn" class="btn btn-primary w-105">Approve</button>
@@ -33,12 +36,8 @@
             </div>
             <hr />
             <div id="profileSection" class="row m-0">
-                <div class="col-md-3">
-                    <div class="d-flex justify-content-center gap-1">
-                        <img src="/assets/images/default-avatar.png" class="img-fluid rounded" />
-                    </div>
-                </div>
-                <div class="col-md-9">
+
+                <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-10">
                             <div class="row mb-5">
@@ -48,10 +47,8 @@
                                             User Type
                                         </label>
                                         <span class="fw-bold">
-                                            @* @Html.DisplayFor(model => model.user_type) *@
+                                            @* <label asp-for="applicantViewModels.user_type" value="@Model.applicantViewModels.user_type">@Model.applicantViewModels.user_type</label> *@
                                             @Html.DisplayFor(model => model.applicantViewModels.user_type)
-                                            @* @Html.DisplayFor(modelItem => item.Engine) *@
-                                            @* Chainsaw Importer *@
                                         </span>
                                     </div>
                                 </div>
@@ -61,6 +58,7 @@
                                             Name
                                         </label>
                                         <span class="fw-bold">
+                                            @* <label asp-for="applicantViewModels.full_name" value="@Model.applicantViewModels.full_name">@Model.applicantViewModels.full_name</label> *@
                                             @Html.DisplayFor(model => model.applicantViewModels.full_name)
                                         </span>
                                     </div>
@@ -73,6 +71,7 @@
                                             Email Address
                                         </label>
                                         <span class="fw-bold">
+                                            @* <label asp-for="email" value="@Model.email">@Model.email</label> *@
                                             @Html.DisplayFor(model => model.applicantViewModels.email)
                                             @Html.HiddenFor(model => model.applicantViewModels.email)
                                         </span>
@@ -84,6 +83,7 @@
                                             Contact Number
                                         </label>
                                         <span class="fw-bold">
+                                            @* <label asp-for="applicantViewModels.contact" value="@Model.applicantViewModels.contact">@Model.applicantViewModels.contact</label> *@
                                             @Html.DisplayFor(model => model.applicantViewModels.contact)
                                         </span>
                                     </div>
@@ -93,20 +93,22 @@
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
-                                            Valid ID
+                                            Permit Type
                                         </label>
                                         <span class="fw-bold">
-                                            @Html.DisplayFor(model => model.applicantViewModels.valid_id)
+                                            @* <label asp-for="applicantViewModels.valid_id" value="@Model.applicantViewModels.valid_id">@Model.applicantViewModels.valid_id</label> *@
+                                            @Html.DisplayFor(model => model.applicantViewModels.permit_type)
                                         </span>
                                     </div>
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
-                                            Valid ID Number
+                                            Permit Status
                                         </label>
                                         <span class="fw-bold">
-                                            @Html.DisplayFor(model => model.applicantViewModels.valid_id_no)
+                                            @* <label asp-for="applicantViewModels.valid_id_no" value="@Model.applicantViewModels.valid_id_no">@Model.applicantViewModels.valid_id_no</label> *@
+                                            @Html.DisplayFor(model => model.applicantViewModels.permit_status)
                                         </span>
                                     </div>
                                 </div>
@@ -115,68 +117,27 @@
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
-                                            Birth Date
+                                            Chainsaw Quantity
                                         </label>
                                         <span class="fw-bold">
-                                            @Html.DisplayFor(model => model.applicantViewModels.birth_date)
+                                            @* <label asp-for="applicantViewModels.birth_date" value="@Model.applicantViewModels.birth_date">@Model.applicantViewModels.birth_date</label> *@
+                                            @Html.DisplayFor(model => model.applicantViewModels.qty)
                                         </span>
                                     </div>
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
-                                            Street Address
+                                            Address
                                         </label>
                                         <span class="fw-bold">
-                                            @Html.DisplayFor(model => model.applicantViewModels.address)
+                                            @* <label asp-for="applicantViewModels.address" value="@Model.applicantViewModels.address">@Model.applicantViewModels.address</label> *@
+                                            @Html.DisplayFor(model => model.applicantViewModels.full_address)
                                         </span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mb-5">
-                                <div class="col-md-5">
-                                    <div class="form-group d-flex flex-column gap-1">
-                                        <label class="text-secondary small">
-                                            Region
-                                        </label>
-                                        <span class="fw-bold">
-                                            @Html.DisplayFor(model => model.applicantViewModels.region)
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="form-group d-flex flex-column gap-1">
-                                        <label class="text-secondary small">
-                                            Province
-                                        </label>
-                                        <span class="fw-bold">
-                                            @Html.DisplayFor(model => model.applicantViewModels.province)
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mb-5">
-                                <div class="col-md-5">
-                                    <div class="form-group d-flex flex-column gap-1">
-                                        <label class="text-secondary small">
-                                            City/Municipality
-                                        </label>
-                                        <span class="fw-bold">
-                                            @Html.DisplayFor(model => model.applicantViewModels.city)
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="form-group d-flex flex-column gap-1">
-                                        <label class="text-secondary small">
-                                            Barangay
-                                        </label>
-                                        <span class="fw-bold">
-                                            @Html.DisplayFor(model => model.applicantViewModels.brgy)
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </div>

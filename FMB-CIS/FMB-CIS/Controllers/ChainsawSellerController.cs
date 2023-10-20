@@ -214,6 +214,8 @@ namespace FMB_CIS.Controllers
                                           tbl_user_id = usid,
                                           full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
                                           email = usr.email,
+                                          full_address = usr.street_address + " " + brngy.name + " " + ct.name + " " + prov.name + " " + reg.name,
+                                          qty = a.qty,
                                           contact = usr.contact_no,
                                           address = usr.street_address,
                                           application_type = appt.name,

@@ -137,14 +137,8 @@
                                             Address
                                         </label>
                                         <span class="fw-bold">
-                                            @if (@Model.applicantViewModels.permit_status != "For Inspector Approval")
-                                            {
-                                                <label asp-for="applicantViewModels.address" value="@Model.applicantViewModels.address">@Model.applicantViewModels.address</label>
-                                            }
-                                            else
-                                            {
-                                                <input asp-for="applicantViewModels.address" value="@Model.applicantViewModels.address" class="form-control" type="text" />
-                                            }
+
+                                            <label asp-for="applicantViewModels.full_address" value="@Model.applicantViewModels.full_address">@Model.applicantViewModels.full_address</label>
                                         </span>
                                     </div>
                                 </div>
@@ -154,9 +148,11 @@
                                             Inspection Date
                                         </label>
                                         <span class="fw-bold">
-                                            
+                                            @if (@Model.applicantViewModels.inspectionDate != null)
+                                            {
                                                 <label asp-for="applicantViewModels.inspectionDate" value="@Model.applicantViewModels.inspectionDate">@Model.applicantViewModels.inspectionDate</label>
-                                            
+                                            }
+
 
                                         </span>
                                     </div>

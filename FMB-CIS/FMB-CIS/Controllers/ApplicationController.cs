@@ -319,12 +319,17 @@ namespace FMB_CIS.Controllers
                                       join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                       join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                       join pS in _context.tbl_permit_status on a.status equals pS.id
+                                      join reg in _context.tbl_region on usr.tbl_region_id equals reg.id
+                                      join prov in _context.tbl_province on usr.tbl_province_id equals prov.id
+                                      join ct in _context.tbl_city on usr.tbl_city_id equals ct.id
+                                      join brngy in _context.tbl_brgy on usr.tbl_brgy_id equals brngy.id
                                       where a.tbl_user_id == usid && a.id == applid
                                       select new ApplicantListViewModel
                                       {
                                           id = a.id,
                                           tbl_user_id = usid,
                                           full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
+                                          full_address = usr.street_address + " " + brngy.name + " " + ct.name + " " + prov.name + " " + reg.name,
                                           email = usr.email,
                                           permit_type = pT.name,
                                           permit_status = pS.status,
@@ -333,7 +338,7 @@ namespace FMB_CIS.Controllers
                                           qty = a.qty,
                                           specification = a.tbl_specification_id,
                                           inspectionDate = a.date_of_inspection,
-                                          address = a.supplier_address,
+                                          address = usr.street_address,
                                           expectedTimeArrived = a.expected_time_arrival,
                                           expectedTimeRelease = a.expected_time_release,
                                           purpose = a.purpose
