@@ -120,11 +120,11 @@ namespace FMB_CIS.Controllers
                 //END FOR FILE DOWNLOAD
 
                 //Profile Photo Source
-                bool profilePhotoExist = _context.tbl_files.Where(f => f.tbl_user_id == uid && f.path.Contains("UserPhotos")).Any();
+                bool profilePhotoExist = _context.tbl_files.Where(f => f.tbl_user_id == uid && f.path.Contains("UserPhotos") && f.is_active == true).Any();
                 if(profilePhotoExist == true)
                 {
-                    var profilePhoto = _context.tbl_files.Where(f => f.tbl_user_id == uid && f.path.Contains("UserPhotos")).FirstOrDefault();
-                    ViewBag.profilePhotoSource = profilePhoto.path.Replace("/","\\") + "\\" + profilePhoto.filename;
+                    var profilePhoto = _context.tbl_files.Where(f => f.tbl_user_id == uid && f.path.Contains("UserPhotos") && f.is_active == true).FirstOrDefault();
+                    ViewBag.profilePhotoSource = "/Files/UserPhotos/"+ profilePhoto.filename;
                 }
                 else
                 {
@@ -268,6 +268,52 @@ namespace FMB_CIS.Controllers
                     _context.SaveChanges();
                 }
             }
+            //Check if profilePhotoExist is true
+            bool profilePhotoExist = _context.tbl_files.Where(f => f.tbl_user_id == uid && f.path.Contains("UserPhotos")).Any();
+            if (profilePhotoExist == true)
+            {
+                var existingProfilePhoto = _context.tbl_files.Where(f => f.tbl_user_id == uid && f.path.Contains("UserPhotos")).FirstOrDefault();
+                existingProfilePhoto.is_active = false;
+                _context.Update(existingProfilePhoto);
+                _context.SaveChanges();
+            }
+            //Profile Pic Upload
+            if (model.profilePicUpload != null)
+            {
+                foreach (var pPicFile in model.profilePicUpload.Files)
+                {
+                    var profilePicFilesDB = new tbl_files();
+                    FileInfo pPicFileInfo = new FileInfo(pPicFile.FileName);
+                    string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserPhotos");
+
+                    //create folder if not exist
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+
+
+                    string fileNameWithPath = Path.Combine(path, pPicFile.FileName);
+
+                    using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                    {
+                        pPicFile.CopyTo(stream);
+                    }
+                    profilePicFilesDB.tbl_user_id = uid;
+                    profilePicFilesDB.created_by = uid;
+                    profilePicFilesDB.modified_by = uid;
+                    profilePicFilesDB.date_created = DateTime.Now;
+                    profilePicFilesDB.date_modified = DateTime.Now;
+                    profilePicFilesDB.filename = pPicFile.FileName;
+                    profilePicFilesDB.path = path;
+                    profilePicFilesDB.tbl_file_type_id = pPicFileInfo.Extension;
+                    profilePicFilesDB.tbl_file_sources_id = pPicFileInfo.Extension;
+                    profilePicFilesDB.file_size = Convert.ToInt32(pPicFile.Length);
+                    profilePicFilesDB.is_active = true;
+                    _context.tbl_files.Add(profilePicFilesDB);
+                    _context.SaveChanges();
+                }
+            }
+            //END FOR Profile Pic UPLOAD
+
             //Email
             var subject = "User Registration Status";
             var body = "Greetings! \n We would like to inform you have successfully edited some information on your User Account.";
@@ -354,7 +400,7 @@ namespace FMB_CIS.Controllers
                     //mymodel.acctApprovalViewModels = (AcctApprovalViewModel?)userinfoList;
 
                     //File Paths from Database
-                    var filesFromDB = _context.tbl_files.Where(f => f.tbl_user_id == usid).ToList();
+                    var filesFromDB = _context.tbl_files.Where(f => f.tbl_user_id == usid && !f.path.Contains("UserPhotos")).ToList();
                     List<tbl_files> files = new List<tbl_files>();
 
                     foreach (var fileList in filesFromDB)
@@ -367,18 +413,17 @@ namespace FMB_CIS.Controllers
                     //END FOR FILE DOWNLOAD
 
                     //Profile Photo Source
-                    //var profilePhoto = _context.tbl_files.Where(f => f.tbl_user_id == usid && f.path.Contains("UserPhotos")).FirstOrDefault();
-                    //ViewBag.profilePhotoSource = profilePhoto.path + "\\" + profilePhoto.filename;
-                    //END for Profile Photo Source
-
-                    //TEST
-                    /*
-                    var commentsFromDB = _context.tbl_comments.Where(u => u.tbl_user_id == usid).ToList();
-                    List<tbl_comments> comments = new List<tbl_comments>();
-                    foreach (var commentsList in commentsFromDB)
+                    bool profilePhotoExist = _context.tbl_files.Where(f => f.tbl_user_id == usid && f.path.Contains("UserPhotos") && f.is_active == true).Any();
+                    if (profilePhotoExist == true)
                     {
-                        comments.Add(new tbl_comments {id = commentsList.id  });
-                    }*/
+                        var profilePhoto = _context.tbl_files.Where(f => f.tbl_user_id == usid && f.path.Contains("UserPhotos") && f.is_active == true).FirstOrDefault();
+                        ViewBag.profilePhotoSource = "/Files/UserPhotos/" + profilePhoto.filename;
+                    }
+                    else
+                    {
+                        ViewBag.profilePhotoSource = "/assets/images/default-avatar.png";
+                    }
+                    //END for Profile Photo Source
                     //Display List of Comments
                     mymodel.commentsViewModelsList = (from c in _context.tbl_comments
                                                       where c.tbl_user_id == usid
