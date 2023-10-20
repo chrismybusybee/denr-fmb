@@ -13,6 +13,7 @@ namespace FMB_CIS.Models
         public string permit_type { get; set; }
         public int status { get; set; }
         public string full_name { get; set; }
+        public string full_address { get; set; }
         public string? email { get; set; }
         public string contact { get; set; }
         public string address { get; set; }

@@ -37,12 +37,8 @@
             </div>
             <hr />
             <div id="profileSection" class="row m-0">
-                <div class="col-md-3">
-                    <div class="d-flex justify-content-center gap-1">
-                        <img src="/assets/images/default-avatar.png" class="img-fluid rounded" />
-                    </div>
-                </div>
-                <div class="col-md-9">
+                
+                <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-10">
                             <div class="row mb-5">
@@ -98,22 +94,22 @@
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
-                                            Valid ID
+                                            Permit Type
                                         </label>
                                         <span class="fw-bold">
                                             @* <label asp-for="applicantViewModels.valid_id" value="@Model.applicantViewModels.valid_id">@Model.applicantViewModels.valid_id</label> *@
-                                            @Html.DisplayFor(model => model.applicantViewModels.valid_id)
+                                            @Html.DisplayFor(model => model.applicantViewModels.permit_type)
                                         </span>
                                     </div>
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
-                                            Valid ID Number
+                                            Permit Status
                                         </label>
                                         <span class="fw-bold">
                                             @* <label asp-for="applicantViewModels.valid_id_no" value="@Model.applicantViewModels.valid_id_no">@Model.applicantViewModels.valid_id_no</label> *@
-                                            @Html.DisplayFor(model => model.applicantViewModels.valid_id_no)
+                                            @Html.DisplayFor(model => model.applicantViewModels.permit_status)
                                         </span>
                                     </div>
                                 </div>
@@ -122,22 +118,22 @@
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
-                                            Birth Date
+                                            Chainsaw Quantity
                                         </label>
                                         <span class="fw-bold">
                                             @* <label asp-for="applicantViewModels.birth_date" value="@Model.applicantViewModels.birth_date">@Model.applicantViewModels.birth_date</label> *@
-                                            @Html.DisplayFor(model => model.applicantViewModels.birth_date)
+                                            @Html.DisplayFor(model => model.applicantViewModels.qty)
                                         </span>
                                     </div>
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
-                                            Street Address
+                                            Address
                                         </label>
                                         <span class="fw-bold">
                                             @* <label asp-for="applicantViewModels.address" value="@Model.applicantViewModels.address">@Model.applicantViewModels.address</label> *@
-                                            @Html.DisplayFor(model => model.applicantViewModels.address)
+                                            @Html.DisplayFor(model => model.applicantViewModels.full_address)
                                         </span>
                                     </div>
                                 </div>

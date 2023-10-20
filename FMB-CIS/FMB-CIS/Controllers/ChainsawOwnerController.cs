@@ -197,20 +197,17 @@ namespace FMB_CIS.Controllers
                                           id = a.id,
                                           tbl_user_id = usid,
                                           full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
+                                          full_address = usr.street_address + " " + brngy.name + " " + ct.name + " " + prov.name + " " + reg.name,
                                           email = usr.email,
                                           contact = usr.contact_no,
-                                          address = usr.street_address,
                                           application_type = appt.name,
                                           permit_type = pT.name,
                                           permit_status = pS.status,
+                                          qty = a.qty,
                                           user_type = usrtyps.name,
                                           valid_id = usr.valid_id,
                                           valid_id_no = usr.valid_id_no,
                                           birth_date = usr.birth_date.ToString(),
-                                          region = reg.name,
-                                          province = prov.name,
-                                          city = ct.name,
-                                          brgy = brngy.name,
                                           comment = usr.comment
                                       }).FirstOrDefault();
                 mymodel.applicantViewModels = applicationMod;
@@ -284,6 +281,7 @@ namespace FMB_CIS.Controllers
         public IActionResult ChainsawOwnerApproval(ViewModel viewMod)
         {
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            string Role = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
 
             //viewMod.applicantListViewModels.FirstOrDefault(x=>x.comment)
             //string newComment = viewMod.applicantListViewModels.Where(x => x.tbl_user_id == uid).Select(v => v.comment).ToList().ToString();
@@ -297,11 +295,20 @@ namespace FMB_CIS.Controllers
             {
                 int usid = Convert.ToInt32(tbl_user_id);
                 int applid = Convert.ToInt32(id);
+                int stats = 0;
                 string buttonClicked = viewMod.decision;
                 if (buttonClicked == "Approve")
                 {
+                    if(Role == "DENR CENRO")
+                    {
+                        stats = 4;
+                    }
+                    else
+                    {
+                        stats = 3;
+                    }
                     //var applicationToUpdate = _context.tbl_application.Find(appID);
-                    var appli = new tbl_application() { id = applid, status = 2, date_modified = DateTime.Now, modified_by = loggedUserID };
+                    var appli = new tbl_application() { id = applid, status = stats, date_modified = DateTime.Now, modified_by = loggedUserID };
                     var usrdet = new tbl_user() { id = usid, comment = viewMod.applicantViewModels.comment };
                     using (_context)
                     {
@@ -319,6 +326,14 @@ namespace FMB_CIS.Controllers
                 }
                 else if (buttonClicked == "Decline")
                 {
+                    if (Role == "DENR CENRO")
+                    {
+                        stats = 5;
+                    }
+                    else
+                    {
+                        stats = 2;
+                    }
                     var appli = new tbl_application() { id = applid, status = 3, date_modified = DateTime.Now, modified_by = loggedUserID };
                     var usrdet = new tbl_user() { id = usid, comment = viewMod.applicantViewModels.comment };
                     using (_context)
@@ -415,7 +430,7 @@ namespace FMB_CIS.Controllers
                                      join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                      join pS in _context.tbl_permit_status on a.status equals pS.id
                                      //where a.tbl_user_id == userID
-                                     select new ApplicantListViewModel { id = a.id, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id };
+                                     select new ApplicantListViewModel { id = a.id, applicationDate = a.date_created, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id };
 
                 mymodel.applicantListViewModels = applicationMod;
 

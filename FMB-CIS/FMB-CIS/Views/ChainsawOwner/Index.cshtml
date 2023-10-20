@@ -145,13 +145,11 @@
             </div>
         
         <div class="d-flex justify-content-end pe-2 me-1">
-                <button id="btnSubmit" type="button" class="btn btn-primary mb-4">Submit</button>
+                <button id="btnSubmit" type="submit" class="btn btn-primary mb-4">Submit</button>
         </div>
         </form>
     </div>
 </div>
-
-
 
 
 
@@ -242,9 +240,9 @@
 
 
 
-        $("#btnSubmit").click(function () {
-            $("#confirmSubmitModal").modal("show");
-        });
+        //$("#btnSubmit").click(function () {
+          //  $("#confirmSubmitModal").modal("show");
+        //});
 
         $("#backBtn").click(function () {
             $("#confirmSubmitModal").modal("hide");
@@ -255,10 +253,10 @@
             $("#confirmSuccessModal").modal("show");
         });
     });
-    const formOwner = document.getElementById('OwnerRegForm');
-    const showModalButton = document.getElementById('btnSubmit');
-    const confirmationModal = document.getElementById('confirmSubmitModal');
-    const confirmButton = document.getElementById('confirmBtn');
+    //const formOwner = document.getElementById('OwnerRegForm');
+    //const showModalButton = document.getElementById('btnSubmit');
+    //const confirmationModal = document.getElementById('confirmSubmitModal');
+    //const confirmButton = document.getElementById('confirmBtn');
 
     // Function to display the modal
     function showModal() {
