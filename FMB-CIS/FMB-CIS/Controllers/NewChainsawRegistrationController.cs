@@ -39,7 +39,31 @@ namespace FMB_CIS.Controllers
         {
             string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
             ViewData["BaseUrl"] = host;
-            return View();
+
+            //Set Roles who can access this page
+            int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            bool? usrStatus = _context.tbl_user.Where(u => u.id == uid).Select(u => u.status).SingleOrDefault();
+
+            if (usrStatus != true) //IF User is not yet approved by the admin.
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+            if (usrRoleID == 3 || usrRoleID == 5 || usrRoleID == 6 || usrRoleID == 7)
+            {
+                return View();
+            }
+            else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
+            {
+
+                return RedirectToAction("ChainsawOwnerApplicantsList", "ChainsawOwner");
+
+            }
+            else
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+
         }
 
         [HttpPost]
