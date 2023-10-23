@@ -80,33 +80,33 @@
                         <label class="text-secondary fw-bold">
                             Permit Type
                         </label>
-                            <select class="form-select" asp-for="tbl_Application.tbl_permit_type_id" aria-label="Permit Type">
-                            <option selected disabled>- Select Permit Type -</option>
-                            <option value="5">Authority to Lease</option>
-                            <option value="6">Authority to Rent</option>
-                            <option value="7">Authority to Lend</option>
-                            <option value="14">Permit to Re-sell/Transfer Ownership</option>
-                        </select>
+                            <select class="form-select" asp-for="tbl_Application.tbl_permit_type_id" aria-label="Permit Type" onchange="permitSelection(this)" required="required">
+                                <option selected disabled>- Select Permit Type -</option>
+                                <option value="5">Authority to Lease</option>
+                                <option value="6">Authority to Rent</option>
+                                <option value="7">Authority to Lend</option>
+                                <option value="14">Permit to Re-sell/Transfer Ownership</option>
+                            </select>
                     </div>
                     <div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
                             Number of chainsaws to be issued
                         </label>
-                            <input type="number" asp-for="tbl_Application.qty" class="form-control" placeholder="Enter number of chainsaws to be issued" />
+                            <input type="number" asp-for="tbl_Application.qty" class="form-control" placeholder="Enter number of chainsaws to be issued" required="required" />
                         <span class="text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
                             Specification
                         </label>
-                            <textarea class="form-control" asp-for="tbl_Application.tbl_specification_id" placeholder="Enter specification"></textarea>
+                            <textarea class="form-control" asp-for="tbl_Application.tbl_specification_id" placeholder="Enter specification" required="required"></textarea>
                         <span class="text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
                             Purpose
                         </label>
-                            <textarea class="form-control" asp-for="tbl_Application.purpose" placeholder="Enter purpose"></textarea>
+                            <textarea class="form-control" asp-for="tbl_Application.purpose" placeholder="Enter purpose" required="required"></textarea>
                         <span class="text-danger"></span>
                     </div>
                     @*<div class="form-group mb-3">
@@ -124,6 +124,12 @@
             <div class="row m-0 mb-4">
                 <div class="col-md-12">
                     <div class="p-4 shadow h-100">
+                        <div class="mb-4" style="display:none" id="PermitToLeaseRentLendRequirements">
+                            <span style="white-space: pre-line">@ViewBag.RequiredDocsList_PermitToLeaseRentLend</span>
+                        </div>
+                        <div class="mb-4" style="display:none" id="TransferOfOwnershipRequirements">
+                            <span style="white-space: pre-line">@ViewBag.RequiredDocsList_TransferOfOwnership</span>
+                        </div>
                         <div class="d-flex gap-4 mb-5">
                             <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
                             <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
@@ -143,7 +149,11 @@
                     </div>
                 </div>
             </div>
-        
+            <div class="text-center mb-4">
+                <small class="text-secondary fw-bold fst-italic">
+                    By submitting this form, you agree to our <a href="@Url.Action("TermsPolicy", "Home")" target="_blank" class="text-decoration-none">Privacy Policy and Terms & Conditions.</a>
+                </small>
+            </div>
         <div class="d-flex justify-content-end pe-2 me-1">
                 <button id="btnSubmit" type="submit" class="btn btn-primary mb-4">Submit</button>
         </div>
@@ -156,6 +166,21 @@
 <script src="/js/jquery-3.7.1.min.js"></script>
 
 <script type="text/javascript">
+    //Things to change depending on Permit Selection
+    function permitSelection(that) {
+        if (that.value == 5 || that.value == 6 || that.value == 7) {
+            //Authority To Lease/Rent/Lend is Selected
+            document.getElementById("PermitToLeaseRentLendRequirements").style.display = "block";
+            document.getElementById("TransferOfOwnershipRequirements").style.display = "none";
+        }
+
+        else if (that.value == 14) {
+            //Permit To Re-sell/Transfer of Ownership is Selected
+            document.getElementById("TransferOfOwnershipRequirements").style.display = "block";
+            document.getElementById("PermitToLeaseRentLendRequirements").style.display = "none";
+        }
+    }
+
     $(document).ready(function () {
 
         const dt = new DataTransfer();

@@ -51,7 +51,10 @@ namespace FMB_CIS.Controllers
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             bool? usrStatus = _context.tbl_user.Where(u => u.id == uid).Select(u => u.status).SingleOrDefault();
-
+            //Get list of required documents from tbl_announcement
+            var requirements = _context.tbl_announcement.Where(a => a.id == 2).FirstOrDefault(); // id = 2 for Permit to Import Requirements
+            ViewBag.RequiredDocsList = requirements.announcement_content;
+            //End for required documents
             if (usrStatus != true)
             {
                 return RedirectToAction("Index", "Dashboard");
@@ -168,6 +171,10 @@ namespace FMB_CIS.Controllers
                     
                 ModelState.Clear();
                 ViewBag.Message = "Save Success";
+                //Get list of required documents from tbl_announcement
+                var requirements = _context.tbl_announcement.Where(a => a.id == 2).FirstOrDefault(); // id = 2 for Permit to Import Requirements
+                ViewBag.RequiredDocsList = requirements.announcement_content;
+                //End for required documents
                 return View();
                 }
                 return View(model);

@@ -40,7 +40,12 @@ namespace FMB_CIS.Controllers
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             bool? usrStatus = _context.tbl_user.Where(u => u.id == uid).Select(u => u.status).SingleOrDefault();
-
+            //Get list of required documents from tbl_announcement
+            var requirementsForPermitToLeaseRentLend = _context.tbl_announcement.Where(a => a.id == 6).FirstOrDefault(); // id = 6 for Permit to Lease/Rent/Lend Requirements
+            var requirementsForTransferOfOwnership = _context.tbl_announcement.Where(a => a.id == 7).FirstOrDefault(); // id = 7 for Transfer of Ownership
+            ViewBag.RequiredDocsList_PermitToLeaseRentLend = requirementsForPermitToLeaseRentLend.announcement_content;
+            ViewBag.RequiredDocsList_TransferOfOwnership = requirementsForTransferOfOwnership.announcement_content;
+            //End for required documents
             if (usrStatus != true) //IF User is not yet approved by the admin.
             {
                 return RedirectToAction("Index", "Dashboard");

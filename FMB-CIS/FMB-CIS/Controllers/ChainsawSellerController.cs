@@ -47,7 +47,12 @@ namespace FMB_CIS.Controllers
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             bool? usrStatus = _context.tbl_user.Where(u => u.id == uid).Select(u => u.status).SingleOrDefault();
-
+            //Get list of required documents from tbl_announcement
+            var requirementsForPermitToPurchase = _context.tbl_announcement.Where(a => a.id == 3).FirstOrDefault(); // id = 3 for Permit to Purchase Requirements
+            var requirementsForPermitToSell = _context.tbl_announcement.Where(a => a.id == 4).FirstOrDefault(); // id = 4 for Permit to Purchase Requirements
+            ViewBag.RequiredDocsList_PermitToPurchase = requirementsForPermitToPurchase.announcement_content;
+            ViewBag.RequiredDocsList_PermitToSell = requirementsForPermitToSell.announcement_content;
+            //End for required documents
             if (usrStatus != true) //IF User is not yet approved by the admin.
             {
                 return RedirectToAction("Index", "Dashboard");
@@ -136,12 +141,18 @@ namespace FMB_CIS.Controllers
                     }
                 }
                 //Email
-                var subject = "Permit to Import Application Status";
-                var body = "Greetings! \n We would like to inform you that your Permit to Import Application has been received.";
+                var subject = "Permit Application Status";
+                var body = "Greetings! \n We would like to inform you that your Permit Application has been received.";
                 EmailSender.SendEmailAsync(((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value, subject, body);
 
                 ModelState.Clear();
                 ViewBag.Message = "Save Success";
+                //Get list of required documents from tbl_announcement
+                var requirementsForPermitToPurchase = _context.tbl_announcement.Where(a => a.id == 3).FirstOrDefault(); // id = 3 for Permit to Purchase Requirements
+                var requirementsForPermitToSell = _context.tbl_announcement.Where(a => a.id == 4).FirstOrDefault(); // id = 4 for Permit to Purchase Requirements
+                ViewBag.RequiredDocsList_PermitToPurchase = requirementsForPermitToPurchase.announcement_content;
+                ViewBag.RequiredDocsList_PermitToSell = requirementsForPermitToSell.announcement_content;
+                //End for required documents
                 return View();
             }
             return View(model);

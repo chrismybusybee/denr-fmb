@@ -45,6 +45,13 @@ namespace FMB_CIS.Controllers
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             bool? usrStatus = _context.tbl_user.Where(u => u.id == uid).Select(u => u.status).SingleOrDefault();
 
+            //ViewModel model = new ViewModel();
+            //Get list of required documents from tbl_announcement
+            var requirements = _context.tbl_announcement.Where(a => a.id == 5).FirstOrDefault(); // id = 5 for Certificate of Registration Requirements
+            //model.soloAnnouncement = requirements;
+            ViewBag.RequiredDocsList = requirements.announcement_content;
+            //End for required documents
+
             if (usrStatus != true) //IF User is not yet approved by the admin.
             {
                 return RedirectToAction("Index", "Dashboard");
@@ -155,6 +162,11 @@ namespace FMB_CIS.Controllers
 
                 ModelState.Clear();
                 ViewBag.Message = "Save Success";
+                //Get list of required documents from tbl_announcement
+                var requirements = _context.tbl_announcement.Where(a => a.id == 5).FirstOrDefault(); // id = 5 for Certificate of Registration Requirements
+                                                                                                     //model.soloAnnouncement = requirements;
+                ViewBag.RequiredDocsList = requirements.announcement_content;
+                //End for required documents
                 return View();
             }
             return View(model);

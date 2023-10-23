@@ -1,10 +1,15 @@
 ﻿using FMB_CIS.Data;
 using FMB_CIS.Models;
+using Humanizer.Localisation;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Configuration;
+using Org.BouncyCastle.Tls;
+using System.Drawing.Drawing2D;
 using System.Security.Claims;
+using System.Security.Cryptography.Xml;
 
 namespace FMB_CIS.Controllers
 {
@@ -280,8 +285,8 @@ namespace FMB_CIS.Controllers
             //tbl_user user = _context.tbl_user.Find(uid);
             if (uid == null || appid == null)
             {
-                ModelState.AddModelError("", "Invalid Importer Application");
-                return RedirectToAction("ChainsawImporterApplicantsList", "ChainsawImporter");
+                ModelState.AddModelError("", "Invalid Application");
+                return RedirectToAction("Index", "Dashboard");
             }
 
             else
@@ -384,7 +389,45 @@ namespace FMB_CIS.Controllers
                                                       date_created = c.date_created,
                                                       date_modified = c.date_modified
                                                   }).Where(u => u.comment_to == "User To CENRO").OrderByDescending(d => d.date_created);
-
+                
+                //Set the value for announcementID (used to display the required documents depending on permit type)
+                int announcementID = 0;
+                var applicationInfo = _context.tbl_application.Where(a => a.id == applid).FirstOrDefault();
+                switch(applicationInfo.tbl_permit_type_id)
+                {
+                    
+                    case 1: //1   Permit to Import
+                        announcementID = 2; //2   Permit to Import Requirements
+                        break;
+                    case 2: //2   Permit to Purchase
+                        announcementID = 3; //3   Permit to Purchase Requirements
+                        break;
+                    case 3: //3   Permit to Sell
+                        announcementID = 4; //4   Permit to Sell Requirements
+                        break;
+                    case 4: //4   Transfer of Ownership
+                        announcementID = 7; //7   Transfer of Ownership Requirements
+                        break;
+                    case 5: //5   Authority to Lease
+                        announcementID = 6; //6   Permit to Lease / Rent / Lend Requirements
+                        break;
+                    case 6: //6   Authority to Rent
+                        announcementID = 6; //6   Permit to Lease / Rent / Lend Requirements
+                        break;
+                    case 7: //7   Authority to Lend
+                        announcementID = 6; //6   Permit to Lease / Rent / Lend Requirements
+                        break;
+                    case 13: //13  Certificate of Registration
+                        announcementID = 5; //5   Certificate of Registration Requirements
+                        break;
+                    case 14: //14  Permit to Re - sell / Transfer Ownership
+                        announcementID = 7; //7   Transfer of Ownership Requirements
+                        break;
+                }
+                //Get list of required documents from tbl_announcement
+                var requirements = _context.tbl_announcement.Where(a => a.id == announcementID).FirstOrDefault();
+                ViewBag.RequiredDocsList = requirements.announcement_content;
+                //End for required documents
                 return View(mymodel);
             }
         }
@@ -456,15 +499,11 @@ namespace FMB_CIS.Controllers
                             _context.tbl_files.Add(filesDB);
                             _context.SaveChanges();
                         }
-                    }
-                    
+                }                    
                     //Email
                     var subject = "Permit Application Status";
                     var body = "Greetings! \n You have successfully edited your application.";
-                    EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);
-                
-                
-                
+                    EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);                                                
             }
 
             var applicationlist = from a in _context.tbl_application
@@ -512,7 +551,45 @@ namespace FMB_CIS.Controllers
                                       expectedTimeRelease = a.expected_time_release,
                                       purpose = a.purpose
                                   }).FirstOrDefault();
+            
+            //Set the value for announcementID (used to display the required documents depending on permit type)
+            int announcementID = 0;
+            var applicationInfo = _context.tbl_application.Where(a => a.id == applid).FirstOrDefault();
+            switch (applicationInfo.tbl_permit_type_id)
+            {
 
+                case 1: //1   Permit to Import
+                    announcementID = 2; //2   Permit to Import Requirements
+                    break;
+                case 2: //2   Permit to Purchase
+                    announcementID = 3; //3   Permit to Purchase Requirements
+                    break;
+                case 3: //3   Permit to Sell
+                    announcementID = 4; //4   Permit to Sell Requirements
+                    break;
+                case 4: //4   Transfer of Ownership
+                    announcementID = 7; //7   Transfer of Ownership Requirements
+                    break;
+                case 5: //5   Authority to Lease
+                    announcementID = 6; //6   Permit to Lease / Rent / Lend Requirements
+                    break;
+                case 6: //6   Authority to Rent
+                    announcementID = 6; //6   Permit to Lease / Rent / Lend Requirements
+                    break;
+                case 7: //7   Authority to Lend
+                    announcementID = 6; //6   Permit to Lease / Rent / Lend Requirements
+                    break;
+                case 13: //13  Certificate of Registration
+                    announcementID = 5; //5   Certificate of Registration Requirements
+                    break;
+                case 14: //14  Permit to Re - sell / Transfer Ownership
+                    announcementID = 7; //7   Transfer of Ownership Requirements
+                    break;
+            }
+            //Get list of required documents from tbl_announcement
+            var requirements = _context.tbl_announcement.Where(a => a.id == announcementID).FirstOrDefault();
+            ViewBag.RequiredDocsList = requirements.announcement_content;
+            //End for required documents
             ViewBag.Message = "Save Success";
             viewMod.applicantViewModels = applicationMod;
 

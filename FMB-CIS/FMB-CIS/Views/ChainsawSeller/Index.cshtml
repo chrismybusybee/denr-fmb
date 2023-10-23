@@ -78,7 +78,7 @@
                         <label class="text-secondary fw-bold">
                             Permit Type
                         </label>
-                            <select class="form-select" asp-for="tbl_Application.tbl_permit_type_id" aria-label="Permit Type">
+                            <select class="form-select" asp-for="tbl_Application.tbl_permit_type_id" aria-label="Permit Type" onchange="permitSelection(this)" required="required">
                             <option selected disabled>- Select Permit Type -</option>
                             <option value="2">Permit to Sell</option>
                             <option value="3">Permit to Purchase</option>
@@ -88,21 +88,21 @@
                         <label class="text-secondary fw-bold">
                             Number of chainsaws to be sold/purchased
                         </label>
-                            <input type="number" asp-for="tbl_Application.qty" class="form-control" placeholder="Enter number of chainsaws to be sold/purchased" />
+                            <input type="number" asp-for="tbl_Application.qty" class="form-control" placeholder="Enter number of chainsaws to be sold/purchased" required="required" />
                         <span class="text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
                             Specification
                         </label>
-                            <textarea class="form-control" asp-for="tbl_Application.tbl_specification_id" placeholder="Enter specification"></textarea>
+                            <textarea class="form-control" asp-for="tbl_Application.tbl_specification_id" placeholder="Enter specification" required="required"></textarea>
                         <span class="text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
                             Purpose
                         </label>
-                            <textarea class="form-control" asp-for="tbl_Application.purpose" placeholder="Enter purpose"></textarea>
+                            <textarea class="form-control" asp-for="tbl_Application.purpose" placeholder="Enter purpose" required="required"></textarea>
                         <span class="text-danger"></span>
                     </div>
                     @*<div class="form-group mb-3">
@@ -120,6 +120,12 @@
             <div class="row m-0 mb-4">
                 <div class="col-md-12">
                     <div class="p-4 shadow h-100">
+                        <div class="mb-4" style="display:none" id="PermitToSellRequirements">
+                            <span style="white-space: pre-line">@ViewBag.RequiredDocsList_PermitToSell</span>
+                        </div>
+                        <div class="mb-4" style="display:none" id="PermitToPurchaseRequirements">
+                            <span style="white-space: pre-line">@ViewBag.RequiredDocsList_PermitToPurchase</span>
+                        </div>
                         <div class="d-flex gap-4 mb-5">
                             <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
                             <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
@@ -139,7 +145,11 @@
                     </div>
                 </div>
             </div>
-            
+            <div class="text-center mb-4">
+                <small class="text-secondary fw-bold fst-italic">
+                    By submitting this form, you agree to our <a href="@Url.Action("TermsPolicy", "Home")" target="_blank" class="text-decoration-none">Privacy Policy and Terms & Conditions.</a>
+                </small>
+            </div>
         <div class="d-flex justify-content-end pe-2 me-1">
             <button class="btn btn-primary mb-4">Submit</button>
         </div>
@@ -154,6 +164,22 @@
 <script src="/js/jquery-3.7.1.min.js"></script>
 
 <script type="text/javascript">
+
+    //Things to change depending on Permit Selection
+    function permitSelection(that) {
+        if (that.value == 2) {
+            //Permit To Sell is Selected
+            document.getElementById("PermitToSellRequirements").style.display = "block";
+            document.getElementById("PermitToPurchaseRequirements").style.display = "none";
+        }
+
+        else if (that.value == 3) {
+            //Permit To Purchase is Selected
+            document.getElementById("PermitToPurchaseRequirements").style.display = "block";
+            document.getElementById("PermitToSellRequirements").style.display = "none";
+        }
+    }
+
     $(document).ready(function () {
 
         const dt = new DataTransfer();
