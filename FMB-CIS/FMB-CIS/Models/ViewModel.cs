@@ -32,6 +32,7 @@
         public IEnumerable<CommentsViewModel>? commentsViewModels2ndList { get; set; }
         public FileUpload? profilePicUpload { get; set; }
         public tbl_chainsaw? TBL_Chainsaw { get; set; }
+        public tbl_announcement? soloAnnouncement { get; set; }
 
     }
 }

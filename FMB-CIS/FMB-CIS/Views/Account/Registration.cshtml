@@ -285,12 +285,13 @@
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="d-flex flex-column justify-content-start">
                             <div class="mb-4">
-                                <span class="fw-bold text-secondary mb-3">Please upload any of the following documents:</span>
+                                <span style="white-space: pre-line">@Model.soloAnnouncement.announcement_content</span>
+                                @* <span class="fw-bold text-secondary mb-3">Please upload any of the following documents:</span>
                                 <ul class="text-secondary mt-3">
                                     <li>DTI or SEC registration certificate</li>
                                     <li>Barangay Clearance</li>
                                     <li>Community Tax Certificate</li>
-                                </ul>
+                                </ul> *@
                             </div>
                             <div class="d-flex gap-2 align-items-center">
                                 <span class="fw-bold text-secondary">Attach documents</span>

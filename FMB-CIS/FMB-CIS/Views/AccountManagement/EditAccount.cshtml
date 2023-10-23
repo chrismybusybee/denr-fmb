@@ -51,10 +51,10 @@
                                 <span class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group mb-2">
                                 <label class="form-label small">User Classification</label>
-                                <select asp-for="tbl_User.user_classification" class="form-select" aria-label="User Classification">
+                                <select asp-for="tbl_User.user_classification" class="form-select" aria-label="User Classification" onchange="userClassification(this)">
                                     <option selected disabled>- Select User Classification -</option>
                                     <option value="Individual">Individual</option>
                                     <option value="Corporation">Corporation</option>
@@ -62,6 +62,26 @@
                                 <span class="text-danger"></span>
                             </div>
                         </div>
+                        @if (Model.tbl_User.user_classification == "Corporation")
+                        {
+                            <div class="col-md-5" id="companyNameInpDiv">
+                                <div class="form-group">
+                                    <label class="form-label small">Company Name</label>
+                                    <input id="companyNameInpField" asp-for="tbl_User.company_name" class="form-control" />
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-5" id="companyNameInpDiv" style="display:none">
+                                <div class="form-group">
+                                    <label class="form-label small">Company Name</label>
+                                    <input asp-for="tbl_User.company_name" class="form-control" />
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+                        }
                     </div>
                     
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -112,7 +132,7 @@
                             </div>
                         </div>
                     </div>
-                    @if (Model.tbl_User.user_classification == "Corporation")
+                    @* @if (Model.tbl_User.user_classification == "Corporation")
                     {
                         <div class="row mb-4">
                             <div class="col-md-4">
@@ -137,9 +157,7 @@
                                 </div>
                             </div>
                         </div>
-                    }
-                    else
-                    {
+                    } *@
                         <div class="row mb-4">
                             <div class="col-md-8">
                                 <div class="form-group">
@@ -159,7 +177,7 @@
                                 </div>
                             </div>
                         </div>
-                    }
+                    
                     <div class="row mb-4">
                         <div class="col-md-6">
                             <div class="form-group mb-4">
@@ -199,7 +217,14 @@
                     <div class="row mb-4">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="form-label small">Street Address</label>
+                                @if (Model.tbl_User.user_classification == "Corporation")
+                                {
+                                    <label id="strtAddLbl" class="form-label small">Company Street Address</label>
+                                }
+                                else
+                                {
+                                    <label id="strtAddLbl" class="form-label small">Street Address</label>
+                                }
                                 <input asp-for="tbl_User.street_address" class="form-control" />
                                 <span class="text-danger"></span>
                             </div>
@@ -226,6 +251,9 @@
                             <select asp-for="tbl_User.tbl_brgy_id" class="form-select" asp-items="ViewBag.BrgyData" id="ddlBrgyId"></select>
                             <span asp-validation-for="tbl_User.tbl_brgy_id" class="text-danger"></span>
                         </div>
+                    </div>
+                    <div class="mb-4">
+                        <span style="white-space: pre-line">@Model.soloAnnouncement.announcement_content</span>  
                     </div>
                     <div class="d-flex gap-4 mb-5">
                         <h2 class="text-secondary fw-bold m-0">Attached Documents</h2>
@@ -405,6 +433,20 @@
 <script src="/js/jquery-3.7.1.min.js"></script>
 
 <script type="text/javascript">
+
+    //Things to change when selected User Classification is Corporation
+    function userClassification(that) {
+        if (that.value == "Corporation") {
+            document.getElementById("companyNameInpDiv").style.display = "block";
+            document.getElementById("strtAddLbl").innerHTML = "Company Street Address";
+        }
+
+        else {            
+            document.getElementById("companyNameInpDiv").style.display = "none";
+            document.getElementById("strtAddLbl").innerHTML = "Street Address";
+        }
+    }
+    //END
 
     const form = document.getElementById('EditAcctForm');
     const showModalButton = document.getElementById('btnSave');

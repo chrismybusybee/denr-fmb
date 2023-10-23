@@ -106,6 +106,11 @@ namespace FMB_CIS.Controllers
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
+                //Get list of required documents from tbl_announcement
+                var requirements = _context.tbl_announcement.Where(a => a.id == 1).FirstOrDefault();
+                model.soloAnnouncement = requirements;
+                //End for required documents
+
                 //File Paths from Database
                 var filesFromDB = _context.tbl_files.Where(f => f.tbl_user_id == uid && !f.path.Contains("UserPhotos")).ToList();
                 List<tbl_files> files = new List<tbl_files>();
@@ -218,10 +223,15 @@ namespace FMB_CIS.Controllers
 
             var usrDB = _context.tbl_user.Where(m => m.id == uid).FirstOrDefault();
             usrDB.tbl_user_types_id = model.tbl_User.tbl_user_types_id;
+            usrDB.user_classification = model.tbl_User.user_classification;
             usrDB.first_name = model.tbl_User.first_name;
             usrDB.middle_name = model.tbl_User.middle_name;
             usrDB.last_name = model.tbl_User.last_name;
             usrDB.suffix = model.tbl_User.suffix;
+            if(model.tbl_User.user_classification == "Corporation")
+            {
+                usrDB.company_name = model.tbl_User.company_name;
+            }            
             usrDB.contact_no = model.tbl_User.contact_no;
             usrDB.birth_date = model.tbl_User.birth_date;
             usrDB.valid_id = model.tbl_User.valid_id;

@@ -71,7 +71,7 @@ namespace FMB_CIS.Controllers
             string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
             ViewData["BaseUrl"] = host;
 
-            //Get list of required documents
+            //Get list of required documents from tbl_announcement
             var requirements = _context.tbl_announcement.Where(a => a.id == 1).FirstOrDefault();
             //ViewBag.RequiredDocs = requirements.announcement_content;
             model.soloAnnouncement = requirements;
@@ -217,6 +217,11 @@ namespace FMB_CIS.Controllers
                     model.tbl_Users.date_modified = DateTime.Now;
                     //model.tbl_Users.tbl_user_types_id = Convert.ToInt32(model.tbl_Users.tbl_user_types_id);
 
+                    //Do not save inputs for Company Name if selected user classifiction is null
+                    if (model.tbl_Users.user_classification != "Corporation")
+                    {
+                        model.tbl_Users.company_name = null;
+                    }
                     //Save Info to Database
                     _context.tbl_user.Add(model.tbl_Users);
                     _context.SaveChanges();
