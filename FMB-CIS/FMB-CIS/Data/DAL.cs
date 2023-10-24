@@ -126,10 +126,10 @@ namespace FMB_CIS.Data
                         userRole = "DENR Management";
                         break;
                     case 13:
-                        userRole = "DENR Administration";
+                        userRole = "DENR CIS Administrator";
                         break;
                     case 14:
-                        userRole = "DENR Super Admin";
+                        userRole = "DENR CIS Super Admin";
                         break;
                     case 15:
                         userRole = "DENR Chief";
