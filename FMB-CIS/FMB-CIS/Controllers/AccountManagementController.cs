@@ -63,7 +63,51 @@ namespace FMB_CIS.Controllers
                 return View(model);
             }
         }
+        public IActionResult AddAccount()
+        {
+            int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            if (usrRoleID == 13 || usrRoleID == 14) // Admin and Super Admin
+            {
+                ViewModel model = new ViewModel();
+                var _regions = _context.tbl_region.ToList();
+                var _provinces = new List<tbl_province>();
+                var _cities = new List<tbl_city>();
+                var _barangays = new List<tbl_brgy>();
 
+
+                _regions.Add(new tbl_region() { id = 0, name = "--Select Region--" });
+                _provinces.Add(new tbl_province() { id = 0, name = "--Select Province--" });
+                _cities.Add(new tbl_city() { id = 0, name = "--Select City/Municipality--" });
+                _barangays.Add(new tbl_brgy() { id = 0, name = "-- Select Barangay --" });
+
+
+                ViewData["RegionData"] = new SelectList(_regions.OrderBy(s => s.id), "id", "name");
+                if (ViewData["ProvinceData"] == null)
+                {
+                    ViewData["ProvinceData"] = new SelectList(_provinces.OrderBy(s => s.id), "id", "name");
+                }
+                if (ViewData["CityData"] == null)
+                {
+                    ViewData["CityData"] = new SelectList(_cities.OrderBy(s => s.id), "id", "name");
+                }
+                if (ViewData["BrgyData"] == null)
+                {
+                    ViewData["BrgyData"] = new SelectList(_barangays.OrderBy(s => s.id), "id", "name");
+                }
+
+                model.tbl_Division_List = _context.tbl_division.ToList();
+
+                string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
+                ViewData["BaseUrl"] = host;
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("Index", "AccountManagement");
+            }
+            
+        }
         public IActionResult EditAccount()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
@@ -204,6 +248,55 @@ namespace FMB_CIS.Controllers
                 brgyLists = _context.tbl_brgy.Where(s => s.citymunCode.Equals(ctID)).OrderBy(s => s.name).ToList();
             }
             return Json(brgyLists);
+        }
+
+        [HttpPost]
+        public IActionResult AddAccount(ViewModel model)
+        {
+            //Check if email exist
+            bool emailExist = _context.tbl_user.Where(u => u.email == model.tbl_User.email).Any();
+            if (emailExist == true)
+            {
+                ModelState.AddModelError("tbl_User.email", "Email Address already registered to the system, please try a different Email Address.");
+
+                //LOAD BACK THE SELECTED PROVINCE, CITIES, AND BRGY
+                var _provinces = _context.tbl_province.Where(p => p.regCode == model.tbl_User.tbl_region_id).ToList();
+                var _cities = _context.tbl_city.Where(c => c.provCode == model.tbl_User.tbl_province_id).ToList();
+                var _barangays = _context.tbl_brgy.Where(b => b.citymunCode == model.tbl_User.tbl_city_id).ToList();
+                ViewData["ProvinceData"] = new SelectList(_provinces.OrderBy(s => s.name), "id", "name");
+                ViewData["CityData"] = new SelectList(_cities.OrderBy(s => s.name), "id", "name");
+                ViewData["BrgyData"] = new SelectList(_barangays.OrderBy(s => s.name), "id", "name");
+                return View(model);
+            }
+            else
+            {
+                //ENCRYPT PASSWORD
+                string decrPw = model.tbl_User.password;
+                string encrPw = EncryptDecrypt.ConvertToEncrypt(model.tbl_User.password);
+                //SET VALUES FOR VARIABLES WITHOUT INPUT FIELDS ON VIEW
+                model.tbl_User.password = encrPw;
+                model.tbl_User.status = false;
+                //model.tbl_Users.comment;
+                model.tbl_User.date_created = DateTime.Now;
+                model.tbl_User.date_modified = DateTime.Now;
+                //model.tbl_Users.tbl_user_types_id = Convert.ToInt32(model.tbl_Users.tbl_user_types_id);
+
+                model.tbl_User.company_name = null;
+                model.tbl_User.user_classification = "Individual";
+                model.tbl_User.is_active = true;
+
+                //Save Info to Database
+                _context.tbl_user.Add(model.tbl_User);
+                _context.SaveChanges();
+
+                var subject = "Account Created";
+                var body = "We would like to inform you that an admin created an account using your email for FMB-CIS.\nPlease login with your temporary password: " + decrPw + "\nThank You!";
+                EmailSender.SendEmailAsync(model.tbl_User.email, subject, body);
+
+                //return View(model);
+                return RedirectToAction("Index", "AccountManagement");
+            }
+            
         }
 
         [HttpPost]

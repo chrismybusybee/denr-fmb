@@ -34,5 +34,7 @@
         public tbl_chainsaw? TBL_Chainsaw { get; set; }
         public tbl_announcement? soloAnnouncement { get; set; }
 
+        public IEnumerable<tbl_division>? tbl_Division_List { get; set; }
+
     }
 }

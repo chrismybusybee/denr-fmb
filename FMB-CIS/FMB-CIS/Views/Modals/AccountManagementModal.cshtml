@@ -139,4 +139,41 @@
         $("#confirmAddModal").modal("hide");
         $("#confirmAddSuccessModal").modal("show");
     });
+
+
+    //MODALS
+
+    const addAcctForm = document.getElementById('AddAccountForm');
+    const showAddModalButton = document.getElementById('submitBtn');
+    const confirmationAddModal = document.getElementById('confirmAddModal');
+    const confirmAddButton = document.getElementById('confirmAddBtn');
+
+    // Function to display the modal
+    function showAddModal() {
+        confirmationAddModal.style.display = 'block';
+    }
+
+    // Function to hide the modal
+    function hideAddModal() {
+        confirmationAddModal.style.display = 'none';
+        console.log('hideAddModal()');
+    }
+
+    // Event listener for the "Submit" button
+    showAddModalButton.addEventListener('click', showAddModal);
+
+    // Event listener for the "Confirm" button
+    confirmAddButton.addEventListener('click', function () {
+        // Submit the form when the "Confirm" button is clicked
+        addAcctForm.submit();
+    });
+
+    // Close the modal when the user clicks outside of it
+    window.addEventListener('click', function (event) {
+        if (event.target === confirmationAddModal) {
+            hideAddModal();
+        }
+    });
+    //MODALS END
+
 </script>

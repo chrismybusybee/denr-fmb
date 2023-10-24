@@ -27,8 +27,9 @@ using System.ComponentModel.DataAnnotations;
         public DateTime? date_created { get; set; }
         public DateTime? date_modified { get; set; }
         public int tbl_user_types_id { get; set; }
-        public string user_classification { get; set; }
+        public string? user_classification { get; set; }
         public string gender { get; set; }
         public string? FullName { get; set; }
+        public bool? is_active { get; set; }
     }
  }

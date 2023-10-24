@@ -215,6 +215,7 @@ namespace FMB_CIS.Controllers
                     //model.tbl_Users.comment;
                     model.tbl_Users.date_created = DateTime.Now;
                     model.tbl_Users.date_modified = DateTime.Now;
+                    model.tbl_Users.is_active = true;
                     //model.tbl_Users.tbl_user_types_id = Convert.ToInt32(model.tbl_Users.tbl_user_types_id);
 
                     //Do not save inputs for Company Name if selected user classifiction is null

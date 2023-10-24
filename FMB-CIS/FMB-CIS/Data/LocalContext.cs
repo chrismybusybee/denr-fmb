@@ -22,6 +22,7 @@ namespace FMB_CIS.Data
         public DbSet<FMB_CIS.Models.tbl_user_temp_passwords> tbl_user_temp_passwords { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_comments> tbl_comments { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_announcement> tbl_announcement { get; set; } = default!;
-        
+        public DbSet<FMB_CIS.Models.tbl_division> tbl_division { get; set; } = default!;
+
     }
 }
