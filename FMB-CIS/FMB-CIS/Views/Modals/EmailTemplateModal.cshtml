@@ -1,0 +1,192 @@
+﻿<div class="modal fade" id="addEmailTemplateModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <p class="fw-bold fs-5">
+                        Add Email Template
+                    </p>
+                    <div class="row w-100">
+                        <div class="col-md-12">
+                            <div class="form-group mb-3">
+                                <label class="form-label small">Template Title</label>
+                                <input class="form-control" />
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label small">Details</label>
+                                <textarea class="form-control" rows="8"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-4 w-100">
+                        <button id="cancelBtn" class="btn btn-danger w-100">Cancel</button>
+                        <button id="confirmSaveBtn" class="btn btn-primary w-100">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmAddModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/submit.png" />
+                    </div>
+                    <p class="fw-bold fs-5 text-center">
+                        Are you sure you want to add this email template?
+                    </p>
+                    <div class="d-flex gap-4 w-100">
+                        <button id="backAddBtn" class="btn btn-danger w-100">Back</button>
+                        <button id="confirmAddBtn" class="btn btn-primary w-100">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmAddSuccessModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/success.png" />
+                    </div>
+                    <p class="fw-bold fs-5">
+                        Email template added successfully!
+                    </p>
+                    <div class="d-flex justify-content-center w-100">
+                        <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("Index", "EmailTemplates")'">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="viewEmailTemplateModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div class="row w-100">
+                        <div class="col-md-12">
+                            <div class="form-group mb-3 w-50">
+                                <label class="form-label small">Email</label>
+                                <input class="form-control" />
+                            </div>
+                            <div class="form-group mb-3 w-100">
+                                <label class="form-label small">Subject</label>
+                                <input class="form-control" />
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label small">Details</label>
+                                <textarea class="form-control" rows="8"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex just gap-4 w-100">
+                        <div class="w-100 d-flex justify-content-end">
+                            <button id="cancelSendBtn" class="btn btn-danger w-25">Cancel</button>
+                        </div>
+                        <div class="w-100">
+                            <button id="confirmSendBtn" class="btn btn-primary w-25">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmSendModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/submit.png" />
+                    </div>
+                    <p class="fw-bold fs-5 text-center">
+                        Are you sure you want to send this email?
+                    </p>
+                    <div class="d-flex gap-4 w-100">
+                        <button id="backSendBtn" class="btn btn-danger w-100">Back</button>
+                        <button id="sendBtn" class="btn btn-primary w-100">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmSendSuccessModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/success.png" />
+                    </div>
+                    <p class="fw-bold fs-5">
+                        Email sent successfully!
+                    </p>
+                    <div class="d-flex justify-content-center w-100">
+                        <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("Index", "EmailTemplates")'">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/jquery-3.7.1.min.js"></script>
+
+<script type="text/javascript">
+    $("#cancelBtn").click(function () {
+        $("#addEmailTemplateModal").modal("hide");
+    });
+
+    $("#confirmSaveBtn").click(function () {
+        $("#addEmailTemplateModal").modal("hide");
+        $("#confirmAddModal").modal("show");
+    });
+
+    $("#backAddBtn").click(function () {
+        $("#addEmailTemplateModal").modal("show");
+        $("#confirmAddModal").modal("hide");
+    });
+
+    $("#confirmAddBtn").click(function () {
+        $("#confirmAddSuccessModal").modal("show");
+        $("#confirmAddModal").modal("hide");
+    });
+
+    $("#cancelSendBtn").click(function () {
+        $("#viewEmailTemplateModal").modal("hide");
+    });
+
+    $("#backSendBtn").click(function () {
+        $("#viewEmailTemplateModal").modal("show");
+        $("#confirmSendModal").modal("hide");
+    });
+
+    $("#confirmSendBtn").click(function () {
+        viewEmailTemplateModal
+        $("#confirmSendModal").modal("show");
+        $("#viewEmailTemplateModal").modal("hide");
+    });
+
+    $("#sendBtn").click(function () {
+        viewEmailTemplateModal
+        $("#confirmSendSuccessModal").modal("show");
+        $("#confirmSendModal").modal("hide");
+        
+    });
+
+</script>   
