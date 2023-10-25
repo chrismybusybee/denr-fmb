@@ -207,4 +207,9 @@ button {
     max-width: 600px;
     margin: 0 auto;
 }
+
+#viewEmailTemplateModal .modal-dialog {
+    max-width: 1000px;
+    margin: 0 auto;
+}
 /* BOOTSTRAP OVERRIDE END */

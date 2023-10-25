@@ -5,6 +5,43 @@
 
 <div id="card-container">
     <div id="card">
-        <partial name="/Views/Shared/Underconstruction.cshtml" />
+        <a href="@Url.Action("Index", "Home")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
+        <button type="button" id="btnAdd" class="btn btn-primary float-end">Add New <i data-feather="plus" class=""></i></button>
+        <table id="denrOfficeTable" class="table table-striped dataTable">
+            <thead>
+                <tr>
+                    <th class="text-nowrap">Template Title</th>
+                    <th class="text-nowrap">Details</th>
+                    <th class="text-nowrap">Date Created</th>
+                    <th class="text-nowrap text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-nowrap">Template 1</td>
+                    <td class="text-nowrap">Failure to submit the given deadline to upload the documentary requirements</td>
+                    <td class="text-nowrap">August 10, 2023</td>
+                    <td class="text-nowrap">
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="#" id="viewEmailTemplate" class="bg-green text-white px-1 pb-1 rounded" title="view">
+                                <i data-feather="eye" class="data-feather-20"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
+
+<script src="/js/jquery-3.7.1.min.js"></script>
+
+<script type="text/javascript">
+    $("#btnAdd").click(function () {
+        $("#addEmailTemplateModal").modal("show");
+    });
+
+    $("#viewEmailTemplate").click(function () {
+        $("#viewEmailTemplateModal").modal("show");
+    });
+</script>
