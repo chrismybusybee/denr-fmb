@@ -13,6 +13,7 @@
     background-color: #14984a;
     color: white;
     margin-left: 300px;
+    transition: all 0.2s ease-in-out;
 }
 
 #header-bottom-container {
@@ -21,6 +22,7 @@
     background-color: #282d6d;
     color: white;
     margin-left: 300px;
+    transition: all 0.2s ease-in-out;
 }
 
 #side-bar {
@@ -41,6 +43,19 @@
 
 .side-bar-container {
     height: min(100vh, 100%);
+}
+
+#side-bar, #systemImg {
+    transition: all .2s ease-in-out !important;
+}
+
+#systemTitle {
+    transition: all 1s ease-in-out !important;
+}
+
+.slide-left {
+    margin-left: -200px;
+    transition: all .2s ease-in-out !important;
 }
 
 #menu-items {
@@ -66,27 +81,28 @@
         color: #14984a;
     }
 
-#chainsawImporterDropdown, #chainsawSellerDropdown, #chainsawOwnerDropdown, #authorityToLeaseDropdown {
+#chainsawImporterDropdown, #chainsawSellerDropdown, #chainsawOwnerDropdown, #authorityToLeaseDropdown, #accountManagementDropdown {
     max-height: 0;
     overflow: hidden;
     opacity: 0;
     transition: all 0.15s ease-in-out;
 }
 
-    #chainsawImporterDropdown.active, #chainsawSellerDropdown.active, #chainsawOwnerDropdown.active, #authorityToLeaseDropdown.active {
+    #chainsawImporterDropdown.active, #chainsawSellerDropdown.active, #chainsawOwnerDropdown.active, #authorityToLeaseDropdown.active, #accountManagementDropdown.active {
         max-height: 100%;
         opacity: 1;
         margin-top: 15px;
     }
 
-    #main {
-        position: fixed;
-        margin-left: 300px;
-        margin-top: 150px;
-        background-color: transparent;
-        width: 100%;
-        height: min(100vh, 100%);
-    }
+#main {
+    position: fixed;
+    margin-left: 300px;
+    margin-top: 150px;
+    background-color: transparent;
+    width: 100%;
+    height: min(100vh, 100%);
+    transition: all 0.2s ease-in-out;
+}
 
 #card-container {
     max-height: 78%;
@@ -97,6 +113,7 @@
     border-radius: 5px;
     overflow-y: auto;
     border: solid 0.5px lightgray;
+    transition: all 0.2s ease-in-out;
 }
 
 ::-webkit-scrollbar {
@@ -107,7 +124,6 @@
     background: #f3f3f3;
     border-radius: 10px;
 }
-
 
 ::-webkit-scrollbar-thumb {
     background: #c1c1c1;
