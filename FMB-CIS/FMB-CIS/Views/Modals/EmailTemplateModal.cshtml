@@ -1,28 +1,42 @@
-﻿<div class="modal fade" id="addEmailTemplateModal" aria-hidden="true">
+﻿@model FMB_CIS.Models.ViewModel
+<div class="modal fade" id="addEmailTemplateModal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
-                <div class="d-flex flex-column align-items-center gap-4 p-5">
-                    <p class="fw-bold fs-5">
-                        Add Email Template
-                    </p>
-                    <div class="row w-100">
-                        <div class="col-md-12">
-                            <div class="form-group mb-3">
-                                <label class="form-label small">Template Title</label>
-                                <input class="form-control" />
-                            </div>
-                            <div class="form-group mb-3">
-                                <label class="form-label small">Details</label>
-                                <textarea class="form-control" rows="8"></textarea>
+                <form asp-controller="EmailTemplates" asp-action="CreateTemplate" id="CreateEmailTemplateForm">
+                    <div class="d-flex flex-column align-items-center gap-4 p-5">                    
+                        <p class="fw-bold fs-5">
+                            Add Email Template
+                        </p>
+                        <div class="row w-100">
+                            <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    <label class="form-label small">Template Title</label>
+                                    <input asp-for="tbl_Email_Template.template_name" class="form-control" />
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label small">Short Description of Template</label>
+                                    @* <label class="form-label small">Details</label> *@
+                                    <input asp-for="tbl_Email_Template.template_description" class="form-control" />
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label small">E-mail Subject</label>
+                                    @* <label class="form-label small">Details</label> *@
+                                    <input asp-for="tbl_Email_Template.email_subject" class="form-control" />
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label small">E-mail Content</label>
+                                    @* <label class="form-label small">Details</label> *@
+                                    <textarea asp-for="tbl_Email_Template.email_content" class="form-control" rows="8"></textarea>
+                                </div>
                             </div>
                         </div>
+                        <div class="d-flex gap-4 w-100">
+                            <button id="cancelBtn" type="button" class="btn btn-danger w-100">Cancel</button>
+                            <button id="confirmSaveBtn" type="button" class="btn btn-primary w-100">Confirm</button>
+                        </div>                    
                     </div>
-                    <div class="d-flex gap-4 w-100">
-                        <button id="cancelBtn" class="btn btn-danger w-100">Cancel</button>
-                        <button id="confirmSaveBtn" class="btn btn-primary w-100">Confirm</button>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -82,10 +96,10 @@
                             </div>
                             <div class="form-group mb-3 w-100">
                                 <label class="form-label small">Subject</label>
-                                <input class="form-control" />
+                                <input class="form-control" id="Subject"/>
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label small">Details</label>
+                                <label class="form-label small">Content</label>
                                 <textarea class="form-control" rows="8"></textarea>
                             </div>
                         </div>
@@ -187,6 +201,37 @@
         $("#confirmSendSuccessModal").modal("show");
         $("#confirmSendModal").modal("hide");
         
+    });
+
+    const createEmailTemplForm = document.getElementById('CreateEmailTemplateForm');
+    const showConfirmSaveModalButton = document.getElementById('confirmSaveBtn');
+    const confirmationAddModal = document.getElementById('confirmAddModal');
+    const confirmAddButton = document.getElementById('confirmAddBtn');
+
+    // Function to display the modal
+    function showAddModal() {
+        confirmationAddModal.style.display = 'block';
+    }
+
+    // Function to hide the modal
+    function hideAddModal() {
+        confirmationAddModal.style.display = 'none';
+    }
+
+    // Event listener for the "Submit" button
+    showConfirmSaveModalButton.addEventListener('click', showAddModal);
+
+    // Event listener for the "Confirm" button
+    confirmAddButton.addEventListener('click', function () {
+        // Submit the form when the "Confirm" button is clicked
+        createEmailTemplForm.submit();
+    });
+
+    // Close the modal when the user clicks outside of it
+    window.addEventListener('click', function (event) {
+        if (event.target === confirmationAddModal) {
+            hideAddModal();
+        }
     });
 
 </script>   

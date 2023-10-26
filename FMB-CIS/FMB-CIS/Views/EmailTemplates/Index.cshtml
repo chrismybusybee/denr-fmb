@@ -1,6 +1,8 @@
-﻿@{
+﻿@model FMB_CIS.Models.ViewModel
+@{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Email Templates";
+    var baseurl = ViewBag.BaseUrl;
 }
 
 <div id="card-container">
@@ -10,14 +12,32 @@
         <table id="denrOfficeTable" class="table table-striped dataTable">
             <thead>
                 <tr>
+                    <th class="text-nowrap">Date Created</th>
                     <th class="text-nowrap">Template Title</th>
                     <th class="text-nowrap">Details</th>
-                    <th class="text-nowrap">Date Created</th>
                     <th class="text-nowrap text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                @foreach (tbl_email_template item in Model.tbl_Email_Templates_List)
+                {
+                    <tr>
+                        <td class="text-nowrap">@item.date_created</td>
+                        <td class="text-nowrap">@item.template_name</td>
+                        <td class="text-nowrap">@item.template_description</td>
+                        <td class="text-nowrap">
+                            <div class="d-flex justify-content-center gap-3">
+                                <a href="#" id="viewEmailTemplate" class="bg-green text-white px-1 pb-1 rounded" title="view" >
+                                    <i data-feather="eye" class="data-feather-20"></i>
+                                    <input type="hidden" id="templateID" value="@item.id" />
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                
+
+                @* <tr>
                     <td class="text-nowrap">Template 1</td>
                     <td class="text-nowrap">Failure to submit the given deadline to upload the documentary requirements</td>
                     <td class="text-nowrap">August 10, 2023</td>
@@ -28,7 +48,7 @@
                             </a>
                         </div>
                     </td>
-                </tr>
+                </tr> *@
             </tbody>
         </table>
     </div>
@@ -44,4 +64,17 @@
     $("#viewEmailTemplate").click(function () {
         $("#viewEmailTemplateModal").modal("show");
     });
+
+
+    //Check Existing Email
+    // function getEmailDetails(that) {
+    //     var templID = that.value; //document.getElementById("templateID").value;
+    //     var url = "@baseurl";
+    //     $.post(url + "EmailTemplates/GetEmailTemplateDetails", { id: templID }, function (data) {
+    //         //debugger;
+    //         console.log(data);
+            
+    //     });
+    // }
+
 </script>

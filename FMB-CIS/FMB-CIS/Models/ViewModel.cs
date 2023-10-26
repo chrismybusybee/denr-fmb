@@ -40,5 +40,7 @@
         public tbl_user_change_info_request? tbl_User_Change_Info_Request { get; set; }
         public IEnumerable<RequestChangeAcctInfoViewModel>? RequestChangeAcctInfoViewModelList { get; set; }
         public RequestChangeAcctInfoViewModel? RequestChangeAcctInfoViewModelApproval { get; set; }
+        public IEnumerable<tbl_email_template>? tbl_Email_Templates_List { get; set; }
+        public tbl_email_template? tbl_Email_Template { get; set; }
     }
 }
