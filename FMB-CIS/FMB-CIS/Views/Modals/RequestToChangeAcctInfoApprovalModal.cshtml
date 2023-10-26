@@ -28,7 +28,7 @@
                         <img src="~/assets/images/success.png" />
                     </div>
                     <p class="fw-bold fs-5">
-                        Application submitted successfully!
+                        Request to change account information submitted successfully!
                     </p>
                     <div class="d-flex justify-content-center w-100">
                         <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("Index", "AccountManagement")'">Ok</button>
@@ -69,7 +69,7 @@
                         <img src="~/assets/images/success.png" />
                     </div>
                     <p class="fw-bold fs-5 text-center">
-                        Registration approved<br />
+                        Request to change account information approved<br />
                         <span class="fs-6">A notification was sent to the applicant</span>
                     </p>
                     <div class="d-flex justify-content-center w-100">
@@ -111,7 +111,7 @@
                         <img src="~/assets/images/success-decline.png" />
                     </div>
                     <p class="fw-bold fs-5 text-center">
-                        Registration declined<br />
+                        Request to change account information declined<br />
                         <span class="fs-6">A notification was sent to the applicant</span>
                     </p>
                     <div class="d-flex justify-content-center w-100">
@@ -123,96 +123,12 @@
     </div>
 </div>
 
-@* Enable/Disable Account *@
-<div class="modal fade" id="confirmEnableModal" aria-hidden="true" style="z-index:1050 !important;">
-    <div class="modal-dialog modal-dialog-centered" style="z-index:1050 !important;">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="d-flex flex-column align-items-center gap-4 p-5">
-                    <div>
-                        <img src="~/assets/images/approve.png" />
-                    </div>
-                    <p class="fw-bold fs-5">
-                        Are you sure you want to enable this account?
-                    </p>
-                    <div class="d-flex gap-4 w-100">
-                        <button id="backEnableBtn" class="btn btn-danger w-100">Back</button>
-                        <button id="confirmEnableBtn" class="btn btn-primary w-100">Confirm</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="confirmSuccessEnableModal" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="d-flex flex-column align-items-center gap-4 p-5">
-                    <div>
-                        <img src="~/assets/images/success.png" />
-                    </div>
-                    <p class="fw-bold fs-5 text-center">
-                        Account Enabled<br />
-                        <span class="fs-6">A notification was sent to the applicant</span>
-                    </p>
-                    <div class="d-flex justify-content-center w-100">
-                        <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("Index", "AccountManagement")'">Ok</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="confirmDisableModal" aria-hidden="true" style="z-index:1050 !important;">
-    <div class="modal-dialog modal-dialog-centered" style="z-index:1050 !important;">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="d-flex flex-column align-items-center gap-4 p-5">
-                    <div>
-                        <img src="~/assets/images/decline.png" />
-                    </div>
-                    <p class="fw-bold fs-5">
-                        Are you sure you want to disable?
-                    </p>
-                    <div class="d-flex gap-4 w-100">
-                        <button id="backDisableBtn" class="btn btn-danger w-100">Back</button>
-                        <button id="confirmDisableBtn" class="btn btn-primary w-100">Confirm</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="confirmSuccessDisableModal" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="d-flex flex-column align-items-center gap-4 p-5">
-                    <div>
-                        <img src="~/assets/images/success-decline.png" />
-                    </div>
-                    <p class="fw-bold fs-5 text-center">
-                        Account Disabled<br />
-                        <span class="fs-6">A notification was sent to the applicant</span>
-                    </p>
-                    <div class="d-flex justify-content-center w-100">
-                        <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("Index", "AccountManagement")'">Ok</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script src="/js/jquery-3.7.1.min.js"></script>
 
 <script type="text/javascript">
 
-    const form = document.getElementById('AcctApprvlForm');
+    const reqForm = document.getElementById('ReqToChangInfApprvlForm');
     const showApproveModalButton = document.getElementById('approveBtn');
     const confirmationApproveModal = document.getElementById('confirmApproveModal');
     const confirmApproveButton = document.getElementById('confirmApproveBtn');
@@ -220,14 +136,6 @@
     const showDeclineModalButton = document.getElementById('declineBtn');
     const confirmationDeclineModal = document.getElementById('confirmDeclineModal');
     const confirmDeclineButton = document.getElementById('confirmDeclineBtn');
-
-    const showEnableModalButton = document.getElementById('enableBtn');
-    const confirmationEnableModal = document.getElementById('confirmEnableModal');
-    const confirmEnableButton = document.getElementById('confirmEnableBtn');
-
-    const showDisableModalButton = document.getElementById('disableBtn');
-    const confirmationDisableModal = document.getElementById('confirmDisableModal');
-    const confirmDisableButton = document.getElementById('confirmDisableBtn');
 
     //FOR APPROVE
     // Function to display the modal
@@ -246,7 +154,7 @@
     // Event listener for the "Confirm" button
     confirmApproveButton.addEventListener('click', function () {
         // Submit the form when the "Confirm" button is clicked
-        form.submit();
+        reqForm.submit();
     });
 
     // Close the modal when the user clicks outside of it
@@ -273,67 +181,13 @@
     // Event listener for the "Confirm" button
     confirmDeclineButton.addEventListener('click', function () {
         // Submit the form when the "Confirm" button is clicked
-        form.submit();
+        reqForm.submit();
     });
 
     // Close the modal when the user clicks outside of it
     window.addEventListener('click', function (event) {
         if (event.target === confirmationDeclineModal) {
             hideDeclineModal();
-        }
-    });
-
-    //FOR ENABLE
-    // Function to display the modal
-    function showEnableModal() {
-        confirmationEnableModal.style.display = 'block';
-    }
-
-    // Function to hide the modal
-    function hideEnableModal() {
-        confirmationEnableModal.style.display = 'none';
-    }
-
-    // Event listener for the "Submit" button
-    showEnableModalButton.addEventListener('click', showEnableModal);
-
-    // Event listener for the "Confirm" button
-    confirmEnableButton.addEventListener('click', function () {
-        // Submit the form when the "Confirm" button is clicked
-        form.submit();
-    });
-
-    // Close the modal when the user clicks outside of it
-    window.addEventListener('click', function (event) {
-        if (event.target === confirmationEnableModal) {
-            hideEnableModal();
-        }
-    });
-
-    //FOR DISABLE
-    // Function to display the modal
-    function showDisableModal() {
-        confirmationDisableModal.style.display = 'block';
-    }
-
-    // Function to hide the modal
-    function hideDisableModal() {
-        confirmationDisableModal.style.display = 'none';
-    }
-
-    // Event listener for the "Submit" button
-    showDisableModalButton.addEventListener('click', showDisableModal);
-
-    // Event listener for the "Confirm" button
-    confirmDisableButton.addEventListener('click', function () {
-        // Submit the form when the "Confirm" button is clicked
-        form.submit();
-    });
-
-    // Close the modal when the user clicks outside of it
-    window.addEventListener('click', function (event) {
-        if (event.target === confirmationDisableModal) {
-            hideDisableModal();
         }
     });
 

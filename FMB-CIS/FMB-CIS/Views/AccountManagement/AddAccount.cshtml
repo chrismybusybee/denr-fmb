@@ -45,9 +45,12 @@
                                                     <option value="9">DENR Implementing PENRO</option>
                                                     <option value="10">DENR PENRO</option>
                                                     <option value="11">DENR Inspector</option>
-                                                    @* <option value="12">DENR Management</option>
-                                                    <option value="13">DENR CIS Administrator</option>*@
-                                                    <option value="14">DENR CIS Super Admin</option>
+                                                    @* <option value="12">DENR Management</option> *@
+                                                    @if(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Super Admin") == true)
+                                                    {
+                                                        <option value="13">DENR CIS Administrator</option>
+                                                    }
+                                                    @* <option value="14">DENR CIS Super Admin</option> *@
                                                     @*<option value="15">DENR Chief</option>
                                                     <option value="16">DENR Division Chief</option> *@
                                                     <option value="17">DENR Regional Executive Director (RED)</option>

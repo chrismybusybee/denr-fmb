@@ -510,12 +510,38 @@
                             @if (ViewBag.UserType.Contains("DENR") == true)
                             {
                                 <li id="accountManagementMenuItem">
-                                    <a href="@Url.Action("Index", "AccountManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                    <a href="#" class="d-flex gap-2 text-decoration-none fs-6">
                                         <div>
                                             <img src="~/assets/images/menu-icons/account-management.png" />
                                         </div>
                                         <span>Account Management</span>
                                     </a>
+                                    <ul id="accountManagementDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
+                                        <li id="requestToChangeAccountInfoMenuItem">
+                                            <a href="@Url.Action("Index", "AccountManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>List of Registered Accounts</span>
+                                            </a>
+                                        </li>
+                                        <li id="requestToChangeAccountInfoMenuItem">
+                                            <a href="@Url.Action("RequestToChangeAcctInfoList", "AccountManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>List of Users Requesting To Change Account Info</span>
+                                            </a>
+                                        </li>
+                                        <li id="requestToChangeAccountInfoMenuItem">
+                                            <a href="@Url.Action("RequestToChangeAccountInfo", "AccountManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>Request To Change my Account Information</span>
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
                             }
                             @if (ViewBag.UserType.Contains("Administrator") == true)
@@ -560,6 +586,27 @@
                                     </a>
                                 </li>
                             }
+                            @if (ViewBag.UserType.Contains("Chainsaw") == true)
+                            {
+                                <li id="accountManagementMenuItem">
+                                    <a href="#" id="accountManagementSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/account-management.png" />
+                                        </div>
+                                        <span>Account Management</span>
+                                    </a>
+                                    <ul id="accountManagementDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
+                                        <li id="requestToChangeAccountInfoMenuItem">
+                                            <a href="@Url.Action("RequestToChangeAccountInfo", "AccountManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>Request To Change Account Info</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
                             <hr class="me-4 my-4" />
                             <li>
                                 @Html.ActionLink("Logout", "Signout", "Home", new { area = "" }, new { @class = "text-decoration-none" })
@@ -585,6 +632,10 @@
     else if (currentUrl.Contains("ChainsawOwner"))
     {
         <partial name="~/Views/Modals/ChainsawOwnerModal.cshtml" />
+    }
+    else if (currentUrl.Contains("RequestToChangeAcctInfoApproval"))
+    {
+        <partial name="~/Views/Modals/RequestToChangeAcctInfoApprovalModal.cshtml" />
     }
     else if (currentUrl.Contains("AccountsApproval"))
     {
@@ -657,6 +708,8 @@
 
         setupDropdown("applicationSubMenuItem", "authorityToLeaseDropdown");
 
+        setupDropdown("accountManagementSubMenuItem", "accountManagementDropdown");
+
         
 
         function setActiveMenuItem(menuItemId) {
@@ -683,6 +736,7 @@
             "/AccountManagement": "accountManagementMenuItem",
             "/AccountManagement/AddAccount": "accountManagementMenuItem",
             "/AccountManagement/EditAccount": "accountManagementMenuItem",
+            "/AccountManagement/RequestToChangeAccountInfo": "accountManagementMenuItem",
             "/Monitoring": "monitoringMenuItem",
             "/CreationOfNewDenrOffice": "creationOfNewDenrOfficeMenuItem",
             "/AnnouncementTemplates": "announcementTemplatesMenuItem",

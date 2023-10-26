@@ -97,7 +97,11 @@ namespace FMB_CIS.Controllers
                     ModelState.AddModelError("email", "Please verify your email first!");
                     return View();                    
                 }
-
+                if (usrDB.is_active == false) //tblTempPass.is_active means the Temporary Password is active and not yet changing their password. It also mean that the user doesn't confirm their email. tblTempPass is null when user was created before having a code for this.
+                {
+                    ModelState.AddModelError("email", "Your account is disabled. Please check your e-mail or contact the administrator for more information.");
+                    return View();
+                }
                 else
                 {
                     string decrPw = EncryptDecrypt.ConvertToDecrypt(dal.selectEncrPassFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng")));

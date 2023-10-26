@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Ajax.Utilities;
+using System.Security.Cryptography;
+using Microsoft.AspNet.Identity;
 
 namespace FMB_CIS.Controllers
 {
@@ -55,8 +57,9 @@ namespace FMB_CIS.Controllers
                                        //province = prov.name,
                                        city = ct.name,
                                        status = (bool)u.status,
-                                       date_created = u.date_created
+                                       date_created = u.date_created,
                                        //brgy = brngy.name
+                                       is_active = (bool)u.is_active
                                    }).OrderByDescending(u => u.date_created);
                 //OrderByDescending(d => d.date_created)
                 //model.acctList = userinfoList;
@@ -107,6 +110,89 @@ namespace FMB_CIS.Controllers
                 return RedirectToAction("Index", "AccountManagement");
             }
             
+        }
+        public IActionResult RequestToChangeAccountInfo()
+        {
+            int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            var usInfo = _context.tbl_user.Where(u => u.id == uid).SingleOrDefault();
+            //bool? status = usInfo.status;
+            ViewModel model = new ViewModel();
+
+
+            model.tbl_User = _context.tbl_user.Find(uid);
+            //model.tbl_User.id = uid;
+
+            var _regions = _context.tbl_region.ToList();
+            var _provinces = _context.tbl_province.Where(p => p.regCode == usInfo.tbl_region_id).ToList();
+            var _cities = _context.tbl_city.Where(c => c.provCode == usInfo.tbl_province_id).ToList();
+            var _barangays = _context.tbl_brgy.Where(b => b.citymunCode == usInfo.tbl_city_id).ToList();
+            //var _provinces = new List<tbl_province>();
+            //var _cities = new List<tbl_city>();
+            //var _barangays = new List<tbl_brgy>();
+
+            _regions.Add(new tbl_region() { id = 0, name = "--Select Region--" });
+            _provinces.Add(new tbl_province() { id = 0, name = "--Select Province--" });
+            _cities.Add(new tbl_city() { id = 0, name = "--Select City/Municipality--" });
+            _barangays.Add(new tbl_brgy() { id = 0, name = "-- Select Barangay --" });
+
+            ViewData["RegionData"] = new SelectList(_regions.OrderBy(s => s.id), "id", "name");
+
+            ViewData["ProvinceData"] = new SelectList(_provinces.OrderBy(s => s.name), "id", "name");
+            ViewData["CityData"] = new SelectList(_cities.OrderBy(s => s.name), "id", "name");
+            ViewData["BrgyData"] = new SelectList(_barangays.OrderBy(s => s.name), "id", "name");
+
+            string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
+            ViewData["BaseUrl"] = host;
+
+            //Get list of required documents from tbl_announcement
+            var requirements = _context.tbl_announcement.Where(a => a.id == 1).FirstOrDefault();
+            model.soloAnnouncement = requirements;
+            //End for required documents
+
+            //File Paths from Database
+            var filesFromDB = _context.tbl_files.Where(f => f.tbl_user_id == uid && !f.path.Contains("UserPhotos")).ToList();
+            List<tbl_files> files = new List<tbl_files>();
+
+            foreach (var fileList in filesFromDB)
+            {
+                files.Add(new tbl_files { Id = fileList.Id, filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, date_created = fileList.date_created, file_size = fileList.file_size });
+                //files.Add(new tbl_files { filename = f });
+            }
+
+            model.tbl_Files = files;
+            //END FOR FILE DOWNLOAD
+
+            //Profile Photo Source
+            bool profilePhotoExist = _context.tbl_files.Where(f => f.tbl_user_id == uid && f.path.Contains("UserPhotos") && f.is_active == true).Any();
+            if (profilePhotoExist == true)
+            {
+                var profilePhoto = _context.tbl_files.Where(f => f.tbl_user_id == uid && f.path.Contains("UserPhotos") && f.is_active == true).FirstOrDefault();
+                ViewBag.profilePhotoSource = "/Files/UserPhotos/" + profilePhoto.filename;
+            }
+            else
+            {
+                ViewBag.profilePhotoSource = "/assets/images/default-avatar.png";
+            }
+            //END for Profile Photo Source
+
+            //Display List of Comments
+            model.commentsViewModelsList = (from c in _context.tbl_comments
+                                            where c.tbl_user_id == uid
+                                            join f in _context.tbl_files on c.tbl_files_id equals f.Id
+                                            join usr in _context.tbl_user on c.created_by equals usr.id
+                                            select new CommentsViewModel
+                                            {
+                                                tbl_user_id = c.tbl_user_id,
+                                                tbl_files_id = c.tbl_files_id,
+                                                fileName = f.filename,
+                                                comment = c.comment,
+                                                commenterName = usr.first_name + " " + usr.last_name + " " + usr.suffix,
+                                                created_by = c.created_by,
+                                                modified_by = c.modified_by,
+                                                date_created = c.date_created,
+                                                date_modified = c.date_modified
+                                            }).OrderBy(f => f.fileName).ThenByDescending(d => d.date_created);
+            return View(model);
         }
         public IActionResult EditAccount()
         {
@@ -202,6 +288,13 @@ namespace FMB_CIS.Controllers
             }
             
         }
+        [Authorize]
+        public IActionResult ChangePassword()
+        {
+            ChangePasswordViewModel model = new ChangePasswordViewModel(); 
+            model.isSuccess = false;
+            return View(model);
+        }
 
         [HttpPost, ActionName("GetProvinceByRegionId")]
         public JsonResult GetProvinceByRegionId(string tbl_region_id)
@@ -289,8 +382,17 @@ namespace FMB_CIS.Controllers
                 _context.tbl_user.Add(model.tbl_User);
                 _context.SaveChanges();
 
+                //var tblUsrTempPass = new tbl_user_temp_passwords();
+                //tblUsrTempPass.tbl_user_id = model.tbl_User.id;
+                //tblUsrTempPass.password = encrPw;
+                //tblUsrTempPass.is_active = false;
+                //tblUsrTempPass.date_created = DateTime.Now;
+                //tblUsrTempPass.date_modified = DateTime.Now;
+                //_context.tbl_user_temp_passwords.Add(tblUsrTempPass);
+                //_context.SaveChanges();
+
                 var subject = "Account Created";
-                var body = "We would like to inform you that an admin created an account using your email for FMB-CIS.\nPlease login with your temporary password: " + decrPw + "\nThank You!";
+                var body = "We would like to inform you that an admin created an account using your email for FMB-CIS.\nPlease login with your temporary password: " + decrPw + "\nPleace replace your password by visiting https://fmb-cis.beesuite.ph/AccountManagement/ChangePassword after you login. Thank You!";
                 EmailSender.SendEmailAsync(model.tbl_User.email, subject, body);
 
                 //return View(model);
@@ -423,7 +525,75 @@ namespace FMB_CIS.Controllers
             EmailSender.SendEmailAsync(usrDB.email, subject, body);
             return RedirectToAction("Index","AccountManagement");
         }
-        
+
+        [HttpPost]
+        public IActionResult RequestToChangeAccountInfo(ViewModel model)
+        {
+            int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            var newChangeInfoRequest = new tbl_user_change_info_request();
+
+
+            newChangeInfoRequest.tbl_user_id = loggedUserID;
+            newChangeInfoRequest.ticket_no = "CIS-CUI" + DateTime.Now.ToString("yyyyMMdd") + "-" + DateTime.Now.ToString("HHmmssffffff");
+            newChangeInfoRequest.first_name = model.tbl_User.first_name;
+            newChangeInfoRequest.middle_name = model.tbl_User.middle_name;
+            newChangeInfoRequest.last_name = model.tbl_User.last_name;
+            newChangeInfoRequest.suffix = model.tbl_User.suffix;
+            newChangeInfoRequest.company_name = model.tbl_User.company_name;
+            newChangeInfoRequest.contact_no = model.tbl_User.contact_no;
+            newChangeInfoRequest.valid_id = model.tbl_User.valid_id;
+            newChangeInfoRequest.valid_id_no = model.tbl_User.valid_id_no;
+            newChangeInfoRequest.birth_date = model.tbl_User.birth_date;
+            newChangeInfoRequest.tbl_region_id = model.tbl_User.tbl_region_id;
+            newChangeInfoRequest.tbl_province_id = model.tbl_User.tbl_province_id;
+            newChangeInfoRequest.tbl_city_id = model.tbl_User.tbl_city_id;
+            newChangeInfoRequest.tbl_brgy_id = model.tbl_User.tbl_brgy_id;
+            newChangeInfoRequest.street_address = model.tbl_User.street_address;
+            newChangeInfoRequest.email = model.tbl_User.email;
+            newChangeInfoRequest.tbl_user_types_id = model.tbl_User.tbl_user_types_id;
+            newChangeInfoRequest.user_classification = model.tbl_User.user_classification;
+            newChangeInfoRequest.gender = model.tbl_User.gender;
+            newChangeInfoRequest.tbl_user_change_info_request_status_id = 2; // 1 - Approved, 2 - Pending, 3 - Declined
+            newChangeInfoRequest.created_by = loggedUserID;
+            newChangeInfoRequest.modified_by = loggedUserID;
+            newChangeInfoRequest.date_created = DateTime.Now;
+            newChangeInfoRequest.date_modified = DateTime.Now;
+
+            _context.tbl_user_change_info_request.Add(newChangeInfoRequest);
+            _context.SaveChanges();
+
+            //Email
+            var subject = "Request to Change Account Information Status";
+            var body = "Greetings! \n We would like to inform your request to change account information has been received.";
+            EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult ChangePassword(ChangePasswordViewModel model)
+        {
+            int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+
+            string decrPw = model.NewPassword;
+            string encrPw = EncryptDecrypt.ConvertToEncrypt(decrPw);
+
+            var usrDB = _context.tbl_user.Where(m => m.id == uid).FirstOrDefault();
+            
+            if(model.OldPassword == EncryptDecrypt.ConvertToDecrypt(usrDB.password))
+            {
+                usrDB.password = encrPw;
+                _context.Update(usrDB);
+                _context.SaveChanges();
+                model.isSuccess = true;
+            }
+            else
+            {
+                ModelState.AddModelError("", "Invalid Password");
+                model.isSuccess = false;
+            }
+            return View(model);
+        }
 
         //LIST OF ACCOUNTS CAN BE ACCESSED BY CENRO ON ACCOUNTS LIST
         public IActionResult AccountsList()
@@ -444,6 +614,191 @@ namespace FMB_CIS.Controllers
             }
 
         }
+
+
+        public IActionResult RequestToChangeAcctInfoList()
+        {
+            string roleOfLoggedUser = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
+            int usrTypeID = _context.tbl_user_types.Where(utype => utype.name == roleOfLoggedUser).Select(utype => utype.id).FirstOrDefault();
+
+            if (roleOfLoggedUser.Contains("Chainsaw") == true)
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }            
+            else if (usrTypeID == 8 || usrTypeID == 9 || usrTypeID == 13 || usrTypeID == 14 || usrTypeID == 17)
+            {
+                //Only the following user roles can access this page:
+                //8 - DENR CENRO,
+                //9 - DENR Implementing PENRO,
+                //13 - DENR CIS Administrator,
+                //14 - DENR CIS Super Admin,
+                //17 - DENR Regional Executive Director(RED)
+
+                ViewModel model = new ViewModel();
+                
+                //Set condition of which User roles can be viewed
+                string condition = "";
+                if (roleOfLoggedUser.Contains("Administrator") == true || roleOfLoggedUser.Contains("Super Admin") == true)
+                {
+                    condition = "DENR";
+                }
+                else if (roleOfLoggedUser.Contains("CENRO") == true || roleOfLoggedUser.Contains("Implementing PENRO") == true || roleOfLoggedUser.Contains("RED") == true)
+                {
+                    condition = "Chainsaw";
+                    //CENRO, Implementing PENRO, and RED are the only allowed to view request for account changes of Chainsaw Owners
+                }
+                model.RequestChangeAcctInfoViewModelList = (from rcui in _context.tbl_user_change_info_request
+                                                            join utype in _context.tbl_user_types on rcui.tbl_user_types_id equals utype.id
+                                                            join reqstat in _context.tbl_user_change_info_request_status on rcui.tbl_user_change_info_request_status_id equals reqstat.id
+                                                            join reg in _context.tbl_region on rcui.tbl_region_id equals reg.id
+                                                            join prov in _context.tbl_province on rcui.tbl_province_id equals prov.id
+                                                            join ct in _context.tbl_city on rcui.tbl_city_id equals ct.id
+                                                            join brngy in _context.tbl_brgy on rcui.tbl_brgy_id equals brngy.id
+                                                            select new RequestChangeAcctInfoViewModel
+                                                            {
+                                                                id = rcui.id,
+                                                                ticket_no = rcui.ticket_no,
+                                                                FullName = rcui.first_name + " " + rcui.middle_name + " " + rcui.last_name + " " + rcui.suffix,
+                                                                tbl_user_id = rcui.tbl_user_id,
+                                                                userType = utype.name,
+                                                                email = rcui.email,
+                                                                contact_no = rcui.contact_no,
+                                                                street_address = rcui.street_address,
+                                                                city = ct.name,
+                                                                status = reqstat.status_name,
+                                                                date_created = rcui.date_created
+                                                            }).Where(rcui => rcui.userType.Contains(condition)).OrderByDescending(rcui => rcui.ticket_no);
+                
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+        }
+
+        //TO BE USED BY CENRO/Implementing PENRO/RED/Admin/Super Admin FOR APPROVAL OF REQUEST IN CHANGING ACCOUNT INFO
+        [HttpGet]
+        public IActionResult RequestToChangeAcctInfoApproval(int id)
+        {
+            if(id == null)
+            {
+                return RedirectToAction("RequestToChangeAcctInfoList", "AccountManagement");
+                
+            }
+            else
+            {
+                string roleOfLoggedUser = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
+                int usrTypeID = _context.tbl_user_types.Where(utype => utype.name == roleOfLoggedUser).Select(utype => utype.id).FirstOrDefault();
+
+                if (roleOfLoggedUser.Contains("Chainsaw") == true)
+                {
+                    return RedirectToAction("Index", "Dashboard");
+                }
+                else if (usrTypeID == 8 || usrTypeID == 9 || usrTypeID == 13 || usrTypeID == 14 || usrTypeID == 17)
+                {
+                    //Only the following user roles can access this page:
+                    //8 - DENR CENRO,
+                    //9 - DENR Implementing PENRO,
+                    //13 - DENR CIS Administrator,
+                    //14 - DENR CIS Super Admin,
+                    //17 - DENR Regional Executive Director(RED)
+
+                    ViewModel model = new ViewModel();
+                    if (id == null)
+                    {
+                        ModelState.AddModelError("", "Invalid Application");
+                        return RedirectToAction("Index", "AccountManagement");
+                    }
+
+                    else
+                    {
+                        //int usid = Convert.ToInt32(uid);
+
+                        model.RequestChangeAcctInfoViewModelApproval = (from rcui in _context.tbl_user_change_info_request
+                                                                        where rcui.id == id
+                                                                        join utbl in _context.tbl_user on rcui.tbl_user_id equals utbl.id
+                                                                        join utype in _context.tbl_user_types on rcui.tbl_user_types_id equals utype.id
+                                                                        join reqstat in _context.tbl_user_change_info_request_status on rcui.tbl_user_change_info_request_status_id equals reqstat.id
+                                                                        join reg in _context.tbl_region on rcui.tbl_region_id equals reg.id
+                                                                        join prov in _context.tbl_province on rcui.tbl_province_id equals prov.id
+                                                                        join ct in _context.tbl_city on rcui.tbl_city_id equals ct.id
+                                                                        join brngy in _context.tbl_brgy on rcui.tbl_brgy_id equals brngy.id
+                                                                        select new RequestChangeAcctInfoViewModel
+                                                                        {
+                                                                            id = rcui.id,
+                                                                            ticket_no = rcui.ticket_no,
+                                                                            first_name = rcui.first_name,
+                                                                            middle_name = rcui.middle_name,
+                                                                            last_name = rcui.last_name,
+                                                                            suffix = rcui.suffix,
+                                                                            tbl_user_id = rcui.tbl_user_id,
+                                                                            company_name = rcui.company_name,
+                                                                            valid_id = rcui.valid_id,
+                                                                            valid_id_no = rcui.valid_id_no,
+                                                                            birth_date = rcui.birth_date,
+                                                                            userType = utype.name,
+                                                                            tbl_user_types_id = rcui.tbl_user_types_id,
+                                                                            user_classification = rcui.user_classification,
+                                                                            gender = rcui.gender,
+                                                                            email = rcui.email,
+                                                                            contact_no = rcui.contact_no,
+                                                                            street_address = rcui.street_address,
+                                                                            brgy = brngy.name,
+                                                                            city = ct.name,
+                                                                            province = prov.name,
+                                                                            region = reg.name,
+                                                                            tbl_brgy_id = rcui.tbl_brgy_id,
+                                                                            tbl_city_id = rcui.tbl_city_id,
+                                                                            tbl_province_id = rcui.tbl_province_id,
+                                                                            tbl_region_id = rcui.tbl_region_id,
+                                                                            status = reqstat.status_name,
+                                                                            date_created = rcui.date_created
+                                                                        }).FirstOrDefault();
+
+
+                        model.acctApprovalViewModels = (from u in _context.tbl_user
+                                                        where u.id == model.RequestChangeAcctInfoViewModelApproval.tbl_user_id
+                                                        join utype in _context.tbl_user_types on u.tbl_user_types_id equals utype.id
+                                                        join reg in _context.tbl_region on u.tbl_region_id equals reg.id
+                                                        join prov in _context.tbl_province on u.tbl_province_id equals prov.id
+                                                        join ct in _context.tbl_city on u.tbl_city_id equals ct.id
+                                                        join brngy in _context.tbl_brgy on u.tbl_brgy_id equals brngy.id
+                                                        select new AcctApprovalViewModel
+                                                        {
+                                                            first_name = u.first_name,
+                                                            middle_name = u.middle_name,
+                                                            last_name = u.last_name,
+                                                            suffix = u.suffix,
+                                                            userType = utype.name,
+                                                            email = u.email,
+                                                            contact_no = u.contact_no,
+                                                            valid_id = u.valid_id,
+                                                            valid_id_no = u.valid_id_no,
+                                                            birth_date = u.birth_date.ToString(),
+                                                            street_address = u.street_address,
+                                                            region = reg.name,
+                                                            province = prov.name,
+                                                            city = ct.name,
+                                                            brgy = brngy.name,
+                                                            comment = u.comment,
+                                                            user_classification = u.user_classification,
+                                                            gender = u.gender,
+                                                            company_name = u.company_name
+                                                        }).FirstOrDefault();
+
+                        return View(model);
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Dashboard");
+                }
+            }
+            
+
+        }
+
         //TO BE USED BY CENRO FOR APPROVAL OF NEWLY REGISTERED ACCOUNTS
         [HttpGet]
         //[Url("?email={email}&code={code}")]
@@ -497,7 +852,8 @@ namespace FMB_CIS.Controllers
                                        comment = u.comment,
                                        user_classification = u.user_classification,
                                        gender = u.gender,
-                                       company_name = u.company_name
+                                       company_name = u.company_name,
+                                       is_active = u.is_active
                                    }).FirstOrDefault();
 
                     //mymodel.acctApprovalViewModels = (AcctApprovalViewModel?)userinfoList;
@@ -564,11 +920,68 @@ namespace FMB_CIS.Controllers
         }
 
         [HttpPost]
+        public IActionResult RequestToChangeAcctInfoApproval(ViewModel model)
+        {
+            if(model.decision == "Approve") //Approve
+            {
+                var usrTbl = _context.tbl_user.Where(m => m.id == model.tbl_User_Change_Info_Request.tbl_user_id).FirstOrDefault();
+                usrTbl.first_name = model.tbl_User_Change_Info_Request.first_name;
+                usrTbl.middle_name = model.tbl_User_Change_Info_Request.middle_name;
+                usrTbl.last_name = model.tbl_User_Change_Info_Request.last_name;
+                usrTbl.suffix = model.tbl_User_Change_Info_Request.suffix;
+                usrTbl.company_name = model.tbl_User_Change_Info_Request.company_name;
+                usrTbl.contact_no = model.tbl_User_Change_Info_Request.contact_no;
+                usrTbl.valid_id = model.tbl_User_Change_Info_Request.valid_id;
+                usrTbl.valid_id_no = model.tbl_User_Change_Info_Request.valid_id_no;
+                usrTbl.birth_date = model.tbl_User_Change_Info_Request.birth_date;
+                usrTbl.tbl_region_id = Convert.ToInt32(model.tbl_User_Change_Info_Request.tbl_region_id);
+                usrTbl.tbl_province_id = Convert.ToInt32(model.tbl_User_Change_Info_Request.tbl_province_id);
+                usrTbl.tbl_city_id = Convert.ToInt32(model.tbl_User_Change_Info_Request.tbl_city_id);
+                usrTbl.tbl_brgy_id = Convert.ToInt32(model.tbl_User_Change_Info_Request.tbl_brgy_id);
+                usrTbl.street_address = model.tbl_User_Change_Info_Request.street_address;
+                usrTbl.email = model.tbl_User_Change_Info_Request.email;
+                usrTbl.tbl_user_types_id = Convert.ToInt32(model.tbl_User_Change_Info_Request.tbl_user_types_id);
+                usrTbl.user_classification = model.tbl_User_Change_Info_Request.user_classification;
+                usrTbl.date_modified = DateTime.Now;
+                _context.Update(usrTbl);
+                _context.SaveChanges();
+
+                var reqTbl = _context.tbl_user_change_info_request.Where(m => m.id == model.tbl_User_Change_Info_Request.id).FirstOrDefault();
+                reqTbl.tbl_user_change_info_request_status_id = 1;
+                _context.Update(reqTbl);
+                _context.SaveChanges();
+                //Email
+                var subject = "Request to Change Account Information Status";
+                var body = "Greetings! \n We would like to inform your request to change account information has been approved.";
+                EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
+                return RedirectToAction("RequestToChangeAcctInfoList", "AccountManagement");
+
+            }                
+            else //Decline
+            {
+                var reqTbl = _context.tbl_user_change_info_request.Where(m => m.id == model.tbl_User_Change_Info_Request.id).FirstOrDefault();
+                reqTbl.tbl_user_change_info_request_status_id = 3;
+                _context.Update(reqTbl);
+                _context.SaveChanges();
+                //Email
+                var subject = "Request to Change Account Information Status";
+                var body = "Greetings! \n We would like to inform your request to change account information has been declined.";
+                EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
+                return RedirectToAction("RequestToChangeAcctInfoApproval", "AccountManagement", new { id = model.tbl_User_Change_Info_Request.id });
+                //return RedirectToAction("RequestToChangeAcctInfoList","AccountManagement");
+            }
+            //return View();
+        }
+
+        [HttpPost]
         //[Url("?email={email}&code={code}")]
         public IActionResult AccountsApproval(int? uid, ViewModel model)
         {
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
 
+            string roleOfLoggedUser = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
+            int usrTypeID = _context.tbl_user_types.Where(utype => utype.name == roleOfLoggedUser).Select(utype => utype.id).FirstOrDefault();
+            
             //viewMod.applicantListViewModels.FirstOrDefault(x=>x.comment)
             //string newComment = viewMod.applicantListViewModels.Where(x => x.tbl_user_id == uid).Select(v => v.comment).ToList().ToString();
 
@@ -580,38 +993,89 @@ namespace FMB_CIS.Controllers
             {
                 int usid = Convert.ToInt32(uid);
                 string buttonClicked = model.decision;
-                if (buttonClicked == "Approve")
-                {                    
-                    var usr = new tbl_user() { id = usid, status = true, date_modified = DateTime.Now, comment = model.acctApprovalViewModels.comment };
-                    
-                    using (_context)
-                    {
-                        _context.tbl_user.Attach(usr);
-                        _context.Entry(usr).Property(x => x.status).IsModified = true;
-                        _context.Entry(usr).Property(x => x.date_modified).IsModified = true;
-                        _context.Entry(usr).Property(x => x.comment).IsModified = true;
-                        _context.SaveChanges();
-                    }
-                    //Email
-                    var subject = "Account Registration Status";
-                    var body = "Greetings! \n We would like to inform your account has been approved.\nThe officer left the following comment:\n" + model.acctApprovalViewModels.comment;
-                    EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
-                }
-                else //if (buttonClicked == "Decline")
+
+                if (usrTypeID <= 7)
                 {
-                    var usr = new tbl_user() { id = usid, status = false, date_modified = DateTime.Now, comment = model.acctApprovalViewModels.comment };
-                    using (_context)
+                    return RedirectToAction("Index", "AccountManagement");
+                }
+                else if (usrTypeID == 8 || usrTypeID == 9 || usrTypeID == 17)
+                {
+                    //ONLY THE FOLLOWING ROLES CAN APPROVE OR DECLINE AN ACCOUNT REGISTRATION
+                    //8 - DENR CENRO,
+                    //9 - DENR Implementing PENRO,
+                    //17 - DENR Regional Executive Director(RED)
+                    if (buttonClicked == "Approve")
                     {
-                        _context.tbl_user.Attach(usr);
-                        _context.Entry(usr).Property(x => x.status).IsModified = true;
-                        _context.Entry(usr).Property(x => x.date_modified).IsModified = true;
-                        _context.Entry(usr).Property(x => x.comment).IsModified = true;
-                        _context.SaveChanges();
+                        var usr = new tbl_user() { id = usid, status = true, date_modified = DateTime.Now, comment = model.acctApprovalViewModels.comment };
+
+                        using (_context)
+                        {
+                            _context.tbl_user.Attach(usr);
+                            _context.Entry(usr).Property(x => x.status).IsModified = true;
+                            _context.Entry(usr).Property(x => x.date_modified).IsModified = true;
+                            _context.Entry(usr).Property(x => x.comment).IsModified = true;
+                            _context.SaveChanges();
+                        }
+                        //Email
+                        var subject = "Account Registration Status";
+                        var body = "Greetings! \n We would like to inform your account has been approved.\nThe officer left the following comment:\n" + model.acctApprovalViewModels.comment;
+                        EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
                     }
-                    //Email
-                    var subject = "Account Registration Status";
-                    var body = "Greetings! \n We regret to inform you that your Account has been rejected.\nThe officer left the following comment:\n" + model.acctApprovalViewModels.comment;
-                    EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
+                    else //if (buttonClicked == "Decline")
+                    {
+                        var usr = new tbl_user() { id = usid, status = false, date_modified = DateTime.Now, comment = model.acctApprovalViewModels.comment };
+                        using (_context)
+                        {
+                            _context.tbl_user.Attach(usr);
+                            _context.Entry(usr).Property(x => x.status).IsModified = true;
+                            _context.Entry(usr).Property(x => x.date_modified).IsModified = true;
+                            _context.Entry(usr).Property(x => x.comment).IsModified = true;
+                            _context.SaveChanges();
+                        }
+                        //Email
+                        var subject = "Account Registration Status";
+                        var body = "Greetings! \n We regret to inform you that your Account has been rejected.\nThe officer left the following comment:\n" + model.acctApprovalViewModels.comment;
+                        EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
+                    }
+                }
+                else if (usrTypeID == 13 || usrTypeID == 14)
+                {
+                    //ONLY THE FOLLOWING ROLES CAN APPROVE OR DECLINE AN ACCOUNT REGISTRATION
+                    //13 - DENR CIS Administrator,
+                    //14 - DENR CIS Super Admin,
+                    if (buttonClicked == "Enable")
+                    {
+                        var usr = new tbl_user() { id = usid, is_active = true, date_modified = DateTime.Now, comment = model.acctApprovalViewModels.comment };
+
+                        using (_context)
+                        {
+                            _context.tbl_user.Attach(usr);
+                            _context.Entry(usr).Property(x => x.is_active).IsModified = true;
+                            _context.Entry(usr).Property(x => x.date_modified).IsModified = true;
+                            _context.Entry(usr).Property(x => x.comment).IsModified = true;
+                            _context.SaveChanges();
+                        }
+                        //Email
+                        var subject = "CIS Account Status";
+                        var body = "Greetings! \n We would like to inform your account has been enabled.\nYou are now allowed to login in the CIS system. Thank you!";
+                        EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
+                    }
+                    else //if (buttonClicked == "Disable")
+                    {
+                        var usr = new tbl_user() { id = usid, is_active = false, date_modified = DateTime.Now, comment = model.acctApprovalViewModels.comment };
+                        using (_context)
+                        {
+                            _context.tbl_user.Attach(usr);
+                            _context.Entry(usr).Property(x => x.is_active).IsModified = true;
+                            _context.Entry(usr).Property(x => x.date_modified).IsModified = true;
+                            _context.Entry(usr).Property(x => x.comment).IsModified = true;
+                            _context.SaveChanges();
+                        }
+                        //Email
+                        var subject = "CIS Account Status";
+                        var body = "Greetings! \n We regret to inform you that your Account has been disabled.\nYou will not be allowed to login in the CIS system.";
+                        EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
+                    }
                 }
 
                 return RedirectToAction("Index", "AccountManagement");

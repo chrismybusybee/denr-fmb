@@ -1,33 +1,30 @@
-﻿@using System.Security.Claims;
+﻿@model FMB_CIS.Models.ViewModel
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
-    ViewBag.Title = "Account Management";
+    ViewBag.Title = "Request To Change Account Info";
 }
 
 <div id="card-container">
     <div id="card">
         <a href="@Url.Action("Index", "Home")" class="me-auto pb-4" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
-        @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Administrator") == true || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Super Admin") == true)
-        {
         <button type="button" id="btnAdd" class="btn btn-primary float-end" onclick="window.location.href = '@Url.Action("AddAccount", "AccountManagement")'">Add New <i data-feather="plus"></i></button>
-        }
+
         <table id="accountManagementTable" class="table table-striped dataTable">
             <thead>
                 <tr>
-                    <th class="text-nowrap">Date Registered</th>
-                    <th class="text-nowrap">User Type</th>
+                    <th class="text-nowrap">Date Requested</th>
+                    <th class="text-nowrap">Ticket No.</th>
                     <th class="text-nowrap">Name</th>
+                    <th class="text-nowrap">User Type</th>
                     <th class="text-nowrap">Email</th>
-                    <th class="text-nowrap">Contact No.</th>
                     <th class="text-nowrap">Address</th>
                     <th class="text-nowrap">Municipality</th>
-                    <th class="text-nowrap text-center">Registration Status</th>
-                    <th class="text-nowrap text-center">Account Status</th>                    
+                    <th class="text-nowrap text-center">Status</th>
                     <th class="text-nowrap text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (AcctApprovalViewModel item in Model.acctList)
+                @foreach (RequestChangeAcctInfoViewModel item in Model.RequestChangeAcctInfoViewModelList)
                 {
                     <tr>
                         <td class="text-nowrap">
@@ -35,16 +32,16 @@
                             @Convert.ToDateTime(item.date_created).ToString("yyyy-MM-dd HH:mm:ss")
                         </td>
                         <td class="text-nowrap">
-                            @Html.DisplayFor(modelItem => item.userType)
+                            @Html.DisplayFor(modelItem => item.ticket_no)
                         </td>
                         <td class="text-nowrap">
                             @Html.DisplayFor(modelItem => item.FullName)
                         </td>
                         <td class="text-nowrap">
-                            @Html.DisplayFor(modelItem => item.email)
+                            @Html.DisplayFor(modelItem => item.userType)
                         </td>
                         <td class="text-nowrap">
-                            @Html.DisplayFor(modelItem => item.contact_no)
+                            @Html.DisplayFor(modelItem => item.email)
                         </td>
                         <td class="text-nowrap">
                             @Html.DisplayFor(modelItem => item.street_address)
@@ -52,40 +49,30 @@
                         <td class="text-nowrap">
                             @Html.DisplayFor(modelItem => item.city)
                         </td>
-                        <td class="text-nowrap text-center justify-content-center">
-                            @if (item.status == true)
+                        <td class="text-nowrap text-center d-flex justify-content-center">
+                            @if (item.status == "Approved")
                             {
                                 <div class="bg-success text-white px-3 pb-2 pt-1 rounded-pill w-105">
                                     Approved
                                 </div>
                             }
-                            else
+                            else if (item.status == "Pending")
                             {
                                 <div class="bg-secondary text-white px-3 pb-2 pt-1 rounded-pill w-105">
                                     Pending
                                 </div>
                             }
-
-                        </td>
-                        <td class="text-nowrap text-center d-flex justify-content-center">
-                            @if (item.is_active == true)
-                            {
-                                <div class="bg-success text-white px-3 pb-2 pt-1 rounded-pill w-105">
-                                    Active
-                                </div>
-                            }
-                            else
+                            else if (item.status == "Declined")
                             {
                                 <div class="bg-danger text-white px-3 pb-2 pt-1 rounded-pill w-105">
-                                    Disabled
+                                    Declined
                                 </div>
                             }
 
                         </td>
-                        
                         <td class="text-nowrap">
                             <div class="d-flex justify-content-center gap-3">
-                                <a href="AccountManagement/AccountsApproval?uid=@item.userID" @* class="bg-green text-white px-1 pb-1 rounded" *@ title="edit">
+                                <a href="@Url.Action("RequestToChangeAcctInfoApproval", "AccountManagement", new { id = item.id })" @* class="bg-green text-white px-1 pb-1 rounded" *@ title="edit">
                                     @* <i data-feather="edit" class="data-feather-20"></i> *@
                                     Take Action
                                 </a>

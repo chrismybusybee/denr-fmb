@@ -36,5 +36,9 @@
 
         public IEnumerable<tbl_division>? tbl_Division_List { get; set; }
 
+        public IEnumerable<tbl_user_change_info_request>? tbl_User_Change_Info_Request_List { get; set; }
+        public tbl_user_change_info_request? tbl_User_Change_Info_Request { get; set; }
+        public IEnumerable<RequestChangeAcctInfoViewModel>? RequestChangeAcctInfoViewModelList { get; set; }
+        public RequestChangeAcctInfoViewModel? RequestChangeAcctInfoViewModelApproval { get; set; }
     }
 }

@@ -13,7 +13,7 @@
                 <input asp-for="uid" type="hidden" />
                 <input asp-for="appid" type="hidden" />
                 <div class="d-flex justify-content-end gap-2">
-                    @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO") == true)
+                    @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO") == true || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("RED") == true || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Implementing") == true)
                     {
                         @* <input id="approveBtn" class="btn btn-primary w-105" name="SubmitButton" type="button" value="Approve" />
                         <input id="declineBtn" class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="button" value="Decline" /> *@
@@ -21,9 +21,13 @@
                         <button type="button" name="SubmitButton" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
                         <input asp-for="decision" id="decisionID" type="hidden" />
                     }
-                    @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true)
+                    @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Administrator") == true || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Super Admin") == true)
                     {
-                        <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" />
+                        <button type="button" name="SubmitButton" id="approveBtn" class="btn btn-primary w-105" style="display: none;">Approve</button>
+                        <button type="button" name="SubmitButton" id="declineBtn" class="btn btn-danger w-105 btnCancel" style="display: none;">Decline</button>
+                        <button type="button" name="SubmitButton" id="enableBtn" class="btn btn-primary w-105">Enable</button>
+                        <button type="button" name="SubmitButton" id="disableBtn" class="btn btn-danger w-105 btnCancel">Disable</button>
+                        <input asp-for="decision" id="decisionID" type="hidden" />
                     }
 
                 </div>
@@ -460,6 +464,33 @@
             $("#confirmDeclineModal").modal('hide');
             $('#confirmSuccessDeclineModal').modal("show");
         });
+        $('#enableBtn').click(function () {
+            $('#confirmEnableModal').modal("show");
+            document.getElementById("decisionID").value = "Enable";
+        });
+
+        $("#backEnableBtn").click(function () {
+            $("#confirmEnableModal").modal('hide');
+        });
+
+        $("#confirmEnableBtn").click(function () {
+            $('#confirmSuccessEnableModal').modal("show");
+        });
+
+        $('#disableBtn').click(function () {
+            $('#confirmDisableModal').modal("show");
+            document.getElementById("decisionID").value = "Disable";
+        });
+
+        $('#backDisableBtn').click(function () {
+            $('#confirmDisableModal').modal("hide");
+        });
+
+        $("#confirmDisableBtn").click(function () {
+            $("#confirmDisableModal").modal('hide');
+            $('#confirmSuccessDisableModal').modal("show");
+        });
+
     });
 
 

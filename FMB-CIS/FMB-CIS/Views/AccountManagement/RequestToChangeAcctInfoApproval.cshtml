@@ -1,0 +1,659 @@
+﻿@using System.Security.Claims;
+@model FMB_CIS.Models.ViewModel
+@* @model FMB_CIS.Models.ApplicantListViewModel *@
+@{
+    Layout = "~/Views/Shared/_MainPageLayout.cshtml";
+    ViewBag.Title = "Request To Change Account Info";
+}
+
+<div id="card-container">
+    <div id="card">
+        <form asp-controller="AccountManagement" asp-action="RequestToChangeAcctInfoApproval" method="post" id="ReqToChangInfApprvlForm">
+            <div class="row m-0">
+                <div class="d-flex justify-content-end gap-2">
+                        @* <input id="approveBtn" class="btn btn-primary w-105" name="SubmitButton" type="button" value="Approve" />
+                        <input id="declineBtn" class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="button" value="Decline" /> *@
+                    <button type="button" name="SubmitButton" id="approveBtn" class="btn btn-primary w-105">Approve</button>
+                    <button type="button" name="SubmitButton" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
+                    <input asp-for="decision" id="decisionID" type="hidden" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <h5 class="text-secondary fw-bold my-2">Request Status:</h5>
+                </div>
+                <div class="col-md-2">
+                    @if (Model.RequestChangeAcctInfoViewModelApproval.status == "Approved")
+                    {
+                        <div class="bg-success text-white px-3 pb-2 pt-1 rounded-pill w-105">
+                            Approved
+                        </div>
+                    }
+                    else if (Model.RequestChangeAcctInfoViewModelApproval.status == "Pending")
+                    {
+                        <div class="bg-secondary text-white px-3 pb-2 pt-1 rounded-pill w-105">
+                            Pending
+                        </div>
+                    }
+                    else if (Model.RequestChangeAcctInfoViewModelApproval.status == "Declined")
+                    {
+                        <div class="bg-danger text-white px-3 pb-2 pt-1 rounded-pill w-105">
+                            Declined
+                        </div>
+                    }
+                </div>
+            </div>
+            <h5 class="text-secondary fw-bold my-4">Current Account Information</h5>
+            <hr />
+            <div id="profileSection" class="row m-0">
+                <div class="col-md-3">
+                    <div class="d-flex justify-content-center gap-1">
+                        <img src="@ViewBag.profilePhotoSource" class="img-fluid rounded" width="220px"/>
+                        @* <img src="/assets/images/default-avatar.png" class="img-fluid rounded" /> *@
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-md-10">
+                           @if (Model.acctApprovalViewModels.user_classification == "Corporation")
+                            {
+                                <div class="row mb-5">
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                User Type
+                                            </label>
+                                            <span class="fw-bold">
+                                                @Html.DisplayFor(model => model.acctApprovalViewModels.userType)
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-5">
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Classification
+                                            </label>
+                                            <span class="fw-bold">
+                                                @Html.DisplayFor(model => model.acctApprovalViewModels.user_classification)
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Company Name
+                                            </label>
+                                            <span class="fw-bold">
+                                                @Html.DisplayFor(model => model.acctApprovalViewModels.company_name)
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="row mb-5">
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                User Type
+                                            </label>
+                                            <span class="fw-bold">
+                                                @Html.DisplayFor(model => model.acctApprovalViewModels.userType)
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Classification
+                                            </label>
+                                            <span class="fw-bold">
+                                                @Html.DisplayFor(model => model.acctApprovalViewModels.user_classification)
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="row mb-5">
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            First Name
+                                        </label>
+                                        <span class="fw-bold">
+                                            @Html.DisplayFor(model => model.acctApprovalViewModels.first_name)
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Middle Name
+                                        </label>
+                                        <span class="fw-bold">
+                                            @Html.DisplayFor(model => model.acctApprovalViewModels.middle_name)
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Last Name
+                                        </label>
+                                        <span class="fw-bold">
+                                            @Html.DisplayFor(model => model.acctApprovalViewModels.last_name)
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Suffix
+                                        </label>
+                                        <span class="fw-bold">
+                                            @Html.DisplayFor(model => model.acctApprovalViewModels.suffix)
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Gender
+                                        </label>
+                                        <span class="fw-bold">
+                                            @Html.DisplayFor(model => model.acctApprovalViewModels.gender)
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Email Address
+                                        </label>
+                                        <span class="fw-bold">
+                                            @* @Model.acctApprovalViewModels.email *@
+                                            @Html.DisplayFor(model => model.acctApprovalViewModels.email)      
+                                            @Html.HiddenFor(model => model.acctApprovalViewModels.email)
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Contact Number
+                                        </label>
+                                        <span class="fw-bold">
+                                            @Html.DisplayFor(model => model.acctApprovalViewModels.contact_no)
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Valid ID
+                                        </label>
+                                        <span class="fw-bold">
+                                            @Html.DisplayFor(model => model.acctApprovalViewModels.valid_id)
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Valid ID Number
+                                        </label>
+                                        <span class="fw-bold">
+                                            @Html.DisplayFor(model => model.acctApprovalViewModels.valid_id_no)
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Birth Date
+                                        </label>
+                                        <span class="fw-bold">
+                                            @Html.DisplayFor(model => model.acctApprovalViewModels.birth_date)
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        @if (Model.acctApprovalViewModels.user_classification == "Corporation")
+                                        {
+                                            <label class="text-secondary small">Company Street Address</label>
+                                        }
+                                        else
+                                        {
+                                            <label class="text-secondary small">Street Address</label>
+                                        }
+                                        <span class="fw-bold">
+                                            @Html.DisplayFor(model => model.acctApprovalViewModels.street_address)
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Region
+                                        </label>
+                                        <span class="fw-bold">
+                                            @Html.DisplayFor(model => model.acctApprovalViewModels.region)
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Province
+                                        </label>
+                                        <span class="fw-bold">
+                                            @Html.DisplayFor(model => model.acctApprovalViewModels.province)
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            City/Municipality
+                                        </label>
+                                        <span class="fw-bold">
+                                            @Html.DisplayFor(model => model.acctApprovalViewModels.city)
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Barangay
+                                        </label>
+                                        <span class="fw-bold">
+                                            @Html.DisplayFor(model => model.acctApprovalViewModels.brgy)
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <h5 class="text-secondary fw-bold my-4">Requested Changes</h5>
+            
+            <input asp-for="tbl_User_Change_Info_Request.id" value="@Model.RequestChangeAcctInfoViewModelApproval.id" type="hidden" />
+            <input asp-for="tbl_User_Change_Info_Request.tbl_user_id" value="@Model.RequestChangeAcctInfoViewModelApproval.tbl_user_id" type="hidden" />
+            <input asp-for="tbl_User_Change_Info_Request.first_name" value="@Model.RequestChangeAcctInfoViewModelApproval.first_name" type="hidden"/>
+            <input asp-for="tbl_User_Change_Info_Request.middle_name" value="@Model.RequestChangeAcctInfoViewModelApproval.middle_name" type="hidden" />
+            <input asp-for="tbl_User_Change_Info_Request.last_name" value="@Model.RequestChangeAcctInfoViewModelApproval.last_name" type="hidden" />
+            <input asp-for="tbl_User_Change_Info_Request.suffix" value="@Model.RequestChangeAcctInfoViewModelApproval.suffix" type="hidden" />
+            <input asp-for="tbl_User_Change_Info_Request.company_name" value="@Model.RequestChangeAcctInfoViewModelApproval.company_name" type="hidden" />
+            <input asp-for="tbl_User_Change_Info_Request.contact_no" value="@Model.RequestChangeAcctInfoViewModelApproval.contact_no" type="hidden" />
+            <input asp-for="tbl_User_Change_Info_Request.valid_id" value="@Model.RequestChangeAcctInfoViewModelApproval.valid_id" type="hidden" />
+            <input asp-for="tbl_User_Change_Info_Request.valid_id_no" value="@Model.RequestChangeAcctInfoViewModelApproval.valid_id_no" type="hidden" />
+            <input asp-for="tbl_User_Change_Info_Request.birth_date" type="datetime" value="@Model.RequestChangeAcctInfoViewModelApproval.birth_date" type="hidden" />
+            <input asp-for="tbl_User_Change_Info_Request.tbl_region_id" value="@Model.RequestChangeAcctInfoViewModelApproval.tbl_region_id" type="hidden" />
+            <input asp-for="tbl_User_Change_Info_Request.tbl_province_id" value="@Model.RequestChangeAcctInfoViewModelApproval.tbl_province_id" type="hidden" />
+            <input asp-for="tbl_User_Change_Info_Request.tbl_city_id" value="@Model.RequestChangeAcctInfoViewModelApproval.tbl_city_id" type="hidden" />
+            <input asp-for="tbl_User_Change_Info_Request.tbl_brgy_id" value="@Model.RequestChangeAcctInfoViewModelApproval.tbl_brgy_id" type="hidden" />
+            <input asp-for="tbl_User_Change_Info_Request.street_address" value="@Model.RequestChangeAcctInfoViewModelApproval.street_address" type="hidden" />
+            <input asp-for="tbl_User_Change_Info_Request.email" value="@Model.RequestChangeAcctInfoViewModelApproval.email" type="hidden" />
+            <input asp-for="tbl_User_Change_Info_Request.tbl_user_types_id" value="@Model.RequestChangeAcctInfoViewModelApproval.tbl_user_types_id" type="hidden" />
+            <input asp-for="tbl_User_Change_Info_Request.user_classification" value="@Model.RequestChangeAcctInfoViewModelApproval.user_classification" type="hidden" />
+            <input asp-for="tbl_User_Change_Info_Request.gender" value="@Model.RequestChangeAcctInfoViewModelApproval.gender" type="hidden" />
+            
+            <input asp-for="acctApprovalViewModels.email" value="@Model.acctApprovalViewModels.email" type="hidden" />
+            
+            <div class="row mb-5">
+                @if (Model.acctApprovalViewModels.first_name != Model.RequestChangeAcctInfoViewModelApproval.first_name)
+                {
+                    <div class="col-md-3">
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                First Name
+                            </label>
+                            <span class="fw-bold">
+                                @Html.DisplayFor(model => Model.RequestChangeAcctInfoViewModelApproval.first_name)
+                            </span>
+                        </div>
+                    </div>
+                }
+                @if (Model.acctApprovalViewModels.middle_name != Model.RequestChangeAcctInfoViewModelApproval.middle_name)
+                {
+                    <div class="col-md-3">
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                Middle Name
+                            </label>
+                            <span class="fw-bold">
+                                @Html.DisplayFor(model => Model.RequestChangeAcctInfoViewModelApproval.middle_name)
+                            </span>
+                        </div>
+                    </div>
+                }
+                @if (Model.acctApprovalViewModels.last_name != Model.RequestChangeAcctInfoViewModelApproval.last_name)
+                {
+                    <div class="col-md-3">
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                Last Name
+                            </label>
+                            <span class="fw-bold">
+                                @Html.DisplayFor(model => Model.RequestChangeAcctInfoViewModelApproval.last_name)
+                            </span>
+                        </div>
+                    </div>
+                }
+                @if (Model.acctApprovalViewModels.suffix != Model.RequestChangeAcctInfoViewModelApproval.suffix)
+                {
+                    <div class="col-md-3">
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                Suffix
+                            </label>
+                            <span class="fw-bold">
+                                @Html.DisplayFor(model => Model.RequestChangeAcctInfoViewModelApproval.suffix)
+                            </span>
+                        </div>
+                    </div>
+                }
+                @if (Model.acctApprovalViewModels.user_classification != Model.RequestChangeAcctInfoViewModelApproval.user_classification)
+                {
+                    <div class="col-md-3">
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                User Classification
+                            </label>
+                            <span class="fw-bold">
+                                @Html.DisplayFor(model => Model.RequestChangeAcctInfoViewModelApproval.user_classification)
+                            </span>
+                        </div>
+                    </div>
+                }
+                @if (Model.acctApprovalViewModels.company_name != Model.RequestChangeAcctInfoViewModelApproval.company_name)
+                {
+                    <div class="col-md-3">
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                Company Name
+                            </label>
+                            <span class="fw-bold">
+                                @Html.DisplayFor(model => Model.RequestChangeAcctInfoViewModelApproval.company_name)
+                            </span>
+                        </div>
+                    </div>
+                }
+                @if (Model.acctApprovalViewModels.contact_no != Model.RequestChangeAcctInfoViewModelApproval.contact_no)
+                {
+                    <div class="col-md-3">
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                Contact No.
+                            </label>
+                            <span class="fw-bold">
+                                @Html.DisplayFor(model => Model.RequestChangeAcctInfoViewModelApproval.contact_no)
+                            </span>
+                        </div>
+                    </div>
+                }
+                @if (Model.acctApprovalViewModels.valid_id != Model.RequestChangeAcctInfoViewModelApproval.valid_id)
+                {
+                    <div class="col-md-3">
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                Valid ID
+                            </label>
+                            <span class="fw-bold">
+                                @Html.DisplayFor(model => Model.RequestChangeAcctInfoViewModelApproval.valid_id)
+                            </span>
+                        </div>
+                    </div>
+                }
+                @if (Model.acctApprovalViewModels.valid_id_no != Model.RequestChangeAcctInfoViewModelApproval.valid_id_no)
+                {
+                    <div class="col-md-3">
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                Valid ID No.
+                            </label>
+                            <span class="fw-bold">
+                                @Html.DisplayFor(model => Model.RequestChangeAcctInfoViewModelApproval.valid_id_no)
+                            </span>
+                        </div>
+                    </div>
+                }
+                @if (Convert.ToDateTime(Model.acctApprovalViewModels.birth_date) != Model.RequestChangeAcctInfoViewModelApproval.birth_date)
+                {
+                    <div class="col-md-3">
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                Birth Date
+                            </label>
+                            <span class="fw-bold">
+                                @Html.DisplayFor(model => Model.RequestChangeAcctInfoViewModelApproval.birth_date)
+                            </span>
+                        </div>
+                    </div>
+                }
+                @if (Model.acctApprovalViewModels.region != Model.RequestChangeAcctInfoViewModelApproval.region)
+                {
+                    <div class="col-md-3">
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                Region
+                            </label>
+                            <span class="fw-bold">
+                                @Html.DisplayFor(model => Model.RequestChangeAcctInfoViewModelApproval.region)
+                            </span>
+                        </div>
+                    </div>
+                }
+                @if (Model.acctApprovalViewModels.province != Model.RequestChangeAcctInfoViewModelApproval.province)
+                {
+                    <div class="col-md-3">
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                Province
+                            </label>
+                            <span class="fw-bold">
+                                @Html.DisplayFor(model => Model.RequestChangeAcctInfoViewModelApproval.province)
+                            </span>
+                        </div>
+                    </div>
+                }
+                @if (Model.acctApprovalViewModels.city != Model.RequestChangeAcctInfoViewModelApproval.city)
+                {
+                    <div class="col-md-3">
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                City
+                            </label>
+                            <span class="fw-bold">
+                                @Html.DisplayFor(model => Model.RequestChangeAcctInfoViewModelApproval.city)
+                            </span>
+                        </div>
+                    </div>
+                }
+                @if (Model.acctApprovalViewModels.brgy != Model.RequestChangeAcctInfoViewModelApproval.brgy)
+                {
+                    <div class="col-md-3">
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                Barangay
+                            </label>
+                            <span class="fw-bold">
+                                @Html.DisplayFor(model => Model.RequestChangeAcctInfoViewModelApproval.brgy)
+                            </span>
+                        </div>
+                    </div>
+                }
+                @if (Model.acctApprovalViewModels.street_address != Model.RequestChangeAcctInfoViewModelApproval.street_address)
+                {
+                    <div class="col-md-3">
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                Street Address
+                            </label>
+                            <span class="fw-bold">
+                                @Html.DisplayFor(model => Model.RequestChangeAcctInfoViewModelApproval.street_address)
+                            </span>
+                        </div>
+                    </div>
+                }
+                @if (Model.acctApprovalViewModels.email != Model.RequestChangeAcctInfoViewModelApproval.email)
+                {
+                    <div class="col-md-3">
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                E-mail
+                            </label>
+                            <span class="fw-bold">
+                                @Html.DisplayFor(model => Model.RequestChangeAcctInfoViewModelApproval.email)
+                            </span>
+                        </div>
+                    </div>
+                }
+                @if (Model.acctApprovalViewModels.userType != Model.RequestChangeAcctInfoViewModelApproval.userType)
+                {
+                    <div class="col-md-3">
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                User Role
+                            </label>
+                            <span class="fw-bold">
+                                @Html.DisplayFor(model => Model.RequestChangeAcctInfoViewModelApproval.userType)
+                            </span>
+                        </div>
+                    </div>
+                }
+                @if (Model.acctApprovalViewModels.gender != Model.RequestChangeAcctInfoViewModelApproval.gender)
+                {
+                    <div class="col-md-3">
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                Gender
+                            </label>
+                            <span class="fw-bold">
+                                @Html.DisplayFor(model => Model.RequestChangeAcctInfoViewModelApproval.gender)
+                            </span>
+                        </div>
+                    </div>
+                }
+            </div>
+            <hr />
+        </form>
+        
+    </div>
+</div>
+
+<script src="/js/jquery-3.7.1.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+ 
+        // Add an event listener for the 'change' event on the file input element
+        // Add an event listener for the 'change' event on the file input element
+        $("#FilesFromDB").on("load", function () {
+            // Get the selected file(s)
+            var selectedFiles = $(this).prop("files");
+            var fafile = "";
+            // Clear the previous output
+            $(".output").empty();
+
+            // Display file information in the specified format
+            for (var i = 0; i < selectedFiles.length; i++) {
+                //ifelse for fa-file type
+                if (selectedFiles[i].type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                    fafile = "fa-file-word"
+                }
+                else if (selectedFiles[i].type == "application/pdf") {
+                    fafile = "fa-file-pdf"
+                }
+                else if (selectedFiles[i].type == "image/jpeg") {
+                    fafile = "fa-file-image"
+                }
+                else {
+                    fafile = "fa-file"
+                }
+                // Create div elements and set their classes and content
+                var cardDiv = $("<div>").addClass("card mw-18rem");
+                var fileDiv = $("<div>").addClass("card-body");
+                var fileIcon = $("<i>").addClass("fas " + fafile + " text-light-green fs-1 mb-3");
+                var dropdownIcon = $("<i>").addClass("fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary").attr({
+                    "data-bs-toggle": "dropdown",
+                    "aria-expanded": "false"
+                });
+                var dropdownMenu = $("<ul>").addClass("dropdown-menu").append(
+                    $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("View")),
+                    $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("Delete")),
+                    $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("Download"))
+                );
+                var fileName = $("<h6>").addClass("card-title text-secondary").text(selectedFiles[i].name);
+                var fileInfoList = $("<ul>").addClass("list-unstyled small mb-0").append(
+                    $("<li>").append($("<span>").addClass("text-muted").text("type: " + selectedFiles[i].type)),
+                    $("<li>").append($("<span>").addClass("text-muted").text("size: " + (selectedFiles[i].size / 1024).toFixed(2) + "kb")),
+                    $("<li>").append($("<span>").addClass("text-muted").text("uploaded: " + new Date().toLocaleDateString()))
+                );
+
+                // Append created elements to the fileDiv
+                fileDiv.append(fileIcon, dropdownIcon, dropdownMenu, fileName, fileInfoList);
+
+                // Append the fileDiv to the cardDiv
+                cardDiv.append(fileDiv);
+
+                // Append the cardDiv to the output div
+                $(".output").append(cardDiv);
+            }
+        });
+
+    });
+
+
+    $(document).ready(function () {
+        $('#approveBtn').click(function () {
+            $('#confirmApproveModal').modal("show");
+            document.getElementById("decisionID").value = "Approve";
+        });
+
+        $("#backApproveBtn").click(function () {
+            $("#confirmApproveModal").modal('hide');
+        });
+
+        $("#confirmApproveBtn").click(function () {
+            $('#confirmSuccessApproveModal').modal("show");
+        });
+
+        $('#declineBtn').click(function () {
+            $('#confirmDeclineModal').modal("show");
+            document.getElementById("decisionID").value = "Decline";
+        });
+
+        $('#backDeclineBtn').click(function () {
+            $('#confirmDeclineModal').modal("hide");
+        });
+
+        $("#confirmDeclineBtn").click(function () {
+            $("#confirmDeclineModal").modal('hide');
+            $('#confirmSuccessDeclineModal').modal("show");
+        });
+    });
+
+
+
+</script>
