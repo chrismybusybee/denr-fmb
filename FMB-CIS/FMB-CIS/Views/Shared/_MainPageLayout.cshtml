@@ -54,11 +54,11 @@
         <div class="side-bar-container">
             <div class="side-bar-header w-100 p-2">
                 <div class="row">
-                    <div class="col-md-6 pe-0 text-center">
+                    <div id="systemImg" class="col-md-6 pe-0 text-center">
                         <img src="~/assets/images/logo-only.png" />
                     </div>
                     <div class="col-md-6 lh-1 small fw-bold text-secondary pt-1 ps-0">
-                        CHAINSAW INFORMATION SYSTEM (CIS)
+                        <span id="systemTitle">CHAINSAW INFORMATION SYSTEM (CIS)</span>
                     </div>
                     <div id="menu-items">
                         <ul class="list-unstyled text-secondary fw-bold">
@@ -510,14 +510,14 @@
                             @if (ViewBag.UserType.Contains("DENR") == true)
                             {
                                 <li id="accountManagementMenuItem">
-                                    <a href="#" class="d-flex gap-2 text-decoration-none fs-6">
+                                    <a href="#" id="accountManagementSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
                                         <div>
                                             <img src="~/assets/images/menu-icons/account-management.png" />
                                         </div>
                                         <span>Account Management</span>
                                     </a>
                                     <ul id="accountManagementDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
-                                        <li id="requestToChangeAccountInfoMenuItem">
+                                        <li id="RegisteredAccountsMenuItem">
                                             <a href="@Url.Action("Index", "AccountManagement")" class="d-flex gap-2 text-decoration-none fs-6">
                                                 <div>
                                                     <img src="~/assets/images/menu-icons/line.png" />
@@ -525,20 +525,20 @@
                                                 <span>List of Registered Accounts</span>
                                             </a>
                                         </li>
-                                        <li id="requestToChangeAccountInfoMenuItem">
+                                        <li id="accountInfoMenuItem">
                                             <a href="@Url.Action("RequestToChangeAcctInfoList", "AccountManagement")" class="d-flex gap-2 text-decoration-none fs-6">
                                                 <div>
                                                     <img src="~/assets/images/menu-icons/line.png" />
                                                 </div>
-                                                <span>List of Users Requesting To Change Account Info</span>
+                                                <span>List of Users Requesting To Change Account Information</span>
                                             </a>
                                         </li>
-                                        <li id="requestToChangeAccountInfoMenuItem">
+                                        <li id="myAccountInfoMenuItem">
                                             <a href="@Url.Action("RequestToChangeAccountInfo", "AccountManagement")" class="d-flex gap-2 text-decoration-none fs-6">
                                                 <div>
                                                     <img src="~/assets/images/menu-icons/line.png" />
                                                 </div>
-                                                <span>Request To Change my Account Information</span>
+                                                <span>Request To Change My Account Information</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -684,6 +684,10 @@
     {
         <partial name="~/Views/Modals/EmailTemplateModal.cshtml" />
     }
+    else if (currentUrl.Contains("AnnouncementTemplates"))
+    {
+        <partial name="~/Views/Modals/AnnouncementTemplateModal.cshtml" />
+    }
     <footer>
         © 2023 DENR-FMB CIS. All rights reserved. <a href="@Url.Action("TermsPolicy", "Home")" target="_blank" class="text-light-gray text-decoration-none">Privacy Policy | Terms & Conditions.</a>
     </footer>
@@ -760,10 +764,11 @@
             "/NewChainsawRegistration": "newChainsawRegistrationMenuItem",
             "/Renewal": "renewalMenuItem",
             "/ProfileManagement": "profileManagementMenuItem",
-            "/AccountManagement": "accountManagementMenuItem",
+            "/AccountManagement": "RegisteredAccountsMenuItem",
+            "/AccountManagement/RequestToChangeAcctInfoList": "accountInfoMenuItem",
+            "/AccountManagement/RequestToChangeAccountInfo": "myAccountInfoMenuItem",
             "/AccountManagement/AddAccount": "accountManagementMenuItem",
             "/AccountManagement/EditAccount": "accountManagementMenuItem",
-            "/AccountManagement/RequestToChangeAccountInfo": "accountManagementMenuItem",
             "/Monitoring": "monitoringMenuItem",
             "/CreationOfNewDenrOffice": "creationOfNewDenrOfficeMenuItem",
             "/AnnouncementTemplates": "announcementTemplatesMenuItem",
@@ -787,43 +792,55 @@
         }
 
         // toggle filter
-        var asideElement = $(".filters");
+        //var asideElement = $("#side-bar");
 
-        if (asideElement.length > 0) {
-            var btnToggler = $('#toggle-btn');
-            var togglerStatus = localStorage.getItem('toggler');
+        //if (asideElement.length > 0) {
+        //    var btnToggler = $('#toggle-btn');
+        //    var togglerStatus = localStorage.getItem('toggler');
 
-            if (localStorage.getItem('toggler') === null || localStorage.getItem('toggler') === 'true') {
-                asideElement.removeClass("slide-left");
-                $(".main-information").css({ "margin-left": "229px", "padding": "0 0 0 30px" });
-                btnToggler.html("&lt;");
-                btnToggler.css("left", "233px");
+        //    if (localStorage.getItem('toggler') === null || localStorage.getItem('toggler') === 'true') {
+        //        asideElement.removeClass("slide-left");
+        //        $("#header-top-container").css({ "margin-left": "300px" });
+        //        $("#header-bottom-container").css({ "margin-left": "300px" });
+        //        $("#main").css({ "margin-left": "300px" });
+        //        $("#card-container").css({ "margin-right": "330px" });
+        //        $("#systemTitle").css({ "display": "block" });
+        //        $("#systemImg").addClass("col-md-6 text-center").removeClass("col-md-12 text-end");
+        //    } else {
+        //        asideElement.addClass("slide-left");
+        //        $("#header-top-container").css({ "margin-left": "100px" });
+        //        $("#header-bottom-container").css({ "margin-left": "100px" });
+        //        $("#main").css({ "margin-left": "100px" });
+        //        $("#card-container").css({ "margin-right": "130px" });
+        //        $("#systemTitle").css({ "display": "none" });
+        //        $("#systemImg").removeClass("col-md-6 text-center").addClass("col-md-12 text-end");
 
-                btnToggler.css("display", "inline-block");
-            } else {
-                asideElement.addClass("slide-left");
-                $(".main-information").css({ "margin-left": "0", "padding": "0 0 0 0" });
-                btnToggler.html("&gt;");
-                btnToggler.css("left", "17px");
-            }
+        //    }
 
-            btnToggler.click(function () {
-                asideElement.toggleClass("slide-left");
+        //    btnToggler.click(function () {
+        //        asideElement.toggleClass("slide-left");
 
-                var currentStatus = localStorage.getItem('toggler');
-                var newStatus = currentStatus === 'true' ? 'false' : 'true';
-                localStorage.setItem('toggler', newStatus);
+        //        var currentStatus = localStorage.getItem('toggler');
+        //        var newStatus = currentStatus === 'true' ? 'false' : 'true';
+        //        localStorage.setItem('toggler', newStatus);
 
-                if (newStatus === 'true') {
-                    $(".main-information").css({ "margin-left": "229px", "padding": "0 0 0 30px" });
-                    btnToggler.css("left", "233px");
-                    btnToggler.html("&lt;");
-                } else {
-                    $(".main-information").css({ "margin-left": "0", "padding": "0 0 0 0" });
-                    btnToggler.css("left", "17px");
-                    btnToggler.html("&gt;");
-                }
-            });
-        }
+        //        if (newStatus === 'true') {
+        //            $("#header-top-container").css({ "margin-left": "300px" });
+        //            $("#header-bottom-container").css({ "margin-left": "300px" });
+        //            $("#main").css({ "margin-left": "300px" });
+        //            $("#card-container").css({ "margin-right": "330px" });
+        //            $("#systemTitle").css({ "display": "block" });
+        //            $("#systemImg").addClass("col-md-6 text-center").removeClass("col-md-12 text-end");
+        //        } else {
+        //            $("#header-top-container").css({ "margin-left": "100px" });
+        //            $("#header-bottom-container").css({ "margin-left": "100px" });
+        //            $("#main").css({ "margin-left": "100px" });
+        //            $("#card-container").css({ "margin-right": "130px" });
+        //            $("#systemTitle").css({ "display": "none" });
+        //            $("#systemImg").removeClass("col-md-6 text-center").addClass("col-md-12 text-end");
+
+        //        }
+        //    });
+        //}
     });
 </script>

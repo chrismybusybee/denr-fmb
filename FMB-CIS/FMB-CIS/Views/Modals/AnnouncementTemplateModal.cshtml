@@ -1,0 +1,207 @@
+﻿<div class="modal fade" id="addAnnouncementTemplateModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <p class="fw-bold fs-5">
+                        Add Announcement Template
+                    </p>
+                    <div class="row w-100">
+                        <div class="col-md-12">
+                            <div class="form-group mb-3">
+                                <label class="form-label small">Type</label>
+                                <select class="form-select">
+                                    <option>Type 01</option>
+                                    <option>Type 02</option>
+                                </select>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label small">Title</label>
+                                <input class="form-control" />
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label small">Subject</label>
+                                <input class="form-control" />
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label small">Details</label>
+                                <textarea class="form-control" rows="8"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-4 w-100">
+                        <button id="cancelBtn" class="btn btn-danger w-100">Cancel</button>
+                        <button id="confirmSaveBtn" class="btn btn-primary w-100">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmAddModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/submit.png" />
+                    </div>
+                    <p class="fw-bold fs-5 text-center">
+                        Are you sure you want to add this announcement template?
+                    </p>
+                    <div class="d-flex gap-4 w-100">
+                        <button id="backAddBtn" class="btn btn-danger w-100">Back</button>
+                        <button id="confirmAddBtn" class="btn btn-primary w-100">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmAddSuccessModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/success.png" />
+                    </div>
+                    <p class="fw-bold fs-5">
+                        Announcement template added successfully!
+                    </p>
+                    <div class="d-flex justify-content-center w-100">
+                        <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("Index", "AnnouncementTemplates")'">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="viewAnnouncementTemplateModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div class="row w-100">
+                        <div class="col-md-12">
+                            <div class="form-group mb-3">
+                                <label class="form-label small">Type</label>
+                                <select class="form-select">
+                                    <option>Type 01</option>
+                                    <option>Type 02</option>
+                                </select>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label small">Title</label>
+                                <input class="form-control" />
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label small">Subject</label>
+                                <input class="form-control" />
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label small">Details</label>
+                                <textarea class="form-control" rows="8"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex just gap-4 w-100">
+                        <div class="w-100 d-flex justify-content-end">
+                            <button id="cancelSendBtn" class="btn btn-danger w-50">Cancel</button>
+                        </div>
+                        <div class="w-100">
+                            <button id="confirmSendBtn" class="btn btn-primary w-50">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmSendModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/submit.png" />
+                    </div>
+                    <p class="fw-bold fs-5 text-center">
+                        Are you sure you want to send this announcement?
+                    </p>
+                    <div class="d-flex gap-4 w-100">
+                        <button id="backSendBtn" class="btn btn-danger w-100">Back</button>
+                        <button id="sendBtn" class="btn btn-primary w-100">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmSendSuccessModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/success.png" />
+                    </div>
+                    <p class="fw-bold fs-5">
+                        Announcement sent successfully!
+                    </p>
+                    <div class="d-flex justify-content-center w-100">
+                        <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("Index", "AnnouncementTemplates")'">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/jquery-3.7.1.min.js"></script>
+
+<script type="text/javascript">
+    $("#cancelBtn").click(function () {
+        $("#addAnnouncementTemplateModal").modal("hide");
+    });
+
+    $("#confirmSaveBtn").click(function () {
+        $("#addAnnouncementTemplateModal").modal("hide");
+        $("#confirmAddModal").modal("show");
+    });
+
+    $("#backAddBtn").click(function () {
+        $("#addAnnouncementTemplateModal").modal("show");
+        $("#confirmAddModal").modal("hide");
+    });
+
+    $("#confirmAddBtn").click(function () {
+        $("#confirmAddSuccessModal").modal("show");
+        $("#confirmAddModal").modal("hide");
+    });
+
+    $("#cancelSendBtn").click(function () {
+        $("#viewAnnouncementTemplateModal").modal("hide");
+    });
+
+    $("#backSendBtn").click(function () {
+        $("#viewAnnouncementTemplateModal").modal("show");
+        $("#confirmSendModal").modal("hide");
+    });
+
+    $("#confirmSendBtn").click(function () {
+        $("#confirmSendModal").modal("show");
+        $("#viewAnnouncementTemplateModal").modal("hide");
+    });
+
+    $("#sendBtn").click(function () {
+        $("#confirmSendSuccessModal").modal("show");
+        $("#confirmSendModal").modal("hide");
+    });
+
+</script>   
