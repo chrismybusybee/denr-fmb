@@ -554,12 +554,39 @@
                                     <span>Monitoring</span>
                                 </a>
                             </li>
-
-                                
+                                                          
 
 
                                 @*@if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw")!=true)
                             {*@
+                                @* <li id="creationOfNewDenrOfficeMenuItem">
+                                    <a href="@Url.Action("Index", "CreationOfNewDenrOffice")" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/creation-of-new-denr-office.png" />
+                                        </div>
+                                        <span>Creation of New DENR Office</span>
+                                    </a>
+                                </li>
+                                
+                                <li id="announcementTemplatesMenuItem">
+                                    <a href="@Url.Action("Index", "AnnouncementTemplates")" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/announcement-templates.png" />
+                                        </div>
+                                        <span>Announcement Templates</span>
+                                    </a>
+                                </li>
+                                <li id="emailTemplatesMenuItem">
+                                    <a href="@Url.Action("Index", "EmailTemplates")" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/email-templates.png" />
+                                        </div>
+                                        <span>Email Templates</span>
+                                    </a>
+                                </li> *@
+                            }
+                            @if (ViewBag.UserType.Contains("Super Admin") == true)
+                            {
                                 <li id="creationOfNewDenrOfficeMenuItem">
                                     <a href="@Url.Action("Index", "CreationOfNewDenrOffice")" class="d-flex gap-2 text-decoration-none fs-6">
                                         <div>

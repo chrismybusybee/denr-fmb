@@ -194,6 +194,29 @@ namespace FMB_CIS.Controllers
                                             }).OrderBy(f => f.fileName).ThenByDescending(d => d.date_created);
             return View(model);
         }
+        public IActionResult RequestToChangeAccountInfoSuccess(int id)
+        {
+            int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            var reqInfo = _context.tbl_user_change_info_request.Where(cui => cui.id == id).FirstOrDefault();
+            if (id != null)
+            {
+                if (loggedUserID == reqInfo.tbl_user_id)
+                {
+                    ViewModel model = new ViewModel();
+                    model.tbl_User_Change_Info_Request = reqInfo;
+                    return View(model);
+                }
+                else
+                {
+                    return RedirectToAction("RequestToChangeAccountInfo", "AccountManagement");
+                }
+            }
+            else
+            {
+                return RedirectToAction("RequestToChangeAccountInfo", "AccountManagement");
+            }
+            
+        }
         public IActionResult EditAccount()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
@@ -565,9 +588,10 @@ namespace FMB_CIS.Controllers
             //Email
             var subject = "Request to Change Account Information Status";
             var body = "Greetings! \n We would like to inform your request to change account information has been received.";
-            EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
+            EmailSender.SendEmailAsync(model.tbl_User.email, subject, body);
 
-            return View(model);
+            //return View(model);
+            return RedirectToAction("RequestToChangeAccountInfoSuccess", "AccountManagement", new { id = newChangeInfoRequest.id });
         }
 
         [HttpPost]

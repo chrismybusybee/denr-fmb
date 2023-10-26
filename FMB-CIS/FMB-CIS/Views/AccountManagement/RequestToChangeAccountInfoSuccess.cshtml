@@ -1,0 +1,261 @@
+﻿@using System.Security.Claims;
+@model FMB_CIS.Models.ViewModel
+@{
+    Layout = "~/Views/Shared/_MainPageLayout.cshtml";
+    ViewBag.Title = "Request To Change Account Info";
+    var baseurl = ViewBag.BaseUrl;
+}
+
+<div id="card-container">
+    <div id="card">
+        <a href="@Url.Action("Index", "AccountManagement")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
+
+
+        <div class="row m-0">
+            <div class="col-md-12 container-fluid d-flex flex-column align-items-center justify-content-center vh-100">
+                <div class="d-flex flex-column mb-5" style="width: min(600px, 100%);">
+                    <div id="success-prompt" class="bg-green border rounded py-2 mb-4">
+                        <div class="row">
+                            <div class="col-md-2 d-flex align-items-center justify-content-end pe-0">
+                                <img src="~/assets/images/small-check.png" />
+                            </div>
+                            <div class="col-md-10 d-flex align-items-center justify-content-center ps-0">
+                                <p class="text-white text-start m-0">
+                                    Success! Your request to change account has been received.<br />
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h5>Please refer to your ticket no.</h5>
+                <h5>@Model.tbl_User_Change_Info_Request.ticket_no</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/jquery-3.7.1.min.js"></script>
+
+<script type="text/javascript">
+
+    //Things to change when selected User Classification is Corporation
+    function userClassification(that) {
+        if (that.value == "Corporation") {
+            document.getElementById("companyNameInpDiv").style.display = "block";
+            document.getElementById("strtAddLbl").innerHTML = "Company Street Address";
+        }
+
+        else {            
+            document.getElementById("companyNameInpDiv").style.display = "none";
+            document.getElementById("strtAddLbl").innerHTML = "Street Address";
+        }
+    }
+    //END
+
+    const form = document.getElementById('RequestToChangeAccountInfoForm');
+    const showModalButton = document.getElementById('btnSave');
+    const confirmationModal = document.getElementById('confirmSaveModal');
+    const confirmButton = document.getElementById('confirmSaveBtn');
+
+    $(document).ready(function () {
+
+        //FILE UPLOAD
+        const dt = new DataTransfer();
+
+        $(".file").on("change", function (e) {
+            // Get the selected file(s)
+            var selectedFiles = $(this).prop("files");
+            var fafile = "";
+            // Clear the previous output
+            //$(".output").empty();
+
+            // Display file information in the specified format
+            for (var i = 0; i < this.files.length; i++) {
+                //ifelse for fa-file type
+                if (selectedFiles[i].type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                    fafile = "fa-file-word"
+                }
+                else if (selectedFiles[i].type == "application/pdf") {
+                    fafile = "fa-file-pdf"
+                }
+                else if (selectedFiles[i].type == "image/jpeg") {
+                    fafile = "fa-file-image"
+                }
+                else {
+                    fafile = "fa-file"
+                }
+                // Create div elements and set their classes and content
+                var cardDiv = $("<div>").addClass("card mw-18rem ").attr('id', selectedFiles[i].name);
+                var fileDiv = $("<div>").addClass("card-body");
+                var fileIcon = $("<i>").addClass("fas " + fafile + " text-light-green fs-1 mb-3");
+                var dropdownIcon = $("<i>").addClass("fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary").attr({
+                    "data-bs-toggle": "dropdown",
+                    "aria-expanded": "false"
+                });
+                var dropdownMenu = $("<ul>").addClass("dropdown-menu").append(
+                    $("<li>").append($("<a>").addClass("dropdown-item file-delete").attr("href", "#").text("Delete"))
+                );
+                var fileName = $("<h6>").addClass("card-title text-secondary").text(selectedFiles[i].name);
+                var fileInfoList = $("<ul>").addClass("list-unstyled small mb-0").append(
+                    $("<li>").append($("<span>").addClass("text-muted").text("type: " + selectedFiles[i].type)),
+                    $("<li>").append($("<span>").addClass("text-muted").text("size: " + (selectedFiles[i].size / 1024).toFixed(2) + "kb")),
+                    $("<li>").append($("<span>").addClass("text-muted").text("uploaded: " + new Date().toLocaleDateString()))
+                );
+
+                // Append created elements to the fileDiv
+                fileDiv.append(fileIcon, dropdownIcon, dropdownMenu, fileName, fileInfoList);
+
+                // Append the fileDiv to the cardDiv
+                cardDiv.append(fileDiv);
+
+                // Append the cardDiv to the output div
+                $(".output").append(cardDiv);
+            }
+            for (let file of this.files) {
+                dt.items.add(file);
+            }
+
+            selectedFiles = dt.files;
+            console.log(selectedFiles);
+            $('.file-delete').click(function () {
+                let name = $(this).closest('.card').attr('id');
+                // Supprimer l'affichage du nom de fichier
+                //$(this).parent().remove();
+                document.getElementById(name).remove()
+                for (let i = 0; i < dt.items.length; i++) {
+                    // Correspondance du fichier et du nom
+                    if (name === dt.items[i].getAsFile().name) {
+                        // Suppression du fichier dans l'objet DataTransfer
+                        dt.items.remove(i);
+                        continue;
+                    }
+                }
+                // Mise à jour des fichiers de l'input file après suppression
+                selectedFiles = dt.files;
+            });
+
+
+        });
+        //END FOR FILE UPLOAD
+
+        $("#btnSave").click(function () {
+            $("#confirmSaveModal").modal("show");
+        });
+
+        $("#backSaveBtn").click(function () {
+            $("#confirmSaveModal").modal("hide");
+        });
+
+        $("#confirmSaveBtn").click(function () {
+            $("#confirmSaveModal").modal("hide");
+            form.submit();
+            $("#confirmSaveSuccessModal").modal("show");
+        });
+    });
+
+    
+
+    // Function to display the modal
+    function showModal() {
+        confirmationModal.style.display = 'block';
+    }
+
+    // Function to hide the modal
+    function hideModal() {
+        confirmationModal.style.display = 'none';
+    }
+
+    // Event listener for the "Submit" button
+    showModalButton.addEventListener('click', showModal);
+
+    // Event listener for the "Confirm" button
+    confirmButton.addEventListener('click', function () {
+        // Submit the form when the "Confirm" button is clicked
+        form.submit();
+    });
+
+    // Close the modal when the user clicks outside of it
+    window.addEventListener('click', function (event) {
+        if (event.target === confirmationModal) {
+            hideModal();
+        }
+    });
+
+    //Location Dropdowns
+    $(document).ready(function () {
+        var a = 0;
+    });
+
+    function loadProvince(obj) {
+        var value = obj.value;
+        var url = "@baseurl";
+
+        $.post(url + "AccountManagement/GetProvinceByRegionId", { tbl_region_id: value }, function (data) {
+            debugger;
+            PopulateProvinceDropDown("#ddlProvinceId", data);
+        });
+    }
+
+    function PopulateProvinceDropDown(dropDownId, list, selectedId) {
+        $(dropDownId).empty();
+        $(dropDownId).append("<option>--Please Select a Province--</option>")
+        $.each(list, function (index, row) {
+            $(dropDownId).append("<option value='" + row.id + "'>" + row.name + "</option>")
+        });
+    }
+
+    //loadCity
+    $(document).ready(function () {
+        var a = 0;
+    });
+
+    function loadCity(obj) {
+        var value = obj.value;
+        var url = "@baseurl";
+
+        $.post(url + "AccountManagement/GetCityByProvinceId", { tbl_province_id: value }, function (data) {
+            debugger;
+            PopulateCityDropDown("#ddlCityId", data);
+        });
+    }
+
+    function PopulateCityDropDown(ctDropDownId, list, selectedId) {
+        $(ctDropDownId).empty();
+        $(ctDropDownId).append("<option>--Please Select a City--</option>")
+        $.each(list, function (index, row) {
+            $(ctDropDownId).append("<option value='" + row.id + "'>" + row.name + "</option>")
+        });
+    }
+
+    //loadBrgy
+    $(document).ready(function () {
+        var a = 0;
+    });
+
+    function loadBrgy(obj) {
+        var value = obj.value;
+        var url = "@baseurl";
+
+        $.post(url + "AccountManagement/GetBrgyByCityId", { tbl_city_id: value }, function (data) {
+            debugger;
+            PopulateBrgyDropDown("#ddlBrgyId", data);
+        });
+    }
+
+    function PopulateBrgyDropDown(brgyDropDownId, list, selectedId) {
+        $(brgyDropDownId).empty();
+        $(brgyDropDownId).append("<option>--Please Select a Barangay--</option>")
+        $.each(list, function (index, row) {
+            $(brgyDropDownId).append("<option value='" + row.id + "'>" + row.name + "</option>")
+        });
+    }
+
+    function profilePicInputChange() {
+        const [file] = profilePicInput.files
+        if (file) {
+            profilePic.src = URL.createObjectURL(file)
+        }
+    }
+
+</script>
