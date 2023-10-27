@@ -3,34 +3,36 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
-                <form asp-controller="EmailTemplates" asp-action="CreateTemplate" id="CreateEmailTemplateForm">
+                <form asp-controller="EmailTemplates" asp-action="CreateEditTemplate" id="CreateEmailTemplateForm">
                     <div class="d-flex flex-column align-items-center gap-4 p-5">                    
-                        <p class="fw-bold fs-5">
+                        <p class="fw-bold fs-5" id="addEmailTemplate">
                             Add Email Template
                         </p>
                         <div class="row w-100">
                             <div class="col-md-12">
                                 <div class="form-group mb-3">
                                     <label class="form-label small">Template Title</label>
-                                    <input asp-for="tbl_Email_Template.template_name" class="form-control" />
+                                    <input asp-for="tbl_Email_Template.template_name" id="EmailTemplateName" class="form-control" />
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="form-label small">Short Description of Template</label>
                                     @* <label class="form-label small">Details</label> *@
-                                    <input asp-for="tbl_Email_Template.template_description" class="form-control" />
+                                    <input asp-for="tbl_Email_Template.template_description" id="EmailTemplateDescription" class="form-control" />
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="form-label small">E-mail Subject</label>
                                     @* <label class="form-label small">Details</label> *@
-                                    <input asp-for="tbl_Email_Template.email_subject" class="form-control" />
+                                    <input asp-for="tbl_Email_Template.email_subject" id="EmailTemplateSubject" class="form-control" />
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="form-label small">E-mail Content</label>
                                     @* <label class="form-label small">Details</label> *@
-                                    <textarea asp-for="tbl_Email_Template.email_content" class="form-control" rows="8"></textarea>
+                                    <textarea asp-for="tbl_Email_Template.email_content" id="EmailTemplateContent" class="form-control" rows="8"></textarea>
                                 </div>
                             </div>
                         </div>
+                        <input type="hidden" id="typeOfActionID" name="typeOfAction" />
+                        <input type="hidden" id="emailTemplateIDVal" asp-for="tbl_Email_Template.id" />
                         <div class="d-flex gap-4 w-100">
                             <button id="cancelBtn" type="button" class="btn btn-danger w-100">Cancel</button>
                             <button id="confirmSaveBtn" type="button" class="btn btn-primary w-100">Confirm</button>
@@ -51,7 +53,8 @@
                         <img src="~/assets/images/submit.png" />
                     </div>
                     <p class="fw-bold fs-5 text-center">
-                        Are you sure you want to add this email template?
+                        @* Are you sure you want to add this email template? *@
+                        Are you sure you want to save this email template?
                     </p>
                     <div class="d-flex gap-4 w-100">
                         <button id="backAddBtn" class="btn btn-danger w-100">Back</button>
@@ -72,7 +75,8 @@
                         <img src="~/assets/images/success.png" />
                     </div>
                     <p class="fw-bold fs-5">
-                        Email template added successfully!
+                        @* Email template added successfully! *@
+                        Success!
                     </p>
                     <div class="d-flex justify-content-center w-100">
                         <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("Index", "EmailTemplates")'">Ok</button>
@@ -87,32 +91,34 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
-                <div class="d-flex flex-column align-items-center gap-4 p-5">
-                    <div class="row w-100">
-                        <div class="col-md-12">
-                            <div class="form-group mb-3 w-50">
-                                <label class="form-label small">Email</label>
-                                <input class="form-control" />
+                <form asp-controller="EmailTemplates" asp-action="SendEmailTemplate" id="SendEmailTemplateForm">
+                    <div class="d-flex flex-column align-items-center gap-4 p-5">
+                        <div class="row w-100">
+                            <div class="col-md-12">
+                                <div class="form-group mb-3 w-50">
+                                    <label class="form-label small">Email</label>
+                                    <input class="form-control" name="sendToEmailAddress" type="email" placeholder="name@address.com" />
+                                </div>
+                                <div class="form-group mb-3 w-100">
+                                    <label class="form-label small">Subject</label>
+                                    <input class="form-control" id="Subject" asp-for="tbl_Email_Template.email_subject" />
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label small">Content</label>
+                                    <textarea class="form-control" rows="8" id="emailContent" asp-for="tbl_Email_Template.email_content"></textarea>
+                                </div>
                             </div>
-                            <div class="form-group mb-3 w-100">
-                                <label class="form-label small">Subject</label>
-                                <input class="form-control" id="Subject"/>
+                        </div>
+                        <div class="d-flex just gap-4 w-100">
+                            <div class="w-100 d-flex justify-content-end">
+                                <button id="cancelSendBtn" type="button" class="btn btn-danger w-25">Cancel</button>
                             </div>
-                            <div class="form-group mb-3">
-                                <label class="form-label small">Content</label>
-                                <textarea class="form-control" rows="8"></textarea>
+                            <div class="w-100">
+                                <button id="confirmSendBtn" type="button" class="btn btn-primary w-25">Send</button>
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex just gap-4 w-100">
-                        <div class="w-100 d-flex justify-content-end">
-                            <button id="cancelSendBtn" class="btn btn-danger w-25">Cancel</button>
-                        </div>
-                        <div class="w-100">
-                            <button id="confirmSendBtn" class="btn btn-primary w-25">Send</button>
-                        </div>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -231,6 +237,37 @@
     window.addEventListener('click', function (event) {
         if (event.target === confirmationAddModal) {
             hideAddModal();
+        }
+    });
+
+    const sendEmailTemplForm = document.getElementById('SendEmailTemplateForm');
+    const showConfirmSendModalButton = document.getElementById('confirmSendBtn');
+    const confirmationSendModal = document.getElementById('confirmSendModal');
+    const confirmSendButton = document.getElementById('sendBtn');
+
+    // Function to display the modal
+    function showSendModal() {
+        confirmationSendModal.style.display = 'block';
+    }
+
+    // Function to hide the modal
+    function hideSendModal() {
+        confirmationSendModal.style.display = 'none';
+    }
+
+    // Event listener for the "Submit" button
+    showConfirmSendModalButton.addEventListener('click', showSendModal);
+
+    // Event listener for the "Confirm" button
+    confirmSendButton.addEventListener('click', function () {
+        // Submit the form when the "Confirm" button is clicked
+        sendEmailTemplForm.submit();
+    });
+
+    // Close the modal when the user clicks outside of it
+    window.addEventListener('click', function (event) {
+        if (event.target === confirmationSendModal) {
+            hideSendModal();
         }
     });
 

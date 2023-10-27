@@ -14,7 +14,7 @@
                 <tr>
                     <th class="text-nowrap">Date Created</th>
                     <th class="text-nowrap">Template Title</th>
-                    <th class="text-nowrap">Details</th>
+                    <th class="text-nowrap">Description</th>
                     <th class="text-nowrap text-center">Actions</th>
                 </tr>
             </thead>
@@ -27,9 +27,12 @@
                         <td class="text-nowrap">@item.template_description</td>
                         <td class="text-nowrap">
                             <div class="d-flex justify-content-center gap-3">
-                                <a href="#" id="viewEmailTemplate" class="bg-green text-white px-1 pb-1 rounded" title="view" >
+                                <a href="#" id="viewEmailTemplate" class="bg-green text-white px-1 pb-1 rounded" title="view" data-template-id="@item.id" onclick="getEmailDetails(this)">
                                     <i data-feather="eye" class="data-feather-20"></i>
-                                    <input type="hidden" id="templateID" value="@item.id" />
+                                    @* <input type="hidden" id="templateID" value="@item.id" /> *@
+                                </a>
+                                <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="edit" data-template-id="@item.id" onclick="editEmailDetails(this)">
+                                    <i data-feather="edit" class="data-feather-20"></i>
                                 </a>
                             </div>
                         </td>
@@ -59,22 +62,53 @@
 <script type="text/javascript">
     $("#btnAdd").click(function () {
         $("#addEmailTemplateModal").modal("show");
+        document.getElementById("addEmailTemplate").innerHTML = "Add Email Template";
+        document.getElementById("EmailTemplateName").value = null;
+        document.getElementById("EmailTemplateDescription").value = null;
+        document.getElementById("EmailTemplateSubject").value = null;
+        document.getElementById("EmailTemplateContent").value = null;
+        document.getElementById("typeOfActionID").value = "create";
     });
 
-    $("#viewEmailTemplate").click(function () {
+    // $("#viewEmailTemplate").click(function () {
+    //     $("#viewEmailTemplateModal").modal("show");
+    // });
+
+
+    
+    function getEmailDetails(that) {
         $("#viewEmailTemplateModal").modal("show");
-    });
-
-
-    //Check Existing Email
-    // function getEmailDetails(that) {
-    //     var templID = that.value; //document.getElementById("templateID").value;
-    //     var url = "@baseurl";
-    //     $.post(url + "EmailTemplates/GetEmailTemplateDetails", { id: templID }, function (data) {
-    //         //debugger;
-    //         console.log(data);
+        var templID = that.dataset.templateId; //data('data-template-id'); //document.getElementById("templateID").value;
+        var url = "@baseurl";
+        //console.log(templID);
+        $.post(url + "EmailTemplates/GetEmailTemplateDetails", { id: templID }, function (data) {
+            //debugger;
+            //console.log(data);
+            //alert(data.template_name);
+            document.getElementById("Subject").value = data.email_subject;
+            document.getElementById("emailContent").value = data.email_content;
             
-    //     });
-    // }
+        });
+    }
+
+    function editEmailDetails(that) {
+        $("#addEmailTemplateModal").modal("show");
+        var templID = that.dataset.templateId;
+        var url = "@baseurl";
+        //console.log(templID);
+        document.getElementById("addEmailTemplate").innerHTML = "Edit Email Template";
+        $.post(url + "EmailTemplates/GetEmailTemplateDetails", { id: templID }, function (data) {
+            //debugger;
+            //console.log(data);
+            //alert(data.template_name);
+            document.getElementById("EmailTemplateName").value = data.template_name;
+            document.getElementById("EmailTemplateDescription").value = data.template_description;
+            document.getElementById("EmailTemplateSubject").value = data.email_subject;
+            document.getElementById("EmailTemplateContent").value = data.email_content;
+            document.getElementById("typeOfActionID").value = "edit";
+            document.getElementById("emailTemplateIDVal").value = data.id;
+
+        });
+    }
 
 </script>

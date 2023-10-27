@@ -49,22 +49,42 @@ namespace FMB_CIS.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateTemplate(ViewModel model)
-        {
+        public IActionResult CreateEditTemplate(ViewModel model, string typeOfAction)
+        {            
+            //USED FOR BOTH CREATE AND EDIT
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            var emailTemplate = new tbl_email_template();
-            //emailTemplate.id
-            emailTemplate.template_name = model.tbl_Email_Template.template_name;
-            emailTemplate.template_description = model.tbl_Email_Template.template_description;
-            emailTemplate.email_subject = model.tbl_Email_Template.email_subject;
-            emailTemplate.email_content = model.tbl_Email_Template.email_content;
-            emailTemplate.is_active = true;
-            emailTemplate.created_by = loggedUserID;
-            emailTemplate.modified_by = loggedUserID;
-            emailTemplate.date_created = DateTime.Now;
-            emailTemplate.date_modified = DateTime.Now;
-            _context.Add(emailTemplate);
-            _context.SaveChanges();
+            if (typeOfAction == "create")
+            {
+                var emailTemplate = new tbl_email_template();
+                //emailTemplate.id
+                emailTemplate.template_name = model.tbl_Email_Template.template_name;
+                emailTemplate.template_description = model.tbl_Email_Template.template_description;
+                emailTemplate.email_subject = model.tbl_Email_Template.email_subject;
+                emailTemplate.email_content = model.tbl_Email_Template.email_content;
+                emailTemplate.is_active = true;
+                emailTemplate.created_by = loggedUserID;
+                emailTemplate.modified_by = loggedUserID;
+                emailTemplate.date_created = DateTime.Now;
+                emailTemplate.date_modified = DateTime.Now;
+                _context.Add(emailTemplate);
+                _context.SaveChanges();
+            }
+            else if (typeOfAction == "edit")
+            {
+                var emailTemplateDB = _context.tbl_email_template.Where(e => e.id == model.tbl_Email_Template.id).FirstOrDefault();
+                //emailTemplate.id
+                emailTemplateDB.template_name = model.tbl_Email_Template.template_name;
+                emailTemplateDB.template_description = model.tbl_Email_Template.template_description;
+                emailTemplateDB.email_subject = model.tbl_Email_Template.email_subject;
+                emailTemplateDB.email_content = model.tbl_Email_Template.email_content;
+                //emailTemplateDB.is_active = true;
+                //emailTemplateDB.created_by = loggedUserID;
+                emailTemplateDB.modified_by = loggedUserID;
+                //emailTemplateDB.date_created = DateTime.Now;
+                emailTemplateDB.date_modified = DateTime.Now;
+                _context.Update(emailTemplateDB);
+                _context.SaveChanges();
+            }
             return RedirectToAction("Index", "EmailTemplates");
         }
 
@@ -74,6 +94,16 @@ namespace FMB_CIS.Controllers
             var emailTemplateDetais = _context.tbl_email_template.Where(e => e.id == id).FirstOrDefault();
             return Json(emailTemplateDetais);
 
+        }
+
+        [HttpPost]
+        public IActionResult SendEmailTemplate(ViewModel model, string sendToEmailAddress)
+        {
+            //Email
+            var subject = model.tbl_Email_Template.email_subject;
+            var body = model.tbl_Email_Template.email_content;
+            EmailSender.SendEmailAsync(sendToEmailAddress, subject, body);
+            return RedirectToAction("Index", "EmailTemplates");
         }
 
     }
