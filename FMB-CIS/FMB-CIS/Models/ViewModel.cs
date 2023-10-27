@@ -32,6 +32,7 @@
         public IEnumerable<CommentsViewModel>? commentsViewModels2ndList { get; set; }
         public FileUpload? profilePicUpload { get; set; }
         public tbl_chainsaw? TBL_Chainsaw { get; set; }
+        public IEnumerable<tbl_announcement>? tbl_Announcement_List { get; set; }
         public tbl_announcement? soloAnnouncement { get; set; }
 
         public IEnumerable<tbl_division>? tbl_Division_List { get; set; }
@@ -42,5 +43,10 @@
         public RequestChangeAcctInfoViewModel? RequestChangeAcctInfoViewModelApproval { get; set; }
         public IEnumerable<tbl_email_template>? tbl_Email_Templates_List { get; set; }
         public tbl_email_template? tbl_Email_Template { get; set; }
+        public IEnumerable<tbl_announcement_type>? tbl_Announcement_Type_List { get; set; }
+        public tbl_announcement_type? tbl_Announcement_Type { get; set; }
+        public IEnumerable<AnnouncementViewModel>? announcementViewModelList { get; set; }
+        public AnnouncementViewModel? announcementViewModel { get; set; }
+
     }
 }

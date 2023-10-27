@@ -26,6 +26,8 @@ namespace FMB_CIS.Data
         public DbSet<FMB_CIS.Models.tbl_user_change_info_request> tbl_user_change_info_request { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_user_change_info_request_status> tbl_user_change_info_request_status { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_email_template> tbl_email_template { get; set; } = default!;
+        public DbSet<FMB_CIS.Models.tbl_announcement_type> tbl_announcement_type { get; set; } = default!;
         
+
     }
 }

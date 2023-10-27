@@ -22,7 +22,7 @@
                 @foreach (tbl_email_template item in Model.tbl_Email_Templates_List)
                 {
                     <tr>
-                        <td class="text-nowrap">@item.date_created</td>
+                        <td class="text-nowrap">@Convert.ToDateTime(item.date_created).ToString("yyyy-MM-dd HH:mm")</td>
                         <td class="text-nowrap">@item.template_name</td>
                         <td class="text-nowrap">@item.template_description</td>
                         <td class="text-nowrap">

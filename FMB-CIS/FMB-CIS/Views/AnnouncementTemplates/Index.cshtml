@@ -1,6 +1,8 @@
-﻿@{
+﻿@model FMB_CIS.Models.ViewModel
+@{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Announcement Templates";
+    var baseurl = ViewBag.BaseUrl;
 }
 
 <div id="card-container">
@@ -10,19 +12,38 @@
         <table id="denrOfficeTable" class="table table-striped dataTable">
             <thead>
                 <tr>
+                    <th class="text-nowrap">Date Created</th>
                     <th class="text-nowrap">Announcement Title</th>
                     <th class="text-nowrap">Type</th>
-                    <th class="text-nowrap">Details</th>
-                    <th class="text-nowrap">Date Created</th>
+                    <th class="text-nowrap">Announcement Subject</th>
                     <th class="text-nowrap text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                @foreach (AnnouncementViewModel item in Model.announcementViewModelList)
+                {
+                    <tr>
+                        <td class="text-nowrap">@Convert.ToDateTime(item.date_created).ToString("yyyy-MM-dd HH:mm")</td>
+                        <td class="text-nowrap">@item.title</td>
+                        <td class="text-nowrap">@item.tbl_announcement_type_name</td>
+                        <td class="text-nowrap">@item.announcement_subject</td>
+                        <td class="text-nowrap">
+                            <div class="d-flex justify-content-center gap-3">
+                                <a href="#" id="viewAnnouncementTemplate" class="bg-green text-white px-1 pb-1 rounded" title="view" data-template-id="@item.tbl_announcement_id" onclick="viewAnnouncementDetails(this)">
+                                    <i data-feather="eye" class="data-feather-20"></i>
+                                </a>
+                                <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="edit" data-template-id="@item.tbl_announcement_id" onclick="editAnnouncementDetails(this)">
+                                    <i data-feather="edit" class="data-feather-20"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                @* <tr>
+                    <td class="text-nowrap">August 10, 2023</td>
                     <td class="text-nowrap">Announcement Title 01</td>
                     <td class="text-nowrap">Announcement Type 01</td>
                     <td class="text-nowrap">Announcement for all registrants</td>
-                    <th class="text-nowrap">August 10, 2023</th>
                     <td class="text-nowrap">
                         <div class="d-flex justify-content-center gap-3">
                             <a href="#" id="viewAnnouncementTemplate" class="bg-green text-white px-1 pb-1 rounded" title="view">
@@ -30,7 +51,7 @@
                             </a>
                         </div>
                     </td>
-                </tr>
+                </tr> *@
             </tbody>
         </table>
     </div>
@@ -41,9 +62,56 @@
 <script type="text/javascript">
     $("#btnAdd").click(function () {
         $("#addAnnouncementTemplateModal").modal("show");
+        document.getElementById("addAnnouncementTemplate").innerHTML = "Add Announcement Template";
+        document.getElementById("announcementTitle").value = null;
+        document.getElementById("announcementSubject").value = null;
+        document.getElementById("announcementContent").value = null;
+        document.getElementById("announcementIDVal").value = null;
+        document.getElementById("typeOfActionID").value = "create";
+        //document.getElementById("announcementTypeIDDropdown").value = null;
+        $("#announcementTypeIDDropdown").prop("selectedIndex", 0).val();
     });
 
-    $("#viewAnnouncementTemplate").click(function () {
+    // $("#viewAnnouncementTemplate").click(function () {
+    //     $("#viewAnnouncementTemplateModal").modal("show");
+    // });
+
+    function viewAnnouncementDetails(that) {
         $("#viewAnnouncementTemplateModal").modal("show");
-    });
+        var templID = that.dataset.templateId; //data('data-template-id'); //document.getElementById("templateID").value;
+        var url = "@baseurl";
+        //console.log(templID);
+        $.post(url + "AnnouncementTemplates/GetAnnouncementTemplateDetails", { id: templID }, function (data) {
+            //debugger;
+            console.log(data);
+            //alert(data.template_name);
+            document.getElementById("announcementTitleView").value = data.title;
+            document.getElementById("announcementSubjectView").value = data.announcement_subject;
+            document.getElementById("announcementContentView").value = data.announcement_content;
+            // document.getElementById("announcementIDValView").value = data.id;
+            document.getElementById("announcementTypeIDDropdownView").value = data.tbl_announcement_type_id;
+
+        });
+    }
+
+    function editAnnouncementDetails(that) {
+        $("#addAnnouncementTemplateModal").modal("show");
+        var templID = that.dataset.templateId;
+        var url = "@baseurl";
+        //console.log(templID);
+        document.getElementById("addAnnouncementTemplate").innerHTML = "Edit Announcement Template";
+        $.post(url + "AnnouncementTemplates/GetAnnouncementTemplateDetails", { id: templID }, function (data) {
+            //debugger;
+            console.log(data);
+            //alert(data.template_name);            
+            document.getElementById("announcementTitle").value = data.title;
+            document.getElementById("announcementSubject").value = data.announcement_subject;
+            document.getElementById("announcementContent").value = data.announcement_content;
+            document.getElementById("announcementIDVal").value = data.id;
+            document.getElementById("typeOfActionID").value = "edit";
+            document.getElementById("announcementTypeIDDropdown").value = data.tbl_announcement_type_id;
+
+        });
+    }
+
 </script>

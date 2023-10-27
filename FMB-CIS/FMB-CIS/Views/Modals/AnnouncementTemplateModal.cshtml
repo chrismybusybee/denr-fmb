@@ -1,39 +1,46 @@
-﻿<div class="modal fade" id="addAnnouncementTemplateModal" aria-hidden="true">
+﻿@model FMB_CIS.Models.ViewModel
+<div class="modal fade" id="addAnnouncementTemplateModal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
-                <div class="d-flex flex-column align-items-center gap-4 p-5">
-                    <p class="fw-bold fs-5">
-                        Add Announcement Template
-                    </p>
-                    <div class="row w-100">
-                        <div class="col-md-12">
-                            <div class="form-group mb-3">
-                                <label class="form-label small">Type</label>
-                                <select class="form-select">
-                                    <option>Type 01</option>
-                                    <option>Type 02</option>
-                                </select>
-                            </div>
-                            <div class="form-group mb-3">
-                                <label class="form-label small">Title</label>
-                                <input class="form-control" />
-                            </div>
-                            <div class="form-group mb-3">
-                                <label class="form-label small">Subject</label>
-                                <input class="form-control" />
-                            </div>
-                            <div class="form-group mb-3">
-                                <label class="form-label small">Details</label>
-                                <textarea class="form-control" rows="8"></textarea>
+                <form asp-controller="AnnouncementTemplates" asp-action="CreateEditAnnouncementTemplate" id="CreateEditAnnouncementTemplateForm">
+                    <div class="d-flex flex-column align-items-center gap-4 p-5">
+                        <p class="fw-bold fs-5" id="addAnnouncementTemplate">
+                            Add Announcement Template
+                        </p>
+                        <div class="row w-100">
+                            <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    <label class="form-label small">Type</label>
+                                    <select asp-for="soloAnnouncement.tbl_announcement_type_id" class="form-select" id="announcementTypeIDDropdown">
+                                        @foreach (tbl_announcement_type item in Model.tbl_Announcement_Type_List)
+                                        {
+                                            <option value="@item.id">@item.name</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label small">Title</label>
+                                    <input asp-for="soloAnnouncement.title" id="announcementTitle" class="form-control" />
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label small">Subject</label>
+                                    <input asp-for="soloAnnouncement.announcement_subject" id="announcementSubject" class="form-control" />
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label small">Content</label>
+                                    <textarea asp-for="soloAnnouncement.announcement_content" id="announcementContent" class="form-control" rows="8"></textarea>
+                                </div>
                             </div>
                         </div>
+                        <input type="hidden" id="typeOfActionID" name="typeOfAction" />
+                        <input type="hidden" id="announcementIDVal" asp-for="soloAnnouncement.id" />
+                        <div class="d-flex gap-4 w-100">
+                            <button id="cancelBtn" type="button" class="btn btn-danger w-100">Cancel</button>
+                            <button id="confirmSaveBtn" type="button" class="btn btn-primary w-100">Confirm</button>
+                        </div>
                     </div>
-                    <div class="d-flex gap-4 w-100">
-                        <button id="cancelBtn" class="btn btn-danger w-100">Cancel</button>
-                        <button id="confirmSaveBtn" class="btn btn-primary w-100">Confirm</button>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -89,31 +96,33 @@
                         <div class="col-md-12">
                             <div class="form-group mb-3">
                                 <label class="form-label small">Type</label>
-                                <select class="form-select">
-                                    <option>Type 01</option>
-                                    <option>Type 02</option>
+                                <select asp-for="soloAnnouncement.tbl_announcement_type_id" class="form-select" id="announcementTypeIDDropdownView" disabled>
+                                    @foreach (tbl_announcement_type item in Model.tbl_Announcement_Type_List)
+                                    {
+                                        <option value="@item.id">@item.name</option>
+                                    }
                                 </select>
                             </div>
                             <div class="form-group mb-3">
                                 <label class="form-label small">Title</label>
-                                <input class="form-control" />
+                                <input class="form-control" id="announcementTitleView" readonly />
                             </div>
                             <div class="form-group mb-3">
                                 <label class="form-label small">Subject</label>
-                                <input class="form-control" />
+                                <input class="form-control" id="announcementSubjectView" readonly />
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label small">Details</label>
-                                <textarea class="form-control" rows="8"></textarea>
+                                <label class="form-label small">Content</label>
+                                <textarea class="form-control" rows="8" id="announcementContentView" readonly></textarea>
                             </div>
                         </div>
                     </div>
                     <div class="d-flex just gap-4 w-100">
                         <div class="w-100 d-flex justify-content-end">
-                            <button id="cancelSendBtn" class="btn btn-danger w-50">Cancel</button>
+                            <button id="cancelSendBtn" class="btn btn-danger w-50" hidden>Cancel</button>
                         </div>
                         <div class="w-100">
-                            <button id="confirmSendBtn" class="btn btn-primary w-50">Send</button>
+                            <button id="confirmSendBtn" class="btn btn-primary w-50" hidden>Send</button>
                         </div>
                     </div>
                 </div>
@@ -202,6 +211,37 @@
     $("#sendBtn").click(function () {
         $("#confirmSendSuccessModal").modal("show");
         $("#confirmSendModal").modal("hide");
+    });
+
+    const createAnnouncementTemplForm = document.getElementById('CreateEditAnnouncementTemplateForm');
+    const showConfirmSaveModalButton = document.getElementById('confirmSaveBtn');
+    const confirmationAddModal = document.getElementById('confirmAddModal');
+    const confirmAddButton = document.getElementById('confirmAddBtn');
+
+    // Function to display the modal
+    function showAddModal() {
+        confirmationAddModal.style.display = 'block';
+    }
+
+    // Function to hide the modal
+    function hideAddModal() {
+        confirmationAddModal.style.display = 'none';
+    }
+
+    // Event listener for the "Submit" button
+    showConfirmSaveModalButton.addEventListener('click', showAddModal);
+
+    // Event listener for the "Confirm" button
+    confirmAddButton.addEventListener('click', function () {
+        // Submit the form when the "Confirm" button is clicked
+        createAnnouncementTemplForm.submit();
+    });
+
+    // Close the modal when the user clicks outside of it
+    window.addEventListener('click', function (event) {
+        if (event.target === confirmationAddModal) {
+            hideAddModal();
+        }
     });
 
 </script>   
