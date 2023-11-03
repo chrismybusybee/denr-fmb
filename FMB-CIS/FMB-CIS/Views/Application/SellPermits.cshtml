@@ -45,6 +45,9 @@
                         Permit Status
                     </th>
                     <th>
+                        Proof of Payment
+                    </th>
+                    <th>
                         Action
                     </th>
 
@@ -52,6 +55,51 @@
                 </tr>
             </thead>
             <tbody>
+
+                <tr>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        John Bernal
+                    </td>
+                    <td>
+                        dale@mybusybee.net
+                    </td>
+                    <td>
+                        0999999999
+                    </td>
+                    <td>
+                        Las Pinas
+                    </td>
+                    <td>
+                        Oct 31, 2023
+                    </td>
+                    <td>
+                        Chainsaw Seller
+                    </td>
+                    <td>
+                        Permit to Sell
+                    </td>
+                    <td>
+                        For Inspector Approval
+                    </td>
+                    <td>
+                        <div class="d-flex justify-content-center">
+                            <a href="#" id="uploadPOP" class="bg-green text-white pt-0 pb-1 px-2 rounded text-decoration-none">
+                                <i data-feather="upload" class="data-feather-20"></i> Upload
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="edit">
+                                <i data-feather="edit" class="data-feather-20"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+
                 @foreach (ApplicantListViewModel item in Model.applicantListViewModels)
                 {
                     {
@@ -84,6 +132,8 @@
                                 @Html.DisplayFor(modelItem => item.permit_status)
                             </td>
                             <td>
+                            </td>
+                            <td>
                                 @* <a href="ChainsawImporterApproval?uid=@item.tbl_user_id&appid=@item.id">Take Action</a> *@
                                 @if (item.application_type.Contains("Importer"))
                                 {
@@ -106,3 +156,17 @@
         </table>
     </div>
 </div>
+
+<script src="/js/jquery-3.7.1.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#uploadPOP").click(function () {
+            $("#uploadPOPModal").modal("show");
+        });
+
+        $("#cancelBtn").click(function () {
+            $("#uploadPOPModal").modal("hide");
+        });
+    });
+</script>

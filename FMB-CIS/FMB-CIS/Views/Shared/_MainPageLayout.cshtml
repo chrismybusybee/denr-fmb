@@ -689,6 +689,10 @@
     {
         <partial name="~/Views/Modals/AnnouncementTemplateModal.cshtml" />
     }
+    else if (currentUrl.Contains("SellPermits"))
+    {
+        <partial name="~/Views/Modals/ManageApplicationModal.cshtml" />
+    }
     <footer>
         © 2023 DENR-FMB CIS. All rights reserved. <a href="@Url.Action("TermsPolicy", "Home")" target="_blank" class="text-light-gray text-decoration-none">Privacy Policy | Terms & Conditions.</a>
     </footer>
