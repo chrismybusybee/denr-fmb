@@ -330,6 +330,8 @@ namespace FMB_CIS.Controllers
                                     Console.WriteLine(passResetLink);
                                     var subject = "Account Created";
                                     var body = "We would like to inform you that you have created an account with FMB-CIS.\nPlease click the link to verify your email and set your password. " + passResetLink + "\nThank You!";
+                                    //Get email and subject from templates in DB
+                                    //var emailTemplate = _context.tbl_email_template.Where(e => e.id == 1).FirstOrDefault();
                                     EmailSender.SendEmailAsync(model.tbl_Users.email, subject, body);
                                     //return RedirectToAction("EmailConfirmation");
                                     return RedirectToAction("Index", "Home", new { success = true });
@@ -452,12 +454,18 @@ namespace FMB_CIS.Controllers
                         
                         if(tblTempPass != null && tblTempPass.is_active == true) //tblTempPass.is_active means the Temporary Password is active and not yet changing their password. It also mean that the user doesn't confirm their email. tblTempPass is null when user was created before having a code for this.
                         {
+                            //Get email and subject from templates in DB
+                            var emailTemplate = _context.tbl_email_template.Where(e => e.id == 1).FirstOrDefault();
+                            // id = 1 - Account Registration (Application Sent)
                             //Make Temporary Password Inactive
                             tblTempPass.is_active = false;
                             _context.Update(tblTempPass);
                             _context.SaveChanges();
-                            var subject = "Email Verified";
-                            var body = "You have successfully verified your email and set your password! You may now login with your credentials!\nThank You!";
+                            //var subject = "Email Verified";
+                            //var body = "You have successfully verified your email and set your password! You may now login with your credentials!\nThank You!";
+                            var subject = emailTemplate.email_subject;
+                            var BODY = emailTemplate.email_content.Replace("{FirstName}", usrDB.first_name);
+                            var body = BODY.Replace(Environment.NewLine, "<br/>");
                             EmailSender.SendEmailAsync(model.email, subject, body);
                         }
                         else

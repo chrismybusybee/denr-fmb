@@ -4,6 +4,8 @@ using Humanizer.Localisation;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Configuration;
 using Org.BouncyCastle.Tls;
@@ -135,7 +137,7 @@ namespace FMB_CIS.Controllers
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
                                  where pT.name == "Certificate of Registration"
-                                 select new ApplicantListViewModel { id = a.id, applicationDate = a.date_created, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id };
+                                 select new ApplicantListViewModel { id = a.id, applicationDate = a.date_created, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id, date_of_expiration = a.date_of_expiration };
 
             mymodel.applicantListViewModels = applicationMod;
 
@@ -271,7 +273,7 @@ namespace FMB_CIS.Controllers
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
                                  where pT.name == "Permit to Import"
-                                 select new ApplicantListViewModel { id = a.id, applicationDate = a.date_created, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id };
+                                 select new ApplicantListViewModel { id = a.id, applicationDate = a.date_created, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id, status=(int)a.status };
 
             mymodel.applicantListViewModels = applicationMod;
 
@@ -304,7 +306,7 @@ namespace FMB_CIS.Controllers
                 //CODE FOR FILE DOWNLOAD
                 int applicID = Convert.ToInt32(appid);
                 //File Paths from Database
-                var filesFromDB = _context.tbl_files.Where(f => f.tbl_application_id == applicID).ToList();
+                var filesFromDB = _context.tbl_files.Where(f => f.tbl_application_id == applicID && f.created_by == usid && f.is_proof_of_payment != true).ToList();
                 List<tbl_files> files = new List<tbl_files>();
 
                 foreach (var fileList in filesFromDB)
@@ -312,8 +314,17 @@ namespace FMB_CIS.Controllers
                     files.Add(new tbl_files { Id = fileList.Id, filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, file_size = fileList.file_size, date_created = fileList.date_created });
                     //files.Add(new tbl_files { filename = f });
                 }
-
                 mymodel.tbl_Files = files;
+
+                //FILES FOR PROOF OF PAYMENT
+                var filesFromPayment = _context.tbl_files.Where(f => f.tbl_application_id == applicID && f.created_by == Convert.ToInt32(uid) && f.is_proof_of_payment == true).ToList();
+                List<tbl_files> paymentFiles = new List<tbl_files>();
+
+                foreach (var fileList in filesFromPayment)
+                {
+                    paymentFiles.Add(new tbl_files { Id = fileList.Id, filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, file_size = fileList.file_size, date_created = fileList.date_created });
+                }
+                mymodel.proofOfPaymentFiles = paymentFiles;
                 //END FOR FILE DOWNLOAD
 
                 //HISTORY
@@ -338,6 +349,7 @@ namespace FMB_CIS.Controllers
                                           email = usr.email,
                                           permit_type = pT.name,
                                           permit_status = pS.status,
+                                          status = Convert.ToInt32(a.status),
                                           user_type = usrtyps.name,
                                           comment = usr.comment,
                                           qty = a.qty,
@@ -346,7 +358,9 @@ namespace FMB_CIS.Controllers
                                           address = usr.street_address,
                                           expectedTimeArrived = a.expected_time_arrival,
                                           expectedTimeRelease = a.expected_time_release,
-                                          purpose = a.purpose
+                                          purpose = a.purpose,
+                                          date_of_registration = a.date_of_registration,
+                                          date_of_expiration = a.date_of_expiration
                                       }).FirstOrDefault();
                 //mymodel.email = UserList.email;
                 mymodel.applicantViewModels = applicationMod;
@@ -464,44 +478,44 @@ namespace FMB_CIS.Controllers
 
                 
                 _context.SaveChanges();
-                
+
 
                 //Saving a file
                 if (viewMod.filesUpload != null)
+                {
+                    foreach (var file in viewMod.filesUpload.Files)
                     {
-                        foreach (var file in viewMod.filesUpload.Files)
+                        var filesDB = new tbl_files();
+                        FileInfo fileInfo = new FileInfo(file.FileName);
+                        string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserDocs");
+
+                        //create folder if not exist
+                        if (!Directory.Exists(path))
+                            Directory.CreateDirectory(path);
+
+
+                        string fileNameWithPath = Path.Combine(path, file.FileName);
+
+                        using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
                         {
-                            var filesDB = new tbl_files();
-                            FileInfo fileInfo = new FileInfo(file.FileName);
-                            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserDocs");
-
-                            //create folder if not exist
-                            if (!Directory.Exists(path))
-                                Directory.CreateDirectory(path);
-
-
-                            string fileNameWithPath = Path.Combine(path, file.FileName);
-
-                            using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
-                            {
-                                file.CopyTo(stream);
-                            }
-                            filesDB.tbl_application_id = viewMod.applicantViewModels.id;
-                            filesDB.created_by = viewMod.applicantViewModels.tbl_user_id;
-                            filesDB.modified_by = viewMod.applicantViewModels.tbl_user_id;
-                            filesDB.date_created = DateTime.Now;
-                            filesDB.date_modified = DateTime.Now;
-                            filesDB.filename = file.FileName;
-                            filesDB.path = path;
-                            filesDB.tbl_file_type_id = fileInfo.Extension;
-                            filesDB.tbl_file_sources_id = fileInfo.Extension;
-                            filesDB.file_size = Convert.ToInt32(file.Length);
-                            _context.tbl_files.Add(filesDB);
-                            _context.SaveChanges();
+                            file.CopyTo(stream);
                         }
-                }                    
-                    //Email
-                    var subject = "Permit Application Status";
+                        filesDB.tbl_application_id = viewMod.applicantViewModels.id;
+                        filesDB.created_by = viewMod.applicantViewModels.tbl_user_id;
+                        filesDB.modified_by = viewMod.applicantViewModels.tbl_user_id;
+                        filesDB.date_created = DateTime.Now;
+                        filesDB.date_modified = DateTime.Now;
+                        filesDB.filename = file.FileName;
+                        filesDB.path = path;
+                        filesDB.tbl_file_type_id = fileInfo.Extension;
+                        filesDB.tbl_file_sources_id = fileInfo.Extension;
+                        filesDB.file_size = Convert.ToInt32(file.Length);
+                        _context.tbl_files.Add(filesDB);
+                        _context.SaveChanges();
+                    }
+                }
+                //Email
+                var subject = "Permit Application Status";
                     var body = "Greetings! \n You have successfully edited your application.";
                     EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);                                                
             }
@@ -593,8 +607,8 @@ namespace FMB_CIS.Controllers
             ViewBag.Message = "Save Success";
             viewMod.applicantViewModels = applicationMod;
 
-            return View(viewMod);
-
+            //return View(viewMod);
+            return RedirectToAction("EditApplication", "Application", new { uid = usid, appid = applid });
         }
 
         //For File Download
@@ -629,6 +643,71 @@ namespace FMB_CIS.Controllers
 
             
             return RedirectToAction("EditApplication", "Application", new { uid = uid, appid = appid });
+        }
+
+        [HttpPost]
+        public IActionResult UploadProofOfPayment(ViewModel model, string actionName)
+        {
+            int applicationID = Convert.ToInt32(model.tbl_Application.id);
+            int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            //var action = ViewContext.RouteData.Values["action"].ToString();
+            //var action = ViewBag.ActionName;
+            
+            //Saving a file
+            if (model.filesUpload != null)
+            {
+                foreach (var file in model.filesUpload.Files)
+                {
+                    var filesDB = new tbl_files();
+                    FileInfo fileInfo = new FileInfo(file.FileName);
+                    string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserDocs");
+
+                    //create folder if not exist
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+
+
+                    string fileNameWithPath = Path.Combine(path, file.FileName);
+
+                    using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+                    filesDB.tbl_application_id = applicationID;
+                    filesDB.created_by = loggedUserID;
+                    filesDB.modified_by = loggedUserID;
+                    filesDB.date_created = DateTime.Now;
+                    filesDB.date_modified = DateTime.Now;
+                    filesDB.filename = file.FileName;
+                    filesDB.path = path;
+                    filesDB.tbl_file_type_id = fileInfo.Extension;
+                    filesDB.tbl_file_sources_id = fileInfo.Extension;
+                    filesDB.is_proof_of_payment = true;
+                    filesDB.file_size = Convert.ToInt32(file.Length);
+                    _context.tbl_files.Add(filesDB);
+                    _context.SaveChanges();
+                }
+            }
+
+            //modify permit status
+            int stats = 7; // 7 - Payment Verification (Inspector)
+            //SAVE CHANGES TO DATABASE
+            DateTime? dateDueOfficer = BusinessDays.AddBusinessDays(DateTime.Now, 2).AddHours(4).AddMinutes(30);
+            var appli = new tbl_application() { id = applicationID, status = stats, date_modified = DateTime.Now, modified_by = loggedUserID, date_due_for_officers = dateDueOfficer };
+            //var usrdet = new tbl_user() { id = usid, comment = viewMod.applicantViewModels.comment };
+            using (_context)
+            {
+                _context.tbl_application.Attach(appli);
+                _context.Entry(appli).Property(x => x.status).IsModified = true;
+                _context.Entry(appli).Property(x => x.modified_by).IsModified = true;
+                _context.Entry(appli).Property(x => x.date_modified).IsModified = true;
+                _context.Entry(appli).Property(x => x.date_due_for_officers).IsModified = true;
+                _context.SaveChanges();
+            }
+
+            //return View();
+            //return new EmptyResult();
+            return RedirectToAction(actionName, "Application");
         }
     }
 }

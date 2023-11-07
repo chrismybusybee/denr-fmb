@@ -10,6 +10,10 @@
 
         public ApplicantListViewModel? applicantViewModels { get; set; }
         public IEnumerable<tbl_files>? tbl_Files { get; set; }
+        public IEnumerable<tbl_files>? filesUploadedByInspector { get; set; }
+        public IEnumerable<tbl_files>? filesUploadedByCENRO { get; set; }
+        public IEnumerable<tbl_files>? proofOfPaymentFiles { get; set; }
+
         public string? uid { get; set; }
         public string? appid { get; set; }
         public string? comment { get; set; }

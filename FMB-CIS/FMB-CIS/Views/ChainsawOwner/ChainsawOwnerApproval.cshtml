@@ -18,19 +18,36 @@
                 <input asp-for="uid" type="hidden" />
                 <input asp-for="appid" type="hidden" />
                 <div class="d-flex justify-content-end gap-2">
-                    @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO") == true)
+                    @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR CENRO" || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR Implementing PENRO" || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR Regional Executive Director (RED)")
                     {
                         @* <input id="approveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Approve" />
                         <input id="declineBtn" class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="submit" value="Decline" /> *@
-                        <button type="button" id="approveBtn" class="btn btn-primary w-105">Approve</button>
-                        <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
+                        if (Model.applicantViewModels.status < 6)
+                        {
+                            <button type="button" id="approveBtn" class="btn btn-primary w-125">Approve and Proceed to Payment</button>
+                            <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
+                        }
+                        if (Model.applicantViewModels.status >= 6)
+                        {
+                            <button type="button" id="approveBtn" class="btn btn-primary w-110">Approve Payment</button>
+                            <button type="button" id="declineBtn" class="btn btn-danger w-110 btnCancel">Decline Payment</button>
+                        }
 
                     }
                     @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true)
                     {
                         @* <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" /> *@
-                        <button type="button" id="approveBtn" class="btn btn-primary w-105">Approve</button>
-                        <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
+                        
+                        if (Model.applicantViewModels.status < 6)
+                        {
+                            <button type="button" id="approveBtn" class="btn btn-primary w-105">Approve</button>
+                            <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
+                        }
+                        if (Model.applicantViewModels.status >= 6)
+                        {
+                            <button type="button" id="approveBtn" class="btn btn-primary w-110">Approve Payment</button>
+                            <button type="button" id="declineBtn" class="btn btn-danger w-110 btnCancel">Decline Payment</button>
+                        }
                     }
                 <input asp-for="decision" id="decisionID" type="hidden" />
                 </div>
@@ -61,6 +78,13 @@
                                         <span class="fw-bold">
                                             @* <label asp-for="applicantViewModels.full_name" value="@Model.applicantViewModels.full_name">@Model.applicantViewModels.full_name</label> *@
                                             @Html.DisplayFor(model => model.applicantViewModels.full_name)
+                                            @Html.HiddenFor(model => model.applicantViewModels.first_name)
+                                            @Html.HiddenFor(model => model.applicantViewModels.middle_name)
+                                            @Html.HiddenFor(model => model.applicantViewModels.last_name)
+                                            @Html.HiddenFor(model => model.applicantViewModels.suffix)
+                                            @Html.HiddenFor(model => model.applicantViewModels.full_name)
+                                            @Html.HiddenFor(model => model.applicantViewModels.tbl_user_id)
+                                            @Html.HiddenFor(model => model.applicantViewModels.status)
                                         </span>
                                     </div>
                                 </div>
@@ -99,6 +123,7 @@
                                         <span class="fw-bold">
                                             @* <label asp-for="applicantViewModels.valid_id" value="@Model.applicantViewModels.valid_id">@Model.applicantViewModels.valid_id</label> *@
                                             @Html.DisplayFor(model => model.applicantViewModels.permit_type)
+                                            @Html.HiddenFor(model => model.applicantViewModels.permit_type)
                                         </span>
                                     </div>
                                 </div>
@@ -110,6 +135,7 @@
                                         <span class="fw-bold">
                                             @* <label asp-for="applicantViewModels.valid_id_no" value="@Model.applicantViewModels.valid_id_no">@Model.applicantViewModels.valid_id_no</label> *@
                                             @Html.DisplayFor(model => model.applicantViewModels.permit_status)
+                                            @Html.HiddenFor(model => model.applicantViewModels.permit_status)
                                         </span>
                                     </div>
                                 </div>
@@ -155,6 +181,57 @@
                                     </div>
                                 }
                             </div>
+                            <div class="row mb-5">
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Specification
+                                        </label>
+                                        <span class="fw-bold">
+                                            @Html.DisplayFor(model => model.applicantViewModels.specification)
+                                            @Html.HiddenFor(model => model.applicantViewModels.specification)
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Purpose
+                                        </label>
+                                        <span class="fw-bold">
+                                            @Html.DisplayFor(model => model.applicantViewModels.purpose)
+                                            @Html.HiddenFor(model => model.applicantViewModels.purpose)
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            @if (Model.applicantViewModels.status == 11)
+                            {
+                                <div class="row mb-5">
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Date of Permit Registration
+                                            </label>
+                                            <span class="fw-bold">
+                                                @Html.DisplayFor(model => model.applicantViewModels.date_of_registration)
+                                                @Html.HiddenFor(model => model.applicantViewModels.date_of_registration)
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Date of Permit Expiration
+                                            </label>
+                                            <span class="fw-bold">
+                                                @Html.DisplayFor(model => model.applicantViewModels.date_of_expiration)
+                                                @Html.HiddenFor(model => model.applicantViewModels.date_of_expiration)
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                             @if (Model.applicantViewModels.permit_type == "Certificate of Registration")
                             {
                                 <div class="row mb-5">
@@ -270,6 +347,37 @@
                                         </div>
                                     </div>
                                 </div>
+                                @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true && Model.applicantViewModels.permit_type == "Certificate of Registration")
+                                {
+                                    <div class="row mb-5">
+                                        <div class="col-md-5">
+                                            <div class="form-group d-flex flex-column gap-1">
+                                                
+                                                @if (Model.applicantViewModels.status < 3)
+                                                {
+                                                    <label class="text-secondary small">
+                                                        Set Date of Inspection
+                                                    </label>
+                                                    <span class="fw-bold">
+                                                        @* @Html.EditorFor(model => model.applicantViewModels.inspectionDate) *@
+                                                        <input type="date" asp-for="applicantViewModels.inspectionDate" class="form-control" />
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <label class="text-secondary small">
+                                                        Date of Inspection
+                                                    </label>
+                                                    <span class="fw-bold">
+                                                        @* @Html.EditorFor(model => model.applicantViewModels.inspectionDate) *@
+                                                        @Html.DisplayFor(model => model.applicantViewModels.inspectionDate)
+                                                        @Html.HiddenFor(model => model.applicantViewModels.inspectionDate)
+                                                    </span>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                             }
                         </div>
                     </div>
@@ -311,9 +419,13 @@
                         </tbody>
                     </table>
                 </div> *@
-                <div class="d-flex gap-4 mb-5">
-                    <h2 class="text-secondary fw-bold m-0">Attached Documents</h2>
+                <div class="mb-4">
+                    <span style="white-space: pre-line">@ViewBag.RequiredDocsList</span>
                 </div>
+                <div class="d-flex gap-4 mb-5">
+                    <h2 class="text-secondary fw-bold m-0">Attached Documents from Applicant</h2>
+                </div>
+
                 <div class="d-flex mb-4 gap-3">
                     @foreach (tbl_files file in Model.tbl_Files)
                     {
@@ -351,7 +463,157 @@
                         </div>
                     }
                 </div>
+                <hr />
+                <div class="d-flex gap-4 mb-5">
+                    <h2 class="text-secondary fw-bold m-0">Attached Documents from Inspector</h2>
+                </div>
 
+                <div class="d-flex mb-4 gap-3">
+                    @foreach (tbl_files file in Model.filesUploadedByInspector)
+                    {
+                        <div class="card mw-18rem">
+                            <div class="card-body">
+                                @if (file.tbl_file_type_id == ".pdf")
+                                {
+                                    <i class="fas fa-file-pdf text-light-green fs-1 mb-3"></i>
+                                }
+                                else if (file.tbl_file_type_id == ".docx")
+                                {
+                                    <i class="fas fa-file-word text-light-green fs-1 mb-3"></i>
+                                }
+                                else if (file.tbl_file_type_id == ".jpg")
+                                {
+                                    <i class="fas fa-file-image text-light-green fs-1 mb-3"></i>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-file text-light-green fs-1 mb-3"></i>
+                                }
+                                <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="~/Files/UserDocs/@file.filename" target="_blank">View</a></li>
+                                    @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
+                                    <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
+                                </ul>
+                                <h6 class="card-title text-secondary">@file.filename</h6>
+                                <ul class="list-unstyled small mb-0">
+                                    <li><span class="text-muted">type: @file.tbl_file_type_id</span></li>
+                                    <li><span class="text-muted">size: @(file.file_size / 1024) kB</span></li>
+                                    <li><span class="text-muted">uploaded: @file.date_created.ToString("MMM dd yyyy")</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <hr />
+                <div class="d-flex gap-4 mb-5">
+                    <h2 class="text-secondary fw-bold m-0">Attached Documents from CENRO</h2>
+                </div>
+
+                <div class="d-flex mb-4 gap-3">
+                    @foreach (tbl_files file in Model.filesUploadedByCENRO)
+                    {
+                        <div class="card mw-18rem">
+                            <div class="card-body">
+                                @if (file.tbl_file_type_id == ".pdf")
+                                {
+                                    <i class="fas fa-file-pdf text-light-green fs-1 mb-3"></i>
+                                }
+                                else if (file.tbl_file_type_id == ".docx")
+                                {
+                                    <i class="fas fa-file-word text-light-green fs-1 mb-3"></i>
+                                }
+                                else if (file.tbl_file_type_id == ".jpg")
+                                {
+                                    <i class="fas fa-file-image text-light-green fs-1 mb-3"></i>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-file text-light-green fs-1 mb-3"></i>
+                                }
+                                <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="~/Files/UserDocs/@file.filename" target="_blank">View</a></li>
+                                    @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
+                                    <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
+                                </ul>
+                                <h6 class="card-title text-secondary">@file.filename</h6>
+                                <ul class="list-unstyled small mb-0">
+                                    <li><span class="text-muted">type: @file.tbl_file_type_id</span></li>
+                                    <li><span class="text-muted">size: @(file.file_size / 1024) kB</span></li>
+                                    <li><span class="text-muted">uploaded: @file.date_created.ToString("MMM dd yyyy")</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <hr />
+                @if (Model.applicantViewModels.status >= 7)
+                {
+
+                    <div class="d-flex gap-4 mb-5">
+                        <h2 class="text-secondary fw-bold m-0">Attached Proof of Payment</h2>
+                    </div>
+                    <div class="d-flex mb-4 gap-3">
+                        @foreach (tbl_files file in Model.proofOfPaymentFiles)
+                        {
+                            <div class="card mw-18rem">
+                                <div class="card-body">
+                                    @if (file.tbl_file_type_id == ".pdf")
+                                    {
+                                        <i class="fas fa-file-pdf text-light-green fs-1 mb-3"></i>
+                                    }
+                                    else if (file.tbl_file_type_id == ".docx")
+                                    {
+                                        <i class="fas fa-file-word text-light-green fs-1 mb-3"></i>
+                                    }
+                                    else if (file.tbl_file_type_id == ".jpg")
+                                    {
+                                        <i class="fas fa-file-image text-light-green fs-1 mb-3"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-file text-light-green fs-1 mb-3"></i>
+                                    }
+                                    <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="~/Files/UserDocs/@file.filename" target="_blank">View</a></li>
+                                        @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
+                                        <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
+                                    </ul>
+                                    <h6 class="card-title text-secondary">@file.filename</h6>
+                                    <ul class="list-unstyled small mb-0">
+                                        <li><span class="text-muted">type: @file.tbl_file_type_id</span></li>
+                                        <li><span class="text-muted">size: @(file.file_size / 1024) kB</span></li>
+                                        <li><span class="text-muted">uploaded: @file.date_created.ToString("MMM dd yyyy")</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <hr />
+                }
+
+                @* @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true) *@
+                @* Inspector and CENRO can upload files *@
+                
+                <div class="d-flex gap-4 mb-5">
+                    <h2 class="text-secondary fw-bold m-0">Upload Documents</h2>
+                    <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
+                        <i data-feather="upload"></i> Upload
+                    </label>
+                    <input type="file" asp-for="filesUpload.Files" class="form-control file" multiple hidden />
+                    @* <button type="button" class="btn btn-primary"><i data-feather="upload"></i> Upload</button>*@
+                </div>
+                <div class="d-flex mb-4 gap-3 output">
+                    @*Cards for files*@
+                    <p id="files-area">
+                        <span id="filesList">
+                            <span id="files-names"></span>
+                        </span>
+                    </p>
+                </div>
+                
                 <div class="row d-flex justify-content-center px-0 mb-5">
                     @* @if (ViewBag.Inspector)
                     {
@@ -375,6 +637,7 @@
         </form>
 
         <hr />
+        <h5 class="text-secondary fw-bold m-0">Add Comments</h5>
         <form id="commentSection" asp-action="CommentSection">
             <div class="row d-flex justify-content-center px-0 mb-5 mt-3">
                 <div class="col-md-11 d-flex flex-column gap-2">
@@ -517,8 +780,95 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        //FOR FILE UPLOAD
+        const dt = new DataTransfer();
+        // Add an event listener for the 'change' event on the file input element
+        // Add an event listener for the 'change' event on the file input element
+        $(".file").on("change", function (e) {
+            // Get the selected file(s)
+            var selectedFiles = $(this).prop("files");
+            var fafile = "";
+            // Clear the previous output
+            //$(".output").empty();
+
+            // Display file information in the specified format
+            for (var i = 0; i < this.files.length; i++) {
+                //ifelse for fa-file type
+                if (selectedFiles[i].type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                    fafile = "fa-file-word"
+                }
+                else if (selectedFiles[i].type == "application/pdf") {
+                    fafile = "fa-file-pdf"
+                }
+                else if (selectedFiles[i].type == "image/jpeg") {
+                    fafile = "fa-file-image"
+                }
+                else {
+                    fafile = "fa-file"
+                }
+                // Create div elements and set their classes and content
+                var cardDiv = $("<div>").addClass("card mw-18rem ").attr('id', selectedFiles[i].name);
+                var fileDiv = $("<div>").addClass("card-body");
+                var fileIcon = $("<i>").addClass("fas " + fafile + " text-light-green fs-1 mb-3");
+                var dropdownIcon = $("<i>").addClass("fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary").attr({
+                    "data-bs-toggle": "dropdown",
+                    "aria-expanded": "false"
+                });
+                var dropdownMenu = $("<ul>").addClass("dropdown-menu").append(
+                    $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("View")),
+                    $("<li>").append($("<a>").addClass("dropdown-item file-delete").attr("href", "#").text("Delete")),
+                    $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("Download"))
+                );
+                var fileName = $("<h6>").addClass("card-title text-secondary").text(selectedFiles[i].name);
+                var fileInfoList = $("<ul>").addClass("list-unstyled small mb-0").append(
+                    $("<li>").append($("<span>").addClass("text-muted").text("type: " + selectedFiles[i].type)),
+                    $("<li>").append($("<span>").addClass("text-muted").text("size: " + (selectedFiles[i].size / 1024).toFixed(2) + "kb")),
+                    $("<li>").append($("<span>").addClass("text-muted").text("uploaded: " + new Date().toLocaleDateString()))
+                );
+
+                // Append created elements to the fileDiv
+                fileDiv.append(fileIcon, dropdownIcon, dropdownMenu, fileName, fileInfoList);
+
+                // Append the fileDiv to the cardDiv
+                cardDiv.append(fileDiv);
+
+                // Append the cardDiv to the output div
+                $(".output").append(cardDiv);
+            }
+            for (let file of this.files) {
+                dt.items.add(file);
+            }
+
+            selectedFiles = dt.files;
+            console.log(selectedFiles);
+            $('.file-delete').click(function () {
+                let name = $(this).closest('.card').attr('id');
+                // Supprimer l'affichage du nom de fichier
+                //$(this).parent().remove();
+                document.getElementById(name).remove()
+                for (let i = 0; i < dt.items.length; i++) {
+                    // Correspondance du fichier et du nom
+                    if (name === dt.items[i].getAsFile().name) {
+                        // Suppression du fichier dans l'objet DataTransfer
+                        dt.items.remove(i);
+                        continue;
+                    }
+                }
+                // Mise à jour des fichiers de l'input file après suppression
+                selectedFiles = dt.files;
+            });
+
+
+        });
+
+        //END FOR FILE UPLOAD
+
+
+
         $('#approveBtn').click(function () {
             $('#confirmApproveModal').modal("show");
+            //console.log(document.getElementById("approveBtn").innerHTML);
+            //document.getElementById("decisionID").value = document.getElementById("approveBtn").innerHTML;
             document.getElementById("decisionID").value = "Approve";
         });
 

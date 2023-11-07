@@ -36,7 +36,7 @@
                     </span>
                 </div>
                 <div class="d-flex justify-content-end gap-2">
-                    @if (@Model.applicantViewModels.permit_status != "Approved")
+                    @if (Model.applicantViewModels.permit_status.Contains("Approved") == false && Model.applicantViewModels.permit_status.Contains("Payment") == false)
                     {
                         @* <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" /> *@
                         <button id="btnSave" class="btn btn-primary w-105" type="button">Submit</button>
@@ -97,7 +97,7 @@
                                             Number of Chainsaws
                                         </label>
                                         <span class="fw-bold">
-                                            @if (@Model.applicantViewModels.permit_status != "For Inspector Approval")
+                                            @if (Model.applicantViewModels.permit_status != "For Inspector Approval" && Model.applicantViewModels.permit_status != "Rejected (Inspector)" && Model.applicantViewModels.permit_status != "Rejected (CENRO)")
                                             {
                                                 <label asp-for="applicantViewModels.qty" value="@Model.applicantViewModels.qty">@Model.applicantViewModels.qty</label>
                                             }
@@ -115,7 +115,7 @@
                                             Specification
                                         </label>
                                         <span class="fw-bold">
-                                            @if (@Model.applicantViewModels.permit_status != "For Inspector Approval")
+                                            @if (Model.applicantViewModels.permit_status != "For Inspector Approval" && Model.applicantViewModels.permit_status != "Rejected (Inspector)" && Model.applicantViewModels.permit_status != "Rejected (CENRO)")
                                             {
                                                 <label asp-for="applicantViewModels.specification" value="@Model.applicantViewModels.specification">@Model.applicantViewModels.specification</label>
                                             }
@@ -142,28 +142,56 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="col-md-5">
-                                    <div class="form-group d-flex flex-column gap-1">
-                                        <label class="text-secondary small">
-                                            Inspection Date
-                                        </label>
-                                        <span class="fw-bold">
-                                            @if (@Model.applicantViewModels.inspectionDate != null)
-                                            {
-                                                <label asp-for="applicantViewModels.inspectionDate" value="@Model.applicantViewModels.inspectionDate">@Model.applicantViewModels.inspectionDate</label>
-                                            }
-
-
-                                        </span>
+                                @if (Model.applicantViewModels.permit_type == "Permit to Sell" || Model.applicantViewModels.permit_type == "Certificate of Registration")
+                                {
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Inspection Date
+                                            </label>
+                                            <span class="fw-bold">
+                                                @if (@Model.applicantViewModels.inspectionDate != null)
+                                                {
+                                                    <label asp-for="applicantViewModels.inspectionDate" value="@Model.applicantViewModels.inspectionDate">@Model.applicantViewModels.inspectionDate</label>
+                                                }
+                                            </span>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            @if (Model.applicantViewModels.status == 11)
+                            {
+                                <div class="row mb-5">
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Date of Permit Registration
+                                            </label>
+                                            <span class="fw-bold">
+                                                @Html.DisplayFor(model => model.applicantViewModels.date_of_registration)
+                                                @Html.HiddenFor(model => model.applicantViewModels.date_of_registration)
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Date of Permit Expiration
+                                            </label>
+                                            <span class="fw-bold">
+                                                @Html.DisplayFor(model => model.applicantViewModels.date_of_expiration)
+                                                @Html.HiddenFor(model => model.applicantViewModels.date_of_expiration)
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            
+                            }
 
                         </div>
                     </div>
                 </div>
             </div>
+            
             @if (@Model.applicantViewModels.permit_type == "Permit to Import")
             {
                 <hr />
@@ -174,7 +202,7 @@
                             <label class="text-secondary small">
                                 Expected time of arrival
                             </label>
-                            @if (@Model.applicantViewModels.permit_status == "Approved")
+                            @if (Model.applicantViewModels.permit_status != "For Inspector Approval" && Model.applicantViewModels.permit_status != "Rejected (Inspector)" && Model.applicantViewModels.permit_status != "Rejected (CENRO)") @* (Model.applicantViewModels.permit_status == "Approved") *@
                             {
                                 <label asp-for="applicantViewModels.expectedTimeArrived" value="@Model.applicantViewModels.expectedTimeArrived">@Model.applicantViewModels.expectedTimeArrived</label>
                             }
@@ -189,7 +217,7 @@
                             <label class="text-secondary small">
                                 Expected time of release
                             </label>
-                            @if (@Model.applicantViewModels.permit_status == "Approved")
+                            @if (Model.applicantViewModels.permit_status != "For Inspector Approval" && Model.applicantViewModels.permit_status != "Rejected (Inspector)" && Model.applicantViewModels.permit_status != "Rejected (CENRO)") @* (Model.applicantViewModels.permit_status == "Approved") *@
                             {
                                 <label asp-for="applicantViewModels.expectedTimeRelease" value="@Model.applicantViewModels.expectedTimeRelease">@Model.applicantViewModels.expectedTimeRelease</label>
                             }
@@ -201,6 +229,7 @@
                     </div>
                 </div>
             }
+
             
             <hr/>
             <div class="row d-flex justify-content-center m-0">
@@ -250,9 +279,58 @@
                     </div>
                 </div>
             </div>
-            <hr/>
-            @if (@Model.applicantViewModels.permit_status != "Approved")
+            @if (Model.applicantViewModels.status >= 7)
             {
+                <hr />
+                <div class="row d-flex justify-content-center m-0">
+                    <div class="row d-flex justify-content-center px-0 mb-5">
+                        <div class="col-md-12 d-flex flex-column gap-2">
+                            <h2 class="text-secondary fw-bold m-0">Attached Proof of Payment</h2>
+                        </div>
+                        <div class="d-flex mb-4 gap-3">
+                            @foreach (tbl_files file in Model.proofOfPaymentFiles)
+                            {
+                                <div class="card mw-18rem">
+                                    <div class="card-body">
+                                        @if (file.tbl_file_type_id == ".pdf")
+                                        {
+                                            <i class="fas fa-file-pdf text-light-green fs-1 mb-3"></i>
+                                        }
+                                        else if (file.tbl_file_type_id == ".docx")
+                                        {
+                                            <i class="fas fa-file-word text-light-green fs-1 mb-3"></i>
+                                        }
+                                        else if (file.tbl_file_type_id == ".jpg")
+                                        {
+                                            <i class="fas fa-file-image text-light-green fs-1 mb-3"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-file text-light-green fs-1 mb-3"></i>
+                                        }
+                                        <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="~/Files/UserDocs/@file.filename" target="_blank">View</a></li>
+                                            @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
+                                            <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
+                                        </ul>
+                                        <h6 class="card-title text-secondary">@file.filename</h6>
+                                        <ul class="list-unstyled small mb-0">
+                                            <li><span class="text-muted">type: @file.tbl_file_type_id</span></li>
+                                            <li><span class="text-muted">size: @(file.file_size / 1024) kB</span></li>
+                                            <li><span class="text-muted">uploaded: @file.date_created.ToString("MMM dd yyyy")</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <hr />
+            }
+            @if (Model.applicantViewModels.permit_status == "For Inspector Approval" || Model.applicantViewModels.permit_status == "Rejected (Inspector)" || Model.applicantViewModels.permit_status == "Rejected (CENRO)") @* (@Model.applicantViewModels.permit_status != "Approved") *@
+            {
+                <hr/>
                 <div class="row d-flex justify-content-center m-0">
                     <div class="row d-flex justify-content-center px-0 mb-5">
                         <div class="mb-4">

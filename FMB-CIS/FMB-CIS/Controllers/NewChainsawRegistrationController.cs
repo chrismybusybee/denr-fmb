@@ -60,7 +60,7 @@ namespace FMB_CIS.Controllers
             {
                 return View();
             }
-            else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
+            else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11 || usrRoleID == 17) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
             {
 
                 return RedirectToAction("ChainsawOwnerApplicantsList", "ChainsawOwner");
@@ -83,10 +83,14 @@ namespace FMB_CIS.Controllers
             {
 
                 int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+                var usrDB = _context.tbl_user.Where(u => u.id == userID).FirstOrDefault();
                 //DAL dal = new DAL();
 
+                //Get email and subject from templates in DB
+                var emailTemplates = _context.tbl_email_template.ToList();
+
                 //SAVE permit application
-                model.tbl_Application.tbl_application_type_id = 3;
+                model.tbl_Application.tbl_application_type_id = 1; //Chainsaw Owner
                 model.tbl_Application.status = 1;
                 model.tbl_Application.tbl_user_id = userID;
                 model.tbl_Application.tbl_permit_type_id = 13;
@@ -95,7 +99,7 @@ namespace FMB_CIS.Controllers
                 model.tbl_Application.modified_by = userID;
                 model.tbl_Application.date_created = DateTime.Now;
                 model.tbl_Application.date_modified = DateTime.Now;
-
+                model.tbl_Application.date_due_for_officers = BusinessDays.AddBusinessDays(DateTime.Now, 2).AddHours(4).AddMinutes(30);
                 //SAVE to tbl_chainsaw
                 model.TBL_Chainsaw.user_id = userID;
                 model.TBL_Chainsaw.status = "Owner";
@@ -155,9 +159,13 @@ namespace FMB_CIS.Controllers
                         _context.SaveChanges();
                     }
                 }
-                //Email
-                var subject = "Chainsaw Registration Application Status";
-                var body = "Greetings! \n We would like to inform you that your Chainsaw Registration Application has been received.";
+
+                //Email                
+                var emailTemplate = emailTemplates.Where(e => e.id == 5).FirstOrDefault(); //5 - Certificate of Ownership (Acknowledging Receipt)
+                var subject = emailTemplate.email_subject;
+                var BODY = emailTemplate.email_content.Replace("{FirstName}", usrDB.first_name);
+                var body = BODY.Replace(Environment.NewLine, "<br/>");
+
                 EmailSender.SendEmailAsync(((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value, subject, body);
 
                 ModelState.Clear();

@@ -195,7 +195,15 @@
                                                     <div>
                                                         <img src="~/assets/images/menu-icons/line.png" />
                                                     </div>
-                                                    <span>Application</span>
+                                                    <span>Permit to Sell</span>
+                                                </a>
+                                            </li>
+                                            <li id="chainsawSellerApplication" class="my-0">
+                                                <a href="@Url.Action("PermitToPurchase", "ChainsawSeller")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                    <div>
+                                                        <img src="~/assets/images/menu-icons/line.png" />
+                                                    </div>
+                                                    <span>Permit to Purchase</span>
                                                 </a>
                                             </li>
                                         </ul>
@@ -263,7 +271,15 @@
                                                     <div>
                                                         <img src="~/assets/images/menu-icons/line.png" />
                                                     </div>
-                                                    <span>Application</span>
+                                                    <span>Permit to Sell</span>
+                                                </a>
+                                            </li>
+                                            <li id="chainsawSellerApplication" class="my-0">
+                                                <a href="@Url.Action("PermitToPurchase", "ChainsawSeller")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                    <div>
+                                                        <img src="~/assets/images/menu-icons/line.png" />
+                                                    </div>
+                                                    <span>Permit to Purchase</span>
                                                 </a>
                                             </li>
                                         </ul>
@@ -330,7 +346,15 @@
                                                     <div>
                                                         <img src="~/assets/images/menu-icons/line.png" />
                                                     </div>
-                                                    <span>Application</span>
+                                                    <span>Permit to Sell</span>
+                                                </a>
+                                            </li>
+                                            <li id="chainsawSellerApplication" class="my-0">
+                                                <a href="@Url.Action("PermitToPurchase", "ChainsawSeller")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                    <div>
+                                                        <img src="~/assets/images/menu-icons/line.png" />
+                                                    </div>
+                                                    <span>Permit to Purchase</span>
                                                 </a>
                                             </li>
                                         </ul>
@@ -395,7 +419,15 @@
                                                     <div>
                                                         <img src="~/assets/images/menu-icons/line.png" />
                                                     </div>
-                                                    <span>Application</span>
+                                                    <span>Permit to Sell</span>
+                                                </a>
+                                            </li>
+                                            <li id="chainsawSellerApplication" class="my-0">
+                                                <a href="@Url.Action("PermitToPurchase", "ChainsawSeller")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                    <div>
+                                                        <img src="~/assets/images/menu-icons/line.png" />
+                                                    </div>
+                                                    <span>Permit to Purchase</span>
                                                 </a>
                                             </li>
                                         </ul>
@@ -689,7 +721,7 @@
     {
         <partial name="~/Views/Modals/AnnouncementTemplateModal.cshtml" />
     }
-    else if (currentUrl.Contains("SellPermits"))
+    else if (currentUrl.Contains("LeasePermits") || currentUrl.Contains("RentPermits") || currentUrl.Contains("LendPermits") || currentUrl.Contains("RegistrationPermits") || currentUrl.Contains("ResellPermits") || currentUrl.Contains("SellPermits") || currentUrl.Contains("PurchasePermits") || currentUrl.Contains("ImportPermits"))
     {
         <partial name="~/Views/Modals/ManageApplicationModal.cshtml" />
     }

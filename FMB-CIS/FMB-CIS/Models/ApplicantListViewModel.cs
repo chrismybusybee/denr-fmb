@@ -14,6 +14,10 @@ namespace FMB_CIS.Models
         public string permit_type { get; set; }
         public int status { get; set; }
         public string full_name { get; set; }
+        public string first_name { get; set; }
+        public string middle_name { get; set; }
+        public string last_name { get; set; }
+        public string suffix { get; set; }
         public string full_address { get; set; }
         public string? email { get; set; }
         public string contact { get; set; }
@@ -46,6 +50,10 @@ namespace FMB_CIS.Models
         public FileUpload? filesUpload { get; set; }
 
         public DateTime? applicationDate { get; set; }
+        public DateTime? date_of_registration { get; set; }
+        public DateTime? date_of_expiration { get; set; }
+        public DateTime? date_due_for_officers { get; set; }
+        public bool? coordinatedWithEnforcementDivision { get; set; }
 
         //FOR CHAINSAW REGISTRATION APPROVAL
         public string? chainsawBrand { get; set; }

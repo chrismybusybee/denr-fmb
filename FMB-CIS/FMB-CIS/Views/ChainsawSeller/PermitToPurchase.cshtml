@@ -14,135 +14,135 @@
                 @ViewBag.message
             </div>
         }
-        <form asp-action="Index" method="post" enctype="multipart/form-data">
-        <a href="@Url.Action("Index", "Dashboard")" class="mx-2" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
-        <div class="row m-0 my-4">
-            @*<div class="col-md-6">
+        <form asp-action="PermitToPurchase" method="post" enctype="multipart/form-data">
+            <a href="@Url.Action("Index", "Dashboard")" class="mx-2" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
+            <div class="row m-0 my-4">
+                @*<div class="col-md-6">
                 <div class="p-4 shadow h-100">
-                    <h2 class="text-secondary fw-bold mb-4">Seller Details</h2>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            First Name
-                        </label>
-                            <input type="text" asp-for="tbl_Application.supplier_fname" class="form-control" placeholder="Enter first name" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Middle Name
-                        </label>
-                            <input type="text" asp-for="tbl_Application.supplier_mname" class="form-control" placeholder="Enter middle name" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Last Name
-                        </label>
-                            <input type="text" asp-for="tbl_Application.supplier_lname" class="form-control" placeholder="Enter last name" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Suffix
-                        </label>
-                            <input type="text" asp-for="tbl_Application.supplier_suffix" class="form-control" placeholder="Enter suffix (if any)" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Address
-                        </label>
-                            <textarea class="form-control" asp-for="tbl_Application.supplier_address" placeholder="Enter address"></textarea>
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Email
-                        </label>
-                            <input type="text" asp-for="tbl_Application.supplier_email" class="form-control" placeholder="Enter email" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Contact No.
-                        </label>
-                            <input type="text" asp-for="tbl_Application.supplier_contact_no" class="form-control" placeholder="Enter contact number" />
-                        <span class="text-danger"></span>
-                    </div>
+                <h2 class="text-secondary fw-bold mb-4">Seller Details</h2>
+                <div class="form-group mb-3">
+                <label class="text-secondary fw-bold">
+                First Name
+                </label>
+                <input type="text" asp-for="tbl_Application.supplier_fname" class="form-control" placeholder="Enter first name" />
+                <span class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                <label class="text-secondary fw-bold">
+                Middle Name
+                </label>
+                <input type="text" asp-for="tbl_Application.supplier_mname" class="form-control" placeholder="Enter middle name" />
+                <span class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                <label class="text-secondary fw-bold">
+                Last Name
+                </label>
+                <input type="text" asp-for="tbl_Application.supplier_lname" class="form-control" placeholder="Enter last name" />
+                <span class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                <label class="text-secondary fw-bold">
+                Suffix
+                </label>
+                <input type="text" asp-for="tbl_Application.supplier_suffix" class="form-control" placeholder="Enter suffix (if any)" />
+                <span class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                <label class="text-secondary fw-bold">
+                Address
+                </label>
+                <textarea class="form-control" asp-for="tbl_Application.supplier_address" placeholder="Enter address"></textarea>
+                <span class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                <label class="text-secondary fw-bold">
+                Email
+                </label>
+                <input type="text" asp-for="tbl_Application.supplier_email" class="form-control" placeholder="Enter email" />
+                <span class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                <label class="text-secondary fw-bold">
+                Contact No.
+                </label>
+                <input type="text" asp-for="tbl_Application.supplier_contact_no" class="form-control" placeholder="Enter contact number" />
+                <span class="text-danger"></span>
+                </div>
                 </div>
                 </div> *@
-            <div class="col-md-12">
-                <div class="p-4 shadow h-100">
-                    <h2 class="text-secondary fw-bold mb-4">Permit to Sell</h2>
-                    <div class="form-group mb-3">
-                        @* <label class="text-secondary fw-bold">
+                <div class="col-md-12">
+                    <div class="p-4 shadow h-100">
+                        <h2 class="text-secondary fw-bold mb-4">Permit to Purchase</h2>
+                        <div class="form-group mb-3">
+                            @* <label class="text-secondary fw-bold">
                             Permit To Sell
-                        </label> *@
+                            </label> *@
                             @* <select class="form-select" asp-for="tbl_Application.tbl_permit_type_id" aria-label="Permit Type" onchange="permitSelection(this)" required="required">
-                                <option selected disabled>- Select Permit Type -</option>
-                                <option value="2" selected>Permit to Purchase</option>
-                                <option value="3">Permit to Sell</option>
+                            <option selected disabled>- Select Permit Type -</option>
+                            <option value="2" selected>Permit to Purchase</option>
+                            <option value="3">Permit to Sell</option>
                             </select> *@
-                            <input type="number" asp-for="tbl_Application.tbl_permit_type_id" class="form-control" hidden value="3" />
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Number of chainsaws to be sold
-                        </label>
-                            <input type="number" asp-for="tbl_Application.qty" class="form-control" placeholder="Enter number of chainsaws to be sold" required="required" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Specification
-                        </label>
+                            <input type="number" asp-for="tbl_Application.tbl_permit_type_id" class="form-control" hidden value="2" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="text-secondary fw-bold">
+                                Number of chainsaws to be purchased
+                            </label>
+                            <input type="number" asp-for="tbl_Application.qty" class="form-control" placeholder="Enter number of chainsaws to be purchased" required="required" />
+                            <span class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="text-secondary fw-bold">
+                                Specification
+                            </label>
                             <textarea class="form-control" asp-for="tbl_Application.tbl_specification_id" placeholder="Enter specification" required="required"></textarea>
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Purpose
-                        </label>
+                            <span class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="text-secondary fw-bold">
+                                Purpose
+                            </label>
                             <textarea class="form-control" asp-for="tbl_Application.purpose" placeholder="Enter purpose" required="required"></textarea>
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
+                            <span class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="text-secondary fw-bold">
                                 Already coordinated w/ Enforcement Division?
-                        </label>
-                        <br />
-                        <label>
-                            <input type="radio" asp-for="tbl_Application.coordinatedWithEnforcementDivision" value="true" />
-                            Yes
-                        </label>
-                        <label>
-                            <input type="radio" asp-for="tbl_Application.coordinatedWithEnforcementDivision" value="false" />
-                            No
-                        </label>
-                    </div>
-                    @*<div class="form-group mb-3">
+                            </label>
+                            <br />
+                            <label>
+                                <input type="radio" asp-for="tbl_Application.coordinatedWithEnforcementDivision" value="true" />
+                                Yes
+                            </label>
+                            <label>
+                                <input type="radio" asp-for="tbl_Application.coordinatedWithEnforcementDivision" value="false" />
+                                No
+                            </label>
+                        </div>
+                        @*<div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
-                            Set Date of Inspection
+                        Set Date of Inspection
                         </label>
-                            <input type="date" asp-for="tbl_Application.date_of_inspection" class="form-control" />
+                        <input type="date" asp-for="tbl_Application.date_of_inspection" class="form-control" />
                         <span class="text-danger"></span>
                         </div>*@
+                    </div>
                 </div>
             </div>
-        </div>
 
 
             <div class="row m-0 mb-4">
                 <div class="col-md-12">
                     <div class="p-4 shadow h-100">
-                        <div class="mb-4" id="PermitToSellRequirements">
-                            <span style="white-space: pre-line">@ViewBag.RequiredDocsList_PermitToSell</span>
+                        <div class="mb-4" id="PermitToPurchaseRequirements">
+                            <span style="white-space: pre-line">@ViewBag.RequiredDocsList_PermitToPurchase</span>
                         </div>
                         @* <div class="mb-4" style="display:none" id="PermitToSellRequirements">
-                            <span style="white-space: pre-line">@ViewBag.RequiredDocsList_PermitToSell</span>
+                        <span style="white-space: pre-line">@ViewBag.RequiredDocsList_PermitToSell</span>
                         </div>
                         <div class="mb-4" style="display:none" id="PermitToPurchaseRequirements">
-                            <span style="white-space: pre-line">@ViewBag.RequiredDocsList_PermitToPurchase</span>
+                        <span style="white-space: pre-line">@ViewBag.RequiredDocsList_PermitToPurchase</span>
                         </div> *@
                         <div class="d-flex gap-4 mb-5">
                             <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
@@ -168,9 +168,9 @@
                     By submitting this form, you agree to our <a href="@Url.Action("TermsPolicy", "Home")" target="_blank" class="text-decoration-none">Privacy Policy and Terms & Conditions.</a>
                 </small>
             </div>
-        <div class="d-flex justify-content-end pe-2 me-1">
-            <button class="btn btn-primary mb-4">Submit</button>
-        </div>
+            <div class="d-flex justify-content-end pe-2 me-1">
+                <button class="btn btn-primary mb-4">Submit</button>
+            </div>
         </form>
     </div>
 </div>
@@ -329,6 +329,7 @@
     textarea {
         resize: none;
     }
+
     .custom-file-upload {
         border: 1px solid #ccc;
         display: inline-block;

@@ -4,6 +4,7 @@
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Chainsaw Seller";
+    var loggedUsrRole = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
 }
 
 <div id="card-container">
@@ -13,6 +14,9 @@
                 <tr>
                     <th>
                         ID
+                    </th>
+                    <th>
+                        Due Date
                     </th>
                     <th>
                         Full Name
@@ -51,6 +55,59 @@
                     <tr>
                         <td>
                             @Html.DisplayFor(modelItem => item.id)
+                        </td>
+                        <td>
+                            @if (item.date_due_for_officers != null)
+                            {
+
+                                if (loggedUsrRole == "DENR CENRO" || loggedUsrRole == "DENR Implementing PENRO" || loggedUsrRole == "DENR Regional Executive Director (RED)")
+                                {
+                                    if (item.permit_status == "Approved (Inspector) - For Cenro Approval" || item.permit_status == "Payment Verification (CENRO)")
+                                    {
+                                        @Html.DisplayFor(modelItem => item.date_due_for_officers)
+                                    }
+                                    else
+                                    {
+                                        <div class="bg-secondary text-white px-3 pb-2 pt-1 rounded-pill w-105">
+                                            Inspector
+                                        </div>
+                                    }
+                                }
+                                else if (loggedUsrRole == "DENR Inspector")
+                                {
+                                    if (item.permit_status == "For Inspector Approval" || item.permit_status == "Payment Verification (Inspector)")
+                                    {
+                                        @Html.DisplayFor(modelItem => item.date_due_for_officers)
+                                    }
+                                    else if (item.permit_status == "Approved (Inspector) - For Cenro Approval" || item.permit_status == "Payment Verification (CENRO)")
+                                    {
+                                        <div class="bg-secondary text-white px-3 pb-2 pt-1 rounded-pill w-105">
+                                            CENRO
+                                        </div>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (item.permit_status.Contains("Rejected") == true)
+                                {
+                                    <div class="bg-secondary text-white px-3 pb-2 pt-1 rounded-pill w-105">
+                                        Applicant
+                                    </div>
+                                }
+                                else if (item.permit_status == "For Payment")
+                                {
+                                    <div class="bg-secondary text-white px-3 pb-2 pt-1 rounded-pill w-105">
+                                        Applicant
+                                    </div>
+                                }
+                                else if (item.permit_status == "Payment and Application Approved (Inspector and CENRO)")
+                                {
+                                    <div class="bg-success text-white px-3 pb-2 pt-1 rounded-pill w-105">
+                                        Done
+                                    </div>
+                                }
+                            }
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.full_name)

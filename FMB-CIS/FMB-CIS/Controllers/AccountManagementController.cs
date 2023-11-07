@@ -862,6 +862,10 @@ namespace FMB_CIS.Controllers
                                    join ct in _context.tbl_city on u.tbl_city_id equals ct.id
                                    join brngy in _context.tbl_brgy on u.tbl_brgy_id equals brngy.id
                                    select new AcctApprovalViewModel {FullName = u.first_name + " " + u.middle_name + " " + u.last_name + " " + u.suffix,
+                                       first_name = u.first_name,
+                                       middle_name = u.middle_name,
+                                       last_name = u.last_name,
+                                       suffix = u.suffix,
                                        userType = utype.name,
                                        email = u.email,
                                        contact_no = u.contact_no,
@@ -1030,6 +1034,10 @@ namespace FMB_CIS.Controllers
                     //17 - DENR Regional Executive Director(RED)
                     if (buttonClicked == "Approve")
                     {
+                        //Get email and subject from templates in DB
+                        var emailTemplate = _context.tbl_email_template.Where(e => e.id == 2).FirstOrDefault();
+                        // id = 2 - Account Registration (Notice of Acceptance)
+
                         var usr = new tbl_user() { id = usid, status = true, date_modified = DateTime.Now, comment = model.acctApprovalViewModels.comment };
 
                         using (_context)
@@ -1041,12 +1049,20 @@ namespace FMB_CIS.Controllers
                             _context.SaveChanges();
                         }
                         //Email
-                        var subject = "Account Registration Status";
-                        var body = "Greetings! \n We would like to inform your account has been approved.\nThe officer left the following comment:\n" + model.acctApprovalViewModels.comment;
+                        //var subject = "Account Registration Status";
+                        //var body = "Greetings! \n We would like to inform your account has been approved.\nThe officer left the following comment:\n" + model.acctApprovalViewModels.comment;
+
+                        
+                        var subject = emailTemplate.email_subject;
+                        var BODY = emailTemplate.email_content.Replace("{FirstName}", model.acctApprovalViewModels.first_name);
+                        var body = BODY.Replace(Environment.NewLine, "<br/>");
                         EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
                     }
                     else //if (buttonClicked == "Decline")
                     {
+                        //Get email and subject from templates in DB
+                        var emailTemplate = _context.tbl_email_template.Where(e => e.id == 3).FirstOrDefault();
+                        // id = 3 - Account Registration (Notice of Rejection)
                         var usr = new tbl_user() { id = usid, status = false, date_modified = DateTime.Now, comment = model.acctApprovalViewModels.comment };
                         using (_context)
                         {
@@ -1057,8 +1073,11 @@ namespace FMB_CIS.Controllers
                             _context.SaveChanges();
                         }
                         //Email
-                        var subject = "Account Registration Status";
-                        var body = "Greetings! \n We regret to inform you that your Account has been rejected.\nThe officer left the following comment:\n" + model.acctApprovalViewModels.comment;
+                        //var subject = "Account Registration Status";
+                        //var body = "Greetings! \n We regret to inform you that your Account has been rejected.\nThe officer left the following comment:\n" + model.acctApprovalViewModels.comment;
+                        var subject = emailTemplate.email_subject;
+                        var BODY = emailTemplate.email_content.Replace("{FirstName}", model.acctApprovalViewModels.first_name);
+                        var body = BODY.Replace(Environment.NewLine, "<br/>");
                         EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
                     }
                 }

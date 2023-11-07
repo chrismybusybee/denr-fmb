@@ -113,6 +113,12 @@
                                         </label>
                                         <span class="fw-bold">
                                             @Html.DisplayFor(model => model.acctApprovalViewModels.FullName)
+                                            @Html.HiddenFor(model => model.acctApprovalViewModels.first_name)
+                                            @Html.HiddenFor(model => model.acctApprovalViewModels.middle_name)
+                                            @Html.HiddenFor(model => model.acctApprovalViewModels.last_name)
+                                            @Html.HiddenFor(model => model.acctApprovalViewModels.suffix)
+                                            @Html.HiddenFor(model => model.acctApprovalViewModels.FullName)
+                                            @Html.HiddenFor(model => model.acctApprovalViewModels.userID)
                                         </span>
                                     </div>
                                 </div>
