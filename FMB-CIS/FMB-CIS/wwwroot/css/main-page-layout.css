@@ -81,14 +81,14 @@
         color: #14984a;
     }
 
-#chainsawImporterDropdown, #chainsawSellerDropdown, #chainsawOwnerDropdown, #authorityToLeaseDropdown, #accountManagementDropdown {
+#chainsawImporterDropdown, #chainsawSellerDropdown, #chainsawOwnerDropdown, #authorityToLeaseDropdown, #accountManagementDropdown, #officeManagementDropdown, #accessRightsManagementDropdown {
     max-height: 0;
     overflow: hidden;
     opacity: 0;
     transition: all 0.15s ease-in-out;
 }
 
-    #chainsawImporterDropdown.active, #chainsawSellerDropdown.active, #chainsawOwnerDropdown.active, #authorityToLeaseDropdown.active, #accountManagementDropdown.active {
+    #chainsawImporterDropdown.active, #chainsawSellerDropdown.active, #chainsawOwnerDropdown.active, #authorityToLeaseDropdown.active, #accountManagementDropdown.active, #officeManagementDropdown.active, #accessRightsManagementDropdown.active {
         max-height: 100%;
         opacity: 1;
         margin-top: 15px;

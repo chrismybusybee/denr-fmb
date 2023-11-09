@@ -1,0 +1,172 @@
+﻿@using System.Security.Claims;
+@using System.Globalization;
+@{
+    Layout = "~/Views/Shared/_MainPageLayout.cshtml";
+    ViewBag.Title = "Access Rights Type Management";
+}
+
+<div id="card-container">
+    <div id="card">
+        <div class="c-info">
+            <div class="card">
+                @*<img src="..." class="card-img-top" alt="...">*@@*
+                <div class="card-head card-head-image">
+                </div>*@
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="@Url.Action("Index", "Home")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>                        Access Right Types
+                    </h5>
+                    <p class="card-text">Used to assign different access rights to user types.</p>
+                    <button id="btnCreateOfficeType" onclick="OpenCreateModal()" class="btn btn-primary">Create Access Rights Type</button>
+                </div>
+            </div>
+        </div>
+        <div class="c-content" id="officeTypeListPartialContainer">
+            <div href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="item-1">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">ALLOW_DASHBOARD</h5>
+                    <small class="text-muted">#1 Modified 09/11/2023 11:11:11</small>
+                </div>
+                <p class="mb-1">Allows access to dashboard</p>
+                @*<p class="c-hidden">Super Admin</p>*@
+                <small><a class="btnUpdateOfficeType" onclick="OpenUpdateModal(1)">Update</a></small>
+                <small><a class="btnDeleteOfficeType" onclick="OpenDeleteModal(1)">Delete</a></small>
+                @*<small class="c-hidden-on-show"><a class="btnShowDetailsOfficeType" onclick="ShowDetails(@Html.DisplayFor(modelItem => item.id))">More Details</a></small>*@
+                @*<small class="c-hidden-inline"><a class="btnHideDetailsOfficeType" onclick="HideDetails(@Html.DisplayFor(modelItem => item.id))">Hide Details</a></small>*@
+            </div>
+            <div href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="item-1">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">ALLOW_ACCOUNT_MANAGEMENT</h5>
+                    <small class="text-muted">#2 Modified 09/11/2023 11:11:11</small>
+                </div>
+                <p class="mb-1">Allows access to account management</p>
+                @*<p class="c-hidden">Super Admin</p>*@
+                <small><a class="btnUpdateOfficeType" onclick="OpenUpdateModal(1)">Update</a></small>
+                <small><a class="btnDeleteOfficeType" onclick="OpenDeleteModal(1)">Delete</a></small>
+                @*<small class="c-hidden-on-show"><a class="btnShowDetailsOfficeType" onclick="ShowDetails(@Html.DisplayFor(modelItem => item.id))">More Details</a></small>*@
+                @*<small class="c-hidden-inline"><a class="btnHideDetailsOfficeType" onclick="HideDetails(@Html.DisplayFor(modelItem => item.id))">Hide Details</a></small>*@
+            </div>
+            <div href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="item-1">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">ALLOW_OFFICE_MANAGEMENT</h5>
+                    <small class="text-muted">#3 Modified 09/11/2023 11:11:11</small>
+                </div>
+                <p class="mb-1">Allows access to office management</p>
+                @*<p class="c-hidden">Super Admin</p>*@
+                <small><a class="btnUpdateOfficeType" onclick="OpenUpdateModal(1)">Update</a></small>
+                <small><a class="btnDeleteOfficeType" onclick="OpenDeleteModal(1)">Delete</a></small>
+                @*<small class="c-hidden-on-show"><a class="btnShowDetailsOfficeType" onclick="ShowDetails(@Html.DisplayFor(modelItem => item.id))">More Details</a></small>*@
+                @*<small class="c-hidden-inline"><a class="btnHideDetailsOfficeType" onclick="HideDetails(@Html.DisplayFor(modelItem => item.id))">Hide Details</a></small>*@
+            </div>
+            <div href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="item-1">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">ALLOW_OFFICE_MANAGEMENT_VIEW</h5>
+                    <small class="text-muted">#4 Modified 09/11/2023 11:11:11</small>
+                </div>
+                <p class="mb-1">Allows office management viewing</p>
+                @*<p class="c-hidden">Super Admin</p>*@
+                <small><a class="btnUpdateOfficeType" onclick="OpenUpdateModal(1)">Update</a></small>
+                <small><a class="btnDeleteOfficeType" onclick="OpenDeleteModal(1)">Delete</a></small>
+                @*<small class="c-hidden-on-show"><a class="btnShowDetailsOfficeType" onclick="ShowDetails(@Html.DisplayFor(modelItem => item.id))">More Details</a></small>*@
+                @*<small class="c-hidden-inline"><a class="btnHideDetailsOfficeType" onclick="HideDetails(@Html.DisplayFor(modelItem => item.id))">Hide Details</a></small>*@
+            </div>
+            <div href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="item-1">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">ALLOW_OFFICE_MANAGEMENT_UPDATE</h5>
+                    <small class="text-muted">#5 Modified 09/11/2023 11:11:11</small>
+                </div>
+                <p class="mb-1">Allows office management updating</p>
+                @*<p class="c-hidden">Super Admin</p>*@
+                <small><a class="btnUpdateOfficeType" onclick="OpenUpdateModal(1)">Update</a></small>
+                <small><a class="btnDeleteOfficeType" onclick="OpenDeleteModal(1)">Delete</a></small>
+                @*<small class="c-hidden-on-show"><a class="btnShowDetailsOfficeType" onclick="ShowDetails(@Html.DisplayFor(modelItem => item.id))">More Details</a></small>*@
+                @*<small class="c-hidden-inline"><a class="btnHideDetailsOfficeType" onclick="HideDetails(@Html.DisplayFor(modelItem => item.id))">Hide Details</a></small>*@
+            </div>
+            <div href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="item-1">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">RESTRICT_SITE_READONLY</h5>
+                    <small class="text-muted">#6 Modified 09/11/2023 11:11:11</small>
+                </div>
+                <p class="mb-1">Restricts to site readonly</p>
+                @*<p class="c-hidden">Super Admin</p>*@
+                <small><a class="btnUpdateOfficeType" onclick="OpenUpdateModal(1)">Update</a></small>
+                <small><a class="btnDeleteOfficeType" onclick="OpenDeleteModal(1)">Delete</a></small>
+                @*<small class="c-hidden-on-show"><a class="btnShowDetailsOfficeType" onclick="ShowDetails(@Html.DisplayFor(modelItem => item.id))">More Details</a></small>*@
+                @*<small class="c-hidden-inline"><a class="btnHideDetailsOfficeType" onclick="HideDetails(@Html.DisplayFor(modelItem => item.id))">Hide Details</a></small>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .c-info {
+        width: 25%;
+        float: left;
+        padding: 12px;
+    }
+
+    .c-content {
+        width: 75%;
+        float: left;
+        padding: 12px;
+    }
+
+    .card-head {
+        width: 100%;
+        height: 30px;
+    }
+
+    .card-head-image {
+        width: 100%;
+        height: 30px;
+    }
+
+    .card-body {
+    }
+
+    .card-margin {
+        margin: 12px;
+    }
+
+    .list-group-style1 {
+    }
+
+        .list-group-style1 .list-group-item {
+            margin-bottom: 12px;
+        }
+
+            .list-group-style1 .list-group-item + .list-group-item {
+                border-top-width: 1px;
+            }
+
+    small a {
+        color: #14984a;
+        padding: 3px 0;
+        border: none;
+        border-bottom: solid 1px #14984a;
+        margin-right: 12px;
+        background: none;
+        box-shadow: unset !important;
+        outline: 0 !important;
+        margin: 0 !important;
+        margin-right: 12px !important;
+        margin-top: 12px !important;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+
+<script src="/js/jquery-3.7.1.min.js"></script>
+
+<script type="text/javascript">
+    $("#btnCreateOfficeType").click(function () {
+    });
+
+    function OpenCreateModal() {
+        $('#officeTypeCreateModalContainer').load('/OfficeManagement/OfficeTypeCreateModal', function () {
+            $("#createOfficeTypeModal").modal("show");
+        });
+    }
+
+    //$('#officeTypeListPartialContainer').load('/OfficeManagement/OfficeTypeListPartialView');
+</script>

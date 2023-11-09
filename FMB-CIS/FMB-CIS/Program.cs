@@ -8,11 +8,21 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using FMB_CIS;
 using reCAPTCHA.AspNetCore;
+using FluentValidation.AspNetCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation().AddFluentValidation(options =>
+{
+    // Validate child properties and root collection elements
+    options.ImplicitlyValidateChildProperties = true;
+    options.ImplicitlyValidateRootCollectionElements = true;
+
+    // Automatic registration of validators in assembly
+    options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+});
 
 
 builder.Services.AddDbContext<LocalContext>(options =>
@@ -33,8 +43,8 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.Configure<DataProtectionTokenProviderOptions>(opts => opts.TokenLifespan = TimeSpan.FromHours(10)); //Added 2023-09-19
 // Configure reCAPTCHA settings from appsettings.json
 builder.Services.Configure<RecaptchaSettings>(builder.Configuration.GetSection("RecaptchaSettings")); //Added 2023-Oct-5
- 
- // Add reCAPTCHA services
+
+// Add reCAPTCHA services
 builder.Services.AddRecaptcha(builder.Configuration.GetSection("RecaptchaSettings")); //Added 2023-Oct-5
 
 builder.Services.Configure<GoogleCaptchaConfig>(builder.Configuration.GetSection("GoogleReCaptcha")); //Added 2023-Oct-6

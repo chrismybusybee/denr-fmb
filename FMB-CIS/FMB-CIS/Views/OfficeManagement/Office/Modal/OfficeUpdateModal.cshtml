@@ -1,0 +1,64 @@
+﻿@using System.Security.Claims;
+@using System.Globalization;
+@model FMB_CIS.Models.Office
+@{
+    ViewBag.Title = "Office Management";
+}
+
+<div class="modal modal-sheet fade  bg-body-secondary p-4 py-md-5" id="updateOfficeModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header p-5 pb-4 border-bottom-0">
+                <h1 class="fw-bold mb-0 fs-2">Update Office</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body p-5 pt-0">
+                <form class="">
+                    <input type="hidden" class="form-control rounded-3" id="officeId" asp-for="@Model.id">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-3" id="officeName" placeholder="" asp-for="@Model.office_name">
+                        <label for="officeName">Office Name</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-3" id="officeDescription" placeholder="" asp-for="@Model.office_name">
+                        <label for="officeDescription">Office Description</label>
+                    </div>
+                    <button id="btnUpdate" class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="button">Update</button>
+                    <small class="text-body-secondary">By clicking Update, the office will be updated on the system.</small>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#cancelBtn").click(function () {
+        $("#updateOfficeModal").modal("hide");
+        var elem = document.querySelector('#updateOfficeTypeModal');
+        elem.parentNode.removeChild(elem);
+    });
+
+    $("#btnUpdate").click(function () {
+        console.log("btnUpdate");
+        let id = document.getElementById("officeId").value;
+        let name = document.getElementById("officeName").value;
+        let description = document.getElementById("officeDescription").value;
+        $.ajax({
+            url: '/OfficeManagement/OfficeUpdate/' + id,
+            type: 'PUT',
+            data: { id: id, name: name, description: description },
+            success: function (data) {
+                console.log("data");
+                console.log(data);
+                // NOTE: TO DO if success
+                $("#updateOfficeModal").modal("hide");
+                var elem = document.querySelector('#updateOfficeModal');
+                elem.parentNode.removeChild(elem);
+
+                // NOTE: TO DO better way of calling callback function from parent
+                $('#officeListPartialContainer').load('/OfficeManagement/OfficeListPartialView');
+            }
+        });
+    });
+</script>               
