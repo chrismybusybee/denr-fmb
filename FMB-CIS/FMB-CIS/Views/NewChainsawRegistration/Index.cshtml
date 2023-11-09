@@ -8,7 +8,7 @@
 }
 
 <div id="card-container">
-    <form asp-action="Index" asp-controller="NewChainsawRegistration">
+    <form asp-action="Index" asp-controller="NewChainsawRegistration" method="post" enctype="multipart/form-data">
         <div id="card">
             @if(ViewBag.message != null)
             {

@@ -318,7 +318,7 @@ namespace FMB_CIS.Controllers
             model.isSuccess = false;
             return View(model);
         }
-
+                
         [HttpPost, ActionName("GetProvinceByRegionId")]
         public JsonResult GetProvinceByRegionId(string tbl_region_id)
         {
@@ -326,7 +326,6 @@ namespace FMB_CIS.Controllers
             List<tbl_province> provinceLists = new List<tbl_province>();
             if (!string.IsNullOrEmpty(tbl_region_id))
             {
-                regID = Convert.ToInt32(tbl_region_id);
                 regID = Convert.ToInt32(tbl_region_id);
                 if (regID == 13)
                 {
@@ -391,7 +390,7 @@ namespace FMB_CIS.Controllers
                 string encrPw = EncryptDecrypt.ConvertToEncrypt(model.tbl_User.password);
                 //SET VALUES FOR VARIABLES WITHOUT INPUT FIELDS ON VIEW
                 model.tbl_User.password = encrPw;
-                model.tbl_User.status = false;
+                model.tbl_User.status = true;
                 //model.tbl_Users.comment;
                 model.tbl_User.date_created = DateTime.Now;
                 model.tbl_User.date_modified = DateTime.Now;

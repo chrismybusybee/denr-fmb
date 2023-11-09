@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using NuGet.Configuration;
 using Org.BouncyCastle.Tls;
 using System.Drawing.Drawing2D;
+using System.Drawing.Printing;
 using System.Security.Claims;
 using System.Security.Cryptography.Xml;
 
@@ -284,8 +285,9 @@ namespace FMB_CIS.Controllers
         public IActionResult EditApplication(string uid, string appid)
         {
             ViewModel mymodel = new ViewModel();
+            int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             //tbl_user user = _context.tbl_user.Find(uid);
-            if (uid == null || appid == null)
+            if (uid == null || appid == null || loggedUserID != Convert.ToInt32(uid))
             {
                 ModelState.AddModelError("", "Invalid Application");
                 return RedirectToAction("Index", "Dashboard");
@@ -327,44 +329,101 @@ namespace FMB_CIS.Controllers
                 mymodel.proofOfPaymentFiles = paymentFiles;
                 //END FOR FILE DOWNLOAD
 
-                //HISTORY
-                var applicationtypelist = _context.tbl_application_type;
-                var applicationMod = (from a in applicationlist
-                                      join usr in _context.tbl_user on a.tbl_user_id equals usr.id
-                                      join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
-                                      join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
-                                      join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
-                                      join pS in _context.tbl_permit_status on a.status equals pS.id
-                                      join reg in _context.tbl_region on usr.tbl_region_id equals reg.id
-                                      join prov in _context.tbl_province on usr.tbl_province_id equals prov.id
-                                      join ct in _context.tbl_city on usr.tbl_city_id equals ct.id
-                                      join brngy in _context.tbl_brgy on usr.tbl_brgy_id equals brngy.id
-                                      where a.tbl_user_id == usid && a.id == applid
-                                      select new ApplicantListViewModel
-                                      {
-                                          id = a.id,
-                                          tbl_user_id = usid,
-                                          full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
-                                          full_address = usr.street_address + " " + brngy.name + " " + ct.name + " " + prov.name + " " + reg.name,
-                                          email = usr.email,
-                                          permit_type = pT.name,
-                                          permit_status = pS.status,
-                                          status = Convert.ToInt32(a.status),
-                                          user_type = usrtyps.name,
-                                          comment = usr.comment,
-                                          qty = a.qty,
-                                          specification = a.tbl_specification_id,
-                                          inspectionDate = a.date_of_inspection,
-                                          address = usr.street_address,
-                                          expectedTimeArrived = a.expected_time_arrival,
-                                          expectedTimeRelease = a.expected_time_release,
-                                          purpose = a.purpose,
-                                          date_of_registration = a.date_of_registration,
-                                          date_of_expiration = a.date_of_expiration
-                                      }).FirstOrDefault();
-                //mymodel.email = UserList.email;
-                mymodel.applicantViewModels = applicationMod;
-                //mymodel.tbl_Users = UserInfo;
+                var permitTypeOfThisApplication  = _context.tbl_application.Where(a => a.id == applid).Select(a => a.tbl_permit_type_id).FirstOrDefault();
+                if(permitTypeOfThisApplication == 13) //For Certificate of Registration
+                {
+                    //HISTORY
+                    var applicationtypelist = _context.tbl_application_type;
+                    var applicationMod = (from a in applicationlist
+                                          join usr in _context.tbl_user on a.tbl_user_id equals usr.id
+                                          join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
+                                          join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
+                                          join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
+                                          join pS in _context.tbl_permit_status on a.status equals pS.id
+                                          join reg in _context.tbl_region on usr.tbl_region_id equals reg.id
+                                          join prov in _context.tbl_province on usr.tbl_province_id equals prov.id
+                                          join ct in _context.tbl_city on usr.tbl_city_id equals ct.id
+                                          join brngy in _context.tbl_brgy on usr.tbl_brgy_id equals brngy.id
+                                          join csaw in _context.tbl_chainsaw on a.id equals csaw.tbl_application_id
+                                          where a.tbl_user_id == usid && a.id == applid
+                                          select new ApplicantListViewModel
+                                          {
+                                              id = a.id,
+                                              tbl_user_id = usid,
+                                              full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
+                                              full_address = usr.street_address + " " + brngy.name + " " + ct.name + " " + prov.name + " " + reg.name,
+                                              email = usr.email,
+                                              permit_type = pT.name,
+                                              permit_status = pS.status,
+                                              status = Convert.ToInt32(a.status),
+                                              user_type = usrtyps.name,
+                                              comment = usr.comment,
+                                              qty = a.qty,
+                                              specification = a.tbl_specification_id,
+                                              inspectionDate = a.date_of_inspection,
+                                              address = usr.street_address,
+                                              expectedTimeArrived = a.expected_time_arrival,
+                                              expectedTimeRelease = a.expected_time_release,
+                                              purpose = a.purpose,
+                                              date_of_registration = a.date_of_registration,
+                                              date_of_expiration = a.date_of_expiration,
+                                              chainsawBrand = csaw.Brand,
+                                              chainsawModel = csaw.Model,
+                                              Engine = csaw.Engine,
+                                              powerSource = csaw.Power,
+                                              Watt = csaw.watt,
+                                              hp = csaw.hp,
+                                              gb = csaw.gb,
+                                              chainsaw_serial_number = csaw.chainsaw_serial_number,
+                                              chainsawSupplier = csaw.supplier,
+                                              date_purchase = csaw.date_purchase,
+                                          }).FirstOrDefault();
+
+                    mymodel.applicantViewModels = applicationMod;
+                }
+                else
+                {
+                    //HISTORY
+                    var applicationtypelist = _context.tbl_application_type;
+                    var applicationMod = (from a in applicationlist
+                                          join usr in _context.tbl_user on a.tbl_user_id equals usr.id
+                                          join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
+                                          join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
+                                          join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
+                                          join pS in _context.tbl_permit_status on a.status equals pS.id
+                                          join reg in _context.tbl_region on usr.tbl_region_id equals reg.id
+                                          join prov in _context.tbl_province on usr.tbl_province_id equals prov.id
+                                          join ct in _context.tbl_city on usr.tbl_city_id equals ct.id
+                                          join brngy in _context.tbl_brgy on usr.tbl_brgy_id equals brngy.id
+                                          where a.tbl_user_id == usid && a.id == applid
+                                          select new ApplicantListViewModel
+                                          {
+                                              id = a.id,
+                                              tbl_user_id = usid,
+                                              full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
+                                              full_address = usr.street_address + " " + brngy.name + " " + ct.name + " " + prov.name + " " + reg.name,
+                                              email = usr.email,
+                                              permit_type = pT.name,
+                                              permit_status = pS.status,
+                                              status = Convert.ToInt32(a.status),
+                                              user_type = usrtyps.name,
+                                              comment = usr.comment,
+                                              qty = a.qty,
+                                              specification = a.tbl_specification_id,
+                                              inspectionDate = a.date_of_inspection,
+                                              address = usr.street_address,
+                                              expectedTimeArrived = a.expected_time_arrival,
+                                              expectedTimeRelease = a.expected_time_release,
+                                              purpose = a.purpose,
+                                              date_of_registration = a.date_of_registration,
+                                              date_of_expiration = a.date_of_expiration,
+                                              coordinatedWithEnforcementDivision = a.coordinatedWithEnforcementDivision
+                                          }).FirstOrDefault();
+                    //mymodel.email = UserList.email;
+                    mymodel.applicantViewModels = applicationMod;
+                    //mymodel.tbl_Users = UserInfo;
+                }
+
 
                 //Display List of Comments for Application Approval (User to Inspector Conversation)
                 mymodel.commentsViewModelsList = (from c in _context.tbl_comments
@@ -475,11 +534,35 @@ namespace FMB_CIS.Controllers
                 appliDB.supplier_address = viewMod.applicantViewModels.address;
                 appliDB.date_of_inspection = viewMod.applicantViewModels.inspectionDate;
                 appliDB.tbl_specification_id = viewMod.applicantViewModels.specification;
-
-                
+                if (appliDB.tbl_permit_type_id == 2 || appliDB.tbl_permit_type_id == 3) //For Permit to Purchase and Permit to Sell
+                {
+                    appliDB.coordinatedWithEnforcementDivision = viewMod.applicantViewModels.coordinatedWithEnforcementDivision;
+                }
                 _context.SaveChanges();
 
-
+                if(appliDB.tbl_permit_type_id == 13)
+                {
+                    var csawDB = _context.tbl_chainsaw.Where(c => c.tbl_application_id == appliDB.id).FirstOrDefault();
+                    csawDB.Brand = viewMod.applicantViewModels.chainsawBrand;
+                    csawDB.Model = viewMod.applicantViewModels.chainsawModel;
+                    csawDB.Engine = viewMod.applicantViewModels.Engine;
+                    csawDB.Power = viewMod.applicantViewModels.powerSource;
+                    if (viewMod.applicantViewModels.powerSource == "Gas")
+                    {
+                        csawDB.hp = viewMod.applicantViewModels.hp;
+                        csawDB.watt = null;
+                    }
+                    else
+                    {
+                        csawDB.watt = viewMod.applicantViewModels.Watt;
+                        csawDB.hp = null;
+                    }                    
+                    csawDB.gb = viewMod.applicantViewModels.gb;
+                    csawDB.chainsaw_serial_number = viewMod.applicantViewModels.chainsaw_serial_number;
+                    csawDB.supplier = viewMod.applicantViewModels.chainsawSupplier;
+                    csawDB.date_purchase = viewMod.applicantViewModels.date_purchase;
+                    _context.SaveChanges();
+                }
                 //Saving a file
                 if (viewMod.filesUpload != null)
                 {

@@ -17,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using FMB_CIS.Data;
 using FMB_CIS.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Security.Cryptography;
 
 
 namespace FMB_CIS.Controllers
@@ -298,6 +299,12 @@ namespace FMB_CIS.Controllers
         //[Url("?email={email}&code={code}")]
         public IActionResult ChainsawSellerApproval(string uid, string appid)
         {
+            int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            string Role = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
+            if(Role!= "DENR CENRO" && Role != "DENR Implementing PENRO" && Role != "DENR Inspector" && Role != "DENR Regional Executive Director (RED)")
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
             ViewModel mymodel = new ViewModel();
             //tbl_user user = _context.tbl_user.Find(uid);
 
@@ -587,7 +594,7 @@ namespace FMB_CIS.Controllers
 
                 if (buttonClicked == "Approve")
                 {
-                    if (viewMod.applicantViewModels.status < 6) // Approval Process before payment
+                    if (viewMod.applicantViewModels.status <= 6) // Approval Process before payment
                     {
                         if (Role == "DENR CENRO" || Role == "DENR Implementing PENRO" || Role == "DENR Regional Executive Director (RED)")
                         {
@@ -657,7 +664,7 @@ namespace FMB_CIS.Controllers
                 }
                 else if (buttonClicked == "Decline")
                 {
-                    if (viewMod.applicantViewModels.status < 6) // Rejection Process before payment
+                    if (viewMod.applicantViewModels.status <= 6) // Rejection Process before payment
                     {
                         if (Role == "DENR CENRO" || Role == "DENR Implementing PENRO" || Role == "DENR Regional Executive Director (RED)")
                         {
@@ -727,9 +734,9 @@ namespace FMB_CIS.Controllers
                         _context.Entry(appli).Property(x => x.status).IsModified = true;
                         _context.Entry(appli).Property(x => x.modified_by).IsModified = true;
                         _context.Entry(appli).Property(x => x.date_modified).IsModified = true;
-                        _context.Entry(appli).Property(x => x.date_of_inspection).IsModified = inspectDateToBeChanged;
+                        _context.Entry(appli).Property(x => x.date_of_inspection).IsModified = false; //Date of Inspection won't be modified if rejected
                         _context.Entry(usrdet).Property(x => x.comment).IsModified = true;
-                        _context.Entry(appli).Property(x => x.date_due_for_officers).IsModified = true;
+                        _context.Entry(appli).Property(x => x.date_due_for_officers).IsModified = true; //No Due Date if Permits are rejected
                         _context.SaveChanges();
                     }
                     //Email
@@ -796,6 +803,9 @@ namespace FMB_CIS.Controllers
                 //    EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);
                 //}
                 return RedirectToAction("ChainsawSellerApplicantsList", "ChainsawSeller");
+                
+                //return RedirectToAction("ChainsawSellerApproval", "ChainsawSeller", new { uid = tbl_user_id, appid = id });
+                
             }
 
         }

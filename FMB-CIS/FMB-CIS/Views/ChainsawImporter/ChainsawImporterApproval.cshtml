@@ -23,12 +23,12 @@
                     <input id="declineBtn" class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="submit" value="Decline" /> *@
                         @* <button type="button" id="approveBtn" class="btn btn-primary w-105">Approve</button>
                         <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button> *@
-                        if (Model.applicantViewModels.status < 6)
+                        if (Model.applicantViewModels.status <= 6)
                         {
                             <button type="button" id="approveBtn" class="btn btn-primary w-125">Approve and Proceed to Payment</button>
                             <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
                         }
-                        if (Model.applicantViewModels.status >= 6)
+                        if (Model.applicantViewModels.status > 6)
                         {
                             <button type="button" id="approveBtn" class="btn btn-primary w-110">Approve Payment</button>
                             <button type="button" id="declineBtn" class="btn btn-danger w-110 btnCancel">Decline Payment</button>
@@ -40,12 +40,12 @@
                         @* <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" /> *@
                         @* <button type="button" id="approveBtn" class="btn btn-primary w-105">Approve</button>
                         <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button> *@
-                        if (Model.applicantViewModels.status < 6)
+                        if (Model.applicantViewModels.status <= 6)
                         {
                             <button type="button" id="approveBtn" class="btn btn-primary w-105">Approve</button>
                             <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
                         }
-                        if (Model.applicantViewModels.status >= 6)
+                        if (Model.applicantViewModels.status > 6)
                         {
                             <button type="button" id="approveBtn" class="btn btn-primary w-110">Approve Payment</button>
                             <button type="button" id="declineBtn" class="btn btn-danger w-110 btnCancel">Decline Payment</button>
