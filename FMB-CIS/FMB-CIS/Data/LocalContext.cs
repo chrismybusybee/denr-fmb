@@ -27,7 +27,13 @@ namespace FMB_CIS.Data
         public DbSet<FMB_CIS.Models.tbl_user_change_info_request_status> tbl_user_change_info_request_status { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_email_template> tbl_email_template { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_announcement_type> tbl_announcement_type { get; set; } = default!;
-        
+        public DbSet<FMB_CIS.Models.tbl_office> tbl_office { get; set; } = default!;
+        public DbSet<FMB_CIS.Models.tbl_office_type> tbl_office_type { get; set; } = default!;
+        //public DbSet<FMB_CIS.Models.tbl_office> tbl_office { get; set; } = default!; // same as division
+        public DbSet<FMB_CIS.Models.tbl_access_right> tbl_access_right { get; set; } = default!;
+        public DbSet<FMB_CIS.Models.tbl_user_type_access_right> tbl_user_type_access_right { get; set; } = default!;
+        public DbSet<FMB_CIS.Models.tbl_site_settings> tbl_site_settings { get; set; } = default!;
+
 
     }
 }

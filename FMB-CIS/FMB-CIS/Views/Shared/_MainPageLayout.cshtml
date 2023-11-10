@@ -619,13 +619,65 @@
                             }
                             @if (ViewBag.UserType.Contains("Super Admin") == true)
                             {
-                                <li id="creationOfNewDenrOfficeMenuItem">
-                                    <a href="@Url.Action("Index", "CreationOfNewDenrOffice")" class="d-flex gap-2 text-decoration-none fs-6">
+                                <li id="officeManagementMenuItem">
+                                    <a href="#" id="officeManagementSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
                                         <div>
                                             <img src="~/assets/images/menu-icons/creation-of-new-denr-office.png" />
                                         </div>
-                                        <span>Manage Offices</span>
+                                        <span>Office Management</span>
                                     </a>
+                                    <ul id="officeManagementDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
+                                        <li id="manageOfficeTypeMenuItem">
+                                            <a href="@Url.Action("OfficeTypeList", "OfficeManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>Manage Office Types</span>
+                                            </a>
+                                        </li>
+                                        <li id="manageOfficeMenuItem">
+                                            <a href="@Url.Action("OfficeList", "OfficeManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>Manage Offices</span>
+                                            </a>
+                                        </li>
+                            @*            <li id="creationOfNewDenrOfficeMenuItem">
+                                            <a href="@Url.Action("Index", "CreationOfNewDenrOffice")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>Manage Offices (original)</span>
+                                            </a>
+                                        </li>*@
+                                    </ul>
+                                </li>
+                                <li id="accessRightsManagementMenuItem">
+                                    <a href="#" id="accessRightsManagementSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/account-management.png" />
+                                        </div>
+                                        <span>Access Rights Management</span>
+                                    </a>
+                                    <ul id="accessRightsManagementDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
+                                        <li id="manageAccessRightsMenuItem">
+                                            <a href="@Url.Action("AccessRightsTypeList", "AccessRightsManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>Assign Access Rights</span>
+                                            </a>
+                                        </li>
+                                        <li id="manageTypeAccessMenuItem">
+                                            <a href="@Url.Action("AccessRightsList", "AccessRightsManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>Manage Access Rights</span>
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
                                 @*}*@
                                 <li id="announcementTemplatesMenuItem">
@@ -709,6 +761,30 @@
     {
         <partial name="~/Views/Modals/CreationOfNewDenrOfficeModal.cshtml" />
     }
+    else if (currentUrl.Contains("OfficeTypeList"))
+    {
+        <div id="officeTypeCreateModalContainer"></div>
+        <div id="officeTypeUpdateModalContainer"></div>
+        <div id="officeTypeDeleteModalContainer"></div>
+    }
+    else if (currentUrl.Contains("OfficeList"))
+    {
+        <div id="officeCreateModalContainer"></div>
+        <div id="officeUpdateModalContainer"></div>
+        <div id="officeDeleteModalContainer"></div>
+    }
+    else if (currentUrl.Contains("AccessRightsTypeList"))
+    {
+        <div id="accessRightsTypeCreateModalContainer"></div>
+        <div id="accessRightsTypeUpdateModalContainer"></div>
+        <div id="accessRightsTypeDeleteModalContainer"></div>
+    }
+    else if (currentUrl.Contains("AccessRightsOfficeList"))
+    {
+        <div id="accessRightsCreateModalContainer"></div>
+        <div id="accessRightsUpdateModalContainer"></div>
+        <div id="accessRightsDeleteModalContainer"></div>
+    }
     else if (currentUrl.Contains("EditApplication"))
     {
         <partial name="~/Views/Modals/EditApplicationModal.cshtml" />
@@ -778,7 +854,11 @@
 
         setupDropdown("accountManagementSubMenuItem", "accountManagementDropdown");
 
-        
+        setupDropdown("officeManagementSubMenuItem", "officeManagementDropdown");
+
+        setupDropdown("accessRightsManagementSubMenuItem", "accessRightsManagementDropdown");
+
+
 
         function setActiveMenuItem(menuItemId) {
             const menuItems = document.querySelectorAll('#menu-items ul li');
@@ -806,6 +886,10 @@
             "/AccountManagement/RequestToChangeAccountInfo": "myAccountInfoMenuItem",
             "/AccountManagement/AddAccount": "accountManagementMenuItem",
             "/AccountManagement/EditAccount": "accountManagementMenuItem",
+            "/OfficeManagement/OfficeList": "officeListMenuItem",
+            "/OfficeManagement/OfficeTypeList": "officeTypeListMenuItem",
+            "/AccessRightsManagement/AccessRightsList": "accessRightsListMenuItem",
+            "/AccessRightsManagement/AccessRightsTypeList": "accessRightsTypeListMenuItem",
             "/Monitoring": "monitoringMenuItem",
             "/CreationOfNewDenrOffice": "creationOfNewDenrOfficeMenuItem",
             "/AnnouncementTemplates": "announcementTemplatesMenuItem",
