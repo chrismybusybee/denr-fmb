@@ -99,7 +99,7 @@ namespace FMB_CIS.Controllers
                     ViewData["BrgyData"] = new SelectList(_barangays.OrderBy(s => s.id), "id", "name");
                 }
 
-                model.tbl_Division_List = _context.tbl_division.ToList();
+                model.tbl_Division_List = _context.tbl_division.Where(e => e.is_active == true).ToList();
 
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;

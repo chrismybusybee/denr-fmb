@@ -1,4 +1,7 @@
-﻿@*@model OfficeCreateViewModel*@
+﻿@{
+    var baseurl = ViewBag.BaseUrl;
+}
+@model OfficeCreateViewModel
 <div class="modal modal-sheet fade  bg-body-secondary p-4 py-md-5" id="createOfficeModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content rounded-4 shadow">
@@ -13,16 +16,27 @@
                         <label for="office_name">Office Name</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control rounded-3" id="department" placeholder="" />
+                        <select class="form-control form-select rounded-3"
+                                asp-items="ViewBag.OfficeTypeData"
+                                id="department"></select>
+                        @*onchange="loadProvince(this)"*@
+                        @*<input type="text" class="form-control rounded-3" id="department" placeholder="" />*@
                         <label for="department">Department</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control rounded-3" id="region_id" placeholder="" />
+                        <select class="form-control form-select rounded-3"
+                                asp-items="ViewBag.RegionData"
+                                id="region_id" onchange="loadProvince(this)"></select>
                         <label for="region_id">Region Id</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control rounded-3" id="province_id" placeholder="" />
+                        <select class="form-control form-select rounded-3" asp-items="ViewBag.ProvinceData" id="province_id" onchange="loadCity(this)"></select>
                         <label for="province_id">Province Id</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select class="form-control form-select rounded-3" asp-items="ViewBag.CityData" id="city_id"></select>
+                         @*onchange="loadBrgy(this)"*@
+                        <label for="city_id">City Id</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control rounded-3" id="company_name" placeholder="" />
@@ -48,13 +62,15 @@
             office_name: document.getElementById("office_name").value,
             department: document.getElementById("department").value,
             region_id: document.getElementById("region_id").value,
-            province_id: document.getElementById("province_id").value,
+            province_id: document.getElementById("province_id").value ? document.getElementById("province_id").value : 0,
+            city_id: document.getElementById("city_id").value ? document.getElementById("city_id").value : 0,
             company_name: document.getElementById("company_name").value
         };
 
         $.post("/OfficeManagement/OfficeCreate", parameters, function (data) {
             // NOTE: TO DO if success
             closeModal();
+            console.log("completed");
             $('#officeListPartialContainer').load('/OfficeManagement/OfficeListPartialView');
         });
     });
@@ -63,4 +79,46 @@
         let elem = document.querySelector('#createOfficeModal');
         elem.parentNode.removeChild(elem);
     }
+
+    function loadProvince(obj) {
+        var value = obj.value;
+        var url = "@baseurl";
+
+        $.post(url + "Account/GetProvinceByRegionId", { tbl_region_id: value }, function (data) {
+            //debugger;
+            PopulateProvinceDropDown("#province_id", data);
+        });
+    }
+
+    function PopulateProvinceDropDown(dropDownId, list, selectedId) {
+        $(dropDownId).empty();
+        $(dropDownId).append("<option selected disabled value='0'>--Please Select a Province--</option>")
+        $.each(list, function (index, row) {
+            $(dropDownId).append("<option value='" + row.id + "'>" + row.name + "</option>")
+        });
+    }
+
+    //loadCity
+    $(document).ready(function () {
+        var a = 0;
+    });
+
+    function loadCity(obj) {
+        var value = obj.value;
+        var url = "@baseurl";
+
+        $.post(url + "Account/GetCityByProvinceId", { tbl_province_id: value }, function (data) {
+            //debugger;
+            PopulateCityDropDown("#city_id", data);
+        });
+    }
+
+    function PopulateCityDropDown(ctDropDownId, list, selectedId) {
+        $(ctDropDownId).empty();
+        $(ctDropDownId).append("<option selected disabled value='0'>--Please Select a City--</option>")
+        $.each(list, function (index, row) {
+            $(ctDropDownId).append("<option value='" + row.id + "'>" + row.name + "</option>")
+        });
+    }
+
 </script>               

@@ -77,6 +77,7 @@ namespace FMB_CIS.Controllers
                 OfficeListViewModel model = new OfficeListViewModel();
                 //Get the list of users
                 var entities = _context.tbl_division.Where(e => e.is_active == true).ToList();
+                
                 model.offices = entities.Adapt<List<Office>>();
 
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
@@ -97,10 +98,32 @@ namespace FMB_CIS.Controllers
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             if (usrRoleID == 14) // Super Admin
             {
-                OfficeListViewModel model = new OfficeListViewModel();
-                //Get the list of users
-                //var entities = _context.tbl_division.ToList();
-                //model.offices = entities.Adapt<List<Office>>();
+                OfficeCreateViewModel model = new OfficeCreateViewModel();
+
+                var _officeTypes = _context.tbl_office_type.Where(o => o.is_active == true).ToList();
+                var _regions = _context.tbl_region.ToList();
+                var _provinces = new List<tbl_province>();
+                var _cities = new List<tbl_city>();
+
+                _officeTypes.Add(new tbl_office_type() { id = 0, name = "--Select Department--" });
+                _regions.Add(new tbl_region() { id = 0, name = "--Select Region--" });
+                _provinces.Add(new tbl_province() { id = 0, name = "--Select Province--" });
+                _cities.Add(new tbl_city() { id = 0, name = "--Select City/Municipality--" });
+
+                ViewData["OfficeTypeData"] = new SelectList(_officeTypes.OrderBy(s => s.id), "id", "name");
+                ViewData["RegionData"] = new SelectList(_regions.OrderBy(s => s.id), "id", "name");
+                if (ViewData["ProvinceData"] == null)
+                {
+                    ViewData["ProvinceData"] = new SelectList(_provinces.OrderBy(s => s.id), "id", "name");
+                }
+                if (ViewData["CityData"] == null)
+                {
+                    ViewData["CityData"] = new SelectList(_cities.OrderBy(s => s.id), "id", "name");
+                }
+                //if (ViewData["BrgyData"] == null)
+                //{
+                //    ViewData["BrgyData"] = new SelectList(_barangays.OrderBy(s => s.id), "id", "name");
+                //}
 
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
@@ -122,6 +145,28 @@ namespace FMB_CIS.Controllers
                 //Get the list of users
                 var entity = _context.tbl_division.FirstOrDefault(o => o.id == id);
                 model = entity.Adapt<Office>();
+
+                var _officeTypes = _context.tbl_office_type.Where(o => o.is_active == true).ToList();
+                var _regions = _context.tbl_region.ToList();
+                var _provinces = new List<tbl_province>();
+                var _cities = new List<tbl_city>();
+
+                _officeTypes.Add(new tbl_office_type() { id = 0, name = "--Select Department--" });
+                _regions.Add(new tbl_region() { id = 0, name = "--Select Region--" });
+                _provinces.Add(new tbl_province() { id = 0, name = "--Select Province--" });
+                _cities.Add(new tbl_city() { id = 0, name = "--Select City/Municipality--" });
+
+                ViewData["OfficeTypeData"] = new SelectList(_officeTypes.OrderBy(s => s.id), "id", "name");
+                ViewData["RegionData"] = new SelectList(_regions.OrderBy(s => s.id), "id", "name");
+                if (ViewData["ProvinceData"] == null)
+                {
+                    ViewData["ProvinceData"] = new SelectList(_provinces.OrderBy(s => s.id), "id", "name");
+                }
+                if (ViewData["CityData"] == null)
+                {
+                    ViewData["CityData"] = new SelectList(_cities.OrderBy(s => s.id), "id", "name");
+                }
+
 
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;

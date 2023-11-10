@@ -38,8 +38,9 @@
 
     $("#btnUpdate").click(function () {
         console.log("btnUpdate");
+        let id = document.getElementById("officeTypeId").value;
         let parameters = {
-            id: document.getElementById("officeTypeId").value,
+            id: id,
             name: document.getElementById("officeTypeName").value,
             description: document.getElementById("officeTypeDescription").value
         };

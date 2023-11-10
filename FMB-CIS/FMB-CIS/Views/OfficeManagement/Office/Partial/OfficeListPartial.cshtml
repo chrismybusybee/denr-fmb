@@ -23,7 +23,7 @@
                 <small class="text-muted">#@Html.DisplayFor(modelItem => item.id) Modified @Html.DisplayFor(modelItem => item.date_modified)</small>
             </div>
             <p class="mb-1">@Html.DisplayFor(modelItem => item.office_name)</p>
-            <p class="c-hidden">@Html.DisplayFor(modelItem => item.createdBy)</p>
+            <p class="c-hidden">@Html.DisplayFor(modelItem => item.created_by)</p>
             <small><a class="btnUpdateOffice" onclick="OpenUpdateModal(@Html.DisplayFor(modelItem => item.id))">Update</a></small>
             <small><a class="btnDeleteOffice" onclick="OpenDeleteModal(@Html.DisplayFor(modelItem => item.id))">Delete</a></small>
             @*<small class="c-hidden-on-show"><a class="btnShowDetailsOffice" onclick="ShowDetails(@Html.DisplayFor(modelItem => item.id))">More Details</a></small>*@

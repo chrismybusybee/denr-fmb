@@ -2,6 +2,7 @@
 @using System.Globalization;
 @model FMB_CIS.Models.Office
 @{
+    var baseurl = ViewBag.BaseUrl;
     ViewBag.Title = "Office Management";
 }
 
@@ -21,8 +22,31 @@
                         <label for="officeName">Office Name</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control rounded-3" id="officeDescription" placeholder="" asp-for="@Model.office_name">
-                        <label for="officeDescription">Office Description</label>
+                        <select class="form-control form-select rounded-3"
+                                asp-items="ViewBag.OfficeTypeData"
+                                id="department" asp-for="@Model.department"></select>
+                        @*onchange="loadProvince(this)"*@
+                        @*<input type="text" class="form-control rounded-3" id="department" placeholder="" />*@
+                        <label for="department">Department</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select class="form-control form-select rounded-3"
+                                asp-items="ViewBag.RegionData"
+                                id="region_id" onchange="loadProvince(this)" asp-for="@Model.region_id"></select>
+                        <label for="region_id">Region Id</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select class="form-control form-select rounded-3" asp-items="ViewBag.ProvinceData" id="province_id" onchange="loadCity(this)" asp-for="@Model.province_id"></select>
+                        <label for="province_id">Province Id</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select class="form-control form-select rounded-3" asp-items="ViewBag.CityData" id="city_id" asp-for="@Model.city_id"></select>
+                        @*onchange="loadBrgy(this)"*@
+                        <label for="city_id">City Id</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-3" id="company_name" placeholder="" asp-for="@Model.company_name" />
+                        <label for="company_name">Company Name</label>
                     </div>
                     <button id="btnUpdate" class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="button">Update</button>
                     <small class="text-body-secondary">By clicking Update, the office will be updated on the system.</small>
@@ -34,31 +58,93 @@
 
 <script type="text/javascript">
     $("#cancelBtn").click(function () {
-        $("#updateOfficeModal").modal("hide");
-        var elem = document.querySelector('#updateOfficeTypeModal');
-        elem.parentNode.removeChild(elem);
+        closeModal();
     });
 
     $("#btnUpdate").click(function () {
         console.log("btnUpdate");
         let id = document.getElementById("officeId").value;
-        let name = document.getElementById("officeName").value;
-        let description = document.getElementById("officeDescription").value;
+        let parameters = {
+            id: id,
+            office_name: document.getElementById("officeName").value,
+            department: document.getElementById("department").value,
+            region_id: document.getElementById("region_id").value,
+            province_id: document.getElementById("province_id").value ? document.getElementById("province_id").value : 0,
+            city_id: document.getElementById("city_id").value ? document.getElementById("city_id").value : 0,
+            company_name: document.getElementById("company_name").value
+        };
+        console.log(parameters);
         $.ajax({
             url: '/OfficeManagement/OfficeUpdate/' + id,
             type: 'PUT',
-            data: { id: id, name: name, description: description },
+            data: parameters,
             success: function (data) {
                 console.log("data");
                 console.log(data);
                 // NOTE: TO DO if success
-                $("#updateOfficeModal").modal("hide");
-                var elem = document.querySelector('#updateOfficeModal');
-                elem.parentNode.removeChild(elem);
 
                 // NOTE: TO DO better way of calling callback function from parent
+                console.log("$('#officeListPartialContainer')");
+                console.log($('#officeListPartialContainer'));
                 $('#officeListPartialContainer').load('/OfficeManagement/OfficeListPartialView');
+                closeModal();
+            }, error: function(e) {
+                console.log(e);
             }
         });
+
+
     });
+
+    function closeModal() {
+        $("#updateOfficeModal").modal("hide");
+        var elem = document.querySelector('#updateOfficeTypeModal');
+        elem.parentNode.removeChild(elem);
+    }
+
+    //loadProvince
+    $(document).ready(function () {
+        var a = 0;
+    });
+    function loadProvince(obj) {
+        var value = obj.value;
+        var url = "@baseurl";
+
+        $.post(url + "Account/GetProvinceByRegionId", { tbl_region_id: value }, function (data) {
+            //debugger;
+            PopulateProvinceDropDown("#province_id", data);
+        });
+    }
+
+    function PopulateProvinceDropDown(dropDownId, list, selectedId) {
+        $(dropDownId).empty();
+        $(dropDownId).append("<option selected disabled value='0'>--Please Select a Province--</option>")
+        $.each(list, function (index, row) {
+            $(dropDownId).append("<option value='" + row.id + "'>" + row.name + "</option>")
+        });
+    }
+
+    //loadCity
+    $(document).ready(function () {
+        var a = 0;
+        $("#region_id").change();
+    });
+
+    function loadCity(obj) {
+        var value = obj.value;
+        var url = "@baseurl";
+
+        $.post(url + "Account/GetCityByProvinceId", { tbl_province_id: value }, function (data) {
+            //debugger;
+            PopulateCityDropDown("#city_id", data);
+        });
+    }
+
+    function PopulateCityDropDown(ctDropDownId, list, selectedId) {
+        $(ctDropDownId).empty();
+        $(ctDropDownId).append("<option selected disabled value='0'>--Please Select a City--</option>")
+        $.each(list, function (index, row) {
+            $(ctDropDownId).append("<option value='" + row.id + "'>" + row.name + "</option>")
+        });
+    }
 </script>               

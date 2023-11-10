@@ -30,12 +30,11 @@
     $("#btnDelete").click(function () {
         console.log("btnDelete");
         let id = document.getElementById("officeId").value;
-        console.log("id");
-        console.log(id);
+        let parameters = { id: id };
         $.ajax({
             url: '/OfficeManagement/OfficeDelete/' + id,
             type: 'DELETE',
-            data: { id: id },
+            data: parameters,
             success: function (data) {
                 console.log("data");
                 console.log(data);

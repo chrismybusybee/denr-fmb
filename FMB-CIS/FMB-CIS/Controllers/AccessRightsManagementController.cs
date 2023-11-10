@@ -68,7 +68,7 @@ namespace FMB_CIS.Controllers
             }
         }
 
-        public IActionResult OfficeListPartialView()
+        public IActionResult AccessRightsListPartialView()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
@@ -91,7 +91,7 @@ namespace FMB_CIS.Controllers
         }
 
 
-        public IActionResult OfficeCreateModal()
+        public IActionResult AccessRightsCreateModal()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
@@ -112,7 +112,7 @@ namespace FMB_CIS.Controllers
                 return RedirectToAction("Index", "Dashboard");
             }
         }
-        public IActionResult OfficeUpdateModal(int id)
+        public IActionResult AccessRightsUpdateModal(int id)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
@@ -133,7 +133,7 @@ namespace FMB_CIS.Controllers
                 return RedirectToAction("Index", "Dashboard");
             }
         }
-        public IActionResult OfficeDeleteModal(int id)
+        public IActionResult AccessRightsDeleteModal(int id)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
@@ -156,7 +156,7 @@ namespace FMB_CIS.Controllers
         }
 
         [HttpPost]
-        public IActionResult OfficeCreate(OfficeCreateViewModel model)
+        public IActionResult AccessRightsCreate(OfficeCreateViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
@@ -204,8 +204,8 @@ namespace FMB_CIS.Controllers
                 return RedirectToAction("Index", "AccountManagement");
             }
         }
-        [HttpPut("OfficeManagement/OfficeUpdate/{id:int}")]
-        public IActionResult OfficeUpdate(OfficeUpdateViewModel model)
+        [HttpPut("AccessManagement/OfficeUpdate/{id:int}")]
+        public IActionResult AccessRightsUpdate(OfficeUpdateViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
@@ -255,8 +255,8 @@ namespace FMB_CIS.Controllers
                 return RedirectToAction("Index", "AccountManagement");
             }
         }
-        [HttpDelete("OfficeManagement/OfficeDelete/{id:int}")]
-        public IActionResult OfficeDelete(OfficeDeleteViewModel model)
+        [HttpDelete("AccessRightsManagement/AccessRightsDelete/{id:int}")]
+        public IActionResult AccessRightsDelete(OfficeDeleteViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
@@ -348,7 +348,7 @@ namespace FMB_CIS.Controllers
         }
 
 
-        public IActionResult OfficeTypeCreateModal()
+        public IActionResult AccessRightsTypeCreateModal()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
@@ -369,7 +369,7 @@ namespace FMB_CIS.Controllers
                 return RedirectToAction("Index", "Dashboard");
             }
         }
-        public IActionResult OfficeTypeUpdateModal(int id)
+        public IActionResult AccessRightsTypeUpdateModal(int id)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
@@ -390,7 +390,7 @@ namespace FMB_CIS.Controllers
                 return RedirectToAction("Index", "Dashboard");
             }
         }
-        public IActionResult OfficeTypeDeleteModal(int id)
+        public IActionResult AccessRightsTypeDeleteModal(int id)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
@@ -413,7 +413,7 @@ namespace FMB_CIS.Controllers
         }
 
         [HttpPost]
-        public IActionResult OfficeTypeCreate(OfficeTypeCreateViewModel model)
+        public IActionResult AccessRightsTypeCreate(OfficeTypeCreateViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();

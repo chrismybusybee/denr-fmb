@@ -27,7 +27,8 @@
 
     $("#btnDelete").click(function () {
         console.log("btnDelete");
-        let parameters = { id: document.getElementById("officeTypeId").value};
+        let id = document.getElementById("officeTypeId").value;
+        let parameters = { id: id};
         $.ajax({
             url: '/OfficeManagement/OfficeTypeDelete/' + id,
             type: 'DELETE',
