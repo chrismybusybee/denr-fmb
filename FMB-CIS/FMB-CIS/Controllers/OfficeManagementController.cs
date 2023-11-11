@@ -225,6 +225,7 @@ namespace FMB_CIS.Controllers
                     entity.department = model.department;
                     entity.region_id = model.region_id;
                     entity.province_id = model.province_id;
+                    entity.city_id = model.city_id;
                     entity.company_name = model.company_name;
                     entity.is_active = true;
                     entity.created_by = uid;
@@ -280,6 +281,7 @@ namespace FMB_CIS.Controllers
                     entity.department = model.department;
                     entity.region_id = model.region_id;
                     entity.province_id = model.province_id;
+                    entity.city_id = model.city_id;
                     entity.company_name = model.company_name;
                     entity.date_modified = DateTime.Now;
 
@@ -599,6 +601,34 @@ namespace FMB_CIS.Controllers
             {
                 return RedirectToAction("Index", "AccountManagement");
             }
+        }
+
+        [HttpPost, ActionName("GetDivisionByUserType")]
+        public JsonResult GetDivisionByUserType(string userTypeId)
+        {
+            int utID;
+            List<tbl_division> divisionLists = new List<tbl_division>();
+            if (!string.IsNullOrEmpty(userTypeId))
+            {
+                utID = Convert.ToInt32(userTypeId);
+                if(utID == 17) // Soon update to dynamic RED
+                {
+                    divisionLists = _context.tbl_division.Where(d => d.department.Equals(1) && d.is_active == true).OrderBy(d => d.office_name).ToList();
+                }
+                else if (utID == 10) // PENRO
+                {
+                    divisionLists = _context.tbl_division.Where(d => d.department.Equals(2) && d.is_active == true).OrderBy(d => d.office_name).ToList();
+                }
+                else if (utID == 8) // CENRO
+                {
+                    divisionLists = _context.tbl_division.Where(d => d.department.Equals(3) && d.is_active == true).OrderBy(d => d.office_name).ToList();
+                }
+                else if (utID == 9) // Implementing PENRO
+                {
+                    divisionLists = _context.tbl_division.Where(d => d.department.Equals(4) && d.is_active == true).OrderBy(d => d.office_name).ToList();
+                }
+            }
+            return Json(divisionLists);
         }
     }
 }
