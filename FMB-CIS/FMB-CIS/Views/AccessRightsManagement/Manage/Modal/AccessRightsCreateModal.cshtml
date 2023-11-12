@@ -1,0 +1,71 @@
+﻿@*@model OfficeTypeCreateViewModel*@
+<div class="modal modal-sheet fade  bg-body-secondary p-4 py-md-5" id="createAccessRightsModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header p-5 pb-4 border-bottom-0">
+                <h1 class="fw-bold mb-0 fs-2">Create New Access Rights</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body p-5 pt-0">
+                <form class="" id="OfficeTypeCreateForm" role="form" method="post">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-3" id="code" placeholder="" />
+                        <label for="code">Code</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-3" id="name" placeholder="" />
+                        <label for="name">Name</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-3" id="description" placeholder="" />
+                        <label for="description">Description</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-3" id="scope" placeholder="" />
+                        <label for="scope">Scope</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-3" id="type" placeholder="" />
+                        <label for="type">Type</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-3" id="parent_code" placeholder="" />
+                        <label for="parent_code">Parent Code</label>
+                    </div>
+                    <button id="btnCreate" class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="button">Create</button>
+                    <small class="text-body-secondary">By clicking Create, an office type will be registered on the system.</small>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#cancelBtn").click(function () {
+        closeModal();
+    });
+    $("#btnCreate").click(function () {
+        let parameters = {
+            code: document.getElementById("code").value,
+            name: document.getElementById("name").value,
+            description: document.getElementById("description").value,
+            scope: document.getElementById("scope").value,
+            type: document.getElementById("type").value,
+            parent_code: document.getElementById("parent_code").value
+        };
+        console.log("parameters");
+        console.log(parameters);
+        $.post("/AccessRightsManagement/AccessRightsCreate", parameters, function (data) {
+            // NOTE: TO DO if success
+            $('#accessRightsListPartialContainer').load('/AccessRightsManagement/AccessRightsListPartialView');
+            closeModal();
+        });
+    });
+
+    function closeModal() {
+        $("#createOfficeTypeModal").modal("hide");
+        let elem = document.querySelector('#createOfficeTypeModal');
+        elem.parentNode.removeChild(elem);
+    }
+</script>               

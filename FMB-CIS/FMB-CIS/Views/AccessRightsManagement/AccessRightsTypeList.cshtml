@@ -21,7 +21,7 @@
                 </div>
             </div>
         </div>
-        <div class="c-content" id="officeTypeListPartialContainer">
+        <div class="c-content" id="accessRightsTypeListPartialContainer">
             <div href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="item-1">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">ALLOW_DASHBOARD</h5>
@@ -159,14 +159,10 @@
 <script src="/js/jquery-3.7.1.min.js"></script>
 
 <script type="text/javascript">
-    $("#btnCreateOfficeType").click(function () {
-    });
-
     function OpenCreateModal() {
-        $('#officeTypeCreateModalContainer').load('/OfficeManagement/OfficeTypeCreateModal', function () {
-            $("#createOfficeTypeModal").modal("show");
+        $('#accessRightsTypeCreateModalContainer').load('/AccessRightsManagement/AccessRightsCreateModal', function () {
+            $("#createAccessRightsTypeModal").modal("show");
         });
     }
-
-    //$('#officeTypeListPartialContainer').load('/OfficeManagement/OfficeTypeListPartialView');
+    $('#accessRightsTypeListPartialContainer').load('/AccessRightsManagement/AccessRightsListPartialView');
 </script>

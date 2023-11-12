@@ -2,7 +2,7 @@
 @using System.Globalization;
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
-    ViewBag.Title = "Office Management";
+    ViewBag.Title = "Access Rights Management";
 }
 
 <div id="card-container">
@@ -16,12 +16,12 @@
                     <h5 class="card-title">
                         <a href="@Url.Action("Index", "Home")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>                        Offices
                     </h5>
-                    <p class="card-text">Used to assign offices to their respective divisions.</p>
-                    <button id="btnCreateOffice" onclick="OpenCreateModal()" class="btn btn-primary">Create New Office</button>
+                    <p class="card-text">Used to manage access rights.</p>
+                    <button id="btnCreateAccessRights" onclick="OpenCreateModal()" class="btn btn-primary">Create New Access Rights</button>
                 </div>
             </div>
         </div>
-        <div class="c-content" id="officeListPartialContainer">
+        <div class="c-content" id="accessRightsListPartialContainer">
         </div>
     </div>
 </div>
@@ -87,14 +87,11 @@
 <script src="/js/jquery-3.7.1.min.js"></script>
 
 <script type="text/javascript">
-    $("#btnCreateOffice").click(function () {
-    });
-
     function OpenCreateModal() {
-        $('#officeCreateModalContainer').load('/OfficeManagement/OfficeCreateModal', function () {
-            $("#createOfficeModal").modal("show");
+        $('#accessRightsCreateModalContainer').load('/AccessRightsManagement/AccessRightsCreateModal', function () {
+            $("#createAccessRightsModal").modal("show");
         });
     }
 
-    $('#officeListPartialContainer').load('/OfficeManagement/OfficeListPartialView');
+    $('#accessRightsListPartialContainer').load('/AccessRightsManagement/AccessRightsListPartialView');
 </script>

@@ -79,13 +79,7 @@
             type: 'PUT',
             data: parameters,
             success: function (data) {
-                console.log("data");
-                console.log(data);
-                // NOTE: TO DO if success
-
                 // NOTE: TO DO better way of calling callback function from parent
-                console.log("$('#officeListPartialContainer')");
-                console.log($('#officeListPartialContainer'));
                 $('#officeListPartialContainer').load('/OfficeManagement/OfficeListPartialView');
                 closeModal();
             }, error: function(e) {

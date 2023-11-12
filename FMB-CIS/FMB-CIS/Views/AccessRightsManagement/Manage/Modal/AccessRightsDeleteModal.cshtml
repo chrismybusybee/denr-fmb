@@ -1,10 +1,10 @@
 ﻿@using System.Security.Claims;
 @using System.Globalization;
-@model FMB_CIS.Models.OfficeType
+@model FMB_CIS.Models.AccessRights
 @{
-    ViewBag.Title = "Office Type Management";
+    ViewBag.Title = "Access Rights Management";
 }
-<div class="modal modal-sheet  bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="deleteOfficeTypeModal" aria-hidden="true">
+<div class="modal modal-sheet  bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="deleteAccessRightsModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content rounded-3 shadow">
             <div class="modal-body p-4 text-center">
@@ -30,19 +30,23 @@
         let id = document.getElementById("officeTypeId").value;
         let parameters = { id: id};
         $.ajax({
-            url: '/OfficeManagement/OfficeTypeDelete/' + id,
+            url: '/AccessRightsManagement/AccessRightsDelete/' + id,
             type: 'DELETE',
             data: parameters,
             success: function (data) {
+                console.log("data");
+                console.log(data);
+                // NOTE: TO DO if success
+                closeModal();
                 // NOTE: TO DO better way of calling callback function from parent
-                $('#officeTypeListPartialContainer').load('/OfficeManagement/OfficeTypeListPartialView');
+                $('#accessRightsListPartialContainer').load('/AccessRightsManagement/AccessRightsListPartialView');
             }
         });
     });
 
     function closeModal() {
-        $("#deleteOfficeTypeModal").modal("hide");
-        let elem = document.querySelector('#deleteOfficeTypeModal');
+        $("#deleteAccessRightsModal").modal("hide");
+        let elem = document.querySelector('#deleteAccessRightsModal');
         elem.parentNode.removeChild(elem);
     }
 </script>               

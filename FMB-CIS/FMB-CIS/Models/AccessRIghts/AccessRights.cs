@@ -1,11 +1,11 @@
-﻿namespace FMB_CIS.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FMB_CIS.Models
 {
-    public class tbl_access_right
+    public class AccessRights
     {
-        // NOTE: this will still need a respective page, module, functionality in the backend, ui
-        // Utilization: Used to 
         public int id { get; set; }
-        public string code { get; set; }
+        public string code { get; set; } // CanAccessAll, CanAccessPageDashboard, CanEditUser, ReadOnlyAll...
         public string name { get; set; } // CanAccessAll, CanAccessPageDashboard, CanEditUser, ReadOnlyAll...
         public string description { get; set; }
         public string scope { get; set; } // For Visualization: Page, Module, Functionality
