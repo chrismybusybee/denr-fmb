@@ -1,6 +1,6 @@
 ﻿@using System.Security.Claims;
 @using System.Globalization;
-@model FMB_CIS.Models.AccessRightsListViewModel
+@model FMB_CIS.Models.UserTypeAccessRightsListViewModel
 @{
     ViewBag.Title = "Access Rights Management";
 }
@@ -13,6 +13,32 @@
             <small class="text-muted">Clear</small>
         </div>
     </div>*@
+    <div class="accordion" id="accordionUserTypes">
+        @foreach (UserTypes item in Model.userTypes)
+        {
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@Html.DisplayFor(modelItem => item.id)" aria-expanded="true" aria-controls="collapseOne">
+                        @Html.DisplayFor(modelItem => item.name) 0/1
+                    </button>
+                </h2>
+                <div id="collapse-@Html.DisplayFor(modelItem => item.id)" class="accordion-collapse collapse" data-bs-parent="#accordionUserTypes">
+                    <div class="accordion-body">
+
+                        @foreach (AccessRights item2 in Model.accessRights)
+                        {
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="flexCheckDefault">  @*value=""*@
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    @Html.DisplayFor(modelItem => item2.code)
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 
     @foreach (AccessRights item in Model.accessRights)
     {
