@@ -100,8 +100,12 @@ namespace FMB_CIS.Controllers
                 model.tbl_Application.date_created = DateTime.Now;
                 model.tbl_Application.date_modified = DateTime.Now;
                 model.tbl_Application.date_due_for_officers = BusinessDays.AddBusinessDays(DateTime.Now, 2).AddHours(4).AddMinutes(30);
+                _context.tbl_application.Add(model.tbl_Application);
+                _context.SaveChanges();
+
                 //SAVE to tbl_chainsaw
                 model.TBL_Chainsaw.user_id = userID;
+                model.TBL_Chainsaw.tbl_application_id = model.tbl_Application.id;
                 model.TBL_Chainsaw.status = "Owner";
                 model.TBL_Chainsaw.is_active = true;
                 model.TBL_Chainsaw.created_by = userID;
@@ -120,7 +124,7 @@ namespace FMB_CIS.Controllers
                 {
                     model.TBL_Chainsaw.hp = null;
                 }
-                _context.tbl_application.Add(model.tbl_Application);
+                
                 _context.tbl_chainsaw.Add(model.TBL_Chainsaw);
                 _context.SaveChanges();
                 int? appID = model.tbl_Application.id;

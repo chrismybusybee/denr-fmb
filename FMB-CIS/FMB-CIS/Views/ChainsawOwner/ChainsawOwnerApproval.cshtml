@@ -22,12 +22,12 @@
                     {
                         @* <input id="approveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Approve" />
                         <input id="declineBtn" class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="submit" value="Decline" /> *@
-                        if (Model.applicantViewModels.status < 6)
+                        if (Model.applicantViewModels.status <= 6)
                         {
                             <button type="button" id="approveBtn" class="btn btn-primary w-125">Approve and Proceed to Payment</button>
                             <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
                         }
-                        if (Model.applicantViewModels.status >= 6)
+                        if (Model.applicantViewModels.status > 6)
                         {
                             <button type="button" id="approveBtn" class="btn btn-primary w-110">Approve Payment</button>
                             <button type="button" id="declineBtn" class="btn btn-danger w-110 btnCancel">Decline Payment</button>
@@ -38,12 +38,12 @@
                     {
                         @* <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" /> *@
                         
-                        if (Model.applicantViewModels.status < 6)
+                        if (Model.applicantViewModels.status <= 6)
                         {
                             <button type="button" id="approveBtn" class="btn btn-primary w-105">Approve</button>
                             <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
                         }
-                        if (Model.applicantViewModels.status >= 6)
+                        if (Model.applicantViewModels.status > 6)
                         {
                             <button type="button" id="approveBtn" class="btn btn-primary w-110">Approve Payment</button>
                             <button type="button" id="declineBtn" class="btn btn-danger w-110 btnCancel">Decline Payment</button>
@@ -360,7 +360,7 @@
                                                     </label>
                                                     <span class="fw-bold">
                                                         @* @Html.EditorFor(model => model.applicantViewModels.inspectionDate) *@
-                                                        <input type="date" asp-for="applicantViewModels.inspectionDate" class="form-control" />
+                                                        <input type="date" asp-for="applicantViewModels.inspectionDate" class="form-control" required />
                                                     </span>
                                                 }
                                                 else
@@ -866,10 +866,15 @@
 
 
         $('#approveBtn').click(function () {
-            $('#confirmApproveModal').modal("show");
-            //console.log(document.getElementById("approveBtn").innerHTML);
-            //document.getElementById("decisionID").value = document.getElementById("approveBtn").innerHTML;
-            document.getElementById("decisionID").value = "Approve";
+            if ($("#ApplApprvlForm")[0].checkValidity()) {
+                $('#confirmApproveModal').modal("show");
+                document.getElementById("decisionID").value = "Approve";
+            }
+            else {
+                //Validate Form
+                $("#ApplApprvlForm")[0].reportValidity()
+            }
+
         });
 
         $("#backApproveBtn").click(function () {

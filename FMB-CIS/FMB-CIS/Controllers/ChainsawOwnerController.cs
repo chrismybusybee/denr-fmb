@@ -178,6 +178,11 @@ namespace FMB_CIS.Controllers
             string Role = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
             int RoleID = _context.tbl_user_types.Where(ut => ut.name == Role).Select(ut => ut.id).FirstOrDefault();
 
+            if (Role != "DENR CENRO" && Role != "DENR Implementing PENRO" && Role != "DENR Inspector" && Role != "DENR Regional Executive Director (RED)")
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+
             //CODE FOR FILE DOWNLOAD
             int applicID = Convert.ToInt32(appid);
             //File Paths from Database
@@ -266,7 +271,7 @@ namespace FMB_CIS.Controllers
                                           join reg in _context.tbl_region on usr.tbl_region_id equals reg.id
                                           join prov in _context.tbl_province on usr.tbl_province_id equals prov.id
                                           join ct in _context.tbl_city on usr.tbl_city_id equals ct.id
-                                          join csaw in _context.tbl_chainsaw on usr.id equals csaw.user_id
+                                          join csaw in _context.tbl_chainsaw on a.id equals csaw.tbl_application_id
                                           join brngy in _context.tbl_brgy on usr.tbl_brgy_id equals brngy.id
                                           where a.tbl_user_id == usid && a.id == applid
                                           select new ApplicantListViewModel
@@ -517,7 +522,7 @@ namespace FMB_CIS.Controllers
 
                 if (buttonClicked == "Approve")
                 {
-                    if (viewMod.applicantViewModels.status < 6) // Approval Process before payment
+                    if (viewMod.applicantViewModels.status <= 6) // Approval Process before payment
                     {
                         if (Role == "DENR CENRO" || Role == "DENR Implementing PENRO" || Role == "DENR Regional Executive Director (RED)")
                         {
@@ -594,7 +599,7 @@ namespace FMB_CIS.Controllers
                 }
                 else if (buttonClicked == "Decline")
                 {
-                    if (viewMod.applicantViewModels.status < 6) // Rejection Process before payment
+                    if (viewMod.applicantViewModels.status <= 6) // Rejection Process before payment
                     {
                         if (Role == "DENR CENRO" || Role == "DENR Implementing PENRO" || Role == "DENR Regional Executive Director (RED)")
                         {
@@ -685,9 +690,9 @@ namespace FMB_CIS.Controllers
                         _context.Entry(appli).Property(x => x.status).IsModified = true;
                         _context.Entry(appli).Property(x => x.modified_by).IsModified = true;
                         _context.Entry(appli).Property(x => x.date_modified).IsModified = true;
-                        _context.Entry(appli).Property(x => x.date_of_inspection).IsModified = true;
+                        _context.Entry(appli).Property(x => x.date_of_inspection).IsModified = false; //Date of Inspection won't be modified if rejected
                         _context.Entry(usrdet).Property(x => x.comment).IsModified = true;
-                        _context.Entry(appli).Property(x => x.date_due_for_officers).IsModified = true;
+                        _context.Entry(appli).Property(x => x.date_due_for_officers).IsModified = true; //No Due Date if Permits are rejected
                         _context.SaveChanges();
                     }
                     if (emailTemplateID != 0) //If emailTemplateID is 0, no email should be sent.

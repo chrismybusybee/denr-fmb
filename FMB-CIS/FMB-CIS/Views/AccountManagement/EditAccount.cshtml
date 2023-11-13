@@ -18,7 +18,7 @@
 
         <div class="row m-0">
             <div class="col-md-12">
-                <form asp-action="EditAccount" id="EditAcctForm" role="form" class="w-100 mx-auto" enctype="multipart/form-data">
+                <form asp-action="EditAccount" id="EditAcctForm" role="form" class="w-100 mx-auto" method="post" enctype="multipart/form-data">
                     <input asp-for="uid" type="hidden" />
                         <div class="d-flex justify-content-center flex-column gap-1">
                         <img src="@ViewBag.profilePhotoSource" width="200" class="img-fluid rounded" id="profilePic" />

@@ -34,7 +34,7 @@
                         @Html.Hidden("actionName", @ViewContext.RouteData.Values["action"].ToString())
                         <div class="d-flex gap-4 w-100">
                             <button id="cancelBtn" type="button" class="btn btn-danger w-100">Cancel</button>
-                            <button id="submitBtn" type="submit" class="btn btn-primary w-100">Submit</button>
+                            <button id="submitBtn" type="button" class="btn btn-primary w-100">Submit</button>
                         </div>
                     </div>
                 </form>
@@ -42,3 +42,88 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="confirmSubmitModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/submit.png" />
+                    </div>
+                    <p class="fw-bold fs-5">
+                        Are you sure you want to submit?
+                    </p>
+                    <div class="d-flex gap-4 w-100">
+                        <button id="backBtn" class="btn btn-danger w-100">Back</button>
+                        @* <input type="submit" value="Confirm" id="confirmBtn" class="btn btn-primary w-100" /> *@
+                        <button id="confirmBtn" class="btn btn-primary w-100">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirmSuccessModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/success.png" />
+                    </div>
+                    <p class="fw-bold fs-5">
+                        Proof of Payment submitted successfully!
+                    </p>
+                    <div class="d-flex justify-content-center w-100">
+                        <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("Index", "Home", new { success = true })'">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    const paymentForm = document.getElementById('UploadPaymentForm');
+    const showModalButton = document.getElementById('submitBtn');
+    const confirmationModal = document.getElementById('confirmSubmitModal');
+    const confirmButton = document.getElementById('confirmBtn');
+
+    // Function to display the modal
+    function showModal() {
+        $("#confirmSubmitModal").modal("show");
+        $("#uploadPOPModal").modal("hide");
+        //confirmationModal.style.display = 'block';
+    }
+
+    // Function to hide the modal
+    function hideModal() {
+        $("#confirmSubmitModal").modal("hide");
+        $("#uploadPOPModal").modal("show");        
+        //confirmationModal.style.display = 'none';
+    }
+
+    $("#backBtn").click(function () {
+        $("#confirmSubmitModal").modal("hide");
+        $("#uploadPOPModal").modal("show");
+    });
+
+    // Event listener for the "Submit" button
+    showModalButton.addEventListener('click', showModal);
+
+    // Event listener for the "Confirm" button
+    confirmButton.addEventListener('click', function () {
+        // Submit the form when the "Confirm" button is clicked
+        paymentForm.submit();
+    });
+
+    // Close the modal when the user clicks outside of it
+    window.addEventListener('click', function (event) {
+        if (event.target === confirmationModal) {
+            hideModal();
+        }
+    });
+
+</script>

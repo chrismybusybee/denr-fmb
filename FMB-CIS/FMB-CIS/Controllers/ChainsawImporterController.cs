@@ -198,6 +198,12 @@ namespace FMB_CIS.Controllers
         //[Url("?email={email}&code={code}")]
         public IActionResult ChainsawImporterApproval(string uid, string appid)
         {
+            int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            string Role = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
+            if (Role != "DENR CENRO" && Role != "DENR Implementing PENRO" && Role != "DENR Inspector" && Role != "DENR Regional Executive Director (RED)")
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
             ViewModel mymodel = new ViewModel();
             //tbl_user user = _context.tbl_user.Find(uid);
 
@@ -470,7 +476,7 @@ namespace FMB_CIS.Controllers
 
                 if (buttonClicked == "Approve")
                 {
-                    if (viewMod.applicantViewModels.status < 6) // Approval Process before payment
+                    if (viewMod.applicantViewModels.status <= 6) // Approval Process before payment
                     {
                         if (Role == "DENR CENRO" || Role == "DENR Implementing PENRO" || Role == "DENR Regional Executive Director (RED)")
                         {
@@ -531,7 +537,7 @@ namespace FMB_CIS.Controllers
                 }
                 else if (buttonClicked == "Decline")
                 {
-                    if (viewMod.applicantViewModels.status < 6) // Rejection Process before payment
+                    if (viewMod.applicantViewModels.status <= 6) // Rejection Process before payment
                     {
                         if (Role == "DENR CENRO" || Role == "DENR Implementing PENRO" || Role == "DENR Regional Executive Director (RED)")
                         {
