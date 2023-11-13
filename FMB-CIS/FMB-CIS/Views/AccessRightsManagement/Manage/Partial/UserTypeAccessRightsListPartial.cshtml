@@ -14,23 +14,23 @@
         </div>
     </div>*@
     <div class="accordion" id="accordionUserTypes">
-        @foreach (UserTypes item in Model.userTypes)
+        @foreach (UserTypes userTypeItem in Model.userTypes)
         {
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@Html.DisplayFor(modelItem => item.id)" aria-expanded="true" aria-controls="collapseOne">
-                        @Html.DisplayFor(modelItem => item.name) 0/1
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@Html.DisplayFor(modelItem => userTypeItem.id)" aria-expanded="true" aria-controls="collapseOne">
+                        @Html.DisplayFor(modelItem => userTypeItem.name) <span class="badge bg-dark rounded-pill text-bg-primary"><span class="userTypeAccessRightTotalToggled" data-user-type-id="@Html.DisplayFor(modelItem => userTypeItem.id)"></span>/<span class="accessRightsTotal">@Model.accessRights.Count()</span></span>
                     </button>
                 </h2>
-                <div id="collapse-@Html.DisplayFor(modelItem => item.id)" class="accordion-collapse collapse" data-bs-parent="#accordionUserTypes">
+                <div id="collapse-@Html.DisplayFor(modelItem => userTypeItem.id)" class="accordion-collapse collapse" data-bs-parent="#accordionUserTypes">
                     <div class="accordion-body">
 
-                        @foreach (AccessRights item2 in Model.accessRights)
+                        @foreach (AccessRights accessRightsItem in Model.accessRights)
                         {
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="flexCheckDefault">  @*value=""*@
+                                <input class="form-check-input userTypeAccessRight-@Html.DisplayFor(modelItem => userTypeItem.id)" type="checkbox" role="switch" id="userTypeAccessRight-@Html.DisplayFor(modelItem => userTypeItem.id)-@Html.DisplayFor(modelItem => accessRightsItem.id)" onclick="ToggleUserTypeAccessRight(@Html.DisplayFor(modelItem => userTypeItem.id), @Html.DisplayFor(modelItem => accessRightsItem.id))">  @*value=""*@
                                 <label class="form-check-label" for="flexCheckDefault">
-                                    @Html.DisplayFor(modelItem => item2.code)
+                                    @Html.DisplayFor(modelItem => accessRightsItem.code)
                                 </label>
                             </div>
                         }
@@ -39,22 +39,6 @@
             </div>
         }
     </div>
-
-    @foreach (AccessRights item in Model.accessRights)
-    {
-        <div href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="item-@Html.DisplayFor(modelItem=>item.id)">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">@Html.DisplayFor(modelItem => item.name)</h5>
-                <small class="text-muted">#@Html.DisplayFor(modelItem => item.id) Modified @Html.DisplayFor(modelItem => item.date_modified)</small>
-            </div>
-            <p class="mb-1">@Html.DisplayFor(modelItem => item.description)</p>
-            <p class="c-hidden">@Html.DisplayFor(modelItem => item.createdBy)</p>
-            <small><a class="btnUpdateOfficeType" onclick="OpenUpdateModal(@Html.DisplayFor(modelItem => item.id))">Update</a></small>
-            <small><a class="btnDeleteOfficeType" onclick="OpenDeleteModal(@Html.DisplayFor(modelItem => item.id))">Delete</a></small>
-            @*<small class="c-hidden-on-show"><a class="btnShowDetailsOfficeType" onclick="ShowDetails(@Html.DisplayFor(modelItem => item.id))">More Details</a></small>*@
-            @*<small class="c-hidden-inline"><a class="btnHideDetailsOfficeType" onclick="HideDetails(@Html.DisplayFor(modelItem => item.id))">Hide Details</a></small>*@
-        </div>
-    }
 </div>
 
 <style>
@@ -148,11 +132,14 @@
     .c-show-hidden .c-hidden-on-show {
         display: none;
     }
+    .badge {
+        margin-left: 12px;
+    }
 </style>
 
 <script type="text/javascript">
     function OpenUpdateModal(id) {
-        $('#e').load('/AccessRightsManagement/AccessRightsUpdateModal/' + id, function () {
+        $('#accessRightsUpdateModalContainer').load('/AccessRightsManagement/AccessRightsUpdateModal/' + id, function () {
             $("#updateAccessRightsModal").modal("show");
         });
     }
@@ -162,10 +149,55 @@
             $("#deleteAccessRightsModal").modal("show");
         });
     }
+    function ToggleUserTypeAccessRight(userTypeId, accessRightsId) {
+        let parameters = {
+            userTypeId: userTypeId,
+            accessRightsId: accessRightsId
+        };
+        $.post("/AccessRightsManagement/UserTypeAccessRightsToggle", parameters, function (data) {
+            // NOTE: TO DO if success
+            //$('#accessRightsListPartialContainer').load('/AccessRightsManagement/UserTypeAccessRightsToggle');
+            //closeModal();
+        });
+        getUserTypeAccessRightCount();
+    }
     function ShowDetails(id) {
         $('#item-' + id).addClass('c-show-hidden');
     }
     function HideDetails(id) {
         $('#item-' + id).removeClass('c-show-hidden');
+    }
+
+    function initializeSettings() {
+        //let userTypes = @Model.userTypes;
+
+        //let accessRights = @Model.accessRights;
+
+        //let userTypeAccessRights = @Model.userTypeAccessRights;
+        GetUserTypeAccessRight();
+    }
+    initializeSettings();
+    function GetUserTypeAccessRight() {
+        $.get("/AccessRightsManagement/UserTypeAccessRights", function (data) {
+            console.log(data);
+            data.forEach(function (dataItem) {
+                console.log(dataItem);
+                $("#userTypeAccessRight-" + dataItem.user_type_id + "-" + dataItem.access_right_id).attr('checked', true);
+            });
+            getUserTypeAccessRightCount();
+            // NOTE: TO DO if success
+            //$('#accessRightsListPartialContainer').load('/AccessRightsManagement/UserTypeAccessRightsToggle');
+            //closeModal();
+        });
+    }
+
+    function getUserTypeAccessRightCount(item) {
+        $(".userTypeAccessRightTotalToggled").each(
+            function(){
+                let id = $(this).attr("data-user-type-id");
+                let count = $(".userTypeAccessRight-" + id + ":checked").length;
+                $(this).text(count);
+            }
+        )
     }
 </script>
