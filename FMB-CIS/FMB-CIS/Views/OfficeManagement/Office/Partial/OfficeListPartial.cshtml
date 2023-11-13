@@ -6,30 +6,31 @@
 }
 
 <div class="list-group list-group-style1">
-@*    <div href="#" class="list-group-item list-group-item-action flex-column align-items-start search-box-container">
+    <div href="#" class="list-group-item list-group-item-action flex-column align-items-start search-box-container">
         <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-2">
-                <input type="text" class="search-box" placeholder="SEARCH" />
+                <input type="text" id="officeSearch" class="search-box" placeholder="SEARCH" />
             </h5>
-            <small class="text-muted">Clear</small>
+            <small class="text-muted clickable" onclick="ClearSearch()">Clear</small>
         </div>
-    </div>*@
-
-    @foreach (Office item in Model.offices)
-    {
-        <div href="#" class="list-group-item list-group-item-action flex-column align-items-start office-type-@Html.DisplayFor(modelItem=>item.department)" id="item-@Html.DisplayFor(modelItem=>item.id)">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">@Html.DisplayFor(modelItem => item.office_name)</h5>
-                <small class="text-muted">#@Html.DisplayFor(modelItem => item.id) Modified @Html.DisplayFor(modelItem => item.date_modified)</small>
+    </div>
+    <div id="offices">
+        @foreach (Office item in Model.offices)
+        {
+            <div href="#" class="list-group-item list-group-item-action flex-column align-items-start office-type-@Html.DisplayFor(modelItem=>item.department)" id="item-@Html.DisplayFor(modelItem=>item.id)">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">@Html.DisplayFor(modelItem => item.office_name)</h5>
+                    <small class="text-muted">#@Html.DisplayFor(modelItem => item.id) Modified @Html.DisplayFor(modelItem => item.date_modified)</small>
+                </div>
+                @*<p class="mb-1">@Html.DisplayFor(modelItem => item.office_name)</p>*@
+                <p class="c-hidden">@Html.DisplayFor(modelItem => item.created_by)</p>
+                <small><a class="btnUpdateOffice" onclick="OpenUpdateModal(@Html.DisplayFor(modelItem => item.id))">Update</a></small>
+                <small><a class="btnDeleteOffice" onclick="OpenDeleteModal(@Html.DisplayFor(modelItem => item.id))">Delete</a></small>
+                @*<small class="c-hidden-on-show"><a class="btnShowDetailsOffice" onclick="ShowDetails(@Html.DisplayFor(modelItem => item.id))">More Details</a></small>*@
+                @*<small class="c-hidden-inline"><a class="btnHideDetailsOffice" onclick="HideDetails(@Html.DisplayFor(modelItem => item.id))">Hide Details</a></small>*@
             </div>
-            @*<p class="mb-1">@Html.DisplayFor(modelItem => item.office_name)</p>*@
-            <p class="c-hidden">@Html.DisplayFor(modelItem => item.created_by)</p>
-            <small><a class="btnUpdateOffice" onclick="OpenUpdateModal(@Html.DisplayFor(modelItem => item.id))">Update</a></small>
-            <small><a class="btnDeleteOffice" onclick="OpenDeleteModal(@Html.DisplayFor(modelItem => item.id))">Delete</a></small>
-            @*<small class="c-hidden-on-show"><a class="btnShowDetailsOffice" onclick="ShowDetails(@Html.DisplayFor(modelItem => item.id))">More Details</a></small>*@
-            @*<small class="c-hidden-inline"><a class="btnHideDetailsOffice" onclick="HideDetails(@Html.DisplayFor(modelItem => item.id))">Hide Details</a></small>*@
-        </div>
-    }
+        }
+    </div>
 </div>
 
 <style>
@@ -154,6 +155,10 @@
         padding-left: 72px;
         margin-bottom: 0 !important;
     }
+
+    .clickable {
+        cursor: pointer;
+    }
 </style>
 
 <script type="text/javascript">
@@ -172,5 +177,33 @@
     }
     function HideDetails(id) {
         $('#item-' + id).removeClass('c-show-hidden');
+    }
+
+    $("#officeSearch").keyup(function () {
+
+        // Retrieve the input field text and reset the count to zero
+        var filter = $(this).val(),
+            count = 0;
+
+        // Loop through the comment list
+        $('#offices .list-group-item').each(function () {
+
+
+            // If the list item does not contain the text phrase fade it out
+            if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+                $(this).hide();  // MY CHANGE
+
+                // Show the list item if the phrase matches and increase the count by 1
+            } else {
+                $(this).show(); // MY CHANGE
+                count++;
+            }
+
+        });
+
+    });
+
+    function ClearSearch() {
+        $("#officeSearch").val("").keyup();
     }
 </script>
