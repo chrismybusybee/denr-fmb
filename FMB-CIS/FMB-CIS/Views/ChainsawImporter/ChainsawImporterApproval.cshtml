@@ -650,6 +650,11 @@
         $('#approveBtn').click(function () {
             $('#confirmApproveModal').modal("show");
             document.getElementById("decisionID").value = "Approve";
+            //console.log("Approve Button CLicked", dt);
+            var formFiles = document.forms['ApplApprvlForm']['filesUpload.Files'];
+            //console.log("old", formFiles);
+            formFiles.files = dt.files;
+            //console.log("new", formFiles);
         });
 
         $("#backApproveBtn").click(function () {
