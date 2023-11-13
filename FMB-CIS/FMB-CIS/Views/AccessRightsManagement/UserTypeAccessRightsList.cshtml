@@ -2,7 +2,7 @@
 @using System.Globalization;
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
-    ViewBag.Title = "Access Rights Management";
+    ViewBag.Title = "User Type Access Rights Management";
 }
 
 <div id="card-container">
@@ -14,14 +14,14 @@
                 </div>*@
                 <div class="card-body">
                     <h5 class="card-title">
-                        <a href="@Url.Action("Index", "Home")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>                        Offices
+                        <a href="@Url.Action("Index", "Home")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>                        Access Right Types
                     </h5>
-                    <p class="card-text">Used to manage access rights.</p>
-                    <button id="btnCreateAccessRights" onclick="OpenCreateModal()" class="btn btn-primary">Create New Access Rights</button>
+                    <p class="card-text">Used to assign different access rights to user types.</p>
+                    <button id="btnCreateOfficeType" onclick="OpenCreateModal()" class="btn btn-primary">Create Access Rights Type</button>
                 </div>
             </div>
         </div>
-        <div class="c-content" id="accessRightsListPartialContainer">
+        <div class="c-content" id="userTypeAccessRightsListPartialContainer">
         </div>
     </div>
 </div>
@@ -88,10 +88,9 @@
 
 <script type="text/javascript">
     function OpenCreateModal() {
-        $('#accessRightsCreateModalContainer').load('/AccessRightsManagement/AccessRightsCreateModal', function () {
-            $("#createAccessRightsModal").modal("show");
+        $('#userTypeAccessRightsCreateModalContainer').load('/AccessRightsManagement/UserTypeAccessRightsCreateModal', function () {
+            $("#createAccessRightsTypeModal").modal("show");
         });
     }
-
-    $('#accessRightsListPartialContainer').load('/AccessRightsManagement/AccessRightsListPartialView');
+    $('#userTypeAccessRightsListPartialContainer').load('/AccessRightsManagement/UserTypeAccessRightsListPartialView');
 </script>

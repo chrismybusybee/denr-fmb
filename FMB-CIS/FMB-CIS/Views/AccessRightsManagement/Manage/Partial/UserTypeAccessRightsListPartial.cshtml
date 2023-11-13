@@ -1,10 +1,9 @@
 ﻿@using System.Security.Claims;
 @using System.Globalization;
-@model FMB_CIS.Models.OfficeListViewModel
+@model FMB_CIS.Models.UserTypeAccessRightsListViewModel
 @{
-    ViewBag.Title = "Office Management";
+    ViewBag.Title = "Access Rights Management";
 }
-
 <div class="list-group list-group-style1">
 @*    <div href="#" class="list-group-item list-group-item-action flex-column align-items-start search-box-container">
         <div class="d-flex w-100 justify-content-between">
@@ -14,20 +13,46 @@
             <small class="text-muted">Clear</small>
         </div>
     </div>*@
+    <div class="accordion" id="accordionUserTypes">
+        @foreach (UserTypes item in Model.userTypes)
+        {
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@Html.DisplayFor(modelItem => item.id)" aria-expanded="true" aria-controls="collapseOne">
+                        @Html.DisplayFor(modelItem => item.name) 0/1
+                    </button>
+                </h2>
+                <div id="collapse-@Html.DisplayFor(modelItem => item.id)" class="accordion-collapse collapse" data-bs-parent="#accordionUserTypes">
+                    <div class="accordion-body">
 
-    @foreach (Office item in Model.offices)
+                        @foreach (AccessRights item2 in Model.accessRights)
+                        {
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="flexCheckDefault">  @*value=""*@
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    @Html.DisplayFor(modelItem => item2.code)
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @foreach (AccessRights item in Model.accessRights)
     {
-        <div href="#" class="list-group-item list-group-item-action flex-column align-items-start office-type-@Html.DisplayFor(modelItem=>item.department)" id="item-@Html.DisplayFor(modelItem=>item.id)">
+        <div href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="item-@Html.DisplayFor(modelItem=>item.id)">
             <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">@Html.DisplayFor(modelItem => item.office_name)</h5>
+                <h5 class="mb-1">@Html.DisplayFor(modelItem => item.name)</h5>
                 <small class="text-muted">#@Html.DisplayFor(modelItem => item.id) Modified @Html.DisplayFor(modelItem => item.date_modified)</small>
             </div>
-            @*<p class="mb-1">@Html.DisplayFor(modelItem => item.office_name)</p>*@
-            <p class="c-hidden">@Html.DisplayFor(modelItem => item.created_by)</p>
-            <small><a class="btnUpdateOffice" onclick="OpenUpdateModal(@Html.DisplayFor(modelItem => item.id))">Update</a></small>
-            <small><a class="btnDeleteOffice" onclick="OpenDeleteModal(@Html.DisplayFor(modelItem => item.id))">Delete</a></small>
-            @*<small class="c-hidden-on-show"><a class="btnShowDetailsOffice" onclick="ShowDetails(@Html.DisplayFor(modelItem => item.id))">More Details</a></small>*@
-            @*<small class="c-hidden-inline"><a class="btnHideDetailsOffice" onclick="HideDetails(@Html.DisplayFor(modelItem => item.id))">Hide Details</a></small>*@
+            <p class="mb-1">@Html.DisplayFor(modelItem => item.description)</p>
+            <p class="c-hidden">@Html.DisplayFor(modelItem => item.createdBy)</p>
+            <small><a class="btnUpdateOfficeType" onclick="OpenUpdateModal(@Html.DisplayFor(modelItem => item.id))">Update</a></small>
+            <small><a class="btnDeleteOfficeType" onclick="OpenDeleteModal(@Html.DisplayFor(modelItem => item.id))">Delete</a></small>
+            @*<small class="c-hidden-on-show"><a class="btnShowDetailsOfficeType" onclick="ShowDetails(@Html.DisplayFor(modelItem => item.id))">More Details</a></small>*@
+            @*<small class="c-hidden-inline"><a class="btnHideDetailsOfficeType" onclick="HideDetails(@Html.DisplayFor(modelItem => item.id))">Hide Details</a></small>*@
         </div>
     }
 </div>
@@ -123,48 +148,18 @@
     .c-show-hidden .c-hidden-on-show {
         display: none;
     }
-
-    .office-type-1 {
-        border-left: solid 5px #14984a;
-        border-top: solid 2px #14984a;
-        margin-bottom: 0 !important;
-        margin-top: 24px !important;
-        background-color: #eeeeee;
-    }
-
-        .office-type-1:first-child {
-            margin-top: 0px !important;
-        }
-
-    .office-type-2 {
-        border-left: solid 5px #333333;
-        padding-left: 36px;
-        margin-bottom: 0 !important;
-        background-color: #f8f8f8;
-    }
-
-    .office-type-3 {
-        border-left: solid 5px #cccccc;
-        padding-left: 72px;
-        margin-bottom: 0 !important;
-    }
-
-    .office-type-4 {
-        border-left: solid 5px #cccccc;
-        padding-left: 72px;
-        margin-bottom: 0 !important;
-    }
 </style>
 
 <script type="text/javascript">
     function OpenUpdateModal(id) {
-        $('#officeUpdateModalContainer').load('/OfficeManagement/OfficeUpdateModal/' + id, function () {
-            $("#updateOfficeModal").modal("show");
+        $('#e').load('/AccessRightsManagement/AccessRightsUpdateModal/' + id, function () {
+            $("#updateAccessRightsModal").modal("show");
         });
     }
     function OpenDeleteModal(id) {
-        $('#officeDeleteModalContainer').load('/OfficeManagement/OfficeDeleteModal/' + id, function () {
-            $("#deleteOfficeModal").modal("show");
+        console.log("OpenDeleteModal");
+        $('#accessRightsDeleteModalContainer').load('/AccessRightsManagement/AccessRightsDeleteModal/' + id, function () {
+            $("#deleteAccessRightsModal").modal("show");
         });
     }
     function ShowDetails(id) {

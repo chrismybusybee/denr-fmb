@@ -49,13 +49,9 @@
             type: 'PUT',
             data: parameters,
             success: function (data) {
-                console.log("data");
-                console.log(data);
-                // NOTE: TO DO if success
-                closeModal();
-
                 // NOTE: TO DO better way of calling callback function from parent
                 $('#officeTypeListPartialContainer').load('/OfficeManagement/OfficeTypeListPartialView');
+                closeModal();
             }
         });
     });

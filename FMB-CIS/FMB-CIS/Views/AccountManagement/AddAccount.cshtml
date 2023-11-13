@@ -41,7 +41,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label text-secondary small mb-1">User Type</label>
-                                                <select asp-for="tbl_User.tbl_user_types_id" class="form-select" aria-label="User Type" required="required">
+                                                <select asp-for="tbl_User.tbl_user_types_id" class="form-select" aria-label="User Type" required="required" onchange="loadDivision(this)">
                                                     <option value="" selected disabled>--Select User Type--</option>
                                                     <option value="8">DENR CENRO</option>
                                                     <option value="9">DENR Implementing PENRO</option>
@@ -64,7 +64,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label text-secondary small mb-1">Division</label>
-                                                <select asp-for="tbl_User.tbl_division_id" class="form-select" required="required">
+                                                <select asp-for="tbl_User.tbl_division_id" class="form-select" required="required" id="ddlDivisionId">
                                                     <option value="" selected disabled>--Select Division--</option>
                                                     @foreach(tbl_division item in Model.tbl_Division_List)
                                                     {
@@ -560,6 +560,30 @@
         });
     }
 
+
+
+    //loadCity
+    $(document).ready(function () {
+        var a = 0;
+    });
+
+    function loadDivision(obj) {
+        var value = obj.value;
+        var url = "@baseurl";
+
+        $.post(url + "OfficeManagement/GetDivisionByUserType", { userTypeId: value }, function (data) {
+            //debugger;
+            PopulateDivisionDropDown("#ddlDivisionId", data);
+        });
+    }
+
+    function PopulateDivisionDropDown(ctDropDownId, list, selectedId) {
+        $(ctDropDownId).empty();
+        $(ctDropDownId).append("<option selected disabled value='0'>--Select Division--</option>")
+        $.each(list, function (index, row) {
+            $(ctDropDownId).append("<option value='" + row.id + "'>" + row.office_name + "</option>")
+        });
+    }
     
 
 </script>

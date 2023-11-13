@@ -627,7 +627,7 @@
                                         <span>Office Management</span>
                                     </a>
                                     <ul id="officeManagementDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
-                                        <li id="manageOfficeTypeMenuItem">
+                                        <li id="officeTypeListMenuItem">
                                             <a href="@Url.Action("OfficeTypeList", "OfficeManagement")" class="d-flex gap-2 text-decoration-none fs-6">
                                                 <div>
                                                     <img src="~/assets/images/menu-icons/line.png" />
@@ -635,7 +635,7 @@
                                                 <span>Manage Office Types</span>
                                             </a>
                                         </li>
-                                        <li id="manageOfficeMenuItem">
+                                        <li id="officeListMenuItem">
                                             <a href="@Url.Action("OfficeList", "OfficeManagement")" class="d-flex gap-2 text-decoration-none fs-6">
                                                 <div>
                                                     <img src="~/assets/images/menu-icons/line.png" />
@@ -661,15 +661,15 @@
                                         <span>Access Rights Management</span>
                                     </a>
                                     <ul id="accessRightsManagementDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
-                                        <li id="manageAccessRightsMenuItem">
-                                            <a href="@Url.Action("AccessRightsTypeList", "AccessRightsManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <li id="accessRightsTypeListMenuItem">
+                                            <a href="@Url.Action("UserTypeAccessRightsList", "AccessRightsManagement")" class="d-flex gap-2 text-decoration-none fs-6">
                                                 <div>
                                                     <img src="~/assets/images/menu-icons/line.png" />
                                                 </div>
                                                 <span>Assign Access Rights</span>
                                             </a>
                                         </li>
-                                        <li id="manageTypeAccessMenuItem">
+                                        <li id="accessRightsListMenuItem">
                                             <a href="@Url.Action("AccessRightsList", "AccessRightsManagement")" class="d-flex gap-2 text-decoration-none fs-6">
                                                 <div>
                                                     <img src="~/assets/images/menu-icons/line.png" />
@@ -773,13 +773,13 @@
         <div id="officeUpdateModalContainer"></div>
         <div id="officeDeleteModalContainer"></div>
     }
-    else if (currentUrl.Contains("AccessRightsTypeList"))
+    else if (currentUrl.Contains("UserTypeAccessRightsList"))
     {
-        <div id="accessRightsTypeCreateModalContainer"></div>
-        <div id="accessRightsTypeUpdateModalContainer"></div>
-        <div id="accessRightsTypeDeleteModalContainer"></div>
+        <div id="userTypeAccessRightsCreateModalContainer"></div>
+        <div id="userTypeAccessRightsUpdateModalContainer"></div>
+        <div id="userTypeAccessRightsDeleteModalContainer"></div>
     }
-    else if (currentUrl.Contains("AccessRightsOfficeList"))
+    else if (currentUrl.Contains("AccessRightsList"))
     {
         <div id="accessRightsCreateModalContainer"></div>
         <div id="accessRightsUpdateModalContainer"></div>
@@ -889,7 +889,7 @@
             "/OfficeManagement/OfficeList": "officeListMenuItem",
             "/OfficeManagement/OfficeTypeList": "officeTypeListMenuItem",
             "/AccessRightsManagement/AccessRightsList": "accessRightsListMenuItem",
-            "/AccessRightsManagement/AccessRightsTypeList": "accessRightsTypeListMenuItem",
+            "/AccessRightsManagement/UserTypeAccessRightsList": "userTypeAccessRightsListMenuItem",
             "/Monitoring": "monitoringMenuItem",
             "/CreationOfNewDenrOffice": "creationOfNewDenrOfficeMenuItem",
             "/AnnouncementTemplates": "announcementTemplatesMenuItem",

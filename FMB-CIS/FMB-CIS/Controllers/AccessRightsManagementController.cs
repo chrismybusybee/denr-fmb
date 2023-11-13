@@ -50,7 +50,6 @@ namespace FMB_CIS.Controllers
         //        return View("AccessRightsList", model);
         //    }
         //}
-
         public IActionResult AccessRightsList()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
@@ -67,45 +66,42 @@ namespace FMB_CIS.Controllers
                 return RedirectToAction("Index", "Dashboard");
             }
         }
-
         public IActionResult AccessRightsListPartialView()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             if (usrRoleID == 14) // Super Admin
             {
-                OfficeListViewModel model = new OfficeListViewModel();
+                AccessRightsListViewModel model = new AccessRightsListViewModel();
                 //Get the list of users
-                var entities = _context.tbl_division.Where(e => e.is_active == true).ToList();
-                model.offices = entities.Adapt<List<Office>>();
+                var entities = _context.tbl_access_right.Where(e => e.is_active == true).ToList();
+                model.accessRights = entities.Adapt<List<AccessRights>>();
 
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
-                return PartialView("~/Views/OfficeManagement/Office/Partial/OfficeListPartial.cshtml", model);
+                return PartialView("~/Views/AccessRightsManagement/Manage/Partial/AccessRightsListPartial.cshtml", model);
             }
             else
             {
                 return RedirectToAction("Index", "Dashboard");
             }
         }
-
-
         public IActionResult AccessRightsCreateModal()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             if (usrRoleID == 14) // Super Admin
             {
-                OfficeListViewModel model = new OfficeListViewModel();
+                AccessRightsListViewModel model = new AccessRightsListViewModel();
                 //Get the list of users
-                //var entities = _context.tbl_division.ToList();
-                //model.offices = entities.Adapt<List<Office>>();
+                var entities = _context.tbl_access_right.ToList();
+                model.accessRights = entities.Adapt<List<AccessRights>>();
 
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
-                return PartialView("~/Views/OfficeManagement/Office/Modal/OfficeCreateModal.cshtml", model);
+                return PartialView("~/Views/AccessRightsManagement/Manage/Modal/AccessRightsCreateModal.cshtml", model);
             }
             else
             {
@@ -118,15 +114,15 @@ namespace FMB_CIS.Controllers
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             if (usrRoleID == 14) // Super Admin
             {
-                Office model = new Office();
+                AccessRights model = new AccessRights();
                 //Get the list of users
-                var entity = _context.tbl_division.FirstOrDefault(o => o.id == id);
-                model = entity.Adapt<Office>();
+                var entity = _context.tbl_access_right.FirstOrDefault(o => o.id == id);
+                model = entity.Adapt<AccessRights>();
 
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
-                return PartialView("~/Views/OfficeManagement/Office/Modal/OfficeUpdateModal.cshtml", model);
+                return PartialView("~/Views/AccessRightsManagement/Manage/Modal/AccessRightsUpdateModal.cshtml", model);
             }
             else
             {
@@ -139,24 +135,23 @@ namespace FMB_CIS.Controllers
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             if (usrRoleID == 14) // Super Admin
             {
-                Office model = new Office();
+                AccessRights model = new AccessRights();
                 //Get the list of users
-                var office = _context.tbl_division.FirstOrDefault(o => o.id == id);
-                model = office.Adapt<Office>();
+                var entity = _context.tbl_access_right.FirstOrDefault(o => o.id == id);
+                model = entity.Adapt<AccessRights>();
 
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
-                return PartialView("~/Views/OfficeManagement/Office/Modal/OfficeDeleteModal.cshtml", model);
+                return PartialView("~/Views/AccessRightsManagement/Manage/Modal/AccessRightsDeleteModal.cshtml", model);
             }
             else
             {
                 return RedirectToAction("Index", "Dashboard");
             }
         }
-
         [HttpPost]
-        public IActionResult AccessRightsCreate(OfficeCreateViewModel model)
+        public IActionResult AccessRightsCreate(AccessRightsCreateViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
@@ -175,20 +170,21 @@ namespace FMB_CIS.Controllers
 
                     // Action: 1 to 5
                     // 1. create entity
-                    var entity = new tbl_division();
-                    entity.office_name = model.office_name;
-                    entity.department = model.department;
-                    entity.region_id = model.region_id;
-                    entity.province_id = model.province_id;
-                    entity.company_name = model.company_name;
+                    var entity = new tbl_access_right();
+                    entity.name = model.name;
+                    entity.code = model.code;
+                    entity.description = model.description;
+                    entity.type = model.type;
+                    entity.scope = model.scope;
+                    entity.parent_code = model.parent_code;
                     entity.is_active = true;
-                    entity.created_by = uid;
-                    entity.modified_by = uid;
+                    entity.createdBy = uid;
+                    entity.modifiedBy = uid;
                     entity.date_created = DateTime.Now;
                     entity.date_modified = DateTime.Now;
 
                     // 2. add to context
-                    _context.tbl_division.Add(entity);
+                    _context.tbl_access_right.Add(entity);
 
                     // 3. TO DO: Add logging / historical data
 
@@ -204,8 +200,8 @@ namespace FMB_CIS.Controllers
                 return RedirectToAction("Index", "AccountManagement");
             }
         }
-        [HttpPut("AccessManagement/OfficeUpdate/{id:int}")]
-        public IActionResult AccessRightsUpdate(OfficeUpdateViewModel model)
+        [HttpPut("AccessRightsManagement/AccessRightsUpdate/{id:int}")]
+        public IActionResult AccessRightsUpdate(AccessRightsUpdateViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
@@ -224,18 +220,20 @@ namespace FMB_CIS.Controllers
 
                     // Action: 1 to 5
                     // 1. get, update entity
-                    var entity = _context.tbl_division.Where(m => m.id == model.id).FirstOrDefault();
+                    var entity = _context.tbl_access_right.Where(m => m.id == model.id).FirstOrDefault();
 
                     // NOTE: TO DO, is there a better location for this
                     if (entity == null)
                     {
                         return StatusCode(StatusCodes.Status404NotFound, ModelState);
                     }
-                    entity.office_name = model.office_name;
-                    entity.department = model.department;
-                    entity.region_id = model.region_id;
-                    entity.province_id = model.province_id;
-                    entity.company_name = model.company_name;
+                    entity.name = model.name;
+                    entity.code = model.code;
+                    entity.description = model.description;
+                    entity.type = model.type;
+                    entity.scope = model.scope;
+                    entity.parent_code = model.parent_code;
+                    entity.is_active = true;
                     entity.date_modified = DateTime.Now;
 
                     // 2. update to context
@@ -275,7 +273,7 @@ namespace FMB_CIS.Controllers
 
                     // Action: 1 to 5
                     // 1. get, update entity
-                    var entity = _context.tbl_division.Where(m => m.id == model.id).FirstOrDefault();
+                    var entity = _context.tbl_access_right.Where(m => m.id == model.id).FirstOrDefault();
 
                     // NOTE: TO DO, is there a better location for this
                     if (entity == null)
@@ -283,7 +281,7 @@ namespace FMB_CIS.Controllers
                         return StatusCode(StatusCodes.Status404NotFound, ModelState);
                     }
                     entity.is_active = false;
-                    entity.modified_by = uid;
+                    entity.modifiedBy = uid;
                     entity.date_modified = DateTime.Now;
 
                     // 2. update to context
@@ -308,7 +306,7 @@ namespace FMB_CIS.Controllers
         /// AccessRights Types
         /// </summary>
         /// <returns></returns>
-        public IActionResult AccessRightsTypeList()
+        public IActionResult UserTypeAccessRightsList()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
@@ -325,21 +323,27 @@ namespace FMB_CIS.Controllers
             }
         }
 
-        public IActionResult OfficeTypeListPartialView()
+        public IActionResult UserTypeAccessRightsListPartialView()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             if (usrRoleID == 14) // Super Admin
             {
-                OfficeTypeListViewModel model = new OfficeTypeListViewModel();
-                //Get the list of users
-                var entities = _context.tbl_office_type.Where(e => e.is_active == true).ToList();
-                model.officeTypes = entities.Adapt<List<OfficeType>>();
+                UserTypeAccessRightsListViewModel model = new UserTypeAccessRightsListViewModel();
+                //Get the list of user types
+                var userTypes = _context.tbl_user_types.ToList();
+                model.userTypes = userTypes.Adapt<List<UserTypes>>();
+                //Get the list of access rights
+                var accessRights = _context.tbl_access_right.Where(e => e.is_active == true).ToList();
+                model.accessRights = accessRights.Adapt<List<AccessRights>>();
+                //Get the list 
+                var userTypeAccessRights = _context.tbl_user_type_access_right.Where(e => e.is_active == true).ToList();
+                model.userTypeAccessRights = userTypeAccessRights.Adapt<List<UserTypeAccessRights>>();
 
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
-                return PartialView("~/Views/OfficeManagement/OfficeType/Partial/OfficeTypeListPartial.cshtml", model);
+                return PartialView("~/Views/AccessRightsManagement/Manage/Partial/UserTypeAccessRightsListPartial.cshtml", model);
             }
             else
             {

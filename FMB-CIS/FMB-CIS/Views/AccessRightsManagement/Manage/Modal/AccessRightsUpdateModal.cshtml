@@ -1,0 +1,94 @@
+﻿@using System.Security.Claims;
+@using System.Globalization;
+@model FMB_CIS.Models.AccessRights
+@{
+    ViewBag.Title = "Access Rights Management";
+}
+
+<div class="modal modal-sheet fade  bg-body-secondary p-4 py-md-5" id="updateAccessRightsModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header p-5 pb-4 border-bottom-0">
+                <h1 class="fw-bold mb-0 fs-2">Update Office Type</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body p-5 pt-0">
+                <form class="">
+                    <input type="hidden" class="form-control rounded-3" id="accessRightsId" asp-for="@Model.id">
+        @*            <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-3" id="officeTypeName" placeholder="" asp-for="@Model.name">
+                        <label for="officeTypeName">Office Type Name</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-3" id="officeTypeDescription" placeholder="" asp-for="@Model.description">
+                        <label for="officeTypeDescription">Office Type Description</label>
+                    </div>
+*@
+
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-3" id="code" placeholder="" asp-for="@Model.code" />
+                        <label for="code">Code</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-3" id="name" placeholder="" asp-for="@Model.name" />
+                        <label for="name">Name</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-3" id="description" placeholder="" asp-for="@Model.description" />
+                        <label for="description">Description</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-3" id="scope" placeholder="" asp-for="@Model.scope" />
+                        <label for="scope">Scope</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-3" id="type" placeholder="" asp-for="@Model.type" />
+                        <label for="type">Type</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-3" id="parent_code" placeholder="" asp-for="@Model.parent_code" />
+                        <label for="parent_code">Parent Code</label>
+                    </div>
+                    <button id="btnUpdate" class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="button">Update</button>
+                    <small class="text-body-secondary">By clicking Update, the office type will be updated on the system.</small>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#cancelBtn").click(function () {
+        closeModal();
+    });
+
+    $("#btnUpdate").click(function () {
+        console.log("btnUpdate");
+        let id = document.getElementById("accessRightsId").value;
+        let parameters = {
+            id: id,
+            code: document.getElementById("code").value,
+            name: document.getElementById("name").value,
+            description: document.getElementById("description").value,
+            scope: document.getElementById("scope").value,
+            type: document.getElementById("type").value,
+            parent_code: document.getElementById("parent_code").value
+        };
+        $.ajax({
+            url: '/AccessRightsManagement/AccessRightsUpdate/' + id,
+            type: 'PUT',
+            data: parameters,
+            success: function (data) {
+                // NOTE: TO DO better way of calling callback function from parent
+                $('#accessRightsUpdateModalContainer').load('/AccessRightsManagement/AccessRightsCreateModal');
+                closeModal();
+            }
+        });
+    });
+
+    function closeModal() {
+        $("#updateAccessRightsModal").modal("hide");
+        let elem = document.querySelector('#updateAccessRightsModal');
+        elem.parentNode.removeChild(elem);
+    }
+</script>               
