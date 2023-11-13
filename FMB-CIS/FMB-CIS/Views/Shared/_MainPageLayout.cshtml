@@ -661,7 +661,7 @@
                                         <span>Access Rights Management</span>
                                     </a>
                                     <ul id="accessRightsManagementDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
-                                        <li id="accessRightsTypeListMenuItem">
+                                        <li id="assignAccessRightsListMenuItem">
                                             <a href="@Url.Action("UserTypeAccessRightsList", "AccessRightsManagement")" class="d-flex gap-2 text-decoration-none fs-6">
                                                 <div>
                                                     <img src="~/assets/images/menu-icons/line.png" />
@@ -675,6 +675,14 @@
                                                     <img src="~/assets/images/menu-icons/line.png" />
                                                 </div>
                                                 <span>Manage Access Rights</span>
+                                            </a>
+                                        </li>
+                                        <li id="userTypeListMenuItem">
+                                            <a href="@Url.Action("UserTypeList", "AccessRightsManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>Manage User Types</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -785,6 +793,12 @@
         <div id="accessRightsUpdateModalContainer"></div>
         <div id="accessRightsDeleteModalContainer"></div>
     }
+    else if (currentUrl.Contains("UserTypeList"))
+    {
+        <div id="userTypeCreateModalContainer"></div>
+        <div id="userTypeUpdateModalContainer"></div>
+        <div id="userTypeDeleteModalContainer"></div>
+    }
     else if (currentUrl.Contains("EditApplication"))
     {
         <partial name="~/Views/Modals/EditApplicationModal.cshtml" />
@@ -888,8 +902,9 @@
             "/AccountManagement/EditAccount": "accountManagementMenuItem",
             "/OfficeManagement/OfficeList": "officeListMenuItem",
             "/OfficeManagement/OfficeTypeList": "officeTypeListMenuItem",
+            "/AccessRightsManagement/UserTypeList": "userTypeListMenuItem",
             "/AccessRightsManagement/AccessRightsList": "accessRightsListMenuItem",
-            "/AccessRightsManagement/UserTypeAccessRightsList": "userTypeAccessRightsListMenuItem",
+            "/AccessRightsManagement/UserTypeAccessRightsList": "assignAccessRightsListMenuItem",
             "/Monitoring": "monitoringMenuItem",
             "/CreationOfNewDenrOffice": "creationOfNewDenrOfficeMenuItem",
             "/AnnouncementTemplates": "announcementTemplatesMenuItem",

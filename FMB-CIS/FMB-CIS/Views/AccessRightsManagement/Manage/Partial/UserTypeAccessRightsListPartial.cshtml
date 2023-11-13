@@ -5,16 +5,16 @@
     ViewBag.Title = "Access Rights Management";
 }
 <div class="list-group list-group-style1">
-@*    <div href="#" class="list-group-item list-group-item-action flex-column align-items-start search-box-container">
+    <div href="#" class="list-group-item list-group-item-action flex-column align-items-start search-box-container">
         <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-2">
-                <input type="text" class="search-box" placeholder="SEARCH" />
+                <input type="text" id="userTypeAccessRightsSearch" class="search-box" placeholder="SEARCH" />
             </h5>
-            <small class="text-muted">Clear</small>
+            <small class="text-muted clickable" onclick="ClearSearch()">Clear</small>
         </div>
-    </div>*@
-    <div class="accordion" id="accordionUserTypes">
-        @foreach (UserTypes userTypeItem in Model.userTypes)
+    </div>
+    <div class="accordion" id="accordionUserTypeAccessRights">
+        @foreach (UserType userTypeItem in Model.userTypes)
         {
             <div class="accordion-item">
                 <h2 class="accordion-header">
@@ -132,8 +132,12 @@
     .c-show-hidden .c-hidden-on-show {
         display: none;
     }
+
     .badge {
         margin-left: 12px;
+    }
+    .clickable {
+        cursor: pointer;
     }
 </style>
 
@@ -193,11 +197,39 @@
 
     function getUserTypeAccessRightCount(item) {
         $(".userTypeAccessRightTotalToggled").each(
-            function(){
+            function () {
                 let id = $(this).attr("data-user-type-id");
                 let count = $(".userTypeAccessRight-" + id + ":checked").length;
                 $(this).text(count);
             }
         )
+    }
+
+    $("#userTypeAccessRightsSearch").keyup(function () {
+
+        // Retrieve the input field text and reset the count to zero
+        var filter = $(this).val(),
+            count = 0;
+
+        // Loop through the comment list
+        $('#accordionUserTypeAccessRights .accordion-item').each(function () {
+
+
+            // If the list item does not contain the text phrase fade it out
+            if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+                $(this).hide();  // MY CHANGE
+
+                // Show the list item if the phrase matches and increase the count by 1
+            } else {
+                $(this).show(); // MY CHANGE
+                count++;
+            }
+
+        });
+
+    });
+
+    function ClearSearch() {
+        $("#userTypeAccessRightsSearch").val("").keyup();
     }
 </script>
