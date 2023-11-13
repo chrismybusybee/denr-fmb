@@ -148,8 +148,8 @@ namespace FMB_CIS.Controllers
 
                 var _officeTypes = _context.tbl_office_type.Where(o => o.is_active == true).ToList();
                 var _regions = _context.tbl_region.ToList();
-                var _provinces = new List<tbl_province>();
-                var _cities = new List<tbl_city>();
+                var _provinces = _context.tbl_province.ToList();
+                var _cities = _context.tbl_city.ToList();
 
                 _officeTypes.Add(new tbl_office_type() { id = 0, name = "--Select Department--" });
                 _regions.Add(new tbl_region() { id = 0, name = "--Select Region--" });
@@ -158,6 +158,8 @@ namespace FMB_CIS.Controllers
 
                 ViewData["OfficeTypeData"] = new SelectList(_officeTypes.OrderBy(s => s.id), "id", "name");
                 ViewData["RegionData"] = new SelectList(_regions.OrderBy(s => s.id), "id", "name");
+                ViewData["ProvinceData"] = new SelectList(_provinces.Where(p => p.regCode == model.region_id || p.id == 0).OrderBy(s => s.id), "id", "name");
+                ViewData["CityData"] = new SelectList(_cities.Where(c => c.citymunCode == model.city_id || c.id == 0).OrderBy(s => s.id), "id", "name");
                 if (ViewData["ProvinceData"] == null)
                 {
                     ViewData["ProvinceData"] = new SelectList(_provinces.OrderBy(s => s.id), "id", "name");
