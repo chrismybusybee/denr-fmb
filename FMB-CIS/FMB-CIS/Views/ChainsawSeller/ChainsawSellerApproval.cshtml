@@ -15,33 +15,27 @@
                 <input asp-for="uid" type="hidden" />
                 <input asp-for="appid" type="hidden" />
                 <div class="d-flex justify-content-end gap-2">
-                    @* <button id="ApproveBtn" class="btn btn-primary w-105">Approve</button>
-                    <button class="btn btn-danger w-105 btnCancel">Decline</button> *@
                     @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR CENRO" || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR Implementing PENRO" || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR Regional Executive Director (RED)")
                     {
-                        @* <input id="ApproveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Approve" />
-                        <input class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="submit" value="Decline" /> *@
-                        if (Model.applicantViewModels.status <= 6)
+                        if (Model.applicantViewModels.permit_status == "Approved (Inspector) - For Cenro Approval" || Model.applicantViewModels.permit_status == "Rejected (CENRO)")
                         {
                             <button type="button" id="approveBtn" class="btn btn-primary w-125">Approve and Proceed to Payment</button>
                             <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
                         }
-                        if (Model.applicantViewModels.status > 6)
+                        if (Model.applicantViewModels.permit_status == "Payment Verification (CENRO)" || Model.applicantViewModels.permit_status == "Payment Rejected (CENRO)")
                         {
                             <button type="button" id="approveBtn" class="btn btn-primary w-110">Approve Payment</button>
                             <button type="button" id="declineBtn" class="btn btn-danger w-110 btnCancel">Decline Payment</button>
                         }
                     }
                     @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true)
-                    {
-                        @* <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" /> *@
-                        
-                        if(Model.applicantViewModels.status <= 6)
-                            {
+                    {                      
+                        if (Model.applicantViewModels.permit_status == "For Inspector Approval" || Model.applicantViewModels.permit_status == "Rejected (Inspector)")
+                        {
                             <button type="button" id="approveBtn" class="btn btn-primary w-105">Approve</button>
                             <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
                         }
-                        if (Model.applicantViewModels.status > 6)
+                        if (Model.applicantViewModels.permit_status == "Payment Verification (Inspector)" || Model.applicantViewModels.permit_status == "Payment Rejected (Inspector)")
                         {
                             <button type="button" id="approveBtn" class="btn btn-primary w-110">Approve Payment</button>
                             <button type="button" id="declineBtn" class="btn btn-danger w-110 btnCancel">Decline Payment</button>
@@ -506,7 +500,7 @@
                                     <option value="Inspector to CENRO">CENRO</option>
                                 }
                             </select>
-                            <textarea asp-for="tbl_Comments.comment" class="form-control mb-4" placeholder="Add comments here."></textarea>
+                            <textarea asp-for="tbl_Comments.comment" class="form-control mb-4" placeholder="Add comments here." required></textarea>
                             <button type="submit" id="commentBtn" class="btn btn-primary w-110">Add Comment</button>
                         </div>
                     </div>
@@ -713,6 +707,8 @@
             if ($("#ApplApprvlForm")[0].checkValidity()) { 
                 $('#confirmApproveModal').modal("show");
                 document.getElementById("decisionID").value = "Approve";
+                var formFiles = document.forms['ApplApprvlForm']['filesUpload.Files'];
+                formFiles.files = dt.files;
             }
             else
             {
@@ -734,6 +730,8 @@
         $('#declineBtn').click(function () {
             $('#confirmDeclineModal').modal("show");
             document.getElementById("decisionID").value = "Decline";
+            var formFiles = document.forms['ApplApprvlForm']['filesUpload.Files'];
+            formFiles.files = dt.files;
         });
 
         $('#backDeclineBtn').click(function () {
