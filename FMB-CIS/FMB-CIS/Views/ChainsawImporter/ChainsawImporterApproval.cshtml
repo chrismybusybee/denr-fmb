@@ -484,7 +484,7 @@
                                 }
                             </select>
                             <textarea asp-for="tbl_Comments.comment" class="form-control mb-4" placeholder="Add comments here."></textarea>
-                            <button type="submit" id="commentBtn" class="btn btn-primary w-110">Add Comment</button>
+                            <button id="commentBtn" type="button" class="btn btn-primary w-110">Add Comment</button>
                         </div>
                     </div>
                 </div>
@@ -643,6 +643,10 @@
             });
 
 
+        });
+
+        $('#commentBtn').click(function(){
+            alert('make ajax call here');
         });
 
         //END FOR FILE UPLOAD
