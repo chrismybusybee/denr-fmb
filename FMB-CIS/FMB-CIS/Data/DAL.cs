@@ -149,6 +149,28 @@ namespace FMB_CIS.Data
             }
         }
 
+        public List<string> selectAccessRightsFromEmail(string email, string connectString)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(connectString))
+            {
+
+                sqlConnection.Open();
+                SqlCommand sqlCmd = new SqlCommand("SelectAccessRightsIDFromEmail", sqlConnection);
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.Parameters.AddWithValue("email", email);
+
+                var reader = sqlCmd.ExecuteReader();
+
+                List<string> accessRights = new List<string>();
+                while(reader.Read())
+                {
+                    accessRights.Add((string)reader["code"]);
+                }
+                return accessRights;
+            }
+        }
+
+
         public bool isLinkValid(string tkncode, string connectString)
         {
             using (SqlConnection sqlConnection = new SqlConnection(connectString))
@@ -171,7 +193,7 @@ namespace FMB_CIS.Data
                 sqlConnection.Open();
                 SqlCommand sqlCmd = new SqlCommand("spChangePassword", sqlConnection);
                 sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.Add("@GUID", SqlDbType.UniqueIdentifier).Value = new Guid (tkncode);
+                sqlCmd.Parameters.Add("@GUID", SqlDbType.UniqueIdentifier).Value = new Guid(tkncode);
                 sqlCmd.Parameters.AddWithValue("@password", encrPass);
                 sqlCmd.ExecuteNonQuery();
                 int returnedVal = Convert.ToInt32(sqlCmd.ExecuteScalar());

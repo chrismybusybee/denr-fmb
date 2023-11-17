@@ -12,6 +12,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http.Extensions;
+using System.Collections.Generic;
 
 namespace FMB_CIS.Controllers
 {
@@ -28,7 +29,7 @@ namespace FMB_CIS.Controllers
             this._configuration = configuration;
             _context = context;
         }
-        
+
         /*
         public IActionResult Index()
         {
@@ -95,7 +96,7 @@ namespace FMB_CIS.Controllers
                 if (tblTempPass != null && tblTempPass.is_active == true) //tblTempPass.is_active means the Temporary Password is active and not yet changing their password. It also mean that the user doesn't confirm their email. tblTempPass is null when user was created before having a code for this.
                 {
                     ModelState.AddModelError("email", "Please verify your email first!");
-                    return View();                    
+                    return View();
                 }
                 if (usrDB.is_active == false) //tblTempPass.is_active means the Temporary Password is active and not yet changing their password. It also mean that the user doesn't confirm their email. tblTempPass is null when user was created before having a code for this.
                 {
@@ -114,7 +115,7 @@ namespace FMB_CIS.Controllers
 
                     else
                     {
-
+                        List<string> accessRights = dal.selectAccessRightsFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng"));
                         var claims = new List<Claim>
                         {
                             new Claim(ClaimTypes.Name, credentials.email),
@@ -123,6 +124,7 @@ namespace FMB_CIS.Controllers
                             new Claim("userID", dal.selectUserIDFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng"))),
                             new Claim(ClaimTypes.Role, dal.selectUserRoleFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng"))),
                             new Claim("userRole", dal.selectUserRoleFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng"))),
+                            new Claim("accessRights", accessRights != null ? string.Join(",", accessRights) : ""),
                             //new Claim(ClaimTypes.Role, "Administrator"),
                         };
 

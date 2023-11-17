@@ -23,12 +23,14 @@
                     <input id="declineBtn" class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="submit" value="Decline" /> *@
                         @* <button type="button" id="approveBtn" class="btn btn-primary w-105">Approve</button>
                         <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button> *@
-                        if (Model.applicantViewModels.status <= 6)
+                        @* if (Model.applicantViewModels.status <= 6) *@
+                        if (Model.applicantViewModels.permit_status == "Approved (Inspector) - For Cenro Approval" || Model.applicantViewModels.permit_status == "Rejected (CENRO)")
                         {
                             <button type="button" id="approveBtn" class="btn btn-primary w-125">Approve and Proceed to Payment</button>
                             <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
                         }
-                        if (Model.applicantViewModels.status > 6)
+                        @* if (Model.applicantViewModels.status > 6) *@
+                        if (Model.applicantViewModels.permit_status == "Payment Verification (CENRO)" || Model.applicantViewModels.permit_status == "Payment Rejected (CENRO)")
                         {
                             <button type="button" id="approveBtn" class="btn btn-primary w-110">Approve Payment</button>
                             <button type="button" id="declineBtn" class="btn btn-danger w-110 btnCancel">Decline Payment</button>
@@ -40,12 +42,14 @@
                         @* <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" /> *@
                         @* <button type="button" id="approveBtn" class="btn btn-primary w-105">Approve</button>
                         <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button> *@
-                        if (Model.applicantViewModels.status <= 6)
+                        @* if (Model.applicantViewModels.status <= 6) *@
+                        if (Model.applicantViewModels.permit_status == "For Inspector Approval" || Model.applicantViewModels.permit_status == "Rejected (Inspector)")
                         {
                             <button type="button" id="approveBtn" class="btn btn-primary w-105">Approve</button>
                             <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
                         }
-                        if (Model.applicantViewModels.status > 6)
+                        @* if (Model.applicantViewModels.status > 6) *@
+                        if (Model.applicantViewModels.permit_status == "Payment Verification (Inspector)" || Model.applicantViewModels.permit_status == "Payment Rejected (Inspector)")
                         {
                             <button type="button" id="approveBtn" class="btn btn-primary w-110">Approve Payment</button>
                             <button type="button" id="declineBtn" class="btn btn-danger w-110 btnCancel">Decline Payment</button>
@@ -483,8 +487,8 @@
                                     <option value="Inspector to CENRO">CENRO</option>
                                 }
                             </select>
-                            <textarea asp-for="tbl_Comments.comment" class="form-control mb-4" placeholder="Add comments here."></textarea>
-                            <button id="commentBtn" type="button" class="btn btn-primary w-110">Add Comment</button>
+                            <textarea asp-for="tbl_Comments.comment" class="form-control mb-4" placeholder="Add comments here." required></textarea>
+                            <button type="submit" id="commentBtn" class="btn btn-primary w-110">Add Comment</button>
                         </div>
                     </div>
                 </div>
@@ -656,9 +660,7 @@
             document.getElementById("decisionID").value = "Approve";
             //console.log("Approve Button CLicked", dt);
             var formFiles = document.forms['ApplApprvlForm']['filesUpload.Files'];
-            //console.log("old", formFiles);
             formFiles.files = dt.files;
-            //console.log("new", formFiles);
         });
 
         $("#backApproveBtn").click(function () {
@@ -673,6 +675,8 @@
         $('#declineBtn').click(function () {
             $('#confirmDeclineModal').modal("show");
             document.getElementById("decisionID").value = "Decline";
+            var formFiles = document.forms['ApplApprvlForm']['filesUpload.Files'];
+            formFiles.files = dt.files;
         });
 
         $('#backDeclineBtn').click(function () {

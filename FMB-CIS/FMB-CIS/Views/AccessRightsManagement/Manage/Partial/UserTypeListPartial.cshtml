@@ -1,29 +1,28 @@
 ﻿@using System.Security.Claims;
 @using System.Globalization;
-@model FMB_CIS.Models.OfficeTypeListViewModel
+@model FMB_CIS.Models.UserTypeListViewModel
 @{
-    ViewBag.Title = "Office Type Management";
+    ViewBag.Title = "User Type Management";
 }
-
 <div class="list-group list-group-style1">
     <div href="#" class="list-group-item list-group-item-action flex-column align-items-start search-box-container">
         <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-2">
-                <input type="text" id="officeTypeSearch" class="search-box" placeholder="SEARCH" />
+                <input type="text" id="userTypeSearch" class="search-box" placeholder="SEARCH" />
             </h5>
             <small class="text-muted clickable" onclick="ClearSearch()">Clear</small>
         </div>
     </div>
-    <div id="officeTypes">
-        @foreach (OfficeType item in Model.officeTypes)
+    <div id="userTypes">
+        @foreach (UserType item in Model.userTypes)
         {
             <div href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="item-@Html.DisplayFor(modelItem=>item.id)">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">@Html.DisplayFor(modelItem => item.name)</h5>
                     <small class="text-muted">#@Html.DisplayFor(modelItem => item.id) Modified @Html.DisplayFor(modelItem => item.date_modified)</small>
                 </div>
-                <p class="mb-1">@Html.DisplayFor(modelItem => item.description)</p>
-                <p class="c-hidden">@Html.DisplayFor(modelItem => item.createdBy)</p>
+                @*<p class="mb-1">@Html.DisplayFor(modelItem => item.name)</p>*@
+                @*<p class="c-hidden">@Html.DisplayFor(modelItem => item.createdBy)</p>*@
                 <small><a class="btnUpdateOfficeType" onclick="OpenUpdateModal(@Html.DisplayFor(modelItem => item.id))">Update</a></small>
                 <small><a class="btnDeleteOfficeType" onclick="OpenDeleteModal(@Html.DisplayFor(modelItem => item.id))">Delete</a></small>
                 @*<small class="c-hidden-on-show"><a class="btnShowDetailsOfficeType" onclick="ShowDetails(@Html.DisplayFor(modelItem => item.id))">More Details</a></small>*@
@@ -132,13 +131,14 @@
 
 <script type="text/javascript">
     function OpenUpdateModal(id) {
-        $('#officeTypeUpdateModalContainer').load('/OfficeManagement/OfficeTypeUpdateModal/' + id, function () {
-            $("#updateOfficeTypeModal").modal("show");
+        $('#userTypeUpdateModalContainer').load('/AccessRightsManagement/UserTypeUpdateModal/' + id, function () {
+            $("#updateUserTypeModal").modal("show");
         });
     }
     function OpenDeleteModal(id) {
-        $('#officeTypeDeleteModalContainer').load('/OfficeManagement/OfficeTypeDeleteModal/' + id, function () {
-            $("#deleteOfficeTypeModal").modal("show");
+        console.log("OpenDeleteModal");
+        $('#userTypeDeleteModalContainer').load('/AccessRightsManagement/UserTypeDeleteModal/' + id, function () {
+            $("#deleteUserTypeModal").modal("show");
         });
     }
     function ShowDetails(id) {
@@ -148,14 +148,14 @@
         $('#item-' + id).removeClass('c-show-hidden');
     }
 
-    $("#officeTypeSearch").keyup(function () {
+    $("#userTypeSearch").keyup(function () {
 
         // Retrieve the input field text and reset the count to zero
         var filter = $(this).val(),
             count = 0;
 
         // Loop through the comment list
-        $('#officeTypes .list-group-item').each(function () {
+        $('#userTypes .list-group-item').each(function () {
 
 
             // If the list item does not contain the text phrase fade it out
@@ -173,6 +173,6 @@
     });
 
     function ClearSearch() {
-        $("#officeTypeSearch").val("").keyup();
+        $("#userTypeSearch").val("").keyup();
     }
 </script>

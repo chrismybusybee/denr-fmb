@@ -5,30 +5,31 @@
     ViewBag.Title = "Access Rights Management";
 }
 <div class="list-group list-group-style1">
-@*    <div href="#" class="list-group-item list-group-item-action flex-column align-items-start search-box-container">
+    <div href="#" class="list-group-item list-group-item-action flex-column align-items-start search-box-container">
         <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-2">
-                <input type="text" class="search-box" placeholder="SEARCH" />
+                <input type="text" id="accessRightsSearch" class="search-box" placeholder="SEARCH" />
             </h5>
-            <small class="text-muted">Clear</small>
+            <small class="text-muted clickable" onclick="ClearSearch()">Clear</small>
         </div>
-    </div>*@
-
-    @foreach (AccessRights item in Model.accessRights)
-    {
-        <div href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="item-@Html.DisplayFor(modelItem=>item.id)">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">@Html.DisplayFor(modelItem => item.name)</h5>
-                <small class="text-muted">#@Html.DisplayFor(modelItem => item.id) Modified @Html.DisplayFor(modelItem => item.date_modified)</small>
+    </div>
+    <div id="accessRights">
+        @foreach (AccessRights item in Model.accessRights)
+        {
+            <div href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="item-@Html.DisplayFor(modelItem=>item.id)">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">@Html.DisplayFor(modelItem => item.name)</h5>
+                    <small class="text-muted">#@Html.DisplayFor(modelItem => item.id) Modified @Html.DisplayFor(modelItem => item.date_modified)</small>
+                </div>
+                <p class="mb-1">@Html.DisplayFor(modelItem => item.description)</p>
+                <p class="c-hidden">@Html.DisplayFor(modelItem => item.createdBy)</p>
+                <small><a class="btnUpdateOfficeType" onclick="OpenUpdateModal(@Html.DisplayFor(modelItem => item.id))">Update</a></small>
+                <small><a class="btnDeleteOfficeType" onclick="OpenDeleteModal(@Html.DisplayFor(modelItem => item.id))">Delete</a></small>
+                @*<small class="c-hidden-on-show"><a class="btnShowDetailsOfficeType" onclick="ShowDetails(@Html.DisplayFor(modelItem => item.id))">More Details</a></small>*@
+                @*<small class="c-hidden-inline"><a class="btnHideDetailsOfficeType" onclick="HideDetails(@Html.DisplayFor(modelItem => item.id))">Hide Details</a></small>*@
             </div>
-            <p class="mb-1">@Html.DisplayFor(modelItem => item.description)</p>
-            <p class="c-hidden">@Html.DisplayFor(modelItem => item.createdBy)</p>
-            <small><a class="btnUpdateOfficeType" onclick="OpenUpdateModal(@Html.DisplayFor(modelItem => item.id))">Update</a></small>
-            <small><a class="btnDeleteOfficeType" onclick="OpenDeleteModal(@Html.DisplayFor(modelItem => item.id))">Delete</a></small>
-            @*<small class="c-hidden-on-show"><a class="btnShowDetailsOfficeType" onclick="ShowDetails(@Html.DisplayFor(modelItem => item.id))">More Details</a></small>*@
-            @*<small class="c-hidden-inline"><a class="btnHideDetailsOfficeType" onclick="HideDetails(@Html.DisplayFor(modelItem => item.id))">Hide Details</a></small>*@
-        </div>
-    }
+        }
+    </div>
 </div>
 
 <style>
@@ -122,11 +123,14 @@
     .c-show-hidden .c-hidden-on-show {
         display: none;
     }
+    .clickable {
+        cursor: pointer;
+    }
 </style>
 
 <script type="text/javascript">
     function OpenUpdateModal(id) {
-        $('#e').load('/AccessRightsManagement/AccessRightsUpdateModal/' + id, function () {
+        $('#accessRightsUpdateModalContainer').load('/AccessRightsManagement/AccessRightsUpdateModal/' + id, function () {
             $("#updateAccessRightsModal").modal("show");
         });
     }
@@ -141,5 +145,33 @@
     }
     function HideDetails(id) {
         $('#item-' + id).removeClass('c-show-hidden');
+    }
+
+    $("#accessRightsSearch").keyup(function () {
+
+        // Retrieve the input field text and reset the count to zero
+        var filter = $(this).val(),
+            count = 0;
+
+        // Loop through the comment list
+        $('#accessRights .list-group-item').each(function () {
+
+
+            // If the list item does not contain the text phrase fade it out
+            if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+                $(this).hide();  // MY CHANGE
+
+                // Show the list item if the phrase matches and increase the count by 1
+            } else {
+                $(this).show(); // MY CHANGE
+                count++;
+            }
+
+        });
+
+    });
+
+    function ClearSearch() {
+        $("#accessRightsSearch").val("").keyup();
     }
 </script>
