@@ -161,6 +161,7 @@
     }
 
     // Event listener for the "Submit" button
+    if(showApproveModalButton != null)
     showApproveModalButton.addEventListener('click', showApproveModal);
 
     // Event listener for the "Confirm" button
@@ -188,6 +189,7 @@
     }
 
     // Event listener for the "Submit" button
+    if(showDeclineModalButton != null)
     showDeclineModalButton.addEventListener('click', showDeclineModal);
 
     // Event listener for the "Confirm" button
@@ -215,9 +217,11 @@
     }
 
     // Event listener for the "Submit" button
+    if (showSaveModalButton != null)
     showSaveModalButton.addEventListener('click', showSaveModal);
 
     // Event listener for the "Confirm" button
+    if (confirmSaveButton != null)
     confirmSaveButton.addEventListener('click', function () {
         // Submit the form when the "Confirm" button is clicked
         form.submit();
@@ -249,7 +253,7 @@
     confirmButton.addEventListener('click', function () {
         // Submit the form when the "Confirm" button is clicked
         console.log("text3");
-        //formIndex.submit();
+        formIndex.submit();
     });
 
     // Close the modal when the user clicks outside of it
