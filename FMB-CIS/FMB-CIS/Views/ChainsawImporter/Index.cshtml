@@ -132,7 +132,7 @@
                             <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
                                 <i data-feather="upload"></i> Upload
                             </label>
-                            <input type="file" asp-for="filesUpload.Files" class="form-control file" accept="application/pdf" multiple hidden />
+                            <input type="file" asp-for="filesUpload.Files" class="form-control file" accept="application/pdf" id="filesUpload_Files" multiple hidden />
                             @* <button type="button" class="btn btn-primary"><i data-feather="upload"></i> Upload</button>*@
                     </div>
                         <div class="d-flex mb-4 gap-3 output">
@@ -163,9 +163,10 @@
 
 <script type="text/javascript">
 
-    
+    const formIndex = document.getElementById('ImporterRegForm');
 
     $(document).ready(function () {
+        //FILE UPLOAD
         const dt = new DataTransfer();
 
         $(".file").on("change", function (e) {
@@ -226,7 +227,8 @@
                     title: "Duplicate File",
                     text: "You have uploaded a duplicate file " + dt.files[0].name,
                     icon: "error",
-                    html: list
+                    html: list,
+                    confirmButtonColor: '#14984a'
                 });
             }
     
@@ -304,13 +306,39 @@
 
             this.value = null;
         });
+
+        //END FOR FILE UPLOAD
       
         $("#btnSubmit").click(function () {
-            $('#confirmSubmitModal').modal("show");
-
-            var formFiles = document.forms['ImporterRegForm']['filesUpload.Files'];
-            ////console.log("old", formFiles);
-            formFiles.files = dt.files;
+            
+            //Check if user selected some files            
+            //If user doesn't select any files
+            if (dt.files.length == 0) { 
+                console.log("dt.files.length = 0");
+                Swal.fire({
+                    title: "No File Selected",
+                    text: "Please upload the required documents to proceed with the application.",
+                    icon: "error",
+                    confirmButtonColor: '#14984a'
+                });
+            }
+            //If User selected a file
+            else
+            {
+                //Check if required fields are filled up
+                if ($("#ImporterRegForm")[0].checkValidity()) {
+                    $('#confirmSubmitModal').modal("show"); //proceed to submit modal
+                    var formFiles = document.forms['ImporterRegForm']['filesUpload.Files'];
+                    ////console.log("old", formFiles);
+                    formFiles.files = dt.files;
+                }
+                //If fields are not filled up
+                else {
+                    //Validate Form
+                    $("#ImporterRegForm")[0].reportValidity();                    
+                }
+            }
+                        
         });
 
         
@@ -321,6 +349,7 @@
 
         $("#confirmBtn").click(function () {
             $("#confirmSubmitModal").modal("hide");
+            formIndex.submit();
             $("#confirmSuccessModal").modal("show");
         });
         

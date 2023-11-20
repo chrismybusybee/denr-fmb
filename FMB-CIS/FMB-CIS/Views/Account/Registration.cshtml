@@ -428,7 +428,7 @@
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript" src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
         asyncdefer></script>
@@ -477,6 +477,7 @@
             }
         });
     }
+    const form = document.getElementById('RegForm');
 
     $(document).ready(function () {
 
@@ -484,29 +485,84 @@
         const dt = new DataTransfer();
 
         $(".file").on("change", function (e) {
+
             // Get the selected file(s)
+            console.log($('#filesUpload.Files').val());
             var selectedFiles = $(this).prop("files");
+            console.log(selectedFiles);
             var fafile = "";
             // Clear the previous output
             //$(".output").empty();
 
+            var duplicatedFiles = [];
+
+            var validFiles = [];
+
+
             // Display file information in the specified format
             for (var i = 0; i < this.files.length; i++) {
+
+                var hasdup = false;
+
+                for (var x = 0; x < dt.files.length; x++) {
+
+                    if (dt.files[x].name == selectedFiles[i].name) {
+                        //Swal.fire({
+                        //    title: "Duplicate File",
+                        //    text: "You have uploaded a duplicate file " + dt.files[0].name,
+                        //    icon: "error"
+                        //});
+                        duplicatedFiles.push(selectedFiles[i].name)
+                        //  selectedFiles.splice(i, 1);
+                        hasdup = true;
+                    }
+                }
+
+                if (!hasdup) {
+                    validFiles.push(selectedFiles[i]);
+                }
+
+            }
+
+            if (duplicatedFiles.length > 0) {
+
+
+                var errorsHtml = "";
+                const list = document.createElement('ul');
+                for (var x = 0; x < duplicatedFiles.length; x++) {
+
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = duplicatedFiles[x] + "<br/>";
+                    list.appendChild(listItem);
+                }
+
+                Swal.fire({
+                    title: "Duplicate File",
+                    text: "You have uploaded a duplicate file " + dt.files[0].name,
+                    icon: "error",
+                    html: list,
+                    confirmButtonColor: '#14984a'
+                });
+            }
+
+
+            // Display file information in the specified format
+            for (var i = 0; i < validFiles.length; i++) {
                 //ifelse for fa-file type
-                if (selectedFiles[i].type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                if (validFiles[i].type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
                     fafile = "fa-file-word"
                 }
-                else if (selectedFiles[i].type == "application/pdf") {
+                else if (validFiles[i].type == "application/pdf") {
                     fafile = "fa-file-pdf"
                 }
-                else if (selectedFiles[i].type == "image/jpeg") {
+                else if (validFiles[i].type == "image/jpeg") {
                     fafile = "fa-file-image"
                 }
                 else {
                     fafile = "fa-file"
                 }
                 // Create div elements and set their classes and content
-                var cardDiv = $("<div>").addClass("card mw-18rem ").attr('id', selectedFiles[i].name);
+                var cardDiv = $("<div>").addClass("card mw-18rem ").attr('id', validFiles[i].name);
                 var fileDiv = $("<div>").addClass("card-body");
                 var fileIcon = $("<i>").addClass("fas " + fafile + " text-light-green fs-1 mb-3");
                 var dropdownIcon = $("<i>").addClass("fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary").attr({
@@ -518,10 +574,10 @@
                     $("<li>").append($("<a>").addClass("dropdown-item file-delete").attr("href", "#").text("Delete")),
                     $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("Download"))
                 );
-                var fileName = $("<h6>").addClass("card-title text-secondary").text(selectedFiles[i].name);
+                var fileName = $("<h6>").addClass("card-title text-secondary").text(validFiles[i].name);
                 var fileInfoList = $("<ul>").addClass("list-unstyled small mb-0").append(
-                    $("<li>").append($("<span>").addClass("text-muted").text("type: " + selectedFiles[i].type)),
-                    $("<li>").append($("<span>").addClass("text-muted").text("size: " + (selectedFiles[i].size / 1024).toFixed(2) + "kb")),
+                    $("<li>").append($("<span>").addClass("text-muted").text("type: " + validFiles[i].type)),
+                    $("<li>").append($("<span>").addClass("text-muted").text("size: " + (validFiles[i].size / 1024).toFixed(2) + "kb")),
                     $("<li>").append($("<span>").addClass("text-muted").text("uploaded: " + new Date().toLocaleDateString()))
                 );
 
@@ -534,12 +590,14 @@
                 // Append the cardDiv to the output div
                 $(".output").append(cardDiv);
             }
-            for (let file of this.files) {
+            for (let file of validFiles) {
                 dt.items.add(file);
             }
 
             selectedFiles = dt.files;
-            //console.log(selectedFiles);
+            console.log(selectedFiles);
+
+
             $('.file-delete').click(function () {
                 let name = $(this).closest('.card').attr('id');
                 // Supprimer l'affichage du nom de fichier
@@ -557,8 +615,9 @@
                 selectedFiles = dt.files;
             });
 
-
+            this.value = null;
         });
+
         //END FOR FILE UPLOAD
 
         // Step by step form
@@ -623,20 +682,34 @@
         
         feather.replace();
 
+        //CONFIRMATION MODALS 
+
         $("#submitBtn").click(function () {
             
-            //captcha upon submission
-            var response = grecaptcha.getResponse();
-            if (response.length == 0) 
-            {
-                $("#rfvCaptcha").show();
+            //check if user uploaded a file
+            if (dt.files.length == 0) {
+                console.log("dt.files.length = 0");
+                Swal.fire({
+                    title: "No File Selected",
+                    text: "Please upload the required documents to proceed with the registration.",
+                    icon: "error",
+                    confirmButtonColor: '#14984a'
+                });
             }
-            else
-            {
-                $("#rfvCaptcha").hide();
-                $("#confirmSubmitModal").modal("show");
+            else {
+                //captcha upon submission
+                var response = grecaptcha.getResponse();
+                if (response.length == 0) {
+                    $("#rfvCaptcha").show();
+                }
+                else {
+                    $("#rfvCaptcha").hide();
+                    $("#confirmSubmitModal").modal("show");
+                    var formFiles = document.forms['RegForm']['filesUpload.Files'];
+                    formFiles.files = dt.files;
+                }
             }
-
+            
         });
 
         $("#backBtn").click(function () {
@@ -644,41 +717,45 @@
         });
 
         $("#confirmBtn").click(function () {
+            form.submit();
             $("#confirmSubmitModal").modal("hide");
             $("#confirmSuccessModal").modal("show");
         });
 
-    });
-    const form = document.getElementById('RegForm');
-    const showModalButton = document.getElementById('submitBtn');
-    const confirmationModal = document.getElementById('confirmSubmitModal');
-    const confirmButton = document.getElementById('confirmBtn');
+        //END FOR CONFIRMATION MODALS
 
-    // Function to display the modal
-    function showModal() {
-        confirmationModal.style.display = 'block';
-    }
-
-    // Function to hide the modal
-    function hideModal() {
-        confirmationModal.style.display = 'none';
-    }
-
-    // Event listener for the "Submit" button
-    showModalButton.addEventListener('click', showModal);
-
-    // Event listener for the "Confirm" button
-    confirmButton.addEventListener('click', function () {
-        // Submit the form when the "Confirm" button is clicked
-        form.submit();
     });
 
-    // Close the modal when the user clicks outside of it
-    window.addEventListener('click', function (event) {
-        if (event.target === confirmationModal) {
-            hideModal();
-        }
-    });
+    // //const form = document.getElementById('RegForm');
+    // const showModalButton = document.getElementById('submitBtn');
+    // const confirmationModal = document.getElementById('confirmSubmitModal');
+    // const confirmButton = document.getElementById('confirmBtn');
+
+    // // Function to display the modal
+    // function showModal() {
+    //     confirmationModal.style.display = 'block';
+    // }
+
+    // // Function to hide the modal
+    // function hideModal() {
+    //     confirmationModal.style.display = 'none';
+    // }
+
+    // // Event listener for the "Submit" button
+    // showModalButton.addEventListener('click', showModal);
+
+    // // Event listener for the "Confirm" button
+    // confirmButton.addEventListener('click', function () {
+    //     // Submit the form when the "Confirm" button is clicked
+    //     form.submit();
+    // });
+
+    // // Close the modal when the user clicks outside of it
+    // window.addEventListener('click', function (event) {
+    //     if (event.target === confirmationModal) {
+    //         hideModal();
+    //     }
+    // });
 
 
 
