@@ -274,7 +274,8 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.filename)
+                                    @* @Html.DisplayFor(modelItem => item.filename) *@
+                                    <a href="#" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DocHistory(this)">@item.filename</a>
                                 </td>
 
                                 <td>
@@ -765,6 +766,40 @@
     //         }
     //     });
     // }
+    function DocHistory(that) 
+    {
+        console.log("test");
+        var filename = that.dataset.filename;
+        var fileID = that.dataset.fileid;
+        console.log("filename: ", filename);
+        console.log("fileID: ", fileID);
+        var url = "@baseurl" + "ChainsawImporter/DocumentHistory";
+        $.get(url, { tbl_files_id: fileID }, function (data) {
+            console.log("data: ", data);
+                                    
+            if (data.length != 0) {
+                var commentsListHTML = "";
+                //comments
+                for (let i = 0; i < data.length; i++) {
+                    commentsListHTML += '<div class="row"> <div class="col-md-12 py-2"> <div class="px-2 py-1"> <div class="border px-3 py-2"> <div class="row d-flex justify-content-between mb-1"> <div class="col-md-6 fs-6 fw-bold text-secondary" style="text-align: left">' + data[i].commenterName + '</div> <div class="col-md-6 text-end"> <span class="border rounded small px-2 fw-bold text-secondary" style="text-align: right">' + data[i].formattedDate + '</span> </div> </div> <div class="row d-flex mb-3"> <div class="col-md-12 fst-normal fs-6">' + data[i].comment + '</div> </div> </div> </div> </div> </div> ';
+                }
+                Swal.fire({
+                    title: "Comment History for " + filename,
+                    width: 700,
+                    confirmButtonColor: '#14984a',
+                    html: commentsListHTML
+                });
+            }
+
+            else {
+                Swal.fire({
+                    title: filename + " does not contain any comments.",
+                    confirmButtonColor: '#14984a'
+                });
+            }
+
+        });
+    }
 
     function ApproveDocStatus(that) {
         console.log("that.dataset: ", that.dataset);

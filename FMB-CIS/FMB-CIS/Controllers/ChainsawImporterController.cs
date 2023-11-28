@@ -770,6 +770,30 @@ namespace FMB_CIS.Controllers
 
             return Json(true);
         }
+        
+        [HttpGet, ActionName("DocumentHistory")]
+        public JsonResult DocumentHistory(int tbl_files_id)
+        {
+            int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            string Role = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
 
+            //var commentsTbl = _context.tbl_comments.Where(c => c.tbl_files_id == tbl_files_id).ToList();
+            //var fileDB = _context.tbl_files.Where(f => f.Id == tbl_files_id).FirstOrDefault();
+            
+            var documentHistoryDetails = (from c in _context.tbl_comments
+                                          where c.tbl_files_id == tbl_files_id
+                                          join usr in _context.tbl_user on c.created_by equals usr.id
+                                          join f in _context.tbl_files on c.tbl_files_id equals f.Id
+                                          select new
+                                          {
+                                              f.filename,
+                                              c.comment,
+                                              commenterName = usr.first_name + " " + usr.last_name + " " + usr.suffix,
+                                              c.date_created,
+                                              formattedDate = c.date_created.ToString("yyyy MMMM dd hh:mm tt")
+                                          }).OrderByDescending(d => d.date_created);
+
+            return Json(documentHistoryDetails);
+        }
     }
 }
