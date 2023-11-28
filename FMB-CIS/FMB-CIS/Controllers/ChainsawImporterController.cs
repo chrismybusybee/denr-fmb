@@ -146,6 +146,7 @@ namespace FMB_CIS.Controllers
                             filesDB.tbl_file_type_id = fileInfo.Extension;
                             filesDB.tbl_file_sources_id = fileInfo.Extension;
                             filesDB.file_size = Convert.ToInt32(file.Length);
+                            filesDB.status = "Pending";
                             _context.tbl_files.Add(filesDB);
                             _context.SaveChanges();
                         }
@@ -209,6 +210,9 @@ namespace FMB_CIS.Controllers
 
             //CODE FOR FILE DOWNLOAD
             int applicID = Convert.ToInt32(appid);
+            string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
+            ViewData["BaseUrl"] = host;
+
             //File Paths from Database
             //Files Uploaded by Applicant
             var filesFromDB = _context.tbl_files.Where(f => f.tbl_application_id == applicID && f.created_by == Convert.ToInt32(uid) && f.is_proof_of_payment != true).ToList();
@@ -261,6 +265,36 @@ namespace FMB_CIS.Controllers
             mymodel.proofOfPaymentFiles = paymentFiles;
 
             //END FOR FILE DOWNLOAD
+
+            //Document Tagging
+            var fileWithCommentsforDocTagging = (from f in _context.tbl_files
+                                                     //join c in _context.tbl_comments on f.Id equals c.tbl_files_id
+                                                     //join usr in _context.tbl_user on c.created_by equals usr.id
+                                                 where f.tbl_application_id == applicID && f.created_by == Convert.ToInt32(uid)
+                                                 select new FilesWithComments
+                                                 {
+                                                     tbl_files_id = f.Id,
+                                                     filename = f.filename,
+                                                     tbl_application_id = f.tbl_application_id,
+                                                     tbl_files_status = f.status,
+                                                     //comment = c.comment
+                                                 }).ToList();
+
+            //Add the latest comments for every file
+            var commentsList = _context.tbl_comments.Where(c => c.tbl_application_id == applicID).ToList();
+
+            for (int i = 0; i < fileWithCommentsforDocTagging.Count; i++)
+            {
+                var latestComment = commentsList.Where(c => c.tbl_files_id == fileWithCommentsforDocTagging[i].tbl_files_id).LastOrDefault();
+                if (latestComment != null)
+                {
+                    fileWithCommentsforDocTagging[i].comment = latestComment.comment;
+                    fileWithCommentsforDocTagging[i].tbl_comments_created_by = latestComment.created_by;
+                }
+            }
+
+            mymodel.filesWithComments = fileWithCommentsforDocTagging;
+            //End for Document Tagging
 
             if (uid == null || appid == null)
             {
@@ -708,6 +742,33 @@ namespace FMB_CIS.Controllers
             {
                 return RedirectToAction("ChainsawImporterApproval", "ChainsawImporter", new { uid = uid, appid = model.appid });
             }
+        }
+
+
+        [HttpPost, ActionName("FileTaggingChanges")]
+        public JsonResult FileTaggingChanges(int tbl_files_id, string tbl_files_status, string comment, int appid)
+        {
+            int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            string Role = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
+
+            var commentsTbl = new tbl_comments();
+            //commentsTbl.id = model.tbl_Comments.id;
+            commentsTbl.tbl_application_id = Convert.ToInt32(appid);
+            commentsTbl.tbl_files_id = tbl_files_id;
+            //commentsTbl.comment_to = model.tbl_Comments.comment_to;
+            commentsTbl.comment = comment;
+            commentsTbl.created_by = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            commentsTbl.modified_by = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            commentsTbl.date_created = DateTime.Now;
+            commentsTbl.date_modified = DateTime.Now;
+            _context.tbl_comments.Add(commentsTbl);
+            _context.SaveChanges();
+
+            var fileDB = _context.tbl_files.Where(f => f.Id == tbl_files_id).FirstOrDefault();
+            fileDB.status = tbl_files_status;
+            _context.SaveChanges();
+
+            return Json(true);
         }
 
     }

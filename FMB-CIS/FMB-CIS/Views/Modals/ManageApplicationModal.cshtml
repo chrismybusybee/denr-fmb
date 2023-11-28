@@ -17,23 +17,23 @@
                             </div>
                         </div> *@
                         <div class="row w-100">
+                            <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload...">
+                        </div>
+                        @* <div class="row w-100">                            
                             <div class="col-md-12">
-                                @* <h2 class="text-secondary fw-bold m-0">Upload Proof of Payment</h2> *@
                                 <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
                                     <i data-feather="upload"></i> Upload Proof of Payment
                                 </label>
                             </div>
-
                             <input type="file" asp-for="filesUpload.Files" class="form-control file" multiple hidden />
-                            @* <button type="button" class="btn btn-primary"><i data-feather="upload"></i> Upload</button>*@
                         </div>
                         <div class="row w-100 output">
-                            @*Cards for files*@
-                        </div>
+                            Cards for files
+                        </div> *@
                         @Html.HiddenFor(x=>x.tbl_Application.id,new { @id = "applicationID" })
                         @Html.Hidden("actionName", @ViewContext.RouteData.Values["action"].ToString())
                         <div class="d-flex gap-4 w-100">
-                            <button id="cancelBtn" type="button" class="btn btn-danger w-100">Cancel</button>
+                            <button id="cancelBtn" type="button" class="btn btn-danger w-100 ">Cancel</button>
                             <button id="submitBtn" type="button" class="btn btn-primary w-100">Submit</button>
                         </div>
                     </div>
@@ -92,164 +92,167 @@
 
     $(document).ready(function () {
 
-        //FILE UPLOAD
-        const dt = new DataTransfer();
+        // //FILE UPLOAD
+        // const dt = new DataTransfer();
 
-        $(".file").on("change", function (e) {
+        // $(".file").on("change", function (e) {
 
-            // Get the selected file(s)
-            console.log($('#filesUpload.Files').val());
-            var selectedFiles = $(this).prop("files");
-            console.log(selectedFiles);
-            var fafile = "";
-            // Clear the previous output
-            //$(".output").empty();
+        //     // Get the selected file(s)
+        //     console.log($('#filesUpload.Files').val());
+        //     var selectedFiles = $(this).prop("files");
+        //     console.log(selectedFiles);
+        //     var fafile = "";
+        //     // Clear the previous output
+        //     //$(".output").empty();
 
-            var duplicatedFiles = [];
+        //     var duplicatedFiles = [];
 
-            var validFiles = [];
-
-
-            // Display file information in the specified format
-            for (var i = 0; i < this.files.length; i++) {
-
-                var hasdup = false;
-
-                for (var x = 0; x < dt.files.length; x++) {
-
-                    if (dt.files[x].name == selectedFiles[i].name) {
-                        //Swal.fire({
-                        //    title: "Duplicate File",
-                        //    text: "You have uploaded a duplicate file " + dt.files[0].name,
-                        //    icon: "error"
-                        //});
-                        duplicatedFiles.push(selectedFiles[i].name)
-                        //  selectedFiles.splice(i, 1);
-                        hasdup = true;
-                    }
-                }
-
-                if (!hasdup) {
-                    validFiles.push(selectedFiles[i]);
-                }
-
-            }
-
-            if (duplicatedFiles.length > 0) {
+        //     var validFiles = [];
 
 
-                var errorsHtml = "";
-                const list = document.createElement('ul');
-                for (var x = 0; x < duplicatedFiles.length; x++) {
+        //     // Display file information in the specified format
+        //     for (var i = 0; i < this.files.length; i++) {
 
-                    const listItem = document.createElement('li');
-                    listItem.innerHTML = duplicatedFiles[x] + "<br/>";
-                    list.appendChild(listItem);
-                }
+        //         var hasdup = false;
 
-                Swal.fire({
-                    title: "Duplicate File",
-                    text: "You have uploaded a duplicate file " + dt.files[0].name,
-                    icon: "error",
-                    html: list,
-                    confirmButtonColor: '#14984a'
-                });
-            }
+        //         for (var x = 0; x < dt.files.length; x++) {
 
+        //             if (dt.files[x].name == selectedFiles[i].name) {
+        //                 //Swal.fire({
+        //                 //    title: "Duplicate File",
+        //                 //    text: "You have uploaded a duplicate file " + dt.files[0].name,
+        //                 //    icon: "error"
+        //                 //});
+        //                 duplicatedFiles.push(selectedFiles[i].name)
+        //                 //  selectedFiles.splice(i, 1);
+        //                 hasdup = true;
+        //             }
+        //         }
 
-            // Display file information in the specified format
-            for (var i = 0; i < validFiles.length; i++) {
-                //ifelse for fa-file type
-                if (validFiles[i].type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-                    fafile = "fa-file-word"
-                }
-                else if (validFiles[i].type == "application/pdf") {
-                    fafile = "fa-file-pdf"
-                }
-                else if (validFiles[i].type == "image/jpeg") {
-                    fafile = "fa-file-image"
-                }
-                else {
-                    fafile = "fa-file"
-                }
-                // Create div elements and set their classes and content
-                var cardDiv = $("<div>").addClass("card mw-18rem ").attr('id', validFiles[i].name);
-                var fileDiv = $("<div>").addClass("card-body");
-                var fileIcon = $("<i>").addClass("fas " + fafile + " text-light-green fs-1 mb-3");
-                var dropdownIcon = $("<i>").addClass("fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary").attr({
-                    "data-bs-toggle": "dropdown",
-                    "aria-expanded": "false"
-                });
-                var dropdownMenu = $("<ul>").addClass("dropdown-menu").append(
-                    $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("View")),
-                    $("<li>").append($("<a>").addClass("dropdown-item file-delete").attr("href", "#").text("Delete")),
-                    $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("Download"))
-                );
-                var fileName = $("<h6>").addClass("card-title text-secondary").text(validFiles[i].name);
-                var fileInfoList = $("<ul>").addClass("list-unstyled small mb-0").append(
-                    $("<li>").append($("<span>").addClass("text-muted").text("type: " + validFiles[i].type)),
-                    $("<li>").append($("<span>").addClass("text-muted").text("size: " + (validFiles[i].size / 1024).toFixed(2) + "kb")),
-                    $("<li>").append($("<span>").addClass("text-muted").text("uploaded: " + new Date().toLocaleDateString()))
-                );
+        //         if (!hasdup) {
+        //             validFiles.push(selectedFiles[i]);
+        //         }
 
-                // Append created elements to the fileDiv
-                fileDiv.append(fileIcon, dropdownIcon, dropdownMenu, fileName, fileInfoList);
+        //     }
 
-                // Append the fileDiv to the cardDiv
-                cardDiv.append(fileDiv);
-
-                // Append the cardDiv to the output div
-                $(".output").append(cardDiv);
-            }
-            for (let file of validFiles) {
-                dt.items.add(file);
-            }
-
-            selectedFiles = dt.files;
-            console.log(selectedFiles);
+        //     if (duplicatedFiles.length > 0) {
 
 
-            $('.file-delete').click(function () {
-                let name = $(this).closest('.card').attr('id');
-                // Supprimer l'affichage du nom de fichier
-                //$(this).parent().remove();
-                document.getElementById(name).remove()
-                for (let i = 0; i < dt.items.length; i++) {
-                    // Correspondance du fichier et du nom
-                    if (name === dt.items[i].getAsFile().name) {
-                        // Suppression du fichier dans l'objet DataTransfer
-                        dt.items.remove(i);
-                        continue;
-                    }
-                }
-                // Mise à jour des fichiers de l'input file après suppression
-                selectedFiles = dt.files;
-            });
+        //         var errorsHtml = "";
+        //         const list = document.createElement('ul');
+        //         for (var x = 0; x < duplicatedFiles.length; x++) {
 
-            this.value = null;
-        });
+        //             const listItem = document.createElement('li');
+        //             listItem.innerHTML = duplicatedFiles[x] + "<br/>";
+        //             list.appendChild(listItem);
+        //         }
 
-        //END FOR FILE UPLOAD
+        //         Swal.fire({
+        //             title: "Duplicate File",
+        //             text: "You have uploaded a duplicate file " + dt.files[0].name,
+        //             icon: "error",
+        //             html: list,
+        //             confirmButtonColor: '#14984a'
+        //         });
+        //     }
+
+
+        //     // Display file information in the specified format
+        //     for (var i = 0; i < validFiles.length; i++) {
+        //         //ifelse for fa-file type
+        //         if (validFiles[i].type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+        //             fafile = "fa-file-word"
+        //         }
+        //         else if (validFiles[i].type == "application/pdf") {
+        //             fafile = "fa-file-pdf"
+        //         }
+        //         else if (validFiles[i].type == "image/jpeg") {
+        //             fafile = "fa-file-image"
+        //         }
+        //         else {
+        //             fafile = "fa-file"
+        //         }
+        //         // Create div elements and set their classes and content
+        //         var cardDiv = $("<div>").addClass("card mw-18rem ").attr('id', validFiles[i].name);
+        //         var fileDiv = $("<div>").addClass("card-body");
+        //         var fileIcon = $("<i>").addClass("fas " + fafile + " text-light-green fs-1 mb-3");
+        //         var dropdownIcon = $("<i>").addClass("fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary").attr({
+        //             "data-bs-toggle": "dropdown",
+        //             "aria-expanded": "false"
+        //         });
+        //         var dropdownMenu = $("<ul>").addClass("dropdown-menu").append(
+        //             $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("View")),
+        //             $("<li>").append($("<a>").addClass("dropdown-item file-delete").attr("href", "#").text("Delete")),
+        //             $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("Download"))
+        //         );
+        //         var fileName = $("<h6>").addClass("card-title text-secondary").text(validFiles[i].name);
+        //         var fileInfoList = $("<ul>").addClass("list-unstyled small mb-0").append(
+        //             $("<li>").append($("<span>").addClass("text-muted").text("type: " + validFiles[i].type)),
+        //             $("<li>").append($("<span>").addClass("text-muted").text("size: " + (validFiles[i].size / 1024).toFixed(2) + "kb")),
+        //             $("<li>").append($("<span>").addClass("text-muted").text("uploaded: " + new Date().toLocaleDateString()))
+        //         );
+
+        //         // Append created elements to the fileDiv
+        //         fileDiv.append(fileIcon, dropdownIcon, dropdownMenu, fileName, fileInfoList);
+
+        //         // Append the fileDiv to the cardDiv
+        //         cardDiv.append(fileDiv);
+
+        //         // Append the cardDiv to the output div
+        //         $(".output").append(cardDiv);
+        //     }
+        //     for (let file of validFiles) {
+        //         dt.items.add(file);
+        //     }
+
+        //     selectedFiles = dt.files;
+        //     console.log(selectedFiles);
+
+
+        //     $('.file-delete').click(function () {
+        //         let name = $(this).closest('.card').attr('id');
+        //         // Supprimer l'affichage du nom de fichier
+        //         //$(this).parent().remove();
+        //         document.getElementById(name).remove()
+        //         for (let i = 0; i < dt.items.length; i++) {
+        //             // Correspondance du fichier et du nom
+        //             if (name === dt.items[i].getAsFile().name) {
+        //                 // Suppression du fichier dans l'objet DataTransfer
+        //                 dt.items.remove(i);
+        //                 continue;
+        //             }
+        //         }
+        //         // Mise à jour des fichiers de l'input file après suppression
+        //         selectedFiles = dt.files;
+        //     });
+
+        //     this.value = null;
+        // });
+
+        // //END FOR FILE UPLOAD
 
 
         var paymentForm = document.getElementById('UploadPaymentForm');
-
+        var formFiles = document.forms['UploadPaymentForm']['filesUpload.Files'];
         $("#cancelBtn").click(function () {            
             //Remove file data if cancel button is clicked            
-            for (let i = (dt.items.length - 1); i >=0; i--) {              
-                // console.log("dt.items[i].getAsFile().name",dt.items[i].getAsFile().name);
-                // console.log("i", i);
-                document.getElementById(dt.items[i].getAsFile().name).remove()
-                dt.items.remove(i);                
-                //continue;
-            }
-            //dt.items.clearData();
+            // for (let i = (formFiles.items.length - 1); i >= 0; i--) {
+            //     // console.log("dt.items[i].getAsFile().name",dt.items[i].getAsFile().name);
+            //     // console.log("i", i);
+            //     //document.getElementById(formFiles.items[i].getAsFile().name).remove()
+            //     formFiles.items.remove(i);
+            //     //continue;
+            // }
+            // formFiles.items.clearData();
+            //formFiles.value = null;
+            const removeFileButton = document.querySelector('.fileinput-remove-button');
+            removeFileButton.click();
             $("#uploadPOPModal").modal("hide");
         });
 
-        $("#submitBtn").click(function () {
-            if (dt.files.length == 0) {
-                console.log("dt.files.length = 0");
+        $("#submitBtn").click(function () {            
+            if (formFiles.files.length == 0) {
+                console.log("formFiles.files.length = 0");
                 Swal.fire({
                     title: "No File Selected",
                     text: "Please upload your proof of payment to proceed with the application.",
@@ -266,8 +269,8 @@
 
         
         $("#confirmBtn").click(function () {
-            var formFiles = document.forms['UploadPaymentForm']['filesUpload.Files'];
-            formFiles.files = dt.files; //Making sure that the displayed files will be the files uploaded when submitting the form.
+            //var formFiles = document.forms['UploadPaymentForm']['filesUpload.Files'];
+            //formFiles.files = dt.files; //Making sure that the displayed files will be the files uploaded when submitting the form.
             paymentForm.submit(); //Submit form
         });
 
@@ -280,7 +283,7 @@
 
     // const paymentForm = document.getElementById('UploadPaymentForm');
     // const showModalButton = document.getElementById('submitBtn');
-    // const confirmationModal = document.getElementById('confirmSubmitModal');
+    const confirmationModal = document.getElementById('confirmSubmitModal');
     // const confirmButton = document.getElementById('confirmBtn');
 
     // // Function to display the modal
@@ -311,11 +314,18 @@
     //     paymentForm.submit();
     // });
 
-    // // Close the modal when the user clicks outside of it
-    // window.addEventListener('click', function (event) {
-    //     if (event.target === confirmationModal) {
-    //         hideModal();
-    //     }
-    // });
+    // Close the modal when the user clicks outside of it
+    window.addEventListener('click', function (event) {
+        if (event.target === confirmationModal) {
+            $("#uploadPOPModal").modal("show");
+            //hideModal();
+        }
+        if (event.target === document.getElementById('uploadPOPModal')) {
+            const removeFileButton = document.querySelector('.fileinput-remove-button');
+            removeFileButton.click()
+            //$("#uploadPOPModal").modal("show");
+            //hideModal();
+        }
+    });
 
 </script>

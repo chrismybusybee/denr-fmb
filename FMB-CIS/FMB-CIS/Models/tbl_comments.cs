@@ -11,6 +11,6 @@
         public int modified_by { get; set; }
         public DateTime date_created { get; set; }
         public DateTime date_modified { get; set;}
-        public string comment_to { get; set; }
+        public string? comment_to { get; set; }
     }
 }

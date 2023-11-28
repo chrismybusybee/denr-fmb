@@ -54,6 +54,7 @@
         public tbl_announcement_type? tbl_Announcement_Type { get; set; }
         public IEnumerable<AnnouncementViewModel>? announcementViewModelList { get; set; }
         public AnnouncementViewModel? announcementViewModel { get; set; }
+        public IEnumerable<FilesWithComments>? filesWithComments { get; set; }
 
     }
 }

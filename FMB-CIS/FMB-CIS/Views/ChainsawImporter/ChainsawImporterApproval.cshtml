@@ -6,6 +6,7 @@
     ViewBag.Title = "Chainsaw Importer";
     ViewBag.Cenro = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO");
     ViewBag.Inspector = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector");
+    var baseurl = ViewBag.BaseUrl;
 }
 
 <div id="card-container">
@@ -247,6 +248,72 @@
                     </div>
                 </div>
             </div>
+
+            <hr />
+            <div class="row d-flex justify-content-center m-0">
+                <table class="table dataTable" id="tblApplicantFiles">
+                    <thead>
+                        <tr>
+                            <th>
+                                Document
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                            <th>
+                                Comment
+                            </th>
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (FilesWithComments item in Model.filesWithComments)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.filename)
+                                </td>
+
+                                <td>
+                                    @if (item.tbl_files_status == "Approved")
+                                    {
+                                        @* <div class="bg-success text-white px-3 pb-2 pt-1 rounded-pill w-105"> *@
+                                        <div class="text-success px-3 pb-2 pt-1" style="font-weight: bold">
+                                            @item.tbl_files_status
+                                        </div>
+                                    }                                    
+                                    else if (item.tbl_files_status == "Denied")
+                                    {
+                                        @* <div class="bg-danger text-white px-3 pb-2 pt-1 rounded-pill w-105"> *@
+                                        <div class="text-danger px-3 pb-2 pt-1" style="font-weight: bold">
+                                            @item.tbl_files_status
+                                        </div>
+                                    }
+                                    else @* if (item.tbl_files_status == "Pending") *@
+                                    {
+                                        @* <div class="bg-secondary text-white px-3 pb-2 pt-1 rounded-pill w-105"> *@
+                                        <div class="text-secondary px-3 pb-2 pt-1" style="font-weight: bold">
+                                            @item.tbl_files_status
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.comment)
+                                </td>
+                                <td>
+                                    @* <button type="button" class="btn btn-primary w-125" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="ChangeDocStatus(this)">Change</button> *@
+                                    <button type="button" class="btn btn-primary w-125" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="ApproveDocStatus(this)">Approve</button>
+                                    <button type="button" class="btn btn-danger w-125" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DenyDocStatus(this)">Deny</button>
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
             <hr />
 
             <div class="row d-flex justify-content-center m-0">
@@ -425,21 +492,9 @@
                     <hr />
                 }
                 
-                <div class="d-flex gap-4 mb-5">
+                <div class="gap-4 mb-5">
                     <h2 class="text-secondary fw-bold m-0">Upload Documents</h2>
-                    <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
-                        <i data-feather="upload"></i> Upload
-                    </label>
-                    <input type="file" asp-for="filesUpload.Files" class="form-control file" multiple hidden />
-                    @* <button type="button" class="btn btn-primary"><i data-feather="upload"></i> Upload</button>*@
-                </div>
-                <div class="d-flex mb-4 gap-3 output">
-                    @*Cards for files*@
-                    <p id="files-area">
-                        <span id="filesList">
-                            <span id="files-names"></span>
-                        </span>
-                    </p>
+                    <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload...">
                 </div>
 
                 @* <div class="row d-flex justify-content-center px-0 mb-5">
@@ -572,149 +627,7 @@
     
     $(document).ready(function () {
 
-        //FILE UPLOAD
-        const dt = new DataTransfer();
-
-        $(".file").on("change", function (e) {
-
-
-
-            // Get the selected file(s)
-            console.log($('#filesUpload.Files').val());
-            var selectedFiles = $(this).prop("files");
-            console.log(selectedFiles);
-            var fafile = "";
-            // Clear the previous output
-            //$(".output").empty();
-
-            var duplicatedFiles = [];
-
-            var validFiles = [];
-
-
-            // Display file information in the specified format
-            for (var i = 0; i < this.files.length; i++) {
-
-                var hasdup = false;
-
-                for (var x = 0; x < dt.files.length; x++) {
-
-                    if (dt.files[x].name == selectedFiles[i].name) {
-                        //Swal.fire({
-                        //    title: "Duplicate File",
-                        //    text: "You have uploaded a duplicate file " + dt.files[0].name,
-                        //    icon: "error"
-                        //});
-                        duplicatedFiles.push(selectedFiles[i].name)
-                        //  selectedFiles.splice(i, 1);
-                        hasdup = true;
-                    }
-                }
-
-                if (!hasdup) {
-                    validFiles.push(selectedFiles[i]);
-                }
-
-            }
-
-            if (duplicatedFiles.length > 0) {
-
-
-                var errorsHtml = "";
-                const list = document.createElement('ul');
-                for (var x = 0; x < duplicatedFiles.length; x++) {
-
-                    const listItem = document.createElement('li');
-                    listItem.innerHTML = duplicatedFiles[x] + "<br/>";
-                    list.appendChild(listItem);
-                }
-
-                Swal.fire({
-                    title: "Duplicate File",
-                    text: "You have uploaded a duplicate file " + dt.files[0].name,
-                    icon: "error",
-                    html: list,
-                    confirmButtonColor: '#14984a'
-                });
-            }
-
-
-
-
-            // Display file information in the specified format
-            for (var i = 0; i < validFiles.length; i++) {
-                //ifelse for fa-file type
-                if (validFiles[i].type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-                    fafile = "fa-file-word"
-                }
-                else if (validFiles[i].type == "application/pdf") {
-                    fafile = "fa-file-pdf"
-                }
-                else if (validFiles[i].type == "image/jpeg") {
-                    fafile = "fa-file-image"
-                }
-                else {
-                    fafile = "fa-file"
-                }
-                // Create div elements and set their classes and content
-                var cardDiv = $("<div>").addClass("card mw-18rem ").attr('id', validFiles[i].name);
-                var fileDiv = $("<div>").addClass("card-body");
-                var fileIcon = $("<i>").addClass("fas " + fafile + " text-light-green fs-1 mb-3");
-                var dropdownIcon = $("<i>").addClass("fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary").attr({
-                    "data-bs-toggle": "dropdown",
-                    "aria-expanded": "false"
-                });
-                var dropdownMenu = $("<ul>").addClass("dropdown-menu").append(
-                    $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("View")),
-                    $("<li>").append($("<a>").addClass("dropdown-item file-delete").attr("href", "#").text("Delete")),
-                    $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("Download"))
-                );
-                var fileName = $("<h6>").addClass("card-title text-secondary").text(validFiles[i].name);
-                var fileInfoList = $("<ul>").addClass("list-unstyled small mb-0").append(
-                    $("<li>").append($("<span>").addClass("text-muted").text("type: " + validFiles[i].type)),
-                    $("<li>").append($("<span>").addClass("text-muted").text("size: " + (validFiles[i].size / 1024).toFixed(2) + "kb")),
-                    $("<li>").append($("<span>").addClass("text-muted").text("uploaded: " + new Date().toLocaleDateString()))
-                );
-
-                // Append created elements to the fileDiv
-                fileDiv.append(fileIcon, dropdownIcon, dropdownMenu, fileName, fileInfoList);
-
-                // Append the fileDiv to the cardDiv
-                cardDiv.append(fileDiv);
-
-                // Append the cardDiv to the output div
-                $(".output").append(cardDiv);
-            }
-            for (let file of validFiles) {
-                dt.items.add(file);
-            }
-
-            selectedFiles = dt.files;
-            console.log(selectedFiles);
-
-
-            $('.file-delete').click(function () {
-                let name = $(this).closest('.card').attr('id');
-                // Supprimer l'affichage du nom de fichier
-                //$(this).parent().remove();
-                document.getElementById(name).remove()
-                for (let i = 0; i < dt.items.length; i++) {
-                    // Correspondance du fichier et du nom
-                    if (name === dt.items[i].getAsFile().name) {
-                        // Suppression du fichier dans l'objet DataTransfer
-                        dt.items.remove(i);
-                        continue;
-                    }
-                }
-                // Mise à jour des fichiers de l'input file après suppression
-                selectedFiles = dt.files;
-            });
-
-            this.value = null;
-        });
-
-        //END FOR FILE UPLOAD
-
+        
         $('#commentBtn').click(function(){
             alert('make ajax call here');
         });
@@ -723,9 +636,6 @@
         $('#approveBtn').click(function () {
             $('#confirmApproveModal').modal("show");
             document.getElementById("decisionID").value = "Approve";
-            //console.log("Approve Button CLicked", dt);
-            var formFiles = document.forms['ApplApprvlForm']['filesUpload.Files'];
-            formFiles.files = dt.files;
         });
 
         $("#backApproveBtn").click(function () {
@@ -741,8 +651,6 @@
         $('#declineBtn').click(function () {
             $('#confirmDeclineModal').modal("show");
             document.getElementById("decisionID").value = "Decline";
-            var formFiles = document.forms['ApplApprvlForm']['filesUpload.Files'];
-            formFiles.files = dt.files;
         });
 
         $('#backDeclineBtn').click(function () {
@@ -773,6 +681,197 @@
 
     });
 
+    // function ChangeDocStatus(that) {
+    //     console.log("that.dataset: ", that.dataset);
+    //     //that.dataset.fileid
+           
+    //     var filename = that.dataset.filename;
+    //     var fileID = that.dataset.fileid;
+    //     var status = "";
+    //     var comment = "";
+    //     var url = "@baseurl";
+    //     const queryString = window.location.search;
+    //     console.log("queryString: ", queryString);
+    //     const urlParams = new URLSearchParams(queryString);
+    //     const applicationID = urlParams.get('appid')
+    //     console.log("applicationID: ", applicationID);
+
+    //     Swal.fire({
+    //         title: "Do you want to Approve or Deny " + filename + "?",
+    //         showDenyButton: true,
+    //         showCancelButton: true,
+    //         confirmButtonText: "Approve",
+    //         denyButtonText: `Deny`,
+    //         confirmButtonColor: '#14984a'
+    //     }).then((result) => {
+    //         /* Read more about isConfirmed, isDenied below */
+    //         console.log("result", result);
+    //         if (result.isConfirmed) {
+    //             status = "Approved";
+    //             Swal.fire({
+    //                 title: "Please type your comment here",
+    //                 input: "text",
+    //                 inputAttributes: {
+    //                     autocapitalize: "off"
+    //                 },
+    //                 showCancelButton: true,
+    //                 confirmButtonText: "Confirm",
+    //                 confirmButtonColor: '#14984a',
+    //             }).then((result) => {
+    //                 console.log("result 2: ", result);
+    //                 if (result.isDismissed != true) {
+    //                     //if confirm button was clicked
+    //                     console.log("result.value 2: ", result.value);
+    //                     comment = result.value;
+    //                     console.log("comment: ", comment);
+    //                     console.log("status: ", status);
+
+    //                     $.post(url + "ChainsawImporter/FileTaggingChanges", { tbl_files_id: fileID, tbl_files_status: status, comment: comment, appid: applicationID }, function (data) {
+    //                         console.log("data: ", data);
+    //                     });
+    //                     Swal.fire("Approved!", "Document is Approved", "success");
+    //                 }
+
+    //             });
+    //             //Swal.fire("Approved!", "Document is Approved", "success");
+    //         } else if (result.isDenied) {
+    //             status = "Denied"
+    //             Swal.fire({
+    //                 title: "Please type your comment here",
+    //                 input: "text",
+    //                 inputAttributes: {
+    //                     autocapitalize: "off"
+    //                 },
+    //                 showCancelButton: true,
+    //                 confirmButtonText: "Confirm",
+    //                 confirmButtonColor: '#14984a',
+    //             }).then((result) => {
+    //                 console.log("result 2: ", result);
+    //                 if (result.isDismissed != true) {
+    //                     //if confirm button was clicked
+    //                     console.log("result.value 2: ", result.value);
+    //                     comment = result.value;
+    //                     console.log("comment: ", comment);
+    //                     console.log("status: ", status);
+
+    //                     $.post(url + "ChainsawImporter/FileTaggingChanges", { tbl_files_id: fileID, tbl_files_status: status, comment: comment, appid: applicationID }, function (data) {
+    //                         console.log("data: ",data);
+    //                     });
+    //                     Swal.fire("Denied", "Document is Denied", "success");
+    //                 }
+                    
+    //             });
+    //             //Swal.fire("Denied", "Document is Denied", "success");
+    //         }
+    //     });
+    // }
+
+    function ApproveDocStatus(that) {
+        console.log("that.dataset: ", that.dataset);
+        //that.dataset.fileid
+
+        var filename = that.dataset.filename;
+        var fileID = that.dataset.fileid;
+        var status = "Approved";
+        var comment = "";
+        var url = "@baseurl";
+        const queryString = window.location.search;
+        console.log("queryString: ", queryString);
+        const urlParams = new URLSearchParams(queryString);
+        const applicationID = urlParams.get('appid')
+        console.log("applicationID: ", applicationID);
+
+        Swal.fire({
+            title: "Are you sure you want to Approve " + filename + "?",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            confirmButtonColor: '#14984a'
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            console.log("result", result);
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Please type your comment here",
+                    input: "textarea",
+                    inputPlaceholder: "Type your comment here...",
+                    inputAttributes: {
+                        autocapitalize: "off"
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: "Confirm",
+                    confirmButtonColor: '#14984a',
+                }).then((result) => {
+                    console.log("result 2 (comment): ", result);
+                    if (result.isDismissed != true) {
+                        //if confirm button was clicked
+                        console.log("result.value 2: ", result.value);
+                        comment = result.value;
+                        console.log("comment: ", comment);
+                        console.log("status: ", status);
+
+                        $.post(url + "ChainsawImporter/FileTaggingChanges", { tbl_files_id: fileID, tbl_files_status: status, comment: comment, appid: applicationID }, function (data) {
+                            console.log("data: ", data);
+                            Swal.fire("Success!", "Document is Approved", "success");
+                        });
+                    }
+                });
+            }           
+        });
+    }
+
+    function DenyDocStatus(that) {
+        console.log("that.dataset: ", that.dataset);
+        
+        var filename = that.dataset.filename;
+        var fileID = that.dataset.fileid;
+        var status = "Denied";
+        var comment = "";
+        var url = "@baseurl";
+        const queryString = window.location.search;
+        console.log("queryString: ", queryString);
+        const urlParams = new URLSearchParams(queryString);
+        const applicationID = urlParams.get('appid')
+        console.log("applicationID: ", applicationID);
+
+        Swal.fire({
+            title: "Are you sure you want to Deny " + filename + "?",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            confirmButtonColor: '#14984a'
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            console.log("result", result);
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Please type your comment here",
+                    input: "textarea",
+                    inputPlaceholder: "Type your comment here...",
+                    inputAttributes: {
+                        autocapitalize: "off"
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: "Confirm",
+                    confirmButtonColor: '#14984a',
+                }).then((result) => {
+                    console.log("result 2 (comment): ", result);
+                    if (result.isDismissed != true) {
+                        //if confirm button was clicked
+                        console.log("result.value 2: ", result.value);
+                        comment = result.value;
+                        console.log("comment: ", comment);
+                        console.log("status: ", status);
+
+                        $.post(url + "ChainsawImporter/FileTaggingChanges", { tbl_files_id: fileID, tbl_files_status: status, comment: comment, appid: applicationID }, function (data) {
+                            console.log("data: ", data);
+                            Swal.fire("Success!", "Document is Denied", "success");
+                        });
+                    }
+                });
+            }
+        });
+    }
     
 
 </script>

@@ -329,6 +329,36 @@ namespace FMB_CIS.Controllers
                 mymodel.proofOfPaymentFiles = paymentFiles;
                 //END FOR FILE DOWNLOAD
 
+                //Document Tagging
+                var fileWithCommentsforDocTagging = (from f in _context.tbl_files
+                                                    //join c in _context.tbl_comments on f.Id equals c.tbl_files_id
+                                                    //join usr in _context.tbl_user on c.created_by equals usr.id
+                                                    where f.tbl_application_id == applicID && f.created_by == usid
+                                                    select new FilesWithComments
+                                                    {
+                                                        tbl_files_id = f.Id,
+                                                        filename = f.filename,
+                                                        tbl_application_id = f.tbl_application_id,
+                                                        tbl_files_status = f.status,
+                                                        //comment = c.comment
+                                                    }).ToList();
+                
+                //Add the latest comments for every file
+                var commentsList = _context.tbl_comments.Where(c => c.tbl_application_id == applicID).ToList();
+                
+                for (int i=0; i< fileWithCommentsforDocTagging.Count; i++)
+                {
+                    var latestComment = commentsList.Where(c => c.tbl_files_id == fileWithCommentsforDocTagging[i].tbl_files_id).LastOrDefault();
+                    if (latestComment != null)
+                    {
+                        fileWithCommentsforDocTagging[i].comment = latestComment.comment;
+                        fileWithCommentsforDocTagging[i].tbl_comments_created_by = latestComment.created_by;
+                    }
+                }
+
+                mymodel.filesWithComments = fileWithCommentsforDocTagging;
+                //End for Document Tagging
+
                 var permitTypeOfThisApplication  = _context.tbl_application.Where(a => a.id == applid).Select(a => a.tbl_permit_type_id).FirstOrDefault();
                 if(permitTypeOfThisApplication == 13) //For Certificate of Registration
                 {

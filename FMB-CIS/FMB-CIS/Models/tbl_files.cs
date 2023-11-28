@@ -16,5 +16,6 @@
         public int file_size { get; set; }
         public bool? is_active { get; set; }
         public bool? is_proof_of_payment { get; set; }
+        public string? status { get; set; }
     }
 }
