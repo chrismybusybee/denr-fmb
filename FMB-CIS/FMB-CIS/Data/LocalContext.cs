@@ -33,7 +33,11 @@ namespace FMB_CIS.Data
         public DbSet<FMB_CIS.Models.tbl_access_right> tbl_access_right { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_user_type_access_right> tbl_user_type_access_right { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_site_settings> tbl_site_settings { get; set; } = default!;
-
-
+        public DbSet<FMB_CIS.Models.tbl_user_type_user> tbl_user_type_user { get; set; } = default!;
+        public DbSet<FMB_CIS.Models.tbl_permit_types> tbl_permit_types { get; set; } = default!;
+        public DbSet<FMB_CIS.Models.tbl_permit_pages> tbl_permit_pages { get; set; } = default!;
+        public DbSet<FMB_CIS.Models.tbl_permit_workflow> tbl_permit_workflow { get; set; } = default!;
+        public DbSet<FMB_CIS.Models.tbl_permit_workflow_step> tbl_permit_workflow_step { get; set; } = default!;
+        public DbSet<FMB_CIS.Models.tbl_permit_workflow_next_step> tbl_permit_workflow_next_step { get; set; } = default!;
     }
 }

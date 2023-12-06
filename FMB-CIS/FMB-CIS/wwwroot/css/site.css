@@ -212,4 +212,8 @@ button {
     max-width: 1000px;
     margin: 0 auto;
 }
+
+.modal-dialog-max {
+    max-width: 1600px;
+}
 /* BOOTSTRAP OVERRIDE END */

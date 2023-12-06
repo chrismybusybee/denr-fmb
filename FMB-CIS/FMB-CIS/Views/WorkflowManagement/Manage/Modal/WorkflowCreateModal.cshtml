@@ -1,0 +1,614 @@
+﻿@*@model OfficeTypeCreateViewModel*@
+<div class="modal modal-sheet fade  bg-body-secondary p-4 py-md-5" id="createWorkflowModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-max" role="document">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header p-5 pb-4 border-bottom-0">
+                <h1 class="fw-bold mb-0 fs-2">Create New Worflow</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            @*<span data-bind="text: activeNextStepIds()"></span>*@
+
+            <div class="modal-body p-5 pt-0">
+                <form class="" id="OfficeTypeCreateForm" role="form" method="post">
+                    <div class="row g-3">
+                        <div class="form-floating mb-3">
+                            <select data-bind="value: permitType" class="form-select">
+                                <option selected value="0">Choose permit type</option>
+                                <!-- ko foreach: permitTypes()-->
+                                <option data-bind="text: name, value: id"></option>
+                                <!-- /ko -->
+                            </select>
+                            <label class="form-label">Permit Type</label>
+                        </div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col">
+                            <div class="form-floating mb-3">
+                                <input data-bind="value: code" type="text" class="form-control rounded-3" id="code" placeholder="" />
+                                <label for="code">Code</label>
+                                <p class="mt-0 mb-0">
+                                    <small class="text-body-secondary">Associated with a controller / view, e.g DOCUMENT_APPROVAL</small>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating mb-3">
+                                <input data-bind="value: name" type="text" class="form-control rounded-3" id="name" placeholder="" />
+                                <label for="name">Name</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input data-bind="value: description" type="text" class="form-control rounded-3" id="description" placeholder="" />
+                        <label for="description">Description</label>
+                    </div>
+                    <hr />
+                    <h2 class="fw-bold mb-0 fs-4">
+                        Steps <span class="c-header-badge-container"> <span class="badge text-bg-secondary bg-primary rounded-pill" data-bind="text: steps().length || '0'"></span></span>
+                    </h2>
+                    <p class="mt-0">
+                        <small class="text-body-secondary">Steps will be displayed as status</small>
+                    </p>
+                    <div class="c-steps-container">
+                        <div class="c-steps-list-container" data-bind="foreach: steps">
+                            <div class="c-steps-list-item" data-bind="css: { 'is-edit': isEdit() }">
+                                <div class="c-step-preview-line">
+                                    <div class="c-step-preview-line-circle-container">
+                                        <div class="c-step-preview-line-circle"></div>
+                                    </div>
+                                </div>
+                                <div class="c-step-preview-card card">
+                                    @*<img src="..." class="card-img-top" alt="...">*@
+                                    <div class="card-body">
+                                        <h5 class="card-title" data-bind="text: name() || '[NEW STEP]'"></h5>
+                                        <p class="card-text"></p>
+                                        <a href="#" class="btn btn-primary" data-bind="click: configureStep">Configure step</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="c-steps-info-container" data-bind="foreach: steps">
+                            <div class="c-steps-info-item" data-bind="if: isEdit()">
+                                <div class="c-step-content">
+                                    <h2 class="c-step-header">
+                                        <span class="step-title" data-bind="text: name() || '[NEW STEP]'"></span>
+                                    </h2>
+                                    <div class="c-step-body">
+                                        <div class="c-step-info-container">
+                                            <h3 class="fw-bold mb-3 fs-5">Step Information</h3>
+                                            <div class="row g-3">
+                                                <div class="col-md-8 mb-3">
+                                                    <div class="form-floating">
+                                                        <input data-bind="value: name" type="text" class="form-control rounded-3" placeholder="" />
+                                                        <label>Status Name</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <div class="form-floating">
+                                                        <input data-bind="value: statusCode" type="text" class="form-control rounded-3" placeholder="" />
+                                                        <label>Status Code</label>
+                                                        <p class="mt-0 mb-0">
+                                                            <small class="text-body-secondary">Associated with a controller / view</small>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                            <h2 class="fw-bold mb-3 fs-5">Advanced Setup</h2>
+                                            <div class="row g-3">
+                                                <div class="col-md-4 mb-3">
+                                                    <div class="form-floating">
+                                                        <input data-bind="value: onPreAction" type="text" class="form-control rounded-3" placeholder="" />
+                                                        <label>On Pre Action</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <div class="form-floating">
+                                                        <input data-bind="value: onSuccessAction" type="text" class="form-control rounded-3" placeholder="" />
+                                                        <label>On Success Action</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <div class="form-floating">
+                                                        <input data-bind="value: onExitAction" type="text" class="form-control rounded-3" placeholder="" />
+                                                        <label>On Exit Action</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row g-3">
+                                                <div class="col-12">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox">
+                                                        <label class="form-check-label">
+                                                            Lock
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="c-next-step-container">
+                                            <h2 class="fw-bold mb-0 fs-5">
+                                                Next Steps
+                                            </h2>
+                                            <p class="mt-0">
+                                                <small class="text-body-secondary">Setup the available next steps and who can access them</small>
+                                            </p>
+                                            <div class="next-step-container" data-bind="foreach: nextSteps">
+                                                <div class="row g-3 mb-3">
+                                                    <div class="col-md-2">
+                                                        <div class="form-floating">
+                                                            <select data-bind="value: stepId" class="form-select">
+                                                                <option selected value="0">Choose step</option>
+                                                                <!-- ko foreach: $parents[1].steps-->
+                                                                <option data-bind="text: statusCode, value: statusCode"></option>
+                                                                <!-- /ko -->
+                                                            </select>
+                                                            <label class="form-label">Next status</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <div class="form-floating">
+                                                            <select data-bind="value: userTypeId" class="form-select">
+                                                                <option selected value="0">Choose user type</option>
+                                                                <!-- ko foreach: $root.userTypes-->
+                                                                <option data-bind="text: name, value: id"></option>
+                                                                <!-- /ko -->
+                                                            </select>
+                                                            <label class="form-label">User type</label>
+                                                        </div>
+                                                    </div>
+                                                    <!-- ko if: userTypeId() == '10' -->
+                                                    <div class="col-md-2">
+                                                        <div class="form-floating">
+                                                        <select data-bind="value: divisionId" class="form-select">
+                                                            <option selected value="0">Choose region</option>
+                                                            <!-- ko foreach: $parents[1].regions-->
+                                                            <option data-bind="text: office_name, value: id"></option>
+                                                            <!-- /ko -->
+                                                            </select>
+                                                            <label class="form-label">Region</label>
+                                                        </div>
+                                                    </div>
+                                                    <!-- /ko -->
+                                                    <!-- ko if: userTypeId() == '8' -->
+                                                    <div class="col-md-2">
+                                                        <div class="form-floating">
+                                                        <select data-bind="value: divisionId" class="form-select">
+                                                            <option selected value="0">Choose city</option>
+                                                            <!-- ko foreach: $parents[1].cities-->
+                                                            <option data-bind="text: office_name, value: id"></option>
+                                                            <!-- /ko -->
+                                                            </select>
+                                                            <label class="form-label">City</label>
+                                                        </div>
+                                                    </div>
+                                                    <!-- /ko -->
+                                                    <div class="col-md-2">
+                                                        <div class="form-floating">
+                                                            <input data-bind="value: buttonText" type="text" class="form-control rounded-3" id="next-step-button-text" placeholder="" />
+                                                            <label for="next-step-button-text">Button text</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <div class="form-floating">
+                                                            <input data-bind="value: buttonClass" type="text" list="list-button-class" class="form-control rounded-3" id="next-step-button-class" placeholder="" />
+                                                            <label for="next-step-button-class">Button class</label>
+                                                            <datalist id="list-button-class">
+                                                                <option>btn-primary</option>
+                                                                <option>btn-secondary</option>
+                                                                <option>btn-success</option>
+                                                                <option>btn-danger</option>
+                                                                <option>btn-warning</option>
+                                                                <option>btn-info</option>
+                                                                <option>btn-light</option>
+                                                                <option>btn-dark</option>
+                                                                <option>btn-link</option>
+                                                                <option>btn-outline-primary</option>
+                                                                <option>btn-outline-secondary</option>
+                                                                <option>btn-outline-success</option>
+                                                                <option>btn-outline-danger</option>
+                                                                <option>btn-outline-warning</option>
+                                                                <option>btn-outline-info</option>
+                                                                <option>btn-outline-light</option>
+                                                                <option>btn-outline-dark</option>
+                                                                <option>btn-sm</option>
+                                                                <option>btn-lg</option>
+                                                            </datalist>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <div class="form-floating">
+                                                            <button data-bind="text: buttonText() || 'Next', css: buttonClass" class="mb-2 mt-3 btn btn-sm rounded-3 btn-primary add-next-step" type="button"></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row g-3">
+                                                <div class="col-md-12">
+                                                    <button data-bind="click: addNextStep" class="mb-2 mt-3 btn btn-sm rounded-3 btn-primary add-next-step" type="button">Add Next Step</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button data-bind="click: addStep" id="btnAddStep" class="mb-2 mt-3 btn btn-sm rounded-3 btn-primary" type="button">Add a new step</button>
+
+                    @*<div class="form-floating mb-3">
+                    <input type="text" class="form-control rounded-3" id="scope" placeholder="" />
+                    <label for="scope">Scope</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                    <input type="text" class="form-control rounded-3" id="type" placeholder="" />
+                    <label for="type">Type</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                    <input type="text" class="form-control rounded-3" id="parent_code" placeholder="" />
+                    <label for="parent_code">Parent Code</label>
+                    </div>*@
+                    <hr />
+                    <p>
+                        <button data-bind="click: saveWorkflow" class="mb-2 mt-3 btn btn-lg rounded-3 btn-primary" type="button">Create</button>
+
+                    </p>
+                    <p>
+                        <small class="text-body-secondary mt-3">By clicking Create, an office type will be registered on the system.</small>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    // Here's my data model
+    var WorkflowModel = function (userTypes, permitTypes, regions, cities) {
+        var self = this;
+        self.permitType = ko.observable(0);
+        //self.workflow_id = ko.observable(crypto.randomUUID());
+        self.code = ko.observable("");//DOCUMENT_APPROVAL
+        self.name = ko.observable("");//Document Approval
+        self.description = ko.observable("");//Workflow for approving documents.
+
+        self.steps = ko.observableArray([]);
+
+        self.userTypes = ko.observableArray(userTypes);
+        self.permitTypes = ko.observableArray(permitTypes);
+        self.regions = ko.observableArray(regions);
+        self.cities = ko.observableArray(cities);
+
+        self.addStep = function () {
+            var newStep = {
+                id: ko.observable(crypto.randomUUID()),
+                name: ko.observable(""),
+                statusCode: ko.observable(""),
+                onPreAction: ko.observable(""),
+                onSuccessAction: ko.observable(""),
+                onExitAction: ko.observable(""),
+                isLock: ko.observable(false),
+                nextSteps: ko.observableArray([]),
+                isEdit: ko.observable(false),
+                configureStep: configureStep,
+                addNextStep: addNextStep
+                };
+            self.steps.push(newStep);
+            configureStep(newStep);
+        };
+
+        self.removeStep = function (step) {
+            self.steps.remove(step);
+        };
+
+        function addNextStep(step) {
+            console.log(step);
+            var nextStepId = crypto.randomUUID();
+            step.nextSteps.push({
+                id: ko.observable(nextStepId),
+                userTypeId: ko.observable(0),
+                divisionId: ko.observable(0),
+                stepId: ko.observable(""),
+                buttonText: ko.observable(""),
+                buttonClass: ko.observable("")
+            });
+        };
+
+        self.removeNextStep = function (step, nextStep) {
+            step.remove(step);
+        };
+
+        function configureStep(step) {
+            var newValue = !step.isEdit();
+            self.steps().forEach(function (s) { s.isEdit(false); });
+            step.isEdit(newValue);
+        }
+
+        self.saveWorkflow = function () {
+            console.log("self");
+            console.log(self.code());
+            //console.log("self.workflow_id()");
+            //console.log(self.workflow_id());
+
+            var workflow = {};
+            workflow.code = self.code();
+            workflow.permitType = self.permitType();
+            workflow.name = self.name();
+            workflow.description = self.description();
+            //workflow.workflow_id = self.workflow_id();
+
+            var steps = [];
+            self.steps().forEach(function (step) {
+                var nextSteps = [];
+                step.nextSteps().forEach(function (nextStep) {
+                    nextSteps.push({
+                        id: nextStep.id(),
+                        userTypeId: nextStep.userTypeId(),
+                        divisionId: nextStep.divisionId(),
+                        stepId: nextStep.stepId(),
+                        buttonText: nextStep.buttonText(),
+                        buttonClass: nextStep.buttonClass()
+                    }
+                    );
+                });
+                steps.push({
+                    id: step.id(),
+                    name: step.name(),
+                    statusCode: step.statusCode(),
+                    onPreAction: step.onPreAction(),
+                    onSuccessAction: step.onSuccessAction(),
+                    onExitAction: step.onExitAction(),
+                    isLock: step.isLock(),
+                    nextSteps: nextSteps,
+                    isEdit: step.isEdit()
+                }
+                );
+            });
+            workflow.steps = steps;
+
+            console.log("workflow");
+            console.log(workflow);
+            $.post("/WorkflowManagement/WorkflowCreate", workflow, function (data) {
+                // NOTE: TO DO if success
+                closeModal();
+                $('#workflowListPartialContainer').load('/WorkflowManagement/WorkflowListPartialView');
+            });
+        }
+
+        //this.fullName = ko.pureComputed(function() {
+        //    // Knockout tracks dependencies automatically. It knows that fullName depends on firstName and lastName, because these get called when evaluating fullName.
+        //    return this.firstName() + " " + this.lastName();
+        //}, this);
+
+
+        //self.activeNextStepIds = ko.pureComputed(function () {
+        //    var activeNextSteps = [];
+        //    console.log();
+        //    var activeStep = self.steps().filter(function (s) { return s.isEdit() });
+
+        //    if(activeStep != null) {
+        //        activeStep.nextSteps.forEach(function (nextStep) {
+        //            activeNextSteps.push(nextStep.id)
+        //        });
+        //    }
+        //    //var activeStep = self.steps().filter(function (s) { return s.isEdit() });
+        //    //if(activeStep) {
+        //    //    activeStep.nextSteps.forEach(function(nextStep){
+        //    //        activeNextSteps.push(nextStep.id)
+        //    //    });
+        //    //}
+        //    return activeNextSteps;
+        //}, self);
+    };
+
+
+    function initialize() {
+        GetDropdownListData();
+    }
+    initialize();
+
+    var userTypes = [];
+    var permitTypes = [];
+    var regions = [];
+    var cities = [];
+    function GetDropdownListData() {
+        $.get("/AccessRightsManagement/UserTypes").then(
+            function (userTypesData) {
+                userTypes = userTypesData;
+                return $.get("/PermitManagement/GetPermitTypes");
+            }
+        ).then(
+            function (permitTypesData) {
+                permitTypes = permitTypesData;
+                return $.post('/OfficeManagement/GetDivisionByUserType', {userTypeId: 10});
+            }
+        ).then(
+            function (regionsData) {
+                regions = regionsData;
+                return $.post('/OfficeManagement/GetDivisionByUserType', { userTypeId: 10 });
+            }
+        ).then(
+            function (citiesData) {
+                cities = citiesData;
+                ko.applyBindings(new WorkflowModel(userTypes, permitTypes, regions, cities));
+            }
+        )
+    }
+
+
+
+
+    $("#cancelBtn").click(function () {
+        closeModal();
+    });
+    //$("#btnCreate").click(function () {
+    //    let parameters = {
+    //        code: document.getElementById("code").value,
+    //        name: document.getElementById("name").value,
+    //        description: document.getElementById("description").value,
+    //        scope: document.getElementById("scope").value,
+    //        type: document.getElementById("type").value,
+    //        parent_code: document.getElementById("parent_code").value
+    //    };
+    //    console.log("parameters");
+    //    console.log(parameters);
+    //    $.post("/WorkflowManagement/WorkflowCreate", parameters, function (data) {
+    //        // NOTE: TO DO if success
+    //        closeModal();
+    //        $('#workflowListPartialContainer').load('/WorkflowManagement/WorkflowListPartialView');
+    //    });
+    //});
+
+    function closeModal() {
+        $("#createWorkflowModal").modal("hide");
+        let elem = document.querySelector('#createWorkflowModal');
+        elem.parentNode.removeChild(elem);
+    }
+</script>
+<style>
+    .workflow-step-list-item {
+        margin: 24px 0 24px 24px;
+        border: solid 1px #CCCCCC;
+        padding: 24px;
+    }
+
+    .c-steps-container {
+        display: flex;
+    }
+
+    .c-steps-list-container {
+        width: 300px;
+    }
+
+    .c-steps-info-container {
+        flex: 1;
+        padding-left: 24px;
+    }
+
+    .c-steps-info-item {
+    }
+
+        .c-steps-info-item .c-step-content {
+            padding: 24px;
+            border: solid 1px #CCCCCC;
+        }
+
+    .c-steps-list-item {
+        width: 300px;
+        display: flex;
+    }
+
+        .c-steps-list-item .c-step-preview-line {
+            width: 36px;
+            border-left: solid 3px #CCCCCC;
+            left: 12px;
+            position: relative;
+        }
+
+            .c-steps-list-item .c-step-preview-line .c-step-preview-line-circle-container {
+                width: 30px;
+                height: 30px;
+                border: solid 3px #ffffff;
+                background-color: #cccccc;
+                padding: 3px;
+                border-radius: 100%;
+                box-sizing: border-box;
+                left: -16px;
+                position: relative;
+            }
+
+                .c-steps-list-item .c-step-preview-line .c-step-preview-line-circle-container .c-step-preview-line-circle {
+                    width: 18px;
+                    height: 18px;
+                    background-color: #cccccc;
+                    border: solid 3px #FFFFFF;
+                    border-radius: 100%;
+                    box-sizing: border-box;
+                }
+
+        .c-steps-list-item .c-step-preview-card {
+            flex: 1;
+            margin-bottom: 24px;
+            border-radius: 24px;
+        }
+
+        .c-steps-list-item.is-edit {
+        }
+
+            .c-steps-list-item.is-edit .c-step-preview-line {
+                border-left: solid 3px #14984a;
+            }
+
+                .c-steps-list-item.is-edit .c-step-preview-line .c-step-preview-line-circle-container {
+                    background-color: #14984a;
+                }
+
+                    .c-steps-list-item.is-edit .c-step-preview-line .c-step-preview-line-circle-container .c-step-preview-line-circle {
+                        background-color: #14984a;
+                    }
+
+            .c-steps-list-item.is-edit .card {
+                border-color: #14984a;
+            }
+
+    .step-container {
+    }
+
+    .c-step-body-container {
+        display: flex;
+    }
+
+    .c-step-info-container {
+        flex: 1;
+    }
+
+    .c-next-step-container {
+        flex: 1;
+        /*border-left: solid 1px #CCCCCC;*/
+        /*padding-left: 24px;*/
+    }
+
+    .c-header-badge-container {
+        display: inline-block;
+        top: -3px;
+        font-size: 18px;
+        position: relative;
+    }
+
+    .c-step-container {
+        /*display: flex;*/
+        display: block;
+        position: relative;
+        clear: both;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .c-step-item.is-edit {
+        /*max-width: 10000px;*/
+    }
+
+    .c-step-name {
+        text-align: center;
+        font-size: 24px;
+        margin-top: 24px;
+    }
+
+    .c-step-action {
+        text-align: center;
+        display: block;
+    }
+
+    .c-step-action-button {
+        display: inline-block;
+        margin-top: 100px;
+        border: solid 1px #CCCCCC;
+        width: 50px;
+        height: 50px;
+        border-radius: 100%;
+        font-size: 18px;
+        padding-top: 11px;
+    }
+</style>

@@ -1,0 +1,231 @@
+﻿@using System.Security.Claims;
+@using System.Globalization;
+@model FMB_CIS.Models.UserTypeUserListViewModel
+@{
+    ViewBag.Title = "Access Rights Management";
+}
+<div class="list-group list-group-style1">
+    <div href="#" class="list-group-item list-group-item-action flex-column align-items-start search-box-container">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-2">
+                <input type="text" id="userTypeUsersSearch" class="search-box" placeholder="SEARCH" />
+            </h5>
+            <small class="text-muted clickable" onclick="ClearSearch()">Clear</small>
+        </div>
+    </div>
+    <div class="accordion" id="accordionUserTypeUsers">
+        @foreach (User userItem in Model.users)
+        {
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@Html.DisplayFor(modelItem => userItem.id)" aria-expanded="true" aria-controls="collapseOne">
+                        @Html.DisplayFor(modelItem => userItem.first_name) @Html.DisplayFor(modelItem => userItem.middle_name) @Html.DisplayFor(modelItem => userItem.last_name) <span class="badge bg-dark rounded-pill text-bg-primary"><span class="userTypeUsersTotalToggled" data-user-id="@Html.DisplayFor(modelItem => userItem.id)"></span>/<span class="usersTotal">@Model.users.Count()</span></span>
+                    </button>
+                </h2>
+                <div id="collapse-@Html.DisplayFor(modelItem => userItem.id)" class="accordion-collapse collapse" data-bs-parent="#accordionUserTypes">
+                    <div class="accordion-body">
+
+                        @foreach (UserType userTypeItem in Model.userTypes)
+                        {
+                            <div class="form-check form-switch">
+                                <input class="form-check-input userTypeUser-@Html.DisplayFor(modelItem => userItem.id)" type="checkbox" role="switch" id="userTypeUser-@Html.DisplayFor(modelItem => userTypeItem.id)-@Html.DisplayFor(modelItem => userItem.id)" onclick="ToggleUserTypeUser(@Html.DisplayFor(modelItem => userTypeItem.id), @Html.DisplayFor(modelItem => userItem.id))">  @*value=""*@
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    @Html.DisplayFor(modelItem => userTypeItem.name)
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .c-info {
+        width: 25%;
+        float: left;
+        padding: 12px;
+    }
+
+    .c-content {
+        width: 75%;
+        float: left;
+        padding: 12px;
+    }
+
+    .card-head {
+        width: 100%;
+        height: 30px;
+    }
+
+    .card-head-image {
+        width: 100%;
+        height: 30px;
+    }
+
+    .card-body {
+    }
+
+    .card-margin {
+        margin: 12px;
+    }
+
+    .list-group-style1 {
+    }
+
+        .list-group-style1 .list-group-item {
+            margin-bottom: 12px;
+        }
+
+            .list-group-style1 .list-group-item + .list-group-item {
+                border-top-width: 1px;
+            }
+
+    small a {
+        color: #14984a;
+        padding: 3px 0;
+        border: none;
+        border-bottom: solid 1px #14984a;
+        margin-right: 12px;
+        background: none;
+        box-shadow: unset !important;
+        outline: 0 !important;
+        margin: 0 !important;
+        margin-right: 12px !important;
+        margin-top: 12px !important;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .search-box-container, .search-box-container:hover {
+        background-color: #FFFFFF;
+    }
+
+        .search-box-container small {
+            padding: 13px 0;
+        }
+
+    .search-box {
+        border: none;
+        font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        font-style: normal;
+        padding: 8px 0;
+    }
+
+        .search-box:focus {
+            outline: none;
+        }
+
+    .c-hidden, .c-hidden-inline {
+        display: none;
+    }
+
+    .c-show-hidden .c-hidden-inline {
+        display: inline-block;
+    }
+
+    .c-show-hidden .c-hidden {
+        display: block;
+    }
+
+    .c-show-hidden .c-hidden-on-show {
+        display: none;
+    }
+
+    .badge {
+        margin-left: 12px;
+    }
+    .clickable {
+        cursor: pointer;
+    }
+</style>
+
+<script type="text/javascript">
+    //function OpenUpdateModal(id) {
+    //    $('#accessRightsUpdateModalContainer').load('/AccessRightsManagement/AccessRightsUpdateModal/' + id, function () {
+    //        $("#updateAccessRightsModal").modal("show");
+    //    });
+    //}
+    //function OpenDeleteModal(id) {
+    //    console.log("OpenDeleteModal");
+    //    $('#accessRightsDeleteModalContainer').load('/AccessRightsManagement/AccessRightsDeleteModal/' + id, function () {
+    //        $("#deleteAccessRightsModal").modal("show");
+    //    });
+    //}
+    function ToggleUserTypeUser(userTypeId, userId) {
+        let parameters = {
+            userTypeId: userTypeId,
+            userId: userId
+        };
+        $.post("/AccessRightsManagement/UserTypeUserToggle", parameters, function (data) {
+            // NOTE: TO DO if success
+            //$('#accessRightsListPartialContainer').load('/AccessRightsManagement/UserTypeAccessRightsToggle');
+            //closeModal();
+        });
+        getUserTypeUsersCount();
+    }
+    function ShowDetails(id) {
+        $('#item-' + id).addClass('c-show-hidden');
+    }
+    function HideDetails(id) {
+        $('#item-' + id).removeClass('c-show-hidden');
+    }
+
+    function initializeSettings() {
+        GetUserTypeUsers();
+    }
+    initializeSettings();
+    function GetUserTypeUsers() {
+        $.get("/AccessRightsManagement/UserTypeUsers", function (data) {
+            console.log(data);
+            data.forEach(function (dataItem) {
+                console.log(dataItem);
+                $("#userTypeUser-" + dataItem.user_type_id + "-" + dataItem.user_id).attr('checked', true);
+            });
+            getUserTypeUsersCount();
+            // NOTE: TO DO if success
+            //$('#accessRightsListPartialContainer').load('/AccessRightsManagement/UserTypeAccessRightsToggle');
+            //closeModal();
+        });
+    }
+
+    function getUserTypeUsersCount(item) {
+        $(".userTypeUsersTotalToggled").each(
+            function () {
+                let id = $(this).attr("data-user-id");
+                let count = $(".userTypeUser-" + id + ":checked").length;
+                console.log(count);
+                $(this).text(count);
+            }
+        )
+    }
+
+    $("#userTypeUsersSearch").keyup(function () {
+
+        // Retrieve the input field text and reset the count to zero
+        var filter = $(this).val(),
+            count = 0;
+
+        // Loop through the comment list
+        $('#accordionUserTypeUsers .accordion-item').each(function () {
+
+
+            // If the list item does not contain the text phrase fade it out
+            if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+                $(this).hide();  // MY CHANGE
+
+                // Show the list item if the phrase matches and increase the count by 1
+            } else {
+                $(this).show(); // MY CHANGE
+                count++;
+            }
+
+        });
+
+    });
+
+    function ClearSearch() {
+        $("#userTypeUsersSearch").val("").keyup();
+    }
+</script>

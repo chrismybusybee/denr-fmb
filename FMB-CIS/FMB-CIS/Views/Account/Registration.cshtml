@@ -61,7 +61,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label text-secondary small mb-1">User Type</label>
-                                    <select asp-for="tbl_Users.tbl_user_types_id" class="form-select" aria-label="User Type" required="required">
+                                  @*  <select asp-for="tbl_Users.tbl_user_types_id" class="form-select" aria-label="User Type" required="required">
                                         <option value="" selected disabled>--Select User Type--</option>
                                         <option value="1">Chainsaw Importer Only</option>
                                         <option value="2">Chainsaw Seller Only</option>
@@ -70,7 +70,25 @@
                                         <option value="5">Chainsaw Importer and Owner</option>
                                         <option value="6">Chainsaw Seller and Owner</option>
                                         <option value="7">Chainsaw Importer, Owner, and Seller</option>
-                                    </select>
+                                    </select>*@
+                                    <label for="flexCheckDefault1" class="form-check form-check-border">
+                                        <input class="form-check-input" type="checkbox" name="tbl_Users.tbl_user_types_ids" value="1" id="flexCheckDefault1">
+                                        <label class="form-check-label" for="flexCheckDefault1">
+                                            Chainsaw Importer
+                                        </label>
+                                    </label>
+                                    <label for="flexCheckDefault2" class="form-check form-check-border">
+                                        <input class="form-check-input" type="checkbox" name="tbl_Users.tbl_user_types_ids" value="2" id="flexCheckDefault2">
+                                        <label class="form-check-label" for="flexCheckDefault2">
+                                            Chainsaw Seller
+                                        </label>
+                                    </label>
+                                    <label for="flexCheckDefault3"  class="form-check form-check-border">
+                                        <input class="form-check-input" type="checkbox" name="tbl_Users.tbl_user_types_ids" value="3" id="flexCheckDefault3">
+                                        <label class="form-check-label" for="flexCheckDefault3">
+                                            Chainsaw Owner
+                                        </label>
+                                    </label>
                                     <span asp-validation-for="tbl_Users.tbl_user_types_id" class="text-danger"></span>
                                 </div>
                             </div>
@@ -820,5 +838,16 @@
 
     .nextBtn, .prevBtn {
         width: min(100px, 100%) !important;
+    }
+    .form-check-border {
+        border: solid 1px #CCCCCC;
+        margin-bottom: 5px;
+        padding-top: 12px;
+        padding-bottom: 12px;
+        padding-left: 36px;
+        cursor: pointer;
+    }
+    .form-check-border {
+
     }
 </style>
