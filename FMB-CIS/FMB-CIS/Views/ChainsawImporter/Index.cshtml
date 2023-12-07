@@ -2,7 +2,7 @@
 @model FMB_CIS.Models.ViewModel
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
-    ViewBag.Title = "Chainsaw Importer";
+    ViewBag.Title = "Chainsaw Import Permit Application";
 }
 
 <div id="card-container">
@@ -72,7 +72,7 @@
                 </div>*@
             <div class="col-md-12">
                 <div class="p-4 shadow h-100">
-                    <h2 class="text-secondary fw-bold mb-4">Bureau of Customs</h2>
+                    @* <h2 class="text-secondary fw-bold mb-4">Bureau of Customs</h2> *@
                     <div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
                             Number of chainsaws to be purchased/imported
@@ -94,20 +94,20 @@
                             <textarea class="form-control" asp-for="tbl_Application.purpose" placeholder="Enter purpose" required="required"></textarea>
                         <span class="text-danger"></span>
                     </div>
-                    <div class="form-group mb-3">
+                    @* <div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
                             Expected time of arrival
                         </label>
                             <input type="date" asp-for="tbl_Application.expected_time_arrival" class="form-control" required="required" />
                         <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
+                    </div> *@
+                    @* <div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
                             Expected time of release
                         </label>
-                            <input type="date" asp-for="tbl_Application.expected_time_release" class="form-control" required="required" />
+                            <input type="date" asp-for="tbl_Application.expected_time_release" class="form-control" />
                         <span class="text-danger"></span>
-                    </div>
+                    </div> *@
                     @*
                     <div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
@@ -147,11 +147,50 @@
                         @* <input id="testDragAndDrop" name="testDragAndDrop" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload..."> *@
                         <div class="gap-4 mb-5">
                             <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
-                            <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload...">
+                            <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload..." onchange="fileChange(this)">
                         </div>
                 </div>                    
             </div>
         </div>
+            <hr />
+            <div class="row d-flex justify-content-center m-0">
+                <table class="table dataTable" id="tblApplicantFiles">
+                    <thead>
+                        <tr>
+                            <th>
+                                Required Document
+                            </th>
+                            <th>
+                                Uploaded Document
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 0;
+                        }
+                        @foreach (tbl_document_checklist item in Model.tbl_Document_Checklist)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.name)
+                                    @* <a href="#" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DocHistory(this)">@item.filename</a> *@
+                                </td>
+                                <input type="hidden" asp-for="fileChecklistViewModel[i].tbl_document_checklist_id" value="@item.id" />
+                                <td>
+                                    <select class="form-select fileListDropDown" id="fileListDropDown_@i" onchange="fileSelected(this)" asp-for="fileChecklistViewModel[i].FileName">
+                                        <option selected disabled>--Please select your uploaded file--</option>
+                                    </select>
+                                </td>
+                                @{
+                                    i++;
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
             <div class="text-center mb-4">
                 <small class="text-secondary fw-bold fst-italic">
                     By submitting this form, you agree to our <a href="@Url.Action("TermsPolicy", "Home")" target="_blank" class="text-decoration-none">Privacy Policy and Terms & Conditions.</a>
@@ -314,7 +353,7 @@
         // });
 
         // //END FOR FILE UPLOAD
-      
+        
         $("#btnSubmit").click(function () {
             
             // //Check if user selected some files            
@@ -348,6 +387,14 @@
                         confirmButtonColor: '#14984a'
                     });
                 }
+                // else if (formFiles.files.length < @Model.tbl_Document_Checklist.Count() && formFiles.files.length !=0) {
+                //     Swal.fire({
+                //         title: "Incomplete Documents",
+                //         text: "Based on the requirements, you need to upload a total of " + @Model.tbl_Document_Checklist.Count() + " documents to proceed. Please re-upload again. Thank you!",
+                //         icon: "error",
+                //         confirmButtonColor: '#14984a'
+                //     });
+                // }
                 else {
                     $('#confirmSubmitModal').modal("show"); //proceed to submit modal
                 }
@@ -376,7 +423,53 @@
         
     });
 
+    function fileChange(that) {
+        var formFiles = document.forms['ImporterRegForm']['filesUpload.Files'];
+        //console.log("that: ", that);
+        //console.log("that.value: ", that.value);
+        // console.log("formFiles.files: ", formFiles.files);
+        // console.log("formFiles.files.length: ", formFiles.files.length);
+        // console.log("formFiles.files[0].name: ", formFiles.files[0].name);
+        //console.log("filesUpload.Files", $('#filesUpload.Files').val());
+        // for (let i = 0; i < formFiles.files.length; i++) {
+        //     console.log("formFiles.files["+i+"].name: ", formFiles.files[i].name);
+        // }
+        PopulateFileDropDown(".fileListDropDown", formFiles.files);
+    }
 
+    function PopulateFileDropDown(fileDropDownClass, list) {
+        $(fileDropDownClass).empty();
+        $(fileDropDownClass).append("<option selected disabled>--Please select your uploaded file--</option>")
+        $.each(list, function (index, row) {
+            $(fileDropDownClass).append("<option value=\"" + row.name + "\"id=\"uploadedFile_" + index + "\">" + row.name + "</option>")
+        });
+    }
+
+    //TO-DO
+    function fileSelected(that) {
+        console.log("that.id:", that.id);
+        var selectClass = document.getElementsByClassName('fileListDropDown');
+        for (let i = 0; i < selectClass.length; i++) {
+            if (selectClass[i].id != that.id) {
+                //hide
+                // console.log("i: ", i);
+                // console.log("that.id: ", that.id);
+                // console.log("selectClass[" + i + "].id: ", selectClass[i].id);
+                // console.log("selectClass.length: ", selectClass.length);
+                var selectedFileList = document.getElementById(selectClass[i].id);
+                for (let j = 0; j < selectedFileList.options.length; j++) {
+                    //console.log("selectedFileList.options[" + j + "]: ", selectedFileList.options[j]);
+                    if (selectedFileList.options[j].value == that.value) {
+                        console.log("disable me");
+                        selectedFileList.options[j].disabled = true;
+                    }
+                    // else {
+                    //     selectedFileList.options[j].disabled = false;
+                    // }
+                }
+            }
+        }
+    }
 
 </script>
 

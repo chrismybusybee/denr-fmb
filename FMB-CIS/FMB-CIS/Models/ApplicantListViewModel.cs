@@ -39,6 +39,8 @@ namespace FMB_CIS.Models
         public string brgy { get; set; }
         public string comment { get; set; }
         public int tbl_user_types_id { get; set; }
+        public string user_classification { get; set; }
+        public string company_name { get; set; }
 
         public int? qty { get; set; }
         public string specification { get; set; }

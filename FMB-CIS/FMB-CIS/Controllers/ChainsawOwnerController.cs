@@ -786,7 +786,21 @@ namespace FMB_CIS.Controllers
                                      join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                      join pS in _context.tbl_permit_status on a.status equals pS.id
                                      //where a.tbl_user_id == userID
-                                     select new ApplicantListViewModel { id = a.id, applicationDate = a.date_created, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id, date_due_for_officers = a.date_due_for_officers };
+                                     select new ApplicantListViewModel 
+                                     { 
+                                         id = a.id, 
+                                         applicationDate = a.date_created,
+                                         qty = pT.name != "Certificate of Registration" ? a.qty : 1,
+                                         full_name = usr.user_classification == "Individual" ? usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix : usr.company_name,
+                                         email = usr.email, 
+                                         contact = usr.contact_no, 
+                                         address = usr.street_address, 
+                                         application_type = appt.name, 
+                                         permit_type = pT.name, 
+                                         permit_status = pS.status, 
+                                         tbl_user_id = (int)usr.id, 
+                                         date_due_for_officers = a.date_due_for_officers 
+                                     };
 
                 mymodel.applicantListViewModels = applicationMod;
 

@@ -33,7 +33,7 @@ namespace FMB_CIS.Data
         public DbSet<FMB_CIS.Models.tbl_access_right> tbl_access_right { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_user_type_access_right> tbl_user_type_access_right { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_site_settings> tbl_site_settings { get; set; } = default!;
-
-
+        public DbSet<FMB_CIS.Models.tbl_document_checklist> tbl_document_checklist { get; set; } = default!;
+        
     }
 }

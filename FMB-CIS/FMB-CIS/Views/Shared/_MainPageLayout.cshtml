@@ -725,6 +725,14 @@
                                         <span>Email Templates</span>
                                     </a>
                                 </li>
+                                <li id="checklistManagementMenuItem">
+                                    <a href="@Url.Action("Index", "ChecklistManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/checklist-management.png" />
+                                        </div>
+                                        <span>Checklist Management</span>
+                                    </a>
+                                </li>
                             }
                             @* @if (ViewBag.UserType.Contains("Chainsaw") == true) *@
                             @if (ViewBag.UserType.Contains("CENRO") == false && ViewBag.UserType.Contains("Implementing") == false && ViewBag.UserType.Contains("RED") == false && ViewBag.UserType.Contains("Administrator") == false && ViewBag.UserType.Contains("Super Admin") == false)
@@ -835,6 +843,10 @@
     else if (currentUrl.Contains("LeasePermits") || currentUrl.Contains("RentPermits") || currentUrl.Contains("LendPermits") || currentUrl.Contains("RegistrationPermits") || currentUrl.Contains("ResellPermits") || currentUrl.Contains("SellPermits") || currentUrl.Contains("PurchasePermits") || currentUrl.Contains("ImportPermits"))
     {
         <partial name="~/Views/Modals/ManageApplicationModal.cshtml" />
+    }
+    else if (currentUrl.Contains("ChecklistManagement"))
+    {
+        <partial name="~/Views/Modals/ChecklistManagementModal.cshtml" />
     }
     <footer>
         © 2023 DENR-FMB CIS. All rights reserved. <a href="@Url.Action("TermsPolicy", "Home")" target="_blank" class="text-light-gray text-decoration-none">Privacy Policy | Terms & Conditions.</a>
@@ -952,6 +964,7 @@
             "/CreationOfNewDenrOffice": "creationOfNewDenrOfficeMenuItem",
             "/AnnouncementTemplates": "announcementTemplatesMenuItem",
             "/EmailTemplates": "emailTemplatesMenuItem",
+            "/ChecklistManagement": "checklistManagementMenuItem",
         };
 
         if (currentPage.startsWith("/AccountManagement/ViewAccount/")) {

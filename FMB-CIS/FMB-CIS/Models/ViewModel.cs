@@ -55,6 +55,8 @@
         public IEnumerable<AnnouncementViewModel>? announcementViewModelList { get; set; }
         public AnnouncementViewModel? announcementViewModel { get; set; }
         public IEnumerable<FilesWithComments>? filesWithComments { get; set; }
-
+        public IEnumerable<tbl_document_checklist>? tbl_Document_Checklist { get; set; }
+        public List<FileChecklistViewModel>? fileChecklistViewModel { get; set; }
+        
     }
 }

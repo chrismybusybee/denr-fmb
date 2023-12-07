@@ -53,17 +53,23 @@ namespace FMB_CIS.Controllers
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             bool? usrStatus = _context.tbl_user.Where(u => u.id == uid).Select(u => u.status).SingleOrDefault();
+            ViewModel model = new ViewModel();
             //Get list of required documents from tbl_announcement
             var requirements = _context.tbl_announcement.Where(a => a.id == 2).FirstOrDefault(); // id = 2 for Permit to Import Requirements
             ViewBag.RequiredDocsList = requirements.announcement_content;
             //End for required documents
+
+            //Document Checklist
+            var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == 1 && c.is_active == true).ToList();
+            model.tbl_Document_Checklist = myChecklist;
+            //End for Document Checklist
             if (usrStatus != true)
             {
                 return RedirectToAction("Index", "Dashboard");
             }
             if (usrRoleID == 1 || usrRoleID == 4 || usrRoleID == 5 || usrRoleID == 7)
             {
-                return View();
+                return View(model);
             }
             else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11 || usrRoleID == 17) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
             {
@@ -142,6 +148,13 @@ namespace FMB_CIS.Controllers
                             filesDB.date_created = DateTime.Now;
                             filesDB.date_modified = DateTime.Now;
                             filesDB.filename = file.FileName;
+                            foreach (var item in model.fileChecklistViewModel)
+                            {
+                                if (item.FileName == file.FileName)
+                                {
+                                    filesDB.checklist_id = item.tbl_document_checklist_id;
+                                }
+                            }
                             filesDB.path = path;
                             filesDB.tbl_file_type_id = fileInfo.Extension;
                             filesDB.tbl_file_sources_id = fileInfo.Extension;
@@ -184,7 +197,13 @@ namespace FMB_CIS.Controllers
                 var requirements = _context.tbl_announcement.Where(a => a.id == 2).FirstOrDefault(); // id = 2 for Permit to Import Requirements
                 ViewBag.RequiredDocsList = requirements.announcement_content;
                 //End for required documents
-                return View();
+
+                //Document Checklist
+                var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == 1).ToList();
+                model.tbl_Document_Checklist = myChecklist;
+                //End for Document Checklist
+
+                return View(model);
                 }
                 return View(model);
             //}
@@ -296,6 +315,20 @@ namespace FMB_CIS.Controllers
             mymodel.filesWithComments = fileWithCommentsforDocTagging;
             //End for Document Tagging
 
+            //Document Checklist
+            //var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == 1).ToList();
+            //mymodel.tbl_Document_Checklist = myChecklist;
+            var checkListApproval = (from f in _context.tbl_files
+                                     join req in _context.tbl_document_checklist on f.checklist_id equals req.id
+                                     where f.tbl_application_id == applicID && req.is_active == true
+                                     select new FileChecklistViewModel
+                                     {
+                                         FileName = f.filename,
+                                         tbl_document_checklist_name = req.name
+                                     }).ToList();           
+            mymodel.fileChecklistViewModel = checkListApproval;
+            //End for Document Checklist
+
             if (uid == null || appid == null)
             {
                 ModelState.AddModelError("", "Invalid Importer Application");
@@ -357,8 +390,8 @@ namespace FMB_CIS.Controllers
                                           comment = usr.comment,
                                           specification = a.tbl_specification_id,
                                           purpose = a.purpose,
-                                          expectedTimeArrived = a.expected_time_arrival,
-                                          expectedTimeRelease = a.expected_time_release,
+                                          //expectedTimeArrived = a.expected_time_arrival,
+                                          //expectedTimeRelease = a.expected_time_release,
                                           date_of_registration = a.date_of_registration,
                                           date_of_expiration = a.date_of_expiration
                                       }).FirstOrDefault();
@@ -706,7 +739,22 @@ namespace FMB_CIS.Controllers
                                      join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                      join pS in _context.tbl_permit_status on a.status equals pS.id
                                      //where a.tbl_user_id == userID
-                                     select new ApplicantListViewModel { id = a.id, applicationDate = a.date_created, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id, date_due_for_officers = a.date_due_for_officers };
+                                     select new ApplicantListViewModel 
+                                     { 
+                                         id = a.id, 
+                                         applicationDate = a.date_created,
+                                         qty = a.qty,
+                                         full_name = usr.user_classification == "Individual"? usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix: usr.company_name,
+                                         email = usr.email,
+                                         contact = usr.contact_no,
+                                         address = usr.street_address,
+                                         application_type = appt.name,
+                                         permit_type = pT.name,
+                                         permit_status = pS.status,
+                                         tbl_user_id = (int)usr.id,
+                                         date_due_for_officers = a.date_due_for_officers
+                                         
+                                     };
 
                 mymodel.applicantListViewModels = applicationMod;
 

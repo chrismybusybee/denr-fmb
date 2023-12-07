@@ -392,8 +392,8 @@ namespace FMB_CIS.Controllers
                                               specification = a.tbl_specification_id,
                                               inspectionDate = a.date_of_inspection,
                                               address = usr.street_address,
-                                              expectedTimeArrived = a.expected_time_arrival,
-                                              expectedTimeRelease = a.expected_time_release,
+                                              //expectedTimeArrived = a.expected_time_arrival,
+                                              //expectedTimeRelease = a.expected_time_release,
                                               purpose = a.purpose,
                                               date_of_registration = a.date_of_registration,
                                               date_of_expiration = a.date_of_expiration,
@@ -442,12 +442,12 @@ namespace FMB_CIS.Controllers
                                               specification = a.tbl_specification_id,
                                               inspectionDate = a.date_of_inspection,
                                               address = usr.street_address,
-                                              expectedTimeArrived = a.expected_time_arrival,
-                                              expectedTimeRelease = a.expected_time_release,
+                                              //expectedTimeArrived = a.expected_time_arrival,
+                                              //expectedTimeRelease = a.expected_time_release,
                                               purpose = a.purpose,
                                               date_of_registration = a.date_of_registration,
                                               date_of_expiration = a.date_of_expiration,
-                                              coordinatedWithEnforcementDivision = a.coordinatedWithEnforcementDivision
+                                              //coordinatedWithEnforcementDivision = a.coordinatedWithEnforcementDivision
                                           }).FirstOrDefault();
                     //mymodel.email = UserList.email;
                     mymodel.applicantViewModels = applicationMod;
@@ -557,17 +557,17 @@ namespace FMB_CIS.Controllers
                 //appliDB.id = applid;
                 appliDB.qty = viewMod.applicantViewModels.qty;
                 appliDB.purpose = viewMod.applicantViewModels.purpose;
-                appliDB.expected_time_arrival = viewMod.applicantViewModels.expectedTimeArrived;
-                appliDB.expected_time_release = viewMod.applicantViewModels.expectedTimeRelease;
+                //appliDB.expected_time_arrival = viewMod.applicantViewModels.expectedTimeArrived;
+                //appliDB.expected_time_release = viewMod.applicantViewModels.expectedTimeRelease;
                 appliDB.date_modified = DateTime.Now;
                 appliDB.modified_by = viewMod.applicantViewModels.tbl_user_id;
                 appliDB.supplier_address = viewMod.applicantViewModels.address;
                 appliDB.date_of_inspection = viewMod.applicantViewModels.inspectionDate;
                 appliDB.tbl_specification_id = viewMod.applicantViewModels.specification;
-                if (appliDB.tbl_permit_type_id == 2 || appliDB.tbl_permit_type_id == 3) //For Permit to Purchase and Permit to Sell
-                {
-                    appliDB.coordinatedWithEnforcementDivision = viewMod.applicantViewModels.coordinatedWithEnforcementDivision;
-                }
+                //if (appliDB.tbl_permit_type_id == 2 || appliDB.tbl_permit_type_id == 3) //For Permit to Purchase and Permit to Sell
+                //{
+                //    appliDB.coordinatedWithEnforcementDivision = viewMod.applicantViewModels.coordinatedWithEnforcementDivision;
+                //}
                 _context.SaveChanges();
 
                 if(appliDB.tbl_permit_type_id == 13)
@@ -674,8 +674,8 @@ namespace FMB_CIS.Controllers
                                       specification = a.tbl_specification_id,
                                       inspectionDate = a.date_of_inspection,
                                       address = a.supplier_address,
-                                      expectedTimeArrived = a.expected_time_arrival,
-                                      expectedTimeRelease = a.expected_time_release,
+                                      //expectedTimeArrived = a.expected_time_arrival,
+                                      //expectedTimeRelease = a.expected_time_release,
                                       purpose = a.purpose
                                   }).FirstOrDefault();
             

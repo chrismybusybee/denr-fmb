@@ -19,30 +19,14 @@
             <thead>
                 <tr>
                     <th>
-                        ID
-                    </th>
-                    <th>
-                        Full Name
-                    </th>
-                    <th>
-                        Email
-                    </th>
-
-                    <th>
-                        Contact No.
-                    </th>
-                    <th>
-                        Address
+                        Reference Number
                     </th>
                     <th>
                         Application Date
                     </th>
                     <th>
-                        Application Type
-                    </th>
-                    <th>
-                        Permit Type
-                    </th>
+                        Quantity
+                    </th>                   
                     <th>
                         Permit Status
                     </th>
@@ -65,7 +49,7 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.id)
                             </td>
-                            <td>
+                            @* <td>
                                 @Html.DisplayFor(modelItem => item.full_name)
                             </td>
                             <td>
@@ -76,15 +60,12 @@
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.address)
-                            </td>
+                            </td> *@
                             <td>
                                 @Html.DisplayFor(modelItem => item.applicationDate)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.application_type)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.permit_type)
+                                @Html.DisplayFor(modelItem => item.qty)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.permit_status)
@@ -115,15 +96,15 @@
                                 @* <a href="ChainsawImporterApproval?uid=@item.tbl_user_id&appid=@item.id">Take Action</a> *@
                                 @if (item.application_type.Contains("Importer"))
                                 {
-                                    <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">Edit</a>
+                                    <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">View</a>
                                 }
                                 @if (item.application_type.Contains("Seller"))
                                 {
-                                    <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">Edit</a>
+                                    <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">View</a>
                                 }
                                 @if (item.application_type.Contains("Owner"))
                                 {
-                                    <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">Edit</a>
+                                    <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">View</a>
                                 }
 
                             </td>
