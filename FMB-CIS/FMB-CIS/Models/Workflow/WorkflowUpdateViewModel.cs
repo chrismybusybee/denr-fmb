@@ -2,20 +2,19 @@
 
 namespace FMB_CIS.Models
 {
-    public class WorkflowNextStep
+    public class WorkflowUpdateViewModel
     {
         public int id { get; set; }
-        //public int userTypeId { get; set; }
-        public int stepId { get; set; }
-        public int division_id { get; set; }
-        public int user_type_id { get; set; }
-        public string next_step_code { get; set; }
-        public string button_text { get; set; }
-        public string button_class { get; set; }
+        //public string workflow_id { get; set; }
+        public string code { get; set; }
+        public string permitType { get; set; }
+        public string name { get; set; }
+        public string description { get; set; }
         public bool? is_active { get; set; }
         public int createdBy { get; set; }
         public int modifiedBy { get; set; }
         public DateTime? date_created { get; set; }
         public DateTime? date_modified { get; set; }
+        public IEnumerable<WorkflowStep> steps { get; set; }
     }
 }

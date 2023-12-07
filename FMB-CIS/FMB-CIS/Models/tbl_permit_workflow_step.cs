@@ -3,8 +3,8 @@
     public class tbl_permit_workflow_step
     {
         public int id { get; set; }
-        //public string workflow_step_id { get; set; }
-        public int workflow_id { get; set; }
+        public string workflow_step_id { get; set; }
+        public string workflow_id { get; set; }
         public string permit_type_code { get; set; }
         public string workflow_code { get; set; }
         public string workflow_step_code { get; set; }

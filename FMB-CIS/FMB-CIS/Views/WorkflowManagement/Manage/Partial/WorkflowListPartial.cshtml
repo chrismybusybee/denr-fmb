@@ -14,7 +14,7 @@
         </div>
     </div>
     <div id="accessRights">
-@*        @foreach (Workflow item in Model.workflows)
+        @foreach (Workflow item in Model.workflows)
         {
             <div href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="item-@Html.DisplayFor(modelItem=>item.id)">
                 <div class="d-flex w-100 justify-content-between">
@@ -23,10 +23,10 @@
                 </div>
                 <p class="mb-1">@Html.DisplayFor(modelItem => item.description)</p>
                 <p class="c-hidden">@Html.DisplayFor(modelItem => item.createdBy)</p>
-                <small><a class="btnUpdateOfficeType" onclick="OpenUpdateModal(@Html.DisplayFor(modelItem => item.id))">Update</a></small>
-                <small><a class="btnDeleteOfficeType" onclick="OpenDeleteModal(@Html.DisplayFor(modelItem => item.id))">Delete</a></small>
+                <small><a class="btnUpdateWorkflow" onclick="OpenUpdateModal(@Html.DisplayFor(modelItem => item.id))">Update</a></small>
+                <small><a class="btnDeleteWorkflow" onclick="OpenDeleteModal(@Html.DisplayFor(modelItem => item.id))">Delete</a></small>
             </div>
-        }*@
+        }
     </div>
 </div>
 

@@ -31,7 +31,7 @@ namespace FMB_CIS.Controllers
         }
 
         /// <summary>
-        /// AccessRights
+        /// Workflow List
         /// </summary>
         /// <returns></returns>
         public IActionResult WorkflowList()
@@ -58,8 +58,8 @@ namespace FMB_CIS.Controllers
             {
                 WorkflowListViewModel model = new WorkflowListViewModel();
                 //Get the list of users
-                //var entities = _context.tbl_workflow.Where(e => e.is_active == true).ToList();
-                //model.workflows = entities.Adapt<List<Workflow>>();
+                var entities = _context.tbl_permit_workflow.Where(e => e.is_active == true).ToList();
+                model.workflows = entities.Adapt<List<Workflow>>();
 
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
@@ -98,15 +98,15 @@ namespace FMB_CIS.Controllers
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             if (usrRoleID == 14) // Super Admin
             {
-                AccessRights model = new AccessRights();
+                WorkflowUpdateViewModel model = new WorkflowUpdateViewModel();
                 //Get the list of users
-                var entity = _context.tbl_access_right.FirstOrDefault(o => o.id == id);
-                model = entity.Adapt<AccessRights>();
+                var entity = _context.tbl_permit_workflow.FirstOrDefault(o => o.id == id);
+                model = entity.Adapt<WorkflowUpdateViewModel>();
 
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
-                return PartialView("~/Views/AccessRightsManagement/Manage/Modal/AccessRightsUpdateModal.cshtml", model);
+                return PartialView("~/Views/WorkflowManagement/Manage/Modal/WorkflowUpdateModal.cshtml", model);
             }
             else
             {
@@ -119,15 +119,15 @@ namespace FMB_CIS.Controllers
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             if (usrRoleID == 14) // Super Admin
             {
-                AccessRights model = new AccessRights();
+                Workflow model = new Workflow();
                 //Get the list of users
-                var entity = _context.tbl_access_right.FirstOrDefault(o => o.id == id);
-                model = entity.Adapt<AccessRights>();
+                var entity = _context.tbl_permit_workflow.FirstOrDefault(o => o.id == id);
+                model = entity.Adapt<Workflow>();
 
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
-                return PartialView("~/Views/AccessRightsManagement/Manage/Modal/AccessRightsDeleteModal.cshtml", model);
+                return PartialView("~/Views/WorkflowManagement/Manage/Modal/WorkflowDeleteModal.cshtml", model);
             }
             else
             {
@@ -143,7 +143,7 @@ namespace FMB_CIS.Controllers
             if (usrRoleID == 14) // Super Admin
             {
                 // Uses fluent validation
-                if (!ModelState.IsValid)
+                if (!ModelState.IsValid && false)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, ModelState);
                 }
@@ -159,6 +159,7 @@ namespace FMB_CIS.Controllers
                     workflowEntity.permit_type_code = model.permitType;
                     workflowEntity.description = model.description;
                     workflowEntity.workflow_code = model.code;
+                    workflowEntity.workflow_id = Guid.NewGuid().ToString();
                     //entity.workflowEntity_id = model.workflowEntity_id;
                     workflowEntity.is_active = true;
                     workflowEntity.createdBy = uid;
@@ -172,10 +173,10 @@ namespace FMB_CIS.Controllers
                     model.steps.ForEach(step =>
                     {
                         var workflowStepEntity = new tbl_permit_workflow_step();
-                        //workflowStepEntity.workflow_id = workflowEntity.id;
-                        workflowStepEntity.name = step.name;
-                        workflowStepEntity.permit_type_code = step.permit_type_code;
-                        workflowStepEntity.workflow_code = step.workflow_code;
+                        workflowStepEntity.workflow_id = workflowEntity.workflow_id;
+                        workflowStepEntity.workflow_step_id = Guid.NewGuid().ToString();
+                        workflowStepEntity.permit_type_code = workflowEntity.permit_type_code;
+                        workflowStepEntity.workflow_code = workflowEntity.workflow_code;
                         workflowStepEntity.workflow_step_code = step.workflow_step_code;
                         workflowStepEntity.permit_page_code = step.permit_page_code;
                         workflowStepEntity.name = step.name;
@@ -183,7 +184,6 @@ namespace FMB_CIS.Controllers
                         workflowStepEntity.on_pre_action = step.on_pre_action;
                         workflowStepEntity.on_success_action = step.on_success_action;
                         workflowStepEntity.on_exit_action = step.on_exit_action;
-                        //entity.workflow_id = step.workflow_id;
                         workflowStepEntity.is_active = true;
                         workflowStepEntity.createdBy = uid;
                         workflowStepEntity.modifiedBy = uid;
@@ -192,6 +192,28 @@ namespace FMB_CIS.Controllers
 
                         // 2. add to context
                         _context.tbl_permit_workflow_step.Add(workflowStepEntity);
+
+                        step.nextSteps.ForEach(nextStep =>
+                        {
+                            var workflowNextStepEntity = new tbl_permit_workflow_next_step();
+                            workflowNextStepEntity.workflow_next_step_id = Guid.NewGuid().ToString();
+                            workflowNextStepEntity.workflow_step_id = workflowStepEntity.workflow_step_id;
+                            workflowNextStepEntity.workflow_id = workflowEntity.workflow_id;
+                            workflowNextStepEntity.workflow_step_code = workflowStepEntity.workflow_step_code;
+                            workflowNextStepEntity.next_step_code = nextStep.next_step_code;
+                            workflowNextStepEntity.division_id = nextStep.division_id;
+                            workflowNextStepEntity.user_type_id = nextStep.user_type_id;
+                            workflowNextStepEntity.button_text = nextStep.button_text;
+                            workflowNextStepEntity.button_class = nextStep.button_class;
+                            workflowNextStepEntity.is_active = true;
+                            workflowNextStepEntity.createdBy = uid;
+                            workflowNextStepEntity.modifiedBy = uid;
+                            workflowNextStepEntity.date_created = DateTime.Now;
+                            workflowNextStepEntity.date_modified = DateTime.Now;
+
+                            // 2. add to context
+                            _context.tbl_permit_workflow_next_step.Add(workflowNextStepEntity);
+                        });
                     });
 
                     // 3. TO DO: Add logging / historical data
@@ -206,6 +228,26 @@ namespace FMB_CIS.Controllers
             else
             {
                 return RedirectToAction("Index", "AccountManagement");
+            }
+        }
+
+        /// <summary>
+        /// UserTypeUser
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("WorkflowManagement/GetWorkflow/{workflowId:int}")]
+        public Workflow GetWorkflow(int workflowId)
+        {
+            int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            if (userRoleID == 14) // Super Admin
+            {
+                var workflow = _context.tbl_permit_workflow.Where(e => e.id == workflowId).FirstOrDefault();
+                return workflow.Adapt<Workflow>();
+            }
+            else
+            {
+                return null;
             }
         }
         [HttpPut("WorkflowManagement/WorkflowUpdate/{id:int}")]

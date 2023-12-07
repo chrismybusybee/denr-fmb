@@ -92,6 +92,12 @@
                                                         </p>
                                                     </div>
                                                 </div>
+                                                <div class="col-md-12 mb-3">
+                                                    <div class="form-floating">
+                                                        <input data-bind="value: description" type="text" class="form-control rounded-3" placeholder="" />
+                                                        <label>Description</label>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <hr />
                                             <h2 class="fw-bold mb-3 fs-5">Advanced Setup</h2>
@@ -285,6 +291,7 @@
             var newStep = {
                 id: ko.observable(crypto.randomUUID()),
                 name: ko.observable(""),
+                description: ko.observable(""),
                 statusCode: ko.observable(""),
                 onPreAction: ko.observable(""),
                 onSuccessAction: ko.observable(""),
@@ -293,7 +300,8 @@
                 nextSteps: ko.observableArray([]),
                 isEdit: ko.observable(false),
                 configureStep: configureStep,
-                addNextStep: addNextStep
+                addNextStep: addNextStep,
+                permit_page_code: ko.observable(111)
                 };
             self.steps.push(newStep);
             configureStep(newStep);
@@ -312,7 +320,7 @@
                 divisionId: ko.observable(0),
                 stepId: ko.observable(""),
                 buttonText: ko.observable(""),
-                buttonClass: ko.observable("")
+                buttonClass: ko.observable("btn-primary")
             });
         };
 
@@ -345,21 +353,27 @@
                 step.nextSteps().forEach(function (nextStep) {
                     nextSteps.push({
                         id: nextStep.id(),
-                        userTypeId: nextStep.userTypeId(),
-                        divisionId: nextStep.divisionId(),
-                        stepId: nextStep.stepId(),
-                        buttonText: nextStep.buttonText(),
-                        buttonClass: nextStep.buttonClass()
+                        user_type_Id: nextStep.userTypeId(),
+                        division_id: nextStep.divisionId(),
+                        workflow_code: workflow.code,
+                        workflow_step_code: step.statusCode(),
+                        next_step_code: nextStep.stepId(),
+                        button_text: nextStep.buttonText(),
+                        button_class: nextStep.buttonClass()
                     }
                     );
                 });
+
                 steps.push({
                     id: step.id(),
                     name: step.name(),
-                    statusCode: step.statusCode(),
-                    onPreAction: step.onPreAction(),
-                    onSuccessAction: step.onSuccessAction(),
-                    onExitAction: step.onExitAction(),
+                    workflow_code: workflow.code,
+                    workflow_step_code: step.statusCode(),
+                    description: step.description(),
+                    permit_page_code: step.permit_page_code(),
+                    on_pre_action: step.onPreAction(),
+                    on_success_action: step.onSuccessAction(),
+                    on_exit_action: step.onExitAction(),
                     isLock: step.isLock(),
                     nextSteps: nextSteps,
                     isEdit: step.isEdit()
