@@ -1,15 +1,15 @@
 ﻿@using System.Security.Claims;
 @using System.Globalization;
-@model FMB_CIS.Models.AccessRights
+@model FMB_CIS.Models.Workflow
 @{
-    ViewBag.Title = "Access Rights Management";
+    ViewBag.Title = "Workflow Management";
 }
-<div class="modal modal-sheet  bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="deleteAccessRightsModal" aria-hidden="true">
+<div class="modal modal-sheet  bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="deleteWorkflowModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content rounded-3 shadow">
             <div class="modal-body p-4 text-center">
                 <h5 class="mb-0">Are you sure with deleting this item?</h5>
-                <p class="mb-0">This will render the connected properties be inactive as well.</p>
+                <p class="mb-0">This will remove all workflow settings.</p>
             </div>
             <div class="modal-footer flex-nowrap p-0">
                 <input type="hidden" class="form-control rounded-3" id="officeTypeId" asp-for="@Model.id">
@@ -30,7 +30,7 @@
         let id = document.getElementById("officeTypeId").value;
         let parameters = { id: id};
         $.ajax({
-            url: '/AccessRightsManagement/AccessRightsDelete/' + id,
+            url: '/WorkflowManagement/WorkflowDelete/' + id,
             type: 'DELETE',
             data: parameters,
             success: function (data) {
@@ -39,14 +39,14 @@
                 // NOTE: TO DO if success
                 closeModal();
                 // NOTE: TO DO better way of calling callback function from parent
-                $('#accessRightsListPartialContainer').load('/AccessRightsManagement/AccessRightsListPartialView');
+                $('#workflowListPartialContainer').load('/WorkflowManagement/WorkflowListPartialView');
             }
         });
     });
 
     function closeModal() {
-        $("#deleteAccessRightsModal").modal("hide");
-        let elem = document.querySelector('#deleteAccessRightsModal');
+        $("#deleteWorkflowModal").modal("hide");
+        let elem = document.querySelector('#deleteWorkflowModal');
         elem.parentNode.removeChild(elem);
     }
 </script>               

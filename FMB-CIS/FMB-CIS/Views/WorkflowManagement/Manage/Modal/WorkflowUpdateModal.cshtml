@@ -277,6 +277,7 @@
     var WorkflowModel = function (workflowDataModel, userTypes, permitTypes, regions, cities) {
         var self = this;
         self.permit_type_code = ko.observable(0);
+        self.id = ko.observable(0);//DOCUMENT_APPROVAL
         //self.workflow_id = ko.observable(crypto.randomUUID());
         self.workflow_code = ko.observable("");//DOCUMENT_APPROVAL
         self.name = ko.observable("");//Document Approval
@@ -342,6 +343,7 @@
         self.saveWorkflow = function () {
 
             var workflow = {};
+            workflow.id = self.id();
             workflow.workflow_code = self.workflow_code();
             workflow.permit_type_code = self.permit_type_code();
             workflow.name = self.name();
@@ -414,6 +416,7 @@
         //}, self);
 
         if (workflowDataModel) {
+            self.id(workflowDataModel.id);
             self.name(workflowDataModel.name);
             self.permit_type_code(workflowDataModel.permit_type_code);
             self.workflow_code(workflowDataModel.workflow_code);
@@ -478,6 +481,8 @@
                 //workflowDataPretext = workflowDataPretext.replaceAll(/PURCHASE/g, "RESELL");
 
                 //workflow = JSON.parse(workflowDataPretext);
+                console.log("workflowData");
+                console.log(workflowData);
                 workflow = workflowData;
                 return $.get("/AccessRightsManagement/UserTypes");
             }

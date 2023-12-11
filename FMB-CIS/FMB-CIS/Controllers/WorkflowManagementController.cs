@@ -108,7 +108,7 @@ namespace FMB_CIS.Controllers
                 model.steps = stepEntity.Adapt<List<WorkflowStep>>();
 
                 //Get the list of nextsteps
-                foreach(WorkflowStep workflowStep in model.steps)
+                foreach (WorkflowStep workflowStep in model.steps)
                 {
                     var nextstepEntity = _context.tbl_permit_workflow_next_step.Where(o => o.workflow_step_code == workflowStep.workflow_step_code).ToList();
                     //o.workflow_code == model.workflow_code &&
@@ -165,6 +165,21 @@ namespace FMB_CIS.Controllers
                     // Note: TO DO Soon refactor code, let's move the Data Access to a new layer
 
                     // Action: 1 to 5
+
+                    // Remove if existing
+                    if (model.id != 0)
+                    {
+                        var removeEntity = _context.tbl_permit_workflow.Where(m => m.id == model.id).SingleOrDefault();
+                        string workflowCode = removeEntity.workflow_code;
+                        _context.tbl_permit_workflow.Remove(removeEntity);
+
+                        var removeWorkflowStepEntity = _context.tbl_permit_workflow_step.Where(m => m.workflow_code == workflowCode);
+                        _context.tbl_permit_workflow_step.RemoveRange(removeWorkflowStepEntity);
+
+                        var removeWorkflowNextStepEntity = _context.tbl_permit_workflow_next_step.Where(m => m.workflow_code == workflowCode);
+                        _context.tbl_permit_workflow_next_step.RemoveRange(removeWorkflowNextStepEntity);
+                    }
+
                     // 1. create entity
                     var workflowEntity = new tbl_permit_workflow();
                     workflowEntity.name = model.name;
@@ -232,6 +247,8 @@ namespace FMB_CIS.Controllers
                     // 3. TO DO: Add logging / historical data
 
                     // 4. Save changes
+
+                    // Remove previous
                     _context.SaveChanges();
 
                     // 5. Return result
@@ -351,19 +368,18 @@ namespace FMB_CIS.Controllers
 
                     // Action: 1 to 5
                     // 1. get, update entity
-                    var entity = _context.tbl_access_right.Where(m => m.id == model.id).FirstOrDefault();
-
-                    // NOTE: TO DO, is there a better location for this
-                    if (entity == null)
+                    if (model.id != 0)
                     {
-                        return StatusCode(StatusCodes.Status404NotFound, ModelState);
-                    }
-                    entity.is_active = false;
-                    entity.modifiedBy = uid;
-                    entity.date_modified = DateTime.Now;
+                        var removeEntity = _context.tbl_permit_workflow.Where(m => m.id == model.id).SingleOrDefault();
+                        string workflowCode = removeEntity.workflow_code;
+                        _context.tbl_permit_workflow.Remove(removeEntity);
 
-                    // 2. update to context
-                    _context.Update(entity);
+                        var removeWorkflowStepEntity = _context.tbl_permit_workflow_step.Where(m => m.workflow_code == workflowCode);
+                        _context.tbl_permit_workflow_step.RemoveRange(removeWorkflowStepEntity);
+
+                        var removeWorkflowNextStepEntity = _context.tbl_permit_workflow_next_step.Where(m => m.workflow_code == workflowCode);
+                        _context.tbl_permit_workflow_next_step.RemoveRange(removeWorkflowNextStepEntity);
+                    }
 
                     // 3. TO DO: Add logging / historical data
 
