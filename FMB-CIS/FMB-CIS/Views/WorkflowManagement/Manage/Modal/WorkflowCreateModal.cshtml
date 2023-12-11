@@ -12,7 +12,7 @@
                 <form class="" id="OfficeTypeCreateForm" role="form" method="post">
                     <div class="row g-3">
                         <div class="form-floating mb-3">
-                            <select data-bind="value: permitType" class="form-select">
+                            <select data-bind="value: permit_type_code" class="form-select">
                                 <option selected value="0">Choose permit type</option>
                                 <!-- ko foreach: permitTypes()-->
                                 <option data-bind="text: name, value: id"></option>
@@ -24,8 +24,8 @@
                     <div class="row g-3">
                         <div class="col">
                             <div class="form-floating mb-3">
-                                <input data-bind="value: code" type="text" class="form-control rounded-3" id="code" placeholder="" />
-                                <label for="code">Code</label>
+                                <input data-bind="value: workflow_code" type="text" class="form-control rounded-3" id="workflow_code" placeholder="" />
+                                <label for="workflow_code">Code</label>
                                 <p class="mt-0 mb-0">
                                     <small class="text-body-secondary">Associated with a controller / view, e.g DOCUMENT_APPROVAL</small>
                                 </p>
@@ -63,6 +63,7 @@
                                         <h5 class="card-title" data-bind="text: name() || '[NEW STEP]'"></h5>
                                         <p class="card-text"></p>
                                         <a href="#" class="btn btn-primary" data-bind="click: configureStep">Configure step</a>
+                                        <a href="#" class="btn btn-primary-outline" data-bind="click: removeStep"><span class="fa fa-close"></span></a>
                                     </div>
                                 </div>
                             </div>
@@ -104,33 +105,33 @@
                                             <div class="row g-3">
                                                 <div class="col-md-4 mb-3">
                                                     <div class="form-floating">
-                                                        <input data-bind="value: onPreAction" type="text" class="form-control rounded-3" placeholder="" />
+                                                        <input disabled="disabled" data-bind="value: onPreAction" type="text" class="form-control rounded-3" placeholder="" />
                                                         <label>On Pre Action</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4 mb-3">
                                                     <div class="form-floating">
-                                                        <input data-bind="value: onSuccessAction" type="text" class="form-control rounded-3" placeholder="" />
+                                                        <input disabled="disabled" data-bind="value: onSuccessAction" type="text" class="form-control rounded-3" placeholder="" />
                                                         <label>On Success Action</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4 mb-3">
                                                     <div class="form-floating">
-                                                        <input data-bind="value: onExitAction" type="text" class="form-control rounded-3" placeholder="" />
+                                                        <input disabled="disabled" data-bind="value: onExitAction" type="text" class="form-control rounded-3" placeholder="" />
                                                         <label>On Exit Action</label>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row g-3">
-                                                <div class="col-12">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox">
-                                                        <label class="form-check-label">
-                                                            Lock
-                                                        </label>
-                                                    </div>
-                                                </div>
+                                            @*                                            <div class="row g-3">
+                                            <div class="col-12">
+                                            <div class="form-check">
+                                            <input class="form-check-input" type="checkbox">
+                                            <label class="form-check-label">
+                                            Lock
+                                            </label>
                                             </div>
+                                            </div>
+                                            </div>*@
                                         </div>
                                         <hr />
                                         <div class="c-next-step-container">
@@ -167,11 +168,11 @@
                                                     <!-- ko if: userTypeId() == '10' -->
                                                     <div class="col-md-2">
                                                         <div class="form-floating">
-                                                        <select data-bind="value: divisionId" class="form-select">
-                                                            <option selected value="0">Choose region</option>
-                                                            <!-- ko foreach: $parents[1].regions-->
-                                                            <option data-bind="text: office_name, value: id"></option>
-                                                            <!-- /ko -->
+                                                            <select data-bind="value: divisionId" class="form-select">
+                                                                <option selected value="0">Choose region</option>
+                                                                <!-- ko foreach: $parents[1].regions-->
+                                                                <option data-bind="text: office_name, value: id"></option>
+                                                                <!-- /ko -->
                                                             </select>
                                                             <label class="form-label">Region</label>
                                                         </div>
@@ -180,11 +181,11 @@
                                                     <!-- ko if: userTypeId() == '8' -->
                                                     <div class="col-md-2">
                                                         <div class="form-floating">
-                                                        <select data-bind="value: divisionId" class="form-select">
-                                                            <option selected value="0">Choose city</option>
-                                                            <!-- ko foreach: $parents[1].cities-->
-                                                            <option data-bind="text: office_name, value: id"></option>
-                                                            <!-- /ko -->
+                                                            <select data-bind="value: divisionId" class="form-select">
+                                                                <option selected value="0">Choose city</option>
+                                                                <!-- ko foreach: $parents[1].cities-->
+                                                                <option data-bind="text: office_name, value: id"></option>
+                                                                <!-- /ko -->
                                                             </select>
                                                             <label class="form-label">City</label>
                                                         </div>
@@ -225,7 +226,8 @@
                                                     </div>
                                                     <div class="col-md-2">
                                                         <div class="form-floating">
-                                                            <button data-bind="text: buttonText() || 'Next', css: buttonClass" class="mb-2 mt-3 btn btn-sm rounded-3 btn-primary add-next-step" type="button"></button>
+                                                            <button data-bind="text: buttonText() || 'Next', css: buttonClass" class="mb-2 mt-3 btn btn-sm rounded-3 btn-primary" type="button"></button>
+                                                            @*<button data-bind="click: $root.removeNextStep" class="mb-2 mt-3 btn btn-sm rounded-3 btn-primary" type="button"><span class="fa fa-close"></span></button>*@
                                                         </div>
                                                     </div>
                                                 </div>
@@ -274,9 +276,9 @@
     // Here's my data model
     var WorkflowModel = function (userTypes, permitTypes, regions, cities) {
         var self = this;
-        self.permitType = ko.observable(0);
+        self.permit_type_code = ko.observable(0);
         //self.workflow_id = ko.observable(crypto.randomUUID());
-        self.code = ko.observable("");//DOCUMENT_APPROVAL
+        self.workflow_code = ko.observable("");//DOCUMENT_APPROVAL
         self.name = ko.observable("");//Document Approval
         self.description = ko.observable("");//Workflow for approving documents.
 
@@ -286,6 +288,7 @@
         self.permitTypes = ko.observableArray(permitTypes);
         self.regions = ko.observableArray(regions);
         self.cities = ko.observableArray(cities);
+        self.removeNextStep = removeNextStep;
 
         self.addStep = function () {
             var newStep = {
@@ -300,9 +303,10 @@
                 nextSteps: ko.observableArray([]),
                 isEdit: ko.observable(false),
                 configureStep: configureStep,
+                removeStep: removeStep,
                 addNextStep: addNextStep,
                 permit_page_code: ko.observable(111)
-                };
+            };
             self.steps.push(newStep);
             configureStep(newStep);
         };
@@ -312,7 +316,7 @@
         };
 
         function addNextStep(step) {
-            console.log(step);
+            //console.log(step);
             var nextStepId = crypto.randomUUID();
             step.nextSteps.push({
                 id: ko.observable(nextStepId),
@@ -324,8 +328,9 @@
             });
         };
 
-        self.removeNextStep = function (step, nextStep) {
-            step.remove(step);
+        function removeNextStep(nextStep) {
+            console.log(nextStep);
+            //parent.nextSteps().remove(nextStep);
         };
 
         function configureStep(step) {
@@ -334,15 +339,23 @@
             step.isEdit(newValue);
         }
 
+        function removeStep(step) {
+            self.steps.remove(step);
+        }
+
+        function removeSubStep(step) {
+            self.steps.remove(step);
+        }
+
         self.saveWorkflow = function () {
             console.log("self");
-            console.log(self.code());
+            console.log(self.workflow_code());
             //console.log("self.workflow_id()");
             //console.log(self.workflow_id());
 
             var workflow = {};
-            workflow.code = self.code();
-            workflow.permitType = self.permitType();
+            workflow.workflow_code = self.workflow_code();
+            workflow.permit_type_code = self.permit_type_code();
             workflow.name = self.name();
             workflow.description = self.description();
             //workflow.workflow_id = self.workflow_id();
@@ -355,7 +368,7 @@
                         id: nextStep.id(),
                         user_type_Id: nextStep.userTypeId(),
                         division_id: nextStep.divisionId(),
-                        workflow_code: workflow.code,
+                        workflow_code: workflow.workflow_code,
                         workflow_step_code: step.statusCode(),
                         next_step_code: nextStep.stepId(),
                         button_text: nextStep.buttonText(),
@@ -367,7 +380,7 @@
                 steps.push({
                     id: step.id(),
                     name: step.name(),
-                    workflow_code: workflow.code,
+                    workflow_code: workflow.workflow_code,
                     workflow_step_code: step.statusCode(),
                     description: step.description(),
                     permit_page_code: step.permit_page_code(),
@@ -436,7 +449,7 @@
         ).then(
             function (permitTypesData) {
                 permitTypes = permitTypesData;
-                return $.post('/OfficeManagement/GetDivisionByUserType', {userTypeId: 10});
+                return $.post('/OfficeManagement/GetDivisionByUserType', { userTypeId: 10 });
             }
         ).then(
             function (regionsData) {
@@ -459,7 +472,7 @@
     });
     //$("#btnCreate").click(function () {
     //    let parameters = {
-    //        code: document.getElementById("code").value,
+    //        workflow_code: document.getElementById("workflow_code").value,
     //        name: document.getElementById("name").value,
     //        description: document.getElementById("description").value,
     //        scope: document.getElementById("scope").value,

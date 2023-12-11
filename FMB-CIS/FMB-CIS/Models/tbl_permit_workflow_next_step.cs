@@ -6,6 +6,7 @@
         public string workflow_next_step_id { get; set; }
         public string workflow_step_id { get; set; }
         public string workflow_id { get; set; }
+        public string workflow_code { get; set; }
         public string workflow_step_code { get; set; }
         public string next_step_code { get; set; }
         public int division_id { get; set; }

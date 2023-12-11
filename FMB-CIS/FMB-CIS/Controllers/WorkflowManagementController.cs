@@ -103,6 +103,18 @@ namespace FMB_CIS.Controllers
                 var entity = _context.tbl_permit_workflow.FirstOrDefault(o => o.id == id);
                 model = entity.Adapt<WorkflowUpdateViewModel>();
 
+                //Get the list of steps
+                var stepEntity = _context.tbl_permit_workflow_step.Where(o => o.workflow_code == model.workflow_code).ToList();
+                model.steps = stepEntity.Adapt<List<WorkflowStep>>();
+
+                //Get the list of nextsteps
+                foreach(WorkflowStep workflowStep in model.steps)
+                {
+                    var nextstepEntity = _context.tbl_permit_workflow_next_step.Where(o => o.workflow_step_code == workflowStep.workflow_step_code).ToList();
+                    //o.workflow_code == model.workflow_code &&
+                    workflowStep.nextSteps = nextstepEntity.Adapt<List<WorkflowNextStep>>();
+                }
+
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
@@ -156,9 +168,9 @@ namespace FMB_CIS.Controllers
                     // 1. create entity
                     var workflowEntity = new tbl_permit_workflow();
                     workflowEntity.name = model.name;
-                    workflowEntity.permit_type_code = model.permitType;
+                    workflowEntity.permit_type_code = model.permit_type_code;
                     workflowEntity.description = model.description;
-                    workflowEntity.workflow_code = model.code;
+                    workflowEntity.workflow_code = model.workflow_code;
                     workflowEntity.workflow_id = Guid.NewGuid().ToString();
                     //entity.workflowEntity_id = model.workflowEntity_id;
                     workflowEntity.is_active = true;
@@ -199,6 +211,7 @@ namespace FMB_CIS.Controllers
                             workflowNextStepEntity.workflow_next_step_id = Guid.NewGuid().ToString();
                             workflowNextStepEntity.workflow_step_id = workflowStepEntity.workflow_step_id;
                             workflowNextStepEntity.workflow_id = workflowEntity.workflow_id;
+                            workflowNextStepEntity.workflow_code = workflowEntity.workflow_code;
                             workflowNextStepEntity.workflow_step_code = workflowStepEntity.workflow_step_code;
                             workflowNextStepEntity.next_step_code = nextStep.next_step_code;
                             workflowNextStepEntity.division_id = nextStep.division_id;
@@ -242,8 +255,23 @@ namespace FMB_CIS.Controllers
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             if (userRoleID == 14) // Super Admin
             {
-                var workflow = _context.tbl_permit_workflow.Where(e => e.id == workflowId).FirstOrDefault();
-                return workflow.Adapt<Workflow>();
+                Workflow model = new Workflow();
+                //Get the list of users
+                var workflow = _context.tbl_permit_workflow.FirstOrDefault(e => e.id == workflowId);
+                model = workflow.Adapt<Workflow>();
+
+                //Get the list of steps
+                var stepEntity = _context.tbl_permit_workflow_step.Where(o => o.workflow_code == model.workflow_code).ToList();
+                model.steps = stepEntity.Adapt<List<WorkflowStep>>();
+
+                //Get the list of nextsteps
+                foreach (WorkflowStep workflowStep in model.steps)
+                {
+                    var nextstepEntity = _context.tbl_permit_workflow_next_step.Where(o => o.workflow_step_code == workflowStep.workflow_step_code).ToList();
+                    //o.workflow_code == model.workflow_code &&
+                    workflowStep.nextSteps = nextstepEntity.Adapt<List<WorkflowNextStep>>();
+                }
+                return model;
             }
             else
             {
