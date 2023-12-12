@@ -36,8 +36,8 @@ namespace FMB_CIS.Controllers
         public IActionResult AccessRightsList()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            if (userRoleID == 14) // Super Admin
             {
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
@@ -52,8 +52,8 @@ namespace FMB_CIS.Controllers
         public IActionResult AccessRightsListPartialView()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            if (userRoleID == 14) // Super Admin
             {
                 AccessRightsListViewModel model = new AccessRightsListViewModel();
                 //Get the list of users
@@ -73,8 +73,8 @@ namespace FMB_CIS.Controllers
         public IActionResult AccessRightsCreateModal()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            if (userRoleID == 14) // Super Admin
             {
                 AccessRightsListViewModel model = new AccessRightsListViewModel();
                 //Get the list of users
@@ -94,8 +94,8 @@ namespace FMB_CIS.Controllers
         public IActionResult AccessRightsUpdateModal(int id)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            if (userRoleID == 14) // Super Admin
             {
                 AccessRights model = new AccessRights();
                 //Get the list of users
@@ -115,8 +115,8 @@ namespace FMB_CIS.Controllers
         public IActionResult AccessRightsDeleteModal(int id)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            if (userRoleID == 14) // Super Admin
             {
                 AccessRights model = new AccessRights();
                 //Get the list of users
@@ -137,9 +137,9 @@ namespace FMB_CIS.Controllers
         public IActionResult AccessRightsCreate(AccessRightsCreateViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (usrRoleID == 14) // Super Admin
+            if (userRoleID == 14) // Super Admin
             {
                 // Uses fluent validation
                 if (!ModelState.IsValid)
@@ -187,9 +187,9 @@ namespace FMB_CIS.Controllers
         public IActionResult AccessRightsUpdate(AccessRightsUpdateViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (usrRoleID == 14) // Super Admin
+            if (userRoleID == 14) // Super Admin
             {
                 // Uses fluent validation
                 if (!ModelState.IsValid)
@@ -240,9 +240,9 @@ namespace FMB_CIS.Controllers
         public IActionResult AccessRightsDelete(OfficeDeleteViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (usrRoleID == 14) // Super Admin
+            if (userRoleID == 14) // Super Admin
             {
                 // Uses fluent validation
                 if (!ModelState.IsValid)
@@ -293,8 +293,8 @@ namespace FMB_CIS.Controllers
         public IActionResult UserTypeList()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            if (userRoleID == 14) // Super Admin
             {
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
@@ -309,8 +309,8 @@ namespace FMB_CIS.Controllers
         public IActionResult UserTypeListPartialView()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            if (userRoleID == 14) // Super Admin
             {
                 UserTypeListViewModel model = new UserTypeListViewModel();
                 //Get the list of users
@@ -330,8 +330,8 @@ namespace FMB_CIS.Controllers
         public IActionResult UserTypeCreateModal()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            if (userRoleID == 14) // Super Admin
             {
                 UserTypeListViewModel model = new UserTypeListViewModel();
                 //Get the list of users
@@ -351,8 +351,8 @@ namespace FMB_CIS.Controllers
         public IActionResult UserTypeUpdateModal(int id)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            if (userRoleID == 14) // Super Admin
             {
                 UserType model = new UserType();
                 //Get the list of users
@@ -372,8 +372,8 @@ namespace FMB_CIS.Controllers
         public IActionResult UserTypeDeleteModal(int id)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            if (userRoleID == 14) // Super Admin
             {
                 UserType model = new UserType();
                 //Get the list of users
@@ -394,9 +394,9 @@ namespace FMB_CIS.Controllers
         public IActionResult UserTypeCreate(UserTypeCreateViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (usrRoleID == 14) // Super Admin
+            if (userRoleID == 14) // Super Admin
             {
                 // Uses fluent validation
                 if (!ModelState.IsValid)
@@ -441,9 +441,9 @@ namespace FMB_CIS.Controllers
         public IActionResult UserTypeUpdate(UserTypeUpdateViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (usrRoleID == 14) // Super Admin
+            if (userRoleID == 14) // Super Admin
             {
                 // Uses fluent validation
                 if (!ModelState.IsValid)
@@ -489,9 +489,9 @@ namespace FMB_CIS.Controllers
         public IActionResult UserTypeDelete(OfficeDeleteViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (usrRoleID == 14) // Super Admin
+            if (userRoleID == 14) // Super Admin
             {
                 // Uses fluent validation
                 if (!ModelState.IsValid)
@@ -535,14 +535,14 @@ namespace FMB_CIS.Controllers
         }
 
         /// <summary>
-        /// UserTypeAccessRights Types
+        /// UserTypeAccessRights
         /// </summary>
         /// <returns></returns>
         public IEnumerable<UserTypeAccessRights> UserTypeAccessRights()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            if (userRoleID == 14) // Super Admin
             {
                 var userTypeAccessRights = _context.tbl_user_type_access_right.Where(e => e.is_active == true).ToList();
                 return userTypeAccessRights.Adapt<List<UserTypeAccessRights>>();
@@ -555,8 +555,8 @@ namespace FMB_CIS.Controllers
         public IActionResult UserTypeAccessRightsList()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            if (userRoleID == 14) // Super Admin
             {
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
@@ -572,8 +572,8 @@ namespace FMB_CIS.Controllers
         public IActionResult UserTypeAccessRightsListPartialView()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            if (userRoleID == 14) // Super Admin
             {
                 UserTypeAccessRightsListViewModel model = new UserTypeAccessRightsListViewModel();
                 //Get the list of user types
@@ -601,9 +601,9 @@ namespace FMB_CIS.Controllers
         public IActionResult UserTypeAccessRightsToggle(UserTypeAccessRightsToggleViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (usrRoleID == 14) // Super Admin
+            if (userRoleID == 14) // Super Admin
             {
                 // Uses fluent validation
                 if (!ModelState.IsValid)
@@ -653,8 +653,8 @@ namespace FMB_CIS.Controllers
         //public IActionResult AccessRightsTypeCreateModal()
         //{
         //    int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-        //    int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-        //    if (usrRoleID == 14) // Super Admin
+        //    int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+        //    if (userRoleID == 14) // Super Admin
         //    {
         //        OfficeTypeListViewModel model = new OfficeTypeListViewModel();
         //        //Get the list of users
@@ -674,8 +674,8 @@ namespace FMB_CIS.Controllers
         //public IActionResult AccessRightsTypeUpdateModal(int id)
         //{
         //    int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-        //    int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-        //    if (usrRoleID == 14) // Super Admin
+        //    int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+        //    if (userRoleID == 14) // Super Admin
         //    {
         //        OfficeType model = new OfficeType();
         //        //Get the list of users
@@ -695,8 +695,8 @@ namespace FMB_CIS.Controllers
         //public IActionResult AccessRightsTypeDeleteModal(int id)
         //{
         //    int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-        //    int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-        //    if (usrRoleID == 14) // Super Admin
+        //    int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+        //    if (userRoleID == 14) // Super Admin
         //    {
         //        OfficeType model = new OfficeType();
         //        //Get the list of users
@@ -718,9 +718,9 @@ namespace FMB_CIS.Controllers
         //public IActionResult AccessRightsTypeCreate(OfficeTypeCreateViewModel model)
         //{
         //    int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-        //    int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+        //    int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
         //    // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-        //    if (usrRoleID == 14) // Super Admin
+        //    if (userRoleID == 14) // Super Admin
         //    {
         //        // Uses fluent validation
         //        if (!ModelState.IsValid)
@@ -764,9 +764,9 @@ namespace FMB_CIS.Controllers
         //public IActionResult OfficeTypeUpdate(OfficeTypeUpdateViewModel model)
         //{
         //    int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-        //    int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+        //    int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
         //    // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-        //    if (usrRoleID == 14) // Super Admin
+        //    if (userRoleID == 14) // Super Admin
         //    {
         //        // Uses fluent validation
         //        if (!ModelState.IsValid)
@@ -813,9 +813,9 @@ namespace FMB_CIS.Controllers
         //public IActionResult OfficeTypeDelete(OfficeTypeDeleteViewModel model)
         //{
         //    int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-        //    int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+        //    int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
         //    // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-        //    if (usrRoleID == 14) // Super Admin
+        //    if (userRoleID == 14) // Super Admin
         //    {
         //        // Uses fluent validation
         //        if (!ModelState.IsValid)
@@ -857,5 +857,243 @@ namespace FMB_CIS.Controllers
         //        return RedirectToAction("Index", "AccountManagement");
         //    }
         //}
+
+
+
+        /// <summary>
+        /// UserTypeUser
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<UserType> UserTypes()
+        {
+            int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            if (userRoleID == 14) // Super Admin
+            {
+                var userTypes = _context.tbl_user_types.Where(e => e.is_active == true).ToList();
+                return userTypes.Adapt<List<UserType>>();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// UserTypeUser
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<UserTypeUser> UserTypeUsers()
+        {
+            int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            if (userRoleID == 14) // Super Admin
+            {
+                var userTypeUsers = _context.tbl_user_type_user.Where(e => e.is_active == true).ToList();
+                return userTypeUsers.Adapt<List<UserTypeUser>>();
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public IActionResult UserTypeUserList()
+        {
+            int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            if (userRoleID == 14) // Super Admin
+            {
+                string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
+                ViewData["BaseUrl"] = host;
+
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+        }
+
+        public IActionResult UserTypeUserListPartialView()
+        {
+            int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            if (userRoleID == 14) // Super Admin
+            {
+                UserTypeUserListViewModel model = new UserTypeUserListViewModel();
+                //Get the list of user types
+                var userTypes = _context.tbl_user_types.Where(e => e.is_active == true).ToList();
+                model.userTypes = userTypes.Adapt<List<UserType>>();
+                //Get the list of access rights
+                var users = _context.tbl_user.Where(e => e.is_active == true).ToList();
+                model.users = users.Adapt<List<User>>();
+                //Get the list 
+                var userTypeUsers = _context.tbl_user_type_user.Where(e => e.is_active == true).ToList();
+                model.userTypeUsers = userTypeUsers.Adapt<List<UserTypeUser>>();
+
+                string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
+                ViewData["BaseUrl"] = host;
+
+                return PartialView("~/Views/AccessRightsManagement/Manage/Partial/UserTypeUserListPartial.cshtml", model);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult UserTypeUserToggle(UserTypeUserToggleViewModel model)
+        {
+            int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
+            if (userRoleID == 14) // Super Admin
+            {
+                // Uses fluent validation
+                if (!ModelState.IsValid)
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+                }
+                else
+                {
+                    // Save
+                    // Note: TO DO Soon refactor code, let's move the Data Access to a new layer
+
+                    var entity = _context.tbl_user_type_user.Where(m => m.user_type_id == model.userTypeId && m.user_id == model.userId).FirstOrDefault();
+
+                    if (entity == null) // No settings yet, create
+                    {
+                        var UserTypeUserEntity = new tbl_user_type_user();
+                        UserTypeUserEntity.user_type_id = model.userTypeId;
+                        UserTypeUserEntity.user_id = model.userId;
+                        UserTypeUserEntity.is_active = true;
+                        UserTypeUserEntity.created_by = uid;
+                        UserTypeUserEntity.modified_by = uid;
+                        UserTypeUserEntity.date_created = DateTime.Now;
+                        UserTypeUserEntity.date_modified = DateTime.Now;
+
+                        _context.tbl_user_type_user.Add(UserTypeUserEntity);
+                    }
+                    else
+                    {
+                        entity.is_active = !entity.is_active;
+                        entity.modified_by = uid;
+                        entity.date_modified = DateTime.Now;
+                        _context.Update(entity);
+                    }
+                    _context.SaveChanges();
+
+                    // TO DO : Add historical data
+
+                    return StatusCode(StatusCodes.Status201Created, ModelState);
+                }
+            }
+            else
+            {
+                return RedirectToAction("Index", "AccountManagement");
+            }
+        }
+
+
+
+
+        public IActionResult UserTypeUsersList()
+        {
+            int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            if (userRoleID == 14) // Super Admin
+            {
+                string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
+                ViewData["BaseUrl"] = host;
+
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+        }
+
+        public IActionResult UserTypeUsersListPartialView()
+        {
+            int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            if (userRoleID == 14) // Super Admin
+            {
+                UserTypeUserListViewModel model = new UserTypeUserListViewModel();
+                //Get the list of user types
+                var userTypes = _context.tbl_user_types.Where(e => e.is_active == true).ToList();
+                model.userTypes = userTypes.Adapt<List<UserType>>();
+                //Get the list of access rights
+                var users = _context.tbl_user.Where(e => e.is_active == true).ToList();
+                model.users = users.Adapt<List<User>>();
+                //Get the list 
+                var userTypeUsers = _context.tbl_user_type_user.Where(e => e.is_active == true).ToList();
+                model.userTypeUsers = userTypeUsers.Adapt<List<UserTypeUser>>();
+
+                string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
+                ViewData["BaseUrl"] = host;
+
+                return PartialView("~/Views/AccessRightsManagement/Manage/Partial/UserTypeAccessRightsListPartial.cshtml", model);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult UserTypeUsersToggle(UserTypeUserToggleViewModel model)
+        {
+            int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+            // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
+            if (userRoleID == 14) // Super Admin
+            {
+                // Uses fluent validation
+                if (!ModelState.IsValid)
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, ModelState);
+                }
+                else
+                {
+                    // Save
+                    // Note: TO DO Soon refactor code, let's move the Data Access to a new layer
+
+                    var entity = _context.tbl_user_type_user.Where(m => m.user_type_id == model.userTypeId && m.user_id == model.userId).FirstOrDefault();
+
+                    if (entity == null) // No settings yet, create
+                    {
+                        var userTypeUserEntity = new tbl_user_type_user();
+                        userTypeUserEntity.user_type_id = model.userTypeId;
+                        userTypeUserEntity.user_id = model.userId;
+                        userTypeUserEntity.is_active = true;
+                        userTypeUserEntity.created_by = uid;
+                        userTypeUserEntity.modified_by = uid;
+                        userTypeUserEntity.date_created = DateTime.Now;
+                        userTypeUserEntity.date_modified = DateTime.Now;
+
+                        _context.tbl_user_type_user.Add(userTypeUserEntity);
+                    }
+                    else
+                    {
+                        entity.is_active = !entity.is_active;
+                        entity.modified_by = uid;
+                        entity.date_modified = DateTime.Now;
+                        _context.Update(entity);
+                    }
+                    _context.SaveChanges();
+
+                    // TO DO : Add historical data
+
+                    return StatusCode(StatusCodes.Status201Created, ModelState);
+                }
+            }
+            else
+            {
+                return RedirectToAction("Index", "AccountManagement");
+            }
+        }
     }
 }

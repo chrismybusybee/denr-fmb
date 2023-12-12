@@ -1,0 +1,371 @@
+USE [denr_fmb_cis]
+GO
+
+/****** Object:  Table [dbo].[tbl_office]    Script Date: 11/11/2023 2:14:52 pm ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+DROP TABLE [dbo].[tbl_division]
+GO
+CREATE TABLE [dbo].[tbl_division](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[office_code] [int] NOT NULL,
+	[parent_code] [int] NOT NULL,
+	[office_name] [varchar](max) NOT NULL,
+	[department] [int] NOT NULL,
+	[region_id] [int] NOT NULL,
+	[province_id] [int] NULL,
+	[city_id] [int] NULL,
+	[company_name] [varchar](max) NULL,
+	[is_active] [bit] NOT NULL,
+	[created_by] [int] NOT NULL,
+	[modified_by] [int] NOT NULL,
+	[date_created] [datetime] NOT NULL,
+	[date_modified] [datetime] NOT NULL,
+ CONSTRAINT [PK_tbl_division] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+USE denr_fmb_cis;  
+GO  
+DROP PROCEDURE IF EXISTS dbo.uspCreateOffice;  
+GO  
+CREATE PROCEDURE dbo.uspCreateOffice 
+    @Id int,   
+    @ParentCode nvarchar(MAX),
+    @OfficeName nvarchar(MAX),
+	@Department nvarchar(MAX),
+	@RegionId nvarchar(MAX),
+	@ProvinceId nvarchar(MAX),
+	@CityId nvarchar(MAX)
+AS   
+	
+DECLARE @SUPERADMINID INT = 81;
+DECLARE @DATETIMENOW DATETIME = 81;
+INSERT INTO [dbo].[tbl_division]
+           ([id]
+		   ,[office_code]
+		   ,[parent_code]
+		   ,[office_name]
+           ,[department]
+           ,[region_id]
+           ,[province_id]
+		   ,[city_id]
+           ,[is_active]
+           ,[created_by]
+           ,[modified_by]
+           ,[date_created]
+           ,[date_modified])
+     VALUES
+           (@Id
+		   ,@Id
+		   ,@ParentCode
+		   ,@OfficeName
+           ,@Department
+           ,@RegionId
+           ,@ProvinceId
+           ,@CityId
+           ,1
+           ,@SUPERADMINID
+           ,@SUPERADMINID
+           ,@DATETIMENOW
+           ,@DATETIMENOW)
+    SET NOCOUNT ON;  
+GO
+
+USE denr_fmb_cis;
+TRUNCATE TABLE dbo.tbl_division;
+SET IDENTITY_INSERT tbl_division ON;
+GO
+
+USE denr_fmb_cis;
+--National Capital Region (NCR)
+EXEC dbo.uspCreateOffice  @Id = 1, @ParentCode = 0, @OfficeName = 'Regional Office NCR - Proper', @Department = 1, @RegionId = 13, @ProvinceId = 0, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 10, @ParentCode = 1, @OfficeName = 'Metropolitan Environmental Office', @Department = 2, @RegionId = 13, @ProvinceId = 0, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 11, @ParentCode = 10, @OfficeName = 'North', @Department = 3, @RegionId = 13, @ProvinceId = 0, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 12, @ParentCode = 10, @OfficeName = 'South', @Department = 3, @RegionId = 13, @ProvinceId = 0, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 13, @ParentCode = 10, @OfficeName = 'East', @Department = 3, @RegionId = 13, @ProvinceId = 0, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 14, @ParentCode = 10, @OfficeName = 'West', @Department = 3, @RegionId = 13, @ProvinceId = 0, @CityId = 0;
+
+--Cordillera Administrative Region (CAR)
+EXEC dbo.uspCreateOffice  @Id = 101, @ParentCode = 0, @OfficeName = 'Regional Office CAR - Proper', @Department = 1, @RegionId = 14, @ProvinceId = 0, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 110, @ParentCode = 101, @OfficeName = 'PENRO Abra', @Department = 2, @RegionId = 14, @ProvinceId = 1401, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 111, @ParentCode = 110, @OfficeName = 'CENRO Bangued', @Department = 3, @RegionId = 14, @ProvinceId = 1401, @CityId = 140101;
+EXEC dbo.uspCreateOffice  @Id = 112, @ParentCode = 110, @OfficeName = 'CENRO Lagangilang', @Department = 3, @RegionId = 14, @ProvinceId = 1401, @CityId = 140110;
+EXEC dbo.uspCreateOffice  @Id = 120, @ParentCode = 101, @OfficeName = 'PENRO Apayao', @Department = 2, @RegionId = 14, @ProvinceId = 1481, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 121, @ParentCode = 120, @OfficeName = 'CENRO Calanasan', @Department = 3, @RegionId = 14, @ProvinceId = 1481, @CityId = 148101;
+EXEC dbo.uspCreateOffice  @Id = 122, @ParentCode = 120, @OfficeName = 'CENRO Conner', @Department = 3, @RegionId = 14, @ProvinceId = 1481, @CityId = 148102;
+EXEC dbo.uspCreateOffice  @Id = 130, @ParentCode = 101, @OfficeName = 'PENRO Benguet', @Department = 2, @RegionId = 14, @ProvinceId = 1411, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 131, @ParentCode = 130, @OfficeName = 'CENRO Baguio City', @Department = 3, @RegionId = 14, @ProvinceId = 1411, @CityId = 141102;
+EXEC dbo.uspCreateOffice  @Id = 132, @ParentCode = 130, @OfficeName = 'CENRO Buguias', @Department = 3, @RegionId = 14, @ProvinceId = 1411, @CityId = 141105;
+EXEC dbo.uspCreateOffice  @Id = 140, @ParentCode = 101, @OfficeName = 'PENRO Ifugao', @Department = 2, @RegionId = 14, @ProvinceId = 1427, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 141, @ParentCode = 140, @OfficeName = 'CENRO Alfonso Lista', @Department = 3, @RegionId = 14, @ProvinceId = 1427, @CityId = 142707;
+EXEC dbo.uspCreateOffice  @Id = 142, @ParentCode = 140, @OfficeName = 'CENRO Lamut', @Department = 3, @RegionId = 14, @ProvinceId = 1427, @CityId = 142705;
+EXEC dbo.uspCreateOffice  @Id = 150, @ParentCode = 101, @OfficeName = 'PENRO Kalinga', @Department = 2, @RegionId = 14, @ProvinceId = 1432, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 151, @ParentCode = 150, @OfficeName = 'CENRO Pinukpuk', @Department = 3, @RegionId = 14, @ProvinceId = 1432, @CityId = 143209;
+EXEC dbo.uspCreateOffice  @Id = 152, @ParentCode = 150, @OfficeName = 'CENRO Tabuk', @Department = 3, @RegionId = 14, @ProvinceId = 1432, @CityId = 143213;
+EXEC dbo.uspCreateOffice  @Id = 160, @ParentCode = 101, @OfficeName = 'PENRO Mt. Province', @Department = 2, @RegionId = 14, @ProvinceId = 1444, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 161, @ParentCode = 160, @OfficeName = 'CENRO Paracelis', @Department = 3, @RegionId = 14, @ProvinceId = 1444, @CityId = 144406;
+EXEC dbo.uspCreateOffice  @Id = 162, @ParentCode = 160, @OfficeName = 'CENRO Sabangan', @Department = 3, @RegionId = 14, @ProvinceId = 1444, @CityId = 144407;
+
+--Region I - Ilocos
+EXEC dbo.uspCreateOffice  @Id = 201, @ParentCode = 0, @OfficeName = 'Regional Office I - Proper', @Department = 1, @RegionId = 1, @ProvinceId = 0, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 210, @ParentCode = 201, @OfficeName = 'PENRO Ilocos Norte', @Department = 2, @RegionId = 1, @ProvinceId = 128, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 211, @ParentCode = 210, @OfficeName = 'CENRO Bangui', @Department = 3, @RegionId = 1, @ProvinceId = 128, @CityId = 12804;
+EXEC dbo.uspCreateOffice  @Id = 212, @ParentCode = 210, @OfficeName = 'CENRO Laoag', @Department = 3, @RegionId = 1, @ProvinceId = 128, @CityId = 12812;
+EXEC dbo.uspCreateOffice  @Id = 220, @ParentCode = 201, @OfficeName = 'PENRO Ilocos Sur', @Department = 2, @RegionId = 1, @ProvinceId = 129, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 221, @ParentCode = 220, @OfficeName = 'CENRO Bantay', @Department = 3, @RegionId = 1, @ProvinceId = 129, @CityId = 12903;
+EXEC dbo.uspCreateOffice  @Id = 222, @ParentCode = 220, @OfficeName = 'CENRO Tagudin', @Department = 3, @RegionId = 1, @ProvinceId = 129, @CityId = 12933;
+EXEC dbo.uspCreateOffice  @Id = 230, @ParentCode = 201, @OfficeName = 'PENRO La Union', @Department = 2, @RegionId = 1, @ProvinceId = 133, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 240, @ParentCode = 201, @OfficeName = 'PENRO Pangasinan', @Department = 2, @RegionId = 1, @ProvinceId = 128, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 241, @ParentCode = 240, @OfficeName = 'CENRO Alaminos', @Department = 3, @RegionId = 1, @ProvinceId = 155, @CityId = 15503;
+EXEC dbo.uspCreateOffice  @Id = 242, @ParentCode = 240, @OfficeName = 'CENRO Dagupan', @Department = 3, @RegionId = 1, @ProvinceId = 155, @CityId = 15518;
+EXEC dbo.uspCreateOffice  @Id = 243, @ParentCode = 240, @OfficeName = 'CENRO Urdaneta', @Department = 3, @RegionId = 1, @ProvinceId = 155, @CityId = 15546;
+
+--Region II - Cagayan Valley
+EXEC dbo.uspCreateOffice  @Id = 301, @ParentCode = 0, @OfficeName = 'Regional Office II - Proper', @Department = 1, @RegionId = 2, @ProvinceId = 0, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 310, @ParentCode = 301, @OfficeName = 'PENRO Batanes', @Department = 2, @RegionId = 2, @ProvinceId = 209, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 320, @ParentCode = 301, @OfficeName = 'PENRO Cagayan', @Department = 2, @RegionId = 2, @ProvinceId = 215, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 321, @ParentCode = 320, @OfficeName = 'CENRO Alcala', @Department = 3, @RegionId = 2, @ProvinceId = 215, @CityId = 21502;
+EXEC dbo.uspCreateOffice  @Id = 322, @ParentCode = 320, @OfficeName = 'CENRO Aparri', @Department = 3, @RegionId = 2, @ProvinceId = 215, @CityId = 21505;
+EXEC dbo.uspCreateOffice  @Id = 323, @ParentCode = 320, @OfficeName = 'CENRO Sanchez Mira', @Department = 3, @RegionId = 2, @ProvinceId = 215, @CityId = 21522;
+EXEC dbo.uspCreateOffice  @Id = 324, @ParentCode = 320, @OfficeName = 'CENRO Solana', @Department = 3, @RegionId = 2, @ProvinceId = 215, @CityId = 21527;
+EXEC dbo.uspCreateOffice  @Id = 325, @ParentCode = 320, @OfficeName = 'PENRO Cagayan Sub-Office', @Department = 3, @RegionId = 2, @ProvinceId = 215, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 330, @ParentCode = 301, @OfficeName = 'PENRO Isabela', @Department = 2, @RegionId = 2, @ProvinceId = 231, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 331, @ParentCode = 330, @OfficeName = 'CENRO Cabagan', @Department = 3, @RegionId = 2, @ProvinceId = 231, @CityId = 23106;
+EXEC dbo.uspCreateOffice  @Id = 332, @ParentCode = 330, @OfficeName = 'CENRO Cauayan', @Department = 3, @RegionId = 2, @ProvinceId = 231, @CityId = 23108;
+EXEC dbo.uspCreateOffice  @Id = 333, @ParentCode = 330, @OfficeName = 'CENRO Nagulian', @Department = 3, @RegionId = 2, @ProvinceId = 231, @CityId = 23120;
+EXEC dbo.uspCreateOffice  @Id = 334, @ParentCode = 330, @OfficeName = 'CENRO Palanan', @Department = 3, @RegionId = 2, @ProvinceId = 231, @CityId = 23121;
+EXEC dbo.uspCreateOffice  @Id = 335, @ParentCode = 330, @OfficeName = 'CENRO San Isidro', @Department = 3, @RegionId = 2, @ProvinceId = 231, @CityId = 23129;
+EXEC dbo.uspCreateOffice  @Id = 340, @ParentCode = 301, @OfficeName = 'PENRO Nueva Vizcaya', @Department = 2, @RegionId = 2, @ProvinceId = 250, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 341, @ParentCode = 340, @OfficeName = 'CENRO Aritao', @Department = 3, @RegionId = 2, @ProvinceId = 250, @CityId = 25002;
+EXEC dbo.uspCreateOffice  @Id = 342, @ParentCode = 340, @OfficeName = 'CENRO Dupax', @Department = 3, @RegionId = 2, @ProvinceId = 250, @CityId = 25007; -- CHECK DUPAX DEL NORTE 25007 OR DUPAZ DEL SUR OR 25008
+EXEC dbo.uspCreateOffice  @Id = 350, @ParentCode = 301, @OfficeName = 'PENRO Quirino', @Department = 2, @RegionId = 2, @ProvinceId = 257, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 351, @ParentCode = 350, @OfficeName = 'CENRO Diffun', @Department = 3, @RegionId = 2, @ProvinceId = 257, @CityId = 25703;
+EXEC dbo.uspCreateOffice  @Id = 352, @ParentCode = 350, @OfficeName = 'CENRO Nagtipunan', @Department = 3, @RegionId = 2, @ProvinceId = 257, @CityId = 25706;
+
+--Region III - Central Luzon
+EXEC dbo.uspCreateOffice  @Id = 401, @ParentCode = 0, @OfficeName = 'Regional Office III - Proper', @Department = 1, @RegionId = 3, @ProvinceId = 0, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 410, @ParentCode = 401, @OfficeName = 'PENRO Aurora', @Department = 2, @RegionId = 3, @ProvinceId = 377, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 411, @ParentCode = 410, @OfficeName = 'CENRO Casiguran', @Department = 3, @RegionId = 3, @ProvinceId = 377, @CityId = 37702;
+EXEC dbo.uspCreateOffice  @Id = 412, @ParentCode = 410, @OfficeName = 'CENRO Dingalan', @Department = 3, @RegionId = 3, @ProvinceId = 377, @CityId = 37705;
+EXEC dbo.uspCreateOffice  @Id = 420, @ParentCode = 401, @OfficeName = 'PENRO Bataan', @Department = 2, @RegionId = 3, @ProvinceId = 308, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 421, @ParentCode = 420, @OfficeName = 'CENRO Bagac', @Department = 3, @RegionId = 3, @ProvinceId = 308, @CityId = 30802;
+EXEC dbo.uspCreateOffice  @Id = 422, @ParentCode = 420, @OfficeName = 'CENRO Dinalupihan', @Department = 3, @RegionId = 3, @ProvinceId = 308, @CityId = 30804;
+EXEC dbo.uspCreateOffice  @Id = 430, @ParentCode = 401, @OfficeName = 'PENRO Bulacan', @Department = 2, @RegionId = 3, @ProvinceId = 314, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 431, @ParentCode = 430, @OfficeName = 'CENRO Baliwag', @Department = 3, @RegionId = 3, @ProvinceId = 314, @CityId = 31403;
+EXEC dbo.uspCreateOffice  @Id = 432, @ParentCode = 430, @OfficeName = 'CENRO Tabang', @Department = 3, @RegionId = 3, @ProvinceId = 314, @CityId = 0; -- NEED DETAILS HERE NO CITY ID
+EXEC dbo.uspCreateOffice  @Id = 440, @ParentCode = 401, @OfficeName = 'PENRO Nueva Ecija', @Department = 2, @RegionId = 3, @ProvinceId = 349, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 441, @ParentCode = 440, @OfficeName = 'CENRO Cabanatuan City', @Department = 3, @RegionId = 3, @ProvinceId = 349, @CityId = 34903;
+EXEC dbo.uspCreateOffice  @Id = 442, @ParentCode = 440, @OfficeName = 'CENRO Science City of Munoz', @Department = 3, @RegionId = 3, @ProvinceId = 349, @CityId = 34917;
+EXEC dbo.uspCreateOffice  @Id = 450, @ParentCode = 401, @OfficeName = 'PENRO Pampanga', @Department = 2, @RegionId = 3, @ProvinceId = 354, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 460, @ParentCode = 401, @OfficeName = 'PENRO Tarlac', @Department = 2, @RegionId = 3, @ProvinceId = 369, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 461, @ParentCode = 460, @OfficeName = 'CENRO Camiling', @Department = 3, @RegionId = 3, @ProvinceId = 369, @CityId = 36903;
+EXEC dbo.uspCreateOffice  @Id = 462, @ParentCode = 460, @OfficeName = 'CENRO Tarlac City', @Department = 3, @RegionId = 3, @ProvinceId = 369, @CityId = 36916;
+EXEC dbo.uspCreateOffice  @Id = 470, @ParentCode = 401, @OfficeName = 'PENRO Zambales', @Department = 2, @RegionId = 3, @ProvinceId = 371, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 471, @ParentCode = 470, @OfficeName = 'CENRO Masinloc', @Department = 3, @RegionId = 3, @ProvinceId = 371, @CityId = 37106;
+EXEC dbo.uspCreateOffice  @Id = 472, @ParentCode = 470, @OfficeName = 'CENRO Olongapo City', @Department = 3, @RegionId = 3, @ProvinceId = 371, @CityId = 37107;
+
+--Region IVA - CALABARZON
+EXEC dbo.uspCreateOffice  @Id = 501, @ParentCode = 0, @OfficeName = 'Regional Office IVA - Proper', @Department = 1, @RegionId = 4, @ProvinceId = 0, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 510, @ParentCode = 501, @OfficeName = 'PENRO Batangas', @Department = 2, @RegionId = 4, @ProvinceId = 410, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 511, @ParentCode = 510, @OfficeName = 'CENRO Calaca', @Department = 3, @RegionId = 4, @ProvinceId = 410, @CityId = 41007;
+EXEC dbo.uspCreateOffice  @Id = 512, @ParentCode = 510, @OfficeName = 'CENRO Lipa City', @Department = 3, @RegionId = 4, @ProvinceId = 410, @CityId = 41014;
+EXEC dbo.uspCreateOffice  @Id = 520, @ParentCode = 501, @OfficeName = 'PENRO Cavite', @Department = 2, @RegionId = 4, @ProvinceId = 421, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 530, @ParentCode = 501, @OfficeName = 'PENRO Laguna', @Department = 2, @RegionId = 4, @ProvinceId = 434, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 531, @ParentCode = 530, @OfficeName = 'CENRO Sta. Cruz (Pagsanjan)', @Department = 3, @RegionId = 4, @ProvinceId = 434, @CityId = 43426; -- PAGSANJAN 43419 OR SANTA CRUZ (CAPITAL) 43426
+EXEC dbo.uspCreateOffice  @Id = 540, @ParentCode = 501, @OfficeName = 'PENRO Quezon', @Department = 2, @RegionId = 4, @ProvinceId = 456, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 541, @ParentCode = 540, @OfficeName = 'CENRO Calauag', @Department = 3, @RegionId = 4, @ProvinceId = 456, @CityId = 45607;
+EXEC dbo.uspCreateOffice  @Id = 542, @ParentCode = 540, @OfficeName = 'CENRO Catanauan', @Department = 3, @RegionId = 4, @ProvinceId = 456, @CityId = 45610;
+EXEC dbo.uspCreateOffice  @Id = 543, @ParentCode = 540, @OfficeName = 'CENRO Tayabas (Pagbilao)', @Department = 3, @RegionId = 4, @ProvinceId = 456, @CityId = 45630;
+EXEC dbo.uspCreateOffice  @Id = 544, @ParentCode = 540, @OfficeName = 'CENRO Real', @Department = 3, @RegionId = 4, @ProvinceId = 456, @CityId = 45638;
+EXEC dbo.uspCreateOffice  @Id = 550, @ParentCode = 501, @OfficeName = 'PENRO Rizal', @Department = 2, @RegionId = 4, @ProvinceId = 458, @CityId = 0;
+
+--Region IVB - MIMAROPA
+EXEC dbo.uspCreateOffice  @Id = 601, @ParentCode = 0, @OfficeName = 'Regional Office IVB - Proper', @Department = 1, @RegionId = 17, @ProvinceId = 0, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 610, @ParentCode = 601, @OfficeName = 'PENRO Marinduque', @Department = 2, @RegionId = 17, @ProvinceId = 1740, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 620, @ParentCode = 601, @OfficeName = 'PENRO Occidental Mindoro', @Department = 2, @RegionId = 17, @ProvinceId = 1751, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 621, @ParentCode = 620, @OfficeName = 'CENRO Sablayan', @Department = 3, @RegionId = 17, @ProvinceId = 1751, @CityId = 175109;
+EXEC dbo.uspCreateOffice  @Id = 622, @ParentCode = 620, @OfficeName = 'CENRO San Jose', @Department = 3, @RegionId = 17, @ProvinceId = 1751, @CityId = 175110;
+EXEC dbo.uspCreateOffice  @Id = 630, @ParentCode = 601, @OfficeName = 'PENRO Oriental Mindoro', @Department = 2, @RegionId = 17, @ProvinceId = 1752, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 631, @ParentCode = 630, @OfficeName = 'CENRO Roxas', @Department = 3, @RegionId = 17, @ProvinceId = 1752, @CityId = 175212;
+EXEC dbo.uspCreateOffice  @Id = 632, @ParentCode = 630, @OfficeName = 'CENRO Socorro', @Department = 3, @RegionId = 17, @ProvinceId = 1752, @CityId = 175214;
+EXEC dbo.uspCreateOffice  @Id = 640, @ParentCode = 601, @OfficeName = 'PENRO Palawan', @Department = 2, @RegionId = 17, @ProvinceId = 1753, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 641, @ParentCode = 640, @OfficeName = 'CENRO Brookes Point', @Department = 3, @RegionId = 17, @ProvinceId = 1753, @CityId = 175306;
+EXEC dbo.uspCreateOffice  @Id = 642, @ParentCode = 640, @OfficeName = 'CENRO Coron', @Department = 3, @RegionId = 17, @ProvinceId = 1753, @CityId = 175309;
+EXEC dbo.uspCreateOffice  @Id = 643, @ParentCode = 640, @OfficeName = 'CENRO Puerto Princesa City', @Department = 3, @RegionId = 17, @ProvinceId = 1753, @CityId = 175316;
+EXEC dbo.uspCreateOffice  @Id = 644, @ParentCode = 640, @OfficeName = 'CENRO Quezon', @Department = 3, @RegionId = 17, @ProvinceId = 1753, @CityId = 175317;
+EXEC dbo.uspCreateOffice  @Id = 645, @ParentCode = 640, @OfficeName = 'CENRO Roxas', @Department = 3, @RegionId = 17, @ProvinceId = 1753, @CityId = 175318;
+EXEC dbo.uspCreateOffice  @Id = 646, @ParentCode = 640, @OfficeName = 'CENRO Taytay', @Department = 3, @RegionId = 17, @ProvinceId = 1753, @CityId = 175320;
+EXEC dbo.uspCreateOffice  @Id = 650, @ParentCode = 601, @OfficeName = 'PENRO Romblon', @Department = 2, @RegionId = 17, @ProvinceId = 1759, @CityId = 0;
+
+--Region V - BICOL
+EXEC dbo.uspCreateOffice  @Id = 701, @ParentCode = 0, @OfficeName = 'Regional Office V - Proper', @Department = 1, @RegionId = 5, @ProvinceId = 0, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 710, @ParentCode = 701, @OfficeName = 'PENRO Albay', @Department = 2, @RegionId = 5, @ProvinceId = 505, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 711, @ParentCode = 710, @OfficeName = 'CENRO Guinobatan', @Department = 3, @RegionId = 5, @ProvinceId = 505, @CityId = 50504;
+EXEC dbo.uspCreateOffice  @Id = 720, @ParentCode = 701, @OfficeName = 'PENRO Camarines Norte', @Department = 2, @RegionId = 5, @ProvinceId = 516, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 730, @ParentCode = 701, @OfficeName = 'PENRO Camarines Sur', @Department = 2, @RegionId = 5, @ProvinceId = 517, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 731, @ParentCode = 730, @OfficeName = 'CENRO Goa', @Department = 3, @RegionId = 5, @ProvinceId = 517, @CityId = 51715;
+EXEC dbo.uspCreateOffice  @Id = 732, @ParentCode = 730, @OfficeName = 'CENRO Iriga City', @Department = 3, @RegionId = 5, @ProvinceId = 517, @CityId = 51716;
+EXEC dbo.uspCreateOffice  @Id = 733, @ParentCode = 730, @OfficeName = 'CENRO Sipocot', @Department = 3, @RegionId = 5, @ProvinceId = 517, @CityId = 51734;
+EXEC dbo.uspCreateOffice  @Id = 740, @ParentCode = 701, @OfficeName = 'PENRO Catanduanes', @Department = 2, @RegionId = 5, @ProvinceId = 520, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 750, @ParentCode = 701, @OfficeName = 'PENRO Masbate', @Department = 2, @RegionId = 5, @ProvinceId = 541, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 751, @ParentCode = 750, @OfficeName = 'CENRO Mobo', @Department = 3, @RegionId = 5, @ProvinceId = 541, @CityId = 54113;
+EXEC dbo.uspCreateOffice  @Id = 752, @ParentCode = 750, @OfficeName = 'CENRO San Jacinto', @Department = 3, @RegionId = 5, @ProvinceId = 541, @CityId = 54119;
+EXEC dbo.uspCreateOffice  @Id = 760, @ParentCode = 701, @OfficeName = 'PENRO Sorsogon', @Department = 2, @RegionId = 5, @ProvinceId = 562, @CityId = 0;
+
+--Region VI - Western Visayas
+EXEC dbo.uspCreateOffice  @Id = 801, @ParentCode = 0, @OfficeName = 'Regional Office VI - Proper', @Department = 1, @RegionId = 6, @ProvinceId = 0, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 810, @ParentCode = 801, @OfficeName = 'PENRO Aklan', @Department = 2, @RegionId = 6, @ProvinceId = 604, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 811, @ParentCode = 810, @OfficeName = 'CENRO Boracay', @Department = 3, @RegionId = 6, @ProvinceId = 604, @CityId = 60407; -- BORACAY ? KALIBO
+EXEC dbo.uspCreateOffice  @Id = 820, @ParentCode = 801, @OfficeName = 'PENRO Antique', @Department = 2, @RegionId = 6, @ProvinceId = 606, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 821, @ParentCode = 820, @OfficeName = 'CENRO Belison', @Department = 3, @RegionId = 6, @ProvinceId = 606, @CityId = 60603;
+EXEC dbo.uspCreateOffice  @Id = 822, @ParentCode = 820, @OfficeName = 'CENRO Culasi', @Department = 3, @RegionId = 6, @ProvinceId = 606, @CityId = 60606;
+EXEC dbo.uspCreateOffice  @Id = 830, @ParentCode = 801, @OfficeName = 'PENRO Capiz', @Department = 2, @RegionId = 6, @ProvinceId = 619, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 831, @ParentCode = 830, @OfficeName = 'CENRO Mambusao', @Department = 3, @RegionId = 6, @ProvinceId = 619, @CityId = 61908;
+EXEC dbo.uspCreateOffice  @Id = 840, @ParentCode = 801, @OfficeName = 'PENRO Guimaras', @Department = 2, @RegionId = 6, @ProvinceId = 679, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 850, @ParentCode = 801, @OfficeName = 'PENRO Iloilo', @Department = 2, @RegionId = 6, @ProvinceId = 630, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 851, @ParentCode = 850, @OfficeName = 'CENRO Barotac Nuevo', @Department = 3, @RegionId = 6, @ProvinceId = 1740, @CityId = 63007;
+EXEC dbo.uspCreateOffice  @Id = 852, @ParentCode = 850, @OfficeName = 'CENRO Guimbal', @Department = 3, @RegionId = 6, @ProvinceId = 1740, @CityId = 63020;
+EXEC dbo.uspCreateOffice  @Id = 853, @ParentCode = 850, @OfficeName = 'CENRO Sara', @Department = 3, @RegionId = 6, @ProvinceId = 1740, @CityId = 63044;
+EXEC dbo.uspCreateOffice  @Id = 860, @ParentCode = 801, @OfficeName = 'PENRO Negros Occidental', @Department = 2, @RegionId = 6, @ProvinceId = 645, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 861, @ParentCode = 860, @OfficeName = 'CENRO Cadiz City', @Department = 3 @RegionId = 6, @ProvinceId = 645, @CityId = 64504;
+EXEC dbo.uspCreateOffice  @Id = 862, @ParentCode = 860, @OfficeName = 'CENRO Kabankalan City', @Department = 3, @RegionId = 6, @ProvinceId = 645, @CityId = 64515;
+EXEC dbo.uspCreateOffice  @Id = 863, @ParentCode = 860, @OfficeName = 'CENRO Bago (San Carlos City)', @Department = 3, @RegionId = 6, @ProvinceId = 645, @CityId = 64524; -- BAGO CITY 64502 OR SAN CARLOS CITY 64524
+
+--Region VII - Central Visayas
+EXEC dbo.uspCreateOffice  @Id = 901, @ParentCode = 0, @OfficeName = 'Regional Office VII - Proper', @Department = 1, @RegionId = 7, @ProvinceId = 0, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 910, @ParentCode = 901, @OfficeName = 'PENRO Bohol', @Department = 2, @RegionId = 7, @ProvinceId = 712, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 911, @ParentCode = 910, @OfficeName = 'CENRO Tagbilaran', @Department = 3, @RegionId = 7, @ProvinceId = 712, @CityId = 71242;
+EXEC dbo.uspCreateOffice  @Id = 912, @ParentCode = 910, @OfficeName = 'CENRO Talibon', @Department = 3, @RegionId = 7, @ProvinceId = 712, @CityId = 71243;
+EXEC dbo.uspCreateOffice  @Id = 920, @ParentCode = 901, @OfficeName = 'PENRO Cebu', @Department = 2, @RegionId = 7, @ProvinceId = 722, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 921, @ParentCode = 920, @OfficeName = 'CENRO Argao', @Department = 3, @RegionId = 7, @ProvinceId = 722, @CityId = 72205;
+EXEC dbo.uspCreateOffice  @Id = 922, @ParentCode = 920, @OfficeName = 'CENRO Cebu City', @Department = 3, @RegionId = 7, @ProvinceId = 722, @CityId = 72217;
+EXEC dbo.uspCreateOffice  @Id = 930, @ParentCode = 901, @OfficeName = 'PENRO Negros Oriental', @Department = 2, @RegionId = 7, @ProvinceId = 746, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 931, @ParentCode = 930, @OfficeName = 'CENRO Ayungon', @Department = 3, @RegionId = 7, @ProvinceId = 746, @CityId = 74602;
+EXEC dbo.uspCreateOffice  @Id = 932, @ParentCode = 930, @OfficeName = 'CENRO Dumaguete City', @Department = 3, @RegionId = 7, @ProvinceId = 746, @CityId = 74610;
+EXEC dbo.uspCreateOffice  @Id = 940, @ParentCode = 901, @OfficeName = 'PENRO Siquijor', @Department = 2, @RegionId = 7, @ProvinceId = 761, @CityId = 0;
+
+--Region VIII - Eastern Visayas
+EXEC dbo.uspCreateOffice  @Id = 1001, @ParentCode = 0, @OfficeName = 'Regional Office VIII - Proper', @Department = 1, @RegionId = 8, @ProvinceId = 0, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1010, @ParentCode = 1001, @OfficeName = 'PENRO Biliran', @Department = 2, @RegionId = 8, @ProvinceId = 878, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1020, @ParentCode = 1001, @OfficeName = 'PENRO Eastern Samar', @Department = 2, @RegionId = 8, @ProvinceId = 826, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1021, @ParentCode = 1020, @OfficeName = 'CENRO Borongan', @Department = 3, @RegionId = 8, @ProvinceId = 826, @CityId = 82604;
+EXEC dbo.uspCreateOffice  @Id = 1022, @ParentCode = 1020, @OfficeName = 'CENRO Dolores', @Department = 3, @RegionId = 8, @ProvinceId = 826, @CityId = 82606;
+EXEC dbo.uspCreateOffice  @Id = 1030, @ParentCode = 1001, @OfficeName = 'PENRO Leyte', @Department = 2, @RegionId = 8, @ProvinceId = 837, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1031, @ParentCode = 1030, @OfficeName = 'CENRO Albuera', @Department = 3, @RegionId = 8, @ProvinceId = 837, @CityId = 83703;
+EXEC dbo.uspCreateOffice  @Id = 1032, @ParentCode = 1030, @OfficeName = 'CENRO Baybay', @Department = 3, @RegionId = 8, @ProvinceId = 837, @CityId = 83708;
+EXEC dbo.uspCreateOffice  @Id = 1033, @ParentCode = 1030, @OfficeName = 'CENRO Palo', @Department = 3, @RegionId = 8, @ProvinceId = 837, @CityId = 83739;
+EXEC dbo.uspCreateOffice  @Id = 1040, @ParentCode = 1001, @OfficeName = 'PENRO Northern Samar', @Department = 2, @RegionId = 8, @ProvinceId = 848, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1041, @ParentCode = 1040, @OfficeName = 'CENRO Catarman', @Department = 3, @RegionId = 8, @ProvinceId = 848, @CityId = 84805;
+EXEC dbo.uspCreateOffice  @Id = 1042, @ParentCode = 1040, @OfficeName = 'CENRO Pambujan', @Department = 3, @RegionId = 8, @ProvinceId = 848, @CityId = 84815;
+EXEC dbo.uspCreateOffice  @Id = 1050, @ParentCode = 1001, @OfficeName = 'PENRO Southern Leyte', @Department = 2, @RegionId = 8, @ProvinceId = 864, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1051, @ParentCode = 1050, @OfficeName = 'CENRO Maasin City', @Department = 3, @RegionId = 8, @ProvinceId = 864, @CityId = 86407;
+EXEC dbo.uspCreateOffice  @Id = 1052, @ParentCode = 1050, @OfficeName = 'CENRO San Juan', @Department = 3, @RegionId = 8, @ProvinceId = 864, @CityId = 86414;
+EXEC dbo.uspCreateOffice  @Id = 1060, @ParentCode = 1001, @OfficeName = 'PENRO Western Samar', @Department = 2, @RegionId = 8, @ProvinceId = 860, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1061, @ParentCode = 1060, @OfficeName = 'CENRO Basey', @Department = 3, @RegionId = 8, @ProvinceId = 860, @CityId = 86002;
+EXEC dbo.uspCreateOffice  @Id = 1062, @ParentCode = 1060, @OfficeName = 'CENRO Catbalogan City', @Department = 3, @RegionId = 8, @ProvinceId = 860, @CityId = 86005;
+
+--Region IX - Zamboanga Peninisula
+EXEC dbo.uspCreateOffice  @Id = 1101, @ParentCode = 0, @OfficeName = 'Regional Office IX - Proper', @Department = 1, @RegionId = 9, @ProvinceId = 0, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1110, @ParentCode = 1101, @OfficeName = 'PENRO Zamboanga del Norte', @Department = 2, @RegionId = 9, @ProvinceId = 972, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1111, @ParentCode = 1110, @OfficeName = 'CENRO Liloy', @Department = 3, @RegionId = 9, @ProvinceId = 972, @CityId = 97206;
+EXEC dbo.uspCreateOffice  @Id = 1112, @ParentCode = 1110, @OfficeName = 'CENRO Manukan', @Department = 3, @RegionId = 9, @ProvinceId = 972, @CityId = 97207;
+EXEC dbo.uspCreateOffice  @Id = 1113, @ParentCode = 1110, @OfficeName = 'CENRO Piñan', @Department = 3, @RegionId = 9, @ProvinceId = 972, @CityId = 97209;
+EXEC dbo.uspCreateOffice  @Id = 1114, @ParentCode = 1110, @OfficeName = 'CENRO Siocon', @Department = 3, @RegionId = 9, @ProvinceId = 972, @CityId = 97219;
+EXEC dbo.uspCreateOffice  @Id = 1120, @ParentCode = 1101, @OfficeName = 'PENRO Zamboanga del Sur', @Department = 2, @RegionId = 9, @ProvinceId = 973, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1121, @ParentCode = 1120, @OfficeName = 'CENRO Guipos', @Department = 3, @RegionId = 9, @ProvinceId = 973, @CityId = 97343
+EXEC dbo.uspCreateOffice  @Id = 1122, @ParentCode = 1120, @OfficeName = 'CENRO Ramon Magsaysay', @Department = 3, @RegionId = 9, @ProvinceId = 973, @CityId = 97323;
+EXEC dbo.uspCreateOffice  @Id = 1130, @ParentCode = 1101, @OfficeName = 'PENRO Zamboanga Sibugay', @Department = 2, @RegionId = 9, @ProvinceId = 983, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1131, @ParentCode = 1130, @OfficeName = 'CENRO Imelda', @Department = 3, @RegionId = 9, @ProvinceId = 983, @CityId = 98304;
+EXEC dbo.uspCreateOffice  @Id = 1132, @ParentCode = 1130, @OfficeName = 'CENRO Kabasalan', @Department = 3, @RegionId = 9, @ProvinceId = 983, @CityId = 98306;
+EXEC dbo.uspCreateOffice  @Id = 1133, @ParentCode = 1130, @OfficeName = 'CENRO Zamboanga City', @Department = 3, @RegionId = 9, @ProvinceId = 983, @CityId = 0; --? Zamboanga CITY 97332 Zamboanga Del Sur
+
+--Region X - Northern Mindanao
+EXEC dbo.uspCreateOffice  @Id = 1201, @ParentCode = 0, @OfficeName = 'Regional Office X - Proper', @Department = 1, @RegionId = 10, @ProvinceId = 0, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1210, @ParentCode = 1201, @OfficeName = 'PENRO Bukidnon', @Department = 2, @RegionId = 10, @ProvinceId = 1013, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1211, @ParentCode = 1210, @OfficeName = 'CENRO Don Carlos', @Department = 3, @RegionId = 10, @ProvinceId = 1013, @CityId = 101304;
+EXEC dbo.uspCreateOffice  @Id = 1212, @ParentCode = 1210, @OfficeName = 'CENRO Manolo Fortich', @Department = 3, @RegionId = 10, @ProvinceId = 1013, @CityId = 101314;
+EXEC dbo.uspCreateOffice  @Id = 1213, @ParentCode = 1210, @OfficeName = 'CENRO Valencia', @Department = 3, @RegionId = 10, @ProvinceId = 1013, @CityId = 101321;
+EXEC dbo.uspCreateOffice  @Id = 1214, @ParentCode = 1210, @OfficeName = 'CENRO Talakag', @Department = 3, @RegionId = 10, @ProvinceId = 1013, @CityId = 101320;
+EXEC dbo.uspCreateOffice  @Id = 1220, @ParentCode = 1201, @OfficeName = 'PENRO Camiguin', @Department = 2, @RegionId = 10, @ProvinceId = 1018, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1230, @ParentCode = 1201, @OfficeName = 'PENRO Lanao del Norte', @Department = 2, @RegionId = 10, @ProvinceId = 1035, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1231, @ParentCode = 1230, @OfficeName = 'CENRO Iligan City', @Department = 3, @RegionId = 10, @ProvinceId = 1035, @CityId = 103504;
+EXEC dbo.uspCreateOffice  @Id = 1232, @ParentCode = 1230, @OfficeName = 'CENRO Kolambugan', @Department = 3, @RegionId = 10, @ProvinceId = 1035, @CityId = 103508;
+EXEC dbo.uspCreateOffice  @Id = 1240, @ParentCode = 1201, @OfficeName = 'PENRO Misamis Occidental', @Department = 2, @RegionId = 10, @ProvinceId = 1042, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1241, @ParentCode = 1240, @OfficeName = 'CENRO Ozamiz City', @Department = 3, @RegionId = 10, @ProvinceId = 1042, @CityId = 104210;
+EXEC dbo.uspCreateOffice  @Id = 1242, @ParentCode = 1240, @OfficeName = 'CENRO Oroquieta City', @Department = 3, @RegionId = 10, @ProvinceId = 1042, @CityId = 104209;
+EXEC dbo.uspCreateOffice  @Id = 1250, @ParentCode = 1201, @OfficeName = 'PENRO Misamis Oriental', @Department = 2, @RegionId = 10, @ProvinceId = 1043, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1251, @ParentCode = 1250, @OfficeName = 'CENRO Gingoog City', @Department = 3, @RegionId = 10, @ProvinceId = 1043, @CityId = 104308;
+EXEC dbo.uspCreateOffice  @Id = 1252, @ParentCode = 1250, @OfficeName = 'CENRO Initao', @Department = 3, @RegionId = 10, @ProvinceId = 1043, @CityId = 104310;
+
+--Region XI - Davao
+EXEC dbo.uspCreateOffice  @Id = 1301, @ParentCode = 0, @OfficeName = 'Regional Office XI - Proper', @Department = 1, @RegionId = 11, @ProvinceId = 0, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1310, @ParentCode = 1301, @OfficeName = 'PENRO Compostela Valley', @Department = 2, @RegionId = 11, @ProvinceId = 1182, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1311, @ParentCode = 1310, @OfficeName = 'CENRO Maco', @Department = 3, @RegionId = 11, @ProvinceId = 1182, @CityId = 118204;
+EXEC dbo.uspCreateOffice  @Id = 1312, @ParentCode = 1310, @OfficeName = 'CENRO Monkayo', @Department = 3, @RegionId = 11, @ProvinceId = 1182, @CityId = 118207;
+EXEC dbo.uspCreateOffice  @Id = 1320, @ParentCode = 1301, @OfficeName = 'PENRO Davao del Norte', @Department = 2, @RegionId = 11, @ProvinceId = 1123, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1321, @ParentCode = 1320, @OfficeName = 'CENRO New Corella', @Department = 3, @RegionId = 11, @ProvinceId = 1123, @CityId = 112314;
+EXEC dbo.uspCreateOffice  @Id = 1322, @ParentCode = 1320, @OfficeName = 'CENRO Panabo City', @Department = 3, @RegionId = 11, @ProvinceId = 1123, @CityId = 112315;
+EXEC dbo.uspCreateOffice  @Id = 1330, @ParentCode = 1301, @OfficeName = 'PENRO Davao del Sur', @Department = 2, @RegionId = 11, @ProvinceId = 1124, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1331, @ParentCode = 1330, @OfficeName = 'CENRO Davao City', @Department = 3, @RegionId = 11, @ProvinceId = 1124, @CityId = 112402;
+EXEC dbo.uspCreateOffice  @Id = 1332, @ParentCode = 1330, @OfficeName = 'CENRO Digos City', @Department = 3, @RegionId = 11, @ProvinceId = 1124, @CityId = 112403;
+EXEC dbo.uspCreateOffice  @Id = 1333, @ParentCode = 1330, @OfficeName = 'CENRO Malalag', @Department = 3, @RegionId = 11, @ProvinceId = 1124, @CityId = 112408;
+
+EXEC dbo.uspCreateOffice  @Id = 1340, @ParentCode = 1301, @OfficeName = 'PENRO Davao Oriental', @Department = 2, @RegionId = 11, @ProvinceId = 1125, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1341, @ParentCode = 1340, @OfficeName = 'CENRO Baganga', @Department = 3, @RegionId = 11, @ProvinceId = 1125, @CityId = 112501;
+EXEC dbo.uspCreateOffice  @Id = 1342, @ParentCode = 1340, @OfficeName = 'CENRO Lupon', @Department = 3, @RegionId = 11, @ProvinceId = 1125, @CityId = 112507;
+EXEC dbo.uspCreateOffice  @Id = 1343, @ParentCode = 1340, @OfficeName = 'CENRO Manay', @Department = 3, @RegionId = 11, @ProvinceId = 1125, @CityId = 112508
+EXEC dbo.uspCreateOffice  @Id = 1344, @ParentCode = 1340, @OfficeName = 'CENRO Mati', @Department = 3, @RegionId = 11, @ProvinceId = 1125, @CityId = 112509;
+EXEC dbo.uspCreateOffice  @Id = 1350, @ParentCode = 1301, @OfficeName = 'PENRO Davao Occidental', @Department = 2, @RegionId = 11, @ProvinceId = 1186, @CityId = 0;
+
+--Region XII - Soccsksargen
+EXEC dbo.uspCreateOffice  @Id = 1401, @ParentCode = 0, @OfficeName = 'Regional Office XII - Proper', @Department = 1, @RegionId = 12, @ProvinceId = 0, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1410, @ParentCode = 1401, @OfficeName = 'PENRO North Cotobato', @Department = 2, @RegionId = 12, @ProvinceId = 1247, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1411, @ParentCode = 1410, @OfficeName = 'CENRO Matalam', @Department = 3, @RegionId = 12, @ProvinceId = 1247, @CityId = 124708;
+EXEC dbo.uspCreateOffice  @Id = 1412, @ParentCode = 1410, @OfficeName = 'CENRO Midsayap', @Department = 3, @RegionId = 12, @ProvinceId = 1247, @CityId = 124709;
+EXEC dbo.uspCreateOffice  @Id = 1420, @ParentCode = 1401, @OfficeName = 'PENRO Saranggani', @Department = 2, @RegionId = 12, @ProvinceId = 1280, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1421, @ParentCode = 1420, @OfficeName = 'CENRO Glan', @Department = 3, @RegionId = 12, @ProvinceId = 1280, @CityId = 128002;
+EXEC dbo.uspCreateOffice  @Id = 1422, @ParentCode = 1420, @OfficeName = 'CENRO Kiamba', @Department = 3, @RegionId = 12, @ProvinceId = 1280, @CityId = 128003;
+EXEC dbo.uspCreateOffice  @Id = 1430, @ParentCode = 1401, @OfficeName = 'PENRO South Cotabato', @Department = 2, @RegionId = 12, @ProvinceId = 1263, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1431, @ParentCode = 1430, @OfficeName = 'CENRO Banga/Surallah', @Department = 3, @RegionId = 12, @ProvinceId = 1263, @CityId = 126313; -- BANGA 126302 SURALLAH 126313
+EXEC dbo.uspCreateOffice  @Id = 1432, @ParentCode = 1430, @OfficeName = 'CENRO Gen. Santos City', @Department = 3, @RegionId = 12, @ProvinceId = 1263, @CityId = 126303;
+EXEC dbo.uspCreateOffice  @Id = 1440, @ParentCode = 1401, @OfficeName = 'PENRO Sultan Kudarat', @Department = 2, @RegionId = 12, @ProvinceId = 1265, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1441, @ParentCode = 1450, @OfficeName = 'CENRO Kalamansig', @Department = 3, @RegionId = 12, @ProvinceId = 1265, @CityId = 126505;
+EXEC dbo.uspCreateOffice  @Id = 1442, @ParentCode = 1450, @OfficeName = 'CENRO Tacurong', @Department = 3, @RegionId = 12, @ProvinceId = 1265, @CityId = 126511;
+
+--Region XIII - CARAGA
+EXEC dbo.uspCreateOffice  @Id = 1501, @ParentCode = 0, @OfficeName = 'Regional Office XIII - Proper', @Department = 1, @RegionId = 16, @ProvinceId = 0, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1510, @ParentCode = 1501, @OfficeName = 'PENRO Agusan del Norte', @Department = 2, @RegionId = 16, @ProvinceId = 1602, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1511, @ParentCode = 1510, @OfficeName = 'CENRO Tubay (Cabadbaran)', @Department = 3, @RegionId = 16, @ProvinceId = 1602, @CityId = 160211; -- TUBAY 160211 OR CABADBARAN 160203
+EXEC dbo.uspCreateOffice  @Id = 1512, @ParentCode = 1510, @OfficeName = 'CENRO Nasipit', @Department = 3, @RegionId = 16, @ProvinceId = 1602, @CityId = 160209;
+EXEC dbo.uspCreateOffice  @Id = 1520, @ParentCode = 1501, @OfficeName = 'PENRO Agusan del Sur', @Department = 2, @RegionId = 16, @ProvinceId = 1603, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1521, @ParentCode = 1520, @OfficeName = 'CENRO Bayugan', @Department = 3, @RegionId = 16, @ProvinceId = 1603, @CityId = 160301;
+EXEC dbo.uspCreateOffice  @Id = 1522, @ParentCode = 1520, @OfficeName = 'CENRO Bunawan', @Department = 3, @RegionId = 16, @ProvinceId = 1603, @CityId = 160302;
+EXEC dbo.uspCreateOffice  @Id = 1523, @ParentCode = 1520, @OfficeName = 'CENRO Loreto', @Department = 3, @RegionId = 16, @ProvinceId = 1603, @CityId = 160305
+EXEC dbo.uspCreateOffice  @Id = 1524, @ParentCode = 1520, @OfficeName = 'CENRO Talacogon', @Department = 3, @RegionId = 16, @ProvinceId = 1603, @CityId = 160311;
+EXEC dbo.uspCreateOffice  @Id = 1530, @ParentCode = 1501, @OfficeName = 'PENRO Dinagat Islands', @Department = 2, @RegionId = 16, @ProvinceId = 1685, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1540, @ParentCode = 1501, @OfficeName = 'PENRO Surigao del Norte', @Department = 2, @RegionId = 16, @ProvinceId = 1667, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1541, @ParentCode = 1540, @OfficeName = 'CENRO Tubod', @Department = 3, @RegionId = 16, @ProvinceId = 1667, @CityId = 166727;
+EXEC dbo.uspCreateOffice  @Id = 1550, @ParentCode = 1501, @OfficeName = 'PENRO Surigao del Sur', @Department = 2, @RegionId = 16, @ProvinceId = 1668, @CityId = 0;
+EXEC dbo.uspCreateOffice  @Id = 1551, @ParentCode = 1550, @OfficeName = 'CENRO Bislig', @Department = 3, @RegionId = 16, @ProvinceId = 1668, @CityId = 166803;
+EXEC dbo.uspCreateOffice  @Id = 1552, @ParentCode = 1550, @OfficeName = 'CENRO Cantilan', @Department = 3, @RegionId = 16, @ProvinceId = 1668, @CityId = 166805;
+EXEC dbo.uspCreateOffice  @Id = 1553, @ParentCode = 1550, @OfficeName = 'CENRO Lianga', @Department = 3, @RegionId = 16, @ProvinceId = 1668, @CityId = 166811;
+
+GO
+
+USE denr_fmb_cis; 
+SELECT * FROM dbo.tbl_division;
+GO
+
+SELECT * FROM tbl_office
+
+SELECT r.regCode, r.name, p.provCode, p.name, c.citymunCode, c.name FROM tbl_region r
+LEFT JOIN tbl_province p ON r.regCode = p.regCode
+LEFT JOIN tbl_city c ON c.provCode = p.provCode
+WHERE C.regCode = 16

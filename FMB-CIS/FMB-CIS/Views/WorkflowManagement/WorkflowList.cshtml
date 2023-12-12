@@ -1,0 +1,97 @@
+﻿@using System.Security.Claims;
+@using System.Globalization;
+@{
+    Layout = "~/Views/Shared/_MainPageLayout.cshtml";
+    ViewBag.Title = "Workflow Management";
+}
+
+<div id="card-container">
+    <div id="card">
+        <div class="c-info">
+            <div class="card">
+                @*<img src="..." class="card-img-top" alt="...">*@@*
+                <div class="card-head card-head-image">
+                </div>*@
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="@Url.Action("Index", "Home")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>Workflow Management
+                    </h5>
+                    <p class="card-text">Used to manage workflows.</p>
+                    <button id="btnCreateWorkflow" onclick="OpenCreateModal()" class="btn btn-primary">Create New Workflow</button>
+                </div>
+            </div>
+        </div>
+        <div class="c-content" id="workflowListPartialContainer">
+        </div>
+    </div>
+</div>
+
+<style>
+    .c-info {
+        width: 25%;
+        float: left;
+        padding: 12px;
+    }
+
+    .c-content {
+        width: 75%;
+        float: left;
+        padding: 12px;
+    }
+
+    .card-head {
+        width: 100%;
+        height: 30px;
+    }
+
+    .card-head-image {
+        width: 100%;
+        height: 30px;
+    }
+
+    .card-body {
+    }
+
+    .card-margin {
+        margin: 12px;
+    }
+
+    .list-group-style1 {
+    }
+
+        .list-group-style1 .list-group-item {
+            margin-bottom: 12px;
+        }
+
+            .list-group-style1 .list-group-item + .list-group-item {
+                border-top-width: 1px;
+            }
+
+    small a {
+        color: #14984a;
+        padding: 3px 0;
+        border: none;
+        border-bottom: solid 1px #14984a;
+        margin-right: 12px;
+        background: none;
+        box-shadow: unset !important;
+        outline: 0 !important;
+        margin: 0 !important;
+        margin-right: 12px !important;
+        margin-top: 12px !important;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+
+<script src="/js/jquery-3.7.1.min.js"></script>
+
+<script type="text/javascript">
+    function OpenCreateModal() {
+        $('#workflowCreateModalContainer').load('/WorkflowManagement/WorkflowCreateModal', function () {
+            $("#createWorkflowModal").modal("show");
+        });
+    }
+
+    $('#workflowListPartialContainer').load('/WorkflowManagement/WorkflowListPartialView');
+</script>

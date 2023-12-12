@@ -706,6 +706,32 @@
                                                 <span>Manage User Types</span>
                                             </a>
                                         </li>
+                                        <li id="userTypeListMenuItem">
+                                            <a href="@Url.Action("UserTypeUserList", "AccessRightsManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>Assign User Types</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li id="workflowManagementMenuItem">
+                                    <a href="#" id="workflowManagementSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/account-management.png" />
+                                        </div>
+                                        <span>Workflow Management</span>
+                                    </a>
+                                    <ul id="workflowManagementDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
+                                        <li id="workflowListMenuItem">
+                                            <a href="@Url.Action("WorkflowList", "WorkflowManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>Workflow Management</span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
                                 @*}*@
@@ -828,6 +854,12 @@
         <div id="userTypeUpdateModalContainer"></div>
         <div id="userTypeDeleteModalContainer"></div>
     }
+    else if (currentUrl.Contains("WorkflowList"))
+    {
+        <div id="workflowCreateModalContainer"></div>
+        <div id="workflowUpdateModalContainer"></div>
+        <div id="workflowDeleteModalContainer"></div>
+    }
     else if (currentUrl.Contains("EditApplication"))
     {
         <partial name="~/Views/Modals/EditApplicationModal.cshtml" />
@@ -858,6 +890,7 @@
     <script src="/js/datatables.min.js"></script>
     <script src="/js/datatables-custom.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.min.js"></script>
 
     <script src="/bootstrap-fileinput-master/js/plugins/piexif.min.js" type="text/javascript"></script>
     <script src="/bootstrap-fileinput-master/js/plugins/sortable.min.js" type="text/javascript"></script>
@@ -912,6 +945,8 @@
 
         setupDropdown("accessRightsManagementSubMenuItem", "accessRightsManagementDropdown");
 
+        setupDropdown("workflowManagementSubMenuItem", "workflowManagementDropdown");
+
 
 
         function setActiveMenuItem(menuItemId) {
@@ -960,6 +995,7 @@
             "/AccessRightsManagement/UserTypeList": "userTypeListMenuItem",
             "/AccessRightsManagement/AccessRightsList": "accessRightsListMenuItem",
             "/AccessRightsManagement/UserTypeAccessRightsList": "assignAccessRightsListMenuItem",
+            "/WorkflowManagement/WorkflowList": "workflowListMenuItem",
             "/Monitoring": "monitoringMenuItem",
             "/CreationOfNewDenrOffice": "creationOfNewDenrOfficeMenuItem",
             "/AnnouncementTemplates": "announcementTemplatesMenuItem",

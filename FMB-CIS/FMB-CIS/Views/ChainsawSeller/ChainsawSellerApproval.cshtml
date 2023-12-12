@@ -16,33 +16,49 @@
                 <input asp-for="uid" type="hidden" />
                 <input asp-for="appid" type="hidden" />
                 <div class="d-flex justify-content-end gap-2">
-                    @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR CENRO" || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR Implementing PENRO" || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR Regional Executive Director (RED)")
+                    @foreach (WorkflowStep worklowStep in Model.workflow.steps)
+                    {
+                        @if (@worklowStep.workflow_step_code == @Model.applicantViewModels.status.ToString())
+                        {
+                            @foreach (WorkflowNextStep workflowNextStep in worklowStep.nextSteps)
+                            {
+                                @if (workflowNextStep.user_type_id.ToString() == ((ClaimsIdentity)User.Identity).FindFirst("userRoleIds").Value)
+                                {
+                                    <button type="button" class="customBtn btn @workflowNextStep.button_class w-125" data-next_step_code="@workflowNextStep.next_step_code" data-button_text="@workflowNextStep.button_text">
+                                        @workflowNextStep.button_text
+                                    </button>
+                                }
+                            }
+                        }
+                    }
+                 @*   @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR CENRO" || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR Implementing PENRO" || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR Regional Executive Director (RED)")
                     {
                         if (Model.applicantViewModels.permit_status == "Approved (Inspector) - For Cenro Approval" || Model.applicantViewModels.permit_status == "Rejected (CENRO)")
                         {
-                            <button type="button" id="approveBtn" class="btn btn-primary w-105">Accept</button>
-                            <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
+                            <button type="button" id="approveBtn" class="btn btn-primary w-105">-----Accept</button>
+                            <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">-----Decline</button>
                         }
                         if (Model.applicantViewModels.permit_status == "Payment Verification (CENRO)" || Model.applicantViewModels.permit_status == "Payment Rejected (CENRO)")
                         {
-                            <button type="button" id="approveBtn" class="btn btn-primary w-110">Approve Permit</button>
-                            <button type="button" id="declineBtn" class="btn btn-danger w-110 btnCancel">Decline Payment</button>
+                            <button type="button" id="approveBtn" class="btn btn-primary w-110">-----Approve Permit</button>
+                            <button type="button" id="declineBtn" class="btn btn-danger w-110 btnCancel">-----Decline Payment</button>
                         }
                     }
                     @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true)
                     {                      
                         if (Model.applicantViewModels.permit_status == "For Inspector Approval" || Model.applicantViewModels.permit_status == "Rejected (Inspector)")
                         {
-                            <button type="button" id="approveBtn" class="btn btn-primary w-105">Accept</button>
-                            <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
+                            <button type="button" id="approveBtn" class="btn btn-primary w-105">-----Accept</button>
+                            <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">-----Decline</button>
                         }
                         if (Model.applicantViewModels.permit_status == "Payment Verification (Inspector)" || Model.applicantViewModels.permit_status == "Payment Rejected (Inspector)")
                         {
-                            <button type="button" id="approveBtn" class="btn btn-primary w-110">Approve Permit</button>
-                            <button type="button" id="declineBtn" class="btn btn-danger w-110 btnCancel">Decline Payment</button>
+                            <button type="button" id="approveBtn" class="btn btn-primary w-110">-----Approve Permit</button>
+                            <button type="button" id="declineBtn" class="btn btn-danger w-110 btnCancel">-----Decline Payment</button>
                         }
-                    }
+                    }*@
                     <input asp-for="decision" id="decisionID" type="hidden" />
+                    <input asp-for="next_step_code" id="next_step_code" type="hidden" />
                 </div>
             </div>
             <hr />
@@ -787,8 +803,7 @@
             {
                 //Validate Form
                 $("#ApplApprvlForm")[0].reportValidity();
-            }
-                            
+            }              
         });
 
         $("#backApproveBtn").click(function () {
@@ -816,6 +831,45 @@
             $('#confirmSuccessDeclineModal').modal("show");
         });
 
+        //////
+        $('.customBtn').click(function (btn) {
+            if ($("#ApplApprvlForm")[0].checkValidity()) {
+                $('#confirmCustomModal').modal("show");
+                document.getElementById("decisionID").value = "Custom";
+                document.getElementById("next_step_code").value = $(this).data('next_step_code');
+                document.getElementById("confirmCustomBtn").value = $(this).data('button_text');
+                document.getElementById("confirmCustomMessage").value = $(this).data('button_text');
+            }
+            else
+            {
+                //Validate Form
+                $("#ApplApprvlForm")[0].reportValidity();
+            }
+        });
+
+        $("#backCustomBtn").click(function () {
+            $("#confirmCustomModal").modal('hide');
+        });
+
+        $("#confirmCustomBtn").click(function () {
+            $("#confirmCustomModal").modal('hide');
+            $('#confirmSuccessCustomModal').modal("show");
+        });
+
+        //$('#declineBtn').click(function () {
+        //    $('#confirmDeclineModal').modal("show");
+        //    document.getElementById("decisionID").value = "Decline";
+        //});
+
+        //$('#backDeclineBtn').click(function () {
+        //    $('#confirmDeclineModal').modal("hide");
+        //});
+
+        //$("#confirmDeclineBtn").click(function () {
+        //    $("#confirmDeclineModal").modal('hide');
+        //    $('#confirmSuccessDeclineModal').modal("show");
+        //});
+        //////
 
 
         // $('#saveBtn').click(function () {

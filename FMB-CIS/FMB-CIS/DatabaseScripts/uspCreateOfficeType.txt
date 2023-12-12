@@ -1,0 +1,79 @@
+USE [denr_fmb_cis]
+GO
+
+/****** Object:  Table [dbo].[tbl_office_type]    Script Date: 11/11/2023 2:14:52 pm ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+DROP TABLE [dbo].[tbl_office_type]
+GO
+CREATE TABLE [dbo].[tbl_office_type](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[office_type_code] [int] NOT NULL,
+	[name] [nvarchar](max) NOT NULL,
+	[description] [nvarchar](max) NOT NULL,
+	[is_active] [bit] NULL,
+	[createdBy] [int] NOT NULL,
+	[modifiedBy] [int] NOT NULL,
+	[date_created] [datetime2](7) NULL,
+	[date_modified] [datetime2](7) NULL,
+ CONSTRAINT [PK_tbl_office_type] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+USE denr_fmb_cis;  
+GO  
+DROP PROCEDURE IF EXISTS dbo.uspCreateOfficeType;  
+GO  
+CREATE PROCEDURE dbo.uspCreateOfficeType 
+    @Id int,   
+    @Name nvarchar(MAX),
+	@Description nvarchar(MAX)
+AS   
+	
+DECLARE @SUPERADMINID INT = 81;
+DECLARE @DATETIMENOW DATETIME = 81;
+INSERT INTO [dbo].[tbl_office_type]
+           ([id]
+		   ,[office_type_code]
+		   ,[name]
+           ,[description]
+           ,[is_active]
+           ,[createdBy]
+           ,[modifiedBy]
+           ,[date_created]
+           ,[date_modified])
+     VALUES
+           (@Id
+		   ,@Id
+		   ,@Name
+           ,@Description
+           ,1
+           ,@SUPERADMINID
+           ,@SUPERADMINID
+           ,@DATETIMENOW
+           ,@DATETIMENOW)
+    SET NOCOUNT ON;  
+GO
+
+USE denr_fmb_cis;
+TRUNCATE TABLE dbo.tbl_office_type;
+SET IDENTITY_INSERT tbl_office_type ON;
+GO
+
+USE denr_fmb_cis;
+EXEC dbo.uspCreateOfficeType  @Id = 1, @Name = 'DENR Regional Executive Director (RED)', @Description = 'DENR office assigned to the whole Region.';
+EXEC dbo.uspCreateOfficeType  @Id = 2, @Name = 'DENR PENRO', @Description = 'Provincial Environment and Natural Resources Office refers to the DENR office, headed by the Provincial Environment and Natural Resources Officer appointed by the Secretary of the DENR, which is responsible for the implementation of DENR policies, programs and projects in the province.';
+EXEC dbo.uspCreateOfficeType  @Id = 3, @Name = 'DENR PENRO Implementing', @Description = 'PENRO office also functioning CENRO functions.';
+EXEC dbo.uspCreateOfficeType  @Id = 4, @Name = 'DENR CENRO', @Description = 'City Environment and Natural Resources Office refers to the DENR office, headed by the City Environment and Natural Resources Officer appointed by the Secretary of the DENR, which is responsible for the implementation of DENR policies, programs and projects in the city.';
+GO
+
+USE denr_fmb_cis; 
+SELECT * FROM dbo.tbl_office_type;
+GO
+
