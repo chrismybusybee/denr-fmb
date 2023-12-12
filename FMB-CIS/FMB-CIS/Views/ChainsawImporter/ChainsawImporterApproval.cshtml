@@ -18,22 +18,18 @@
                 <input asp-for="uid" type="hidden" />
                 <input asp-for="appid" type="hidden" />
                 <div class="d-flex justify-content-end gap-2">
-@*                    @Model.applicantViewModels.status
-*@                    @foreach (WorkflowStep worklowStep in Model.workflow.steps)
+                    @foreach (WorkflowStep worklowStep in Model.workflow.steps)
                     {
                         @if (@worklowStep.workflow_step_code == @Model.applicantViewModels.status.ToString())
                         {
-@*                            @worklowStep.id
-*@                            @foreach (WorkflowNextStep workflowNextStep in worklowStep.nextSteps)
+                            @foreach (WorkflowNextStep workflowNextStep in worklowStep.nextSteps)
                             {
                                 @if (workflowNextStep.user_type_id.ToString() == ((ClaimsIdentity)User.Identity).FindFirst("userRoleIds").Value)
                                 {
                                     <button type="button" class="customBtn btn @workflowNextStep.button_class w-125" data-next_step_code="@workflowNextStep.next_step_code" data-button_text="@workflowNextStep.button_text">
-                                    @*@workflowNextStep.id @workflowNextStep.user_type_id*@
                                     @workflowNextStep.button_text
                                     </button>
                                 }
-                                @*@(((ClaimsIdentity)User.Identity).FindFirst("userRole").ValueType)*@
                             }
                         }
                     }

@@ -18,7 +18,7 @@ using FMB_CIS.Data;
 using FMB_CIS.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Security.Cryptography;
-
+using Mapster;
 
 namespace FMB_CIS.Controllers
 {
@@ -42,6 +42,7 @@ namespace FMB_CIS.Controllers
             EmailSender = emailSender;
         }
 
+        // Chainsaw Permit to Sell
         public IActionResult Index()
         {
             //Set Roles who can access this page
@@ -406,6 +407,28 @@ namespace FMB_CIS.Controllers
             //Get application permit type id
             int permitTypeID = Convert.ToInt32(_context.tbl_application.Where(a => a.id == applicID).Select(a => a.tbl_permit_type_id).FirstOrDefault());
             //Document Tagging and Checklist
+
+
+
+            Workflow workflowModel = new Workflow();
+            //Get the list of users
+            string permitTypeQueryParameter = permitTypeID == 3 ? "PERMIT_TO_SELL_CUSTOM" : "PERMIT_TO_PURCHASE_CUSTOM";
+            var workflow = _context.tbl_permit_workflow.FirstOrDefault(e => e.workflow_code == permitTypeQueryParameter);
+            workflowModel = workflow.Adapt<Workflow>();
+
+            //Get the list of steps
+            var stepEntity = _context.tbl_permit_workflow_step.Where(o => o.workflow_code == workflowModel.workflow_code).ToList();
+            workflowModel.steps = stepEntity.Adapt<List<WorkflowStep>>();
+
+            //Get the list of nextsteps
+            foreach (WorkflowStep workflowStep in workflowModel.steps)
+            {
+                var nextstepEntity = _context.tbl_permit_workflow_next_step.Where(o => o.workflow_code == workflowModel.workflow_code && o.workflow_step_code == workflowStep.workflow_step_code).ToList();
+                //o.workflow_code == model.workflow_code &&
+                workflowStep.nextSteps = nextstepEntity.Adapt<List<WorkflowNextStep>>();
+            }
+
+            mymodel.workflow = workflowModel;
 
             //Get uploaded files and requirements
             var fileWithCommentsforDocTagging = (from dc in _context.tbl_document_checklist
@@ -847,57 +870,85 @@ namespace FMB_CIS.Controllers
                         EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);
                     }
                 }
-                //else
-                //{
-                //    var appli = new tbl_application() { id = applid, date_modified = DateTime.Now, modified_by = loggedUserID };
-                //    var usrdet = new tbl_user() { id = usid, comment = viewMod.applicantViewModels.comment };
-                //    if (viewMod.filesUpload != null)
-                //    {
-                //        foreach (var file in viewMod.filesUpload.Files)
-                //        {
-                //            var filesDB = new tbl_files();
-                //            FileInfo fileInfo = new FileInfo(file.FileName);
-                //            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserDocs");
+                else
+                {
+                    stats = (int)(WorkFlowStepEnum)Enum.Parse(typeof(WorkFlowStepEnum), viewMod.next_step_code);
 
-                //            //create folder if not exist
-                //            if (!Directory.Exists(path))
-                //                Directory.CreateDirectory(path);
+                    var appli = new tbl_application() { id = applid, status = stats, date_modified = DateTime.Now, modified_by = loggedUserID, date_of_inspection = dateInspection, date_of_registration = dateRegistration, date_of_expiration = dateExpiration, date_due_for_officers = dateDueOfficer };
+                    var usrdet = new tbl_user() { id = usid, comment = viewMod.applicantViewModels.comment };
+                    using (_context)
+                    {
+                        _context.tbl_application.Attach(appli);
+                        _context.Entry(appli).Property(x => x.status).IsModified = true;
+                        _context.Entry(appli).Property(x => x.modified_by).IsModified = true;
+                        _context.Entry(appli).Property(x => x.date_modified).IsModified = true;
+                        _context.Entry(appli).Property(x => x.date_of_inspection).IsModified = inspectDateToBeChanged;
+                        _context.Entry(appli).Property(x => x.date_of_registration).IsModified = registrationDateToBeChanged;
+                        _context.Entry(appli).Property(x => x.date_of_expiration).IsModified = expirationDateToBeChanged;
+                        _context.Entry(appli).Property(x => x.date_due_for_officers).IsModified = true;
+                        _context.Entry(usrdet).Property(x => x.comment).IsModified = true;
+                        _context.SaveChanges();
+                    }
+                    //Email
+                    if (emailTemplateID != 0) //If emailTemplateID is 0, no email should be sent.
+                    {
+                        var emailTemplate = emailTemplates.Where(e => e.id == emailTemplateID).FirstOrDefault();
+
+                        var subject = emailTemplate.email_subject;
+                        var BODY = emailTemplate.email_content.Replace("{FirstName}", viewMod.applicantViewModels.first_name);
+                        var body = BODY.Replace(Environment.NewLine, "<br/>");
+
+                        EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);
+                    }
+                    //    var appli = new tbl_application() { id = applid, date_modified = DateTime.Now, modified_by = loggedUserID };
+                    //    var usrdet = new tbl_user() { id = usid, comment = viewMod.applicantViewModels.comment };
+                    //    if (viewMod.filesUpload != null)
+                    //    {
+                    //        foreach (var file in viewMod.filesUpload.Files)
+                    //        {
+                    //            var filesDB = new tbl_files();
+                    //            FileInfo fileInfo = new FileInfo(file.FileName);
+                    //            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserDocs");
+
+                    //            //create folder if not exist
+                    //            if (!Directory.Exists(path))
+                    //                Directory.CreateDirectory(path);
 
 
-                //            string fileNameWithPath = Path.Combine(path, file.FileName);
+                    //            string fileNameWithPath = Path.Combine(path, file.FileName);
 
-                //            using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
-                //            {
-                //                file.CopyTo(stream);
-                //            }
-                //            filesDB.tbl_application_id = id;
-                //            filesDB.created_by = usid;
-                //            filesDB.modified_by = usid;
-                //            filesDB.date_created = DateTime.Now;
-                //            filesDB.date_modified = DateTime.Now;
-                //            filesDB.filename = file.FileName;
-                //            filesDB.path = path;
-                //            filesDB.tbl_file_type_id = fileInfo.Extension;
-                //            filesDB.tbl_file_sources_id = fileInfo.Extension;
-                //            filesDB.file_size = Convert.ToInt32(file.Length);
-                //            _context.tbl_files.Add(filesDB);
-                //            _context.SaveChanges();
-                //        }
-                //    }
-                //    using (_context)
-                //    {
-                //        _context.tbl_application.Attach(appli);
-                //        //_context.Entry(appli).Property(x => x.status).IsModified = true;
-                //        _context.Entry(appli).Property(x => x.modified_by).IsModified = true;
-                //        _context.Entry(appli).Property(x => x.date_modified).IsModified = true;
-                //        _context.Entry(usrdet).Property(x => x.comment).IsModified = true;
-                //        _context.SaveChanges();
-                //    }
-                //    //Email
-                //    var subject = "Permit Application Status";
-                //    var body = "Greetings! \n An inspector viewed your application.\nThe officer left the following comment:\n" + viewMod.applicantViewModels.comment;
-                //    EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);
-                //}
+                    //            using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                    //            {
+                    //                file.CopyTo(stream);
+                    //            }
+                    //            filesDB.tbl_application_id = id;
+                    //            filesDB.created_by = usid;
+                    //            filesDB.modified_by = usid;
+                    //            filesDB.date_created = DateTime.Now;
+                    //            filesDB.date_modified = DateTime.Now;
+                    //            filesDB.filename = file.FileName;
+                    //            filesDB.path = path;
+                    //            filesDB.tbl_file_type_id = fileInfo.Extension;
+                    //            filesDB.tbl_file_sources_id = fileInfo.Extension;
+                    //            filesDB.file_size = Convert.ToInt32(file.Length);
+                    //            _context.tbl_files.Add(filesDB);
+                    //            _context.SaveChanges();
+                    //        }
+                    //    }
+                    //    using (_context)
+                    //    {
+                    //        _context.tbl_application.Attach(appli);
+                    //        //_context.Entry(appli).Property(x => x.status).IsModified = true;
+                    //        _context.Entry(appli).Property(x => x.modified_by).IsModified = true;
+                    //        _context.Entry(appli).Property(x => x.date_modified).IsModified = true;
+                    //        _context.Entry(usrdet).Property(x => x.comment).IsModified = true;
+                    //        _context.SaveChanges();
+                    //    }
+                    //    //Email
+                    //    var subject = "Permit Application Status";
+                    //    var body = "Greetings! \n An inspector viewed your application.\nThe officer left the following comment:\n" + viewMod.applicantViewModels.comment;
+                    //    EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);
+                }
                 return RedirectToAction("ChainsawSellerApplicantsList", "ChainsawSeller");
                 
                 //return RedirectToAction("ChainsawSellerApproval", "ChainsawSeller", new { uid = tbl_user_id, appid = id });

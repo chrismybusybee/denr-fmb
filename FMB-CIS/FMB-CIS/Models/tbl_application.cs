@@ -25,6 +25,7 @@ namespace FMB_CIS.Models
         public DateTime? date_of_inspection { get; set; }
         public DateTime? date_of_registration { get; set; }
         public DateTime? date_of_expiration { get; set; }
+        public DateTime? initial_date_of_inspection { get; set; }
         public int? status { get; set; }
 
         public string? tbl_specification_id { get; set; }

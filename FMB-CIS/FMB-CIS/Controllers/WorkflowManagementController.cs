@@ -262,6 +262,7 @@ namespace FMB_CIS.Controllers
         }
 
         /// <summary>
+        /// 
         /// UserTypeUser
         /// </summary>
         /// <returns></returns>
@@ -284,7 +285,7 @@ namespace FMB_CIS.Controllers
                 //Get the list of nextsteps
                 foreach (WorkflowStep workflowStep in model.steps)
                 {
-                    var nextstepEntity = _context.tbl_permit_workflow_next_step.Where(o => o.workflow_step_code == workflowStep.workflow_step_code).ToList();
+                    var nextstepEntity = _context.tbl_permit_workflow_next_step.Where(o => o.workflow_code == model.workflow_code && o.workflow_step_code == workflowStep.workflow_step_code).ToList();
                     //o.workflow_code == model.workflow_code &&
                     workflowStep.nextSteps = nextstepEntity.Adapt<List<WorkflowNextStep>>();
                 }

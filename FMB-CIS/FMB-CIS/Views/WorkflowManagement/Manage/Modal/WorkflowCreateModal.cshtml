@@ -227,7 +227,7 @@
                                                     <div class="col-md-2">
                                                         <div class="form-floating">
                                                             <button data-bind="text: buttonText() || 'Next', css: buttonClass" class="mb-2 mt-3 btn btn-sm rounded-3 btn-primary" type="button"></button>
-                                                            @*<button data-bind="click: removeNextStep" class="mb-2 mt-3 btn btn-sm rounded-3 btn-primary" type="button"><span class="fa fa-close"></span></button>*@
+                                                            <button data-bind="click: $root.removeNextStep" class="mb-2 mt-3 btn btn-sm rounded-3 btn-primary" type="button"><span class="fa fa-close"></span></button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -346,8 +346,19 @@
         };
 
         function removeNextStep(nextStep) {
-            console.log(nextStep);
-            //parent.nextSteps().remove(nextStep);
+            var currentStep;
+            var currentNextStep;
+            self.steps().forEach(function (s) {
+                if (s.isEdit()) {
+                    currentStep = s;
+                    s.nextSteps().forEach(function (ns) {
+                        if (ns.id() == nextStep.id()) {
+                            currentNextStep = ns;
+                        }
+                    });
+                    s.nextSteps.remove(currentNextStep);
+                }
+            });
         };
 
         function configureStep(step) {

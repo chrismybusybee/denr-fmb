@@ -228,6 +228,7 @@
                                                     <div class="col-md-2">
                                                         <div class="form-floating">
                                                             <button data-bind="text: buttonText() || 'Next', css: buttonClass" class="mb-2 mt-3 btn btn-sm rounded-3 btn-primary add-next-step" type="button"></button>
+                                                            <button data-bind="click: $root.removeNextStep" class="mb-2 mt-3 btn btn-sm rounded-3 btn-primary" type="button"><span class="fa fa-close"></span></button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -289,6 +290,7 @@
         self.permitTypes = ko.observableArray(permitTypes);
         self.regions = ko.observableArray(regions);
         self.cities = ko.observableArray(cities);
+
         self.removeNextStep = removeNextStep;
 
         self.addStep = function () {
@@ -340,10 +342,20 @@
             });
         };
 
-        function removeNextStep(step, nextStep) {
-            console.log(step);
-            console.log(nextStep);
-            //step.remove(step);
+        function removeNextStep(nextStep) {
+            var currentStep;
+            var currentNextStep;
+            self.steps().forEach(function(s){
+                if(s.isEdit()) {
+                    currentStep = s;
+                    s.nextSteps().forEach(function(ns){
+                        if(ns.id() == nextStep.id()) {
+                            currentNextStep = ns;
+                        }
+                    });
+                    s.nextSteps.remove(currentNextStep);
+                }
+            });
         };
 
         function configureStep(step) {
@@ -463,7 +475,7 @@
         //}, self);
 
         if (workflowDataModel) {
-            self.id(workflowDataModel.id);
+            self.id(");
             self.name(workflowDataModel.name);
             self.permit_type_code(workflowDataModel.permit_type_code);
             self.workflow_code(workflowDataModel.workflow_code);
@@ -527,13 +539,15 @@
             function (workflowData) {
                 //var workflowDataPretext = JSON.stringify(workflowData);
 
-                //workflowDataPretext = workflowDataPretext.replaceAll(/Import Custom Custom/g, "Import Custom");
-                //workflowDataPretext = workflowDataPretext.replaceAll(/IMPORT_CUSTOM_CUSTOM/g, "IMPORT_CUSTOM");
+                //workflowDataPretext = workflowDataPretext.replaceAll(/Import/g, "Sell");
+                //workflowDataPretext = workflowDataPretext.replaceAll(/IMPORT/g, "SELL");
 
                 //workflow = JSON.parse(workflowDataPretext);
                 //console.log("workflowData");
                 //console.log(workflowData);
                 workflow = workflowData;
+                console.log("workflow");
+                console.log(workflow);
                 return $.get("/AccessRightsManagement/UserTypes");
             }
         ).then(
