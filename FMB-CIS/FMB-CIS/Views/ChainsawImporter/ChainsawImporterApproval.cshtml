@@ -33,18 +33,13 @@
                             }
                         }
                     }
-                    @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR CENRO" || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR Implementing PENRO" || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR Regional Executive Director (RED)")
+                  @*  @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR CENRO" || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR Implementing PENRO" || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR Regional Executive Director (RED)")
                     {
-                        @* <input id="approveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Approve" />
-                    <input id="declineBtn" class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="submit" value="Decline" /> *@
-                        @* <button type="button" id="approveBtn" class="btn btn-primary w-105">Approve</button>
-                    <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button> *@
                         if (Model.applicantViewModels.status <= 6)
                         {
                             <button type="button" id="approveBtn" class="btn btn-primary w-125">-----Approve and Proceed to Payments</button>
                             <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">-----Decline</button>
                         }
-                        @* if (Model.applicantViewModels.status > 6) *@
                         if (Model.applicantViewModels.permit_status == "Payment Verification (CENRO)" || Model.applicantViewModels.permit_status == "Payment Rejected (CENRO)")
                         {
                             <button type="button" id="approveBtn" class="btn btn-primary w-110">-----Approve Payment</button>
@@ -54,21 +49,17 @@
                     }
                     @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true)
                     {
-                        @* <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" /> *@
-                        @* <button type="button" id="approveBtn" class="btn btn-primary w-105">Approve</button>
-                    <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button> *@
                         if (Model.applicantViewModels.status <= 6)
                         {
                             <button type="button" id="approveBtn" class="btn btn-primary w-105">-----Approve</button>
                             <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">-----Decline</button>
                         }
-                        @* if (Model.applicantViewModels.status > 6) *@
                         if (Model.applicantViewModels.permit_status == "Payment Verification (Inspector)" || Model.applicantViewModels.permit_status == "Payment Rejected (Inspector)")
                         {
                             <button type="button" id="approveBtn" class="btn btn-primary w-110">-----Approve Payment</button>
                             <button type="button" id="declineBtn" class="btn btn-danger w-110 btnCancel">-----Decline Payment</button>
                         }
-                    }
+                    }*@
                     <input asp-for="decision" id="decisionID" type="hidden" />
                     <input asp-for="next_step_code" id="next_step_code" type="hidden" />
                 </div>
@@ -851,11 +842,17 @@
 
         //////
         $('.customBtn').click(function (btn) {
-            $('#confirmCustomModal').modal("show");
-            document.getElementById("decisionID").value = "Custom";
-            document.getElementById("next_step_code").value = $(this).data('next_step_code');
-            document.getElementById("confirmCustomBtn").value = $(this).data('button_text');
-            document.getElementById("confirmCustomMessage").value = $(this).data('button_text');
+            if ($("#ApplApprvlForm")[0].checkValidity()) {
+                $('#confirmCustomModal').modal("show");
+                document.getElementById("decisionID").value = "Custom";
+                document.getElementById("next_step_code").value = $(this).data('next_step_code');
+                document.getElementById("confirmCustomBtn").value = $(this).data('button_text');
+                document.getElementById("confirmCustomMessage").value = $(this).data('button_text');
+            }
+            else {
+                //Validate Form
+                $("#ApplApprvlForm")[0].reportValidity();
+            }
         });
 
         $("#backCustomBtn").click(function () {
