@@ -774,7 +774,7 @@ namespace FMB_CIS.Controllers
 
 
 
-                    var appli = new tbl_application() { id = applid, status = stats, date_modified = DateTime.Now, modified_by = loggedUserID, date_of_registration = dateRegistration, date_of_expiration = dateExpiration, date_due_for_officers = dateDueOfficer };
+                    var appli = new tbl_application() { id = applid, status = stats, date_modified = DateTime.Now, modified_by = loggedUserID, initial_date_of_inspection = dateInspectionInitial, date_of_inspection = dateInspection, date_of_registration = dateRegistration, date_of_expiration = dateExpiration, date_due_for_officers = dateDueOfficer };
                     var usrdet = new tbl_user() { id = usid, comment = viewMod.applicantViewModels.comment };
                     using (_context)
                     {
@@ -782,6 +782,7 @@ namespace FMB_CIS.Controllers
                         _context.Entry(appli).Property(x => x.status).IsModified = true;
                         _context.Entry(appli).Property(x => x.modified_by).IsModified = true;
                         _context.Entry(appli).Property(x => x.date_modified).IsModified = true;
+                        _context.Entry(appli).Property(x => x.initial_date_of_inspection).IsModified = initialInspectDateToBeChanged;
                         _context.Entry(appli).Property(x => x.date_of_registration).IsModified = registrationDateToBeChanged;
                         _context.Entry(appli).Property(x => x.date_of_expiration).IsModified = expirationDateToBeChanged;
                         _context.Entry(appli).Property(x => x.date_due_for_officers).IsModified = true;
