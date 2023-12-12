@@ -34,6 +34,10 @@ namespace FMB_CIS.Controllers
            
         }
 
+        public IActionResult Login()
+        {
+            return RedirectToAction("Index", "Home");
+        }
 
         public IActionResult Registration()
         {

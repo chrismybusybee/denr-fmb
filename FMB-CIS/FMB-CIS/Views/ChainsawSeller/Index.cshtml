@@ -14,7 +14,7 @@
                 @ViewBag.message
             </div>
         }
-        <form asp-action="Index" method="post" enctype="multipart/form-data">
+        <form asp-action="Index" method="post" enctype="multipart/form-data" id="SellerRegForm">
         <a href="@Url.Action("Index", "Dashboard")" class="mx-2" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
         <div class="row m-0 my-4">
             @*<div class="col-md-6">
@@ -106,20 +106,20 @@
                             <textarea class="form-control" asp-for="tbl_Application.purpose" placeholder="Enter purpose" required="required"></textarea>
                         <span class="text-danger"></span>
                     </div>
-                    <div class="form-group mb-3">
+                    @* <div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
                                 Already coordinated w/ Enforcement Division?
                         </label>
                         <br />
                         <label>
-                            <input type="radio" asp-for="tbl_Application.coordinatedWithEnforcementDivision" value="true" />
+                            <input type="radio" asp-for="tbl_Application.coordinatedWithEnforcementDivision" value="true" required/>
                             Yes
                         </label>
                         <label>
                             <input type="radio" asp-for="tbl_Application.coordinatedWithEnforcementDivision" value="false" />
                             No
                         </label>
-                    </div>
+                    </div> *@
                     @*<div class="form-group mb-3">
                         <label class="text-secondary fw-bold">
                             Set Date of Inspection
@@ -144,32 +144,61 @@
                         <div class="mb-4" style="display:none" id="PermitToPurchaseRequirements">
                             <span style="white-space: pre-line">@ViewBag.RequiredDocsList_PermitToPurchase</span>
                         </div> *@
-                        <div class="d-flex gap-4 mb-5">
+                        <div class="gap-4 mb-5">
                             <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
-                            <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
-                                <i data-feather="upload"></i> Upload
-                            </label>
-                            <input type="file" asp-for="filesUpload.Files" class="form-control file" accept="application/pdf" multiple hidden />
-                            @* <button type="button" class="btn btn-primary"><i data-feather="upload"></i> Upload</button>*@
-                        </div>
-                        <div class="d-flex mb-4 gap-3 output">
-                            @*Cards for files*@
-                            <p id="files-area">
-                                <span id="filesList">
-                                    <span id="files-names"></span>
-                                </span>
-                            </p>
+                            <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload..." onchange="fileChange(this)">
                         </div>
                     </div>
                 </div>
             </div>
+            <hr />
+            <div class="row d-flex justify-content-center m-0">
+                <h5 class="text-secondary">Please match your uploaded file based on the checklist of requirements.</h5>
+                <table class="table dataTable" id="tblApplicantFiles">
+                    <thead>
+                        <tr>
+                            <th>
+                                Required Document
+                            </th>
+                            <th>
+                                Uploaded Document
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 0;
+                        }
+                        @foreach (tbl_document_checklist item in Model.tbl_Document_Checklist)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.name)
+                                    @* <a href="#" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DocHistory(this)">@item.filename</a> *@
+                                </td>
+                                <input type="hidden" asp-for="fileChecklistViewModel[i].tbl_document_checklist_id" value="@item.id" />
+                                <td>
+                                    <select class="form-select fileListDropDown" id="fileListDropDown_@i" onchange="fileSelected(this)" asp-for="fileChecklistViewModel[i].FileName" required>
+                                        <option selected disabled>--Please select your uploaded file--</option>
+                                    </select>
+                                </td>
+                                @{
+                                    i++;
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
             <div class="text-center mb-4">
                 <small class="text-secondary fw-bold fst-italic">
                     By submitting this form, you agree to our <a href="@Url.Action("TermsPolicy", "Home")" target="_blank" class="text-decoration-none">Privacy Policy and Terms & Conditions.</a>
                 </small>
             </div>
         <div class="d-flex justify-content-end pe-2 me-1">
-            <button class="btn btn-primary mb-4">Submit</button>
+            <button type="button" id="btnSubmit" class="btn btn-primary mb-4">Submit</button>
         </div>
         </form>
     </div>
@@ -180,6 +209,7 @@
 
 
 <script src="/js/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script type="text/javascript">
 
@@ -199,88 +229,30 @@
     // }
 
     $(document).ready(function () {
+                
+        const permitToSellRegform = document.getElementById('SellerRegForm');
+        $("#btnSubmit").click(function () {
+            //Check if required fields are filled up
+            if ($("#SellerRegForm")[0].checkValidity()) {
+                var formFiles = document.forms['SellerRegForm']['filesUpload.Files'];
 
-        const dt = new DataTransfer();
-
-        $(".file").on("change", function (e) {
-            // Get the selected file(s)
-            var selectedFiles = $(this).prop("files");
-            var fafile = "";
-            // Clear the previous output
-            //$(".output").empty();
-
-            // Display file information in the specified format
-            for (var i = 0; i < this.files.length; i++) {
-                //ifelse for fa-file type
-                if (selectedFiles[i].type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-                    fafile = "fa-file-word"
-                }
-                else if (selectedFiles[i].type == "application/pdf") {
-                    fafile = "fa-file-pdf"
-                }
-                else if (selectedFiles[i].type == "image/jpeg") {
-                    fafile = "fa-file-image"
+                if (formFiles.files.length == 0) {
+                    Swal.fire({
+                        title: "No File Selected",
+                        text: "Please upload the required documents to proceed with the application.",
+                        icon: "error",
+                        confirmButtonColor: '#14984a'
+                    });
                 }
                 else {
-                    fafile = "fa-file"
+                    $('#confirmSubmitModal').modal("show"); //proceed to submit modal
                 }
-                // Create div elements and set their classes and content
-                var cardDiv = $("<div>").addClass("card mw-18rem ").attr('id', selectedFiles[i].name);
-                var fileDiv = $("<div>").addClass("card-body");
-                var fileIcon = $("<i>").addClass("fas " + fafile + " text-light-green fs-1 mb-3");
-                var dropdownIcon = $("<i>").addClass("fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary").attr({
-                    "data-bs-toggle": "dropdown",
-                    "aria-expanded": "false"
-                });
-                var dropdownMenu = $("<ul>").addClass("dropdown-menu").append(
-                    $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("View")),
-                    $("<li>").append($("<a>").addClass("dropdown-item file-delete").attr("href", "#").text("Delete")),
-                    $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("Download"))
-                );
-                var fileName = $("<h6>").addClass("card-title text-secondary").text(selectedFiles[i].name);
-                var fileInfoList = $("<ul>").addClass("list-unstyled small mb-0").append(
-                    $("<li>").append($("<span>").addClass("text-muted").text("type: " + selectedFiles[i].type)),
-                    $("<li>").append($("<span>").addClass("text-muted").text("size: " + (selectedFiles[i].size / 1024).toFixed(2) + "kb")),
-                    $("<li>").append($("<span>").addClass("text-muted").text("uploaded: " + new Date().toLocaleDateString()))
-                );
-
-                // Append created elements to the fileDiv
-                fileDiv.append(fileIcon, dropdownIcon, dropdownMenu, fileName, fileInfoList);
-
-                // Append the fileDiv to the cardDiv
-                cardDiv.append(fileDiv);
-
-                // Append the cardDiv to the output div
-                $(".output").append(cardDiv);
             }
-            for (let file of this.files) {
-                dt.items.add(file);
+            //If fields are not filled up
+            else {
+                //Validate Form
+                $("#SellerRegForm")[0].reportValidity();
             }
-
-            selectedFiles = dt.files;
-            console.log(selectedFiles);
-            $('.file-delete').click(function () {
-                let name = $(this).closest('.card').attr('id');
-                // Supprimer l'affichage du nom de fichier
-                //$(this).parent().remove();
-                document.getElementById(name).remove()
-                for (let i = 0; i < dt.items.length; i++) {
-                    // Correspondance du fichier et du nom
-                    if (name === dt.items[i].getAsFile().name) {
-                        // Suppression du fichier dans l'objet DataTransfer
-                        dt.items.remove(i);
-                        continue;
-                    }
-                }
-                // Mise à jour des fichiers de l'input file après suppression
-                selectedFiles = dt.files;
-            });
-
-
-        });
-
-        $("#btnSubmit").click(function () {
-            $("#confirmSubmitModal").modal("show");
         });
 
         $("#backBtn").click(function () {
@@ -289,39 +261,75 @@
 
         $("#confirmBtn").click(function () {
             $("#confirmSubmitModal").modal("hide");
+            permitToSellRegform.submit();
             $("#confirmSuccessModal").modal("show");
         });
     });
-    //const form = document.getElementById('SellerRegForm');
-    const showModalButton = document.getElementById('btnSubmit');
-    const confirmationModal = document.getElementById('confirmSubmitModal');
-    const confirmButton = document.getElementById('confirmBtn');
 
-    // Function to display the modal
-    function showModal() {
-        confirmationModal.style.display = 'block';
+    //FOR CHECKLIST OF DOCUMENTS
+    function fileChange(that) {
+        var formFiles = document.forms['SellerRegForm']['filesUpload.Files'];
+        PopulateFileDropDown(".fileListDropDown", formFiles.files);
     }
 
-    // Function to hide the modal
-    function hideModal() {
-        confirmationModal.style.display = 'none';
+    function PopulateFileDropDown(fileDropDownClass, list) {
+        $(fileDropDownClass).empty();
+        $(fileDropDownClass).append("<option value=\"\" selected disabled>--Please select your uploaded file--</option>")
+        $(fileDropDownClass).append("<option value=\"N/A\" >N/A</option>")
+        $.each(list, function (index, row) {
+            $(fileDropDownClass).append("<option value=\"" + row.name + "\"id=\"uploadedFile_" + index + "\">" + row.name + "</option>")
+        });
     }
 
-    // Event listener for the "Submit" button
-    showModalButton.addEventListener('click', showModal);
-
-    // Event listener for the "Confirm" button
-    confirmButton.addEventListener('click', function () {
-        // Submit the form when the "Confirm" button is clicked
-        form.submit();
-    });
-
-    // Close the modal when the user clicks outside of it
-    window.addEventListener('click', function (event) {
-        if (event.target === confirmationModal) {
-            hideModal();
+    function fileSelected(that) {
+        console.log("that.id:", that.id);
+        var selectClass = document.getElementsByClassName('fileListDropDown');
+        for (let i = 0; i < selectClass.length; i++) {
+            if (selectClass[i].id != that.id) {
+                var selectedFileList = document.getElementById(selectClass[i].id);
+                for (let j = 0; j < selectedFileList.options.length; j++) {
+                    if (selectedFileList.options[j].value == that.value) {
+                        if (that.value != "N/A") {
+                            selectedFileList.options[j].disabled = true;
+                        }
+                    }
+                }
+            }
         }
-    });
+    }
+
+    //END FOR CHECKLIST OF DOCUMENTS
+
+    // const form = document.getElementById('SellerRegForm');
+    // const showModalButton = document.getElementById('btnSubmit');
+    // const confirmationModal = document.getElementById('confirmSubmitModal');
+    // const confirmButton = document.getElementById('confirmBtn');
+
+    // // Function to display the modal
+    // // function showModal() {
+    // //     confirmationModal.style.display = 'block';
+    // // }
+
+    // // Function to hide the modal
+    // function hideModal() {
+    //     confirmationModal.style.display = 'none';
+    // }
+
+    // // Event listener for the "Submit" button
+    // //showModalButton.addEventListener('click', showModal);
+
+    // // Event listener for the "Confirm" button
+    // confirmButton.addEventListener('click', function () {
+    //     // Submit the form when the "Confirm" button is clicked
+    //     form.submit();
+    // });
+
+    // // Close the modal when the user clicks outside of it
+    // window.addEventListener('click', function (event) {
+    //     if (event.target === confirmationModal) {
+    //         hideModal();
+    //     }
+    // });
 
 </script>
 

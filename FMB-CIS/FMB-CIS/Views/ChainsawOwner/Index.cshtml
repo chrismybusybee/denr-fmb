@@ -80,7 +80,7 @@
                         <label class="text-secondary fw-bold">
                             Permit Type
                         </label>
-                            <select class="form-select" asp-for="tbl_Application.tbl_permit_type_id" aria-label="Permit Type" onchange="permitSelection(this)" required="required">
+                            <select class="form-select" asp-for="tbl_Application.tbl_permit_type_id" aria-label="Permit Type" onchange="permitSelection(this)" required>
                                 <option selected disabled>- Select Permit Type -</option>
                                 <option value="5">Authority to Lease</option>
                                 <option value="6">Authority to Rent</option>
@@ -130,22 +130,10 @@
                         <div class="mb-4" style="display:none" id="TransferOfOwnershipRequirements">
                             <span style="white-space: pre-line">@ViewBag.RequiredDocsList_TransferOfOwnership</span>
                         </div>
-                        <div class="d-flex gap-4 mb-5">
+                        <div class="gap-4 mb-5">
                             <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
-                            <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
-                                <i data-feather="upload"></i> Upload
-                            </label>
-                            <input type="file" asp-for="filesUpload.Files" class="form-control file" accept="application/pdf" multiple hidden />
-                            @* <button type="button" class="btn btn-primary"><i data-feather="upload"></i> Upload</button>*@
-                        </div>
-                        <div class="d-flex mb-4 gap-3 output">
-                            @*Cards for files*@
-                            <p id="files-area">
-                                <span id="filesList">
-                                    <span id="files-names"></span>
-                                </span>
-                            </p>
-                        </div>
+                            <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload...">
+                        </div>                                               
                     </div>
                 </div>
             </div>
@@ -155,7 +143,7 @@
                 </small>
             </div>
         <div class="d-flex justify-content-end pe-2 me-1">
-                <button id="btnSubmit" type="submit" class="btn btn-primary mb-4">Submit</button>
+                <button id="btnSubmit" type="button" class="btn btn-primary mb-4">Submit</button>
         </div>
         </form>
     </div>
@@ -164,6 +152,7 @@
 
 
 <script src="/js/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script type="text/javascript">
     //Things to change depending on Permit Selection
@@ -182,92 +171,32 @@
     }
 
     $(document).ready(function () {
+                
+        //MODAL FORM SUBMISSION CONFIRMATIONS
+        const ownerPermitsRegform = document.getElementById('OwnerRegForm');
+        $("#btnSubmit").click(function () {
+            //Check if required fields are filled up
+            if ($("#OwnerRegForm")[0].checkValidity()) {
+                var formFiles = document.forms['OwnerRegForm']['filesUpload.Files'];
 
-        const dt = new DataTransfer();
-        // Add an event listener for the 'change' event on the file input element
-        // Add an event listener for the 'change' event on the file input element
-        $(".file").on("change", function (e) {
-            // Get the selected file(s)
-            var selectedFiles = $(this).prop("files");
-            var fafile = "";
-            // Clear the previous output
-            //$(".output").empty();
-
-            // Display file information in the specified format
-            for (var i = 0; i < this.files.length; i++) {
-                //ifelse for fa-file type
-                if (selectedFiles[i].type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-                    fafile = "fa-file-word"
-                }
-                else if (selectedFiles[i].type == "application/pdf") {
-                    fafile = "fa-file-pdf"
-                }
-                else if (selectedFiles[i].type == "image/jpeg") {
-                    fafile = "fa-file-image"
+                if (formFiles.files.length == 0) {
+                    Swal.fire({
+                        title: "No File Selected",
+                        text: "Please upload the required documents to proceed with the application.",
+                        icon: "error",
+                        confirmButtonColor: '#14984a'
+                    });
                 }
                 else {
-                    fafile = "fa-file"
+                    $('#confirmSubmitModal').modal("show"); //proceed to submit modal
                 }
-                // Create div elements and set their classes and content
-                var cardDiv = $("<div>").addClass("card mw-18rem ").attr('id', selectedFiles[i].name);
-                var fileDiv = $("<div>").addClass("card-body");
-                var fileIcon = $("<i>").addClass("fas " + fafile + " text-light-green fs-1 mb-3");
-                var dropdownIcon = $("<i>").addClass("fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary").attr({
-                    "data-bs-toggle": "dropdown",
-                    "aria-expanded": "false"
-                });
-                var dropdownMenu = $("<ul>").addClass("dropdown-menu").append(
-                    $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("View")),
-                    $("<li>").append($("<a>").addClass("dropdown-item file-delete").attr("href", "#").text("Delete")),
-                    $("<li>").append($("<a>").addClass("dropdown-item").attr("href", "#").text("Download"))
-                );
-                var fileName = $("<h6>").addClass("card-title text-secondary").text(selectedFiles[i].name);
-                var fileInfoList = $("<ul>").addClass("list-unstyled small mb-0").append(
-                    $("<li>").append($("<span>").addClass("text-muted").text("type: " + selectedFiles[i].type)),
-                    $("<li>").append($("<span>").addClass("text-muted").text("size: " + (selectedFiles[i].size / 1024).toFixed(2) + "kb")),
-                    $("<li>").append($("<span>").addClass("text-muted").text("uploaded: " + new Date().toLocaleDateString()))
-                );
-
-                // Append created elements to the fileDiv
-                fileDiv.append(fileIcon, dropdownIcon, dropdownMenu, fileName, fileInfoList);
-
-                // Append the fileDiv to the cardDiv
-                cardDiv.append(fileDiv);
-
-                // Append the cardDiv to the output div
-                $(".output").append(cardDiv);
             }
-            for (let file of this.files) {
-                dt.items.add(file);
+            //If fields are not filled up
+            else {
+                //Validate Form
+                $("#OwnerRegForm")[0].reportValidity();
             }
-
-            selectedFiles = dt.files;
-            console.log(selectedFiles);
-            $('.file-delete').click(function () {
-                let name = $(this).closest('.card').attr('id');
-                // Supprimer l'affichage du nom de fichier
-                //$(this).parent().remove();
-                document.getElementById(name).remove()
-                for (let i = 0; i < dt.items.length; i++) {
-                    // Correspondance du fichier et du nom
-                    if (name === dt.items[i].getAsFile().name) {
-                        // Suppression du fichier dans l'objet DataTransfer
-                        dt.items.remove(i);
-                        continue;
-                    }
-                }
-                // Mise à jour des fichiers de l'input file après suppression
-                selectedFiles = dt.files;
-            });
-
-
         });
-
-
-
-        //$("#btnSubmit").click(function () {
-          //  $("#confirmSubmitModal").modal("show");
-        //});
 
         $("#backBtn").click(function () {
             $("#confirmSubmitModal").modal("hide");
@@ -275,39 +204,58 @@
 
         $("#confirmBtn").click(function () {
             $("#confirmSubmitModal").modal("hide");
+            ownerPermitsRegform.submit();
             $("#confirmSuccessModal").modal("show");
         });
+        //END FOR MODAL FORM SUBMISSION CONFIRMATION
+
+
+        //$("#btnSubmit").click(function () {
+          //  $("#confirmSubmitModal").modal("show");
+        //});
+
+        // $("#backBtn").click(function () {
+        //     $("#confirmSubmitModal").modal("hide");
+        // });
+
+        // $("#confirmBtn").click(function () {
+        //     $("#confirmSubmitModal").modal("hide");
+        //     $("#confirmSuccessModal").modal("show");
+        // });
     });
+
+
+
     //const formOwner = document.getElementById('OwnerRegForm');
     //const showModalButton = document.getElementById('btnSubmit');
     //const confirmationModal = document.getElementById('confirmSubmitModal');
     //const confirmButton = document.getElementById('confirmBtn');
 
     // Function to display the modal
-    function showModal() {
-        confirmationModal.style.display = 'block';
-    }
+    // function showModal() {
+    //     confirmationModal.style.display = 'block';
+    // }
 
-    // Function to hide the modal
-    function hideModal() {
-        confirmationModal.style.display = 'none';
-    }
+    // // Function to hide the modal
+    // function hideModal() {
+    //     confirmationModal.style.display = 'none';
+    // }
 
-    // Event listener for the "Submit" button
-    showModalButton.addEventListener('click', showModal);
+    // // Event listener for the "Submit" button
+    // showModalButton.addEventListener('click', showModal);
 
-    // Event listener for the "Confirm" button
-    confirmButton.addEventListener('click', function () {
-        // Submit the form when the "Confirm" button is clicked
-        formOwner.submit();
-    });
+    // // Event listener for the "Confirm" button
+    // confirmButton.addEventListener('click', function () {
+    //     // Submit the form when the "Confirm" button is clicked
+    //     formOwner.submit();
+    // });
 
-    // Close the modal when the user clicks outside of it
-    window.addEventListener('click', function (event) {
-        if (event.target === confirmationModal) {
-            hideModal();
-        }
-    });
+    // // Close the modal when the user clicks outside of it
+    // window.addEventListener('click', function (event) {
+    //     if (event.target === confirmationModal) {
+    //         hideModal();
+    //     }
+    // });
 
 </script>
 

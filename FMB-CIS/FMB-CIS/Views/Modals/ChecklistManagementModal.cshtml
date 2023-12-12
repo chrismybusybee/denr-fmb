@@ -1,0 +1,156 @@
+﻿@model FMB_CIS.Models.ChecklistManagementViewModel
+
+<div class="modal fade" id="editRequiredDocsModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form asp-controller="ChecklistManagement" asp-action="EditChecklistInfo" id="EditChecklistInfoForm">
+                    <div class="d-flex flex-column align-items-center gap-4 p-5">
+                        <p class="fw-bold fs-5">
+                            Edit Checklist Requirement
+                        </p>
+                        <div class="row w-100">
+                            <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    <label class="form-label small">Permit Type</label>
+                                    <select asp-for="tbl_document_Checklist.permit_type_id" class="form-select" id="permitTypeIDDropdown">
+                                        @foreach (var item in Model.tbl_Permit_Types)
+                                        {
+                                            <option value="@item.id">@item.name</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label small">Requirement Name</label>
+                                    <input asp-for="tbl_document_Checklist.name" id="checklistName" class="form-control" />
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label small">Requirement Description</label>
+                                    <textarea asp-for="tbl_document_Checklist.description" id="checklistDesc" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="documentChecklistIDVal" asp-for="tbl_document_Checklist.id" />
+                        <div class="d-flex gap-4 w-100">
+                            <button id="confirmEditBtn" type="button" class="btn btn-primary w-100">Confirm</button>
+                            <button id="cancelBtn" type="button" class="btn btn-danger w-100">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="CreateRequiredDocsModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form asp-controller="ChecklistManagement" asp-action="CreateReqDocChecklist" id="CreateReqDocChecklistForm">
+                    <div class="d-flex flex-column align-items-center gap-4 p-5">
+                        <p class="fw-bold fs-5">
+                            Create Checklist Requirement
+                        </p>
+                        <div class="row w-100">
+                            <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    <label class="form-label small">Permit Type</label>
+                                    <select asp-for="tbl_document_Checklist.permit_type_id" class="form-select" id="permitTypeIDDropdownForCreate">
+                                        @foreach (var item in Model.tbl_Permit_Types)
+                                        {
+                                            <option value="@item.id">@item.name</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label small">Requirement Name</label>
+                                    <input asp-for="tbl_document_Checklist.name" id="checklistNameForCreate" class="form-control" />
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label small">Requirement Description</label>
+                                    <input asp-for="tbl_document_Checklist.description" id="checklistDescForCreate" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="documentChecklistIDValForCreate" asp-for="tbl_document_Checklist.id" />
+                        <div class="d-flex gap-4 w-100">
+                            <button id="confirmCreateBtn" type="button" class="btn btn-primary w-100">Confirm</button>
+                            <button id="cancelCreateBtn" type="button" class="btn btn-danger w-100">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script type="text/javascript">
+
+    const editChecklistInfoForm = document.getElementById('EditChecklistInfoForm');
+    const createReqDocChecklistForm = document.getElementById('CreateReqDocChecklistForm');
+
+    $("#cancelBtn").click(function () {
+        $("#editRequiredDocsModal").modal("hide");
+    });
+
+
+    $("#confirmEditBtn").click(function () {
+
+
+        Swal.fire({
+            title: "Are you sure you want to edit this?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#14984a",
+            cancelButtonColor: "#bb2d3b",
+            confirmButtonText: "Confirm"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                //ADD POST HERE
+                editChecklistInfoForm.submit();
+                $("#editRequiredDocsModal").modal("hide");
+                Swal.fire({
+                    title: "Success!",
+                    text: "",
+                    confirmButtonColor: "#14984a",
+                    icon: "success"
+                });
+            }
+        });
+        // $("#confirmAddModal").modal("show");
+    });
+
+
+
+    $("#cancelCreateBtn").click(function () {
+        $("#CreateRequiredDocsModal").modal("hide");
+    });
+
+    $("#confirmCreateBtn").click(function () {
+
+        Swal.fire({
+            title: "Are you sure you want to add this?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#14984a",
+            cancelButtonColor: "#bb2d3b",
+            confirmButtonText: "Confirm"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                //ADD POST HERE
+                createReqDocChecklistForm.submit();
+                $("#CreateRequiredDocsModal").modal("hide");
+                Swal.fire({
+                    title: "Success!",
+                    text: "",
+                    confirmButtonColor: "#14984a",
+                    icon: "success"
+                });
+            }
+        });
+    });
+
+</script>   

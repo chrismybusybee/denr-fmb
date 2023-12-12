@@ -54,17 +54,23 @@ namespace FMB_CIS.Controllers
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             bool? usrStatus = _context.tbl_user.Where(u => u.id == uid).Select(u => u.status).SingleOrDefault();
+            ViewModel model = new ViewModel();
             //Get list of required documents from tbl_announcement
             var requirements = _context.tbl_announcement.Where(a => a.id == 2).FirstOrDefault(); // id = 2 for Permit to Import Requirements
             ViewBag.RequiredDocsList = requirements.announcement_content;
             //End for required documents
+
+            //Document Checklist
+            var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == 1 && c.is_active == true).ToList();
+            model.tbl_Document_Checklist = myChecklist;
+            //End for Document Checklist
             if (usrStatus != true)
             {
                 return RedirectToAction("Index", "Dashboard");
             }
             if (usrRoleID == 1 || usrRoleID == 4 || usrRoleID == 5 || usrRoleID == 7)
             {
-                return View();
+                return View(model);
             }
             else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11 || usrRoleID == 17) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
             {
@@ -143,10 +149,18 @@ namespace FMB_CIS.Controllers
                             filesDB.date_created = DateTime.Now;
                             filesDB.date_modified = DateTime.Now;
                             filesDB.filename = file.FileName;
+                            foreach (var item in model.fileChecklistViewModel)
+                            {
+                                if (item.FileName == file.FileName)
+                                {
+                                    filesDB.checklist_id = item.tbl_document_checklist_id;
+                                }
+                            }
                             filesDB.path = path;
                             filesDB.tbl_file_type_id = fileInfo.Extension;
                             filesDB.tbl_file_sources_id = fileInfo.Extension;
                             filesDB.file_size = Convert.ToInt32(file.Length);
+                            filesDB.status = "Pending";
                             _context.tbl_files.Add(filesDB);
                             _context.SaveChanges();
                         }
@@ -184,7 +198,13 @@ namespace FMB_CIS.Controllers
                 var requirements = _context.tbl_announcement.Where(a => a.id == 2).FirstOrDefault(); // id = 2 for Permit to Import Requirements
                 ViewBag.RequiredDocsList = requirements.announcement_content;
                 //End for required documents
-                return View();
+
+                //Document Checklist
+                var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == 1 && c.is_active == true).ToList();
+                model.tbl_Document_Checklist = myChecklist;
+                //End for Document Checklist
+
+                return View(model);
                 }
                 return View(model);
             //}
@@ -230,6 +250,9 @@ namespace FMB_CIS.Controllers
 
             //CODE FOR FILE DOWNLOAD
             int applicID = Convert.ToInt32(appid);
+            string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
+            ViewData["BaseUrl"] = host;
+
             //File Paths from Database
             //Files Uploaded by Applicant
             var filesFromDB = _context.tbl_files.Where(f => f.tbl_application_id == applicID && f.created_by == Convert.ToInt32(uid) && f.is_proof_of_payment != true).ToList();
@@ -282,6 +305,87 @@ namespace FMB_CIS.Controllers
             mymodel.proofOfPaymentFiles = paymentFiles;
 
             //END FOR FILE DOWNLOAD
+
+            //Document Tagging and Checklist
+            //var fileWithCommentsforDocTagging = (from f in _context.tbl_files
+            //                                         //join c in _context.tbl_comments on f.Id equals c.tbl_files_id
+            //                                         //join usr in _context.tbl_user on c.created_by equals usr.id
+            //                                     where f.tbl_application_id == applicID && f.created_by == Convert.ToInt32(uid)
+            //                                     select new FilesWithComments
+            //                                     {
+            //                                         tbl_files_id = f.Id,
+            //                                         filename = f.filename,
+            //                                         tbl_application_id = f.tbl_application_id,
+            //                                         tbl_files_status = f.status,
+            //                                         //comment = c.comment
+            //                                     }).ToList();
+            
+            //Get uploaded files and requirements
+            var fileWithCommentsforDocTagging = (from dc in _context.tbl_document_checklist
+                                                 join f in _context.tbl_files on dc.id equals f.checklist_id
+                                                 //join c in _context.tbl_comments on f.Id equals c.tbl_files_id
+                                                 //join usr in _context.tbl_user on c.created_by equals usr.id
+                                                 where dc.permit_type_id == 1 && f.tbl_application_id == applicID && f.created_by == Convert.ToInt32(uid) && dc.is_active == true
+                                                 select new FilesWithComments
+                                                 {
+                                                     tbl_document_checklist_id = dc.id,
+                                                     tbl_document_checklist_name = dc.name,
+                                                     tbl_files_id = f.Id,
+                                                     filename = f.filename,
+                                                     tbl_application_id = f.tbl_application_id,
+                                                     tbl_files_status = f.status
+                                                     //comment = c.comment
+                                                 }).ToList();
+            
+            var requiredDocumentList = _context.tbl_document_checklist.Where(c=>c.permit_type_id==1 && c.is_active==true).ToList();
+            foreach(var reqList in requiredDocumentList)
+            {
+                //paymentFiles.Add(new tbl_files { Id = fileList.Id, filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, file_size = fileList.file_size, date_created = fileList.date_created });
+                bool isReqAvailable = fileWithCommentsforDocTagging.Any(r => r.tbl_document_checklist_id == reqList.id);
+                if(isReqAvailable == false)
+                {
+                    fileWithCommentsforDocTagging.Add(new FilesWithComments
+                    {
+                        tbl_document_checklist_id = reqList.id,
+                        tbl_document_checklist_name = reqList.name,
+                        tbl_files_id = null,
+                        filename = "N/A",
+                        tbl_application_id = applicID,
+                        tbl_files_status = "N/A"
+                    });
+                }
+            }
+
+
+            //Add the latest comments for every file
+            var commentsList = _context.tbl_comments.Where(c => c.tbl_application_id == applicID).ToList();
+
+            for (int i = 0; i < fileWithCommentsforDocTagging.Count; i++)
+            {
+                var latestComment = commentsList.Where(c => c.tbl_files_id == fileWithCommentsforDocTagging[i].tbl_files_id).LastOrDefault();
+                if (latestComment != null)
+                {
+                    fileWithCommentsforDocTagging[i].comment = latestComment.comment;
+                    fileWithCommentsforDocTagging[i].tbl_comments_created_by = latestComment.created_by;
+                }
+            }
+
+            mymodel.filesWithComments = fileWithCommentsforDocTagging;
+            //End for Document Tagging and Checklist
+
+            //Document Checklist
+            //var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == 1).ToList();
+            //mymodel.tbl_Document_Checklist = myChecklist;
+            //var checkListApproval = (from f in _context.tbl_files
+            //                         join req in _context.tbl_document_checklist on f.checklist_id equals req.id
+            //                         where f.tbl_application_id == applicID && req.is_active == true
+            //                         select new FileChecklistViewModel
+            //                         {
+            //                             FileName = f.filename,
+            //                             tbl_document_checklist_name = req.name
+            //                         }).ToList();           
+            //mymodel.fileChecklistViewModel = checkListApproval;
+            //End for Document Checklist
 
             if (uid == null || appid == null)
             {
@@ -342,10 +446,11 @@ namespace FMB_CIS.Controllers
                                           city = ct.name,
                                           brgy = brngy.name,
                                           comment = usr.comment,
+                                          inspectionDate = a.date_of_inspection,
                                           specification = a.tbl_specification_id,
                                           purpose = a.purpose,
-                                          expectedTimeArrived = a.expected_time_arrival,
-                                          expectedTimeRelease = a.expected_time_release,
+                                          //expectedTimeArrived = a.expected_time_arrival,
+                                          //expectedTimeRelease = a.expected_time_release,
                                           date_of_registration = a.date_of_registration,
                                           date_of_expiration = a.date_of_expiration
                                       }).FirstOrDefault();
@@ -458,7 +563,13 @@ namespace FMB_CIS.Controllers
                 DateTime? dateRegistration = null;
                 DateTime? dateExpiration = null;
                 DateTime? dateDueOfficer = BusinessDays.AddBusinessDays(DateTime.Now, 2).AddHours(4).AddMinutes(30);
-
+                DateTime? dateInspection = null;
+                bool inspectDateToBeChanged = false;
+                if (Role == "DENR Inspector" && (viewMod.applicantViewModels.status == 7 || viewMod.applicantViewModels.status == 8))
+                {
+                    dateInspection = Convert.ToDateTime(viewMod.applicantViewModels.inspectionDate);
+                    inspectDateToBeChanged = true;
+                }
 
                 //File Upload
                 if (viewMod.filesUpload != null)
@@ -530,7 +641,7 @@ namespace FMB_CIS.Controllers
                     }
                     //SAVE CHANGES TO DATABASE
                     //var applicationToUpdate = _context.tbl_application.Find(appID);
-                    var appli = new tbl_application() { id = applid, status = stats, date_modified = DateTime.Now, modified_by = loggedUserID, date_of_registration = dateRegistration, date_of_expiration = dateExpiration, date_due_for_officers = dateDueOfficer };
+                    var appli = new tbl_application() { id = applid, status = stats, date_modified = DateTime.Now, modified_by = loggedUserID, date_of_inspection = dateInspection, date_of_registration = dateRegistration, date_of_expiration = dateExpiration, date_due_for_officers = dateDueOfficer };
                     var usrdet = new tbl_user() { id = usid, comment = viewMod.applicantViewModels.comment };
                     using (_context)
                     {
@@ -538,6 +649,7 @@ namespace FMB_CIS.Controllers
                         _context.Entry(appli).Property(x => x.status).IsModified = true;
                         _context.Entry(appli).Property(x => x.modified_by).IsModified = true;
                         _context.Entry(appli).Property(x => x.date_modified).IsModified = true;
+                        _context.Entry(appli).Property(x => x.date_of_inspection).IsModified = inspectDateToBeChanged;
                         _context.Entry(appli).Property(x => x.date_of_registration).IsModified = registrationDateToBeChanged;
                         _context.Entry(appli).Property(x => x.date_of_expiration).IsModified = expirationDateToBeChanged;
                         _context.Entry(appli).Property(x => x.date_due_for_officers).IsModified = true;
@@ -756,7 +868,22 @@ namespace FMB_CIS.Controllers
                                      join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                      join pS in _context.tbl_permit_status on a.status equals pS.id
                                      //where a.tbl_user_id == userID
-                                     select new ApplicantListViewModel { id = a.id, applicationDate = a.date_created, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id, date_due_for_officers = a.date_due_for_officers };
+                                     select new ApplicantListViewModel 
+                                     { 
+                                         id = a.id, 
+                                         applicationDate = a.date_created,
+                                         qty = a.qty,
+                                         full_name = usr.user_classification == "Individual"? usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix: usr.company_name,
+                                         email = usr.email,
+                                         contact = usr.contact_no,
+                                         address = usr.street_address,
+                                         application_type = appt.name,
+                                         permit_type = pT.name,
+                                         permit_status = pS.status,
+                                         tbl_user_id = (int)usr.id,
+                                         date_due_for_officers = a.date_due_for_officers
+                                         
+                                     };
 
                 mymodel.applicantListViewModels = applicationMod;
 
@@ -794,5 +921,56 @@ namespace FMB_CIS.Controllers
             }
         }
 
+
+        [HttpPost, ActionName("FileTaggingChanges")]
+        public JsonResult FileTaggingChanges(int tbl_files_id, string tbl_files_status, string comment, int appid)
+        {
+            int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            string Role = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
+
+            var commentsTbl = new tbl_comments();
+            //commentsTbl.id = model.tbl_Comments.id;
+            commentsTbl.tbl_application_id = Convert.ToInt32(appid);
+            commentsTbl.tbl_files_id = tbl_files_id;
+            //commentsTbl.comment_to = model.tbl_Comments.comment_to;
+            commentsTbl.comment = comment;
+            commentsTbl.created_by = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            commentsTbl.modified_by = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            commentsTbl.date_created = DateTime.Now;
+            commentsTbl.date_modified = DateTime.Now;
+            _context.tbl_comments.Add(commentsTbl);
+            _context.SaveChanges();
+
+            var fileDB = _context.tbl_files.Where(f => f.Id == tbl_files_id).FirstOrDefault();
+            fileDB.status = tbl_files_status;
+            _context.SaveChanges();
+
+            return Json(true);
+        }
+        
+        [HttpGet, ActionName("DocumentHistory")]
+        public JsonResult DocumentHistory(int tbl_files_id)
+        {
+            int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            string Role = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
+
+            //var commentsTbl = _context.tbl_comments.Where(c => c.tbl_files_id == tbl_files_id).ToList();
+            //var fileDB = _context.tbl_files.Where(f => f.Id == tbl_files_id).FirstOrDefault();
+            
+            var documentHistoryDetails = (from c in _context.tbl_comments
+                                          where c.tbl_files_id == tbl_files_id
+                                          join usr in _context.tbl_user on c.created_by equals usr.id
+                                          join f in _context.tbl_files on c.tbl_files_id equals f.Id
+                                          select new
+                                          {
+                                              f.filename,
+                                              c.comment,
+                                              commenterName = usr.first_name + " " + usr.last_name + " " + usr.suffix,
+                                              c.date_created,
+                                              formattedDate = c.date_created.ToString("yyyy MMMM dd hh:mm tt")
+                                          }).OrderByDescending(d => d.date_created);
+
+            return Json(documentHistoryDetails);
+        }
     }
 }

@@ -1,0 +1,388 @@
+﻿@model FMB_CIS.Models.ChecklistManagementViewModel
+@{
+    Layout = "~/Views/Shared/_MainPageLayout.cshtml";
+    ViewBag.Title = "Checklist Management";
+    var baseurl = ViewBag.BaseUrl;
+}
+
+<div id="card-container">
+    <div id="card">
+
+        <div class="c-info">
+            <div class="card">
+                
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="@Url.Action("Index", "Home")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>                        Checklist
+                    </h5>
+                    <p class="card-text">Used to manage checklist for required documents.</p>
+                    <button id="btnCreateChecklist" class="btn btn-primary">Create New Checklist</button>
+                </div>
+            </div>
+        </div>
+        <div class="c-content"  id="requiredDocListPartialContainer">
+        </div>
+
+        <br />
+        @* <div>
+            <table class="table dataTable">
+                <thead>
+                    <tr>
+                        <th>
+                            Permit Type
+                        </th>
+                        <th>
+                            Required Document Name
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            is_active
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.checklistManagementModels)
+                    {
+                        <tr>
+                            <td>
+                                @item.tbl_permit_type_name
+                            </td>
+                            <td>
+                                @item.tbl_document_checklist_name
+                            </td>
+                            <td>
+                                @item.tbl_document_checklist_description
+                            </td>
+                            <td>
+                                @item.is_active
+                            </td>
+                            <td>
+                                <a href="#" data-reqDocName="@item.tbl_document_checklist_name" onclick="EditReq(@item.tbl_document_checklist_id, this)">Edit</a>
+                                @if(item.is_active)
+                                {                                    
+                                    <a href="#" data-reqDocName="@item.tbl_document_checklist_description" onclick="disableReq(@item.tbl_document_checklist_id, this)">Disable</a>
+                                }
+                                else
+                                {
+                                    <a href="#" data-reqDocName="@item.tbl_document_checklist_description" onclick="enableReq(@item.tbl_document_checklist_id, this)">Enable</a>
+                                }
+                                <a href="#" data-reqDocName="@item.tbl_document_checklist_description" onclick="DeleteReq(@item.tbl_document_checklist_id, this)">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div> *@
+
+    </div>
+</div>
+
+<style>
+    .c-info {
+        width: 25%;
+        float: left;
+        padding: 12px;
+    }
+
+    .c-content {
+        width: 75%;
+        float: left;
+        padding: 12px;
+    }
+
+    .card-head {
+        width: 100%;
+        height: 30px;
+    }
+
+    .card-head-image {
+        width: 100%;
+        height: 30px;
+    }
+
+    .card-body {
+    }
+
+    .card-margin {
+        margin: 12px;
+    }
+
+    .list-group-style1 {
+    }
+
+        .list-group-style1 .list-group-item {
+            margin-bottom: 12px;
+        }
+
+            .list-group-style1 .list-group-item + .list-group-item {
+                border-top-width: 1px;
+            }
+
+    small a {
+        color: #14984a;
+        padding: 3px 0;
+        border: none;
+        border-bottom: solid 1px #14984a;
+        margin-right: 12px;
+        background: none;
+        box-shadow: unset !important;
+        outline: 0 !important;
+        margin: 0 !important;
+        margin-right: 12px !important;
+        margin-top: 12px !important;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+
+
+<script src="/js/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script type="text/javascript">
+
+    $('#requiredDocListPartialContainer').load('/ChecklistManagement/ChecklistOfDocumentsPartialView');
+    
+    function EditReq(id, that) {
+        console.log("edit clicked");
+        console.log("url: ", window.location.href);
+        $("#editRequiredDocsModal").modal("show");
+        var url = "@baseurl" + "ChecklistManagement/";
+
+        $.get(url + "GetChecklistData", { tbl_document_checklist_id: id }, function (data) { 
+            console.log("data: ", data);
+            document.getElementById("checklistName").value = data.name;
+            document.getElementById("checklistDesc").value = data.description;
+            document.getElementById("permitTypeIDDropdown").value = data.permit_type_id;
+            document.getElementById("documentChecklistIDVal").value = data.id;
+        });
+
+        
+    }
+
+    $("#btnCreateChecklist").click(function () {
+        console.log("create clicked");
+        console.log("url: ", window.location.href);        
+        $("#CreateRequiredDocsModal").modal("show");
+    });
+
+    // function EditReq(id, that) {
+    //     console.log("EditReq id: ", id);
+    //     console.log("that: ", that);
+    //     var url = "@baseurl" + "ChecklistManagement/";
+        
+    //     $.get(url + "GetChecklistData", { tbl_document_checklist_id: id }, function (data) {
+    //         console.log("data: ", data);
+    //         var checklistData = data.checklistData;
+    //         var permitTypesData = data.permitTypesData;
+
+    //         console.log("checklistData: ", checklistData);
+    //         console.log("permitTypesData: ", permitTypesData);
+
+    //         var selectOptionsHTML = "";
+    //         for (let i = 0; i < permitTypesData.length; i++) {
+    //             selectOptionsHTML += "<option value=\"" + permitTypesData[i].id + "\">" + permitTypesData[i].name + "</option>";
+    //         }
+
+    //         console.log("selectOptionsHTML", selectOptionsHTML);
+    //         var fullSelectHTML = "<select class=\"form-select\">" + selectOptionsHTML + "</select>";
+    //         console.log("fullSelectHTML: ", fullSelectHTML);
+
+    //         var inputsHTML = "<label class=\"text-secondary fw-bold\" style=\"text-align: left;\">Requirement Name</label> <input id=\"checklistName\" class=\"form-control\" value=\"" + checklistData.name + "\"> <label class=\"text-secondary fw-bold\" style=\"text-align: left;\">Requirement Description:</label> <input id=\"checklistDesc\" class=\"form-control\" value=\"" + checklistData.description + " \"> ";
+    //         var contentHTML = fullSelectHTML + inputsHTML;
+    //         const { value: formValues } = Swal.fire({
+    //             title: "Edit",
+    //             width: 700,
+    //             confirmButtonColor: '#14984a',
+    //             html: contentHTML,
+    //             focusConfirm: false,
+    //             preConfirm: () => {
+    //                 return [
+    //                     document.getElementById("checklistName").value,
+    //                     document.getElementById("checklistDesc").value
+    //                 ];
+    //             }
+    //         });
+    //         if (formValues) {
+    //             Swal.fire(JSON.stringify(formValues));
+    //             console.log("formValues: ", formValues);
+    //         }
+
+            
+
+    //     });
+
+
+    // }
+
+    function enableDisableReq(id, that) {
+               
+        var isChecked = that.checked;
+        var url = "@baseurl" + "ChecklistManagement/EnableDisableDocReq";
+
+        $.post(url, { tbl_document_checklist_id: id, enableOrDisable: isChecked }, function (data) {
+            console.log("data: ", data);
+            // if (data == true) {
+                
+            //     $('#requiredDocListPartialContainer').load('/ChecklistManagement/ChecklistOfDocumentsPartialView');
+            // }
+            // else {
+                
+            //     $('#requiredDocListPartialContainer').load('/ChecklistManagement/ChecklistOfDocumentsPartialView');
+            // }
+        });
+    }
+
+    function enableReq(id, that) {
+        
+        var document_name = that.dataset.reqdocname;
+        var url = "@baseurl" + "ChecklistManagement/EnableDocReq";
+
+        Swal.fire({
+            title: "Are you sure you want to enable " + document_name + "?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            confirmButtonColor: '#14984a'
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            console.log("result", result);
+            if (result.isConfirmed) {
+
+                
+                $.post(url, { tbl_document_checklist_id: id }, function (data) {
+                    console.log("data: ", data);
+                    if (data == true) {
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Requirement has been enabled.",
+                            icon: "success",
+                            confirmButtonColor: "#14984a"
+                        });
+                        $('#requiredDocListPartialContainer').load('/ChecklistManagement/ChecklistOfDocumentsPartialView');
+                    }
+                    else {
+                        Swal.fire({
+                            title: "Failed!",
+                            text: "An error occured. Please try again.",
+                            icon: "error",
+                            confirmButtonColor: "#14984a"
+                        });
+                        $('#requiredDocListPartialContainer').load('/ChecklistManagement/ChecklistOfDocumentsPartialView');
+                    }
+                });
+
+
+            }
+        });
+
+
+
+    }
+
+    function disableReq(id, that) {
+
+        var document_name = that.dataset.reqdocname;
+        var url = "@baseurl" + "ChecklistManagement/DisableDocReq";
+
+        Swal.fire({
+            title: "Are you sure you want to disable " + document_name + "?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            confirmButtonColor: '#14984a'
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            console.log("result", result);
+            if (result.isConfirmed) {
+
+
+                $.post(url, { tbl_document_checklist_id: id }, function (data) {
+                    console.log("data: ", data);
+                    if (data == true) {
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Requirement has been disabled.",
+                            icon: "success",
+                            confirmButtonColor: "#14984a"
+                        });
+                        $('#requiredDocListPartialContainer').load('/ChecklistManagement/ChecklistOfDocumentsPartialView');
+                    }
+                    else {
+                        Swal.fire({
+                            title: "Failed!",
+                            text: "An error occured. Please try again.",
+                            icon: "error",
+                            confirmButtonColor: "#14984a"
+                        });
+                        $('#requiredDocListPartialContainer').load('/ChecklistManagement/ChecklistOfDocumentsPartialView');
+                    }
+                });
+
+
+            }
+        });
+
+
+    }
+
+    function DeleteReq(id, that) {
+        console.log("DeleteReq id: ", id);
+        console.log("that: ", that);
+        console.log("that.dataset: ", that.dataset);
+        var document_name = that.dataset.reqdocname;
+        var url = "@baseurl" + "ChecklistManagement/DeleteDocReq";
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "By deleting " + document_name + ", you won't be able to revert this action.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            confirmButtonColor: '#14984a'
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            console.log("result", result);
+            if (result.isConfirmed) {
+
+                //post action here to delete
+                console.log("deleted")
+                $.post(url, { tbl_document_checklist_id: id}, function (data) {
+                    console.log("data: ", data);
+                    if(data == true)
+                    {
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Requirement has been deleted.",
+                            icon: "success",
+                            confirmButtonColor: "#14984a"
+                        });
+                        $('#requiredDocListPartialContainer').load('/ChecklistManagement/ChecklistOfDocumentsPartialView');
+                    }
+                    else
+                    {
+                        Swal.fire({
+                            title: "Failed!",
+                            text: "An error occured. Please try again.",
+                            icon: "error",
+                            confirmButtonColor: "#14984a"
+                        });
+                        $('#requiredDocListPartialContainer').load('/ChecklistManagement/ChecklistOfDocumentsPartialView');
+                    }
+                });
+
+
+            }
+        });
+
+
+    }
+</script>
