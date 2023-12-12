@@ -21,6 +21,7 @@ using FMB_CIS.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNet.Identity;
 using System.Collections;
+using Mapster;
 
 namespace FMB_CIS.Controllers
 {
@@ -206,6 +207,26 @@ namespace FMB_CIS.Controllers
             }
             ViewModel mymodel = new ViewModel();
             //tbl_user user = _context.tbl_user.Find(uid);
+
+
+            Workflow workflowModel = new Workflow();
+            //Get the list of users
+            var workflow = _context.tbl_permit_workflow.FirstOrDefault(e => e.workflow_code == "PERMIT_TO_IMPORT_CUSTOM");
+            workflowModel = workflow.Adapt<Workflow>();
+
+            //Get the list of steps
+            var stepEntity = _context.tbl_permit_workflow_step.Where(o => o.workflow_code == workflowModel.workflow_code).ToList();
+            workflowModel.steps = stepEntity.Adapt<List<WorkflowStep>>();
+
+            //Get the list of nextsteps
+            foreach (WorkflowStep workflowStep in workflowModel.steps)
+            {
+                var nextstepEntity = _context.tbl_permit_workflow_next_step.Where(o => o.workflow_step_code == workflowStep.workflow_step_code).ToList();
+                //o.workflow_code == model.workflow_code &&
+                workflowStep.nextSteps = nextstepEntity.Adapt<List<WorkflowNextStep>>();
+            }
+
+            mymodel.workflow = workflowModel;
 
             //CODE FOR FILE DOWNLOAD
             int applicID = Convert.ToInt32(appid);
@@ -579,6 +600,69 @@ namespace FMB_CIS.Controllers
                         _context.Entry(appli).Property(x => x.date_modified).IsModified = true;
                         _context.Entry(usrdet).Property(x => x.comment).IsModified = true;
                         _context.Entry(appli).Property(x => x.date_due_for_officers).IsModified = true;
+                        _context.SaveChanges();
+                    }
+                    //Email
+                    if (emailTemplateID != 0) //If emailTemplateID is 0, no email should be sent.
+                    {
+                        var emailTemplate = emailTemplates.Where(e => e.id == emailTemplateID).FirstOrDefault();
+
+                        var subject = emailTemplate.email_subject;
+                        var BODY = emailTemplate.email_content.Replace("{FirstName}", viewMod.applicantViewModels.first_name);
+                        var body = BODY.Replace(Environment.NewLine, "<br/>");
+
+                        EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);
+                    }
+                }
+                else
+                {
+                    stats = (int)(WorkFlowStepEnum)Enum.Parse(typeof(WorkFlowStepEnum), viewMod.next_step_code);
+                    //if (viewMod.applicantViewModels.status <= 6) // Approval Process before payment
+                    //{
+                    //    if (Role == "DENR CENRO" || Role == "DENR Implementing PENRO" || Role == "DENR Regional Executive Director (RED)")
+                    //    {
+                    //        stats = 6; //For Payment which also means that it is already approved by CENRO
+                    //        emailTemplateID = 38;
+                    //        // email template id = 38 - Proceed to Payment
+                    //        dateDueOfficer = null; //Next step is not assigned to the officer
+                    //    }
+                    //    else //Inspector
+                    //    {
+                    //        stats = 3; // Approved (Inspector) - For Cenro Approval                                                       
+                    //    }
+                    //}
+                    //else //Final Approval of Application including Payments
+                    //{
+                    //    if (Role == "DENR CENRO" || Role == "DENR Implementing PENRO" || Role == "DENR Regional Executive Director (RED)")
+                    //    {
+                    //        stats = 11; //Payment and Application Approved (Inspector and CENRO)
+                    //        emailTemplateID = 39; //Permit to Import (Approval)
+                    //        registrationDateToBeChanged = true;
+                    //        dateRegistration = DateTime.Now; //Permit will be considered registered once it has been approved
+                    //        expirationDateToBeChanged = true;
+                    //        dateExpiration = DateTime.Now.AddYears(3); //Permit to Expire after 3 years
+                    //        dateDueOfficer = null; //Since task is done, no more due date for officer
+                    //    }
+                    //    else //Inspector
+                    //    {
+                    //        stats = 9; // Payment Verification (CENRO) - Approved by Inspector and to be verified by CENRO
+                    //    }
+                    //}
+
+
+
+                    var appli = new tbl_application() { id = applid, status = stats, date_modified = DateTime.Now, modified_by = loggedUserID, date_of_registration = dateRegistration, date_of_expiration = dateExpiration, date_due_for_officers = dateDueOfficer };
+                    var usrdet = new tbl_user() { id = usid, comment = viewMod.applicantViewModels.comment };
+                    using (_context)
+                    {
+                        _context.tbl_application.Attach(appli);
+                        _context.Entry(appli).Property(x => x.status).IsModified = true;
+                        _context.Entry(appli).Property(x => x.modified_by).IsModified = true;
+                        _context.Entry(appli).Property(x => x.date_modified).IsModified = true;
+                        _context.Entry(appli).Property(x => x.date_of_registration).IsModified = registrationDateToBeChanged;
+                        _context.Entry(appli).Property(x => x.date_of_expiration).IsModified = expirationDateToBeChanged;
+                        _context.Entry(appli).Property(x => x.date_due_for_officers).IsModified = true;
+                        _context.Entry(usrdet).Property(x => x.comment).IsModified = true;
                         _context.SaveChanges();
                     }
                     //Email

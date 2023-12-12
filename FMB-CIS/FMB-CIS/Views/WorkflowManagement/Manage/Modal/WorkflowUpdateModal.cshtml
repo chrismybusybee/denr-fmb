@@ -477,12 +477,12 @@
             function (workflowData) {
                 //var workflowDataPretext = JSON.stringify(workflowData);
 
-                //workflowDataPretext = workflowDataPretext.replaceAll(/Purchase/g, "Resell");
-                //workflowDataPretext = workflowDataPretext.replaceAll(/PURCHASE/g, "RESELL");
+                //workflowDataPretext = workflowDataPretext.replaceAll(/Import Custom Custom/g, "Import Custom");
+                //workflowDataPretext = workflowDataPretext.replaceAll(/IMPORT_CUSTOM_CUSTOM/g, "IMPORT_CUSTOM");
 
                 //workflow = JSON.parse(workflowDataPretext);
-                console.log("workflowData");
-                console.log(workflowData);
+                //console.log("workflowData");
+                //console.log(workflowData);
                 workflow = workflowData;
                 return $.get("/AccessRightsManagement/UserTypes");
             }

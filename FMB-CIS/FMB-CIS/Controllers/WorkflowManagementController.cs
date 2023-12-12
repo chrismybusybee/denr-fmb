@@ -295,6 +295,43 @@ namespace FMB_CIS.Controllers
                 return null;
             }
         }
+
+        ///// <summary>
+        ///// UserTypeUser
+        ///// </summary>
+        ///// <returns></returns>
+        //[HttpGet("WorkflowManagement/GetWorkflowByCode/{workflowCode:String}")]
+        //public Workflow GetWorkflowByCode(string workflowCode)
+        //{
+        //    int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+        //    int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+        //    if (userRoleID == 14) // Super Admin
+        //    {
+        //        Workflow model = new Workflow();
+        //        //Get the list of users
+        //        var workflow = _context.tbl_permit_workflow.FirstOrDefault(e => e.workflow_code == workflowCode);
+        //        model = workflow.Adapt<Workflow>();
+
+        //        //Get the list of steps
+        //        var stepEntity = _context.tbl_permit_workflow_step.Where(o => o.workflow_code == model.workflow_code).ToList();
+        //        model.steps = stepEntity.Adapt<List<WorkflowStep>>();
+
+        //        //Get the list of nextsteps
+        //        foreach (WorkflowStep workflowStep in model.steps)
+        //        {
+        //            var nextstepEntity = _context.tbl_permit_workflow_next_step.Where(o => o.workflow_step_code == workflowStep.workflow_step_code).ToList();
+        //            //o.workflow_code == model.workflow_code &&
+        //            workflowStep.nextSteps = nextstepEntity.Adapt<List<WorkflowNextStep>>();
+        //        }
+        //        return model;
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
+        //}
+
+
         [HttpPut("WorkflowManagement/WorkflowUpdate/{id:int}")]
         public IActionResult WorkflowUpdate(AccessRightsUpdateViewModel model)
         {

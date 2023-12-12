@@ -17,21 +17,40 @@
                 <input asp-for="uid" type="hidden" />
                 <input asp-for="appid" type="hidden" />
                 <div class="d-flex justify-content-end gap-2">
+@*                    @Model.applicantViewModels.status
+*@                    @foreach (WorkflowStep worklowStep in Model.workflow.steps)
+                    {
+                        @if (@worklowStep.workflow_step_code == @Model.applicantViewModels.status.ToString())
+                        {
+@*                            @worklowStep.id
+*@                            @foreach (WorkflowNextStep workflowNextStep in worklowStep.nextSteps)
+                            {
+                                @if (workflowNextStep.user_type_id.ToString() == ((ClaimsIdentity)User.Identity).FindFirst("userRoleIds").Value)
+                                {
+                                    <button type="button" class="customBtn btn @workflowNextStep.button_class w-125" data-next_step_code="@workflowNextStep.next_step_code" data-button_text="@workflowNextStep.button_text">
+                                    @*@workflowNextStep.id @workflowNextStep.user_type_id*@
+                                    @workflowNextStep.button_text
+                                    </button>
+                                }
+                                @*@(((ClaimsIdentity)User.Identity).FindFirst("userRole").ValueType)*@
+                            }
+                        }
+                    }
                     @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR CENRO" || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR Implementing PENRO" || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR Regional Executive Director (RED)")
                     {
                         @* <input id="approveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Approve" />
                     <input id="declineBtn" class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="submit" value="Decline" /> *@
                         @* <button type="button" id="approveBtn" class="btn btn-primary w-105">Approve</button>
-                        <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button> *@
+                    <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button> *@
                         if (Model.applicantViewModels.status <= 6)
                         {
-                            <button type="button" id="approveBtn" class="btn btn-primary w-125">Approve and Proceed to Payment</button>
-                            <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
+                            <button type="button" id="approveBtn" class="btn btn-primary w-125">-----Approve and Proceed to Payments</button>
+                            <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">-----Decline</button>
                         }
                         if (Model.applicantViewModels.status > 6)
                         {
-                            <button type="button" id="approveBtn" class="btn btn-primary w-110">Approve Payment</button>
-                            <button type="button" id="declineBtn" class="btn btn-danger w-110 btnCancel">Decline Payment</button>
+                            <button type="button" id="approveBtn" class="btn btn-primary w-110">-----Approve Payment</button>
+                            <button type="button" id="declineBtn" class="btn btn-danger w-110 btnCancel">-----Decline Payment</button>
                         }
 
                     }
@@ -39,19 +58,20 @@
                     {
                         @* <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" /> *@
                         @* <button type="button" id="approveBtn" class="btn btn-primary w-105">Approve</button>
-                        <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button> *@
+                    <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button> *@
                         if (Model.applicantViewModels.status <= 6)
                         {
-                            <button type="button" id="approveBtn" class="btn btn-primary w-105">Approve</button>
-                            <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
+                            <button type="button" id="approveBtn" class="btn btn-primary w-105">-----Approve</button>
+                            <button type="button" id="declineBtn" class="btn btn-danger w-105 btnCancel">-----Decline</button>
                         }
                         if (Model.applicantViewModels.status > 6)
                         {
-                            <button type="button" id="approveBtn" class="btn btn-primary w-110">Approve Payment</button>
-                            <button type="button" id="declineBtn" class="btn btn-danger w-110 btnCancel">Decline Payment</button>
+                            <button type="button" id="approveBtn" class="btn btn-primary w-110">-----Approve Payment</button>
+                            <button type="button" id="declineBtn" class="btn btn-danger w-110 btnCancel">-----Decline Payment</button>
                         }
                     }
                     <input asp-for="decision" id="decisionID" type="hidden" />
+                    <input asp-for="next_step_code" id="next_step_code" type="hidden" />
                 </div>
             </div>
             <hr />
@@ -212,7 +232,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @if(Model.applicantViewModels.status == 11)
+                            @if (Model.applicantViewModels.status == 11)
                             {
                                 <div class="row mb-5">
                                     <div class="col-md-5">
@@ -276,7 +296,7 @@
                                 <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="~/Files/UserDocs/@file.filename" target="_blank">View</a></li>
-                                @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
+                                    @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
                                     <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
                                 </ul>
                                 <h6 class="card-title text-secondary">@file.filename</h6>
@@ -420,7 +440,7 @@
                     </div>
                     <hr />
                 }
-                
+
                 <div class="d-flex gap-4 mb-5">
                     <h2 class="text-secondary fw-bold m-0">Upload Documents</h2>
                     <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
@@ -439,22 +459,22 @@
                 </div>
 
                 @* <div class="row d-flex justify-content-center px-0 mb-5">
-                    @if (ViewBag.Inspector)
-                    {
-                        <div class="col-md-11 d-flex flex-column gap-2">
-                            <input type="file" asp-for="filesUpload.Files" class="form-control" multiple />
-                        </div>
-                    }
+                @if (ViewBag.Inspector)
+                {
+                <div class="col-md-11 d-flex flex-column gap-2">
+                <input type="file" asp-for="filesUpload.Files" class="form-control" multiple />
+                </div>
+                }
                 </div> *@
                 @* <div class="row d-flex justify-content-center px-0 mb-5">
-                    <div class="col-md-11 d-flex flex-column gap-2">
-                        <span>
-                            Comments
-                        </span>
-                        <textarea asp-for="comment" class="form-control"></textarea>
-                        @Html.EditorFor(model => model.applicantListViewModels.ToList(comment), new { htmlAttributes = new { @class = "form-control" } })
-                        <textarea asp-for="applicantViewModels.comment" class="form-control"></textarea>
-                    </div>
+                <div class="col-md-11 d-flex flex-column gap-2">
+                <span>
+                Comments
+                </span>
+                <textarea asp-for="comment" class="form-control"></textarea>
+                @Html.EditorFor(model => model.applicantListViewModels.ToList(comment), new { htmlAttributes = new { @class = "form-control" } })
+                <textarea asp-for="applicantViewModels.comment" class="form-control"></textarea>
+                </div>
                 </div> *@
             </div>
         </form>
@@ -471,7 +491,7 @@
                                 Please select who you want to address a comment.
                             </span>
                             @* Dropdown to select which user is addressed in the comment *@
-                            <select asp-for="tbl_Comments.comment_to" class="form-select mb-4">                                
+                            <select asp-for="tbl_Comments.comment_to" class="form-select mb-4">
                                 @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO") == true)
                                 {
                                     <option value="User To CENRO">@Model.applicantViewModels.full_name</option>
@@ -555,7 +575,7 @@
                 </div>
             }
         </div>
-        
+
     </div>
 </div>
 
@@ -675,6 +695,42 @@
             $('#confirmSuccessDeclineModal').modal("show");
         });
 
+        //////
+        $('.customBtn').click(function (btn) {
+            $('#confirmCustomModal').modal("show");
+            document.getElementById("decisionID").value = "Custom";
+            document.getElementById("next_step_code").value = $(this).data('next_step_code');
+            document.getElementById("confirmCustomBtn").value = $(this).data('button_text');
+            document.getElementById("confirmCustomMessage").value = $(this).data('button_text');
+        });
+
+        $("#backCustomBtn").click(function () {
+            $("#confirmCustomModal").modal('hide');
+        });
+
+        $("#confirmCustomBtn").click(function () {
+            $("#confirmCustomModal").modal('hide');
+            $('#confirmSuccessCustomModal').modal("show");
+        });
+
+        //$('#declineBtn').click(function () {
+        //    $('#confirmDeclineModal').modal("show");
+        //    document.getElementById("decisionID").value = "Decline";
+        //});
+
+        //$('#backDeclineBtn').click(function () {
+        //    $('#confirmDeclineModal').modal("hide");
+        //});
+
+        //$("#confirmDeclineBtn").click(function () {
+        //    $("#confirmDeclineModal").modal('hide');
+        //    $('#confirmSuccessDeclineModal').modal("show");
+        //});
+        //////
+
+
+
+
 
 
         $('#saveBtn').click(function () {
@@ -693,6 +749,6 @@
 
     });
 
-    
+
 
 </script>

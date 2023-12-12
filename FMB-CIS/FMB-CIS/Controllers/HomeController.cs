@@ -116,6 +116,8 @@ namespace FMB_CIS.Controllers
                     else
                     {
                         List<string> accessRights = dal.selectAccessRightsFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng"));
+                        int userID = Int32.Parse(dal.selectUserIDFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng")));
+                        string userRoleIds = _context.tbl_user.Where(u => u.id == userID).Select(u => u.tbl_user_types_id).SingleOrDefault().ToString();
                         var claims = new List<Claim>
                         {
                             new Claim(ClaimTypes.Name, credentials.email),
@@ -125,6 +127,7 @@ namespace FMB_CIS.Controllers
                             new Claim(ClaimTypes.Role, dal.selectUserRoleFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng"))),
                             new Claim("userRole", dal.selectUserRoleFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng"))),
                             new Claim("accessRights", accessRights != null ? string.Join(",", accessRights) : ""),
+                            new Claim("userRoleIds", userRoleIds != null ? string.Join(",", userRoleIds) : ""),
                             //new Claim(ClaimTypes.Role, "Administrator"),
                         };
 
