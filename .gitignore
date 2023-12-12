@@ -80,3 +80,5 @@ bin/BlazorApp/dist/
 #appsettings
 appsettings.json
 appsettings.Development.json
+/FMB-CIS/node_modules
+/FMB-CIS/FMB-CIS/wwwroot/Files
