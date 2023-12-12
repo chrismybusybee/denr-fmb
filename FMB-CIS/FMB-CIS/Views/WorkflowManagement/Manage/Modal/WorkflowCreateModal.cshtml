@@ -51,7 +51,7 @@
                     </p>
                     <div class="c-steps-container">
                         <div class="c-steps-list-container" data-bind="foreach: steps">
-                            <div class="c-steps-list-item" data-bind="css: { 'is-edit': isEdit() }">
+                            <div class="c-steps-list-item" data-bind="css: { 'is-edit': isEdit(),'is-next-step': isNextStep() }">
                                 <div class="c-step-preview-line">
                                     <div class="c-step-preview-line-circle-container">
                                         <div class="c-step-preview-line-circle"></div>
@@ -145,7 +145,7 @@
                                                 <div class="row g-3 mb-3">
                                                     <div class="col-md-2">
                                                         <div class="form-floating">
-                                                            <select data-bind="value: stepId" class="form-select">
+                                                            <select data-bind="value: stepId, click:{ change: $parent.nextStepChanged}" class="form-select">
                                                                 <option selected value="0">Choose step</option>
                                                                 <!-- ko foreach: $parents[1].steps-->
                                                                 <option data-bind="text: statusCode, value: statusCode"></option>
@@ -227,7 +227,7 @@
                                                     <div class="col-md-2">
                                                         <div class="form-floating">
                                                             <button data-bind="text: buttonText() || 'Next', css: buttonClass" class="mb-2 mt-3 btn btn-sm rounded-3 btn-primary" type="button"></button>
-                                                            @*<button data-bind="click: $root.removeNextStep" class="mb-2 mt-3 btn btn-sm rounded-3 btn-primary" type="button"><span class="fa fa-close"></span></button>*@
+                                                            @*<button data-bind="click: removeNextStep" class="mb-2 mt-3 btn btn-sm rounded-3 btn-primary" type="button"><span class="fa fa-close"></span></button>*@
                                                         </div>
                                                     </div>
                                                 </div>
@@ -302,10 +302,12 @@
                 isLock: ko.observable(false),
                 nextSteps: ko.observableArray([]),
                 isEdit: ko.observable(false),
+                isNextStep: ko.observable(false),
                 configureStep: configureStep,
                 removeStep: removeStep,
                 addNextStep: addNextStep,
-                permit_page_code: ko.observable(111)
+                permit_page_code: ko.observable(111),
+                nextStepChanged: nextStepChanged
             };
             self.steps.push(newStep);
             configureStep(newStep);
@@ -314,6 +316,21 @@
         self.removeStep = function (step) {
             self.steps.remove(step);
         };
+
+        function nextStepChanged(obj, event) {
+            if (event.originalEvent) { //user changed
+
+                setTimeout(function () {
+                    setIsNextStep();
+                }, 100);
+                
+            } else { // program changed
+                setTimeout(function () {
+                    setIsNextStep();
+                }, 100);
+            }
+
+        }
 
         function addNextStep(step) {
             //console.log(step);
@@ -335,8 +352,37 @@
 
         function configureStep(step) {
             var newValue = !step.isEdit();
-            self.steps().forEach(function (s) { s.isEdit(false); });
-            step.isEdit(newValue);
+            self.steps().forEach(
+                function (s) {
+                    if (step.id != s.id) {
+                        s.isEdit(false);
+                    } else {
+                        s.isEdit(true);
+                    }
+            setIsNextStep();
+        }
+
+        function setIsNextStep() {
+            var nextStepIds = [];
+            // get active step, get next step ids
+            self.steps().forEach(function (step) {
+                if (step.isEdit) {
+                    step.nextSteps.forEach(function (nextStep) {
+                        nextStepIds.push(nextStep.stepId);
+                    });
+                }
+            });
+            console.log("nextStepIds");
+            console.log(nextStepIds);
+            // apply is next step on the step
+            self.steps().forEach(function (step) {
+                if (nextStepIds.indexOf(step.statusCode()) != -1) {
+                    step.isNextStep(true);
+                }
+                else {
+                    step.isNextStep(false);
+                }
+            });
         }
 
         function removeStep(step) {
@@ -363,7 +409,7 @@
             var steps = [];
             self.steps().forEach(function (step) {
                 var nextSteps = [];
-                step.nextSteps().forEach(function (nextStep) {
+                step.nextSteps.forEach(function (nextStep) {
                     nextSteps.push({
                         id: nextStep.id(),
                         user_type_Id: nextStep.userTypeId(),
@@ -416,13 +462,13 @@
         //    var activeStep = self.steps().filter(function (s) { return s.isEdit() });
 
         //    if(activeStep != null) {
-        //        activeStep.nextSteps.forEach(function (nextStep) {
+        //        activeStep.nextSteps().forEach(function (nextStep) {
         //            activeNextSteps.push(nextStep.id)
         //        });
         //    }
         //    //var activeStep = self.steps().filter(function (s) { return s.isEdit() });
         //    //if(activeStep) {
-        //    //    activeStep.nextSteps.forEach(function(nextStep){
+        //    //    activeStep.nextSteps().forEach(function(nextStep){
         //    //        activeNextSteps.push(nextStep.id)
         //    //    });
         //    //}
@@ -577,6 +623,25 @@
                     }
 
             .c-steps-list-item.is-edit .card {
+                border-color: #14984a;
+            }
+
+        .c-steps-list-item.is-next-step {
+        }
+
+            .c-steps-list-item.is-next-step .c-step-preview-line {
+                border-left: solid 3px #14984a;
+            }
+
+                .c-steps-list-item.is-next-step .c-step-preview-line .c-step-preview-line-circle-container {
+                    background-color: #14984a;
+                }
+
+                    .c-steps-list-item.is-next-step .c-step-preview-line .c-step-preview-line-circle-container .c-step-preview-line-circle {
+                        background-color: #14984a;
+                    }
+
+            .c-steps-list-item.is-next-step .card {
                 border-color: #14984a;
             }
 

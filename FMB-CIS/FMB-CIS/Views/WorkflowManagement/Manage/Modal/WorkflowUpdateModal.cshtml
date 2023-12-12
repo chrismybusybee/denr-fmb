@@ -52,7 +52,7 @@
                     </p>
                     <div class="c-steps-container">
                         <div class="c-steps-list-container" data-bind="foreach: steps">
-                            <div class="c-steps-list-item" data-bind="css: { 'is-edit': isEdit() }">
+                            <div class="c-steps-list-item" data-bind="css: { 'is-edit': isEdit(),'is-next-step': isNextStep() }">
                                 <div class="c-step-preview-line">
                                     <div class="c-step-preview-line-circle-container">
                                         <div class="c-step-preview-line-circle"></div>
@@ -64,7 +64,7 @@
                                         <h5 class="card-title" data-bind="text: name() || '[NEW STEP]'"></h5>
                                         <p class="card-text"></p>
                                         <a href="#" class="btn btn-primary" data-bind="click: configureStep">Configure step</a>
-                                        <a href="#" class="btn btn-primary-outline" data-birnd="click: removeStep"><span class="fa fa-close"></span></a>
+                                        <a href="#" class="btn btn-primary-outline" data-bind="click: removeStep"><span class="fa fa-close"></span></a>
                                     </div>
                                 </div>
                             </div>
@@ -146,7 +146,7 @@
                                                 <div class="row g-3 mb-3">
                                                     <div class="col-md-2">
                                                         <div class="form-floating">
-                                                            <select data-bind="value: stepId" class="form-select">
+                                                            <select data-bind="value: stepId, event:{ change: $parent.nextStepChanged}" class="form-select">
                                                                 <option selected value="0">Choose step</option>
                                                                 <!-- ko foreach: $parents[1].steps-->
                                                                 <option data-bind="text: statusCode, value: statusCode"></option>
@@ -289,7 +289,7 @@
         self.permitTypes = ko.observableArray(permitTypes);
         self.regions = ko.observableArray(regions);
         self.cities = ko.observableArray(cities);
-        //self.removeNextStep = removeNextStep;
+        self.removeNextStep = removeNextStep;
 
         self.addStep = function () {
             var newStep = {
@@ -303,17 +303,29 @@
                 isLock: ko.observable(false),
                 nextSteps: ko.observableArray([]),
                 isEdit: ko.observable(false),
+                isNextStep: ko.observable(false),
                 configureStep: configureStep,
                 removeStep: removeStep,
                 addNextStep: addNextStep,
-                permit_page_code: ko.observable(111)
+                permit_page_code: ko.observable(111),
+                nextStepChanged: nextStepChanged
             };
             self.steps.push(newStep);
             configureStep(newStep);
         };
 
-        function removeStep(step) {
-            self.steps.remove(step);
+        function nextStepChanged(obj, event) {
+            console.log("test");
+            if (event.originalEvent) { //user changed
+                setTimeout(function () {
+                    setIsNextStep();
+                }, 100);
+            } else { // program changed
+                setTimeout(function () {
+                    setIsNextStep();
+                }, 100);
+            }
+
         }
 
         function addNextStep(step) {
@@ -328,7 +340,7 @@
             });
         };
 
-        self.removeNextStep = function (step, nextStep) {
+        function removeNextStep(step, nextStep) {
             console.log(step);
             console.log(nextStep);
             //step.remove(step);
@@ -336,9 +348,44 @@
 
         function configureStep(step) {
             var newValue = !step.isEdit();
-            self.steps().forEach(function (s) { s.isEdit(false); });
-            step.isEdit(newValue);
+            self.steps().forEach(
+                function (s) {
+                    if (step.id != s.id) {
+                        s.isEdit(false);
+                    } else {
+                        s.isEdit(true);
+                    }
+                });
+            setIsNextStep();
         }
+
+        function setIsNextStep() {
+            var nextStepIds = [];
+            // get active step, get next step ids
+            self.steps().forEach(function (step) {
+                if (step.isEdit()) {
+                    step.nextSteps().forEach(function (nextStep) {
+                        nextStepIds.push(nextStep.stepId());
+                    });
+                }
+            });
+            console.log(nextStepIds);
+            // apply is next step on the step
+            self.steps().forEach(function (step) {
+                console.log(step.id());
+                if (nextStepIds.indexOf(step.statusCode()) != -1) {
+                    step.isNextStep(true);
+                }
+                else {
+                    step.isNextStep(false);
+                }
+            });
+        }
+
+        function removeStep(step) {
+            self.steps.remove(step);
+        }
+
 
         self.saveWorkflow = function () {
 
@@ -402,13 +449,13 @@
         //    var activeStep = self.steps().filter(function (s) { return s.isEdit() });
 
         //    if(activeStep != null) {
-        //        activeStep.nextSteps.forEach(function (nextStep) {
+        //        activeStep.nextSteps().forEach(function (nextStep) {
         //            activeNextSteps.push(nextStep.id)
         //        });
         //    }
         //    //var activeStep = self.steps().filter(function (s) { return s.isEdit() });
         //    //if(activeStep) {
-        //    //    activeStep.nextSteps.forEach(function(nextStep){
+        //    //    activeStep.nextSteps().forEach(function(nextStep){
         //    //        activeNextSteps.push(nextStep.id)
         //    //    });
         //    //}
@@ -437,10 +484,13 @@
                     isLock: ko.observable(false), //step.is_lock
                     nextSteps: ko.observableArray([]),
                     isEdit: ko.observable(false),
+                    isNextStep: ko.observable(false),
                     configureStep: configureStep,
                     addNextStep: addNextStep,
+                    removeStep: removeStep,
                     permit_page_code: ko.observable(step.permit_page_code),
-                    permit_page_type: ko.observable(step.permit_page_type)
+                    permit_page_type: ko.observable(step.permit_page_type),
+                    nextStepChanged: nextStepChanged
                 };
 
                 step.nextSteps.forEach(nextStep => {
@@ -608,6 +658,7 @@
         }
 
             .c-steps-list-item.is-edit .c-step-preview-line {
+                left: -24px;
                 border-left: solid 3px #14984a;
             }
 
@@ -620,6 +671,29 @@
                     }
 
             .c-steps-list-item.is-edit .card {
+                left: -24px;
+                border-color: #14984a;
+            }
+
+
+        .c-steps-list-item.is-next-step {
+        }
+
+            .c-steps-list-item.is-next-step .c-step-preview-line {
+                left: -12px;
+                border-left: solid 3px #14984a;
+            }
+
+                .c-steps-list-item.is-next-step .c-step-preview-line .c-step-preview-line-circle-container {
+                    background-color: #14984a;
+                }
+
+                    .c-steps-list-item.is-next-step .c-step-preview-line .c-step-preview-line-circle-container .c-step-preview-line-circle {
+                        background-color: #14984a;
+                    }
+
+            .c-steps-list-item.is-next-step .card {
+                left: -12px;
                 border-color: #14984a;
             }
 
