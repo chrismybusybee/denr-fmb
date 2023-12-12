@@ -49,6 +49,12 @@ namespace FMB_CIS.Controllers
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             bool? usrStatus = _context.tbl_user.Where(u => u.id == uid).Select(u => u.status).SingleOrDefault();
             //Get list of required documents from tbl_announcement
+            ViewModel model = new ViewModel();
+            //Document Checklist
+            var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == 3 && c.is_active == true).ToList();
+            model.tbl_Document_Checklist = myChecklist;
+            //End for Document Checklist
+
             var requirementsForPermitToPurchase = _context.tbl_announcement.Where(a => a.id == 3).FirstOrDefault(); // id = 3 for Permit to Purchase Requirements
             var requirementsForPermitToSell = _context.tbl_announcement.Where(a => a.id == 4).FirstOrDefault(); // id = 4 for Permit to Purchase Requirements
             ViewBag.RequiredDocsList_PermitToPurchase = requirementsForPermitToPurchase.announcement_content;
@@ -60,7 +66,7 @@ namespace FMB_CIS.Controllers
             }
             if (usrRoleID == 2 || usrRoleID == 4 || usrRoleID == 6 || usrRoleID == 7)
             {
-                return View();
+                return View(model);
             }
             else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11 || usrRoleID == 17) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
             {
@@ -137,6 +143,13 @@ namespace FMB_CIS.Controllers
                         filesDB.date_created = DateTime.Now;
                         filesDB.date_modified = DateTime.Now;
                         filesDB.filename = file.FileName;
+                        foreach (var item in model.fileChecklistViewModel)
+                        {
+                            if (item.FileName == file.FileName)
+                            {
+                                filesDB.checklist_id = item.tbl_document_checklist_id;
+                            }
+                        }
                         filesDB.path = path;
                         filesDB.tbl_file_type_id = fileInfo.Extension;
                         filesDB.tbl_file_sources_id = fileInfo.Extension;
@@ -161,7 +174,13 @@ namespace FMB_CIS.Controllers
                 ViewBag.RequiredDocsList_PermitToPurchase = requirementsForPermitToPurchase.announcement_content;
                 ViewBag.RequiredDocsList_PermitToSell = requirementsForPermitToSell.announcement_content;
                 //End for required documents
-                return View();
+
+                //Document Checklist
+                var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == 3 && c.is_active == true).ToList();
+                model.tbl_Document_Checklist = myChecklist;
+                //End for Document Checklist
+
+                return View(model);
             }
             return View(model);
             //}
@@ -184,13 +203,19 @@ namespace FMB_CIS.Controllers
             ViewBag.RequiredDocsList_PermitToPurchase = requirementsForPermitToPurchase.announcement_content;
             ViewBag.RequiredDocsList_PermitToSell = requirementsForPermitToSell.announcement_content;
             //End for required documents
+
+            ViewModel model = new ViewModel();
+            //Document Checklist
+            var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == 2 && c.is_active == true).ToList();
+            model.tbl_Document_Checklist = myChecklist;
+            //End for Document Checklist
             if (usrStatus != true) //IF User is not yet approved by the admin.
             {
                 return RedirectToAction("Index", "Dashboard");
             }
             if (usrRoleID == 2 || usrRoleID == 4 || usrRoleID == 6 || usrRoleID == 7)
             {
-                return View();
+                return View(model);
             }
             else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11 || usrRoleID == 17) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
             {
@@ -260,6 +285,13 @@ namespace FMB_CIS.Controllers
                         filesDB.date_created = DateTime.Now;
                         filesDB.date_modified = DateTime.Now;
                         filesDB.filename = file.FileName;
+                        foreach (var item in model.fileChecklistViewModel)
+                        {
+                            if (item.FileName == file.FileName)
+                            {
+                                filesDB.checklist_id = item.tbl_document_checklist_id;
+                            }
+                        }
                         filesDB.path = path;
                         filesDB.tbl_file_type_id = fileInfo.Extension;
                         filesDB.tbl_file_sources_id = fileInfo.Extension;
@@ -284,7 +316,13 @@ namespace FMB_CIS.Controllers
                 ViewBag.RequiredDocsList_PermitToPurchase = requirementsForPermitToPurchase.announcement_content;
                 ViewBag.RequiredDocsList_PermitToSell = requirementsForPermitToSell.announcement_content;
                 //End for required documents
-                return View();
+
+                //Document Checklist
+                var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == 2 && c.is_active == true).ToList();
+                model.tbl_Document_Checklist = myChecklist;
+                //End for Document Checklist
+
+                return View(model);
             }
             return View(model);
             //}
@@ -310,6 +348,8 @@ namespace FMB_CIS.Controllers
 
             //CODE FOR FILE DOWNLOAD
             int applicID = Convert.ToInt32(appid);
+            string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
+            ViewData["BaseUrl"] = host;
             //File Paths from Database
             //Files Uploaded by Applicant
             var filesFromDB = _context.tbl_files.Where(f => f.tbl_application_id == applicID && f.created_by == Convert.ToInt32(uid) && f.is_proof_of_payment != true).ToList();
@@ -362,6 +402,62 @@ namespace FMB_CIS.Controllers
 
             mymodel.proofOfPaymentFiles = paymentFiles;
             //END FOR FILE DOWNLOAD
+
+            //Get application permit type id
+            int permitTypeID = Convert.ToInt32(_context.tbl_application.Where(a => a.id == applicID).Select(a => a.tbl_permit_type_id).FirstOrDefault());
+            //Document Tagging and Checklist
+
+            //Get uploaded files and requirements
+            var fileWithCommentsforDocTagging = (from dc in _context.tbl_document_checklist
+                                                 join f in _context.tbl_files on dc.id equals f.checklist_id
+                                                 //join c in _context.tbl_comments on f.Id equals c.tbl_files_id
+                                                 //join usr in _context.tbl_user on c.created_by equals usr.id
+                                                 where dc.permit_type_id == permitTypeID && f.tbl_application_id == applicID && f.created_by == Convert.ToInt32(uid) && dc.is_active == true
+                                                 select new FilesWithComments
+                                                 {
+                                                     tbl_document_checklist_id = dc.id,
+                                                     tbl_document_checklist_name = dc.name,
+                                                     tbl_files_id = f.Id,
+                                                     filename = f.filename,
+                                                     tbl_application_id = f.tbl_application_id,
+                                                     tbl_files_status = f.status
+                                                     //comment = c.comment
+                                                 }).ToList();
+
+            var requiredDocumentList = _context.tbl_document_checklist.Where(c => c.permit_type_id == permitTypeID && c.is_active == true).ToList();
+            foreach (var reqList in requiredDocumentList)
+            {
+                bool isReqAvailable = fileWithCommentsforDocTagging.Any(r => r.tbl_document_checklist_id == reqList.id);
+                if (isReqAvailable == false)
+                {
+                    fileWithCommentsforDocTagging.Add(new FilesWithComments
+                    {
+                        tbl_document_checklist_id = reqList.id,
+                        tbl_document_checklist_name = reqList.name,
+                        tbl_files_id = null,
+                        filename = "N/A",
+                        tbl_application_id = applicID,
+                        tbl_files_status = "N/A"
+                    });
+                }
+            }
+
+
+            //Add the latest comments for every file
+            var commentsList = _context.tbl_comments.Where(c => c.tbl_application_id == applicID).ToList();
+
+            for (int i = 0; i < fileWithCommentsforDocTagging.Count; i++)
+            {
+                var latestComment = commentsList.Where(c => c.tbl_files_id == fileWithCommentsforDocTagging[i].tbl_files_id).LastOrDefault();
+                if (latestComment != null)
+                {
+                    fileWithCommentsforDocTagging[i].comment = latestComment.comment;
+                    fileWithCommentsforDocTagging[i].tbl_comments_created_by = latestComment.created_by;
+                }
+            }
+
+            mymodel.filesWithComments = fileWithCommentsforDocTagging;
+            //End for Document Tagging and Checklist
 
             if (uid == null || appid == null)
             {
@@ -551,7 +647,7 @@ namespace FMB_CIS.Controllers
 
                 DateTime? dateInspection = null;
                 bool inspectDateToBeChanged = false;
-                if (Role == "DENR Inspector" && viewMod.applicantViewModels.permit_type == "Permit to Sell" && viewMod.applicantViewModels.status < 3)
+                if (Role == "DENR Inspector" && (viewMod.applicantViewModels.status == 7 || viewMod.applicantViewModels.status == 8))
                 {
                     dateInspection = Convert.ToDateTime(viewMod.applicantViewModels.inspectionDate);
                     inspectDateToBeChanged = true;

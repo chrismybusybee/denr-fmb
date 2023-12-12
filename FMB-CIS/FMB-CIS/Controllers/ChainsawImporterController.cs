@@ -199,7 +199,7 @@ namespace FMB_CIS.Controllers
                 //End for required documents
 
                 //Document Checklist
-                var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == 1).ToList();
+                var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == 1 && c.is_active == true).ToList();
                 model.tbl_Document_Checklist = myChecklist;
                 //End for Document Checklist
 
@@ -285,19 +285,56 @@ namespace FMB_CIS.Controllers
 
             //END FOR FILE DOWNLOAD
 
-            //Document Tagging
-            var fileWithCommentsforDocTagging = (from f in _context.tbl_files
-                                                     //join c in _context.tbl_comments on f.Id equals c.tbl_files_id
-                                                     //join usr in _context.tbl_user on c.created_by equals usr.id
-                                                 where f.tbl_application_id == applicID && f.created_by == Convert.ToInt32(uid)
+            //Document Tagging and Checklist
+            //var fileWithCommentsforDocTagging = (from f in _context.tbl_files
+            //                                         //join c in _context.tbl_comments on f.Id equals c.tbl_files_id
+            //                                         //join usr in _context.tbl_user on c.created_by equals usr.id
+            //                                     where f.tbl_application_id == applicID && f.created_by == Convert.ToInt32(uid)
+            //                                     select new FilesWithComments
+            //                                     {
+            //                                         tbl_files_id = f.Id,
+            //                                         filename = f.filename,
+            //                                         tbl_application_id = f.tbl_application_id,
+            //                                         tbl_files_status = f.status,
+            //                                         //comment = c.comment
+            //                                     }).ToList();
+            
+            //Get uploaded files and requirements
+            var fileWithCommentsforDocTagging = (from dc in _context.tbl_document_checklist
+                                                 join f in _context.tbl_files on dc.id equals f.checklist_id
+                                                 //join c in _context.tbl_comments on f.Id equals c.tbl_files_id
+                                                 //join usr in _context.tbl_user on c.created_by equals usr.id
+                                                 where dc.permit_type_id == 1 && f.tbl_application_id == applicID && f.created_by == Convert.ToInt32(uid) && dc.is_active == true
                                                  select new FilesWithComments
                                                  {
+                                                     tbl_document_checklist_id = dc.id,
+                                                     tbl_document_checklist_name = dc.name,
                                                      tbl_files_id = f.Id,
                                                      filename = f.filename,
                                                      tbl_application_id = f.tbl_application_id,
-                                                     tbl_files_status = f.status,
+                                                     tbl_files_status = f.status
                                                      //comment = c.comment
                                                  }).ToList();
+            
+            var requiredDocumentList = _context.tbl_document_checklist.Where(c=>c.permit_type_id==1 && c.is_active==true).ToList();
+            foreach(var reqList in requiredDocumentList)
+            {
+                //paymentFiles.Add(new tbl_files { Id = fileList.Id, filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, file_size = fileList.file_size, date_created = fileList.date_created });
+                bool isReqAvailable = fileWithCommentsforDocTagging.Any(r => r.tbl_document_checklist_id == reqList.id);
+                if(isReqAvailable == false)
+                {
+                    fileWithCommentsforDocTagging.Add(new FilesWithComments
+                    {
+                        tbl_document_checklist_id = reqList.id,
+                        tbl_document_checklist_name = reqList.name,
+                        tbl_files_id = null,
+                        filename = "N/A",
+                        tbl_application_id = applicID,
+                        tbl_files_status = "N/A"
+                    });
+                }
+            }
+
 
             //Add the latest comments for every file
             var commentsList = _context.tbl_comments.Where(c => c.tbl_application_id == applicID).ToList();
@@ -313,20 +350,20 @@ namespace FMB_CIS.Controllers
             }
 
             mymodel.filesWithComments = fileWithCommentsforDocTagging;
-            //End for Document Tagging
+            //End for Document Tagging and Checklist
 
             //Document Checklist
             //var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == 1).ToList();
             //mymodel.tbl_Document_Checklist = myChecklist;
-            var checkListApproval = (from f in _context.tbl_files
-                                     join req in _context.tbl_document_checklist on f.checklist_id equals req.id
-                                     where f.tbl_application_id == applicID && req.is_active == true
-                                     select new FileChecklistViewModel
-                                     {
-                                         FileName = f.filename,
-                                         tbl_document_checklist_name = req.name
-                                     }).ToList();           
-            mymodel.fileChecklistViewModel = checkListApproval;
+            //var checkListApproval = (from f in _context.tbl_files
+            //                         join req in _context.tbl_document_checklist on f.checklist_id equals req.id
+            //                         where f.tbl_application_id == applicID && req.is_active == true
+            //                         select new FileChecklistViewModel
+            //                         {
+            //                             FileName = f.filename,
+            //                             tbl_document_checklist_name = req.name
+            //                         }).ToList();           
+            //mymodel.fileChecklistViewModel = checkListApproval;
             //End for Document Checklist
 
             if (uid == null || appid == null)
@@ -388,6 +425,7 @@ namespace FMB_CIS.Controllers
                                           city = ct.name,
                                           brgy = brngy.name,
                                           comment = usr.comment,
+                                          inspectionDate = a.date_of_inspection,
                                           specification = a.tbl_specification_id,
                                           purpose = a.purpose,
                                           //expectedTimeArrived = a.expected_time_arrival,
@@ -504,7 +542,13 @@ namespace FMB_CIS.Controllers
                 DateTime? dateRegistration = null;
                 DateTime? dateExpiration = null;
                 DateTime? dateDueOfficer = BusinessDays.AddBusinessDays(DateTime.Now, 2).AddHours(4).AddMinutes(30);
-
+                DateTime? dateInspection = null;
+                bool inspectDateToBeChanged = false;
+                if (Role == "DENR Inspector" && (viewMod.applicantViewModels.status == 7 || viewMod.applicantViewModels.status == 8))
+                {
+                    dateInspection = Convert.ToDateTime(viewMod.applicantViewModels.inspectionDate);
+                    inspectDateToBeChanged = true;
+                }
 
                 //File Upload
                 if (viewMod.filesUpload != null)
@@ -576,7 +620,7 @@ namespace FMB_CIS.Controllers
                     }
                     //SAVE CHANGES TO DATABASE
                     //var applicationToUpdate = _context.tbl_application.Find(appID);
-                    var appli = new tbl_application() { id = applid, status = stats, date_modified = DateTime.Now, modified_by = loggedUserID, date_of_registration = dateRegistration, date_of_expiration = dateExpiration, date_due_for_officers = dateDueOfficer };
+                    var appli = new tbl_application() { id = applid, status = stats, date_modified = DateTime.Now, modified_by = loggedUserID, date_of_inspection = dateInspection, date_of_registration = dateRegistration, date_of_expiration = dateExpiration, date_due_for_officers = dateDueOfficer };
                     var usrdet = new tbl_user() { id = usid, comment = viewMod.applicantViewModels.comment };
                     using (_context)
                     {
@@ -584,6 +628,7 @@ namespace FMB_CIS.Controllers
                         _context.Entry(appli).Property(x => x.status).IsModified = true;
                         _context.Entry(appli).Property(x => x.modified_by).IsModified = true;
                         _context.Entry(appli).Property(x => x.date_modified).IsModified = true;
+                        _context.Entry(appli).Property(x => x.date_of_inspection).IsModified = inspectDateToBeChanged;
                         _context.Entry(appli).Property(x => x.date_of_registration).IsModified = registrationDateToBeChanged;
                         _context.Entry(appli).Property(x => x.date_of_expiration).IsModified = expirationDateToBeChanged;
                         _context.Entry(appli).Property(x => x.date_due_for_officers).IsModified = true;

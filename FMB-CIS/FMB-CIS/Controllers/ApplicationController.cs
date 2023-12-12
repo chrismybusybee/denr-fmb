@@ -84,7 +84,20 @@ namespace FMB_CIS.Controllers
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
                                  where pT.name == "Permit to Re-sell/Transfer Ownership"
-                                 select new ApplicantListViewModel { id = a.id, applicationDate = a.date_created, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id };
+                                 select new ApplicantListViewModel 
+                                 {
+                                     id = a.id,
+                                     applicationDate = a.date_created,
+                                     full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
+                                     email = usr.email,
+                                     contact = usr.contact_no,
+                                     address = usr.street_address,
+                                     application_type = appt.name,
+                                     permit_type = pT.name,
+                                     permit_status = pS.status,
+                                     tbl_user_id = (int)usr.id,
+                                     qty = a.qty
+                                 };
 
             mymodel.applicantListViewModels = applicationMod;
 
@@ -111,7 +124,20 @@ namespace FMB_CIS.Controllers
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
                                  where pT.name == "Authority to Lend"
-                                 select new ApplicantListViewModel { id = a.id, applicationDate = a.date_created, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id };
+                                 select new ApplicantListViewModel 
+                                 {
+                                     id = a.id,
+                                     applicationDate = a.date_created, 
+                                     full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, 
+                                     email = usr.email,
+                                     contact = usr.contact_no,
+                                     address = usr.street_address,
+                                     application_type = appt.name,
+                                     permit_type = pT.name, 
+                                     permit_status = pS.status, 
+                                     tbl_user_id = (int)usr.id,
+                                     qty = a.qty
+                                 };
 
             mymodel.applicantListViewModels = applicationMod;
 
@@ -138,7 +164,21 @@ namespace FMB_CIS.Controllers
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
                                  where pT.name == "Certificate of Registration"
-                                 select new ApplicantListViewModel { id = a.id, applicationDate = a.date_created, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id, date_of_expiration = a.date_of_expiration };
+                                 select new ApplicantListViewModel 
+                                 { 
+                                     id = a.id,
+                                     applicationDate = a.date_created,
+                                     full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
+                                     email = usr.email,
+                                     contact = usr.contact_no,
+                                     address = usr.street_address,
+                                     application_type = appt.name, 
+                                     permit_type = pT.name,
+                                     permit_status = pS.status, 
+                                     tbl_user_id = (int)usr.id,
+                                     date_of_expiration = a.date_of_expiration,
+                                     qty = a.qty
+                                 };
 
             mymodel.applicantListViewModels = applicationMod;
 
@@ -165,7 +205,20 @@ namespace FMB_CIS.Controllers
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
                                  where pT.name == "Authority to Rent"
-                                 select new ApplicantListViewModel { id = a.id, applicationDate = a.date_created, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id };
+                                 select new ApplicantListViewModel 
+                                 { 
+                                     id = a.id, 
+                                     applicationDate = a.date_created, 
+                                     full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
+                                     email = usr.email, 
+                                     contact = usr.contact_no,
+                                     address = usr.street_address,
+                                     application_type = appt.name,
+                                     permit_type = pT.name, 
+                                     permit_status = pS.status,
+                                     tbl_user_id = (int)usr.id,
+                                     qty = a.qty
+                                 };
 
             mymodel.applicantListViewModels = applicationMod;
 
@@ -192,7 +245,20 @@ namespace FMB_CIS.Controllers
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
                                  where pT.name == "Authority to Lease"
-                                 select new ApplicantListViewModel { id = a.id, applicationDate = a.date_created, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id };
+                                 select new ApplicantListViewModel 
+                                 {
+                                     id = a.id,
+                                     applicationDate = a.date_created,
+                                     full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
+                                     email = usr.email,
+                                     contact = usr.contact_no,
+                                     address = usr.street_address,
+                                     application_type = appt.name,
+                                     permit_type = pT.name, 
+                                     permit_status = pS.status,
+                                     tbl_user_id = (int)usr.id,
+                                     qty = a.qty
+                                 };
 
             mymodel.applicantListViewModels = applicationMod;
 
@@ -219,7 +285,20 @@ namespace FMB_CIS.Controllers
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
                                  where pT.name == "Permit to Sell"
-                                 select new ApplicantListViewModel { id = a.id, applicationDate = a.date_created, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id };
+                                 select new ApplicantListViewModel 
+                                 { 
+                                     id = a.id,
+                                     applicationDate = a.date_created,
+                                     full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
+                                     email = usr.email,
+                                     contact = usr.contact_no,
+                                     address = usr.street_address, 
+                                     application_type = appt.name, 
+                                     permit_type = pT.name,
+                                     permit_status = pS.status,
+                                     tbl_user_id = (int)usr.id,
+                                     qty = a.qty
+                                 };
 
             mymodel.applicantListViewModels = applicationMod;
 
@@ -247,7 +326,20 @@ namespace FMB_CIS.Controllers
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
                                  where pT.name == "Permit to Purchase"
-                                 select new ApplicantListViewModel { id = a.id, applicationDate = a.date_created, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id };
+                                 select new ApplicantListViewModel 
+                                 {
+                                     id = a.id,
+                                     applicationDate = a.date_created, 
+                                     full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, 
+                                     email = usr.email, 
+                                     contact = usr.contact_no,
+                                     address = usr.street_address,
+                                     application_type = appt.name,
+                                     permit_type = pT.name, 
+                                     permit_status = pS.status,
+                                     tbl_user_id = (int)usr.id,
+                                     qty = a.qty
+                                 };
 
             mymodel.applicantListViewModels = applicationMod;
 
@@ -274,7 +366,21 @@ namespace FMB_CIS.Controllers
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
                                  where pT.name == "Permit to Import"
-                                 select new ApplicantListViewModel { id = a.id, applicationDate = a.date_created, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id, status=(int)a.status };
+                                 select new ApplicantListViewModel 
+                                 { 
+                                     id = a.id, 
+                                     applicationDate = a.date_created,
+                                     full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
+                                     email = usr.email,
+                                     contact = usr.contact_no,
+                                     address = usr.street_address,
+                                     application_type = appt.name,
+                                     permit_type = pT.name,
+                                     permit_status = pS.status,
+                                     tbl_user_id = (int)usr.id,
+                                     status=(int)a.status,
+                                     qty = a.qty
+                                 };
 
             mymodel.applicantListViewModels = applicationMod;
 
@@ -330,23 +436,75 @@ namespace FMB_CIS.Controllers
                 //END FOR FILE DOWNLOAD
 
                 //Document Tagging
-                var fileWithCommentsforDocTagging = (from f in _context.tbl_files
-                                                    //join c in _context.tbl_comments on f.Id equals c.tbl_files_id
-                                                    //join usr in _context.tbl_user on c.created_by equals usr.id
-                                                    where f.tbl_application_id == applicID && f.created_by == usid
-                                                    select new FilesWithComments
-                                                    {
-                                                        tbl_files_id = f.Id,
-                                                        filename = f.filename,
-                                                        tbl_application_id = f.tbl_application_id,
-                                                        tbl_files_status = f.status,
-                                                        //comment = c.comment
-                                                    }).ToList();
-                
+                //var fileWithCommentsforDocTagging = (from f in _context.tbl_files
+                //                                    //join c in _context.tbl_comments on f.Id equals c.tbl_files_id
+                //                                    //join usr in _context.tbl_user on c.created_by equals usr.id
+                //                                    where f.tbl_application_id == applicID && f.created_by == usid
+                //                                    select new FilesWithComments
+                //                                    {
+                //                                        tbl_files_id = f.Id,
+                //                                        filename = f.filename,
+                //                                        tbl_application_id = f.tbl_application_id,
+                //                                        tbl_files_status = f.status,
+                //                                        //comment = c.comment
+                //                                    }).ToList();
+
+                ////Add the latest comments for every file
+                //var commentsList = _context.tbl_comments.Where(c => c.tbl_application_id == applicID).ToList();
+
+                //for (int i=0; i< fileWithCommentsforDocTagging.Count; i++)
+                //{
+                //    var latestComment = commentsList.Where(c => c.tbl_files_id == fileWithCommentsforDocTagging[i].tbl_files_id).LastOrDefault();
+                //    if (latestComment != null)
+                //    {
+                //        fileWithCommentsforDocTagging[i].comment = latestComment.comment;
+                //        fileWithCommentsforDocTagging[i].tbl_comments_created_by = latestComment.created_by;
+                //    }
+                //}
+
+                //mymodel.filesWithComments = fileWithCommentsforDocTagging;
+                //End for Document Tagging
+
+                //Get application permit type id
+                int permitTypeID = Convert.ToInt32(_context.tbl_application.Where(a => a.id == applicID).Select(a => a.tbl_permit_type_id).FirstOrDefault());
+                //Document Tagging and Checklist
+                //Get uploaded files and requirements
+                var fileWithCommentsforDocTagging = (from dc in _context.tbl_document_checklist
+                                                     join f in _context.tbl_files on dc.id equals f.checklist_id
+                                                     where dc.permit_type_id == permitTypeID && f.tbl_application_id == applicID && f.created_by == Convert.ToInt32(uid) && dc.is_active == true
+                                                     select new FilesWithComments
+                                                     {
+                                                         tbl_document_checklist_id = dc.id,
+                                                         tbl_document_checklist_name = dc.name,
+                                                         tbl_files_id = f.Id,
+                                                         filename = f.filename,
+                                                         tbl_application_id = f.tbl_application_id,
+                                                         tbl_files_status = f.status
+                                                         //comment = c.comment
+                                                     }).ToList();
+
+                var requiredDocumentList = _context.tbl_document_checklist.Where(c => c.permit_type_id == permitTypeID && c.is_active == true).ToList();
+                foreach (var reqList in requiredDocumentList)
+                {
+                    bool isReqAvailable = fileWithCommentsforDocTagging.Any(r => r.tbl_document_checklist_id == reqList.id);
+                    if (isReqAvailable == false)
+                    {
+                        fileWithCommentsforDocTagging.Add(new FilesWithComments
+                        {
+                            tbl_document_checklist_id = reqList.id,
+                            tbl_document_checklist_name = reqList.name,
+                            tbl_files_id = null,
+                            filename = "N/A",
+                            tbl_application_id = applicID,
+                            tbl_files_status = "N/A"
+                        });
+                    }
+                }
+
                 //Add the latest comments for every file
                 var commentsList = _context.tbl_comments.Where(c => c.tbl_application_id == applicID).ToList();
-                
-                for (int i=0; i< fileWithCommentsforDocTagging.Count; i++)
+
+                for (int i = 0; i < fileWithCommentsforDocTagging.Count; i++)
                 {
                     var latestComment = commentsList.Where(c => c.tbl_files_id == fileWithCommentsforDocTagging[i].tbl_files_id).LastOrDefault();
                     if (latestComment != null)
@@ -357,7 +515,7 @@ namespace FMB_CIS.Controllers
                 }
 
                 mymodel.filesWithComments = fileWithCommentsforDocTagging;
-                //End for Document Tagging
+                //End for Document Tagging and Checklist
 
                 var permitTypeOfThisApplication  = _context.tbl_application.Where(a => a.id == applid).Select(a => a.tbl_permit_type_id).FirstOrDefault();
                 if(permitTypeOfThisApplication == 13) //For Certificate of Registration

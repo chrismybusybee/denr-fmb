@@ -46,6 +46,11 @@ namespace FMB_CIS.Controllers
             ViewBag.RequiredDocsList_PermitToLeaseRentLend = requirementsForPermitToLeaseRentLend.announcement_content;
             ViewBag.RequiredDocsList_TransferOfOwnership = requirementsForTransferOfOwnership.announcement_content;
             //End for required documents
+            ViewModel model = new ViewModel();
+            //Document Checklist
+            var myChecklist = _context.tbl_document_checklist.Where(c => c.is_active == true && (c.permit_type_id == 5 || c.permit_type_id == 6 || c.permit_type_id == 7 || c.permit_type_id == 14 )).ToList();
+            model.tbl_Document_Checklist = myChecklist;
+            //End for Document Checklist
             if (usrStatus != true) //IF User is not yet approved by the admin.
             {
                 return RedirectToAction("Index", "Dashboard");
@@ -185,6 +190,8 @@ namespace FMB_CIS.Controllers
 
             //CODE FOR FILE DOWNLOAD
             int applicID = Convert.ToInt32(appid);
+            string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
+            ViewData["BaseUrl"] = host;
             //File Paths from Database
             //Files Uploaded by Applicant
             var filesFromDB = _context.tbl_files.Where(f => f.tbl_application_id == applicID && f.created_by == Convert.ToInt32(uid) && f.is_proof_of_payment != true).ToList();
@@ -237,6 +244,62 @@ namespace FMB_CIS.Controllers
 
             mymodel.proofOfPaymentFiles = paymentFiles;
             //END FOR FILE DOWNLOAD
+
+            //Get application permit type id
+            int permitTypeID = Convert.ToInt32(_context.tbl_application.Where(a => a.id == applicID).Select(a => a.tbl_permit_type_id).FirstOrDefault());
+            //Document Tagging and Checklist
+
+            //Get uploaded files and requirements
+            var fileWithCommentsforDocTagging = (from dc in _context.tbl_document_checklist
+                                                 join f in _context.tbl_files on dc.id equals f.checklist_id
+                                                 //join c in _context.tbl_comments on f.Id equals c.tbl_files_id
+                                                 //join usr in _context.tbl_user on c.created_by equals usr.id
+                                                 where dc.permit_type_id == permitTypeID && f.tbl_application_id == applicID && f.created_by == Convert.ToInt32(uid) && dc.is_active == true
+                                                 select new FilesWithComments
+                                                 {
+                                                     tbl_document_checklist_id = dc.id,
+                                                     tbl_document_checklist_name = dc.name,
+                                                     tbl_files_id = f.Id,
+                                                     filename = f.filename,
+                                                     tbl_application_id = f.tbl_application_id,
+                                                     tbl_files_status = f.status
+                                                     //comment = c.comment
+                                                 }).ToList();
+
+            var requiredDocumentList = _context.tbl_document_checklist.Where(c => c.permit_type_id == permitTypeID && c.is_active == true).ToList();
+            foreach (var reqList in requiredDocumentList)
+            {
+                bool isReqAvailable = fileWithCommentsforDocTagging.Any(r => r.tbl_document_checklist_id == reqList.id);
+                if (isReqAvailable == false)
+                {
+                    fileWithCommentsforDocTagging.Add(new FilesWithComments
+                    {
+                        tbl_document_checklist_id = reqList.id,
+                        tbl_document_checklist_name = reqList.name,
+                        tbl_files_id = null,
+                        filename = "N/A",
+                        tbl_application_id = applicID,
+                        tbl_files_status = "N/A"
+                    });
+                }
+            }
+
+
+            //Add the latest comments for every file
+            var commentsList = _context.tbl_comments.Where(c => c.tbl_application_id == applicID).ToList();
+
+            for (int i = 0; i < fileWithCommentsforDocTagging.Count; i++)
+            {
+                var latestComment = commentsList.Where(c => c.tbl_files_id == fileWithCommentsforDocTagging[i].tbl_files_id).LastOrDefault();
+                if (latestComment != null)
+                {
+                    fileWithCommentsforDocTagging[i].comment = latestComment.comment;
+                    fileWithCommentsforDocTagging[i].tbl_comments_created_by = latestComment.created_by;
+                }
+            }
+
+            mymodel.filesWithComments = fileWithCommentsforDocTagging;
+            //End for Document Tagging and Checklist
 
             if (uid == null || appid == null)
             {

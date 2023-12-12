@@ -508,7 +508,10 @@
                     <thead>
                         <tr>
                             <th>
-                                Document
+                                Requirement
+                            </th>
+                            <th>
+                                Uploaded Document
                             </th>
                             <th>
                                 Status
@@ -524,18 +527,30 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.filename)
+                                    @Html.DisplayFor(modelItem => item.tbl_document_checklist_name)
+                                </td>
+                                <td>
+                                    @* @Html.DisplayFor(modelItem => item.filename) *@
+                                    @if(item.filename!="N/A")
+                                    {
+                                        @* <a href="#" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DocHistory(this)">@item.filename</a> *@
+                                        @item.filename
+                                    }
+                                    else
+                                    {
+                                        @item.filename
+                                    }
                                 </td>
 
                                 <td>
-                                    @if (item.tbl_files_status == "Approved")
+                                    @if (item.tbl_files_status == "Complied")
                                     {
                                         @* <div class="bg-success text-white px-3 pb-2 pt-1 rounded-pill w-105"> *@
                                         <div class="text-success px-3 pb-2 pt-1" style="font-weight: bold">
                                             @item.tbl_files_status
                                         </div>
                                     }
-                                    else if (item.tbl_files_status == "Denied")
+                                    else if (item.tbl_files_status == "Not Complied")
                                     {
                                         @* <div class="bg-danger text-white px-3 pb-2 pt-1 rounded-pill w-105"> *@
                                         <div class="text-danger px-3 pb-2 pt-1" style="font-weight: bold">

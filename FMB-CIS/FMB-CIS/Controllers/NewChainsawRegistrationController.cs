@@ -52,13 +52,19 @@ namespace FMB_CIS.Controllers
             ViewBag.RequiredDocsList = requirements.announcement_content;
             //End for required documents
 
+            ViewModel model = new ViewModel();
+            //Document Checklist
+            var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == 13 && c.is_active == true).ToList();
+            model.tbl_Document_Checklist = myChecklist;
+            //End for Document Checklist
+
             if (usrStatus != true) //IF User is not yet approved by the admin.
             {
                 return RedirectToAction("Index", "Dashboard");
             }
             if (usrRoleID == 3 || usrRoleID == 5 || usrRoleID == 6 || usrRoleID == 7)
             {
-                return View();
+                return View(model);
             }
             else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11 || usrRoleID == 17) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
             {

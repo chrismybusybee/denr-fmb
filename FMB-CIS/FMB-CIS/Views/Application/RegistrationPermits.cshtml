@@ -18,31 +18,13 @@
             <thead>
                 <tr>
                     <th>
-                        ID
-                    </th>
-                    <th>
-                        Permit Expiration Date
-                    </th>
-                    <th>
-                        Full Name
-                    </th>
-                    <th>
-                        Email
-                    </th>
-                    <th>
-                        Contact No.
-                    </th>
-                    <th>
-                        Address
+                        Reference Number
                     </th>
                     <th>
                         Application Date
                     </th>
                     <th>
-                        Application Type
-                    </th>
-                    <th>
-                        Permit Type
+                        Quantity
                     </th>
                     <th>
                         Permit Status
@@ -53,94 +35,51 @@
                     <th>
                         Action
                     </th>
-
-
                 </tr>
             </thead>
             <tbody>
                 @foreach (ApplicantListViewModel item in Model.applicantListViewModels)
                 {
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.id)
-                            </td>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.id)
+                        </td>
 
-                            @if (item.permit_status == "Payment and Application Approved (Inspector and CENRO)")
+                        <td>
+                            @Html.DisplayFor(modelItem => item.applicationDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.qty)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.permit_status)
+                        </td>
+                        <td>
+                            @if (item.permit_status == "For Payment" || item.permit_status == "Payment Rejected (Inspector)" || item.permit_status == "Payment Rejected (CENRO)")
                             {
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.date_of_expiration)
-                                </td>
+                                <div class="d-flex">
+                                    <a href="#" id="uploadPOP" class="bg-green text-white pt-0 pb-1 px-2 rounded text-decoration-none" data-application-id="@item.id" onclick="uploadPaymentClicked(this)">
+                                        <i data-feather="upload" class="data-feather-20"></i> Upload
+                                    </a>
+                                </div>
+                            }
+                            else if (item.permit_status == "Payment Verification (Inspector)" || item.permit_status == "Payment Verification (CENRO)")
+                            {
+                                <div class="d-flex">Payment Verification In Progress</div>
+                            }
+                            else if (item.permit_status == "Payment and Application Approved (Inspector and CENRO)")
+                            {
+                                <div class="d-flex">Payment Approved</div>
                             }
                             else
                             {
-                                <td>Not Yet Available</td>
+                                <div class="d-flex">Not Yet Approved for Payment</div>
                             }
-                            
-                            <td>
-                                @Html.DisplayFor(modelItem => item.full_name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.email)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.contact)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.address)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.applicationDate)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.application_type)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.permit_type)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.permit_status)
-                            </td>
-                            <td>
-                                @if (item.permit_status == "For Payment" || item.permit_status == "Payment Rejected (Inspector)" || item.permit_status == "Payment Rejected (CENRO)")
-                                {
-                                    <div class="d-flex justify-content-center">
-                                        <a href="#" id="uploadPOP" class="bg-green text-white pt-0 pb-1 px-2 rounded text-decoration-none" data-application-id="@item.id" onclick="uploadPaymentClicked(this)">
-                                            <i data-feather="upload" class="data-feather-20"></i> Upload
-                                        </a>
-                                    </div>
-                                }
-                                else if (item.permit_status == "Payment Verification (Inspector)" || item.permit_status == "Payment Verification (CENRO)")
-                                {
-                                    <div class="d-flex justify-content-center">Payment Verification In Progress</div>
-                                }
-                                else if (item.permit_status == "Payment and Application Approved (Inspector and CENRO)")
-                                {
-                                    <div class="d-flex justify-content-center">Payment Approved</div>
-                                }
-                                else
-                                {
-                                    <div class="d-flex justify-content-center">Not Yet Approved for Payment</div>
-                                }
-                            </td>
-                            <td>
-                                @* <a href="ChainsawImporterApproval?uid=@item.tbl_user_id&appid=@item.id">Take Action</a> *@
-                                @if (item.application_type.Contains("Importer"))
-                                {
-                                    <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">View</a>
-                                }
-                                @if (item.application_type.Contains("Seller"))
-                                {
-                                    <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">View</a>
-                                }
-                                @if (item.application_type.Contains("Owner"))
-                                {
-                                    <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">View</a>
-                                }
-
-                            </td>
-                        </tr>
-                    }
+                        </td>
+                        <td>
+                            <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">View</a>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>

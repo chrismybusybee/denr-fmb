@@ -154,6 +154,7 @@
         </div>
             <hr />
             <div class="row d-flex justify-content-center m-0">
+                <h5 class="text-secondary">Please match your uploaded file based on the checklist of requirements.</h5>
                 <table class="table dataTable" id="tblApplicantFiles">
                     <thead>
                         <tr>
@@ -179,7 +180,7 @@
                                 </td>
                                 <input type="hidden" asp-for="fileChecklistViewModel[i].tbl_document_checklist_id" value="@item.id" />
                                 <td>
-                                    <select class="form-select fileListDropDown" id="fileListDropDown_@i" onchange="fileSelected(this)" asp-for="fileChecklistViewModel[i].FileName">
+                                    <select class="form-select fileListDropDown" id="fileListDropDown_@i" onchange="fileSelected(this)" asp-for="fileChecklistViewModel[i].FileName" required>
                                         <option selected disabled>--Please select your uploaded file--</option>
                                     </select>
                                 </td>
@@ -423,6 +424,7 @@
         
     });
 
+    //FOR CHECKLIST OF DOCUMENTS
     function fileChange(that) {
         var formFiles = document.forms['ImporterRegForm']['filesUpload.Files'];
         //console.log("that: ", that);
@@ -439,13 +441,13 @@
 
     function PopulateFileDropDown(fileDropDownClass, list) {
         $(fileDropDownClass).empty();
-        $(fileDropDownClass).append("<option selected disabled>--Please select your uploaded file--</option>")
+        $(fileDropDownClass).append("<option value=\"\" selected disabled>--Please select your uploaded file--</option>")
+        $(fileDropDownClass).append("<option value=\"N/A\" >N/A</option>")
         $.each(list, function (index, row) {
             $(fileDropDownClass).append("<option value=\"" + row.name + "\"id=\"uploadedFile_" + index + "\">" + row.name + "</option>")
         });
     }
 
-    //TO-DO
     function fileSelected(that) {
         console.log("that.id:", that.id);
         var selectClass = document.getElementsByClassName('fileListDropDown');
@@ -460,8 +462,11 @@
                 for (let j = 0; j < selectedFileList.options.length; j++) {
                     //console.log("selectedFileList.options[" + j + "]: ", selectedFileList.options[j]);
                     if (selectedFileList.options[j].value == that.value) {
-                        console.log("disable me");
-                        selectedFileList.options[j].disabled = true;
+                        //console.log("disable me");
+                        if (that.value != "N/A") {
+                            selectedFileList.options[j].disabled = true;
+                        }
+                        
                     }
                     // else {
                     //     selectedFileList.options[j].disabled = false;
@@ -470,6 +475,7 @@
             }
         }
     }
+    //END FOR CHECKLIST OF DOCUMENTS
 
 </script>
 

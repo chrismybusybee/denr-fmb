@@ -223,6 +223,59 @@
                                     </div>
                                 </div>
                             </div>
+                            @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true) @* && Model.applicantViewModels.permit_type == "Permit to Sell" *@
+                            {
+                                <div class="row mb-5">
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+
+                                            @if (Model.applicantViewModels.status == 7 || Model.applicantViewModels.status == 8)
+                                            {
+                                                <label class="text-secondary small">
+                                                    Date Inspected
+                                                </label>
+                                                <span class="fw-bold">
+                                                    @* @Html.EditorFor(model => model.applicantViewModels.inspectionDate) *@
+                                                    <input type="date" asp-for="applicantViewModels.inspectionDate" class="form-control" required />
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                @if (Model.applicantViewModels.inspectionDate != null)
+                                                {
+                                                    <label class="text-secondary small">
+                                                        Date Inspected
+                                                    </label>
+                                                    <span class="fw-bold">
+                                                        @* @Html.EditorFor(model => model.applicantViewModels.inspectionDate) *@
+                                                        @Html.DisplayFor(model => model.applicantViewModels.inspectionDate)
+                                                        @Html.HiddenFor(model => model.applicantViewModels.inspectionDate)
+                                                    </span>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else @* for CENRO View *@
+                            {
+                                @if (Model.applicantViewModels.inspectionDate != null)
+                                {
+                                    <div class="row mb-5">
+                                        <div class="col-md-5">
+                                            <div class="form-group d-flex flex-column gap-1">
+                                                <label class="text-secondary small">
+                                                    Date Inspected
+                                                </label>
+                                                <span class="fw-bold">
+                                                    @Html.DisplayFor(model => model.applicantViewModels.inspectionDate)
+                                                    @Html.HiddenFor(model => model.applicantViewModels.inspectionDate)
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
                             @* <div class="row mb-5">
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
@@ -253,13 +306,17 @@
                 </div>
             </div>
 
+            @* Document Tagging and Checklist *@
             <hr />
             <div class="row d-flex justify-content-center m-0">
                 <table class="table dataTable" id="tblApplicantFiles">
                     <thead>
                         <tr>
                             <th>
-                                Document
+                                Requirement
+                            </th>
+                            <th>
+                                Uploaded Document
                             </th>
                             <th>
                                 Status
@@ -278,19 +335,29 @@
                         {
                             <tr>
                                 <td>
+                                    @Html.DisplayFor(modelItem => item.tbl_document_checklist_name)
+                                </td>
+                                <td>
                                     @* @Html.DisplayFor(modelItem => item.filename) *@
-                                    <a href="#" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DocHistory(this)">@item.filename</a>
+                                    @if(item.filename!="N/A")
+                                    {
+                                        <a href="#" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DocHistory(this)">@item.filename</a>
+                                    }
+                                    else
+                                    {
+                                        @item.filename
+                                    }
                                 </td>
 
                                 <td>
-                                    @if (item.tbl_files_status == "Approved")
+                                    @if (item.tbl_files_status == "Complied")
                                     {
                                         @* <div class="bg-success text-white px-3 pb-2 pt-1 rounded-pill w-105"> *@
                                         <div class="text-success px-3 pb-2 pt-1" style="font-weight: bold">
                                             @item.tbl_files_status
                                         </div>
                                     }
-                                    else if (item.tbl_files_status == "Denied")
+                                    else if (item.tbl_files_status == "Not Complied")
                                     {
                                         @* <div class="bg-danger text-white px-3 pb-2 pt-1 rounded-pill w-105"> *@
                                         <div class="text-danger px-3 pb-2 pt-1" style="font-weight: bold">
@@ -306,12 +373,26 @@
                                     }
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.comment)
+                                    
+                                    @if (item.filename != "N/A")
+                                    {
+                                        @Html.DisplayFor(modelItem => item.comment)
+                                    }
+                                    else
+                                    {
+                                        <label>N/A</label>
+                                    }
                                 </td>
                                 <td>
-                                    @* <button type="button" class="btn btn-primary w-125" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="ChangeDocStatus(this)">Change</button> *@
-                                    <button type="button" class="btn btn-primary w-125" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="ApproveDocStatus(this)">Approve</button>
-                                    <button type="button" class="btn btn-danger w-125" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DenyDocStatus(this)">Deny</button>
+                                    @if (item.filename != "N/A")
+                                    {
+                                        <button type="button" class="btn btn-primary w-125" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="ApproveDocStatus(this)">Complied</button>
+                                        <button type="button" class="btn btn-danger w-125" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DenyDocStatus(this)">Not Complied</button>
+                                    }
+                                    else
+                                    {
+                                        <label>N/A</label>
+                                    }
                                 </td>
 
                             </tr>
@@ -319,13 +400,15 @@
                     </tbody>
                 </table>
             </div>
+            @* End for Document Tagging and Checklist *@
+
             <hr />
-            <div class="row d-flex justify-content-center m-0">
+            @* <div class="row d-flex justify-content-center m-0">
                 <table class="table dataTable" id="tblDocumentChecklist">
                     <thead>
                         <tr>
                             <th>
-                                Requiremed Document
+                                Required Document
                             </th>
                             <th>
                                 Uploaded Document
@@ -339,7 +422,6 @@
                             <tr>
                                 <td>
                                     @item.tbl_document_checklist_name
-                                    @* <a href="#" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DocHistory(this)">@item.filename</a> *@
                                 </td>
                                 <td>
                                     @item.FileName
@@ -349,7 +431,7 @@
                     </tbody>
                 </table>
             </div>
-            <hr />
+            <hr /> *@
 
             <div class="row d-flex justify-content-center m-0">
                 <div class="mb-4">
@@ -675,8 +757,15 @@
 
 
         $('#approveBtn').click(function () {
-            $('#confirmApproveModal').modal("show");
-            document.getElementById("decisionID").value = "Approve";
+            
+            if ($("#ApplApprvlForm")[0].checkValidity()) {
+                $('#confirmApproveModal').modal("show");
+                document.getElementById("decisionID").value = "Approve";
+            }
+            else {
+                //Validate Form
+                $("#ApplApprvlForm")[0].reportValidity();
+            }
         });
 
         $("#backApproveBtn").click(function () {
@@ -806,6 +895,7 @@
     //         }
     //     });
     // }
+
     function DocHistory(that) {
         console.log("test");
         var filename = that.dataset.filename;
@@ -846,7 +936,7 @@
 
         var filename = that.dataset.filename;
         var fileID = that.dataset.fileid;
-        var status = "Approved";
+        var status = "Complied";
         var comment = "";
         var url = "@baseurl";
         const queryString = window.location.search;
@@ -856,7 +946,7 @@
         console.log("applicationID: ", applicationID);
 
         Swal.fire({
-            title: "Are you sure you want to Approve " + filename + "?",
+            title: "Are you sure you want to mark " + filename + " as \"Complied\"?",
             showCancelButton: true,
             confirmButtonText: "Yes",
             cancelButtonText: "No",
@@ -886,7 +976,7 @@
 
                         $.post(url + "ChainsawImporter/FileTaggingChanges", { tbl_files_id: fileID, tbl_files_status: status, comment: comment, appid: applicationID }, function (data) {
                             console.log("data: ", data);
-                            Swal.fire("Success!", "Document is Approved", "success");
+                            Swal.fire("Success!", "Document marked as \"Complied\"", "success");
                         });
                     }
                 });
@@ -899,7 +989,7 @@
 
         var filename = that.dataset.filename;
         var fileID = that.dataset.fileid;
-        var status = "Denied";
+        var status = "Not Complied";
         var comment = "";
         var url = "@baseurl";
         const queryString = window.location.search;
@@ -909,7 +999,7 @@
         console.log("applicationID: ", applicationID);
 
         Swal.fire({
-            title: "Are you sure you want to Deny " + filename + "?",
+            title: "Are you sure you want to mark " + filename + " as \"Not Complied\"?",
             showCancelButton: true,
             confirmButtonText: "Yes",
             cancelButtonText: "No",
@@ -939,7 +1029,7 @@
 
                         $.post(url + "ChainsawImporter/FileTaggingChanges", { tbl_files_id: fileID, tbl_files_status: status, comment: comment, appid: applicationID }, function (data) {
                             console.log("data: ", data);
-                            Swal.fire("Success!", "Document is Denied", "success");
+                            Swal.fire("Success!", "Document marked as \"Not Complied\"", "success");
                         });
                     }
                 });

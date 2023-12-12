@@ -28,5 +28,10 @@
         public DateTime tbl_comments_date_created { get; set; }
         public DateTime tbl_comments_date_modified { get; set; }
         public string? comment_to { get; set; }
+        //from tbl_document_checklist
+        public int tbl_document_checklist_id { get; set; }
+        public int permit_type_id { get; set; }
+        public string tbl_document_checklist_name { get; set; }
+        public string tbl_document_checklist_description { get; set; }
     }
 }

@@ -5,6 +5,7 @@
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Chainsaw Owner";
+    var baseurl = ViewBag.BaseUrl;
     // ViewBag.Cenro = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO");
     // ViewBag.Inspector = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector");
 }
@@ -381,6 +382,101 @@
                     </div>
                 </div>
             </div>
+            @* Document Tagging and Checklist *@
+            <hr />
+            <div class="row d-flex justify-content-center m-0">
+                <table class="table dataTable" id="tblApplicantFiles">
+                    <thead>
+                        <tr>
+                            <th>
+                                Requirement
+                            </th>
+                            <th>
+                                Uploaded Document
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                            <th>
+                                Comment
+                            </th>
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (FilesWithComments item in Model.filesWithComments)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.tbl_document_checklist_name)
+                                </td>
+                                <td>
+                                    @* @Html.DisplayFor(modelItem => item.filename) *@
+                                    @if (item.filename != "N/A")
+                                    {
+                                        <a href="#" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DocHistory(this)">@item.filename</a>
+                                    }
+                                    else
+                                    {
+                                        @item.filename
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (item.tbl_files_status == "Complied")
+                                    {
+                                        @* <div class="bg-success text-white px-3 pb-2 pt-1 rounded-pill w-105"> *@
+                                        <div class="text-success px-3 pb-2 pt-1" style="font-weight: bold">
+                                            @item.tbl_files_status
+                                        </div>
+                                    }
+                                    else if (item.tbl_files_status == "Not Complied")
+                                    {
+                                        @* <div class="bg-danger text-white px-3 pb-2 pt-1 rounded-pill w-105"> *@
+                                        <div class="text-danger px-3 pb-2 pt-1" style="font-weight: bold">
+                                            @item.tbl_files_status
+                                        </div>
+                                    }
+                                    else @* if (item.tbl_files_status == "Pending") *@
+                                    {
+                                        @* <div class="bg-secondary text-white px-3 pb-2 pt-1 rounded-pill w-105"> *@
+                                        <div class="text-secondary px-3 pb-2 pt-1" style="font-weight: bold">
+                                            @item.tbl_files_status
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+
+                                    @if (item.filename != "N/A")
+                                    {
+                                        @Html.DisplayFor(modelItem => item.comment)
+                                    }
+                                    else
+                                    {
+                                        <label>N/A</label>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.filename != "N/A")
+                                    {
+                                        <button type="button" class="btn btn-primary w-125" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="ApproveDocStatus(this)">Complied</button>
+                                        <button type="button" class="btn btn-danger w-125" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DenyDocStatus(this)">Not Complied</button>
+                                    }
+                                    else
+                                    {
+                                        <label>N/A</label>
+                                    }
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @* End for Document Tagging and Checklist *@
             <hr />
 
             <div class="row d-flex justify-content-center m-0">
@@ -832,6 +928,145 @@
 
     });
 
+    function DocHistory(that) {
+        console.log("test");
+        var filename = that.dataset.filename;
+        var fileID = that.dataset.fileid;
+        console.log("filename: ", filename);
+        console.log("fileID: ", fileID);
+        var url = "@baseurl" + "ChainsawImporter/DocumentHistory";
+        $.get(url, { tbl_files_id: fileID }, function (data) {
+            console.log("data: ", data);
 
+            if (data.length != 0) {
+                var commentsListHTML = "";
+                //comments
+                for (let i = 0; i < data.length; i++) {
+                    commentsListHTML += '<div class="row"> <div class="col-md-12 py-2"> <div class="px-2 py-1"> <div class="border px-3 py-2"> <div class="row d-flex justify-content-between mb-1"> <div class="col-md-6 fs-6 fw-bold text-secondary" style="text-align: left">' + data[i].commenterName + '</div> <div class="col-md-6 text-end"> <span class="border rounded small px-2 fw-bold text-secondary" style="text-align: right">' + data[i].formattedDate + '</span> </div> </div> <div class="row d-flex mb-3"> <div class="col-md-12 fst-normal fs-6">' + data[i].comment + '</div> </div> </div> </div> </div> </div> ';
+                }
+                Swal.fire({
+                    title: "Comment History for " + filename,
+                    width: 700,
+                    confirmButtonColor: '#14984a',
+                    html: commentsListHTML
+                });
+            }
+
+            else {
+                Swal.fire({
+                    title: filename + " does not contain any comments.",
+                    confirmButtonColor: '#14984a'
+                });
+            }
+
+        });
+    }
+
+    function ApproveDocStatus(that) {
+        console.log("that.dataset: ", that.dataset);
+        //that.dataset.fileid
+
+        var filename = that.dataset.filename;
+        var fileID = that.dataset.fileid;
+        var status = "Complied";
+        var comment = "";
+        var url = "@baseurl";
+        const queryString = window.location.search;
+        console.log("queryString: ", queryString);
+        const urlParams = new URLSearchParams(queryString);
+        const applicationID = urlParams.get('appid')
+        console.log("applicationID: ", applicationID);
+
+        Swal.fire({
+            title: "Are you sure you want to mark " + filename + " as \"Complied\"?",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            confirmButtonColor: '#14984a'
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            console.log("result", result);
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Please type your comment here",
+                    input: "textarea",
+                    inputPlaceholder: "Type your comment here...",
+                    inputAttributes: {
+                        autocapitalize: "off"
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: "Confirm",
+                    confirmButtonColor: '#14984a',
+                }).then((result) => {
+                    console.log("result 2 (comment): ", result);
+                    if (result.isDismissed != true) {
+                        //if confirm button was clicked
+                        console.log("result.value 2: ", result.value);
+                        comment = result.value;
+                        console.log("comment: ", comment);
+                        console.log("status: ", status);
+
+                        $.post(url + "ChainsawImporter/FileTaggingChanges", { tbl_files_id: fileID, tbl_files_status: status, comment: comment, appid: applicationID }, function (data) {
+                            console.log("data: ", data);
+                            Swal.fire("Success!", "Document marked as \"Complied\"", "success");
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    function DenyDocStatus(that) {
+        console.log("that.dataset: ", that.dataset);
+
+        var filename = that.dataset.filename;
+        var fileID = that.dataset.fileid;
+        var status = "Not Complied";
+        var comment = "";
+        var url = "@baseurl";
+        const queryString = window.location.search;
+        console.log("queryString: ", queryString);
+        const urlParams = new URLSearchParams(queryString);
+        const applicationID = urlParams.get('appid')
+        console.log("applicationID: ", applicationID);
+
+        Swal.fire({
+            title: "Are you sure you want to mark " + filename + " as \"Not Complied\"?",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            confirmButtonColor: '#14984a'
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            console.log("result", result);
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Please type your comment here",
+                    input: "textarea",
+                    inputPlaceholder: "Type your comment here...",
+                    inputAttributes: {
+                        autocapitalize: "off"
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: "Confirm",
+                    confirmButtonColor: '#14984a',
+                }).then((result) => {
+                    console.log("result 2 (comment): ", result);
+                    if (result.isDismissed != true) {
+                        //if confirm button was clicked
+                        console.log("result.value 2: ", result.value);
+                        comment = result.value;
+                        console.log("comment: ", comment);
+                        console.log("status: ", status);
+
+                        $.post(url + "ChainsawImporter/FileTaggingChanges", { tbl_files_id: fileID, tbl_files_status: status, comment: comment, appid: applicationID }, function (data) {
+                            console.log("data: ", data);
+                            Swal.fire("Success!", "Document marked as \"Not Complied\"", "success");
+                        });
+                    }
+                });
+            }
+        });
+    }
 
 </script>
