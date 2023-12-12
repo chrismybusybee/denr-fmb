@@ -833,12 +833,12 @@
 
         //////
         $('.customBtn').click(function (btn) {
-            if ($("#ApplApprvlForm")[0].checkValidity()) { 
-            $('#confirmCustomModal').modal("show");
-            document.getElementById("decisionID").value = "Custom";
-            document.getElementById("next_step_code").value = $(this).data('next_step_code');
-            document.getElementById("confirmCustomBtn").value = $(this).data('button_text');
-            document.getElementById("confirmCustomMessage").value = $(this).data('button_text');
+            if ($("#ApplApprvlForm")[0].checkValidity()) {
+                $('#confirmCustomModal').modal("show");
+                document.getElementById("decisionID").value = "Custom";
+                document.getElementById("next_step_code").value = $(this).data('next_step_code');
+                document.getElementById("confirmCustomBtn").value = $(this).data('button_text');
+                document.getElementById("confirmCustomMessage").value = $(this).data('button_text');
             }
             else
             {
