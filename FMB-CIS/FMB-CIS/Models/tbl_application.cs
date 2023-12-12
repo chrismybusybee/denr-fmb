@@ -37,6 +37,7 @@ namespace FMB_CIS.Models
         public DateTime? date_modified { get; set; }
         public DateTime? date_due_for_officers { get; set; }
         public bool? coordinatedWithEnforcementDivision { get; set; }
+        public DateTime? initial_date_of_inspection { get; set; }
 
     }
 }

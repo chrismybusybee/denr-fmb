@@ -425,6 +425,7 @@ namespace FMB_CIS.Controllers
                                           city = ct.name,
                                           brgy = brngy.name,
                                           comment = usr.comment,
+                                          initial_date_of_inspection = a.initial_date_of_inspection,
                                           inspectionDate = a.date_of_inspection,
                                           specification = a.tbl_specification_id,
                                           purpose = a.purpose,
@@ -542,14 +543,23 @@ namespace FMB_CIS.Controllers
                 DateTime? dateRegistration = null;
                 DateTime? dateExpiration = null;
                 DateTime? dateDueOfficer = BusinessDays.AddBusinessDays(DateTime.Now, 2).AddHours(4).AddMinutes(30);
+                DateTime? dateInspectionInitial = null;
+                bool initialInspectDateToBeChanged = false;
                 DateTime? dateInspection = null;
                 bool inspectDateToBeChanged = false;
+
+                if (Role == "DENR Inspector" && viewMod.applicantViewModels.status == 1)
+                {
+                    dateInspectionInitial = Convert.ToDateTime(viewMod.applicantViewModels.initial_date_of_inspection);
+                    initialInspectDateToBeChanged = true;
+                }
+
                 if (Role == "DENR Inspector" && (viewMod.applicantViewModels.status == 7 || viewMod.applicantViewModels.status == 8))
                 {
                     dateInspection = Convert.ToDateTime(viewMod.applicantViewModels.inspectionDate);
                     inspectDateToBeChanged = true;
                 }
-
+                
                 //File Upload
                 if (viewMod.filesUpload != null)
                 {
@@ -620,7 +630,7 @@ namespace FMB_CIS.Controllers
                     }
                     //SAVE CHANGES TO DATABASE
                     //var applicationToUpdate = _context.tbl_application.Find(appID);
-                    var appli = new tbl_application() { id = applid, status = stats, date_modified = DateTime.Now, modified_by = loggedUserID, date_of_inspection = dateInspection, date_of_registration = dateRegistration, date_of_expiration = dateExpiration, date_due_for_officers = dateDueOfficer };
+                    var appli = new tbl_application() { id = applid, status = stats, date_modified = DateTime.Now, modified_by = loggedUserID, initial_date_of_inspection = dateInspectionInitial, date_of_inspection = dateInspection, date_of_registration = dateRegistration, date_of_expiration = dateExpiration, date_due_for_officers = dateDueOfficer };
                     var usrdet = new tbl_user() { id = usid, comment = viewMod.applicantViewModels.comment };
                     using (_context)
                     {
@@ -628,6 +638,7 @@ namespace FMB_CIS.Controllers
                         _context.Entry(appli).Property(x => x.status).IsModified = true;
                         _context.Entry(appli).Property(x => x.modified_by).IsModified = true;
                         _context.Entry(appli).Property(x => x.date_modified).IsModified = true;
+                        _context.Entry(appli).Property(x => x.initial_date_of_inspection).IsModified = initialInspectDateToBeChanged;
                         _context.Entry(appli).Property(x => x.date_of_inspection).IsModified = inspectDateToBeChanged;
                         _context.Entry(appli).Property(x => x.date_of_registration).IsModified = registrationDateToBeChanged;
                         _context.Entry(appli).Property(x => x.date_of_expiration).IsModified = expirationDateToBeChanged;

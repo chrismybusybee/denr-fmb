@@ -216,6 +216,34 @@
                                     <div class="col-md-5">
                                         <div class="form-group d-flex flex-column gap-1">
 
+                                            @if (Model.applicantViewModels.status == 1)
+                                            {
+                                                <label class="text-secondary small">
+                                                    Initial Date of Physical Inspection
+                                                </label>
+                                                <span class="fw-bold">
+                                                    <input type="date" asp-for="applicantViewModels.initial_date_of_inspection" class="form-control" required />
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                @if (Model.applicantViewModels.initial_date_of_inspection != null)
+                                                {
+                                                    <label class="text-secondary small">
+                                                        Initial Date of Physical Inspection
+                                                    </label>
+                                                    <span class="fw-bold">
+                                                        @* @Html.EditorFor(model => model.applicantViewModels.inspectionDate) *@
+                                                        @Html.DisplayFor(model => model.applicantViewModels.initial_date_of_inspection)
+                                                        @Html.HiddenFor(model => model.applicantViewModels.initial_date_of_inspection)
+                                                    </span>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+
                                             @if (Model.applicantViewModels.status == 7 || Model.applicantViewModels.status == 8)
                                             {
                                                 <label class="text-secondary small">
@@ -223,7 +251,7 @@
                                                 </label>
                                                 <span class="fw-bold">
                                                     @* @Html.EditorFor(model => model.applicantViewModels.inspectionDate) *@
-                                                    <input type="date" asp-for="applicantViewModels.inspectionDate" class="form-control" required/>
+                                                    <input type="date" asp-for="applicantViewModels.inspectionDate" class="form-control" required />
                                                 </span>
                                             }
                                             else
@@ -238,7 +266,7 @@
                                                         @Html.DisplayFor(model => model.applicantViewModels.inspectionDate)
                                                         @Html.HiddenFor(model => model.applicantViewModels.inspectionDate)
                                                     </span>
-                                                }                                                
+                                                }
                                             }
                                         </div>
                                     </div>
@@ -246,9 +274,23 @@
                             }
                             else @* for CENRO View *@
                             {
-                                @if (Model.applicantViewModels.inspectionDate != null)
-                                {
-                                    <div class="row mb-5">
+                                <div class="row mb-5">
+                                    @if (Model.applicantViewModels.initial_date_of_inspection != null)
+                                    {
+                                        <div class="col-md-5">
+                                            <div class="form-group d-flex flex-column gap-1">
+                                                <label class="text-secondary small">
+                                                    Initial Date of Physical Inspection
+                                                </label>
+                                                <span class="fw-bold">
+                                                    @Html.DisplayFor(model => model.applicantViewModels.initial_date_of_inspection)
+                                                    @Html.HiddenFor(model => model.applicantViewModels.initial_date_of_inspection)
+                                                </span>
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (Model.applicantViewModels.inspectionDate != null)
+                                    {
                                         <div class="col-md-5">
                                             <div class="form-group d-flex flex-column gap-1">
                                                 <label class="text-secondary small">
@@ -260,8 +302,8 @@
                                                 </span>
                                             </div>
                                         </div>
-                                    </div>
-                                }
+                                    }
+                                </div>
                             }
                             @* <div class="row mb-5">
                                 <div class="col-md-5">

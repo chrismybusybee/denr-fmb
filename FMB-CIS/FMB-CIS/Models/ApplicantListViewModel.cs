@@ -46,7 +46,8 @@ namespace FMB_CIS.Models
         public string specification { get; set; }
         
         public string purpose { get; set; }
-        public DateTime? inspectionDate { get; set; }
+        public DateTime? initial_date_of_inspection { get; set; } //Initial Date of Inspection
+        public DateTime? inspectionDate { get; set; } //Actual Date of Inspecton
         public DateTime? expectedTimeArrived { get; set; }
         public DateTime? expectedTimeRelease { get; set; }
         public FileUpload? filesUpload { get; set; }
