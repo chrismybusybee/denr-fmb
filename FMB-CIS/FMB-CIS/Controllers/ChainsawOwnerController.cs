@@ -14,9 +14,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Runtime.ConstrainedExecution;
 using Microsoft.AspNetCore.Identity.UI.Services;
-
-
-
+using Mapster;
 
 namespace FMB_CIS.Controllers
 {
@@ -55,7 +53,7 @@ namespace FMB_CIS.Controllers
             {
                 return RedirectToAction("Index", "Dashboard");
             }
-            if (usrRoleID == 3 || usrRoleID == 5 || usrRoleID == 6 || usrRoleID == 7) 
+            if (usrRoleID == 3 || usrRoleID == 5 || usrRoleID == 6 || usrRoleID == 7)
             {
                 return View();
             }
@@ -63,7 +61,7 @@ namespace FMB_CIS.Controllers
             {
 
                 return RedirectToAction("ChainsawOwnerApplicantsList", "ChainsawOwner");
-                
+
             }
             else
             {
@@ -204,7 +202,7 @@ namespace FMB_CIS.Controllers
                         break;
                 }
                 //Email
-                if(emailTemplateID !=0)
+                if (emailTemplateID != 0)
                 {
                     var emailTemplate = emailTemplates.Where(e => e.id == emailTemplateID).FirstOrDefault();
                     var subject = emailTemplate.email_subject;
@@ -303,6 +301,45 @@ namespace FMB_CIS.Controllers
             int permitTypeID = Convert.ToInt32(_context.tbl_application.Where(a => a.id == applicID).Select(a => a.tbl_permit_type_id).FirstOrDefault());
             //Document Tagging and Checklist
 
+            Workflow workflowModel = new Workflow();
+            //Get the list of users
+            string permitTypeQueryParameter = "";
+
+            switch (permitTypeID)
+            {
+                case 5:
+                    permitTypeQueryParameter = "AUTHORITY_TO_LEASE_CUSTOM";
+                    break;
+                case 6:
+                    permitTypeQueryParameter = "AUTHORITY_TO_RENT_CUSTOM";
+                    break;
+                case 7:
+                    permitTypeQueryParameter = "AUTHORITY_TO_LEND_CUSTOM";
+                    break;
+                case 14:
+                    permitTypeQueryParameter = "PERMIT_TO_RESELL_CUSTOM";
+                    break;
+                case 13:
+                    permitTypeQueryParameter = "CERTIFICATE_OF_REGISTRATION_CUSTOM";
+                    break;
+            }
+            var workflow = _context.tbl_permit_workflow.FirstOrDefault(e => e.workflow_code == permitTypeQueryParameter);
+            workflowModel = workflow.Adapt<Workflow>();
+
+            //Get the list of steps
+            var stepEntity = _context.tbl_permit_workflow_step.Where(o => o.workflow_code == workflowModel.workflow_code).ToList();
+            workflowModel.steps = stepEntity.Adapt<List<WorkflowStep>>();
+
+            //Get the list of nextsteps
+            foreach (WorkflowStep workflowStep in workflowModel.steps)
+            {
+                var nextstepEntity = _context.tbl_permit_workflow_next_step.Where(o => o.workflow_code == workflowModel.workflow_code && o.workflow_step_code == workflowStep.workflow_step_code).ToList();
+                //o.workflow_code == model.workflow_code &&
+                workflowStep.nextSteps = nextstepEntity.Adapt<List<WorkflowNextStep>>();
+            }
+
+            mymodel.workflow = workflowModel;
+
             //Get uploaded files and requirements
             var fileWithCommentsforDocTagging = (from dc in _context.tbl_document_checklist
                                                  join f in _context.tbl_files on dc.id equals f.checklist_id
@@ -376,8 +413,8 @@ namespace FMB_CIS.Controllers
 
                 //HISTORY
                 var applicationtypelist = _context.tbl_application_type;
-                var permitTypeOfThisApplication  = _context.tbl_application.Where(a => a.id == applid).Select(a => a.tbl_permit_type_id).FirstOrDefault();
-                if(permitTypeOfThisApplication == 13) //For Certificate of Registration
+                var permitTypeOfThisApplication = _context.tbl_application.Where(a => a.id == applid).Select(a => a.tbl_permit_type_id).FirstOrDefault();
+                if (permitTypeOfThisApplication == 13) //For Certificate of Registration
                 {
                     var applicationMod = (from a in applicationlist
                                           join usr in _context.tbl_user on a.tbl_user_id equals usr.id
@@ -396,7 +433,7 @@ namespace FMB_CIS.Controllers
                                               id = a.id,
                                               tbl_user_id = usid,
                                               full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
-                                              first_name = usr.first_name, 
+                                              first_name = usr.first_name,
                                               middle_name = usr.middle_name,
                                               last_name = usr.last_name,
                                               suffix = usr.suffix,
@@ -542,7 +579,7 @@ namespace FMB_CIS.Controllers
                     announcementID = 7; // Announcement ID 7 - Transfer of Ownership Requirements
                 }
 
-                if (announcementID !=0)
+                if (announcementID != 0)
                 {
                     //Get list of required documents from tbl_announcement
                     var requirements = _context.tbl_announcement.Where(a => a.id == announcementID).FirstOrDefault();
@@ -725,7 +762,7 @@ namespace FMB_CIS.Controllers
                     if (emailTemplateID != 0) //If emailTemplateID is 0, no email should be sent.
                     {
                         var emailTemplate = emailTemplates.Where(e => e.id == emailTemplateID).FirstOrDefault();
-                        
+
                         var subject = emailTemplate.email_subject;
                         var BODY = emailTemplate.email_content.Replace("{FirstName}", viewMod.applicantViewModels.first_name);
                         var body = BODY.Replace(Environment.NewLine, "<br/>");
@@ -842,57 +879,133 @@ namespace FMB_CIS.Controllers
                         EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);
                     }
                 }
-                //else
-                //{
-                //    var appli = new tbl_application() { id = applid, date_modified = DateTime.Now, modified_by = loggedUserID };
-                //    var usrdet = new tbl_user() { id = usid, comment = viewMod.applicantViewModels.comment };
-                //    if (viewMod.filesUpload != null)
-                //    {
-                //        foreach (var file in viewMod.filesUpload.Files)
-                //        {
-                //            var filesDB = new tbl_files();
-                //            FileInfo fileInfo = new FileInfo(file.FileName);
-                //            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserDocs");
+                else
+                {
+                    stats = (int)(WorkFlowStepEnum)Enum.Parse(typeof(WorkFlowStepEnum), viewMod.next_step_code);
+                    //if (viewMod.applicantViewModels.status <= 6) // Approval Process before payment
+                    //{
+                    //    if (Role == "DENR CENRO" || Role == "DENR Implementing PENRO" || Role == "DENR Regional Executive Director (RED)")
+                    //    {
+                    //        stats = 6; //For Payment which means it is already approved by CENRO
+                    //        emailTemplateID = 38;
+                    //        dateDueOfficer = null; //Next step is not assigned to the officer
+                    //        // email template id = 38 - Proceed to Payment
+                    //    }
+                    //    else //Inspector
+                    //    {
+                    //        stats = 3; // Approved (Inspector) - For Cenro Approval                                                       
+                    //    }
+                    //}
+                    //else //Final Approval of Application including Payments
+                    //{
+                    //    if (Role == "DENR CENRO" || Role == "DENR Implementing PENRO" || Role == "DENR Regional Executive Director (RED)")
+                    //    {
+                    //        stats = 11; //Payment and Application Approved (Inspector and CENRO)
+                    //        registrationDateToBeChanged = true;
+                    //        dateRegistration = DateTime.Now; //Permit will be considered registered once it has been approved
+                    //        expirationDateToBeChanged = true;
+                    //        dateExpiration = DateTime.Now.AddYears(3); //Permit to Expire after 3 years
+                    //        dateDueOfficer = null; //Since task is done, no more due date for officer
+                    //        if (viewMod.applicantViewModels.permit_type == "Certificate of Registration")
+                    //        {
+                    //            emailTemplateID = 7;
+                    //            // email template id = 7 - Certificate of Ownership (Approval) (NOTICE OF APPROVAL OF APPLICATION)
+                    //        }
+                    //        else if (viewMod.applicantViewModels.permit_type == "Authority to Lease" || viewMod.applicantViewModels.permit_type == "Authority to Rent" || viewMod.applicantViewModels.permit_type == "Authority to Lend")
+                    //        {
+                    //            emailTemplateID = 18;
+                    //            // email template id = 18 - Permit to Lease/ Rent/ Lend (Notice of Acceptance)
+                    //        }
+                    //        else if (viewMod.applicantViewModels.permit_type == "Permit to Re-sell/Transfer Ownership")
+                    //        {
+                    //            emailTemplateID = 35;
+                    //            // email template id = 35 - Permit to Transfer Ownership (Notice of Acceptance)
+                    //        }
+                    //    }
+                    //    else //Inspector
+                    //    {
+                    //        stats = 9; // Payment Verification (CENRO) - Approved by Inspector and to be verified by CENRO
+                    //    }
+                    //}
+                    //var applicationToUpdate = _context.tbl_application.Find(appID);
+                    //Get email and subject from templates in DB
 
-                //            //create folder if not exist
-                //            if (!Directory.Exists(path))
-                //                Directory.CreateDirectory(path);
+                    var appli = new tbl_application() { id = applid, status = stats, date_modified = DateTime.Now, modified_by = loggedUserID, initial_date_of_inspection = dateInspectionInitial, date_of_inspection = dateInspection, date_of_registration = dateRegistration, date_of_expiration = dateExpiration, date_due_for_officers = dateDueOfficer };
+                    var usrdet = new tbl_user() { id = usid, comment = viewMod.applicantViewModels.comment };
+                    using (_context)
+                    {
+                        _context.tbl_application.Attach(appli);
+                        _context.Entry(appli).Property(x => x.status).IsModified = true;
+                        _context.Entry(appli).Property(x => x.modified_by).IsModified = true;
+                        _context.Entry(appli).Property(x => x.date_modified).IsModified = true;
+                        _context.Entry(appli).Property(x => x.initial_date_of_inspection).IsModified = initialInspectDateToBeChanged;
+                        _context.Entry(appli).Property(x => x.date_of_inspection).IsModified = inspectDateToBeChanged;
+                        _context.Entry(appli).Property(x => x.date_of_registration).IsModified = registrationDateToBeChanged;
+                        _context.Entry(appli).Property(x => x.date_of_expiration).IsModified = expirationDateToBeChanged;
+                        _context.Entry(appli).Property(x => x.date_due_for_officers).IsModified = true;
+                        _context.Entry(usrdet).Property(x => x.comment).IsModified = true;
+                        _context.SaveChanges();
+                    }
+
+                    //if (emailTemplateID != 0) //If emailTemplateID is 0, no email should be sent.
+                    //{
+                    //    var emailTemplate = emailTemplates.Where(e => e.id == emailTemplateID).FirstOrDefault();
+
+                    //    var subject = emailTemplate.email_subject;
+                    //    var BODY = emailTemplate.email_content.Replace("{FirstName}", viewMod.applicantViewModels.first_name);
+                    //    var body = BODY.Replace(Environment.NewLine, "<br/>");
+
+                    //    EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);
+                    //}
+                    //    var appli = new tbl_application() { id = applid, date_modified = DateTime.Now, modified_by = loggedUserID };
+                    //    var usrdet = new tbl_user() { id = usid, comment = viewMod.applicantViewModels.comment };
+                    //    if (viewMod.filesUpload != null)
+                    //    {
+                    //        foreach (var file in viewMod.filesUpload.Files)
+                    //        {
+                    //            var filesDB = new tbl_files();
+                    //            FileInfo fileInfo = new FileInfo(file.FileName);
+                    //            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserDocs");
+
+                    //            //create folder if not exist
+                    //            if (!Directory.Exists(path))
+                    //                Directory.CreateDirectory(path);
 
 
-                //            string fileNameWithPath = Path.Combine(path, file.FileName);
+                    //            string fileNameWithPath = Path.Combine(path, file.FileName);
 
-                //            using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
-                //            {
-                //                file.CopyTo(stream);
-                //            }
-                //            filesDB.tbl_application_id = id;
-                //            filesDB.created_by = usid;
-                //            filesDB.modified_by = usid;
-                //            filesDB.date_created = DateTime.Now;
-                //            filesDB.date_modified = DateTime.Now;
-                //            filesDB.filename = file.FileName;
-                //            filesDB.path = path;
-                //            filesDB.tbl_file_type_id = fileInfo.Extension;
-                //            filesDB.tbl_file_sources_id = fileInfo.Extension;
-                //            filesDB.file_size = Convert.ToInt32(file.Length);
-                //            _context.tbl_files.Add(filesDB);
-                //            _context.SaveChanges();
-                //        }
-                //    }
-                //    using (_context)
-                //    {
-                //        _context.tbl_application.Attach(appli);
-                //        //_context.Entry(appli).Property(x => x.status).IsModified = true;
-                //        _context.Entry(appli).Property(x => x.modified_by).IsModified = true;
-                //        _context.Entry(appli).Property(x => x.date_modified).IsModified = true;
-                //        _context.Entry(usrdet).Property(x => x.comment).IsModified = true;
-                //        _context.SaveChanges();
-                //    }
-                //    //Email
-                //    var subject = "Permit Application Status";
-                //    var body = "Greetings! \n An inspector viewed your application.\nThe officer left the following comment:\n" + viewMod.applicantViewModels.comment;
-                //    EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);
-                //}
+                    //            using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                    //            {
+                    //                file.CopyTo(stream);
+                    //            }
+                    //            filesDB.tbl_application_id = id;
+                    //            filesDB.created_by = usid;
+                    //            filesDB.modified_by = usid;
+                    //            filesDB.date_created = DateTime.Now;
+                    //            filesDB.date_modified = DateTime.Now;
+                    //            filesDB.filename = file.FileName;
+                    //            filesDB.path = path;
+                    //            filesDB.tbl_file_type_id = fileInfo.Extension;
+                    //            filesDB.tbl_file_sources_id = fileInfo.Extension;
+                    //            filesDB.file_size = Convert.ToInt32(file.Length);
+                    //            _context.tbl_files.Add(filesDB);
+                    //            _context.SaveChanges();
+                    //        }
+                    //    }
+                    //    using (_context)
+                    //    {
+                    //        _context.tbl_application.Attach(appli);
+                    //        //_context.Entry(appli).Property(x => x.status).IsModified = true;
+                    //        _context.Entry(appli).Property(x => x.modified_by).IsModified = true;
+                    //        _context.Entry(appli).Property(x => x.date_modified).IsModified = true;
+                    //        _context.Entry(usrdet).Property(x => x.comment).IsModified = true;
+                    //        _context.SaveChanges();
+                    //    }
+                    //    //Email
+                    //    var subject = "Permit Application Status";
+                    //    var body = "Greetings! \n An inspector viewed your application.\nThe officer left the following comment:\n" + viewMod.applicantViewModels.comment;
+                    //    EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);
+                }
                 return RedirectToAction("ChainsawOwnerApplicantsList", "ChainsawOwner");
             }
 
@@ -922,20 +1035,20 @@ namespace FMB_CIS.Controllers
                                      join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                      join pS in _context.tbl_permit_status on a.status equals pS.id
                                      //where a.tbl_user_id == userID
-                                     select new ApplicantListViewModel 
-                                     { 
-                                         id = a.id, 
+                                     select new ApplicantListViewModel
+                                     {
+                                         id = a.id,
                                          applicationDate = a.date_created,
                                          qty = pT.name != "Certificate of Registration" ? a.qty : 1,
                                          full_name = usr.user_classification == "Individual" ? usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix : usr.company_name,
-                                         email = usr.email, 
-                                         contact = usr.contact_no, 
-                                         address = usr.street_address, 
-                                         application_type = appt.name, 
-                                         permit_type = pT.name, 
-                                         permit_status = pS.status, 
-                                         tbl_user_id = (int)usr.id, 
-                                         date_due_for_officers = a.date_due_for_officers 
+                                         email = usr.email,
+                                         contact = usr.contact_no,
+                                         address = usr.street_address,
+                                         application_type = appt.name,
+                                         permit_type = pT.name,
+                                         permit_status = pS.status,
+                                         tbl_user_id = (int)usr.id,
+                                         date_due_for_officers = a.date_due_for_officers
                                      };
 
                 mymodel.applicantListViewModels = applicationMod;

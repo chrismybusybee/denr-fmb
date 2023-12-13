@@ -16,6 +16,34 @@
                     </div>
                 </div>
                 <form data-bind="css: {'is-initial-hidden-show': !isLoading()}" class="is-initial-hidden" id="OfficeTypeCreateForm" role="form" method="post">
+                   <div class="row g-3" data-bind="if: !isDuplicate()">
+                       <div class="form-floating mb-3">
+                            <button type="button" class="btn btn-primary" data-bind="click: makeADuplicate">Make a Duplicate</button>
+                       </div>
+                   </div>
+                    <div class="row g-3" data-bind="if: isDuplicate()">
+                        <div class="col">
+                            <div class="form-floating mb-3">
+                                <input data-bind="value: replaceFrom" type="text" class="form-control rounded-3" id="replaceFrom" placeholder="" />
+                                <label for="workflow_code">Replace from</label>
+                                <p class="mt-0 mb-0">
+                                    <small class="text-body-secondary">Will replace all occurence of text accross the workflow, steps, substeps</small>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating mb-3">
+                                <input data-bind="value: replaceTo" type="text" class="form-control rounded-3" id="replaceTo" placeholder="" />
+                                <label for="name">Replace to</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating mb-3">
+                                <button type="button" class="btn btn-primary" data-bind="click: replaceText">Replace text</button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
                     <div class="row g-3">
                         <div class="form-floating mb-3">
                             <select data-bind="value: permit_type_code" class="form-select">
@@ -265,11 +293,11 @@
                     </div>*@
                     <hr />
                     <p>
-                        <button data-bind="click: saveWorkflow" class="mb-2 mt-3 btn btn-lg rounded-3 btn-primary" type="button">Update</button>
+                        <button data-bind="click: saveWorkflow" class="mb-2 mt-3 btn btn-lg rounded-3 btn-primary" type="button">Save</button>
 
                     </p>
                     <p>
-                        <small class="text-body-secondary mt-3">By clicking Create, an office type will be registered on the system.</small>
+                        <small class="text-body-secondary mt-3">By clicking Save, workflow will be saved on the system.</small>
                     </p>
                 </form>
             </div>
@@ -297,7 +325,15 @@
         self.regions = ko.observableArray(regions);
         self.cities = ko.observableArray(cities);
 
+        self.replaceFrom = ko.observable("");
+        self.replaceTo = ko.observable("");
+
         self.removeNextStep = removeNextStep;
+
+        self.makeADuplicate = makeADuplicate;
+
+        self.isDuplicate = ko.observable(false);
+        self.replaceText = replaceText;
 
         self.addStep = function () {
             var newStep = {
@@ -322,6 +358,36 @@
             configureStep(newStep);
         };
 
+        function replaceText() {
+            var fromText = self.replaceFrom();
+            var toText = self.replaceTo();
+            self.workflow_code(self.workflow_code().replaceAll(fromText, toText));
+ 
+ 
+            self.name(self.name().replaceAll(fromText, toText));
+            self.description(self.description().replaceAll(fromText, toText));
+            
+            //workflowDataPretext.replaceAll(/Sell/g, "Import")
+            self.steps().forEach(function (step) {
+                step.nextSteps().forEach(function (nextStep) {
+                    nextStep.stepId(step.stepId().replaceAll(fromText, toText));
+                    nextStep.button_text(step.button_text().replaceAll(fromText, toText));
+                });
+
+                step.name(step.name().replaceAll(fromText, toText));
+                step.statusCode(step.statusCode().replaceAll(fromText, toText));
+                step.description(step.description().replaceAll(fromText, toText));
+                step.permit_page_code(step.permit_page_code().replaceAll(fromText, toText));
+                step.onPreAction(step.onPreAction().replaceAll(fromText, toText));
+                step.onSuccessAction(step.onSuccessAction().replaceAll(fromText, toText));
+                step.onExitAction(step.onExitAction().replaceAll(fromText, toText));
+            });
+        }
+
+        function makeADuplicate() {
+            self.isDuplicate(true);
+            self.id(0);
+        }
         function nextStepChanged(obj, event) {
             if (event.originalEvent) { //user changed
                 setTimeout(function () {
