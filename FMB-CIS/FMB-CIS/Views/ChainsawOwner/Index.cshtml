@@ -262,23 +262,24 @@
     }
 
     function fileSelected(that) {
-        console.log("that.id:", that.id);
-        var selectClass = document.getElementsByClassName('fileListDropDown');
-        for (let i = 0; i < selectClass.length; i++) {
-            if (selectClass[i].id != that.id) {
-                var selectedFileList = document.getElementById(selectClass[i].id);
-                for (let j = 0; j < selectedFileList.options.length; j++) {
-                    //console.log("selectedFileList.options[" + j + "]: ", selectedFileList.options[j]);
-                    if (selectedFileList.options[j].value == that.value) {
-                        //console.log("disable me");
-                        if (that.value != "N/A") {
-                            selectedFileList.options[j].disabled = true;
-                        }
+        console.log("Disabling of select options currently under development");
+        //console.log("that.id:", that.id);
+        // var selectClass = document.getElementsByClassName('fileListDropDown');
+        // for (let i = 0; i < selectClass.length; i++) {
+        //     if (selectClass[i].id != that.id) {
+        //         var selectedFileList = document.getElementById(selectClass[i].id);
+        //         for (let j = 0; j < selectedFileList.options.length; j++) {
+        //             //console.log("selectedFileList.options[" + j + "]: ", selectedFileList.options[j]);
+        //             if (selectedFileList.options[j].value == that.value) {
+        //                 //console.log("disable me");
+        //                 if (that.value != "N/A") {
+        //                     selectedFileList.options[j].disabled = true;
+        //                 }
 
-                    }
-                }
-            }
-        }
+        //             }
+        //         }
+        //     }
+        // }
     }
         //END FOR CHECKLIST OF DOCUMENTS
     //const formOwner = document.getElementById('OwnerRegForm');
