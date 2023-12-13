@@ -94,36 +94,14 @@ namespace FMB_CIS.Controllers
         }
         public IActionResult WorkflowUpdateModal(int id)
         {
-            int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
-                WorkflowUpdateViewModel model = new WorkflowUpdateViewModel();
-                //Get the list of users
-                var entity = _context.tbl_permit_workflow.FirstOrDefault(o => o.id == id);
-                model = entity.Adapt<WorkflowUpdateViewModel>();
+            // security check, data loading on GetWorkflow
+            WorkflowUpdateViewModel model = new WorkflowUpdateViewModel();
+            model.id = id;
 
-                //Get the list of steps
-                var stepEntity = _context.tbl_permit_workflow_step.Where(o => o.workflow_code == model.workflow_code).ToList();
-                model.steps = stepEntity.Adapt<List<WorkflowStep>>();
+            string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
+            ViewData["BaseUrl"] = host;
 
-                //Get the list of nextsteps
-                foreach (WorkflowStep workflowStep in model.steps)
-                {
-                    var nextstepEntity = _context.tbl_permit_workflow_next_step.Where(o => o.workflow_step_code == workflowStep.workflow_step_code).ToList();
-                    //o.workflow_code == model.workflow_code &&
-                    workflowStep.nextSteps = nextstepEntity.Adapt<List<WorkflowNextStep>>();
-                }
-
-                string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
-                ViewData["BaseUrl"] = host;
-
-                return PartialView("~/Views/WorkflowManagement/Manage/Modal/WorkflowUpdateModal.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            return PartialView("~/Views/WorkflowManagement/Manage/Modal/WorkflowUpdateModal.cshtml", model);
         }
         public IActionResult WorkflowDeleteModal(int id)
         {
