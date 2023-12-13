@@ -1,0 +1,111 @@
+﻿@using System.Security.Claims;
+@using System.Globalization;
+@model FMB_CIS.Models.ViewModel
+@{
+  
+}
+
+<div class="row d-flex justify-content-center m-0">
+    <h5 class="text-secondary">Please match your uploaded file based on the checklist of requirements.</h5>
+    <table class="table dataTable" id="tblApplicantFiles">
+        <thead>
+            <tr>
+                <th>
+                    Required Document
+                </th>
+                <th>
+                    Uploaded Document
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int i = 0;
+            }
+            @foreach (tbl_document_checklist item in Model.tbl_Document_Checklist)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.name)
+                        @* <a href="#" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DocHistory(this)">@item.filename</a> *@
+                    </td>
+                    <input type="hidden" asp-for="fileChecklistViewModel[i].tbl_document_checklist_id" value="@item.id" />
+                    <td>
+                        <select class="form-select fileListDropDown" id="fileListDropDown_@i" onchange="fileSelected(this)" asp-for="fileChecklistViewModel[i].FileName" required>
+                            <option selected disabled>--Please select your uploaded file--</option>
+                        </select>
+                    </td>
+                    @{
+                        i++;
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@* <div>
+    <table class="table dataTable">
+        <thead>
+            <tr>
+                <th>
+                    Permit Type
+                </th>
+                <th>
+                    Required Document Name
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    is_active
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.checklistManagementModels)
+            {
+                <tr>
+                    <td>
+                        @item.tbl_permit_type_name
+                    </td>
+                    <td>
+                        @item.tbl_document_checklist_name
+                        <a href="#" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DocHistory(this)">@item.filename</a>
+                    </td>
+                    <td>
+                        @item.tbl_document_checklist_description
+                    </td>
+                    <td>
+                        @item.is_active
+
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" asp-for="@item.is_active" onclick="enableDisableReq(@item.tbl_document_checklist_id, this)">
+                            <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+                        </div>
+                    </td>
+                    <td>
+                        <a href="#" data-reqDocName="@item.tbl_document_checklist_name" onclick="EditReq(@item.tbl_document_checklist_id, this)">Edit</a>
+                        <br>
+                        @if (item.is_active)
+                        {
+                            <a href="#" data-reqDocName="@item.tbl_document_checklist_name" onclick="disableReq(@item.tbl_document_checklist_id, this)">Disable</a>
+                        }
+                        else
+                        {
+                            <a href="#" data-reqDocName="@item.tbl_document_checklist_name" onclick="enableReq(@item.tbl_document_checklist_id, this)">Enable</a>
+                        }
+                        <br>
+                        <a href="#" data-reqDocName="@item.tbl_document_checklist_name" onclick="DeleteReq(@item.tbl_document_checklist_id, this)">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div> *@
+

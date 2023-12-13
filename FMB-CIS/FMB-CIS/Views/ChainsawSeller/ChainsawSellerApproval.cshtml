@@ -238,7 +238,7 @@
                                                     Initial Date of Physical Inspection
                                                 </label>
                                                 <span class="fw-bold">
-                                                    <input type="date" asp-for="applicantViewModels.initial_date_of_inspection" class="form-control" required />
+                                                    <input type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" asp-for="applicantViewModels.initial_date_of_inspection" class="form-control" required />
                                                 </span>
                                             }
                                             else
@@ -267,7 +267,7 @@
                                                 </label>
                                                 <span class="fw-bold">
                                                     @* @Html.EditorFor(model => model.applicantViewModels.inspectionDate) *@
-                                                    <input type="date" asp-for="applicantViewModels.inspectionDate" class="form-control" required />
+                                                    <input type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" asp-for="applicantViewModels.inspectionDate" class="form-control" required />
                                                 </span>
                                             }
                                             else

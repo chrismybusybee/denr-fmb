@@ -345,24 +345,55 @@
                                             </span>
                                         </div>
                                     </div>
-                                </div>
-                                @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true && Model.applicantViewModels.permit_type == "Certificate of Registration")
-                                {
-                                    <div class="row mb-5">
-                                        <div class="col-md-5">
-                                            <div class="form-group d-flex flex-column gap-1">
+                                </div>                                
+                            }
+                            @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true)
+                            {
+                                <div class="row mb-5">
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
 
-                                                @if (Model.applicantViewModels.status == 7 || Model.applicantViewModels.status == 8)
+                                            @if (Model.applicantViewModels.status == 1)
+                                            {
+                                                <label class="text-secondary small">
+                                                    Initial Date of Physical Inspection
+                                                </label>
+                                                <span class="fw-bold">
+                                                    <input type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" asp-for="applicantViewModels.initial_date_of_inspection" class="form-control" required />
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                @if (Model.applicantViewModels.initial_date_of_inspection != null)
                                                 {
                                                     <label class="text-secondary small">
-                                                        Date Inspected
+                                                        Initial Date of Physical Inspection
                                                     </label>
                                                     <span class="fw-bold">
                                                         @* @Html.EditorFor(model => model.applicantViewModels.inspectionDate) *@
-                                                        <input type="date" asp-for="applicantViewModels.inspectionDate" class="form-control" required />
+                                                        @Html.DisplayFor(model => model.applicantViewModels.initial_date_of_inspection)
+                                                        @Html.HiddenFor(model => model.applicantViewModels.initial_date_of_inspection)
                                                     </span>
                                                 }
-                                                else
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+
+                                            @if (Model.applicantViewModels.status == 7 || Model.applicantViewModels.status == 8)
+                                            {
+                                                <label class="text-secondary small">
+                                                    Date Inspected
+                                                </label>
+                                                <span class="fw-bold">
+                                                    @* @Html.EditorFor(model => model.applicantViewModels.inspectionDate) *@
+                                                    <input type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" asp-for="applicantViewModels.inspectionDate" class="form-control" required />
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                @if (Model.applicantViewModels.inspectionDate != null)
                                                 {
                                                     <label class="text-secondary small">
                                                         Date Inspected
@@ -373,10 +404,43 @@
                                                         @Html.HiddenFor(model => model.applicantViewModels.inspectionDate)
                                                     </span>
                                                 }
-                                            </div>
+                                            }
                                         </div>
                                     </div>
-                                }
+                                </div>
+                            }
+                            else @* for CENRO View *@
+                            {
+                                <div class="row mb-5">
+                                    @if (Model.applicantViewModels.initial_date_of_inspection != null)
+                                    {
+                                        <div class="col-md-5">
+                                            <div class="form-group d-flex flex-column gap-1">
+                                                <label class="text-secondary small">
+                                                    Initial Date of Physical Inspection
+                                                </label>
+                                                <span class="fw-bold">
+                                                    @Html.DisplayFor(model => model.applicantViewModels.initial_date_of_inspection)
+                                                    @Html.HiddenFor(model => model.applicantViewModels.initial_date_of_inspection)
+                                                </span>
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (Model.applicantViewModels.inspectionDate != null)
+                                    {
+                                        <div class="col-md-5">
+                                            <div class="form-group d-flex flex-column gap-1">
+                                                <label class="text-secondary small">
+                                                    Date Inspected
+                                                </label>
+                                                <span class="fw-bold">
+                                                    @Html.DisplayFor(model => model.applicantViewModels.inspectionDate)
+                                                    @Html.HiddenFor(model => model.applicantViewModels.inspectionDate)
+                                                </span>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
                             }
                         </div>
                     </div>
