@@ -475,7 +475,7 @@
         //}, self);
 
         if (workflowDataModel) {
-            self.id(");
+            self.id(workflowDataModel.id);
             self.name(workflowDataModel.name);
             self.permit_type_code(workflowDataModel.permit_type_code);
             self.workflow_code(workflowDataModel.workflow_code);
@@ -539,8 +539,8 @@
             function (workflowData) {
                 //var workflowDataPretext = JSON.stringify(workflowData);
 
-                //workflowDataPretext = workflowDataPretext.replaceAll(/Import/g, "Sell");
-                //workflowDataPretext = workflowDataPretext.replaceAll(/IMPORT/g, "SELL");
+                //workflowDataPretext = workflowDataPretext.replaceAll(/Sell/g, "Import");
+                //workflowDataPretext = workflowDataPretext.replaceAll(/SELL/g, "IMPORT");
 
                 //workflow = JSON.parse(workflowDataPretext);
                 //console.log("workflowData");
