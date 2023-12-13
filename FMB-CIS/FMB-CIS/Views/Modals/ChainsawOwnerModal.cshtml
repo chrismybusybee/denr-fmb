@@ -164,6 +164,48 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="confirmCustomModal" aria-hidden="true" style="z-index:1050 !important;">
+    <div class="modal-dialog modal-dialog-centered" style="z-index:1050 !important;">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/approve.png" />
+                    </div>
+                    <p class="fw-bold fs-5">
+                        Are you sure you want to <span id="confirmCustomMessage"></span>?
+                    </p>
+                    <div class="d-flex gap-4 w-100">
+                        <button id="backCustomBtn" class="btn btn-danger w-100">Back</button>
+                        <button id="confirmCustomBtn" class="btn btn-primary w-100">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirmSuccessCustomModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/success.png" />
+                    </div>
+                    <p class="fw-bold fs-5 text-center">
+                        Custom approved<br />
+                        <span class="fs-6">A notification was sent to the applicant</span>
+                    </p>
+                    <div class="d-flex justify-content-center w-100">
+                        <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("ChainsawOwnerApplicantsList", "ChainsawOwner")'">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="/js/jquery-3.7.1.min.js"></script>
 
 <script type="text/javascript">
@@ -255,11 +297,17 @@
     //     form.submit();
     // });
 
+    const confirmCustomButton = document.getElementById('confirmCustomBtn');
+
     // // Close the modal when the user clicks outside of it
     // window.addEventListener('click', function (event) {
     //     if (event.target === confirmationSaveModal) {
     //         hideSaveModal();
     //     }
     // });
+    confirmCustomButton.addEventListener('click', function () {
+        // Submit the form when the "Confirm" button is clicked
+        form.submit();
+    });
 
 </script>
