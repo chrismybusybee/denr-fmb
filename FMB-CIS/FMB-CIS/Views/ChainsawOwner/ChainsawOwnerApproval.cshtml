@@ -35,7 +35,7 @@
                             }
                         }
                     }
-                    @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR CENRO" || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR Implementing PENRO" || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR Regional Executive Director (RED)")
+                   @* @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR CENRO" || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR Implementing PENRO" || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value == "DENR Regional Executive Director (RED)")
                     {
                         if (Model.applicantViewModels.permit_status == "Approved (Inspector) - For Cenro Approval" || Model.applicantViewModels.permit_status == "Rejected (CENRO)")
                         {
@@ -60,7 +60,7 @@
                             <button type="button" id="approveBtn" class="btn btn-primary w-110">-----Approve Permit</button>
                             <button type="button" id="declineBtn" class="btn btn-danger w-110 btnCancel">-----Decline Payment</button>
                         }
-                    }
+                    }*@
                     <input asp-for="decision" id="decisionID" type="hidden" />
                     <input asp-for="next_step_code" id="next_step_code" type="hidden" />
                 </div>
