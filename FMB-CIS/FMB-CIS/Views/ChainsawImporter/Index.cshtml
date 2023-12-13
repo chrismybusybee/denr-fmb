@@ -449,13 +449,15 @@
     }
 
     function fileSelected(that) {
-        //console.log("that.dataset.:", that.dataset);
+        console.log("that.dataset.:", that.dataset);
         //that.dataset.prevval that.dataset.curval
+        var curval = that.dataset.curval;
+        document.getElementById(that.id).setAttribute("data-prevVal", curval);
+        document.getElementById(that.id).setAttribute("data-curVal", that.value);
 
-        //document.getElementById(that.id).setAttribute("data-curVal", that.value);
-        //console.log("that.id:", that.id);
+        console.log("that.id:", that.id);
         console.log("Disabling of select options currently under development");
-        //var selectClass = document.getElementsByClassName('fileListDropDown');
+        var selectClass = document.getElementsByClassName('fileListDropDown');
         for (let i = 0; i < selectClass.length; i++) {
             if (selectClass[i].id != that.id) {
                 console.log("Disabling of select options currently under development");
@@ -466,29 +468,32 @@
                 // console.log("selectClass.length: ", selectClass.length);
 
                 //CODE TO DISABLE OPTIONS
-                // var selectedFileList = document.getElementById(selectClass[i].id);
-                // for (let j = 0; j < selectedFileList.options.length; j++) {
-                //     //console.log("selectedFileList.options[" + j + "]: ", selectedFileList.options[j]);
-                //     if (selectedFileList.options[j].value == that.value) {
-                //         //console.log("disable me");
-                //         if (that.value != "N/A") {
-                //             selectedFileList.options[j].disabled = true;
-
-                //             //document.getElementById(that.id).setAttribute("data-prevVal", that.value);
-                //         }
+                var selectedFileList = document.getElementById(selectClass[i].id);
+                for (let j = 0; j < selectedFileList.options.length; j++) {
+                    //console.log("selectedFileList.options[" + j + "]: ", selectedFileList.options[j]);
+                    if (selectedFileList.options[j].value == that.value) {
+                        //console.log("disable me");
+                        if (that.value != "N/A") {
+                            //Disable options with the same selected value
+                            selectedFileList.options[j].disabled = true;
+                        }
                         
-                //     }
-                //     // if (selectedFileList.options[j].value == that.dataset.prevval) {        
-                //     //     if (that.value == "N/A") {
-                //     //         selectedFileList.options[j].disabled = false;
-                //     //     }
+                    }
+                    if (selectedFileList.options[j].value == that.dataset.prevval) {
+                        //Enable options based on prev value                        
+                        selectedFileList.options[j].disabled = false;                       
+                    }
+                    // if (selectedFileList.options[j].value == that.dataset.prevval) {        
+                    //     if (that.value == "N/A") {
+                    //         selectedFileList.options[j].disabled = false;
+                    //     }
 
-                //     // }
+                    // }
 
-                //     // else {
-                //     //     selectedFileList.options[j].disabled = false;
-                //     // }
-                // }
+                    // else {
+                    //     selectedFileList.options[j].disabled = false;
+                    // }
+                }
             }
         }
     }

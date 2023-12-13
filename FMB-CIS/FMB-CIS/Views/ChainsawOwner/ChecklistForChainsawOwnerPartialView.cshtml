@@ -32,7 +32,7 @@
                     </td>
                     <input type="hidden" asp-for="fileChecklistViewModel[i].tbl_document_checklist_id" value="@item.id" />
                     <td>
-                        <select class="form-select fileListDropDown" id="fileListDropDown_@i" onchange="fileSelected(this)" asp-for="fileChecklistViewModel[i].FileName" required>
+                        <select class="form-select fileListDropDown" data-prevVal="" data-curVal="" id="fileListDropDown_@i" onchange="fileSelected(this)" asp-for="fileChecklistViewModel[i].FileName" required>
                             <option selected disabled>--Please select your uploaded file--</option>
                         </select>
                     </td>
