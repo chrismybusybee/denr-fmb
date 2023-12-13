@@ -10,7 +10,12 @@
             @*<span data-bind="text: activeNextStepIds()"></span>*@
 
             <div class="modal-body p-5 pt-0">
-                <form class="" id="OfficeTypeCreateForm" role="form" method="post">
+                <div class="d-flex justify-content-center" data-bind="if:isLoading()">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <form data-bind="css: {'is-initial-hidden-show': !isLoading()}" class="is-initial-hidden" id="OfficeTypeCreateForm" role="form" method="post">
                     <div class="row g-3">
                         <div class="form-floating mb-3">
                             <select data-bind="value: permit_type_code" class="form-select">
@@ -277,6 +282,7 @@
     // Here's my data model
     var WorkflowModel = function (workflowDataModel, userTypes, permitTypes, regions, cities) {
         var self = this;
+        self.isLoading = ko.observable(true);
         self.permit_type_code = ko.observable(0);
         self.id = ko.observable(0);//DOCUMENT_APPROVAL
         //self.workflow_id = ko.observable(crypto.randomUUID());
@@ -317,7 +323,6 @@
         };
 
         function nextStepChanged(obj, event) {
-            console.log("test");
             if (event.originalEvent) { //user changed
                 setTimeout(function () {
                     setIsNextStep();
@@ -381,10 +386,8 @@
                     });
                 }
             });
-            console.log(nextStepIds);
             // apply is next step on the step
             self.steps().forEach(function (step) {
-                console.log(step.id());
                 if (nextStepIds.indexOf(step.statusCode()) != -1) {
                     step.isNextStep(true);
                 }
@@ -481,9 +484,6 @@
             self.workflow_code(workflowDataModel.workflow_code);
             self.description(workflowDataModel.description);
 
-            console.log("workflowDataModel");
-            console.log(workflowDataModel);
-
             workflowDataModel.steps.forEach(step => {
                 var newStep = {
                     id: ko.observable(step.id),
@@ -507,7 +507,6 @@
 
                 step.nextSteps.forEach(nextStep => {
                     var nextStepId = crypto.randomUUID();
-                    console.log(nextStep);
                     newStep.nextSteps.push({
                         id: ko.observable(nextStep.id),
                         userTypeId: ko.observable(nextStep.user_type_id),
@@ -519,6 +518,9 @@
                 });
                 self.steps.push(newStep);
             });
+
+
+            self.isLoading(false);
         }
     };
 
@@ -546,8 +548,6 @@
                 //console.log("workflowData");
                 //console.log(workflowData);
                 workflow = workflowData;
-                console.log("workflow");
-                console.log(workflow);
                 return $.get("/AccessRightsManagement/UserTypes");
             }
         ).then(
@@ -768,5 +768,11 @@
         border-radius: 100%;
         font-size: 18px;
         padding-top: 11px;
+    }
+    .is-initial-hidden {
+        display: none;
+    }
+    .is-initial-hidden.is-initial-hidden-show{
+        display: block;
     }
 </style>
