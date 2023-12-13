@@ -217,8 +217,3 @@ button {
     max-width: 1600px;
 }
 /* BOOTSTRAP OVERRIDE END */
-
-
-.spinner-border-margin {
-    margin-top: 50px;
-}
