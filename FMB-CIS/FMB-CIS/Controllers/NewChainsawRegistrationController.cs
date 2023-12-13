@@ -161,6 +161,13 @@ namespace FMB_CIS.Controllers
                         filesDB.date_created = DateTime.Now;
                         filesDB.date_modified = DateTime.Now;
                         filesDB.filename = file.FileName;
+                        foreach (var item in model.fileChecklistViewModel)
+                        {
+                            if (item.FileName == file.FileName)
+                            {
+                                filesDB.checklist_id = item.tbl_document_checklist_id;
+                            }
+                        }
                         filesDB.path = path;
                         filesDB.tbl_file_type_id = fileInfo.Extension;
                         filesDB.tbl_file_sources_id = fileInfo.Extension;
@@ -183,9 +190,16 @@ namespace FMB_CIS.Controllers
                 //Get list of required documents from tbl_announcement
                 var requirements = _context.tbl_announcement.Where(a => a.id == 5).FirstOrDefault(); // id = 5 for Certificate of Registration Requirements
                                                                                                      //model.soloAnnouncement = requirements;
+                string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
+                ViewData["BaseUrl"] = host;
+                //Document Checklist
+                var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == 13 && c.is_active == true).ToList();
+                model.tbl_Document_Checklist = myChecklist;
+                //End for Document Checklist
+
                 ViewBag.RequiredDocsList = requirements.announcement_content;
                 //End for required documents
-                return View();
+                return View(model);
             }
             return View(model);
             //}

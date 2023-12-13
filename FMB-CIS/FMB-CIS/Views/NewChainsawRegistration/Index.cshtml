@@ -133,10 +133,50 @@
                         </div>
                         <div class="gap-4 mb-5">
                             <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
-                            <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload...">
+                            <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload..." onchange="fileChange(this)">
                         </div>                        
                     </div>
                 </div>
+            </div>
+            <hr />
+            <div class="row d-flex justify-content-center m-0">
+                <h5 class="text-secondary">Please match your uploaded file based on the checklist of requirements.</h5>
+                <table class="table dataTable" id="tblApplicantFiles">
+                    <thead>
+                        <tr>
+                            <th>
+                                Required Document
+                            </th>
+                            <th>
+                                Uploaded Document
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 0;
+                        }
+                        @foreach (tbl_document_checklist item in Model.tbl_Document_Checklist)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.name)
+                                    @* <a href="#" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DocHistory(this)">@item.filename</a> *@
+                                </td>
+                                <input type="hidden" asp-for="fileChecklistViewModel[i].tbl_document_checklist_id" value="@item.id" />
+                                <td>
+                                    <select class="form-select fileListDropDown" id="fileListDropDown_@i" onchange="fileSelected(this)" asp-for="fileChecklistViewModel[i].FileName" required>
+                                        <option selected disabled>--Please select your uploaded file--</option>
+                                    </select>
+                                </td>
+                                @{
+                                    i++;
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
             <div class="text-center mb-4">
                 <small class="text-secondary fw-bold fst-italic">
@@ -258,7 +298,7 @@
     }
 
     var chainsawSerNumExist = false;
-    //Check Existing Email
+    //Check Existing Chainsaw on Database
     function checkExistingSerialNum() {
         var serialNumValue = document.getElementById("chSerNumInput").value;
         var url = "@baseurl";
@@ -276,6 +316,40 @@
             }
         });
     }
+
+    //FOR CHECKLIST OF DOCUMENTS
+    function fileChange(that) {
+        var formFiles = document.forms['ChainsawRegForm']['filesUpload.Files'];
+        PopulateFileDropDown(".fileListDropDown", formFiles.files);
+    }
+
+    function PopulateFileDropDown(fileDropDownClass, list) {
+        $(fileDropDownClass).empty();
+        $(fileDropDownClass).append("<option value=\"\" selected disabled>--Please select your uploaded file--</option>")
+        $(fileDropDownClass).append("<option value=\"N/A\" >N/A</option>")
+        $.each(list, function (index, row) {
+            $(fileDropDownClass).append("<option value=\"" + row.name + "\"id=\"uploadedFile_" + index + "\">" + row.name + "</option>")
+        });
+    }
+
+    function fileSelected(that) {
+        console.log("that.id:", that.id);
+        var selectClass = document.getElementsByClassName('fileListDropDown');
+        for (let i = 0; i < selectClass.length; i++) {
+            if (selectClass[i].id != that.id) {
+                var selectedFileList = document.getElementById(selectClass[i].id);
+                for (let j = 0; j < selectedFileList.options.length; j++) {
+                    if (selectedFileList.options[j].value == that.value) {
+                        if (that.value != "N/A") {
+                            selectedFileList.options[j].disabled = true;
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+    //END FOR CHECKLIST OF DOCUMENTS
 
 </script>
 

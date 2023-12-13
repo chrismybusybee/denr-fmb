@@ -81,7 +81,7 @@
                             Permit Type
                         </label>
                             <select class="form-select" asp-for="tbl_Application.tbl_permit_type_id" aria-label="Permit Type" onchange="permitSelection(this)" required>
-                                <option selected disabled>- Select Permit Type -</option>
+                                <option value="" selected disabled>- Select Permit Type -</option>
                                 <option value="5">Authority to Lease</option>
                                 <option value="6">Authority to Rent</option>
                                 <option value="7">Authority to Lend</option>
@@ -120,7 +120,6 @@
             </div>
         </div>
 
-
             <div class="row m-0 mb-4">
                 <div class="col-md-12">
                     <div class="p-4 shadow h-100">
@@ -132,11 +131,15 @@
                         </div>
                         <div class="gap-4 mb-5">
                             <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
-                            <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload...">
+                            <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload..." onchange="fileChange(this)">
                         </div>                                               
                     </div>
                 </div>
             </div>
+
+            <div id="requiredDocForOwnerPermitsPartialContainer">
+            </div>
+
             <div class="text-center mb-4">
                 <small class="text-secondary fw-bold fst-italic">
                     By submitting this form, you agree to our <a href="@Url.Action("TermsPolicy", "Home")" target="_blank" class="text-decoration-none">Privacy Policy and Terms & Conditions.</a>
@@ -157,6 +160,15 @@
 <script type="text/javascript">
     //Things to change depending on Permit Selection
     function permitSelection(that) {
+        console.log("that.value: ", that.value);
+        var permitTypeID = that.value;
+        console.log("permitTypeID: ", permitTypeID);
+        $('#requiredDocForOwnerPermitsPartialContainer').load('/ChainsawOwner/ChecklistForChainsawOwnerPartialView?permitTypeID=' + permitTypeID);
+
+        //remove files when changing permit type
+        const removeFileButton = document.querySelector('.fileinput-remove-button');
+        removeFileButton.click();
+
         if (that.value == 5 || that.value == 6 || that.value == 7) {
             //Authority To Lease/Rent/Lend is Selected
             document.getElementById("PermitToLeaseRentLendRequirements").style.display = "block";
@@ -225,7 +237,50 @@
     });
 
 
+    //FOR CHECKLIST OF DOCUMENTS
+    function fileChange(that) {
+        var formFiles = document.forms['OwnerRegForm']['filesUpload.Files'];
+        //console.log("that: ", that);
+        //console.log("that.value: ", that.value);
+        // console.log("formFiles.files: ", formFiles.files);
+        // console.log("formFiles.files.length: ", formFiles.files.length);
+        // console.log("formFiles.files[0].name: ", formFiles.files[0].name);
+        //console.log("filesUpload.Files", $('#filesUpload.Files').val());
+        // for (let i = 0; i < formFiles.files.length; i++) {
+        //     console.log("formFiles.files["+i+"].name: ", formFiles.files[i].name);
+        // }
+        PopulateFileDropDown(".fileListDropDown", formFiles.files);
+    }
 
+    function PopulateFileDropDown(fileDropDownClass, list) {
+        $(fileDropDownClass).empty();
+        $(fileDropDownClass).append("<option value=\"\" selected disabled>--Please select your uploaded file--</option>")
+        $(fileDropDownClass).append("<option value=\"N/A\" >N/A</option>")
+        $.each(list, function (index, row) {
+            $(fileDropDownClass).append("<option value=\"" + row.name + "\"id=\"uploadedFile_" + index + "\">" + row.name + "</option>")
+        });
+    }
+
+    function fileSelected(that) {
+        console.log("that.id:", that.id);
+        var selectClass = document.getElementsByClassName('fileListDropDown');
+        for (let i = 0; i < selectClass.length; i++) {
+            if (selectClass[i].id != that.id) {
+                var selectedFileList = document.getElementById(selectClass[i].id);
+                for (let j = 0; j < selectedFileList.options.length; j++) {
+                    //console.log("selectedFileList.options[" + j + "]: ", selectedFileList.options[j]);
+                    if (selectedFileList.options[j].value == that.value) {
+                        //console.log("disable me");
+                        if (that.value != "N/A") {
+                            selectedFileList.options[j].disabled = true;
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+        //END FOR CHECKLIST OF DOCUMENTS
     //const formOwner = document.getElementById('OwnerRegForm');
     //const showModalButton = document.getElementById('btnSubmit');
     //const confirmationModal = document.getElementById('confirmSubmitModal');

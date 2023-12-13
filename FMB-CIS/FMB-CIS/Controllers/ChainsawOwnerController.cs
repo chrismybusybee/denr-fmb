@@ -44,11 +44,11 @@ namespace FMB_CIS.Controllers
             ViewBag.RequiredDocsList_PermitToLeaseRentLend = requirementsForPermitToLeaseRentLend.announcement_content;
             ViewBag.RequiredDocsList_TransferOfOwnership = requirementsForTransferOfOwnership.announcement_content;
             //End for required documents
-            ViewModel model = new ViewModel();
-            //Document Checklist
-            var myChecklist = _context.tbl_document_checklist.Where(c => c.is_active == true && (c.permit_type_id == 5 || c.permit_type_id == 6 || c.permit_type_id == 7 || c.permit_type_id == 14)).ToList();
-            model.tbl_Document_Checklist = myChecklist;
-            //End for Document Checklist
+            //ViewModel model = new ViewModel();
+            ////Document Checklist
+            //var myChecklist = _context.tbl_document_checklist.Where(c => c.is_active == true && (c.permit_type_id == 5 || c.permit_type_id == 6 || c.permit_type_id == 7 || c.permit_type_id == 14 )).ToList();
+            //model.tbl_Document_Checklist = myChecklist;
+            ////End for Document Checklist
             if (usrStatus != true) //IF User is not yet approved by the admin.
             {
                 return RedirectToAction("Index", "Dashboard");
@@ -56,6 +56,53 @@ namespace FMB_CIS.Controllers
             if (usrRoleID == 3 || usrRoleID == 5 || usrRoleID == 6 || usrRoleID == 7)
             {
                 return View();
+            }
+            else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11 || usrRoleID == 17) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
+            {
+
+                return RedirectToAction("ChainsawOwnerApplicantsList", "ChainsawOwner");
+
+            }
+            else
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+        }
+        public IActionResult ChecklistForChainsawOwnerPartialView(int permitTypeID)
+        {
+            int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
+
+            ViewModel model = new ViewModel();
+            
+            
+            if (usrRoleID == 3 || usrRoleID == 5 || usrRoleID == 6 || usrRoleID == 7)
+            {
+                string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
+                ViewData["BaseUrl"] = host;
+
+
+                //var checklistDocs = (from dc in _context.tbl_document_checklist
+                //                     join pt in _context.tbl_permit_type on dc.permit_type_id equals pt.id
+                //                     select new ChecklistManagementModel
+                //                     {
+                //                         tbl_document_checklist_id = dc.id,
+                //                         permit_type_id = dc.permit_type_id,
+                //                         tbl_permit_type_name = pt.name,
+                //                         tbl_document_checklist_name = dc.name,
+                //                         tbl_document_checklist_description = dc.description,
+                //                         is_active = dc.is_active
+
+                //                     }).OrderBy(ptype => ptype.tbl_permit_type_name).ToList();
+
+                //model.checklistManagementModels = checklistDocs;
+
+                //Document Checklist
+                var myChecklist = _context.tbl_document_checklist.Where(c => c.is_active == true && c.permit_type_id == permitTypeID).ToList();
+                model.tbl_Document_Checklist = myChecklist;
+                //End for Document Checklist
+
+                return PartialView("~/Views/ChainsawOwner/ChecklistForChainsawOwnerPartialView.cshtml", model);
             }
             else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11 || usrRoleID == 17) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
             {
@@ -123,6 +170,13 @@ namespace FMB_CIS.Controllers
                         filesDB.date_created = DateTime.Now;
                         filesDB.date_modified = DateTime.Now;
                         filesDB.filename = file.FileName;
+                        foreach (var item in model.fileChecklistViewModel)
+                        {
+                            if (item.FileName == file.FileName)
+                            {
+                                filesDB.checklist_id = item.tbl_document_checklist_id;
+                            }
+                        }
                         filesDB.path = path;
                         filesDB.tbl_file_type_id = fileInfo.Extension;
                         filesDB.tbl_file_sources_id = fileInfo.Extension;
@@ -406,6 +460,7 @@ namespace FMB_CIS.Controllers
                                               chainsaw_serial_number = csaw.chainsaw_serial_number,
                                               chainsawSupplier = csaw.supplier,
                                               date_purchase = csaw.date_purchase,
+                                              initial_date_of_inspection = a.initial_date_of_inspection,
                                               inspectionDate = a.date_of_inspection,
                                               specification = a.tbl_specification_id,
                                               purpose = a.purpose,
@@ -449,6 +504,8 @@ namespace FMB_CIS.Controllers
                                               valid_id_no = usr.valid_id_no,
                                               birth_date = usr.birth_date.ToString(),
                                               comment = usr.comment,
+                                              initial_date_of_inspection = a.initial_date_of_inspection,
+                                              inspectionDate = a.date_of_inspection,
                                               specification = a.tbl_specification_id,
                                               purpose = a.purpose,
                                               date_of_registration = a.date_of_registration,
@@ -576,13 +633,28 @@ namespace FMB_CIS.Controllers
                 DateTime? dateRegistration = null;
                 DateTime? dateExpiration = null;
                 DateTime? dateDueOfficer = BusinessDays.AddBusinessDays(DateTime.Now, 2).AddHours(4).AddMinutes(30);
+                DateTime? dateInspectionInitial = null;
+                bool initialInspectDateToBeChanged = false;
                 DateTime? dateInspection = null;
                 bool inspectDateToBeChanged = false;
-                if (Role == "DENR Inspector" && viewMod.applicantViewModels.permit_type == "Certificate of Registration" && viewMod.applicantViewModels.status < 3)
+
+                if (Role == "DENR Inspector" && viewMod.applicantViewModels.status == 1)
+                {
+                    dateInspectionInitial = Convert.ToDateTime(viewMod.applicantViewModels.initial_date_of_inspection);
+                    initialInspectDateToBeChanged = true;
+                }
+
+                if (Role == "DENR Inspector" && (viewMod.applicantViewModels.status == 7 || viewMod.applicantViewModels.status == 8))
                 {
                     dateInspection = Convert.ToDateTime(viewMod.applicantViewModels.inspectionDate);
                     inspectDateToBeChanged = true;
                 }
+
+                //if (Role == "DENR Inspector" && viewMod.applicantViewModels.permit_type == "Certificate of Registration" && viewMod.applicantViewModels.status < 3)
+                //{
+                //    dateInspection = Convert.ToDateTime(viewMod.applicantViewModels.inspectionDate);
+                //    inspectDateToBeChanged = true;
+                //}
 
 
                 //File Upload
@@ -669,8 +741,8 @@ namespace FMB_CIS.Controllers
                     }
                     //var applicationToUpdate = _context.tbl_application.Find(appID);
                     //Get email and subject from templates in DB
-
-                    var appli = new tbl_application() { id = applid, status = stats, date_modified = DateTime.Now, modified_by = loggedUserID, date_of_inspection = dateInspection, date_of_registration = dateRegistration, date_of_expiration = dateExpiration, date_due_for_officers = dateDueOfficer };
+                    
+                    var appli = new tbl_application() { id = applid, status = stats, date_modified = DateTime.Now, modified_by = loggedUserID, initial_date_of_inspection = dateInspectionInitial, date_of_inspection = dateInspection, date_of_registration = dateRegistration, date_of_expiration = dateExpiration, date_due_for_officers = dateDueOfficer };
                     var usrdet = new tbl_user() { id = usid, comment = viewMod.applicantViewModels.comment };
                     using (_context)
                     {
@@ -678,6 +750,7 @@ namespace FMB_CIS.Controllers
                         _context.Entry(appli).Property(x => x.status).IsModified = true;
                         _context.Entry(appli).Property(x => x.modified_by).IsModified = true;
                         _context.Entry(appli).Property(x => x.date_modified).IsModified = true;
+                        _context.Entry(appli).Property(x => x.initial_date_of_inspection).IsModified = initialInspectDateToBeChanged;
                         _context.Entry(appli).Property(x => x.date_of_inspection).IsModified = inspectDateToBeChanged;
                         _context.Entry(appli).Property(x => x.date_of_registration).IsModified = registrationDateToBeChanged;
                         _context.Entry(appli).Property(x => x.date_of_expiration).IsModified = expirationDateToBeChanged;
@@ -857,7 +930,7 @@ namespace FMB_CIS.Controllers
                     //var applicationToUpdate = _context.tbl_application.Find(appID);
                     //Get email and subject from templates in DB
 
-                    var appli = new tbl_application() { id = applid, status = stats, date_modified = DateTime.Now, modified_by = loggedUserID, initial_date_of_inspection = null, date_of_inspection = null, date_of_registration = dateRegistration, date_of_expiration = dateExpiration, date_due_for_officers = dateDueOfficer };
+                    var appli = new tbl_application() { id = applid, status = stats, date_modified = DateTime.Now, modified_by = loggedUserID, initial_date_of_inspection = dateInspectionInitial, date_of_inspection = dateInspection, date_of_registration = dateRegistration, date_of_expiration = dateExpiration, date_due_for_officers = dateDueOfficer };
                     var usrdet = new tbl_user() { id = usid, comment = viewMod.applicantViewModels.comment };
                     using (_context)
                     {
@@ -865,7 +938,7 @@ namespace FMB_CIS.Controllers
                         _context.Entry(appli).Property(x => x.status).IsModified = true;
                         _context.Entry(appli).Property(x => x.modified_by).IsModified = true;
                         _context.Entry(appli).Property(x => x.date_modified).IsModified = true;
-                        _context.Entry(appli).Property(x => x.initial_date_of_inspection).IsModified = true;
+                        _context.Entry(appli).Property(x => x.initial_date_of_inspection).IsModified = initialInspectDateToBeChanged;
                         _context.Entry(appli).Property(x => x.date_of_inspection).IsModified = inspectDateToBeChanged;
                         _context.Entry(appli).Property(x => x.date_of_registration).IsModified = registrationDateToBeChanged;
                         _context.Entry(appli).Property(x => x.date_of_expiration).IsModified = expirationDateToBeChanged;
