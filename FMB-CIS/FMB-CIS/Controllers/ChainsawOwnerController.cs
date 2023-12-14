@@ -692,6 +692,8 @@ namespace FMB_CIS.Controllers
                     }
                 }
 
+                int permitTypeID = Convert.ToInt32(_context.tbl_application.Where(a => a.id == id).Select(a => a.tbl_permit_type_id).FirstOrDefault());
+
                 if (buttonClicked == "Approve")
                 {
                     if (viewMod.applicantViewModels.status <= 6) // Approval Process before payment
@@ -718,6 +720,7 @@ namespace FMB_CIS.Controllers
                             expirationDateToBeChanged = true;
                             dateExpiration = DateTime.Now.AddYears(3); //Permit to Expire after 3 years
                             dateDueOfficer = null; //Since task is done, no more due date for officer
+
                             if (viewMod.applicantViewModels.permit_type == "Certificate of Registration")
                             {
                                 emailTemplateID = 7;
@@ -881,7 +884,117 @@ namespace FMB_CIS.Controllers
                 }
                 else
                 {
-                    stats = (int)(WorkFlowStepEnum)Enum.Parse(typeof(WorkFlowStepEnum), viewMod.next_step_code);
+                    stats = (int)(PermitStatusEnum)Enum.Parse(typeof(PermitStatusEnum), viewMod.next_step_code);
+
+                    switch (stats)
+                    {
+                        case (int)PermitStatusEnum.APPLICATION_SUBMISSION:
+                            break;
+                        case (int)PermitStatusEnum.APPLICATION_ACCEPTANCE_REJECT:
+                            switch (permitTypeID)
+                            {
+                                case (int)PermitTypesEnum.AUTHORITY_TO_LEASE:
+                                case (int)PermitTypesEnum.AUTHORITY_TO_RENT:
+                                case (int)PermitTypesEnum.AUTHORITY_TO_LEND:
+                                    emailTemplateID = 19;
+                                    break;
+                                case (int)PermitTypesEnum.PERMIT_TO_RESELL:
+                                    emailTemplateID = 36;
+                                    break;
+                                case (int)PermitTypesEnum.CERTIFICATE_OF_REGISTRATION:
+                                    emailTemplateID = 8;
+                                    break;
+                            }
+                            break;
+                        case (int)PermitStatusEnum.FOR_PHYSICAL_INSPECTION:
+
+                            break;
+                        case (int)PermitStatusEnum.PHYSICAL_INSPECTION_APPROVED:
+
+                            break;
+                        case (int)PermitStatusEnum.PHYSICAL_INSPECTION_REJECT:
+                            switch (permitTypeID)
+                            {
+                                case (int)PermitTypesEnum.AUTHORITY_TO_LEASE:
+                                case (int)PermitTypesEnum.AUTHORITY_TO_RENT:
+                                case (int)PermitTypesEnum.AUTHORITY_TO_LEND:
+                                    emailTemplateID = 19;
+                                    break;
+                                case (int)PermitTypesEnum.PERMIT_TO_RESELL:
+                                    emailTemplateID = 36;
+                                    break;
+                                case (int)PermitTypesEnum.CERTIFICATE_OF_REGISTRATION:
+                                    emailTemplateID = 8;
+                                    break;
+                            }
+                            break;
+                        case (int)PermitStatusEnum.PAYMENT_OF_FEES:
+                            emailTemplateID = 38;
+                            //emailTemplateID = 38; // email template id = 38 - Proceed to Payment
+                            dateDueOfficer = null; //Next step is not assigned to the officer
+                            break;
+                        case (int)PermitStatusEnum.PAYMENT_EVALUATION:
+
+                            break;
+                        case (int)PermitStatusEnum.PAYMENT_EVALUATION_REJECT:
+                            switch (permitTypeID)
+                            {
+                                case (int)PermitTypesEnum.AUTHORITY_TO_LEASE:
+                                case (int)PermitTypesEnum.AUTHORITY_TO_RENT:
+                                case (int)PermitTypesEnum.AUTHORITY_TO_LEND:
+                                    emailTemplateID = 19;
+                                    break;
+                                case (int)PermitTypesEnum.PERMIT_TO_RESELL:
+                                    emailTemplateID = 36;
+                                    break;
+                                case (int)PermitTypesEnum.CERTIFICATE_OF_REGISTRATION:
+                                    emailTemplateID = 8;
+                                    break;
+                            }
+                            break;
+                        case (int)PermitStatusEnum.PERMIT_APPROVAL:
+
+                            break;
+                        case (int)PermitStatusEnum.PERMIT_APPROVAL_REJECT:
+
+                            switch (permitTypeID)
+                            {
+                                case (int)PermitTypesEnum.AUTHORITY_TO_LEASE:
+                                case (int)PermitTypesEnum.AUTHORITY_TO_RENT:
+                                case (int)PermitTypesEnum.AUTHORITY_TO_LEND:
+                                    emailTemplateID = 19;
+                                    break;
+                                case (int)PermitTypesEnum.PERMIT_TO_RESELL:
+                                    emailTemplateID = 36;
+                                    break;
+                                case (int)PermitTypesEnum.CERTIFICATE_OF_REGISTRATION:
+                                    emailTemplateID = 8;
+                                    break;
+                            }
+                            break;
+                        case (int)PermitStatusEnum.PERMIT_ISSUANCE:
+                            //stats = 11; //Payment and Application Approved (Inspector and CENRO)
+                            registrationDateToBeChanged = true;
+                            dateRegistration = DateTime.Now; //Permit will be considered registered once it has been approved
+                            expirationDateToBeChanged = true;
+                            dateExpiration = DateTime.Now.AddYears(3); //Permit to Expire after 3 years
+                            dateDueOfficer = null; //Since task is done, no more due date for officer
+                            switch (permitTypeID)
+                            {
+                                case (int)PermitTypesEnum.AUTHORITY_TO_LEASE:
+                                case (int)PermitTypesEnum.AUTHORITY_TO_RENT:
+                                case (int)PermitTypesEnum.AUTHORITY_TO_LEND:
+                                    emailTemplateID = 18;
+                                    break;
+                                case (int)PermitTypesEnum.PERMIT_TO_RESELL:
+                                    emailTemplateID = 35;
+                                    break;
+                                case (int)PermitTypesEnum.CERTIFICATE_OF_REGISTRATION:
+                                    emailTemplateID = 7;
+                                    break;
+                            }
+                            break;
+                    }
                     //if (viewMod.applicantViewModels.status <= 6) // Approval Process before payment
                     //{
                     //    if (Role == "DENR CENRO" || Role == "DENR Implementing PENRO" || Role == "DENR Regional Executive Director (RED)")

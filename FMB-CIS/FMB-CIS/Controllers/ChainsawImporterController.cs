@@ -739,7 +739,51 @@ namespace FMB_CIS.Controllers
                 }
                 else
                 {
-                    stats = (int)(WorkFlowStepEnum)Enum.Parse(typeof(WorkFlowStepEnum), viewMod.next_step_code);
+                    stats = (int)(PermitStatusEnum)Enum.Parse(typeof(PermitStatusEnum), viewMod.next_step_code);
+
+                    switch (stats)
+                    {
+                        case (int)PermitStatusEnum.APPLICATION_SUBMISSION:
+
+                            break;
+                        case (int)PermitStatusEnum.APPLICATION_ACCEPTANCE_REJECT:
+                            emailTemplateID = 16;
+                            break;
+                        case (int)PermitStatusEnum.FOR_PHYSICAL_INSPECTION:
+
+                            break;
+                        case (int)PermitStatusEnum.PHYSICAL_INSPECTION_APPROVED:
+
+                            break;
+                        case (int)PermitStatusEnum.PHYSICAL_INSPECTION_REJECT:
+                            emailTemplateID = 16;
+                            break;
+                        case (int)PermitStatusEnum.PAYMENT_OF_FEES:
+                            emailTemplateID = 38; // email template id = 38 - Proceed to Payment
+                            dateDueOfficer = null; //Next step is not assigned to the officer
+                            break;
+                        case (int)PermitStatusEnum.PAYMENT_EVALUATION:
+
+                            break;
+                        case (int)PermitStatusEnum.PAYMENT_EVALUATION_REJECT:
+                            emailTemplateID = 16;
+                            break;
+                        case (int)PermitStatusEnum.PERMIT_APPROVAL:
+
+                            break;
+                        case (int)PermitStatusEnum.PERMIT_APPROVAL_REJECT:
+                            emailTemplateID = 16;
+                            break;
+                        case (int)PermitStatusEnum.PERMIT_ISSUANCE:
+                            emailTemplateID = 39; //Permit to Import (Approval)
+                            registrationDateToBeChanged = true;
+                            dateRegistration = DateTime.Now; //Permit will be considered registered once it has been approved
+                            expirationDateToBeChanged = true;
+                            dateExpiration = DateTime.Now.AddYears(3); //Permit to Expire after 3 years
+                            dateDueOfficer = null; //Since task is done, no more due date for officer
+                            break;
+                    }
+
                     //if (viewMod.applicantViewModels.status <= 6) // Approval Process before payment
                     //{
                     //    if (Role == "DENR CENRO" || Role == "DENR Implementing PENRO" || Role == "DENR Regional Executive Director (RED)")

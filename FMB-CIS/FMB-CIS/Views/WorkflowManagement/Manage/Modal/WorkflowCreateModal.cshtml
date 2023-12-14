@@ -86,7 +86,13 @@
                                                 </div>
                                                 <div class="col-md-4 mb-3">
                                                     <div class="form-floating">
-                                                        <input data-bind="value: statusCode" type="text" class="form-control rounded-3" placeholder="" />
+                                                        <select data-bind="value: statusCode" class="form-select">
+                                                            <option selected value="0">Choose step status</option>
+                                                            <!-- ko foreach: $root.statusCodes()-->
+                                                            <option data-bind="text: id + ' - ' + status, value: id"></option>
+                                                            <!-- /ko -->
+                                                        </select>
+                                                        @*<input data-bind="value: statusCode" type="text" class="form-control rounded-3" placeholder="" />*@
                                                         <label>Status Code</label>
                                                         <p class="mt-0 mb-0">
                                                             <small class="text-body-secondary">Associated with a controller / view</small>
@@ -272,9 +278,8 @@
 </div>
 
 <script type="text/javascript">
-
     // Here's my data model
-    var WorkflowModel = function (userTypes, permitTypes, regions, cities) {
+    var WorkflowModel = function (userTypes, permitTypes, regions, cities, statusCodes) {
         var self = this;
         self.permit_type_code = ko.observable(0);
         //self.workflow_id = ko.observable(crypto.randomUUID());
@@ -288,6 +293,10 @@
         self.permitTypes = ko.observableArray(permitTypes);
         self.regions = ko.observableArray(regions);
         self.cities = ko.observableArray(cities);
+        self.statusCodes = ko.observableArray(statusCodes);
+        self.replaceFrom = ko.observable("");
+        self.replaceTo = ko.observable("");
+
         self.removeNextStep = removeNextStep;
 
         self.addStep = function () {
@@ -323,7 +332,7 @@
                 setTimeout(function () {
                     setIsNextStep();
                 }, 100);
-                
+
             } else { // program changed
                 setTimeout(function () {
                     setIsNextStep();
@@ -370,186 +379,196 @@
                     } else {
                         s.isEdit(true);
                     }
-            setIsNextStep();
-        }
+                    setIsNextStep();
+                }
 
-        function setIsNextStep() {
-            var nextStepIds = [];
-            // get active step, get next step ids
-            self.steps().forEach(function (step) {
-                if (step.isEdit) {
-                    step.nextSteps.forEach(function (nextStep) {
-                        nextStepIds.push(nextStep.stepId);
+            function setIsNextStep() {
+                    var nextStepIds = [];
+                    // get active step, get next step ids
+                    self.steps().forEach(function (step) {
+                        if (step.isEdit) {
+                            step.nextSteps.forEach(function (nextStep) {
+                                nextStepIds.push(nextStep.stepId);
+                            });
+                        }
+                    });
+                    console.log("nextStepIds");
+                    console.log(nextStepIds);
+                    // apply is next step on the step
+                    self.steps().forEach(function (step) {
+                        if (nextStepIds.indexOf(step.statusCode()) != -1) {
+                            step.isNextStep(true);
+                        }
+                        else {
+                            step.isNextStep(false);
+                        }
                     });
                 }
-            });
-            console.log("nextStepIds");
-            console.log(nextStepIds);
-            // apply is next step on the step
-            self.steps().forEach(function (step) {
-                if (nextStepIds.indexOf(step.statusCode()) != -1) {
-                    step.isNextStep(true);
+
+            function removeStep(step) {
+                    self.steps.remove(step);
                 }
-                else {
-                    step.isNextStep(false);
+
+            function removeSubStep(step) {
+                    self.steps.remove(step);
                 }
-            });
-        }
 
-        function removeStep(step) {
-            self.steps.remove(step);
-        }
+            self.saveWorkflow = function () {
+                    console.log("self");
+                    console.log(self.workflow_code());
+                    //console.log("self.workflow_id()");
+                    //console.log(self.workflow_id());
 
-        function removeSubStep(step) {
-            self.steps.remove(step);
-        }
+                    var workflow = {};
+                    workflow.workflow_code = self.workflow_code();
+                    workflow.permit_type_code = self.permit_type_code();
+                    workflow.name = self.name();
+                    workflow.description = self.description();
+                    //workflow.workflow_id = self.workflow_id();
 
-        self.saveWorkflow = function () {
-            console.log("self");
-            console.log(self.workflow_code());
-            //console.log("self.workflow_id()");
-            //console.log(self.workflow_id());
+                    var steps = [];
+                    self.steps().forEach(function (step) {
+                        var nextSteps = [];
+                        step.nextSteps.forEach(function (nextStep) {
+                            nextSteps.push({
+                                id: nextStep.id(),
+                                user_type_Id: nextStep.userTypeId(),
+                                division_id: nextStep.divisionId(),
+                                workflow_code: workflow.workflow_code,
+                                workflow_step_code: step.statusCode(),
+                                next_step_code: nextStep.stepId(),
+                                button_text: nextStep.buttonText(),
+                                button_class: nextStep.buttonClass()
+                            }
+                            );
+                        });
 
-            var workflow = {};
-            workflow.workflow_code = self.workflow_code();
-            workflow.permit_type_code = self.permit_type_code();
-            workflow.name = self.name();
-            workflow.description = self.description();
-            //workflow.workflow_id = self.workflow_id();
+                        steps.push({
+                            id: step.id(),
+                            name: step.name(),
+                            workflow_code: workflow.workflow_code,
+                            workflow_step_code: step.statusCode(),
+                            description: step.description(),
+                            permit_page_code: step.permit_page_code(),
+                            on_pre_action: step.onPreAction(),
+                            on_success_action: step.onSuccessAction(),
+                            on_exit_action: step.onExitAction(),
+                            isLock: step.isLock(),
+                            nextSteps: nextSteps,
+                            isEdit: step.isEdit()
+                        }
+                        );
+                    });
+                    workflow.steps = steps;
 
-            var steps = [];
-            self.steps().forEach(function (step) {
-                var nextSteps = [];
-                step.nextSteps.forEach(function (nextStep) {
-                    nextSteps.push({
-                        id: nextStep.id(),
-                        user_type_Id: nextStep.userTypeId(),
-                        division_id: nextStep.divisionId(),
-                        workflow_code: workflow.workflow_code,
-                        workflow_step_code: step.statusCode(),
-                        next_step_code: nextStep.stepId(),
-                        button_text: nextStep.buttonText(),
-                        button_class: nextStep.buttonClass()
-                    }
-                    );
-                });
-
-                steps.push({
-                    id: step.id(),
-                    name: step.name(),
-                    workflow_code: workflow.workflow_code,
-                    workflow_step_code: step.statusCode(),
-                    description: step.description(),
-                    permit_page_code: step.permit_page_code(),
-                    on_pre_action: step.onPreAction(),
-                    on_success_action: step.onSuccessAction(),
-                    on_exit_action: step.onExitAction(),
-                    isLock: step.isLock(),
-                    nextSteps: nextSteps,
-                    isEdit: step.isEdit()
+                    console.log("workflow");
+                    console.log(workflow);
+                    $.post("/WorkflowManagement/WorkflowCreate", workflow, function (data) {
+                        // NOTE: TO DO if success
+                        closeModal();
+                        $('#workflowListPartialContainer').load('/WorkflowManagement/WorkflowListPartialView');
+                    });
                 }
-                );
-            });
-            workflow.steps = steps;
 
-            console.log("workflow");
-            console.log(workflow);
-            $.post("/WorkflowManagement/WorkflowCreate", workflow, function (data) {
-                // NOTE: TO DO if success
-                closeModal();
-                $('#workflowListPartialContainer').load('/WorkflowManagement/WorkflowListPartialView');
-            });
+            //this.fullName = ko.pureComputed(function() {
+            //    // Knockout tracks dependencies automatically. It knows that fullName depends on firstName and lastName, because these get called when evaluating fullName.
+            //    return this.firstName() + " " + this.lastName();
+            //}, this);
+
+
+            //self.activeNextStepIds = ko.pureComputed(function () {
+            //    var activeNextSteps = [];
+            //    console.log();
+            //    var activeStep = self.steps().filter(function (s) { return s.isEdit() });
+
+            //    if(activeStep != null) {
+            //        activeStep.nextSteps().forEach(function (nextStep) {
+            //            activeNextSteps.push(nextStep.id)
+            //        });
+            //    }
+            //    //var activeStep = self.steps().filter(function (s) { return s.isEdit() });
+            //    //if(activeStep) {
+            //    //    activeStep.nextSteps().forEach(function(nextStep){
+            //    //        activeNextSteps.push(nextStep.id)
+            //    //    });
+            //    //}
+            //    return activeNextSteps;
+            //}, self);
+        };
+
+
+        function initialize() {
+            GetDropdownListData();
+        }
+        initialize();
+
+        var userTypes = [];
+        var permitTypes = [];
+        var regions = [];
+        var cities = [];
+        var statusCodes = [];
+        function GetDropdownListData() {
+            $.get("/AccessRightsManagement/UserTypes").then(
+                function (userTypesData) {
+                    userTypes = userTypesData;
+                    return $.get("/PermitManagement/GetPermitTypes");
+                }
+            ).then(
+                function (permitTypesData) {
+                    permitTypes = permitTypesData;
+                    console.log("permitTypesData");
+                    console.log(permitTypesData);
+                    return $.get('/PermitManagement/GetStatusCodes');
+                }
+            ).then(
+                function (statusCodesData) {
+                    statusCodes = statusCodesData;
+                    console.log("statusCodesData");
+                    console.log(statusCodesData);
+                    return $.post('/OfficeManagement/GetDivisionByUserType', { userTypeId: 10 });
+                }
+            ).then(
+                function (regionsData) {
+                    regions = regionsData;
+                    return $.post('/OfficeManagement/GetDivisionByUserType', { userTypeId: 8 });
+                }
+            ).then(
+                function (citiesData) {
+                    cities = citiesData;
+                    ko.applyBindings(new WorkflowModel(userTypes, permitTypes, regions, cities, statusCodes));
+                }
+            )
         }
 
-        //this.fullName = ko.pureComputed(function() {
-        //    // Knockout tracks dependencies automatically. It knows that fullName depends on firstName and lastName, because these get called when evaluating fullName.
-        //    return this.firstName() + " " + this.lastName();
-        //}, this);
-
-
-        //self.activeNextStepIds = ko.pureComputed(function () {
-        //    var activeNextSteps = [];
-        //    console.log();
-        //    var activeStep = self.steps().filter(function (s) { return s.isEdit() });
-
-        //    if(activeStep != null) {
-        //        activeStep.nextSteps().forEach(function (nextStep) {
-        //            activeNextSteps.push(nextStep.id)
-        //        });
-        //    }
-        //    //var activeStep = self.steps().filter(function (s) { return s.isEdit() });
-        //    //if(activeStep) {
-        //    //    activeStep.nextSteps().forEach(function(nextStep){
-        //    //        activeNextSteps.push(nextStep.id)
-        //    //    });
-        //    //}
-        //    return activeNextSteps;
-        //}, self);
-    };
-
-
-    function initialize() {
-        GetDropdownListData();
-    }
-    initialize();
-
-    var userTypes = [];
-    var permitTypes = [];
-    var regions = [];
-    var cities = [];
-    function GetDropdownListData() {
-        $.get("/AccessRightsManagement/UserTypes").then(
-            function (userTypesData) {
-                userTypes = userTypesData;
-                return $.get("/PermitManagement/GetPermitTypes");
-            }
-        ).then(
-            function (permitTypesData) {
-                permitTypes = permitTypesData;
-                return $.post('/OfficeManagement/GetDivisionByUserType', { userTypeId: 10 });
-            }
-        ).then(
-            function (regionsData) {
-                regions = regionsData;
-                return $.post('/OfficeManagement/GetDivisionByUserType', { userTypeId: 10 });
-            }
-        ).then(
-            function (citiesData) {
-                cities = citiesData;
-                ko.applyBindings(new WorkflowModel(userTypes, permitTypes, regions, cities));
-            }
-        )
-    }
 
 
 
+        $("#cancelBtn").click(function () {
+            closeModal();
+        });
+        //$("#btnCreate").click(function () {
+        //    let parameters = {
+        //        workflow_code: document.getElementById("workflow_code").value,
+        //        name: document.getElementById("name").value,
+        //        description: document.getElementById("description").value,
+        //        scope: document.getElementById("scope").value,
+        //        type: document.getElementById("type").value,
+        //        parent_code: document.getElementById("parent_code").value
+        //    };
+        //    console.log("parameters");
+        //    console.log(parameters);
+        //    $.post("/WorkflowManagement/WorkflowCreate", parameters, function (data) {
+        //        // NOTE: TO DO if success
+        //        closeModal();
+        //        $('#workflowListPartialContainer').load('/WorkflowManagement/WorkflowListPartialView');
+        //    });
+        //});
 
-    $("#cancelBtn").click(function () {
-        closeModal();
-    });
-    //$("#btnCreate").click(function () {
-    //    let parameters = {
-    //        workflow_code: document.getElementById("workflow_code").value,
-    //        name: document.getElementById("name").value,
-    //        description: document.getElementById("description").value,
-    //        scope: document.getElementById("scope").value,
-    //        type: document.getElementById("type").value,
-    //        parent_code: document.getElementById("parent_code").value
-    //    };
-    //    console.log("parameters");
-    //    console.log(parameters);
-    //    $.post("/WorkflowManagement/WorkflowCreate", parameters, function (data) {
-    //        // NOTE: TO DO if success
-    //        closeModal();
-    //        $('#workflowListPartialContainer').load('/WorkflowManagement/WorkflowListPartialView');
-    //    });
-    //});
-
-    function closeModal() {
-        $("#createWorkflowModal").modal("hide");
-        let elem = document.querySelector('#createWorkflowModal');
-        elem.parentNode.removeChild(elem);
-    }
+        function closeModal() {
+            $("#createWorkflowModal").modal("hide");
+            let elem = document.querySelector('#createWorkflowModal');
+            elem.parentNode.removeChild(elem);
+        }
 </script>
 <style>
     .workflow-step-list-item {
