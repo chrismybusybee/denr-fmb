@@ -864,6 +864,9 @@ namespace FMB_CIS.Controllers
             }
             else
             {
+                int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+                var userRegion = _context.tbl_user.Where(u=>u.id == loggedUserID).Select(u=>u.tbl_region_id).FirstOrDefault();
+
                 ViewModel mymodel = new ViewModel();
 
                 var applicationlist = from a in _context.tbl_application
@@ -879,6 +882,7 @@ namespace FMB_CIS.Controllers
                                      join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                      join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                      join pS in _context.tbl_permit_status on a.status equals pS.id
+                                     where usr.tbl_region_id == userRegion
                                      //where a.tbl_user_id == userID
                                      select new ApplicantListViewModel 
                                      { 
