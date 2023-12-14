@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using Microsoft.AspNet.Identity;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace FMB_CIS.Controllers
 {
@@ -35,6 +36,14 @@ namespace FMB_CIS.Controllers
             List<tbl_permit_types> permitTypes = new List<tbl_permit_types>();
             permitTypes = _context.tbl_permit_types.OrderBy(d => d.id).ToList();
             return Json(permitTypes);
+        }
+
+        [HttpGet, ActionName("GetStatusCodes")]
+        public JsonResult GetStatusCodes()
+        {
+            List<tbl_permit_statuses> statusCodes = new List<tbl_permit_statuses>();
+            statusCodes = _context.tbl_permit_statuses.OrderBy(d => d.id).ToList();
+            return Json(statusCodes);
         }
     }
 }

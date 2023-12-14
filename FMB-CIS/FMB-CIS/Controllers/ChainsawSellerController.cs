@@ -720,6 +720,8 @@ namespace FMB_CIS.Controllers
                     }
                 }
 
+                int permitTypeID = Convert.ToInt32(_context.tbl_application.Where(a => a.id == id).Select(a => a.tbl_permit_type_id).FirstOrDefault());
+
                 if (buttonClicked == "Approve")
                 {
                     if (viewMod.applicantViewModels.status <= 6) // Approval Process before payment
@@ -882,7 +884,100 @@ namespace FMB_CIS.Controllers
                 }
                 else
                 {
-                    stats = (int)(WorkFlowStepEnum)Enum.Parse(typeof(WorkFlowStepEnum), viewMod.next_step_code);
+                    stats = (int)(PermitStatusEnum)Enum.Parse(typeof(PermitStatusEnum), viewMod.next_step_code);
+
+                    switch (stats)
+                    {
+                        case (int)PermitStatusEnum.APPLICATION_SUBMISSION:
+                            break;
+                        case (int)PermitStatusEnum.APPLICATION_ACCEPTANCE_REJECT:
+                            switch (permitTypeID)
+                            {
+                                case (int)PermitTypesEnum.PERMIT_TO_PURCHASE:
+                                    emailTemplateID = 29;
+                                    break;
+                                case (int)PermitTypesEnum.PERMIT_TO_SELL:
+                                    emailTemplateID = 33;
+                                    break;
+                            }
+                            break;
+                        case (int)PermitStatusEnum.FOR_PHYSICAL_INSPECTION:
+
+                            break;
+                        case (int)PermitStatusEnum.PHYSICAL_INSPECTION_APPROVED:
+
+                            break;
+                        case (int)PermitStatusEnum.PHYSICAL_INSPECTION_REJECT:
+                            switch (permitTypeID)
+                            {
+                                case (int)PermitTypesEnum.PERMIT_TO_PURCHASE:
+                                    emailTemplateID = 29;
+                                    break;
+                                case (int)PermitTypesEnum.PERMIT_TO_SELL:
+                                    emailTemplateID = 33;
+                                    break;
+                            }
+                            break;
+                        case (int)PermitStatusEnum.PAYMENT_OF_FEES:
+                            emailTemplateID = 38;
+                            //emailTemplateID = 38; // email template id = 38 - Proceed to Payment
+                            dateDueOfficer = null; //Next step is not assigned to the officer
+                            break;
+                        case (int)PermitStatusEnum.PAYMENT_EVALUATION:
+
+                            break;
+                        case (int)PermitStatusEnum.PAYMENT_EVALUATION_REJECT:
+                            switch (permitTypeID)
+                            {
+                                case (int)PermitTypesEnum.PERMIT_TO_PURCHASE:
+                                    emailTemplateID = 29;
+                                    break;
+                                case (int)PermitTypesEnum.PERMIT_TO_SELL:
+                                    emailTemplateID = 33;
+                                    break;
+                            }
+                            break;
+                        case (int)PermitStatusEnum.PERMIT_APPROVAL:
+
+                            break;
+                        case (int)PermitStatusEnum.PERMIT_APPROVAL_REJECT:
+                            switch (permitTypeID)
+                            {
+                                case (int)PermitTypesEnum.PERMIT_TO_PURCHASE:
+                                    emailTemplateID = 29;
+                                    break;
+                                case (int)PermitTypesEnum.PERMIT_TO_SELL:
+                                    emailTemplateID = 33;
+                                    break;
+                            }
+                            break;
+                        case (int)PermitStatusEnum.PERMIT_ISSUANCE:
+
+                            stats = 11; //Payment and Application Approved (Inspector and CENRO)
+                            registrationDateToBeChanged = true;
+                            dateRegistration = DateTime.Now; //Permit will be considered registered once it has been approved
+                            expirationDateToBeChanged = true;
+                            dateExpiration = DateTime.Now.AddYears(3); //Permit to Expire after 3 years
+                            dateDueOfficer = null; //Since task is done, no more due date for officer
+
+                            switch (permitTypeID)
+                            {
+                                case (int)PermitTypesEnum.PERMIT_TO_PURCHASE:
+                                    emailTemplateID = 28;
+                                    break;
+                                case (int)PermitTypesEnum.PERMIT_TO_SELL:
+                                    emailTemplateID = 32;
+                                    break;
+                            }
+
+                            //stats = 11; //Payment and Application Approved (Inspector and CENRO)
+                            registrationDateToBeChanged = true;
+                            dateRegistration = DateTime.Now; //Permit will be considered registered once it has been approved
+                            expirationDateToBeChanged = true;
+                            dateExpiration = DateTime.Now.AddYears(3); //Permit to Expire after 3 years
+                            dateDueOfficer = null; //Since task is done, no more due date for officer
+                            break;
+                    }
 
                     var appli = new tbl_application() { id = applid, status = stats, date_modified = DateTime.Now, modified_by = loggedUserID, initial_date_of_inspection = dateInspectionInitial, date_of_inspection = dateInspection, date_of_registration = dateRegistration, date_of_expiration = dateExpiration, date_due_for_officers = dateDueOfficer };
                     var usrdet = new tbl_user() { id = usid, comment = viewMod.applicantViewModels.comment };

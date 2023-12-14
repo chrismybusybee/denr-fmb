@@ -120,7 +120,13 @@
                                                 </div>
                                                 <div class="col-md-4 mb-3">
                                                     <div class="form-floating">
-                                                        <input data-bind="value: statusCode" type="text" class="form-control rounded-3" placeholder="" />
+                                                        <select data-bind="value: statusCode" class="form-select">
+                                                            <option selected value="0">Choose step status</option>
+                                                            <!-- ko foreach: $root.statusCodes()-->
+                                                            <option data-bind="text: id + ' - ' + status, value: id"></option>
+                                                            <!-- /ko -->
+                                                        </select>
+                                                        @*<input data-bind="value: statusCode" type="text" class="form-control rounded-3" placeholder="" />*@
                                                         <label>Status Code</label>
                                                         <p class="mt-0 mb-0">
                                                             <small class="text-body-secondary">Associated with a controller / view</small>
@@ -306,9 +312,8 @@
 </div>
 
 <script type="text/javascript">
-
     // Here's my data model
-    var WorkflowModel = function (workflowDataModel, userTypes, permitTypes, regions, cities) {
+    var WorkflowModel = function (workflowDataModel, userTypes, permitTypes, regions, cities, statusCodes) {
         var self = this;
         self.isLoading = ko.observable(true);
         self.permit_type_code = ko.observable(0);
@@ -324,7 +329,7 @@
         self.permitTypes = ko.observableArray(permitTypes);
         self.regions = ko.observableArray(regions);
         self.cities = ko.observableArray(cities);
-
+        self.statusCodes = ko.observableArray(statusCodes);
         self.replaceFrom = ko.observable("");
         self.replaceTo = ko.observable("");
 
@@ -601,6 +606,7 @@
     var permitTypes = [];
     var regions = [];
     var cities = [];
+    var statusCodes = [];
     function GetData() {
         let id = document.getElementById("workflowId").value;
         $.get("/WorkflowManagement/GetWorkflow/" + id).then(
@@ -624,17 +630,26 @@
         ).then(
             function (permitTypesData) {
                 permitTypes = permitTypesData;
+                console.log("permitTypesData");
+                console.log(permitTypesData);
+                return $.get('/PermitManagement/GetStatusCodes');
+            }
+        ).then(
+            function (statusCodesData) {
+                statusCodes = statusCodesData;
+                console.log("statusCodesData");
+                console.log(statusCodesData);
                 return $.post('/OfficeManagement/GetDivisionByUserType', { userTypeId: 10 });
             }
         ).then(
             function (regionsData) {
                 regions = regionsData;
-                return $.post('/OfficeManagement/GetDivisionByUserType', { userTypeId: 10 });
+                return $.post('/OfficeManagement/GetDivisionByUserType', { userTypeId: 8 });
             }
         ).then(
             function (citiesData) {
                 cities = citiesData;
-                ko.applyBindings(new WorkflowModel(workflow, userTypes, permitTypes, regions, cities));
+                ko.applyBindings(new WorkflowModel(workflow, userTypes, permitTypes, regions, cities, statusCodes));
             }
         )
     }
