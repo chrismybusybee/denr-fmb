@@ -9,6 +9,7 @@ namespace FMB_CIS.Models
         public string email { get; set; }
         [Required]
         [DataType(DataType.Password)]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", ErrorMessage = "Password must contain at least 8 characters, including at least 1 uppercase letter, at least 1 lowercase letter, at least one number and a special character.")]
         public string Password { get; set; }
         [Required]
         [Display(Name = "Confirm Password")]

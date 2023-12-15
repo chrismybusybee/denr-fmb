@@ -445,7 +445,7 @@ namespace FMB_CIS.Controllers
             usrDB.middle_name = model.tbl_User.middle_name;
             usrDB.last_name = model.tbl_User.last_name;
             usrDB.suffix = model.tbl_User.suffix;
-            if(model.tbl_User.user_classification == "Corporation")
+            if(model.tbl_User.user_classification == "Corporation" || model.tbl_User.user_classification == "Corporate/Cooperative")
             {
                 usrDB.company_name = model.tbl_User.company_name;
             }            

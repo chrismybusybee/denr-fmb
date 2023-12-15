@@ -101,7 +101,8 @@
                                     <select asp-for="tbl_Users.user_classification" class="form-select" aria-label="User Classification" onchange="userClassification(this)" required>
                                         <option value="" selected disabled>--Select User Classification--</option>
                                         <option value="Individual">Individual</option>
-                                        <option value="Corporation">Corporation</option>
+                                        <option value="Corporate/Cooperative">Corporate/Cooperative</option>
+                                        <option value="Government">Government</option>
                                     </select>
                                     <span asp-validation-for="tbl_Users.user_classification" class="text-danger"></span>
                                 </div>
@@ -470,7 +471,7 @@
 
     //Things to change when selected User Classification is Corporation
     function userClassification(that) {
-        if (that.value == "Corporation") {
+        if (that.value == "Corporate/Cooperative") {
             document.getElementById("companyNameInpField").style.display = "block";
             document.getElementById("strtAddLbl").innerHTML = "Company Street Address";
         }

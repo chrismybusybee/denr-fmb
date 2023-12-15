@@ -215,7 +215,7 @@ namespace FMB_CIS.Controllers
                     //SET VALUES FOR VARIABLES WITHOUT INPUT FIELDS ON VIEW
                     //tbl_division_id = model.tbl_division_id
                     model.tbl_Users.password = encrPw;
-                    model.tbl_Users.status = false;
+                    model.tbl_Users.status = true;
                     //model.tbl_Users.comment;
                     model.tbl_Users.date_created = DateTime.Now;
                     model.tbl_Users.date_modified = DateTime.Now;
@@ -223,7 +223,7 @@ namespace FMB_CIS.Controllers
                     //model.tbl_Users.tbl_user_types_id = Convert.ToInt32(model.tbl_Users.tbl_user_types_id);
 
                     //Do not save inputs for Company Name if selected user classifiction is null
-                    if (model.tbl_Users.user_classification != "Corporation")
+                    if (model.tbl_Users.user_classification != "Corporate/Cooperative")
                     {
                         model.tbl_Users.company_name = null;
                     }
@@ -328,7 +328,7 @@ namespace FMB_CIS.Controllers
                             {
                                 if (Convert.ToBoolean(rdr["ReturnCode"]))
                                 {
-                                    string passResetLink = "https://fmb-cis.beesuite.ph/Account/ResetPassword?email=" + rdr["email"].ToString() + "&tokencode=" + rdr["UniqueId"].ToString();
+                                    string passResetLink = "https://fmb-cis.beesuite.ph/Account/ResetPassword?email=" + rdr["email"].ToString() + "&tokencode=" + rdr["UniqueId"].ToString() +"&isNew=true";
                                 
                                     Console.WriteLine("Link for Password Reset:");
                                     Console.WriteLine(passResetLink);
@@ -393,7 +393,7 @@ namespace FMB_CIS.Controllers
                         {
                             if (Convert.ToBoolean(rdr["ReturnCode"]))
                             {
-                                string passResetLink = "https://fmb-cis.beesuite.ph/Account/ResetPassword?email=" + rdr["email"].ToString() + "&tokencode=" + rdr["UniqueId"].ToString();
+                                string passResetLink = "https://fmb-cis.beesuite.ph/Account/ResetPassword?email=" + rdr["email"].ToString() + "&tokencode=" + rdr["UniqueId"].ToString() + "&isNew=false";
                                 //string passResetLink = "https://localhost:7270/Account/ResetPassword?email=" + rdr["email"].ToString() + "&tokencode=" + rdr["UniqueId"].ToString();
 
 
@@ -428,11 +428,19 @@ namespace FMB_CIS.Controllers
 
         [HttpGet]
         //[Url("?email={email}&code={code}")]
-        public IActionResult ResetPassword(string email, string tokencode)
+        public IActionResult ResetPassword(string email, string tokencode, bool isNew)
         {
             if (tokencode == null || email == null)
             {
                 ModelState.AddModelError("", "Invalid password reset token");
+            }
+            if (isNew == true)
+            {
+                ViewBag.Title = "New Password";
+            }
+            else
+            {
+                ViewBag.Title = "Reset Password";
             }
             return View();
         }
