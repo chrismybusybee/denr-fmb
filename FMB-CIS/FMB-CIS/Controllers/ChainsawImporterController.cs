@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNet.Identity;
 using System.Collections;
 using Mapster;
+using Microsoft.Extensions.Hosting;
 
 namespace FMB_CIS.Controllers
 {
@@ -36,16 +37,16 @@ namespace FMB_CIS.Controllers
         private readonly LocalContext _context;
         private readonly IConfiguration _configuration;
         private IEmailSender EmailSender { get; set; }
-        //private IWebHostEnvironment Environment;
+        private IWebHostEnvironment EnvironmentHosting;
 
 
 
-        public ChainsawImporterController(IConfiguration configuration, LocalContext context, IEmailSender emailSender)//, IWebHostEnvironment _environment)
+        public ChainsawImporterController(IConfiguration configuration, LocalContext context, IEmailSender emailSender, IWebHostEnvironment _environment)
         {
             this._configuration = configuration;
             _context = context;
             EmailSender = emailSender;
-            //Environment = _environment;
+            EnvironmentHosting = _environment;
         }
 
         public IActionResult Index()
@@ -123,13 +124,14 @@ namespace FMB_CIS.Controllers
                 //File Upload
                 if(model.filesUpload != null)
                 {
+                    var folderName = userID + "_" + model.tbl_Application.id;
                     foreach (var file in model.filesUpload.Files)
                     {
                         try
                         {
                             var filesDB = new tbl_files();
                             FileInfo fileInfo = new FileInfo(file.FileName);
-                            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserDocs");
+                            string path = Path.Combine(EnvironmentHosting.ContentRootPath, "wwwroot/Files/" + folderName);
 
                             //create folder if not exist
                             if (!Directory.Exists(path))
@@ -226,6 +228,11 @@ namespace FMB_CIS.Controllers
                 return RedirectToAction("Index", "Dashboard");
             }
             ViewModel mymodel = new ViewModel();
+            int applicID = Convert.ToInt32(appid);
+
+            mymodel.uid = uid;
+            mymodel.appid = applicID.ToString();
+
             //tbl_user user = _context.tbl_user.Find(uid);
 
 
@@ -249,7 +256,7 @@ namespace FMB_CIS.Controllers
             mymodel.workflow = workflowModel;
 
             //CODE FOR FILE DOWNLOAD
-            int applicID = Convert.ToInt32(appid);
+           // int applicID = Convert.ToInt32(appid);
             string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
             ViewData["BaseUrl"] = host;
 
@@ -584,11 +591,21 @@ namespace FMB_CIS.Controllers
                 //File Upload
                 if (viewMod.filesUpload != null)
                 {
+                    var folderName = tbl_user_id + "_" + id;
+
+                    var folder = @"/INSPECTOR UPLOADS/";
+
+
+                    if (Role == "DENR CENRO")
+                    {
+                        folder = @"/CENRO UPLOADS/";
+                    }
+                    string path = Path.Combine(EnvironmentHosting.ContentRootPath, "wwwroot/Files/" + folderName + folder);
+
                     foreach (var file in viewMod.filesUpload.Files)
                     {
                         var filesDB = new tbl_files();
                         FileInfo fileInfo = new FileInfo(file.FileName);
-                        string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserDocs");
 
                         //create folder if not exist
                         if (!Directory.Exists(path))

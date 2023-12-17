@@ -19,12 +19,14 @@ namespace FMB_CIS.Controllers
         private readonly LocalContext _context;
         private readonly IConfiguration _configuration;
         private IEmailSender EmailSender { get; set; }
+        private IWebHostEnvironment EnvironmentWebHost;
 
-        public AccountManagementController(IConfiguration configuration, LocalContext context, IEmailSender emailSender)
+        public AccountManagementController(IConfiguration configuration, LocalContext context, IEmailSender emailSender, IWebHostEnvironment _environment)
         {
             this._configuration = configuration;
             _context = context;
             EmailSender = emailSender;
+            EnvironmentWebHost = _environment;  
         }
         public IActionResult Index()
         {
@@ -281,8 +283,9 @@ namespace FMB_CIS.Controllers
                 bool profilePhotoExist = _context.tbl_files.Where(f => f.tbl_user_id == uid && f.path.Contains("UserPhotos") && f.is_active == true).Any();
                 if(profilePhotoExist == true)
                 {
+                    var folderName = "USER_" + uid;
                     var profilePhoto = _context.tbl_files.Where(f => f.tbl_user_id == uid && f.path.Contains("UserPhotos") && f.is_active == true).FirstOrDefault();
-                    ViewBag.profilePhotoSource = "/Files/UserPhotos/"+ profilePhoto.filename;
+                    ViewBag.profilePhotoSource = "/Files/UserPhotos/"+folderName+"/"+ profilePhoto.filename;
                 }
                 else
                 {
@@ -464,11 +467,13 @@ namespace FMB_CIS.Controllers
             //File Upload
             if (model.filesUpload != null)
             {
+
+                var folderName = "USER_" + uid;
                 foreach (var file in model.filesUpload.Files)
                 {
                     var filesDB = new tbl_files();
                     FileInfo fileInfo = new FileInfo(file.FileName);
-                    string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserDocs");
+                    string path = Path.Combine(EnvironmentWebHost.ContentRootPath, "wwwroot/Files/UserDocs/" + folderName);
 
                     //create folder if not exist
                     if (!Directory.Exists(path))
@@ -507,11 +512,13 @@ namespace FMB_CIS.Controllers
             //Profile Pic Upload
             if (model.profilePicUpload != null)
             {
+
+                var folderName = "USER_" + uid;
                 foreach (var pPicFile in model.profilePicUpload.Files)
                 {
                     var profilePicFilesDB = new tbl_files();
                     FileInfo pPicFileInfo = new FileInfo(pPicFile.FileName);
-                    string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserPhotos");
+                    string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserPhotos/" + folderName);
 
                     //create folder if not exist
                     if (!Directory.Exists(path))

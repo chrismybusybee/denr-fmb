@@ -23,15 +23,16 @@ namespace FMB_CIS.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly LocalContext _context;
-       
+        private IWebHostEnvironment EnvironmentHosting;
+
         private IEmailSender EmailSender { get; set; }
 
-        public AccountController(IConfiguration configuration, LocalContext context, IEmailSender emailSender)
+        public AccountController(IConfiguration configuration, LocalContext context, IEmailSender emailSender, IWebHostEnvironment _environment)
         {
             this._configuration = configuration;
             _context = context;
             EmailSender = emailSender;
-           
+            EnvironmentHosting = _environment;
         }
 
         public IActionResult Login()
@@ -244,11 +245,13 @@ namespace FMB_CIS.Controllers
                     //File Upload
                     if (model.filesUpload != null)
                     {
+
+                        var folderName = "USER_"+usrID;
                         foreach (var file in model.filesUpload.Files)
                         {
                             var filesDB = new tbl_files();
                             FileInfo fileInfo = new FileInfo(file.FileName);
-                            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserDocs");
+                            string path = Path.Combine(EnvironmentHosting.ContentRootPath, "wwwroot/Files/UserDocs/" + folderName);
 
                             //create folder if not exist
                             if (!Directory.Exists(path))

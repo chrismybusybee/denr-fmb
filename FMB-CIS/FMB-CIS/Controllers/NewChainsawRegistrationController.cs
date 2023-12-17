@@ -27,13 +27,15 @@ namespace FMB_CIS.Controllers
         private readonly LocalContext _context;
         private readonly IConfiguration _configuration;
         private IEmailSender EmailSender { get; set; }
+        private IWebHostEnvironment EnvironmentHosting;
 
 
-        public NewChainsawRegistrationController(IConfiguration configuration, LocalContext context, IEmailSender emailSender)
+        public NewChainsawRegistrationController(IConfiguration configuration, LocalContext context, IEmailSender emailSender, IWebHostEnvironment _environment)
         {
             this._configuration = configuration;
             _context = context;
             EmailSender = emailSender;
+            EnvironmentHosting = _environment;
         }
         public IActionResult Index()
         {
@@ -138,11 +140,12 @@ namespace FMB_CIS.Controllers
                 //File Upload
                 if (model.filesUpload != null)
                 {
+                    var folderName = userID + "_" + model.tbl_Application.id;
                     foreach (var file in model.filesUpload.Files)
                     {
                         var filesDB = new tbl_files();
                         FileInfo fileInfo = new FileInfo(file.FileName);
-                        string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserDocs");
+                        string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/" + folderName);
 
                         //create folder if not exist
                         if (!Directory.Exists(path))

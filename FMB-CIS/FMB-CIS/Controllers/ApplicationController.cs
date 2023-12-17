@@ -21,13 +21,15 @@ namespace FMB_CIS.Controllers
         private readonly LocalContext _context;
         private readonly IConfiguration _configuration;
         private IEmailSender EmailSender { get; set; }
+        private IWebHostEnvironment WebHostEnvironment;
 
 
-        public ApplicationController(IConfiguration configuration, LocalContext context, IEmailSender emailSender)
+        public ApplicationController(IConfiguration configuration, LocalContext context, IEmailSender emailSender, IWebHostEnvironment _environment)
         {
             this._configuration = configuration;
             _context = context;
             EmailSender = emailSender;
+            this.WebHostEnvironment = _environment;
         }
 
         public IActionResult Index()
@@ -413,6 +415,9 @@ namespace FMB_CIS.Controllers
 
                 //CODE FOR FILE DOWNLOAD
                 int applicID = Convert.ToInt32(appid);
+
+                mymodel.uid = uid;
+                mymodel.appid = applicID.ToString();
                 //File Paths from Database
                 var filesFromDB = _context.tbl_files.Where(f => f.tbl_application_id == applicID && f.created_by == usid && f.is_proof_of_payment != true).ToList();
                 List<tbl_files> files = new List<tbl_files>();
@@ -590,7 +595,7 @@ namespace FMB_CIS.Controllers
                                               id = a.id,
                                               tbl_user_id = usid,
                                               full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
-                                              full_address = usr.street_address + " " + brngy.name + " " + ct.name + " " + prov.name + " " + reg.name,
+                                              full_address = usr.street_address ,//+ " " + brngy.name + " " + ct.name + " " + prov.name + " " + reg.name,
                                               email = usr.email,
                                               permit_type = pT.name,
                                               permit_status = pS.status,
@@ -756,11 +761,12 @@ namespace FMB_CIS.Controllers
                 //Saving a file
                 if (viewMod.filesUpload != null)
                 {
+                    var folderName = usid + "_" + applid;
                     foreach (var file in viewMod.filesUpload.Files)
                     {
                         var filesDB = new tbl_files();
                         FileInfo fileInfo = new FileInfo(file.FileName);
-                        string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserDocs");
+                        string path = Path.Combine(WebHostEnvironment.ContentRootPath, "wwwroot/Files/" + folderName);
 
                         //create folder if not exist
                         if (!Directory.Exists(path))
@@ -925,7 +931,19 @@ namespace FMB_CIS.Controllers
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             //var action = ViewContext.RouteData.Values["action"].ToString();
             //var action = ViewBag.ActionName;
-            
+
+
+            var folderName = loggedUserID + "_" + applicationID;
+
+            //var folder = @"wwwroot/Files/ChainsawImporterPermit/";
+
+            //if (actionName == "ImportPermits")
+            //{
+
+            //    folder = @"wwwroot/Files/ChainsawImporterPermit/";
+            //}
+
+
             //Saving a file
             if (model.filesUpload != null)
             {
@@ -933,7 +951,7 @@ namespace FMB_CIS.Controllers
                 {
                     var filesDB = new tbl_files();
                     FileInfo fileInfo = new FileInfo(file.FileName);
-                    string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserDocs");
+                    string path = Path.Combine(WebHostEnvironment.ContentRootPath, "wwwroot/Files/" + folderName + "/ProofofPayment/");
 
                     //create folder if not exist
                     if (!Directory.Exists(path))
