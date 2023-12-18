@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using Microsoft.AspNet.Identity;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing;
 
 namespace FMB_CIS.Controllers
 {
@@ -631,6 +632,18 @@ namespace FMB_CIS.Controllers
                 }
             }
             return Json(divisionLists);
+        }
+
+
+
+        [HttpPost, ActionName("GetRegions")]
+        public JsonResult GetRegions()
+        {
+            List<tbl_region> regionLists = new List<tbl_region>();
+
+            regionLists = _context.tbl_region.OrderBy(r => r.id).ToList();
+
+            return Json(regionLists);
         }
     }
 }

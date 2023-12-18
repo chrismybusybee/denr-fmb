@@ -1015,6 +1015,22 @@ namespace FMB_CIS.Controllers
                             dateExpiration = DateTime.Now.AddYears(3); //Permit to Expire after 3 years
                             dateDueOfficer = null; //Since task is done, no more due date for officer
                             break;
+                        case (int)PermitStatusEnum.PENRO_FOCAL_APPROVAL:
+                            break;
+                        case (int)PermitStatusEnum.PENRO_FOCAL_APPROVAL_REJECT:
+                            break;
+                        case (int)PermitStatusEnum.PENRO_APPROVAL:
+                            break;
+                        case (int)PermitStatusEnum.PENRO_APPROVAL_REJECT:
+                            break;
+                        case (int)PermitStatusEnum.REGION_FOCAL_APPROVAL:
+                            break;
+                        case (int)PermitStatusEnum.REGION_FOCAL_APPROVAL_REJECT:
+                            break;
+                        case (int)PermitStatusEnum.REGION_APPROVAL:
+                            break;
+                        case (int)PermitStatusEnum.REGION_APPROVAL_REJECT:
+                            break;
                     }
 
                     var appli = new tbl_application() { id = applid, status = stats, date_modified = DateTime.Now, modified_by = loggedUserID, initial_date_of_inspection = dateInspectionInitial, date_of_inspection = dateInspection, date_of_registration = dateRegistration, date_of_expiration = dateExpiration, date_due_for_officers = dateDueOfficer };

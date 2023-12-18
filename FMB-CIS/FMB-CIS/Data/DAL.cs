@@ -149,6 +149,27 @@ namespace FMB_CIS.Data
             }
         }
 
+        public List<string> selectAccessRightsFromEmailMultiple(string email, string connectString)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(connectString))
+            {
+
+                sqlConnection.Open();
+                SqlCommand sqlCmd = new SqlCommand("SelectAccessRightsIDFromEmailMultiple", sqlConnection);
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.Parameters.AddWithValue("email", email);
+
+                var reader = sqlCmd.ExecuteReader();
+
+                List<string> accessRights = new List<string>();
+                while (reader.Read())
+                {
+                    accessRights.Add((string)reader["code"]);
+                }
+                return accessRights;
+            }
+        }
+
         public List<string> selectAccessRightsFromEmail(string email, string connectString)
         {
             using (SqlConnection sqlConnection = new SqlConnection(connectString))

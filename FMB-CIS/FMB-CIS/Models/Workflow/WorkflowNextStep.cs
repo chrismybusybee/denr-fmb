@@ -8,6 +8,7 @@ namespace FMB_CIS.Models
         //public int userTypeId { get; set; }
         public int stepId { get; set; }
         public int division_id { get; set; }
+        public string division_parameter { get; set; }
         public int user_type_id { get; set; }
         public string workflow_code { get; set; }
         public string next_step_code { get; set; }
