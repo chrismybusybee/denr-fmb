@@ -1012,6 +1012,22 @@ namespace FMB_CIS.Controllers
                                     break;
                             }
                             break;
+                        case (int)PermitStatusEnum.PENRO_FOCAL_APPROVAL:
+                            break;
+                        case (int)PermitStatusEnum.PENRO_FOCAL_APPROVAL_REJECT:
+                            break;
+                        case (int)PermitStatusEnum.PENRO_APPROVAL:
+                            break;
+                        case (int)PermitStatusEnum.PENRO_APPROVAL_REJECT:
+                            break;
+                        case (int)PermitStatusEnum.REGION_FOCAL_APPROVAL:
+                            break;
+                        case (int)PermitStatusEnum.REGION_FOCAL_APPROVAL_REJECT:
+                            break;
+                        case (int)PermitStatusEnum.REGION_APPROVAL:
+                            break;
+                        case (int)PermitStatusEnum.REGION_APPROVAL_REJECT:
+                            break;
                     }
                     //if (viewMod.applicantViewModels.status <= 6) // Approval Process before payment
                     //{

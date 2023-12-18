@@ -207,6 +207,7 @@ namespace FMB_CIS.Controllers
                             workflowNextStepEntity.workflow_code = workflowEntity.workflow_code;
                             workflowNextStepEntity.workflow_step_code = workflowStepEntity.workflow_step_code;
                             workflowNextStepEntity.next_step_code = nextStep.next_step_code;
+                            workflowNextStepEntity.division_parameter = nextStep.division_parameter;
                             workflowNextStepEntity.division_id = nextStep.division_id;
                             workflowNextStepEntity.user_type_id = nextStep.user_type_id;
                             workflowNextStepEntity.button_text = nextStep.button_text;
