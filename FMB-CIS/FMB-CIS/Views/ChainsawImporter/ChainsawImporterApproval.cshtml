@@ -355,7 +355,7 @@
 
             @* Document Tagging and Checklist *@
             <hr />
-            <div class="row d-flex justify-content-center m-0">
+            <div class="row d-flex justify-content-center m-0" id="checklistTBLdiv">
                 <table class="table dataTable" id="tblApplicantFiles">
                     <thead>
                         <tr>
@@ -1068,6 +1068,8 @@
 
                         $.post(url + "ChainsawImporter/FileTaggingChanges", { tbl_files_id: fileID, tbl_files_status: status, comment: comment, appid: applicationID }, function (data) {
                             console.log("data: ", data);
+                            $("#checklistTBLdiv").load("ChainsawImporterApproval?uid=" + "@Model.applicantViewModels.tbl_user_id" + "&appid=" + "@Model.applicantViewModels.id" + " #checklistTBLdiv");
+                            console.log("load");
                             Swal.fire("Success!", "Document marked as \"Complied\"", "success");
                         });
                     }
@@ -1121,6 +1123,7 @@
 
                         $.post(url + "ChainsawImporter/FileTaggingChanges", { tbl_files_id: fileID, tbl_files_status: status, comment: comment, appid: applicationID }, function (data) {
                             console.log("data: ", data);
+                            $("#checklistTBLdiv").load("ChainsawImporterApproval?uid=" + "@Model.applicantViewModels.tbl_user_id" + "&appid=" + "@Model.applicantViewModels.id" + " #checklistTBLdiv");
                             Swal.fire("Success!", "Document marked as \"Not Complied\"", "success");
                         });
                     }
