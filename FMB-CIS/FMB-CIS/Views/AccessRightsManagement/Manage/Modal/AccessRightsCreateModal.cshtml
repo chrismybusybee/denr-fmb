@@ -58,6 +58,7 @@
         console.log(parameters);
         $.post("/AccessRightsManagement/AccessRightsCreate", parameters, function (data) {
             // NOTE: TO DO if success
+            //console.log("Success");
             closeModal();
             $('#accessRightsListPartialContainer').load('/AccessRightsManagement/AccessRightsListPartialView');
         });
