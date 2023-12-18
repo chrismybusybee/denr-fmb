@@ -24,13 +24,15 @@ namespace FMB_CIS.Controllers
         private readonly IConfiguration _configuration;
         private readonly LocalContext _context;
         private IEmailSender EmailSender { get; set; }
+        private IWebHostEnvironment WebHostEnvironment;
 
 
-        public ChainsawOwnerController(IConfiguration configuration, LocalContext context, IEmailSender emailSender)
+        public ChainsawOwnerController(IConfiguration configuration, LocalContext context, IEmailSender emailSender, IWebHostEnvironment _environment)
         {
             this._configuration = configuration;
             _context = context;
             EmailSender = emailSender;
+            WebHostEnvironment = _environment;
         }
         public IActionResult Index()
         {
@@ -147,11 +149,13 @@ namespace FMB_CIS.Controllers
                 //File Upload
                 if (model.filesUpload != null)
                 {
+                    var folderName = userID + "_" + model.tbl_Application.id;
+                    string path = Path.Combine(WebHostEnvironment.ContentRootPath, "wwwroot/Files/" + folderName);
                     foreach (var file in model.filesUpload.Files)
                     {
                         var filesDB = new tbl_files();
                         FileInfo fileInfo = new FileInfo(file.FileName);
-                        string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserDocs");
+                        //string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserDocs");
 
                         //create folder if not exist
                         if (!Directory.Exists(path))
@@ -242,6 +246,10 @@ namespace FMB_CIS.Controllers
 
             //CODE FOR FILE DOWNLOAD
             int applicID = Convert.ToInt32(appid);
+
+            mymodel.uid = uid;
+            mymodel.appid = applicID.ToString();
+
             string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
             ViewData["BaseUrl"] = host;
             //File Paths from Database
@@ -660,11 +668,21 @@ namespace FMB_CIS.Controllers
                 //File Upload
                 if (viewMod.filesUpload != null)
                 {
+                    var folderName = tbl_user_id + "_" + id;
+                    var folder = @"/INSPECTOR UPLOADS/";
+
+
+                    if (Role == "DENR CENRO")
+                    {
+                        folder = @"/CENRO UPLOADS/";
+                    }
+                    string path = Path.Combine(WebHostEnvironment.ContentRootPath, "wwwroot/Files/" + folderName + folder);
+
                     foreach (var file in viewMod.filesUpload.Files)
                     {
                         var filesDB = new tbl_files();
                         FileInfo fileInfo = new FileInfo(file.FileName);
-                        string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserDocs");
+                        //string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserDocs");
 
                         //create folder if not exist
                         if (!Directory.Exists(path))
