@@ -7,6 +7,8 @@
     ViewBag.Cenro = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO");
     ViewBag.Inspector = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector");
     ViewBag.AccessRights = ((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value;
+    var usrRoleList = ((ClaimsIdentity)User.Identity).FindFirst("userRoleList").Value.Split(",");
+    var test = "";
 }
 <!DOCTYPE html>
 <style>
@@ -179,6 +181,8 @@
                                         </ul>
                                 </li>
                             }
+                            
+                            @* OLD METHOD *@
                             @switch(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value)
                             {
                                 case "Chainsaw Importer":
@@ -543,6 +547,150 @@
 
                                     break;
                             }
+                            @* END FOR OLD METHOD *@
+
+                            @if (usrRoleList.Contains("Chainsaw Importer"))
+                            {
+                                <li id="chainsawImporterMenuItem">
+                                    <a href="#" id="chainsawImporterSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/chainsaw-importer.png" />
+                                        </div>
+                                        <span>Chainsaw Importer</span>
+                                    </a>
+                                    <ul id="chainsawImporterDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
+                                        <li id="chainsawImporterApplication" class="my-0">
+                                            <a href="@Url.Action("Index", "ChainsawImporter")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>Application</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+
+                            @if (usrRoleList.Contains("Chainsaw Seller"))
+                            {
+                                <li id="chainsawSellerMenuItem">
+                                        <a href="#" id="chainsawSellerSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
+                                            <div>
+                                                <img src="~/assets/images/menu-icons/chainsaw-seller.png" />
+                                            </div>
+                                            <span>Chainsaw Seller</span>
+                                        </a>
+                                        <ul id="chainsawSellerDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
+                                            <li id="chainsawSellerApplication" class="my-0">
+                                                <a href="@Url.Action("Index", "ChainsawSeller")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                    <div>
+                                                        <img src="~/assets/images/menu-icons/line.png" />
+                                                    </div>
+                                                    <span>Permit to Sell</span>
+                                                </a>
+                                            </li>
+                                            <li id="permitToPurchaseApplication" class="my-0">
+                                                <a href="@Url.Action("PermitToPurchase", "ChainsawSeller")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                    <div>
+                                                        <img src="~/assets/images/menu-icons/line.png" />
+                                                    </div>
+                                                    <span>Permit to Purchase</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>                                
+                            }
+
+                            @if (usrRoleList.Contains("Chainsaw Owner"))
+                            {
+                                <li id="chainsawOwnerMenuItem">
+                                    <a href="#" id="chainsawOwnerSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/chainsaw-owner.png" />
+                                        </div>
+                                        <span>Chainsaw Owner</span>
+                                    </a>
+                                    <ul id="chainsawOwnerDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
+                                        <li id="newChainsawRegistrationMenuItem">
+                                            <a href="@Url.Action("Index", "NewChainsawRegistration")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>Chainsaw Registration</span>
+                                            </a>
+                                        </li>
+                                        <li id="chainsawOwnerApplication" class="my-0">
+                                            <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+
+                                                <span>Other Permits</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+
+                            @if (usrRoleList.Contains("DENR CENRO") || usrRoleList.Contains("DENR Inspector") || usrRoleList.Contains("DENR Regional Executive Director (RED)") || usrRoleList.Contains("DENR Implementing PENRO"))
+                            {
+                                <li id="chainsawImporterMenuItem">
+                                    <a href="#" id="chainsawImporterSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/chainsaw-importer.png" />
+                                        </div>
+                                        <span>Chainsaw Importer</span>
+                                    </a>
+                                    <ul id="chainsawImporterDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
+                                        <li id="chainsawImporterApplication" class="my-0">
+                                            <a href="@Url.Action("Index", "ChainsawImporter")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>Application</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li id="chainsawSellerMenuItem">
+                                    <a href="#" id="chainsawSellerSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/chainsaw-seller.png" />
+                                        </div>
+                                        <span>Chainsaw Seller</span>
+                                    </a>
+                                    <ul id="chainsawSellerDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
+                                        <li id="chainsawSellerApplication" class="my-0">
+                                            <a href="@Url.Action("Index", "ChainsawSeller")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>Application</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li id="chainsawOwnerMenuItem">
+                                    <a href="#" id="chainsawOwnerSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/chainsaw-owner.png" />
+                                        </div>
+                                        <span>Chainsaw Owner</span>
+                                    </a>
+                                    <ul id="chainsawOwnerDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
+                                        <li id="chainsawOwnerApplication" class="my-0">
+                                            <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+
+                                                <span>Application</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+
                             
                             @* <li id="renewalMenuItem">
                                 <a href="@Url.Action("Index", "Renewal")" class="d-flex gap-2 text-decoration-none fs-6">
@@ -892,6 +1040,13 @@
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.min.js"></script>
 
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script> *@
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script> *@
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> *@
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    @* <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script> *@
+
     <script src="/bootstrap-fileinput-master/js/plugins/piexif.min.js" type="text/javascript"></script>
     <script src="/bootstrap-fileinput-master/js/plugins/sortable.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -908,7 +1063,9 @@
         feather.replace();
         $('.dataTable').DataTable({
             destroy: true,
-            order: [[0, 'desc']]
+            order: [[0, 'desc']],
+            dom: 'Bfrtip',
+            buttons: ['csv', 'excel']
         });
         function toggleDropdown(menuItem, dropdown) {
             $(dropdown).toggleClass("active");
