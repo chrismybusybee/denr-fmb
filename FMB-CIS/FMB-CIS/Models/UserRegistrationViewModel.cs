@@ -64,6 +64,9 @@ namespace FMB_CIS.Models
         public IEnumerable<tbl_city>? tbl_Cities { get; set; }
         public IEnumerable<tbl_brgy>? tbl_Brgys { get; set; }
         public IEnumerable<tbl_files>? tbl_Files { get; set; }
+
+        public string tbl_user_types_string { get; set; }
+        public IEnumerable<int>? tbl_user_types_ids { get; set; }
         public FileUpload? filesUpload { get; set; }
         public tbl_user? tbl_Users { get; set; }
         public RECaptcha? reCaptcha { get; set;}

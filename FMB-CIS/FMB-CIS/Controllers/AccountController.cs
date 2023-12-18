@@ -15,7 +15,7 @@ using System.Web.Helpers;
 using System.Net;
 using reCAPTCHA.AspNetCore;
 using Newtonsoft;
-
+using WebGrease.Css.Extensions;
 
 namespace FMB_CIS.Controllers
 {
@@ -181,6 +181,7 @@ namespace FMB_CIS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Registration(UserRegistrationViewModel model)
         {
+            model.tbl_user_types_ids = model.tbl_user_types_string.Split(',').Select(item => int.Parse(item));
             //[Bind("first_name,middle_name,last_name,suffix,contact_no,valid_id,valid_id_no,birth_date,tbl_region_id,tbl_province_id,tbl_city_id,tbl_brgy_id,street_address,tbl_division_id,email,password,confirmPassword,comment,tbl_user_types_id")]
 
             if (ModelState.IsValid)
@@ -239,6 +240,20 @@ namespace FMB_CIS.Controllers
                     tblUsrTmpPsFB.date_created = DateTime.Now;
                     tblUsrTmpPsFB.date_modified = DateTime.Now;
                     _context.tbl_user_temp_passwords.Add(tblUsrTmpPsFB);
+                    _context.SaveChanges();
+
+                    model.tbl_user_types_ids.ForEach(ut =>
+                    {
+                        tbl_user_type_user new_tbl_user_type_user = new tbl_user_type_user();
+                        new_tbl_user_type_user.user_id = model.tbl_Users.id;
+                        new_tbl_user_type_user.user_type_id = ut;
+                        new_tbl_user_type_user.is_active = true;
+                        new_tbl_user_type_user.date_created = DateTime.Now;
+                        new_tbl_user_type_user.date_modified = DateTime.Now;
+                        new_tbl_user_type_user.created_by = model.tbl_Users.id;
+                        new_tbl_user_type_user.modified_by = model.tbl_Users.id;
+                        _context.tbl_user_type_user.Add(new_tbl_user_type_user);
+                    });
                     _context.SaveChanges();
 
                     //File Upload

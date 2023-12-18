@@ -40,22 +40,22 @@
                     Upload Supporting Documents
                 </div>
                 @* <div class="stepwizard-step">
-                    <p class="mb-1 fw-bold">Step</p>
-                    <a href="#step-4" type="button" class="btn btn-default btn-circle fw-bold" disabled="disabled">4</a>
+                <p class="mb-1 fw-bold">Step</p>
+                <a href="#step-4" type="button" class="btn btn-default btn-circle fw-bold" disabled="disabled">4</a>
                 </div>
                 <div class="stepwizard-step">
-                    <p class="mb-1 fw-bold">Step</p>
-                    <a href="#step-5" type="button" class="btn btn-default btn-circle fw-bold" disabled="disabled">5</a>
+                <p class="mb-1 fw-bold">Step</p>
+                <a href="#step-5" type="button" class="btn btn-default btn-circle fw-bold" disabled="disabled">5</a>
                 </div>
                 <div class="stepwizard-step">
-                    <p class="mb-1 fw-bold">Step</p>
-                    <a href="#step-6" type="button" class="btn btn-default btn-circle fw-bold" disabled="disabled">6</a>
+                <p class="mb-1 fw-bold">Step</p>
+                <a href="#step-6" type="button" class="btn btn-default btn-circle fw-bold" disabled="disabled">6</a>
                 </div> *@
             </div>
         </div>
-        
+
         <form asp-action="Registration" id="RegForm" role="form" class="w-75 mx-auto mb-5" method="post" enctype="multipart/form-data">
-            
+
             <div class="row setup-content border rounded pt-3 pb-4" id="step-1">
                 <label class="control-label text-secondary fw-bold mb-3">Choose your user type & classification</label>
                 <div class="col-xs-6 col-md-offset-3">
@@ -64,35 +64,39 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label text-secondary small mb-1">User Type</label>
-                                  @*  <select asp-for="tbl_Users.tbl_user_types_id" class="form-select" aria-label="User Type" required="required">
-                                        <option value="" selected disabled>--Select User Type--</option>
-                                        <option value="1">Chainsaw Importer Only</option>
-                                        <option value="2">Chainsaw Seller Only</option>
-                                        <option value="3">Chainsaw Owner Only</option>
-                                        <option value="4">Chainsaw Importer and Seller</option>
-                                        <option value="5">Chainsaw Importer and Owner</option>
-                                        <option value="6">Chainsaw Seller and Owner</option>
-                                        <option value="7">Chainsaw Importer, Owner, and Seller</option>
+                                    <input type="hidden" asp-for="tbl_user_types_string" id="tbl_user_types_ids" />
+                                    @*  <select asp-for="tbl_Users.tbl_user_types_id" class="form-select" aria-label="User Type" required="required">
+                                    <option value="" selected disabled>--Select User Type--</option>
+                                    <option value="1">Chainsaw Importer Only</option>
+                                    <option value="2">Chainsaw Seller Only</option>
+                                    <option value="3">Chainsaw Owner Only</option>
+                                    <option value="4">Chainsaw Importer and Seller</option>
+                                    <option value="5">Chainsaw Importer and Owner</option>
+                                    <option value="6">Chainsaw Seller and Owner</option>
+                                    <option value="7">Chainsaw Importer, Owner, and Seller</option>
                                     </select>*@
-                                    <label for="flexCheckDefault1" class="form-check form-check-border">
-                                        <input class="form-check-input" type="checkbox" name="tbl_Users.tbl_user_types_ids" value="1" id="flexCheckDefault1">
-                                        <label class="form-check-label" for="flexCheckDefault1">
+                                    <label for="checkbox_chainsawImporter" class="form-check form-check-border">
+                                        <input class="form-check-input user_types_button" type="checkbox" value="1" id="checkbox_chainsawImporter">
+                                        @*name="tbl_Users.tbl_user_types_ids"*@
+                                        <label class="form-check-label" for="checkbox_chainsawImporter">
                                             Chainsaw Importer
                                         </label>
                                     </label>
-                                    <label for="flexCheckDefault2" class="form-check form-check-border">
-                                        <input class="form-check-input" type="checkbox" name="tbl_Users.tbl_user_types_ids" value="2" id="flexCheckDefault2">
-                                        <label class="form-check-label" for="flexCheckDefault2">
+                                    <label for="checkbox_chainsawSeller" class="form-check form-check-border">
+                                        <input class="form-check-input user_types_button" type="checkbox" value="2" id="checkbox_chainsawSeller">
+                                        @*name="tbl_Users.tbl_user_types_ids"*@
+                                        <label class="form-check-label" for="checkbox_chainsawSeller">
                                             Chainsaw Seller
                                         </label>
                                     </label>
-                                    <label for="flexCheckDefault3"  class="form-check form-check-border">
-                                        <input class="form-check-input" type="checkbox" name="tbl_Users.tbl_user_types_ids" value="3" id="flexCheckDefault3">
-                                        <label class="form-check-label" for="flexCheckDefault3">
+                                    <label for="checkbox_chainsawOwner" class="form-check form-check-border">
+                                        <input class="form-check-input user_types_button" type="checkbox" value="3" id="checkbox_chainsawOwner">
+                                        @*name="tbl_Users.tbl_user_types_ids"*@
+                                        <label class="form-check-label" for="checkbox_chainsawOwner">
                                             Chainsaw Owner
                                         </label>
                                     </label>
-                                    <span asp-validation-for="tbl_Users.tbl_user_types_id" class="text-danger"></span>
+                                    <span asp-validation-for="tbl_user_types_ids" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -246,7 +250,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row mb-4">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -293,7 +297,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="text-center mt-3">
                             <button class="btn btn-secondary prevBtn" type="button">Previous</button>
                             <button class="btn btn-primary nextBtn" type="button">Next</button>
@@ -310,9 +314,9 @@
                                 <span style="white-space: pre-line">@Model.soloAnnouncement.announcement_content</span>
                                 @* <span class="fw-bold text-secondary mb-3">Please upload any of the following documents:</span>
                                 <ul class="text-secondary mt-3">
-                                    <li>DTI or SEC registration certificate</li>
-                                    <li>Barangay Clearance</li>
-                                    <li>Community Tax Certificate</li>
+                                <li>DTI or SEC registration certificate</li>
+                                <li>Barangay Clearance</li>
+                                <li>Community Tax Certificate</li>
                                 </ul> *@
                             </div>
                             <div class="gap-4 mb-5">
@@ -320,24 +324,24 @@
                                 <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload...">
                             </div>
                             @* <div class="d-flex gap-2 align-items-center">
-                                <span class="fw-bold text-secondary">Attach documents</span>
-                                <div>
-                                    <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
-                                        <i data-feather="upload"></i> Upload
-                                    </label>
-                                </div>
-                                <input type="file" asp-for="filesUpload.Files" class="form-control file" multiple hidden accept="application/pdf" />
+                            <span class="fw-bold text-secondary">Attach documents</span>
+                            <div>
+                            <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
+                            <i data-feather="upload"></i> Upload
+                            </label>
+                            </div>
+                            <input type="file" asp-for="filesUpload.Files" class="form-control file" multiple hidden accept="application/pdf" />
                             </div> *@
-                            
+
                         </div>
                     </div>
                     @* <div class="d-flex gap-3 output align-items-center justify-content-center">
-                        <!-- Cards for files -->
-                        <p id="files-area">
-                            <span id="filesList">
-                                <span id="files-names"></span>
-                            </span>
-                        </p>
+                    <!-- Cards for files -->
+                    <p id="files-area">
+                    <span id="filesList">
+                    <span id="files-names"></span>
+                    </span>
+                    </p>
                     </div> *@
                     <hr class="my-5" />
                     <div class="d-flex flex-column justify-content-center align-items-center">
@@ -360,48 +364,48 @@
                     @*@Model.soloAnnouncement.announcement_content*@
 
                     @*<div class="form-group" hidden="hidden">
-                        <label asp-for="tbl_Users.comment" class="form-label small">Remarks</label>
-                        <input asp-for="tbl_Users.comment" class="form-control" disabled />
-                        <span asp-validation-for="tbl_Users.comment" class="text-danger"></span>
+                    <label asp-for="tbl_Users.comment" class="form-label small">Remarks</label>
+                    <input asp-for="tbl_Users.comment" class="form-control" disabled />
+                    <span asp-validation-for="tbl_Users.comment" class="text-danger"></span>
                     </div>*@
                     @*<div class="form-group mb-5">
-                        <label class="control-label small text-black">Attach Forms</label>
-                        <input type="file" asp-for="filesUpload.Files" class="form-control" multiple />
+                    <label class="control-label small text-black">Attach Forms</label>
+                    <input type="file" asp-for="filesUpload.Files" class="form-control" multiple />
                     </div> *@
 
                     @*<div class="row m-0 mb-4">
-                        <div class="col-md-12">
-                            <div class="d-flex gap-4 mb-5">
-                                <h3 class="text-secondary fw-bold m-0">Attach Documents</h3>
-                                <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
-                                    <i data-feather="upload"></i> Upload
-                                </label>
-                                <input type="file" asp-for="filesUpload.Files" class="form-control file" multiple hidden accept="application/pdf" />
-                                <!-- <button type="button" class="btn btn-primary"><i data-feather="upload"></i> Upload</button> -->
-                            </div>
-                            <div class="d-flex mb-4 gap-3 output">
-                                <!-- Cards for files -->
-                                <p id="files-area">
-                                    <span id="filesList">
-                                        <span id="files-names"></span>
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
+                    <div class="col-md-12">
+                    <div class="d-flex gap-4 mb-5">
+                    <h3 class="text-secondary fw-bold m-0">Attach Documents</h3>
+                    <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
+                    <i data-feather="upload"></i> Upload
+                    </label>
+                    <input type="file" asp-for="filesUpload.Files" class="form-control file" multiple hidden accept="application/pdf" />
+                    <!-- <button type="button" class="btn btn-primary"><i data-feather="upload"></i> Upload</button> -->
+                    </div>
+                    <div class="d-flex mb-4 gap-3 output">
+                    <!-- Cards for files -->
+                    <p id="files-area">
+                    <span id="filesList">
+                    <span id="files-names"></span>
+                    </span>
+                    </p>
+                    </div>
+                    </div>
                     </div>*@
 
                     @*<div class="row m-0 mb-4">
-                        <div class="col-md-12">
-                            <div class="d-flex gap-4 mb-5">
-                                <h3 class="text-secondary fw-bold m-0">Upload Profile Photo/Company Logo</h3>
-                                <label for="profilePicInput" class="btn btn-primary custom-file-upload">
-                                    <i data-feather="upload"></i> Upload Photo
-                                    <input type="file" asp-for="profilePicUpload.Files" class="form-control" id="profilePicInput" hidden accept="image/jpeg" onchange="profilePicInputChange()" />
-                                </label>
-                                    
-                            </div>
-                            <img id="profilePic" src="#" height="200px" hidden/>
-                        </div>
+                    <div class="col-md-12">
+                    <div class="d-flex gap-4 mb-5">
+                    <h3 class="text-secondary fw-bold m-0">Upload Profile Photo/Company Logo</h3>
+                    <label for="profilePicInput" class="btn btn-primary custom-file-upload">
+                    <i data-feather="upload"></i> Upload Photo
+                    <input type="file" asp-for="profilePicUpload.Files" class="form-control" id="profilePicInput" hidden accept="image/jpeg" onchange="profilePicInputChange()" />
+                    </label>
+
+                    </div>
+                    <img id="profilePic" src="#" height="200px" hidden/>
+                    </div>
                     </div> *@
 
                     @*<div id="divcaptch"></div>
@@ -410,41 +414,41 @@
             </div>
 
             @* <div class="row setup-content" id="step-4">
-                <center><label class="control-label">User Information</label></center>
-                <div class="col-xs-6 col-md-offset-3">
-                    <div class="col-md-12">
-                        
-                        <div class="text-center mt-4">
-                            <button class="btn btn-secondary prevBtn" type="button">Previous</button>
-                            <button class="btn btn-primary nextBtn" type="button">Next</button>
-                        </div>
-                    </div>
-                </div>
+            <center><label class="control-label">User Information</label></center>
+            <div class="col-xs-6 col-md-offset-3">
+            <div class="col-md-12">
+
+            <div class="text-center mt-4">
+            <button class="btn btn-secondary prevBtn" type="button">Previous</button>
+            <button class="btn btn-primary nextBtn" type="button">Next</button>
+            </div>
+            </div>
+            </div>
             </div>
             <div class="row setup-content" id="step-5">
-                <center><label class="control-label">User Information</label></center>
-                <div class="col-xs-6 col-md-offset-3">
-                    <div class="col-md-12">
-                        
+            <center><label class="control-label">User Information</label></center>
+            <div class="col-xs-6 col-md-offset-3">
+            <div class="col-md-12">
 
-                        <div class="form-group" hidden="hidden">
-                            <label asp-for="tbl_Users.tbl_division_id" class="form-label small">DIVISION ID</label>
-                            <input asp-for="tbl_Users.tbl_division_id" class="form-control" value=" " disabled />
-                        </div>
-                        <div class="text-center mt-4">
-                            <button class="btn btn-secondary prevBtn" type="button">Previous</button>
-                            <button class="btn btn-primary nextBtn" type="button">Next</button>
-                        </div>
-                    </div>
-                </div>
+
+            <div class="form-group" hidden="hidden">
+            <label asp-for="tbl_Users.tbl_division_id" class="form-label small">DIVISION ID</label>
+            <input asp-for="tbl_Users.tbl_division_id" class="form-control" value=" " disabled />
+            </div>
+            <div class="text-center mt-4">
+            <button class="btn btn-secondary prevBtn" type="button">Previous</button>
+            <button class="btn btn-primary nextBtn" type="button">Next</button>
+            </div>
+            </div>
+            </div>
             </div>
             <div class="row setup-content" id="step-6">
-                <center><label class="control-label">Upload Proof of Company SEC Registration</label></center>
-                <div class="col-xs-6 col-md-offset-3">
-                    <div class="col-md-12">
-                        
-                    </div>
-                </div>
+            <center><label class="control-label">Upload Proof of Company SEC Registration</label></center>
+            <div class="col-xs-6 col-md-offset-3">
+            <div class="col-md-12">
+
+            </div>
+            </div>
             </div> *@
         </form>
     </div>
@@ -500,12 +504,11 @@
         $.post(url + "Account/CheckExistingEmailOnField", { email: emailValue }, function (data) {
             //debugger;
             emailExist = data;
-            if (data == true) {                
+            if (data == true) {
                 //console.log(emailExist);
                 document.getElementById("emailValidation").innerHTML = "Email exist! Please use a different email!";
             }
-            else 
-            {
+            else {
                 document.getElementById("emailValidation").innerHTML = "";
             }
         });
@@ -513,6 +516,19 @@
     const form = document.getElementById('RegForm');
 
     $(document).ready(function () {
+
+        $('.user_types_button').on('change', function () {
+            // get checked user types
+            var tbl_user_types_ids = [];
+
+            if ($('#checkbox_chainsawImporter').is(':checked')) { tbl_user_types_ids.push(1); }
+            if ($('#checkbox_chainsawSeller').is(':checked')) { tbl_user_types_ids.push(2); }
+            if ($('#checkbox_chainsawOwner').is(':checked')) { tbl_user_types_ids.push(3); }
+
+            $('#tbl_user_types_ids').val(tbl_user_types_ids.join(','));
+
+            console.log(tbl_user_types_ids.join(','));
+        });
 
         // //FILE UPLOAD
         // const dt = new DataTransfer();
@@ -697,11 +713,11 @@
                     $(curInputs[i]).closest(".form-group").addClass("has-error");
                 }
             }
-            
-            if (isValid && curStepBtn != 'step-2') {   
+
+            if (isValid && curStepBtn != 'step-2') {
                 //console.log(curStepBtn);
-                nextStepWizard.removeAttr('disabled').trigger('click'); 
-            }  
+                nextStepWizard.removeAttr('disabled').trigger('click');
+            }
             if (isValid && curStepBtn == 'step-2' && !emailExist) {
                 //console.log(curStepBtn);
                 nextStepWizard.removeAttr('disabled').trigger('click');
@@ -712,13 +728,13 @@
         // Step by step form end
 
 
-        
+
         feather.replace();
 
-        //CONFIRMATION MODALS 
+        //CONFIRMATION MODALS
         var formFiles = document.forms['RegForm']['filesUpload.Files'];
         $("#submitBtn").click(function () {
-            
+
             //check if user uploaded a file
             if (formFiles.files.length == 0) {
                 //console.log("formFiles.files.length = 0");
@@ -731,18 +747,23 @@
             }
             else {
                 //captcha upon submission
-                var response = grecaptcha.getResponse();
-                if (response.length == 0) {
-                    $("#rfvCaptcha").show();
-                }
-                else {
-                    $("#rfvCaptcha").hide();
-                    $("#confirmSubmitModal").modal("show");
-                    //var formFiles = document.forms['RegForm']['filesUpload.Files'];
-                    //formFiles.files = dt.files;
-                }
+                //var response = grecaptcha.getResponse();
+                //if (response.length == 0) {
+                //    $("#rfvCaptcha").show();
+                //}
+                //else {
+                //    $("#rfvCaptcha").hide();
+                $("#confirmSubmitModal").modal("show");
+
+
+                $('#check').on('change', function () {
+                    var val = this.checked ? this.value : '';
+                    $('#show').html(val);
+                });
+
+
             }
-            
+
         });
 
         $("#backBtn").click(function () {
@@ -865,8 +886,8 @@
 
 <style type="text/css">
     /*body {
-            margin-top: 40px;
-        }*/
+                    margin-top: 40px;
+                }*/
 
     .stepwizard-step p {
         margin-top: 10px;
@@ -931,6 +952,7 @@
     .nextBtn, .prevBtn {
         width: min(100px, 100%) !important;
     }
+
     .form-check-border {
         border: solid 1px #CCCCCC;
         margin-bottom: 5px;
@@ -939,7 +961,7 @@
         padding-left: 36px;
         cursor: pointer;
     }
-    .form-check-border {
 
+    .form-check-border {
     }
 </style>
