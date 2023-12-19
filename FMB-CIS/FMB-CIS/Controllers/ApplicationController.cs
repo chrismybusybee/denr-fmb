@@ -66,6 +66,8 @@ namespace FMB_CIS.Controllers
                 return View(mymodel);
             
         }
+
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_permit_to_resell")]
         public IActionResult ResellPermits()
         {
 
@@ -106,6 +108,7 @@ namespace FMB_CIS.Controllers
             return View(mymodel);
 
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_authority_to_lend")]
         public IActionResult LendPermits()
         {
 
@@ -146,6 +149,7 @@ namespace FMB_CIS.Controllers
             return View(mymodel);
 
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_certification_of_registration")]
         public IActionResult RegistrationPermits()
         {
 
@@ -187,6 +191,7 @@ namespace FMB_CIS.Controllers
             return View(mymodel);
 
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_authority_to_rent")]
         public IActionResult RentPermits()
         {
 
@@ -227,6 +232,7 @@ namespace FMB_CIS.Controllers
             return View(mymodel);
 
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_authority_to_lease")]
         public IActionResult LeasePermits()
         {
 
@@ -267,6 +273,7 @@ namespace FMB_CIS.Controllers
             return View(mymodel);
 
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_permit_to_sell")]
         public IActionResult SellPermits()
         {
 
@@ -308,6 +315,7 @@ namespace FMB_CIS.Controllers
 
         }
 
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_permit_to_purchase")]
         public IActionResult PurchasePermits()
         {
 
@@ -348,6 +356,7 @@ namespace FMB_CIS.Controllers
             return View(mymodel);
 
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_permit_to_import")]
         public IActionResult ImportPermits()
         {
 
