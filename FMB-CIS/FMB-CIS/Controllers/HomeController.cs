@@ -115,7 +115,7 @@ namespace FMB_CIS.Controllers
 
                     else
                     {
-                        List<string> accessRights = dal.selectAccessRightsFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng"));
+                        List<string> accessRights = dal.selectAccessRightsFromEmailMultiple(credentials.email, _configuration.GetConnectionString("ConnStrng"));
                         int userID = Int32.Parse(dal.selectUserIDFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng")));
                         string userRoleIds = _context.tbl_user.Where(u => u.id == userID).Select(u => u.tbl_user_types_id).SingleOrDefault().ToString();
                         List<int> rolesID = _context.tbl_user_type_user.Where(u => u.user_id == userID).Select(s=>s.user_type_id).ToList(); //Added 15 Dec 2023
