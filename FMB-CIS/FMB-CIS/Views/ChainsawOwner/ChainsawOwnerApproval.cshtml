@@ -955,6 +955,19 @@
 <script type="text/javascript">
     const form = document.getElementById('ApplApprvlForm');
 
+    var baseURL = "@baseurl";
+    const queryStr = window.location.search;
+    const urlParameters = new URLSearchParams(queryStr);
+    const appID = urlParameters.get('appid')
+
+    //Code for marking application as read
+    $(window).on('load', function () {
+        
+        $.post(baseURL + "ChainsawImporter/applicationRead", { appid: appID }, function (data) {
+            //console.log("data: ", data);
+        });
+    });
+
     $(document).ready(function () {
         
         $('#approveBtn').click(function () {

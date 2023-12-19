@@ -36,9 +36,49 @@
                 @foreach (ApplicantListViewModel item in Model.applicantListViewModels)
                 {
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.id)
-                        </td>
+                        @if (item.isRead == true)
+                        {
+                            <td>
+                                @Html.DisplayFor(modelItem => item.id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.full_name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.applicationDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.qty)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.permit_status)
+                            </td>
+                            <td>
+                                <a href="ChainsawOwnerApproval?uid=@item.tbl_user_id&appid=@item.id">View</a>
+                            </td>
+                        }
+
+                        else
+                        {
+                            <td style="font-weight:bold;">
+                                @Html.DisplayFor(modelItem => item.id)
+                            </td>
+                            <td style="font-weight:bold;">
+                                @Html.DisplayFor(modelItem => item.full_name)
+                            </td>
+                            <td style="font-weight:bold;">
+                                @Html.DisplayFor(modelItem => item.applicationDate)
+                            </td>
+                            <td style="font-weight:bold;">
+                                @Html.DisplayFor(modelItem => item.qty)
+                            </td>
+                            <td style="font-weight:bold;">
+                                @Html.DisplayFor(modelItem => item.permit_status)
+                            </td>
+                            <td style="font-weight:bold;">
+                                <a href="ChainsawOwnerApproval?uid=@item.tbl_user_id&appid=@item.id">View</a>
+                            </td>
+                        }
                         @* <td>
                             @if (item.date_due_for_officers != null)
                             {
@@ -92,24 +132,7 @@
                                 }
                             }
                         </td> *@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.full_name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.applicationDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.qty)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.permit_status)
-                        </td>
-                        <td>
-                            @* @Html.ActionLink("Take Action", "ChainsawImporterApproval?uid="+ item.tbl_user_id + "&appid=" + item.id) *@
-                            <a href="ChainsawOwnerApproval?uid=@item.tbl_user_id&appid=@item.id">View</a>
-
-                            <a href =""></a>
-                        </td>
+                       
                     </tr>
                 }
             </tbody>

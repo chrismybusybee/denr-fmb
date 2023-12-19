@@ -1151,7 +1151,7 @@ namespace FMB_CIS.Controllers
                 //HISTORY
                 var applicationtypelist = _context.tbl_application_type;
 
-                var applicationMod = from a in applicationlist
+                var applicationMod = (from a in applicationlist
                                      join usr in _context.tbl_user on a.tbl_user_id equals usr.id
                                      join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                      join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
@@ -1172,7 +1172,34 @@ namespace FMB_CIS.Controllers
                                          permit_status = pS.status,
                                          tbl_user_id = (int)usr.id,
                                          date_due_for_officers = a.date_due_for_officers
-                                     };
+                                     }).ToList();
+
+                bool isReadExist;
+                bool isAppRead;
+
+                for (int i = 0; i < applicationMod.Count(); i++)
+                {
+                    isReadExist = _context.tbl_application_read.Any(r => r.tbl_application_id == applicationMod[i].id && r.tbl_user_id == loggedUserID);
+                    if (isReadExist)
+                    {
+                        isAppRead = _context.tbl_application_read.Where(r => r.tbl_application_id == applicationMod[i].id && r.tbl_user_id == loggedUserID).Select(r => r.is_read).FirstOrDefault();
+                        if (isAppRead)
+                        {
+                            //true
+                            applicationMod[i].isRead = true;
+                        }
+                        else
+                        {
+                            //false
+                            applicationMod[i].isRead = false;
+                        }
+                    }
+                    else
+                    {
+                        //false
+                        applicationMod[i].isRead = false;
+                    }
+                }
 
                 mymodel.applicantListViewModels = applicationMod;
 
