@@ -69,6 +69,8 @@ namespace FMB_CIS.Models
         public string? chainsaw_serial_number { get; set; }
         public string? chainsawSupplier { get; set; }
         public DateTime? date_purchase { get; set; }
+        //FOR ApplicantList
+        public bool? isRead { get; set; }
 
     }
 }

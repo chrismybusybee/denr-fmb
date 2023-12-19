@@ -797,6 +797,18 @@
 <script type="text/javascript">
 
     const form = document.getElementById('ApplApprvlForm');
+    
+    var baseURL = "@baseurl";
+    const queryStr = window.location.search;
+    const urlParameters = new URLSearchParams(queryStr);
+    const appID = urlParameters.get('appid')
+
+    $(window).on('load', function () {
+        // code here
+        $.post(baseURL + "ChainsawImporter/applicationRead", { appid: appID }, function (data) {
+            console.log("data: ", data);
+        });
+    });
 
     $(document).ready(function () {
 
