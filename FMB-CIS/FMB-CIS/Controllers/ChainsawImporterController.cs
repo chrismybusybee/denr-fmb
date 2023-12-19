@@ -23,6 +23,7 @@ using Microsoft.AspNet.Identity;
 using System.Collections;
 using Mapster;
 using Microsoft.Extensions.Hosting;
+using Services.Utilities;
 
 namespace FMB_CIS.Controllers
 {
@@ -49,6 +50,7 @@ namespace FMB_CIS.Controllers
             EnvironmentHosting = _environment;
         }
 
+        [RequiresAccess(allowedAccessRights = "allow_page_create_permit_to_import")]
         public IActionResult Index()
         {
             //Set Roles who can access this page
@@ -69,20 +71,22 @@ namespace FMB_CIS.Controllers
             {
                 return RedirectToAction("Index", "Dashboard");
             }
-            if (usrRoleID == 1 || usrRoleID == 4 || usrRoleID == 5 || usrRoleID == 7)
-            {
+
                 return View(model);
-            }
-            else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11 || usrRoleID == 17) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
-            {
+            // if (usrRoleID == 1 || usrRoleID == 4 || usrRoleID == 5 || usrRoleID == 7)
+            // {
+            //     return View(model);
+            // }
+            // else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11 || usrRoleID == 17) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
+            // {
 
-                return RedirectToAction("ChainsawImporterApplicantsList", "ChainsawImporter");
+            //     return RedirectToAction("ChainsawImporterApplicantsList", "ChainsawImporter");
 
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            // }
+            // else
+            // {
+            //     return RedirectToAction("Index", "Dashboard");
+            // }
             //return View();
         }
 

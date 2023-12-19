@@ -47,6 +47,8 @@ namespace FMB_CIS.Controllers
         }
 
         // Chainsaw Permit to Sell
+        // [UserActivated]
+        [RequiresAccess(allowedAccessRights = "allow_page_create_permit_to_sell")]
         public IActionResult Index()
         {
             //Set Roles who can access this page
@@ -69,20 +71,21 @@ namespace FMB_CIS.Controllers
             {
                 return RedirectToAction("Index", "Dashboard");
             }
-            if (usrRoleID == 2 || usrRoleID == 4 || usrRoleID == 6 || usrRoleID == 7)
-            {
-                return View(model);
-            }
-            else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11 || usrRoleID == 17) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
-            {
 
-                return RedirectToAction("ChainsawSellerApplicantsList", "ChainsawSeller");
+            return View(model);
+            // if (usrRoleID == 2 || usrRoleID == 4 || usrRoleID == 6 || usrRoleID == 7)
+            // {
+            // }
+            // else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11 || usrRoleID == 17) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
+            // {
 
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //     return RedirectToAction("ChainsawSellerApplicantsList", "ChainsawSeller");
+
+            // }
+            // else
+            // {
+            //     return RedirectToAction("Index", "Dashboard");
+            // }
 
         }
 
@@ -206,6 +209,7 @@ namespace FMB_CIS.Controllers
             //}
         }
 
+        [RequiresAccess(allowedAccessRights = "allow_page_create_permit_to_purchase")]
         public IActionResult PermitToPurchase()
         {
             //Set Roles who can access this page
@@ -228,20 +232,21 @@ namespace FMB_CIS.Controllers
             {
                 return RedirectToAction("Index", "Dashboard");
             }
-            if (usrRoleID == 2 || usrRoleID == 4 || usrRoleID == 6 || usrRoleID == 7)
-            {
+
                 return View(model);
-            }
-            else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11 || usrRoleID == 17) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
-            {
+            // if (usrRoleID == 2 || usrRoleID == 4 || usrRoleID == 6 || usrRoleID == 7)
+            // {
+            // }
+            // else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11 || usrRoleID == 17) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
+            // {
 
-                return RedirectToAction("ChainsawSellerApplicantsList", "ChainsawSeller");
+            //     return RedirectToAction("ChainsawSellerApplicantsList", "ChainsawSeller");
 
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            // }
+            // else
+            // {
+            //     return RedirectToAction("Index", "Dashboard");
+            // }
 
         }
         [HttpPost]
