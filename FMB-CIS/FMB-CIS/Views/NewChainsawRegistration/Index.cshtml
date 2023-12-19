@@ -58,14 +58,14 @@
                             <label class="text-secondary fw-bold">
                                 Watt
                             </label>
-                            <input asp-for="TBL_Chainsaw.watt" type="number" class="form-control" placeholder="Enter chainsaw wattage" />
+                            <input asp-for="TBL_Chainsaw.watt" type="number" step="0.01" class="form-control" placeholder="Enter chainsaw wattage" />
                             <span class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3" id="HorsepowerDiv" style="display:none">
                             <label class="text-secondary fw-bold">
                                 Horsepower
                             </label>
-                            <input asp-for="TBL_Chainsaw.hp" type="number" class="form-control" placeholder="Enter chainsaw horsepower" />
+                            <input asp-for="TBL_Chainsaw.hp" type="number" step="0.01" class="form-control" placeholder="Enter chainsaw horsepower" />
                             <span class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
@@ -337,26 +337,26 @@
         document.getElementById(that.id).setAttribute("data-prevVal", curval);
         document.getElementById(that.id).setAttribute("data-curVal", that.value);
 
-        var selectClass = document.getElementsByClassName('fileListDropDown');
-        for (let i = 0; i < selectClass.length; i++) {
-            if (selectClass[i].id != that.id) {
+        // var selectClass = document.getElementsByClassName('fileListDropDown');
+        // for (let i = 0; i < selectClass.length; i++) {
+        //     if (selectClass[i].id != that.id) {
 
-                //CODE TO DISABLE OPTIONS
-                var selectedFileList = document.getElementById(selectClass[i].id);
-                for (let j = 0; j < selectedFileList.options.length; j++) {
-                    if (selectedFileList.options[j].value == that.value) {
-                        if (that.value != "N/A") {
-                            //Disable options with the same selected value
-                            selectedFileList.options[j].disabled = true;
-                        }
-                    }
-                    if (selectedFileList.options[j].value == that.dataset.prevval) {
-                        //Enable options based on prev value
-                        selectedFileList.options[j].disabled = false;
-                    }
-                }
-            }
-        }
+        //         //CODE TO DISABLE OPTIONS
+        //         var selectedFileList = document.getElementById(selectClass[i].id);
+        //         for (let j = 0; j < selectedFileList.options.length; j++) {
+        //             if (selectedFileList.options[j].value == that.value) {
+        //                 if (that.value != "N/A") {
+        //                     //Disable options with the same selected value
+        //                     selectedFileList.options[j].disabled = true;
+        //                 }
+        //             }
+        //             if (selectedFileList.options[j].value == that.dataset.prevval) {
+        //                 //Enable options based on prev value
+        //                 selectedFileList.options[j].disabled = false;
+        //             }
+        //         }
+        //     }
+        // }
     }
     //END FOR CHECKLIST OF DOCUMENTS
 
