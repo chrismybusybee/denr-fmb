@@ -758,7 +758,7 @@
                                         <span>Account Management</span>
                                     </a>
                                     <ul id="accountManagementDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
-                                         @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_users")) {}
+                                         @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_users")) {
                                         <li id="RegisteredAccountsMenuItem">
                                             <a href="@Url.Action("Index", "AccountManagement")" class="d-flex gap-2 text-decoration-none fs-6">
                                                 <div>
