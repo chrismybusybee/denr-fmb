@@ -44,10 +44,10 @@
     <div id="header">
         <div id="header-top-container">
             <div class="row h-100 d-flex align-items-center ps-2 ms-2 pe-1 me-3">
-                <div class="col-md-1">
+                @*<div class="col-md-1">
                     <span id="toggle-btn" class="cursor-pointer" title="toggle menu"><i data-feather="align-justify"></i></span>
-                </div>
-                <div class="col-md-11 d-flex justify-content-end d-flex align-items-center gap-2">
+                </div>*@
+                <div class="col-md-12 d-flex justify-content-end d-flex align-items-center gap-2">
 
                     <span class="fw-bold">@(((ClaimsIdentity)User.Identity).FindFirst("FullName").Value)</span>
                     

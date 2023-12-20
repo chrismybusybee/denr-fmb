@@ -41,6 +41,7 @@ namespace FMB_CIS.Data
         public DbSet<FMB_CIS.Models.tbl_permit_workflow_step> tbl_permit_workflow_step { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_permit_workflow_next_step> tbl_permit_workflow_next_step { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_document_checklist> tbl_document_checklist { get; set; } = default!;
-        
+        public DbSet<FMB_CIS.Models.tbl_application_read> tbl_application_read { get; set; } = default!;
+        public DbSet<FMB_CIS.Models.tbl_files_checklist_bridge> tbl_files_checklist_bridge { get; set; } = default!;
     }
 }

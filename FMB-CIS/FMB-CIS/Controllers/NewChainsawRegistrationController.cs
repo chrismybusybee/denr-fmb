@@ -164,19 +164,26 @@ namespace FMB_CIS.Controllers
                         filesDB.date_created = DateTime.Now;
                         filesDB.date_modified = DateTime.Now;
                         filesDB.filename = file.FileName;
-                        foreach (var item in model.fileChecklistViewModel)
-                        {
-                            if (item.FileName == file.FileName)
-                            {
-                                filesDB.checklist_id = item.tbl_document_checklist_id;
-                            }
-                        }
                         filesDB.path = path;
                         filesDB.tbl_file_type_id = fileInfo.Extension;
                         filesDB.tbl_file_sources_id = fileInfo.Extension;
                         filesDB.file_size = Convert.ToInt32(file.Length);
                         _context.tbl_files.Add(filesDB);
                         _context.SaveChanges();
+
+                        //Matching of tbl_files to tbl_document_checklist
+                        foreach (var item in model.fileChecklistViewModel)
+                        {
+                            if (item.FileName == file.FileName)
+                            {
+                                var filesChecklistBridge = new tbl_files_checklist_bridge();
+
+                                filesChecklistBridge.tbl_document_checklist_id = item.tbl_document_checklist_id;
+                                filesChecklistBridge.tbl_files_id = filesDB.Id;
+                                _context.tbl_files_checklist_bridge.Add(filesChecklistBridge);
+                                _context.SaveChanges();
+                            }
+                        }
                     }
                 }
 
