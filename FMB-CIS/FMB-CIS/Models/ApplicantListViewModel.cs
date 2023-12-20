@@ -23,6 +23,7 @@ namespace FMB_CIS.Models
         public string contact { get; set; }
         public string address { get; set; }
 
+
         public int tbl_user_id { get; set; }
         public string user_type { get; set; }
         public string valid_id { get; set; }

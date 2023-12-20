@@ -464,7 +464,8 @@ namespace FMB_CIS.Controllers
                                           //expectedTimeArrived = a.expected_time_arrival,
                                           //expectedTimeRelease = a.expected_time_release,
                                           date_of_registration = a.date_of_registration,
-                                          date_of_expiration = a.date_of_expiration
+                                          date_of_expiration = a.date_of_expiration,
+                                          tbl_region_id = usr.tbl_region_id
                                       }).FirstOrDefault();
                 mymodel.applicantViewModels = applicationMod;
                 string commentType = "";
