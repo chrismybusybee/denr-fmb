@@ -37,6 +37,7 @@ namespace FMB_CIS.Controllers
             EmailSender = emailSender;
             EnvironmentHosting = _environment;
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_create_chainsaw_registration,allow_page_create_other_permits")]
         public IActionResult Index()
         {
             string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
@@ -64,20 +65,21 @@ namespace FMB_CIS.Controllers
             {
                 return RedirectToAction("Index", "Dashboard");
             }
-            if (usrRoleID == 3 || usrRoleID == 5 || usrRoleID == 6 || usrRoleID == 7)
-            {
-                return View(model);
-            }
-            else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11 || usrRoleID == 17) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
-            {
+            return View(model);
+            //if (usrRoleID == 3 || usrRoleID == 5 || usrRoleID == 6 || usrRoleID == 7)
+            //{
+            //    return View(model);
+            //}
+            //else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11 || usrRoleID == 17) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
+            //{
 
-                return RedirectToAction("ChainsawOwnerApplicantsList", "ChainsawOwner");
+            //    return RedirectToAction("ChainsawOwnerApplicantsList", "ChainsawOwner");
 
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
 
         }
 
