@@ -14,134 +14,83 @@
             </div>
         }
         <form asp-action="Index" method="post" enctype="multipart/form-data" id="ImporterRegForm">
-        <a href="@Url.Action("Index", "Dashboard")" class="mx-2" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
-        <div class="row m-0 my-4">
-                @*<div class="col-md-6">
-               <div class="p-4 shadow h-100">
-                    <h2 class="text-secondary fw-bold mb-4">Supplier</h2>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            First Name
-                        </label>
-                            <input type="text" asp-for="tbl_Application.supplier_fname" class="form-control" placeholder="Enter first name" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Middle Name
-                        </label>
-                            <input type="text" asp-for="tbl_Application.supplier_mname" class="form-control" placeholder="Enter middle name" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Last Name
-                        </label>
-                            <input type="text" asp-for="tbl_Application.supplier_lname" class="form-control" placeholder="Enter last name" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Suffix
-                        </label>
-                            <input type="text" asp-for="tbl_Application.supplier_suffix" class="form-control" placeholder="Enter suffix (if any)" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Address
-                        </label>
-                            <textarea asp-for="tbl_Application.supplier_address" class="form-control" placeholder="Enter address"></textarea>
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Email
-                        </label>
-                            <input type="text" asp-for="tbl_Application.supplier_email" class="form-control" placeholder="Enter email" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Contact No.
-                        </label>
-                            <input type="text" asp-for="tbl_Application.supplier_contact_no" class="form-control" placeholder="Enter contact number" />
-                        <span class="text-danger"></span>
-                    </div>
-                </div>
-                </div>*@
-            <div class="col-md-12">
-                <div class="p-4 shadow h-100">
-                    @* <h2 class="text-secondary fw-bold mb-4">Bureau of Customs</h2> *@
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Number of chainsaws to be purchased/imported
-                        </label>
-                            <input type="number" asp-for="tbl_Application.qty" class="form-control" placeholder="Enter number of chainsaws to be purchased/imported" required="required" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Specification
-                        </label>
-                            <textarea class="form-control" asp-for="tbl_Application.tbl_specification_id" placeholder="Enter specification" required="required"></textarea>
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Purpose
-                        </label>
-                            <textarea class="form-control" asp-for="tbl_Application.purpose" placeholder="Enter purpose" required="required"></textarea>
-                        <span class="text-danger"></span>
-                    </div>
-                    @* <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Expected time of arrival
-                        </label>
-                            <input type="date" asp-for="tbl_Application.expected_time_arrival" class="form-control" required="required" />
-                        <span class="text-danger"></span>
-                    </div> *@
-                    @* <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Expected time of release
-                        </label>
-                            <input type="date" asp-for="tbl_Application.expected_time_release" class="form-control" />
-                        <span class="text-danger"></span>
-                    </div> *@
-                    @*
-                    <div class="form-group mb-3">
-                        <label class="text-secondary fw-bold">
-                            Set Date of Inspection
-                        </label>
-                            <input type="date" asp-for="tbl_Application.date_of_inspection" class="form-control" />
-                        <span class="text-danger"></span>
-                        </div>*@
+            <a href="@Url.Action("Index", "Dashboard")" class="mx-2" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
+            <table class="table" id="applicationTable">
+                <!-- Table headers -->
+                <thead>
+                    <tr>
+                        @*   <th>ID</th>*@
+                        <th>Supplier Name</th>
+                        <th>Supplier Address</th>
+                        <th>Expected Time Of Arrival</th>
+                        <th>PowerSource</th>
+                        <th>UnitOfMeasure</th>
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>EngineSerialNo</th>
+                        <th>Quantity</th>
+                        <!-- ... Other headers ... -->
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <!-- Table body for displaying and editing data -->
+                <tbody id="tableBody">
+                    <!-- Rows with data will be dynamically added here -->
+                    @* @foreach (tbl_application_group item in Model.tbl_Application_Group)
+                    {
+                    //    var folder = Model.uid + "_" + Model.appid;
+                    @Html.EditorFor(item => item.SupplierName)
+                    @Html.EditorFor(item => .Property2)
+                    }*@
+
+
+                </tbody>
+
+                <!-- Inline add row -->
+                <tfoot>
+                    <tr id="addRow" style="display:none;">
+                        <td><input type="text" id="newId" /></td>
+                        <td><input type="text" id="newSupplierName" /></td>
+                        <td><input type="datetime-local" id="newExpectedTimeArrival" /></td>
+                        <!-- ... Other fields ... -->
+                        <td>
+                            <button id="addRowButton" type="button">Add</button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <input type="file" asp-for="tbl_Application_Group" multiple hidden />
+
+            <div class="row m-0 mb-4">
+                <div class="col-md-12" style="padding-top: 40px;">
+                    <button id="showAddRowButton" type="button" class="btn btn-primary w-125" style="float:right;">Add Supplier</button>
                 </div>
             </div>
-        </div>
+            <input type="text" asp-for="Dataxxx" multiple hidden />
 
-        
-        <div class="row m-0 mb-4">
-            <div class="col-md-12">
-                <div class="p-4 shadow h-100">
-                    <div class="mb-4">
-                        <span style="white-space: pre-line">@ViewBag.RequiredDocsList</span>
-                    </div>
-                    @* <div class="d-flex gap-4 mb-5">
+
+            <div class="row m-0 mb-4">
+                <div class="col-md-12">
+                    <div class="p-4 shadow h-100">
+                        <div class="mb-4">
+                            <span style="white-space: pre-line">@ViewBag.RequiredDocsList</span>
+                        </div>
+                        @* <div class="d-flex gap-4 mb-5">
                         <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
-                            <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
-                                <i data-feather="upload"></i> Upload
-                            </label>
-                            <input type="file" asp-for="filesUpload.Files" class="form-control file" accept="application/pdf" id="filesUpload_Files" multiple hidden />
-                            <button type="button" class="btn btn-primary"><i data-feather="upload"></i> Upload</button>
-                    </div>
+                        <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
+                        <i data-feather="upload"></i> Upload
+                        </label>
+                        <input type="file" asp-for="filesUpload.Files" class="form-control file" accept="application/pdf" id="filesUpload_Files" multiple hidden />
+                        <button type="button" class="btn btn-primary"><i data-feather="upload"></i> Upload</button>
+                        </div>
                         <div class="d-flex mb-4 gap-3 output">
-                            Cards for files
-                            <p id="files-area">
-                                <span id="filesList">
-                                    <span id="files-names"></span>
-                                </span>
-                            </p>
+                        Cards for files
+                        <p id="files-area">
+                        <span id="filesList">
+                        <span id="files-names"></span>
+                        </span>
+                        </p>
                         </div> *@
 
                         @* <input id="testDragAndDrop" name="testDragAndDrop" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload..."> *@
@@ -149,9 +98,9 @@
                             <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
                             <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-allowed-file-extensions='["pdf"]' accept="application/pdf" data-show-caption="true" data-msg-placeholder="Select {files} for upload..." onchange="fileChange(this)">
                         </div>
-                </div>                    
+                    </div>
+                </div>
             </div>
-        </div>
             <hr />
             <div class="row d-flex justify-content-center m-0">
                 <h5 class="text-secondary">Please match your uploaded file based on the checklist of requirements.</h5>
@@ -212,6 +161,36 @@
     const formIndex = document.getElementById('ImporterRegForm');
 
     $(document).ready(function () {
+
+        //$('#applicationTable').DataTable({
+        //    dom: 'Bfrtip',
+        //    buttons: ['csv']
+        //});
+
+
+        //if ($.fn.dataTable.isDataTable('#applicationTable')) {
+        //    table.clear();
+        //    table.destroy();
+        //    var x = 0;
+        //}
+        //else {
+        //    table.clear();
+        //    table.destroy();
+
+        //    table = $('#applicationTable').DataTable({
+        //        paging: false,
+        //        buttons: ['csv']
+        //    });
+        //}
+
+        //$('#applicationTable').DataTable({
+        //    destroy: true,
+        //    order: [[0, 'desc']],
+        //    dom: 'Bfrtip',
+        //    buttons: ['csv']
+        //});
+
+
         // //FILE UPLOAD
         // const dt = new DataTransfer();
 
@@ -238,7 +217,7 @@
         //         var hasdup = false;
 
         //         for (var x = 0; x < dt.files.length; x++) {
-                   
+
         //              if (dt.files[x].name == selectedFiles[i].name) {
         //                 //Swal.fire({
         //                 //    title: "Duplicate File",
@@ -277,7 +256,7 @@
         //             confirmButtonColor: '#14984a'
         //         });
         //     }
-    
+
 
 
 
@@ -328,7 +307,7 @@
         //     for (let file of validFiles) {
         //         dt.items.add(file);
         //     }
-            
+
         //     selectedFiles = dt.files;
         //     console.log(selectedFiles);
 
@@ -354,7 +333,7 @@
         // });
 
         // //END FOR FILE UPLOAD
-        
+
         //BRB
         // const dt = new DataTransfer();
 
@@ -366,7 +345,7 @@
         //     overwriteInitial: false,
         // });
 
-        // $(".file").on("change", function (e) { 
+        // $(".file").on("change", function (e) {
         //     console.log("this", this.files);
         //     //console.log("myDropzone.files",myDropzone.files);
         // });
@@ -383,13 +362,13 @@
         //     var cFile = document.getElementsByClassName("file");
         //     console.log("cFile.files", cFile.files)
         // });
-        
+
 
         $("#btnSubmit").click(function () {
-            
-            // //Check if user selected some files            
+
+            // //Check if user selected some files
             // //If user doesn't select any files
-            // if (dt.files.length == 0) { 
+            // if (dt.files.length == 0) {
             //     console.log("dt.files.length = 0");
             //     Swal.fire({
             //         title: "No File Selected",
@@ -401,14 +380,18 @@
             // //If User selected a file
             // else
             // {
-                
+
             //Check if required fields are filled up
             if ($("#ImporterRegForm")[0].checkValidity()) {
-                
+
                 var formFiles = document.forms['ImporterRegForm']['filesUpload.Files'];
                 console.log("formFiles: ", formFiles);
                 console.log("formFiles.files: ", formFiles.files);
                 console.log("formFiles.files.length: ", formFiles.files.length);
+
+                var x = document.forms['ImporterRegForm']['Dataxxx'];
+
+                x.value = JSON.stringify(applications);
                 //formFiles.files = dt.files;
                 if (formFiles.files.length == 0) {
                     Swal.fire({
@@ -436,11 +419,11 @@
                 $("#ImporterRegForm")[0].reportValidity();
             }
             //}
-                        
+
         });
 
-        
- 
+
+
         $("#backBtn").click(function () {
             $("#confirmSubmitModal").modal("hide");
         });
@@ -451,7 +434,244 @@
             $("#confirmSuccessModal").modal("show");
             console.log("submit success");
         });
-        
+
+        let applications = [
+            //{ ID: 1, SupplierName: 'Supplier 1', ExpectedTimeArrival: '2023-12-31T23:59' },
+            //{ ID: 2, SupplierName: 'Supplier 2', ExpectedTimeArrival: '2023-12-25T18:00' }
+            // More simulated data...
+        ];
+        function displayApplications() {
+            let tableBody = $('#tableBody');
+            tableBody.empty(); // Clear previous data
+            applications.forEach(app => {
+                let row = $('<tr>');
+                row.append(`<td style="display:none;">${app.id}</td>`);
+                row.append(`<td><span class="editable" data-id="${app.id}" data-field="supplier_name" name="supplier_name">${app.supplier_name}</span></td>`);
+                row.append(`<td><span class="editable" data-id="${app.id}" data-field="supplier_address" name="supplier_address">${app.supplier_address}</span></td>`);
+                row.append(`<td><span class="editable" data-id="${app.id}" data-field="expected_time_arrival" name="expected_time_arrival">${app.expected_time_arrival}</span></td>`);
+                row.append(`<td><span class="editable" data-id="${app.id}" data-field="power_source" name="power_source">${app.power_source}</span></td>`);
+                row.append(`<td><span class="editable" data-id="${app.id}" data-field="unit_of_measure" name="unit_of_measure">${app.unit_of_measure}</span></td>`);
+                row.append(`<td><span class="editable" data-id="${app.id}" data-field="brand" name="brand">${app.brand}</span></td>`);
+                row.append(`<td><span class="editable" data-id="${app.id}" data-field="model" name="model">${app.model}</span></td>`);
+                row.append(`<td><span class="editable" data-id="${app.id}" data-field="engine_serialNo" name="engine_serialNo">${app.engine_serialNo}</span></td>`);
+                row.append(`<td><span class="editable" data-id="${app.id}" data-field="quantity" name="quantity">${app.quantity}</span></td>`);
+                // Add other fields similarly...
+
+                // Actions column with Edit and Delete buttons
+                let actions = `<td>
+                            <button  type="button" onclick="deleteApplication(${app.id})">Delete</button>
+                                   </td>`;
+                row.append(actions);
+
+                tableBody.append(row);
+            });
+        }
+
+        // Function to enable editing of a specific application
+        window.enableEdit = function (id) {
+            $(`.editable[data-id=${id}]`).prop('contenteditable', 'true').focus();
+            $(this).prop('contenteditable', 'false').html(`<input type="text" class="datepicker" value="${$(this).text()}">`);
+
+
+            //$(`.editable[data-id=${id}]`).each(function () {
+
+            //    if (this.attributes.name.value == "ExpectedTimeArrival") {
+            //        $(this).prop('contenteditable', 'false').html(`<input class="form-control" type="datetime-local" value="${$(this).text()}">`);
+            //    }
+
+            //});
+        };
+
+        // Function to update application data inline
+        $(document).on('blur', '.editable', function () {
+            let id = $(this).data('id');
+            let field = $(this).data('field');
+            let newValue = $(this).text();
+            updateApplication(id, field, newValue);
+        });
+
+        function updateApplication(id, field, newValue) {
+            let appIndex = applications.findIndex(app => app.ID === id);
+            if (appIndex !== -1) {
+                applications[appIndex][field] = newValue;
+            }
+        }
+
+        // Function to delete an application
+        window.deleteApplication = function (id) {
+            let confirmDelete = confirm("Are you sure you want to delete this application?");
+            if (confirmDelete) {
+                applications = applications.filter(app => app.id !== id);
+                displayApplications(); // Refresh the table after deletion
+            }
+        };
+
+
+
+        $('#addRowButton').click(function () {
+            //// Retrieve values from inputs
+            //let id = $('#newId').val();
+            //let supplierName = $('#newSupplierName').val();
+            //let expectedTimeArrival = $('#newExpectedTimeArrival').val();
+            //// Get other field values similarly
+
+            //// Validation and error handling
+            //if (!id || !supplierName || !expectedTimeArrival /* Add more validations */) {
+            //    alert('Please fill in all fields.'); // Show an error message or handle as needed
+            //    return;
+            //}
+
+
+
+
+
+        });
+
+        // Function to clear the inline add row inputs
+        function clearAddRow() {
+            $('#newId').val('');
+            $('#newSupplierName').val('');
+            $('#newExpectedTimeArrival').val('');
+            // Clear other inputs similarly
+        }
+
+        // Function to show/hide the inline add row
+        $('#showAddRowButton').click(function () {
+            //$('#addRow').toggle(); // Toggle visibility of the inline add row
+
+            Swal.fire({
+                title: 'Supplier Information',
+                //html:
+                //    'Supplier Name :<input id="supplierName" class="swal2-input" placeholder="Supplier Name">' +
+                //    'Supplier Address:<input id="supplierAddress" class="swal2-input" placeholder="Supplier Address">' +
+                //    'Expected Time Of Arrival :<input type="datetime-local" id="newExpectedTimeArrival2" placeholder="Expected Time Of Arrival" />' +
+                //    'Power Source :<input id="powerSource" class="swal2-input" placeholder="Power Source">' +
+                //    'Brand :<input id="brand" class="swal2-input" placeholder="Brand">' +
+                //    'Model :<input id="model" class="swal2-input" placeholder="Model">' +
+                //    'EngineSerialNo :<input id="engineSerialNo" class="swal2-input" placeholder="EngineSerialNo">' +
+                //    'Quantity :<input type=number id="quantity" class="swal2-input" placeholder="Quantity">'
+                //    ,
+                html: `<form class="form-horizontal" style="margin-top: 20px;">
+                                    <div class="form-group">
+                                                <div style="width:726px;padding-top:5px;">
+                                                   <label style="float:left; line-height: 40px;padding-right: 75px;">Supplier Name</label>
+                                                   <input style="display:inline-block;width: 500px;" id="supplierName" class="form-control">
+                                                </div>
+                                    </div>
+                                    <div class="form-group">
+                                                <div style="width:726px;padding-top:5px;">
+                                                                    <label style="float:left; line-height: 40px;padding-right: 58px;">Supplier Address</label>
+                                                                    <input style="display:inline-block;width: 500px;" id="supplierAddress" class="form-control">
+                                                            </div>
+                                        </div>
+
+                                              <div class="form-group">
+                                                                <div style="width:726px;padding-top:5px;">
+                                                                            <label style="float:left; line-height: 40px;">Expected Time Of Arrival</label>
+                                                                                   <input class="form-control" type="datetime-local" id="newExpectedTimeArrival" placeholder="Expected Time Of Arrival" style="display:inline-block;width: 500px;" />
+                                                                </div>
+                                            </div>
+
+                                                    <div class="form-group">
+                                                                <div style="width:726px;padding-top:5px;">
+                                                                            <label style="float:left; line-height: 40px;padding-right: 88px;">Power Source</label>
+                                                                        <input style="display:inline-block;width: 500px;" id="powerSource" class="form-control">
+                                                                </div>
+                                            </div>
+
+                                             <div class="form-group">
+                                                                <div style="width:726px;padding-top:5px;">
+                                                                            <label style="float:left; line-height: 40px;padding-right: 70px;">Unit of Measure</label>
+                                                                        <input style="display:inline-block;width: 500px;" id="unitOfMeasure" class="form-control">
+                                                                </div>
+                                            </div>
+
+
+                                                <div class="form-group">
+                                                                    <div style="width:726px;padding-top:5px;">
+                                                                                <label style="float:left; line-height: 40px;padding-right: 150px;">Brand</label>
+                                                                            <input style="display:inline-block;width: 500px;" id="brand" class="form-control">
+                                                                    </div>
+                                                </div>
+                                                    <div class="form-group">
+                                                                        <div style="width:726px;padding-top:5px;">
+                                                                                    <label style="float:left; line-height: 40px;padding-right: 145px;">Model</label>
+                                                                                <input style="display:inline-block;width: 500px;" id="model" class="form-control">
+                                                                        </div>
+                                                    </div>
+                                                            <div class="form-group">
+                                                                        <div style="width:726px;padding-top:5px;">
+                                                                                    <label style="float:left; line-height: 40px;padding-right: 60px;">Engine Serial No.</label>
+                                                                                <input style="display:inline-block;width: 500px;" id="engineSerialNo" class="form-control">
+                                                                        </div>
+                                                    </div>
+                                                        <div class="form-group">
+                                                                            <div style="width:726px;padding-top:5px;">
+                                                                                        <label style="float:left; line-height: 40px;padding-right: 127px;">Quantity</label>
+                                                                                    <input style="display:inline-block;width: 500px;" id="quantity" class="form-control">
+                                                                            </div>
+                                                        </div>
+
+                          </form>`,
+                width: '800px',
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Submit',
+                preConfirm: () => {
+                    return [
+                        document.getElementById('supplierName').value,
+                        document.getElementById('supplierAddress').value,
+                        document.getElementById('newExpectedTimeArrival').value,
+                        document.getElementById('powerSource').value,
+                        document.getElementById('unitOfMeasure').value,
+                        document.getElementById('brand').value,
+                        document.getElementById('model').value,
+                        document.getElementById('engineSerialNo').value,
+                        document.getElementById('quantity').value
+                    ];
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const values = result.value;
+                    const supplierName = values[0];
+                    const supplierAddress = values[1];
+                    const newExpectedTimeArrival = values[2];
+                    const powerSource = values[3];
+                    const unitOfMeasure = values[4];
+                    const brand = values[5];
+                    const model = values[6];
+                    const engineSerialNo = values[7];
+                    const quantity = values[8];
+                    //console.log('Input 1:', value1);
+                    //console.log('Input 2:', value2);
+                    // Perform actions with the input values here
+
+                    // Logic to add a new application (simulate adding here)
+                    let newApp = {
+                        id: applications.length,
+                        supplier_name: supplierName,
+                        supplier_address: supplierAddress,
+                        expected_time_arrival: newExpectedTimeArrival,
+                        power_source: powerSource,
+                        unit_of_measure: unitOfMeasure,
+                        brand: brand,
+                        model: model,
+                        engine_serialNo: engineSerialNo,
+                        quantity: quantity
+                        // Set other fields similarly
+                    };
+                    applications.push(newApp); // Simulate adding a new application
+
+                    displayApplications(); // Refresh the table
+                    clearAddRow(); // Clear the inline add row inputs
+                }
+            });
+
+        });
+
+        // Initial display of applications
+        displayApplications();
+
     });
 
     //FOR CHECKLIST OF DOCUMENTS
@@ -504,30 +724,37 @@
         //                     //Disable options with the same selected value
         //                     selectedFileList.options[j].disabled = true;
         //                 }
-                        
+
         //             }
         //             if (selectedFileList.options[j].value == that.dataset.prevval) {
-        //                 //Enable options based on prev value                        
-        //                 selectedFileList.options[j].disabled = false;                       
+        //                 //Enable options based on prev value
+        //                 selectedFileList.options[j].disabled = false;
         //             }
         //         }
         //     }
         // }
     }
-    //END FOR CHECKLIST OF DOCUMENTS
+        //END FOR CHECKLIST OF DOCUMENTS
 
 </script>
 
- <style>
+<style>
+
+    h2#swal2-title {
+        font-size: 30px;
+    }
+
     textarea {
         resize: none;
     }
+
     .custom-file-upload {
         border: 1px solid #ccc;
         display: inline-block;
         padding: 6px 12px;
         cursor: pointer;
     }
+
     .app-card {
         position: relative;
         background: #fff;
@@ -569,4 +796,4 @@
     .app-card-doc .app-doc-meta {
         font-size: .75rem;
     }
- </style>
+</style>

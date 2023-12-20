@@ -20,6 +20,10 @@
         public string? comment { get; set; }
         public string? email { get; set; }
         public tbl_application? tbl_Application { get; set; }
+
+        public string? Dataxxx { get; set; }
+
+        public IEnumerable<tbl_application_group>? tbl_Application_Group { get; set; }
         public FileUpload? filesUpload { get; set; }
         public IEnumerable<AcctApprovalViewModel>? acctList { get; set; } //Used in the List of Accounts
         public AcctApprovalViewModel? acctApprovalViewModels { get; set; } // Used in the Accounts Approval Page

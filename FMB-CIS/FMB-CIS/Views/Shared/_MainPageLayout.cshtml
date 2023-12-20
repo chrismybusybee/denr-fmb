@@ -783,12 +783,37 @@
 <script type="text/javascript">
     $(document).ready(function () {
         feather.replace();
+
+
         $('.dataTable').DataTable({
+            retrieve: true,
             destroy: true,
             order: [[0, 'desc']],
             dom: 'Bfrtip',
-            buttons: ['csv', 'excel']
+            buttons: []
         });
+
+
+
+        if ($.fn.dataTable.isDataTable('#applicationTable')) {
+            table.clear();
+            table.destroy();
+            var x = 0;
+        }
+        else {
+           // table.clear();
+           // table.destroy();
+
+            table = $('#applicationTable').DataTable({
+                retrieve: true,
+                destroy: true,
+                order: [[0, 'desc']],
+                dom: 'Bfrtip',
+                buttons: ['csv']
+            });
+        }
+
+
         function toggleDropdown(menuItem, dropdown) {
             $(dropdown).toggleClass("active");
             const isOpen = $(dropdown).hasClass("active");
