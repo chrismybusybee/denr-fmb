@@ -58,6 +58,7 @@ namespace FMB_CIS.Models
         public DateTime? date_of_expiration { get; set; }
         public DateTime? date_due_for_officers { get; set; }
         public bool? coordinatedWithEnforcementDivision { get; set; }
+        public int? renew_from { get;set; }
 
         //FOR CHAINSAW REGISTRATION APPROVAL
         public string? chainsawBrand { get; set; }

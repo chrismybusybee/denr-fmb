@@ -18,6 +18,39 @@
                 <input asp-for="applicantViewModels.tbl_user_id" value="@Model.applicantViewModels.tbl_user_id" type="hidden" /> *@
                 <input asp-for="uid" type="hidden" />
                 <input asp-for="appid" type="hidden" />
+                <div class="col-md-6">
+                    @if (Model.applicantViewModels.renew_from == null)
+                    {
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                Category
+                            </label>
+                            <span class="fw-bold">
+                                <label>NEW APPLICATION</label>
+                            </span>
+                            @if (ViewBag.hasRenewal == true)
+                            {
+                                <a href='@string.Format("{0}ChainsawOwner/ChainsawOwnerApproval?uid={1}&appid={2}", baseurl,ViewBag.uid,ViewBag.RenewalID)'>A renewal for this application was applied. Please click this to view.</a>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                Category
+                            </label>
+                            <span class="fw-bold">
+                                <label>RENEWAL</label>
+                            </span>
+                            <a href='@string.Format("{0}ChainsawOwner/ChainsawOwnerApproval?uid={1}&appid={2}", baseurl,ViewBag.uid,Model.applicantViewModels.renew_from)'>Click here to see previous application</a>
+                            @if (ViewBag.hasRenewal == true)
+                            {
+                                <a href='@string.Format("{0}ChainsawOwner/ChainsawOwnerApproval?uid={1}&appid={2}", baseurl,ViewBag.uid,ViewBag.RenewalID)'>A renewal for this application was applied. Please click this to view.</a>
+                            }
+                        </div>
+                    }
+                </div>
                 <div class="d-flex justify-content-end gap-2">
 
                     @foreach (WorkflowStep worklowStep in Model.workflow.steps)
@@ -470,10 +503,10 @@
                     <thead>
                         <tr>
                             <th>
-                                Requirement
+                                Uploaded Document
                             </th>
                             <th>
-                                Uploaded Document
+                                Requirement
                             </th>
                             <th>
                                 Status
@@ -492,9 +525,6 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.tbl_document_checklist_name)
-                                </td>
-                                <td>
                                     @* @Html.DisplayFor(modelItem => item.filename) *@
                                     @if (item.filename != "N/A")
                                     {
@@ -505,7 +535,9 @@
                                         @item.filename
                                     }
                                 </td>
-
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.tbl_document_checklist_name)
+                                </td>
                                 <td>
                                     @if (item.tbl_files_status == "Complied")
                                     {

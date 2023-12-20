@@ -22,6 +22,7 @@ namespace FMB_CIS.Controllers
         private readonly IConfiguration _configuration;
         private IEmailSender EmailSender { get; set; }
         private IWebHostEnvironment WebHostEnvironment;
+        private IWebHostEnvironment EnvironmentHosting;
 
 
         public ApplicationController(IConfiguration configuration, LocalContext context, IEmailSender emailSender, IWebHostEnvironment _environment)
@@ -30,6 +31,7 @@ namespace FMB_CIS.Controllers
             _context = context;
             EmailSender = emailSender;
             this.WebHostEnvironment = _environment;
+            EnvironmentHosting = _environment;
         }
 
         public IActionResult Index()
@@ -404,6 +406,10 @@ namespace FMB_CIS.Controllers
             ViewModel mymodel = new ViewModel();
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             //tbl_user user = _context.tbl_user.Find(uid);
+            string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
+            ViewData["BaseUrl"] = host;
+            ViewBag.uid = uid;
+            ViewBag.appid = appid;
             if (uid == null || appid == null || loggedUserID != Convert.ToInt32(uid))
             {
                 ModelState.AddModelError("", "Invalid Application");
@@ -483,8 +489,9 @@ namespace FMB_CIS.Controllers
                 int permitTypeID = Convert.ToInt32(_context.tbl_application.Where(a => a.id == applicID).Select(a => a.tbl_permit_type_id).FirstOrDefault());
                 //Document Tagging and Checklist
                 //Get uploaded files and requirements
-                var fileWithCommentsforDocTagging = (from dc in _context.tbl_document_checklist
-                                                     join f in _context.tbl_files on dc.id equals f.checklist_id
+                var fileWithCommentsforDocTagging = (from br in _context.tbl_files_checklist_bridge
+                                                     join dc in _context.tbl_document_checklist on br.tbl_document_checklist_id equals dc.id
+                                                     join f in _context.tbl_files on br.tbl_files_id equals f.Id
                                                      where dc.permit_type_id == permitTypeID && f.tbl_application_id == applicID && f.created_by == Convert.ToInt32(uid) && dc.is_active == true
                                                      select new FilesWithComments
                                                      {
@@ -495,7 +502,7 @@ namespace FMB_CIS.Controllers
                                                          tbl_application_id = f.tbl_application_id,
                                                          tbl_files_status = f.status
                                                          //comment = c.comment
-                                                     }).ToList();
+                                                     }).OrderBy(o => o.filename).ToList();
 
                 var requiredDocumentList = _context.tbl_document_checklist.Where(c => c.permit_type_id == permitTypeID && c.is_active == true).ToList();
                 foreach (var reqList in requiredDocumentList)
@@ -580,6 +587,7 @@ namespace FMB_CIS.Controllers
                                               chainsaw_serial_number = csaw.chainsaw_serial_number,
                                               chainsawSupplier = csaw.supplier,
                                               date_purchase = csaw.date_purchase,
+                                              renew_from = a.renew_from
                                           }).FirstOrDefault();
 
                     mymodel.applicantViewModels = applicationMod;
@@ -621,6 +629,7 @@ namespace FMB_CIS.Controllers
                                               purpose = a.purpose,
                                               date_of_registration = a.date_of_registration,
                                               date_of_expiration = a.date_of_expiration,
+                                              renew_from = a.renew_from
                                               //coordinatedWithEnforcementDivision = a.coordinatedWithEnforcementDivision
                                           }).FirstOrDefault();
                     //mymodel.email = UserList.email;
@@ -628,6 +637,18 @@ namespace FMB_CIS.Controllers
                     //mymodel.tbl_Users = UserInfo;
                 }
 
+                //Check if this application has applied for renewal
+                var checkRenewal = _context.tbl_application.Where(a => a.renew_from == applid).FirstOrDefault();
+                if (checkRenewal != null)
+                {
+                    ViewBag.hasRenewal = true;
+                    ViewBag.RenewalID = checkRenewal.id;
+                }
+                else
+                {
+                    ViewBag.hasRenewal = false;
+                }
+                //End of checking if this application has applied for renewal
 
                 //Display List of Comments for Application Approval (User to Inspector Conversation)
                 mymodel.commentsViewModelsList = (from c in _context.tbl_comments
@@ -1008,6 +1029,106 @@ namespace FMB_CIS.Controllers
             //return View();
             //return new EmptyResult();
             return RedirectToAction(actionName, "Application");
+        }
+
+        [HttpPost]
+        public JsonResult RenewApplication(int oldApplicationID)
+        {
+            int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+
+            var oldApplication = _context.tbl_application.Where(a=>a.id== oldApplicationID).FirstOrDefault();
+            var renewApplication = new tbl_application();
+            var isRenewForThisExist = _context.tbl_application.Any(a=>a.renew_from==oldApplicationID);
+
+            //Copy contents of previous application
+            if (oldApplication != null && DateTime.Now.AddMonths(2) >= oldApplication.date_of_expiration && isRenewForThisExist == false)
+            {
+                renewApplication = oldApplication;
+                renewApplication.id = null; //remove id here
+                renewApplication.date_of_registration = null;
+                renewApplication.date_of_expiration = null;
+                renewApplication.created_by = loggedUserID;
+                renewApplication.modified_by = loggedUserID;
+                renewApplication.date_created = DateTime.Now;
+                renewApplication.date_modified = DateTime.Now;
+                renewApplication.date_due_for_officers = BusinessDays.AddBusinessDays(DateTime.Now, 2).AddHours(4).AddMinutes(30);
+                renewApplication.status = 1;
+                renewApplication.renew_from = oldApplicationID;
+
+                _context.tbl_application.Add(renewApplication);
+                _context.SaveChanges();
+
+                //
+                //var oldApplicationGroup
+                //Copy contents of files
+
+                string folderName = loggedUserID + "_" + renewApplication.id;
+                string path = Path.Combine(EnvironmentHosting.ContentRootPath, "wwwroot/Files/" + folderName);
+
+                var oldApplicationFiles = _context.tbl_files.Where(f=>f.tbl_application_id==oldApplicationID).ToList();
+                var oldFilePath = oldApplicationFiles.Select(p=>p.path).FirstOrDefault();
+
+                string newPath = Path.Combine(EnvironmentHosting.ContentRootPath, "wwwroot/Files/" + folderName); ;
+                CopyFiles.CopyFilesRecursively(oldFilePath, newPath);
+
+                var newApplicationFiles = oldApplicationFiles.ToList();
+                //newApplicationFiles.Select(n => n.path).ToList();
+
+                //Copy contents from tbl_files based on previous application
+                for (int i = 0; i < newApplicationFiles.Count; i++)
+                {
+                    int oldFileID = newApplicationFiles[i].Id;
+                    newApplicationFiles[i].Id = 0;
+                    newApplicationFiles[i].path = newApplicationFiles[i].path.Replace(loggedUserID + "_" + oldApplicationID, folderName);
+                    newApplicationFiles[i].date_modified = DateTime.Now;
+                    newApplicationFiles[i].tbl_application_id = renewApplication.id;
+
+                    _context.tbl_files.Add(newApplicationFiles[i]);
+                    _context.SaveChanges();
+
+                    var isFilesChcklstBrdgeNotNull = _context.tbl_files_checklist_bridge.Where(f => f.tbl_files_id == oldFileID).Any();
+                    if(isFilesChcklstBrdgeNotNull == true)
+                    {
+                        var filesChcklstBrdge = _context.tbl_files_checklist_bridge.Where(f => f.tbl_files_id == oldFileID).ToList();
+                        //var newFilesChcklstBrdge = new tbl_files_checklist_bridge;
+
+                        //Copy tagged checklist of files based from previous application
+                        for (int j = 0; j < filesChcklstBrdge.Count; j++)
+                        {
+                            filesChcklstBrdge[j].id = 0;
+                            filesChcklstBrdge[j].tbl_files_id = newApplicationFiles[i].Id;
+                            _context.tbl_files_checklist_bridge.Add(filesChcklstBrdge[j]);
+                            _context.SaveChanges();
+                        }
+                    }                    
+
+                }
+
+                
+                //folder format loggedUserID_renewApplication.id
+
+
+                //string path = Path.Combine(EnvironmentHosting.ContentRootPath, "wwwroot/Files/" + folderName);
+
+                ////create folder if not exist
+                //if (!Directory.Exists(path))
+                //    Directory.CreateDirectory(path);
+
+
+                //string fileNameWithPath = Path.Combine(path, file.FileName);
+
+                //using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                //{
+                //    file.CopyTo(stream);
+                //}
+
+                return Json(renewApplication.id);
+            }
+            else
+            {
+                return Json(false);
+            }
+            
         }
     }
 }

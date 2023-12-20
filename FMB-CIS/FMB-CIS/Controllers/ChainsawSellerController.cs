@@ -398,6 +398,8 @@ namespace FMB_CIS.Controllers
             
             string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
             ViewData["BaseUrl"] = host;
+            ViewBag.uid = uid;
+            ViewBag.appid = appid;
             //File Paths from Database
             //Files Uploaded by Applicant
             var filesFromDB = _context.tbl_files.Where(f => f.tbl_application_id == applicID && f.created_by == Convert.ToInt32(uid) && f.is_proof_of_payment != true).ToList();
@@ -478,8 +480,9 @@ namespace FMB_CIS.Controllers
             mymodel.workflow = workflowModel;
 
             //Get uploaded files and requirements
-            var fileWithCommentsforDocTagging = (from dc in _context.tbl_document_checklist
-                                                 join f in _context.tbl_files on dc.id equals f.checklist_id
+            var fileWithCommentsforDocTagging = (from br in _context.tbl_files_checklist_bridge
+                                                 join dc in _context.tbl_document_checklist on br.tbl_document_checklist_id equals dc.id
+                                                 join f in _context.tbl_files on br.tbl_files_id equals f.Id
                                                  //join c in _context.tbl_comments on f.Id equals c.tbl_files_id
                                                  //join usr in _context.tbl_user on c.created_by equals usr.id
                                                  where dc.permit_type_id == permitTypeID && f.tbl_application_id == applicID && f.created_by == Convert.ToInt32(uid) && dc.is_active == true
@@ -492,7 +495,7 @@ namespace FMB_CIS.Controllers
                                                      tbl_application_id = f.tbl_application_id,
                                                      tbl_files_status = f.status
                                                      //comment = c.comment
-                                                 }).ToList();
+                                                 }).OrderBy(o => o.filename).ToList();
 
             var requiredDocumentList = _context.tbl_document_checklist.Where(c => c.permit_type_id == permitTypeID && c.is_active == true).ToList();
             foreach (var reqList in requiredDocumentList)
@@ -594,10 +597,24 @@ namespace FMB_CIS.Controllers
                                           specification = a.tbl_specification_id,
                                           purpose = a.purpose,
                                           date_of_registration = a.date_of_registration,
-                                          date_of_expiration = a.date_of_expiration
+                                          date_of_expiration = a.date_of_expiration,
+                                          renew_from = a.renew_from
                                           //coordinatedWithEnforcementDivision = a.coordinatedWithEnforcementDivision
                                       }).FirstOrDefault();
                 mymodel.applicantViewModels = applicationMod;
+
+                //Check if this application has applied for renewal
+                var checkRenewal = _context.tbl_application.Where(a => a.renew_from == applid).FirstOrDefault();
+                if (checkRenewal != null)
+                {
+                    ViewBag.hasRenewal = true;
+                    ViewBag.RenewalID = checkRenewal.id;
+                }
+                else
+                {
+                    ViewBag.hasRenewal = false;
+                }
+                //End of checking if this application has applied for renewal
 
                 string commentType = "";
                 if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector"))

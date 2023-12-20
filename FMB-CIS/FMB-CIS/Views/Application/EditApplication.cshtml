@@ -6,6 +6,7 @@
     ViewBag.Title = "Manage Applications";
     ViewBag.Cenro = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO");
     ViewBag.Inspector = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector");
+    var baseurl = ViewBag.BaseUrl;
 }
 
 <div id="card-container">
@@ -24,27 +25,67 @@
                 @* @Html.HiddenFor(model => model.applicantViewModels.id)
                 @Html.HiddenFor(model => model.applicantViewModels.tbl_user_id)
                 @Html.HiddenFor(model => model.applicantViewModels.email) *@
-                <div class="form-group d-flex flex-column gap-1">
-                    <label class="text-secondary small">
-                        Permit Status
-                    </label>
-                    <span class="fw-bold">
-                        @* @Html.DisplayFor(model => model.user_type) *@
-                        <label asp-for="applicantViewModels.permit_status" value="@Model.applicantViewModels.permit_status">@Model.applicantViewModels.permit_status</label>
-                        @* @Html.DisplayFor(modelItem => item.Engine) *@
-                        @* Chainsaw Importer *@
-                    </span>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                Permit Status
+                            </label>
+                            <span class="fw-bold">
+                                <label asp-for="applicantViewModels.permit_status" value="@Model.applicantViewModels.permit_status">@Model.applicantViewModels.permit_status</label>                               
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        @if (Model.applicantViewModels.renew_from == null)
+                        {
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label class="text-secondary small">
+                                    Category
+                                </label>
+                                <span class="fw-bold">
+                                    <label>NEW APPLICATION</label>
+                                </span>
+                                @if (ViewBag.hasRenewal == true)
+                                {
+                                    <a href='@string.Format("{0}Application/EditApplication?uid={1}&appid={2}", baseurl,ViewBag.uid,ViewBag.RenewalID)'>A renewal for this application was applied. Please click this to view.</a>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label class="text-secondary small">
+                                    Category
+                                </label>
+                                <span class="fw-bold">
+                                    <label>RENEWAL</label>
+                                </span>
+                                <a href='@string.Format("{0}Application/EditApplication?uid={1}&appid={2}", baseurl,ViewBag.uid,Model.applicantViewModels.renew_from)'>Click here to see previous application</a>
+                                @if (ViewBag.hasRenewal == true)
+                                {
+                                    <a href='@string.Format("{0}Application/EditApplication?uid={1}&appid={2}", baseurl,ViewBag.uid,ViewBag.RenewalID)'>A renewal for this application was applied. Please click this to view.</a>
+                                }
+                            </div>
+                        }
+                    </div>
                 </div>
                 <div class="d-flex justify-content-end gap-2">
-                    @if (Model.applicantViewModels.permit_status.Contains("Approved") == false && Model.applicantViewModels.permit_status.Contains("Payment") == false)
+                    @if (Model.applicantViewModels.permit_status.Contains("Approved") == false && Model.applicantViewModels.permit_status.Contains("Payment") == false && Model.applicantViewModels.renew_from == null)
                     {
                         @* <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" /> *@
                         <button id="btnSave" class="btn btn-primary w-105" type="button">Submit</button>
                     }
-                    
+                    @if (DateTime.Now.AddMonths(2) >= Model.applicantViewModels.date_of_expiration && ViewBag.hasRenewal == false)
+                    {
+                        <button id="btnRenew" class="btn btn-primary" type="button">Renew Application</button>
+                    }
                 </div>
             </div>
             <hr />
+            @if (Model.applicantViewModels.renew_from == null)
+            {
             <div id="profileSection" class="row m-0">
                 <div class="col-md-3">
                     <div class="d-flex justify-content-center gap-1">
@@ -512,8 +553,273 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            
+                </div>
+            }
+            else
+            {
+                <div id="profileSection" class="row m-0">
+                    <div class="col-md-3">
+                        <div class="d-flex justify-content-center gap-1">
+                            <img src="/assets/images/default-avatar.png" class="img-fluid rounded" />
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="row mb-5">
+                                    <div class="col-md-3">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                User Type
+                                            </label>
+                                            <span class="fw-bold">
+                                                <label asp-for="applicantViewModels.user_type" value="@Model.applicantViewModels.user_type">@Model.applicantViewModels.user_type</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Name
+                                            </label>
+                                            <span class="fw-bold">
+                                                <label asp-for="applicantViewModels.full_name" value="@Model.applicantViewModels.full_name">@Model.applicantViewModels.full_name</label>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Address
+                                            </label>
+                                            <span class="fw-bold">
+
+                                                <label asp-for="applicantViewModels.full_address" value="@Model.applicantViewModels.full_address">@Model.applicantViewModels.full_address</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-5">
+                                    <div class="col-md-3">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Permit Type
+                                            </label>
+                                            <span class="fw-bold">
+                                                <label asp-for="applicantViewModels.permit_type" value="@Model.applicantViewModels.permit_type">@Model.applicantViewModels.permit_type</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Permit Application Details-->
+                                <div class="row mb-5">
+                                    @if (Model.applicantViewModels.permit_type != "Certificate of Registration")
+                                    {
+                                        <div class="col-md-5">
+                                            <div class="form-group d-flex flex-column gap-1">
+                                                <label class="text-secondary small">
+                                                    Number of Chainsaws
+                                                </label>
+                                                <span class="fw-bold">
+                                                    <label asp-for="applicantViewModels.qty" value="@Model.applicantViewModels.qty">@Model.applicantViewModels.qty</label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Specification
+                                            </label>
+                                            <span class="fw-bold">
+                                                <label asp-for="applicantViewModels.specification" value="@Model.applicantViewModels.specification">@Model.applicantViewModels.specification</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @if (Model.applicantViewModels.initial_date_of_inspection != null)
+                                {
+                                    <div class="row mb-5">
+                                        <div class="col-md-5">
+                                            <div class="form-group d-flex flex-column gap-1">
+                                                <label class="text-secondary small">
+                                                    Initial Inspection Date
+                                                </label>
+                                                <span class="fw-bold">
+                                                    <label asp-for="applicantViewModels.initial_date_of_inspection" value="@Model.applicantViewModels.initial_date_of_inspection">@Model.applicantViewModels.initial_date_of_inspection</label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.applicantViewModels.inspectionDate != null)
+                                {
+                                    <div class="row mb-5">
+                                        <div class="col-md-5">
+                                            <div class="form-group d-flex flex-column gap-1">
+                                                <label class="text-secondary small">
+                                                    Inspection Date
+                                                </label>
+                                                <span class="fw-bold">
+                                                    <label asp-for="applicantViewModels.inspectionDate" value="@Model.applicantViewModels.inspectionDate">@Model.applicantViewModels.inspectionDate</label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        @if (Model.applicantViewModels.permit_type == "Certificate of Registration")
+                                        {
+                                            <div class="col-md-5">
+                                                <div class="form-group d-flex flex-column gap-1">
+                                                    <label class="text-secondary small">
+                                                        Date of Purchase
+                                                    </label>
+                                                    <span class="fw-bold">
+                                                        <label asp-for="applicantViewModels.date_purchase" value="@Model.applicantViewModels.date_purchase">@Model.applicantViewModels.date_purchase</label>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+
+
+                                @if (Model.applicantViewModels.date_of_registration != null)
+                                {
+                                    <div class="row mb-5">
+                                        <div class="col-md-5">
+                                            <div class="form-group d-flex flex-column gap-1">
+                                                <label class="text-secondary small">
+                                                    Date of Permit Registration
+                                                </label>
+                                                <span class="fw-bold">
+                                                    @Html.DisplayFor(model => model.applicantViewModels.date_of_registration)
+                                                    @Html.HiddenFor(model => model.applicantViewModels.date_of_registration)
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group d-flex flex-column gap-1">
+                                                <label class="text-secondary small">
+                                                    Date of Permit Expiration
+                                                </label>
+                                                <span class="fw-bold">
+                                                    @Html.DisplayFor(model => model.applicantViewModels.date_of_expiration)
+                                                    @Html.HiddenFor(model => model.applicantViewModels.date_of_expiration)
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.applicantViewModels.permit_type == "Certificate of Registration")
+                                {
+                                    <div class="row mb-5">
+                                        <div class="col-md-5">
+                                            <div class="form-group d-flex flex-column gap-1">
+                                                <label class="text-secondary small">
+                                                    Chainsaw Brand
+                                                </label>
+                                                <span class="fw-bold">
+                                                    <label asp-for="applicantViewModels.chainsawBrand" value="@Model.applicantViewModels.chainsawBrand">@Model.applicantViewModels.chainsawBrand</label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group d-flex flex-column gap-1">
+                                                <label class="text-secondary small">
+                                                    Chainsaw Model
+                                                </label>
+                                                <span class="fw-bold">
+                                                    <label asp-for="applicantViewModels.chainsawModel" value="@Model.applicantViewModels.chainsawModel">@Model.applicantViewModels.chainsawModel</label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-5">
+                                        <div class="col-md-5">
+                                            <div class="form-group d-flex flex-column gap-1">
+                                                <label class="text-secondary small">
+                                                    Chainsaw Engine
+                                                </label>
+                                                <span class="fw-bold">
+                                                    <label asp-for="applicantViewModels.Engine" value="@Model.applicantViewModels.Engine">@Model.applicantViewModels.Engine</label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group d-flex flex-column gap-1">
+                                                <label class="text-secondary small">
+                                                    Chainsaw Power Source
+                                                </label>
+                                                <span class="fw-bold">
+                                                    <label asp-for="applicantViewModels.powerSource" value="@Model.applicantViewModels.powerSource">@Model.applicantViewModels.powerSource</label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-5">
+                                        <div class="col-md-5">
+                                            <div class="form-group d-flex flex-column gap-1">
+                                                @if (Model.applicantViewModels.powerSource == "Gas")
+                                                {
+                                                    <label class="text-secondary small">
+                                                        Horsepower
+                                                    </label>
+                                                    <span class="fw-bold">
+                                                        <label asp-for="applicantViewModels.hp" value="@Model.applicantViewModels.hp">@Model.applicantViewModels.hp</label>
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <label class="text-secondary small">
+                                                        Watt
+                                                    </label>
+                                                    <span class="fw-bold">
+                                                        <label asp-for="applicantViewModels.Watt" value="@Model.applicantViewModels.Watt">@Model.applicantViewModels.Watt</label>
+                                                    </span>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group d-flex flex-column gap-1">
+                                                <label class="text-secondary small">
+                                                    Length of Guidebar
+                                                </label>
+                                                <span class="fw-bold">
+                                                    <label asp-for="applicantViewModels.gb" value="@Model.applicantViewModels.gb">@Model.applicantViewModels.gb</label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-5">
+                                        <div class="col-md-5">
+                                            <div class="form-group d-flex flex-column gap-1">
+                                                <label class="text-secondary small">
+                                                    Chainsaw Serial Number
+                                                </label>
+                                                <span class="fw-bold">
+                                                    <label asp-for="applicantViewModels.chainsaw_serial_number" value="@Model.applicantViewModels.chainsaw_serial_number">@Model.applicantViewModels.chainsaw_serial_number</label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group d-flex flex-column gap-1">
+                                                <label class="text-secondary small">
+                                                    Chainsaw Supplier
+                                                </label>
+                                                <span class="fw-bold">
+                                                    <label asp-for="applicantViewModels.chainsawSupplier" value="@Model.applicantViewModels.chainsawSupplier">@Model.applicantViewModels.chainsawSupplier</label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
             @* @if (@Model.applicantViewModels.permit_type == "Permit to Import")
             {
                 <hr />
@@ -841,6 +1147,11 @@
     // const showModalButton = document.getElementById('btnSave');
     // const confirmationModal = document.getElementById('confirmSaveModal');
     // const confirmButton = document.getElementById('confirmSaveBtn');
+    var baseURL = "@baseurl";
+    const queryStr = window.location.search;
+    const urlParameters = new URLSearchParams(queryStr);
+    const uid = urlParameters.get('uid')
+    const appID = urlParameters.get('appid')
 
     $(document).ready(function () {
                 
@@ -858,6 +1169,53 @@
             // formFiles.files = dt.files;
             form.submit();
             $("#confirmSaveSuccessModal").modal("show");
+        });
+
+        $("#btnRenew").click(function () {
+            Swal.fire({
+                title: "Are you sure you want to renew this application?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                confirmButtonColor: '#14984a'
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                console.log("result", result);
+                
+                $.post(baseURL + "Application/RenewApplication", { oldApplicationID: appID }, function (data) {
+                    console.log("data: ", data);
+                    
+                    if (data != false) {
+                        var renewedAppLink = baseURL + "Application/EditApplication?uid=" + uid + "&appid=" + data;
+                        var innerHTML = "<div>Application for renewal has been submitted! You may view your application for renewal on this link: </div><br>" + "<a href=\"" + renewedAppLink + "\">" + renewedAppLink + "</a>";
+                        Swal.fire({
+                            title: "Success!",
+                            icon: "success",
+                            //text: "Application for renewal has been submitted! You may view your application for renewal on this link: ",
+                            html: innerHTML,
+                            confirmButtonText: "Ok",
+                            confirmButtonColor: '#14984a'
+                        });
+                    }
+
+                    else
+                    {
+                        Swal.fire({
+                            title: "Failed!",
+                            icon: "error",
+                            text: "Your application is not qualified for renewal.",
+                            confirmButtonText: "Ok",
+                            confirmButtonColor: '#14984a'
+                        });
+                    }
+
+                });
+
+            });
+
+
+
+
         });
     });
 

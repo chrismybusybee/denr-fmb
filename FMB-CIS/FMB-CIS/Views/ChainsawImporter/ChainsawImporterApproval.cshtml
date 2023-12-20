@@ -17,6 +17,39 @@
                 <input asp-for="applicantViewModels.tbl_user_id" value="@Model.applicantViewModels.tbl_user_id" type="hidden" /> *@
                 <input asp-for="uid" type="hidden" />
                 <input asp-for="appid" type="hidden" />
+                <div class="col-md-6">
+                    @if (Model.applicantViewModels.renew_from == null)
+                    {
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                Category
+                            </label>
+                            <span class="fw-bold">
+                                <label>NEW APPLICATION</label>
+                            </span>
+                            @if (ViewBag.hasRenewal == true)
+                            {
+                                <a href='@string.Format("{0}ChainsawImporter/ChainsawImporterApproval?uid={1}&appid={2}", baseurl,ViewBag.uid,ViewBag.RenewalID)'>A renewal for this application was applied. Please click this to view.</a>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label class="text-secondary small">
+                                Category
+                            </label>
+                            <span class="fw-bold">
+                                <label>RENEWAL</label>
+                            </span>
+                            <a href='@string.Format("{0}ChainsawImporter/ChainsawImporterApproval?uid={1}&appid={2}", baseurl,ViewBag.uid,Model.applicantViewModels.renew_from)'>Click here to see previous application</a>
+                            @if (ViewBag.hasRenewal == true)
+                            {
+                                <a href='@string.Format("{0}ChainsawImporter/ChainsawImporterApproval?uid={1}&appid={2}", baseurl,ViewBag.uid,ViewBag.RenewalID)'>A renewal for this application was applied. Please click this to view.</a>
+                            }
+                        </div>
+                    }
+                </div>
                 <div class="d-flex justify-content-end gap-2">
                     @foreach (WorkflowStep worklowStep in Model.workflow.steps)
                     {
@@ -363,10 +396,10 @@
                     <thead>
                         <tr>
                             <th>
-                                Requirement
+                                Uploaded Document
                             </th>
                             <th>
-                                Uploaded Document
+                                Requirement
                             </th>
                             <th>
                                 Status
@@ -377,7 +410,6 @@
                             <th>
                                 Action
                             </th>
-
                         </tr>
                     </thead>
                     <tbody>
@@ -385,11 +417,8 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.tbl_document_checklist_name)
-                                </td>
-                                <td>
                                     @* @Html.DisplayFor(modelItem => item.filename) *@
-                                    @if(item.filename!="N/A")
+                                    @if (item.filename != "N/A")
                                     {
                                         <a href="#" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DocHistory(this)">@item.filename</a>
                                     }
@@ -399,6 +428,10 @@
                                     }
                                 </td>
 
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.tbl_document_checklist_name)
+                                </td>
+                                
                                 <td>
                                     @if (item.tbl_files_status == "Complied")
                                     {
@@ -423,7 +456,7 @@
                                     }
                                 </td>
                                 <td>
-                                    
+
                                     @if (item.filename != "N/A")
                                     {
                                         @Html.DisplayFor(modelItem => item.comment)
@@ -447,6 +480,89 @@
 
                             </tr>
                         }
+                        @*
+                        TO BE USED IF ROWSPAN IS COMPATIBLE    
+                        @{
+                            int a = 0;
+                            var prevFileName = "";
+                            var grpFilesWithComments = Model.filesWithComments.GroupBy(g => g.filename).ToList();
+                            var test = "test";
+                        }
+                        
+                        @for(int i =0; i< grpFilesWithComments.Count();i++)
+                        {
+                            int lengthOfUsingTheFileName = grpFilesWithComments[i].Count();
+
+                            int j=0;
+                            @foreach (var item in grpFilesWithComments[i])
+                            {
+                                @if (j < 1)
+                                {
+                                    <tr>
+                                        <td rowspan="@lengthOfUsingTheFileName">
+                                            @item.filename
+                                        </td>
+                                        <td>
+                                            @item.tbl_document_checklist_name
+                                        </td>
+                                        <td rowspan="@lengthOfUsingTheFileName">
+                                            @if (item.tbl_files_status == "Complied")
+                                            {
+                                                <div class="text-success px-3 pb-2 pt-1" style="font-weight: bold">
+                                                    @item.tbl_files_status
+                                                </div>
+                                            }
+                                            else if (item.tbl_files_status == "Not Complied")
+                                            {
+                                                <div class="text-danger px-3 pb-2 pt-1" style="font-weight: bold">
+                                                    @item.tbl_files_status
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="text-secondary px-3 pb-2 pt-1" style="font-weight: bold">
+                                                    @item.tbl_files_status
+                                                </div>
+                                            }
+                                        </td>
+                                        <td rowspan="@lengthOfUsingTheFileName">
+
+                                            @if (item.filename != "N/A")
+                                            {                                                
+                                                <label>@item.comment</label>
+                                            }
+                                            else
+                                            {
+                                                <label>N/A</label>
+                                            }
+                                        </td>
+                                        <td rowspan="@lengthOfUsingTheFileName">
+                                            @if (item.filename != "N/A")
+                                            {
+                                                <button type="button" class="btn btn-primary w-125" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="ApproveDocStatus(this)">Complied</button>
+                                                <button type="button" class="btn btn-danger w-125" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DenyDocStatus(this)">Not Complied</button>
+                                            }
+                                            else
+                                            {
+                                                <label>N/A</label>
+                                            }
+                                        </td>
+                                    </tr>
+
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>
+                                            <label>@item.tbl_document_checklist_name</label>
+                                        </td>
+                                    </tr>
+                                }
+                                
+                                j++;
+                            }
+                        } *@
+                                                
                     </tbody>
                 </table>
             </div>
