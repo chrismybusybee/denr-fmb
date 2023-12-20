@@ -30,7 +30,7 @@
                 </div>
             }
             <h1 class="c-form-title text-green">LOGIN</h1>
-            <p class="c-form-subtitle">Manage your chainsaw applications</p>
+            <p class="c-form-subtitle">Forest Management Bureau - Chainsaw Information System</p>
                 <div class="c-form d-flex flex-column align-items-start w-100">
                     <div class="c-field">
                         @* @Html.ValidationSummary("") *@
@@ -66,6 +66,7 @@
                     <button type="submit" class="btn btn-primary w-100 mb-4">Login</button>
                     </div>
                     <p class="c-text-center">Don't have an account? <a class="c-form-link" onclick="window.location.href = '@Url.Action("Registration", "Account")'">Register now</a></p>
+                <a href="/Home/TermsPolicy" target="_blank" class="c-text-center">About FMB CIS | Privacy and Policy</a>
                 </div>
         </div>
         @* <div class="col-md-6 min-vh-100 d-flex align-items-md-end" style="background-image: url('assets/images/login-cover.png');background-size:cover;">

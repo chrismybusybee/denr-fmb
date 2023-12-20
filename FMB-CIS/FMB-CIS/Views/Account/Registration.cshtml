@@ -502,7 +502,6 @@
         var emailValue = document.getElementById("emailInput").value;
         var url = "@baseurl";
         $.post(url + "Account/CheckExistingEmailOnField", { email: emailValue }, function (data) {
-            //debugger;
             emailExist = data;
             if (data == true) {
                 //console.log(emailExist);
@@ -823,7 +822,6 @@
         var url = "@baseurl";
 
         $.post(url + "Account/GetProvinceByRegionId", { tbl_region_id: value }, function (data) {
-            debugger;
             PopulateProvinceDropDown("#ddlProvinceId", data);
         });
     }
@@ -846,7 +844,6 @@
         var url = "@baseurl";
 
         $.post(url + "Account/GetCityByProvinceId", { tbl_province_id: value }, function (data) {
-            debugger;
             PopulateCityDropDown("#ddlCityId", data);
         });
     }
@@ -869,7 +866,6 @@
         var url = "@baseurl";
 
         $.post(url + "Account/GetBrgyByCityId", { tbl_city_id: value }, function (data) {
-            debugger;
             PopulateBrgyDropDown("#ddlBrgyId", data);
         });
     }
