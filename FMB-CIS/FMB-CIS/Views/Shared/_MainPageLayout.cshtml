@@ -313,7 +313,7 @@
                                     </a>
                                     <ul id="chainsawImporterDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
                                         <li id="chainsawImporterApplication" class="my-0">
-                                            <a href="@Url.Action("Index", "ChainsawImporter")" class="d-flex gap-2 text-decoration-none fs-6">
+                                            <a href="@Url.Action("ChainsawImporterApplicantsList", "ChainsawImporter")" class="d-flex gap-2 text-decoration-none fs-6">
                                                 <div>
                                                     <img src="~/assets/images/menu-icons/line.png" />
                                                 </div>
@@ -331,7 +331,7 @@
                                     </a>
                                     <ul id="chainsawSellerDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
                                         <li id="chainsawSellerApplication" class="my-0">
-                                            <a href="@Url.Action("Index", "ChainsawSeller")" class="d-flex gap-2 text-decoration-none fs-6">
+                                            <a href="@Url.Action("ChainsawSellerApplicantsList", "ChainsawSeller")" class="d-flex gap-2 text-decoration-none fs-6">
                                                 <div>
                                                     <img src="~/assets/images/menu-icons/line.png" />
                                                 </div>
@@ -349,7 +349,7 @@
                                     </a>
                                     <ul id="chainsawOwnerDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
                                         <li id="chainsawOwnerApplication" class="my-0">
-                                            <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
+                                            <a href="@Url.Action("ChainsawOwnerApplicantsList", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
                                                 <div>
                                                     <img src="~/assets/images/menu-icons/line.png" />
                                                 </div>
@@ -382,7 +382,7 @@
                             @* @if (ViewBag.UserType.Contains("DENR") == true) *@
                         @*    @if (ViewBag.UserType.Contains("CENRO") == true || ViewBag.UserType.Contains("Implementing") == true || ViewBag.UserType.Contains("RED") == true || ViewBag.UserType.Contains("Administrator") == true || ViewBag.UserType.Contains("Super Admin") == true)
                             {*@
-                                @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_account_management"))
+                                @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_account_management") || AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_profile"))
                                 {
                                 <li id="accountManagementMenuItem">
                                     <a href="#" id="accountManagementSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
@@ -626,31 +626,6 @@
                                         </a>
                                     </li>
                                 }
-                            }
-                            @* @if (ViewBag.UserType.Contains("Chainsaw") == true) *@
-                       @*     @if (ViewBag.UserType.Contains("CENRO") == false && ViewBag.UserType.Contains("Implementing") == false && ViewBag.UserType.Contains("RED") == false && ViewBag.UserType.Contains("Administrator") == false && ViewBag.UserType.Contains("Super Admin") == false)
-                            {
-*@
-                                @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_profile"))
-                                {
-                                    <li id="accountManagementMenuItem">
-                                        <a href="#" id="accountManagementSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
-                                            <div>
-                                                <img src="~/assets/images/menu-icons/account-management.png" />
-                                            </div>
-                                            <span>Account Management</span>
-                                        </a>
-                                        <ul id="accountManagementDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
-                                            <li id="ManageProfileMenuItem">
-                                                <a href="@Url.Action("RequestToChangeAccountInfo", "AccountManagement")" class="d-flex gap-2 text-decoration-none fs-6">
-                                                    <div>
-                                                        <img src="~/assets/images/menu-icons/line.png" />
-                                                    </div>
-                                                    <span>Manage Profile</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
                             }
                             <hr class="me-4 my-4" />
                             <li>
