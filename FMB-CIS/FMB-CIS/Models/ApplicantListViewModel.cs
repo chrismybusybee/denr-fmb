@@ -23,6 +23,7 @@ namespace FMB_CIS.Models
         public string contact { get; set; }
         public string address { get; set; }
 
+
         public int tbl_user_id { get; set; }
         public string user_type { get; set; }
         public string valid_id { get; set; }
@@ -57,6 +58,7 @@ namespace FMB_CIS.Models
         public DateTime? date_of_expiration { get; set; }
         public DateTime? date_due_for_officers { get; set; }
         public bool? coordinatedWithEnforcementDivision { get; set; }
+        public int? renew_from { get;set; }
 
         //FOR CHAINSAW REGISTRATION APPROVAL
         public string? chainsawBrand { get; set; }
