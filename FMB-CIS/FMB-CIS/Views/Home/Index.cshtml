@@ -7,9 +7,20 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="container-fluid d-flex justify-content-center align-items-center min-vh-100">
-        <div class="col-md-6 d-flex flex-column justify-content-center align-items-center mb-5 pb-5">
-            <img src="~/assets/images/logo.png" class="mb-5 pb-5" />
+    <div class="c-fluid d-flex justify-content-center align-items-center min-vh-100">
+        <div class="c-box col-md-6 d-flex flex-column justify-content-center mb-5 pb-5">
+                                @* <img src="~/assets/images/logo.png" /> *@
+                                <div class="c-form-images-title-container">
+            <div class="c-form-images-container">
+
+                <img class="c-form-image" src="~/assets/images/denr.png" />
+                <img class="c-form-image" src="~/assets/images/forestmanagementbureau.png" />
+            </div>
+            <div class="c-form-image-title-container">
+                <p class="c-form-image-pretitle">Department of Environment and Natural Resources</p>
+                <p class="c-form-image-title">Forest Management Bureau</p>
+            </div>
+            </div>
             @if (ViewBag.message != null)
             {
                 <div class="px-5">
@@ -18,45 +29,44 @@
                     </div>
                 </div>
             }
-            <h1 class="text-green mt-3 mb-2">LOGIN</h1>
-            <div class="d-flex w-50">
-                <div class="d-flex flex-column align-items-start w-100">
-                    @* @Html.ValidationSummary("") *@
-                    <label class="form-label">Email Address</label>
-                    @* @Html.Editor("Email", new { htmlAttributes = new { @class = "form-control mb-md-4", @id = "Username", @type = "text", @placeholder = "name@address.com", @tabindex = "1" } }) *@
-                    @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control mb-md-4", @id = "Username", @type = "text", @placeholder = "name@address.com", @tabindex = "1" } })
-                    @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
-                    @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
-                    <label class="form-label">Password</label>
-                    <div class="input-group password-toggle mb-md-2">
-                        @* @Html.Editor("Password", new { htmlAttributes = new { @class = "form-control", @id = "Password", @type = "password", @placeholder = "Enter your password", @tabindex = "2", @style = "border-right:none;" } }) *@
-                        @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", @id = "Password", @placeholder = "Enter your password", @tabindex = "2", @style = "border-right:none;" } })
-                        <span class="input-group-text cursor-pointer" id="ShowPassword" title="show/hide password">
-                            <i data-feather="eye" class="data-feather"></i>
+            <h1 class="c-form-title text-green">LOGIN</h1>
+            <p class="c-form-subtitle">Manage your chainsaw applications</p>
+                <div class="c-form d-flex flex-column align-items-start w-100">
+                    <div class="c-field">
+                        @* @Html.ValidationSummary("") *@
+                        <label class="form-label">Email Address</label>
+                        @* @Html.Editor("Email", new { htmlAttributes = new { @class = "form-control mb-md-4", @id = "Username", @type = "text", @placeholder = "name@address.com", @tabindex = "1" } }) *@
+                        @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control", @id = "Username", @type = "text", @placeholder = "name@address.com", @tabindex = "1" } })
+                        @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="c-field">
+                        <label class="form-label">Password 
+                        <span class="c-field-label-link-container">
+                            @Html.ActionLink("Forgot Password?", "ForgotPassword", "Account")
                         </span>
+                        </label>
+                        <div class="input-group password-toggle mb-md-2">
+                            @* @Html.Editor("Password", new { htmlAttributes = new { @class = "form-control", @id = "Password", @type = "password", @placeholder = "Enter your password", @tabindex = "2", @style = "border-right:none;" } }) *@
+                            @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", @id = "Password", @placeholder = "Enter your password", @tabindex = "2", @style = "border-right:none;" } })
+                            <span class="input-group-text cursor-pointer" id="ShowPassword" title="show/hide password">
+                                <i data-feather="eye" class="data-feather"></i>
+                            </span>
+                        </div>
+
                     </div>
 
-                    <div class="d-flex justify-content-between w-100 mb-5 small">
-                        <div>
-                            @Html.ActionLink("Forgot Password?", "ForgotPassword", "Account")
-                        </div>
-                        <div class="d-flex justify-content-end">
+                    <div class="c-field">
                             <div class="form-check">
                                 @Html.CheckBox("RememberMe", htmlAttributes: new { @class = "form-check-input", @type = "checkbox", @tabindex = "3" })
                                 <label class="form-check-label" for="remember-me">Remember Me</label>
                             </div>
                         </div>
+                    <div class="c-field">
+                    <button type="submit" class="btn btn-primary w-100 mb-4">Login</button>
                     </div>
-                    @* <button class="btn btn-primary w-100 mb-4" onclick="window.location.href = '@Url.Action("Index", "Dashboard")'">Login</button> *@
-
-                    <button type="submit" class="btn btn-primary w-100 mb-4" @* onclick="window.location.href = '@Url.Action("Index", "Dashboard")'" *@>Login</button>
-
-                    @*                 <div class="form-group">
-                <input type="submit" value="Login" class="btn btn-primary w-100 mb-4" />
-                </div> *@
-                    <button type="button" class="btn btn-secondary w-100" onclick="window.location.href = '@Url.Action("Registration", "Account")'">Register</button>
+                    <p class="c-text-center">Don't have an account? <a class="c-form-link" onclick="window.location.href = '@Url.Action("Registration", "Account")'">Register now</a></p>
                 </div>
-            </div>
         </div>
         @* <div class="col-md-6 min-vh-100 d-flex align-items-md-end" style="background-image: url('assets/images/login-cover.png');background-size:cover;">
             <img class="login-cover-overlay mx-auto" src="~/assets/images/login-cover-overlay.png" width="650" />
@@ -98,3 +108,81 @@
         });
     });
 </script>
+<style>
+    .c-fluid {
+        @* background-color: #14984a; *@
+        background: rgb(20,152,74);
+background: linear-gradient(325deg, rgba(132,200,106,1) 0%, rgba(20,152,74,1) 50%, rgba(20,152,74,1)  100%);
+    }
+    .c-box {
+        border: solid 1px #CCCCCC;
+        background-color: #FFFFFF;
+        padding: 48px;
+        max-width: 480px;
+        border-radius: 12px;
+    }
+    .c-form {
+        width: 100%;
+    }
+    .c-form-title  {
+        margin-top: 24px;
+        font-size: 24px;   
+        font-weight: bolder; 
+    }
+    .c-form-subtitle  {
+        font-size: 14px;    
+        margin-bottom: 24px;
+    }
+    .c-field {
+        margin-top: 24px;
+        width: 100%;
+    }
+    .c-field label {
+        margin-bottom: 0;
+        font-weight: bolder;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    .c-field-label-link-container {
+        float: right;
+    }
+    .c-field-label-link-container a {
+        color: #14984a;
+        text-decoration: underline;
+        font-size: 16px;
+    }
+    .c-field input {
+
+    }
+    .c-form-images-title-container {
+        display: flex;
+    }
+    .c-form-images-container {
+    }
+    .c-form-image {
+        width: 50px;
+    }
+    .c-form-image-title-container {
+flex: 1;
+    }
+    .c-form-image-pretitle {
+        font-size: 12px;
+        margin-bottom: 0;
+        @* padding-left: 3px *@
+    }
+    .c-form-image-title {
+        font-size: 20px;
+        margin-top: 0;
+        @* padding-left: 3px *@
+    }
+    .c-text-center {
+        text-align: center;
+        display: block;
+        position: relative;
+        width: 100%;
+    }
+    .c-form-link {
+        color: #14984a;
+        font-weight: bolder;
+    }
+</style>
