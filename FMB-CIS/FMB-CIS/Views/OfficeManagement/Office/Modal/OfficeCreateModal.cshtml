@@ -84,7 +84,6 @@
         var url = "@baseurl";
 
         $.post(url + "Account/GetProvinceByRegionId", { tbl_region_id: value }, function (data) {
-            //debugger;
             PopulateProvinceDropDown("#province_id", data);
         });
     }
@@ -107,7 +106,6 @@
         var url = "@baseurl";
 
         $.post(url + "Account/GetCityByProvinceId", { tbl_province_id: value }, function (data) {
-            //debugger;
             PopulateCityDropDown("#city_id", data);
         });
     }

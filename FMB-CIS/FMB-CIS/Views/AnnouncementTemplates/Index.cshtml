@@ -82,7 +82,6 @@
         var url = "@baseurl";
         //console.log(templID);
         $.post(url + "AnnouncementTemplates/GetAnnouncementTemplateDetails", { id: templID }, function (data) {
-            //debugger;
             console.log(data);
             //alert(data.template_name);
             document.getElementById("announcementTitleView").value = data.title;
@@ -101,7 +100,6 @@
         //console.log(templID);
         document.getElementById("addAnnouncementTemplate").innerHTML = "Edit Announcement Template";
         $.post(url + "AnnouncementTemplates/GetAnnouncementTemplateDetails", { id: templID }, function (data) {
-            //debugger;
             console.log(data);
             //alert(data.template_name);            
             document.getElementById("announcementTitle").value = data.title;

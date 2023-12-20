@@ -303,7 +303,6 @@
         var serialNumValue = document.getElementById("chSerNumInput").value;
         var url = "@baseurl";
         $.post(url + "NewChainsawRegistration/CheckExistingSerialNumOnField", { serialNum: serialNumValue }, function (data) {
-            //debugger;
             chainsawSerNumExist = data;
             if (data == true) {
                 //console.log(chainsawSerNumExist);

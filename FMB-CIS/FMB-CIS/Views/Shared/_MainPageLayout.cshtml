@@ -93,7 +93,7 @@
                                     </a>
                                 </li>
                             } 
-                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_applications"))//ViewBag.UserType.Contains("DENR") == false
+                            @* @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_applications"))//ViewBag.UserType.Contains("DENR") == false
                             {
                                 <li id="applicationMenuItem">
                                     <a href="#" id="applicationSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
@@ -195,7 +195,7 @@
                                             }
                                         </ul>
                                 </li>
-                            }
+                            } *@
                             
                             @*@if ()*@
                             @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_import_applications"))// || usrRoleList.Contains("Chainsaw Importer")
@@ -211,11 +211,11 @@
                                         @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_permit_to_import"))// || usrRoleList.Contains("Chainsaw Importer")
                                         {
                                             <li id="chainsawImporterApplication" class="my-0">
-                                                <a href="@Url.Action("Index", "ChainsawImporter")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <a href="@Url.Action("ImportPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
                                                     <div>
                                                         <img src="~/assets/images/menu-icons/line.png" />
                                                     </div>
-                                                    <span>Application</span>
+                                                    <span>Permit to Import</span>
                                                 </a>
                                             </li>
                                         }
@@ -236,7 +236,7 @@
                                         @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_permit_to_sell"))// || usrRoleList.Contains("Chainsaw Importer")
                                         {
                                             <li id="chainsawSellerApplication" class="my-0">
-                                                <a href="@Url.Action("Index", "ChainsawSeller")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <a href="@Url.Action("SellPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
                                                     <div>
                                                         <img src="~/assets/images/menu-icons/line.png" />
                                                     </div>
@@ -247,7 +247,7 @@
                                         @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_permit_to_purchase"))// || usrRoleList.Contains("Chainsaw Importer")
                                         {
                                             <li id="permitToPurchaseApplication" class="my-0">
-                                                <a href="@Url.Action("PermitToPurchase", "ChainsawSeller")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <a href="@Url.Action("PurchasePermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
                                                     <div>
                                                         <img src="~/assets/images/menu-icons/line.png" />
                                                     </div>
@@ -256,7 +256,7 @@
                                             </li>
                                         }
                                     </ul>
-                                    </li>                                
+                                </li>                                
                             }
 
                             @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_own_applications"))// || usrRoleList.Contains("Chainsaw Importer")
@@ -272,7 +272,7 @@
                                         @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_chainsaw_registration"))// || usrRoleList.Contains("Chainsaw Importer")
                                         {
                                         <li id="newChainsawRegistrationMenuItem">
-                                            <a href="@Url.Action("Index", "NewChainsawRegistration")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <a href="@Url.Action("RegistrationPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
                                                 <div>
                                                     <img src="~/assets/images/menu-icons/line.png" />
                                                 </div>
@@ -280,7 +280,51 @@
                                             </a>
                                         </li>
                                         }
-                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_other_permits"))// || usrRoleList.Contains("Chainsaw Importer")
+                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_authority_to_lease"))//ViewBag.UserType.Contains("Owner") == true
+                                        {
+                                            <li id="authorityToLease" class="mb-3">
+                                                <a href="@Url.Action("LeasePermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                    <div>
+                                                        <img src="~/assets/images/menu-icons/line.png" />
+                                                    </div>
+                                                    <span>Authority to Lease</span>
+                                                </a>
+                                            </li>
+                                        }
+                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_authority_to_rent"))//ViewBag.UserType.Contains("Owner") == true
+                                        {
+                                            <li id="authorityToRent" class="mb-3">
+                                                <a href="@Url.Action("RentPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                    <div>
+                                                        <img src="~/assets/images/menu-icons/line.png" />
+                                                    </div>
+                                                    <span>Authority to Rent</span>
+                                                </a>
+                                            </li>
+                                        }
+                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_authority_to_lend"))//ViewBag.UserType.Contains("Owner") == true
+                                        {
+                                            <li id="authorityToLend" class="mb-3">
+                                                <a href="@Url.Action("LendPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                    <div>
+                                                        <img src="~/assets/images/menu-icons/line.png" />
+                                                    </div>
+                                                    <span>Authority to Lend</span>
+                                                </a>
+                                            </li>
+                                        }
+                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_permit_to_resell"))//ViewBag.UserType.Contains("Owner") == true
+                                        {
+                                            <li id="permitToResellTransferOwnership" class="mb-3">
+                                                <a href="@Url.Action("ResellPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                    <div>
+                                                        <img src="~/assets/images/menu-icons/line.png" />
+                                                    </div>
+                                                    <span>Permit to Resell/Transfer Ownership</span>
+                                                </a>
+                                            </li>
+                                        }
+                                        @* @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_other_permits"))// || usrRoleList.Contains("Chainsaw Importer")
                                         {
                                             <li id="chainsawOwnerApplication" class="my-0">
                                                 <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
@@ -291,7 +335,7 @@
                                                     <span>Other Permits</span>
                                                 </a>
                                             </li>
-                                        }
+                                        } *@
                                     </ul>
                                 </li>
                             }

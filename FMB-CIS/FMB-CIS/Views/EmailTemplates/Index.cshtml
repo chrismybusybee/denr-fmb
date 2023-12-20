@@ -82,7 +82,6 @@
         var url = "@baseurl";
         //console.log(templID);
         $.post(url + "EmailTemplates/GetEmailTemplateDetails", { id: templID }, function (data) {
-            //debugger;
             //console.log(data);
             //alert(data.template_name);
             document.getElementById("Subject").value = data.email_subject;
@@ -98,7 +97,6 @@
         //console.log(templID);
         document.getElementById("addEmailTemplate").innerHTML = "Edit Email Template";
         $.post(url + "EmailTemplates/GetEmailTemplateDetails", { id: templID }, function (data) {
-            //debugger;
             //console.log(data);
             //alert(data.template_name);
             document.getElementById("EmailTemplateName").value = data.template_name;

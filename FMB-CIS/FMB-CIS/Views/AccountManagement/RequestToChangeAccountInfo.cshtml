@@ -548,7 +548,6 @@
         var url = "@baseurl";
 
         $.post(url + "AccountManagement/GetProvinceByRegionId", { tbl_region_id: value }, function (data) {
-            debugger;
             PopulateProvinceDropDown("#ddlProvinceId", data);
         });
     }
@@ -571,7 +570,6 @@
         var url = "@baseurl";
 
         $.post(url + "AccountManagement/GetCityByProvinceId", { tbl_province_id: value }, function (data) {
-            debugger;
             PopulateCityDropDown("#ddlCityId", data);
         });
     }
@@ -594,7 +592,6 @@
         var url = "@baseurl";
 
         $.post(url + "AccountManagement/GetBrgyByCityId", { tbl_city_id: value }, function (data) {
-            debugger;
             PopulateBrgyDropDown("#ddlBrgyId", data);
         });
     }
