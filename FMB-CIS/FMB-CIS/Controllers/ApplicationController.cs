@@ -487,6 +487,14 @@ namespace FMB_CIS.Controllers
 
                 //Get application permit type id
                 int permitTypeID = Convert.ToInt32(_context.tbl_application.Where(a => a.id == applicID).Select(a => a.tbl_permit_type_id).FirstOrDefault());
+
+                //Application Group
+                //Get all chainsaw registered to application id
+
+                var applicationGroups = _context.tbl_application_group.Where(g => g.tbl_application_id == applicID).ToList();
+                mymodel.tbl_Application_Group= applicationGroups;
+
+
                 //Document Tagging and Checklist
                 //Get uploaded files and requirements
                 var fileWithCommentsforDocTagging = (from br in _context.tbl_files_checklist_bridge

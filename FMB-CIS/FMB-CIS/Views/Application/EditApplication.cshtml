@@ -861,6 +861,44 @@
             
             <hr/>
             <div class="row d-flex justify-content-center m-0">
+
+                 <table class="table dataTable" id="tblApplicationGroup">
+                    <thead>
+                        <tr>
+                            <th>
+                                Supplier Name
+                            </th>
+                            <th>
+                                Supplier Address
+                            </th>
+                            <th>
+                                Quantity
+                            </th>
+                           @* <th>
+                                Comment
+                            </th>*@
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (tbl_application_group item in Model.tbl_Application_Group)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.supplier_name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.supplier_address)
+                                </td>
+                                 <td>
+                                    @Html.DisplayFor(modelItem => item.quantity)
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
                 <table class="table dataTable" id="tblApplicantFiles">
                     <thead>
                         <tr>

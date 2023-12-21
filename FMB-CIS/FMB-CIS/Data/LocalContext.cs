@@ -9,6 +9,7 @@ namespace FMB_CIS.Data
 
         public DbSet<FMB_CIS.Models.tbl_chainsaw> tbl_chainsaw { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_application> tbl_application { get; set; } = default!;
+        public DbSet<FMB_CIS.Models.tbl_application_group> tbl_application_group { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_application_type> tbl_application_type { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_permit_status> tbl_permit_status { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_permit_statuses> tbl_permit_statuses { get; set; } = default!;

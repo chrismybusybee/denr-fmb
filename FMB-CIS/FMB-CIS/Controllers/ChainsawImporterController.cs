@@ -24,6 +24,12 @@ using System.Collections;
 using Mapster;
 using Microsoft.Extensions.Hosting;
 using Services.Utilities;
+using MailKit;
+using System.Text.Json;
+using Newtonsoft.Json;
+using System.Web.Helpers;
+using Newtonsoft.Json.Linq;
+using Azure;
 
 namespace FMB_CIS.Controllers
 {
@@ -58,6 +64,8 @@ namespace FMB_CIS.Controllers
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             bool? usrStatus = _context.tbl_user.Where(u => u.id == uid).Select(u => u.status).SingleOrDefault();
             ViewModel model = new ViewModel();
+
+            model.tbl_Application_Group = new List<tbl_application_group>();
             //Get list of required documents from tbl_announcement
             var requirements = _context.tbl_announcement.Where(a => a.id == 2).FirstOrDefault(); // id = 2 for Permit to Import Requirements
             ViewBag.RequiredDocsList = requirements.announcement_content;
@@ -66,6 +74,7 @@ namespace FMB_CIS.Controllers
             //Document Checklist
             var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == 1 && c.is_active == true).ToList();
             model.tbl_Document_Checklist = myChecklist;
+
             //End for Document Checklist
             if (usrStatus != true)
             {
@@ -100,17 +109,22 @@ namespace FMB_CIS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Index(ViewModel model)
         {
+            List<tbl_application_group> myDeserializedObjList = (List<tbl_application_group>)Newtonsoft.Json.JsonConvert.DeserializeObject(model.Dataxxx, typeof(List<tbl_application_group>));
+
+
+
             //try
             //{
-                if (ModelState.IsValid)
+            if (ModelState.IsValid)
                 {
                     int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
                     var usrDB = _context.tbl_user.Where(u => u.id == userID).FirstOrDefault();
                     //Get email and subject from templates in DB
                     var emailTemplates = _context.tbl_email_template.ToList();
-                    //DAL dal = new DAL();
+                //DAL dal = new DAL();
 
-                    //SAVE permit application
+                //SAVE permit application
+                    model.tbl_Application = new tbl_application();
                     model.tbl_Application.tbl_application_type_id = 2;
                     model.tbl_Application.status = 1;
                     model.tbl_Application.tbl_user_id = userID;
@@ -125,8 +139,24 @@ namespace FMB_CIS.Controllers
                     _context.SaveChanges();
                     int? appID = model.tbl_Application.id;
 
+                //Application Grouping
+
+                foreach (tbl_application_group childApplication in myDeserializedObjList)
+                {
+                    childApplication.id = 0;
+                    childApplication.tbl_application_id = appID;
+                    childApplication.created_by = userID;
+                    childApplication.modified_by = userID;
+                    childApplication.date_created = DateTime.Now;
+                    childApplication.date_modified = DateTime.Now;
+
+                    _context.tbl_application_group.Add(childApplication);
+                }
+
+                _context.SaveChanges();
+
                 //File Upload
-                if(model.filesUpload != null)
+                if (model.filesUpload != null)
                 {
                     var folderName = userID + "_" + model.tbl_Application.id;
                     foreach (var file in model.filesUpload.Files)
@@ -571,6 +601,11 @@ namespace FMB_CIS.Controllers
                     ViewBag.RequiredDocsList = requirements.announcement_content;
                     //End for required documents
                 }
+
+
+                //Application Grouping
+                var applicationGroups = _context.tbl_application_group.Where(g => g.tbl_application_id == applicID).ToList();
+                mymodel.tbl_Application_Group = applicationGroups;
 
                 return View(mymodel);
             }
