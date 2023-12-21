@@ -438,7 +438,7 @@ namespace FMB_CIS.Controllers
                 {
                     var applicationMod = (from a in applicationlist
                                           join usr in _context.tbl_user on a.tbl_user_id equals usr.id
-                                          join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
+                                          //join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
                                           join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                           join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                           join pS in _context.tbl_permit_status on a.status equals pS.id
@@ -465,7 +465,7 @@ namespace FMB_CIS.Controllers
                                               permit_status = pS.status,
                                               status = Convert.ToInt32(a.status),
                                               qty = a.qty,
-                                              user_type = usrtyps.name,
+                                             // user_type = usrtyps.name,
                                               valid_id = usr.valid_id,
                                               valid_id_no = usr.valid_id_no,
                                               birth_date = usr.birth_date.ToString(),
@@ -494,7 +494,7 @@ namespace FMB_CIS.Controllers
                 {
                     var applicationMod = (from a in applicationlist
                                           join usr in _context.tbl_user on a.tbl_user_id equals usr.id
-                                          join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
+                                          //join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
                                           join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                           join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                           join pS in _context.tbl_permit_status on a.status equals pS.id
@@ -520,7 +520,7 @@ namespace FMB_CIS.Controllers
                                               permit_status = pS.status,
                                               status = Convert.ToInt32(a.status),
                                               qty = a.qty,
-                                              user_type = usrtyps.name,
+                                              //user_type = usrtyps.name,
                                               valid_id = usr.valid_id,
                                               valid_id_no = usr.valid_id_no,
                                               birth_date = usr.birth_date.ToString(),
