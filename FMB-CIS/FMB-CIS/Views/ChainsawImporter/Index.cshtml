@@ -551,68 +551,70 @@
                 //    'EngineSerialNo :<input id="engineSerialNo" class="swal2-input" placeholder="EngineSerialNo">' +
                 //    'Quantity :<input type=number id="quantity" class="swal2-input" placeholder="Quantity">'
                 //    ,
-                html: `<form class="form-horizontal" style="margin-top: 20px;">
-                                    <div class="form-group">
-                                                <div style="width:726px;padding-top:5px;">
-                                                   <label style="float:left; line-height: 40px;padding-right: 75px;">Supplier Name</label>
-                                                   <input style="display:inline-block;width: 500px;" id="supplierName" class="form-control">
-                                                </div>
-                                    </div>
-                                    <div class="form-group">
-                                                <div style="width:726px;padding-top:5px;">
-                                                                    <label style="float:left; line-height: 40px;padding-right: 58px;">Supplier Address</label>
-                                                                    <input style="display:inline-block;width: 500px;" id="supplierAddress" class="form-control">
-                                                            </div>
-                                        </div>
+                html: `<div class="c-form-container">
+<form>
 
-                                              <div class="form-group">
-                                                                <div style="width:726px;padding-top:5px;">
-                                                                            <label style="float:left; line-height: 40px;">Expected Time Of Arrival</label>
-                                                                                   <input class="form-control" type="datetime-local" id="newExpectedTimeArrival" placeholder="Expected Time Of Arrival" style="display:inline-block;width: 500px;" />
-                                                                </div>
-                                            </div>
-
-                                                    <div class="form-group">
-                                                                <div style="width:726px;padding-top:5px;">
-                                                                            <label style="float:left; line-height: 40px;padding-right: 88px;">Power Source</label>
-                                                                        <input style="display:inline-block;width: 500px;" id="powerSource" class="form-control">
-                                                                </div>
-                                            </div>
-
-                                             <div class="form-group">
-                                                                <div style="width:726px;padding-top:5px;">
-                                                                            <label style="float:left; line-height: 40px;padding-right: 70px;">Unit of Measure</label>
-                                                                        <input style="display:inline-block;width: 500px;" id="unitOfMeasure" class="form-control">
-                                                                </div>
-                                            </div>
-
-
-                                                <div class="form-group">
-                                                                    <div style="width:726px;padding-top:5px;">
-                                                                                <label style="float:left; line-height: 40px;padding-right: 150px;">Brand</label>
-                                                                            <input style="display:inline-block;width: 500px;" id="brand" class="form-control">
-                                                                    </div>
-                                                </div>
-                                                    <div class="form-group">
-                                                                        <div style="width:726px;padding-top:5px;">
-                                                                                    <label style="float:left; line-height: 40px;padding-right: 145px;">Model</label>
-                                                                                <input style="display:inline-block;width: 500px;" id="model" class="form-control">
-                                                                        </div>
-                                                    </div>
-                                                            <div class="form-group">
-                                                                        <div style="width:726px;padding-top:5px;">
-                                                                                    <label style="float:left; line-height: 40px;padding-right: 60px;">Engine Serial No.</label>
-                                                                                <input style="display:inline-block;width: 500px;" id="engineSerialNo" class="form-control">
-                                                                        </div>
-                                                    </div>
-                                                        <div class="form-group">
-                                                                            <div style="width:726px;padding-top:5px;">
-                                                                                        <label style="float:left; line-height: 40px;padding-right: 127px;">Quantity</label>
-                                                                                    <input style="display:inline-block;width: 500px;" id="quantity" class="form-control">
-                                                                            </div>
-                                                        </div>
-
-                          </form>`,
+    <div class="g-3">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control rounded-3" id="supplierName" placeholder="" />
+            <label class="form-label">Supplier Name</label>
+        </div>
+    </div>
+    <div class="g-3">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control rounded-3" id="supplierAddress" placeholder="" />
+            <label class="form-label">Supplier Address</label>
+        </div>
+    </div>
+    <div class="row">
+    <div class="col-md-5 mb-3">
+        <div class="form-floating">
+            <input class="form-control rounded-3" type="datetime-local" id="newExpectedTimeArrival"
+                placeholder="Expected Time Of Arrival" />
+            <label class="form-label">Expected Time Of Arrival</label>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="form-floating">
+            <input type="text" class="form-control rounded-3" id="powerSource" placeholder="" />
+            <label class="form-label">Power Source</label>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="form-floating">
+            <input type="text" class="form-control rounded-3" id="unitOfMeasure" placeholder="" />
+            <label class="form-label">Unit of Measure</label>
+        </div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-4 mb-3">
+        <div class="form-floating">
+            <input type="text" class="form-control rounded-3" id="brand" placeholder="" />
+            <label class="form-label">Brand</label>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="form-floating">
+            <input type="text" class="form-control rounded-3" id="model" placeholder="" />
+            <label class="form-label">Model</label>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="form-floating">
+            <input type="text" class="form-control rounded-3" id="engineSerialNo" placeholder="" />
+            <label class="form-label">Engine Serial No.</label>
+        </div>
+    </div>
+    <div class="col-md-2 mb-3">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control rounded-3" id="quantity" placeholder="" />
+            <label class="form-label">Quantity</label>
+        </div>
+    </div>
+    </div>
+</form>
+</div>`,
                 width: '800px',
                 focusConfirm: false,
                 showCancelButton: true,
@@ -796,4 +798,25 @@
     .app-card-doc .app-doc-meta {
         font-size: .75rem;
     }
+.c-form-container {
+    padding: 12px 5px 0 5px;
+    overflow: hidden;
+}
+.swal2-title {
+        display: block;
+    padding: 48px 40px 0 40px;
+    text-align: left;
+}
+div:where(.swal2-container) .swal2-html-container{
+    margin-top: 12px;
+    margin-bottom: 0;
+}
+div:where(.swal2-container) div:where(.swal2-actions) {
+    justify-content: right;
+    width: 100%;
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-top: 0;
+}
+
 </style>
