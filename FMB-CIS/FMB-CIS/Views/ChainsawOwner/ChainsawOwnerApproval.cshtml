@@ -675,12 +675,47 @@
                     }
                 </div>
                 <hr />
-                @if (Model.applicantViewModels.status >= 7)
+                @* @if (Model.applicantViewModels.status >= 7) *@
+                @if (Model.proofOfPaymentFiles != null)
                 {
-
                     <div class="d-flex gap-4 mb-5">
-                        <h2 class="text-secondary fw-bold m-0">Attached Proof of Payment</h2>
+                        <h2 class="text-secondary fw-bold m-0">Proof of Payment</h2>
                     </div>
+                    @if (Model.tbl_Application_Payment != null)
+                    {
+                        <div class="row mb-5">
+                            <div class="col-md-4">
+                                <div class="form-group d-flex flex-column gap-1">
+                                    <label class="text-secondary small">
+                                        OR Number
+                                    </label>
+                                    <span class="fw-bold">
+                                        <label asp-for="tbl_Application_Payment.OR_Number" value="@Model.tbl_Application_Payment.OR_Number">@Model.tbl_Application_Payment.OR_Number</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group d-flex flex-column gap-1">
+                                    <label class="text-secondary small">
+                                        Amount
+                                    </label>
+                                    <span class="fw-bold">
+                                        <label asp-for="tbl_Application_Payment.Amount" value="@Model.tbl_Application_Payment.Amount">@Model.tbl_Application_Payment.Amount</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group d-flex flex-column gap-1">
+                                    <label class="text-secondary small">
+                                        Date of Payment
+                                    </label>
+                                    <span class="fw-bold">
+                                        <label asp-for="tbl_Application_Payment.Date_of_Payment" value="@Model.tbl_Application_Payment.Date_of_Payment">@Convert.ToDateTime(Model.tbl_Application_Payment.Date_of_Payment).ToString("MMM dd yyyy")</label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    }
                     <div class="d-flex mb-4 gap-3">
                         @foreach (tbl_files file in Model.proofOfPaymentFiles)
                         {

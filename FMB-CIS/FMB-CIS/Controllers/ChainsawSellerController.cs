@@ -685,6 +685,10 @@ namespace FMB_CIS.Controllers
                     //End for required documents
                 }
 
+                //Proof of Payment
+                var paymentDetails = _context.tbl_application_payment.Where(p => p.tbl_application_id == applid).FirstOrDefault();
+                mymodel.tbl_Application_Payment = paymentDetails;
+
                 return View(mymodel);
             }
 

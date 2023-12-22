@@ -17,6 +17,28 @@
                             </div>
                         </div> *@
                         <div class="row w-100">
+                            <div class="col md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control rounded-3" asp-for="tbl_Application_Payment.OR_Number" id="OR_Number" placeholder="" required/>
+                                    <label for="OR_Number">OR Number</label>
+                                </div>
+                            </div>
+                            <div class="col md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control rounded-3" asp-for="tbl_Application_Payment.Amount" type="number" min="0" step="0.01" id="Amt" placeholder="" required />
+                                    <label for="Amt">Amount</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row w-100">
+                            <div class="col md-12">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control rounded-3" asp-for="tbl_Application_Payment.Date_of_Payment" type="date" id="Date_of_Payment" placeholder="" required />
+                                    <label for="Date_of_Payment">Date of Payment</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row w-100">
                             <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload...">
                         </div>
                         @* <div class="row w-100">                            
@@ -246,24 +268,33 @@
             // formFiles.items.clearData();
             //formFiles.value = null;
             const removeFileButton = document.querySelector('.fileinput-remove-button');
+            $("input").val("");
             removeFileButton.click();
             $("#uploadPOPModal").modal("hide");
         });
 
         $("#submitBtn").click(function () {            
-            if (formFiles.files.length == 0) {
-                console.log("formFiles.files.length = 0");
-                Swal.fire({
-                    title: "No File Selected",
-                    text: "Please upload your proof of payment to proceed with the application.",
-                    icon: "error",
-                    confirmButtonColor: '#14984a'
-                });
+            
+            if ($("#UploadPaymentForm")[0].checkValidity()) {
+                if (formFiles.files.length == 0) {
+                    console.log("formFiles.files.length = 0");
+                    Swal.fire({
+                        title: "No File Selected",
+                        text: "Please upload your proof of payment to proceed with the application.",
+                        icon: "error",
+                        confirmButtonColor: '#14984a'
+                    });
+                }
+                else {
+                    $("#confirmSubmitModal").modal("show");
+                    $("#uploadPOPModal").modal("hide");
+                }
+
             }
             else {
-                $("#confirmSubmitModal").modal("show");
-                $("#uploadPOPModal").modal("hide");
+                $("#UploadPaymentForm")[0].reportValidity();
             }
+            
             
         });
 
@@ -322,7 +353,8 @@
         }
         if (event.target === document.getElementById('uploadPOPModal')) {
             const removeFileButton = document.querySelector('.fileinput-remove-button');
-            removeFileButton.click()
+            removeFileButton.click();
+            $("input").val("");
             //$("#uploadPOPModal").modal("show");
             //hideModal();
         }
