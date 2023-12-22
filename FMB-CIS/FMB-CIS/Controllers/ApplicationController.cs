@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Configuration;
+using Org.BouncyCastle.Pqc.Crypto.Lms;
 using Org.BouncyCastle.Tls;
 using System.Drawing.Drawing2D;
 using System.Drawing.Printing;
@@ -89,6 +90,7 @@ namespace FMB_CIS.Controllers
                                  join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
+                                 join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
                                  where pT.name == "Permit to Re-sell/Transfer Ownership"
                                  select new ApplicantListViewModel 
                                  {
@@ -100,7 +102,8 @@ namespace FMB_CIS.Controllers
                                      address = usr.street_address,
                                      application_type = appt.name,
                                      permit_type = pT.name,
-                                     permit_status = pS.status,
+                                     permit_status = pSs.status,
+                                     permit_status_id = pSs.id,
                                      tbl_user_id = (int)usr.id,
                                      qty = a.qty
                                  };
@@ -130,6 +133,7 @@ namespace FMB_CIS.Controllers
                                  join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
+                                 join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
                                  where pT.name == "Authority to Lend"
                                  select new ApplicantListViewModel 
                                  {
@@ -140,8 +144,9 @@ namespace FMB_CIS.Controllers
                                      contact = usr.contact_no,
                                      address = usr.street_address,
                                      application_type = appt.name,
-                                     permit_type = pT.name, 
-                                     permit_status = pS.status, 
+                                     permit_type = pT.name,
+                                     permit_status = pSs.status,
+                                     permit_status_id = pSs.id,
                                      tbl_user_id = (int)usr.id,
                                      qty = a.qty
                                  };
@@ -171,6 +176,7 @@ namespace FMB_CIS.Controllers
                                  join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
+                                 join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
                                  where pT.name == "Certificate of Registration"
                                  select new ApplicantListViewModel 
                                  { 
@@ -182,7 +188,8 @@ namespace FMB_CIS.Controllers
                                      address = usr.street_address,
                                      application_type = appt.name, 
                                      permit_type = pT.name,
-                                     permit_status = pS.status, 
+                                     permit_status = pSs.status,
+                                     permit_status_id = pSs.id,
                                      tbl_user_id = (int)usr.id,
                                      date_of_expiration = a.date_of_expiration,
                                      qty = a.qty
@@ -213,6 +220,7 @@ namespace FMB_CIS.Controllers
                                  join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
+                                 join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
                                  where pT.name == "Authority to Rent"
                                  select new ApplicantListViewModel 
                                  { 
@@ -223,8 +231,9 @@ namespace FMB_CIS.Controllers
                                      contact = usr.contact_no,
                                      address = usr.street_address,
                                      application_type = appt.name,
-                                     permit_type = pT.name, 
-                                     permit_status = pS.status,
+                                     permit_type = pT.name,
+                                     permit_status = pSs.status,
+                                     permit_status_id = pSs.id,
                                      tbl_user_id = (int)usr.id,
                                      qty = a.qty
                                  };
@@ -254,6 +263,7 @@ namespace FMB_CIS.Controllers
                                  join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
+                                 join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
                                  where pT.name == "Authority to Lease"
                                  select new ApplicantListViewModel 
                                  {
@@ -264,8 +274,9 @@ namespace FMB_CIS.Controllers
                                      contact = usr.contact_no,
                                      address = usr.street_address,
                                      application_type = appt.name,
-                                     permit_type = pT.name, 
-                                     permit_status = pS.status,
+                                     permit_type = pT.name,
+                                     permit_status = pSs.status,
+                                     permit_status_id = pSs.id,
                                      tbl_user_id = (int)usr.id,
                                      qty = a.qty
                                  };
@@ -295,6 +306,7 @@ namespace FMB_CIS.Controllers
                                  join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
+                                 join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
                                  where pT.name == "Permit to Sell"
                                  select new ApplicantListViewModel 
                                  { 
@@ -306,7 +318,8 @@ namespace FMB_CIS.Controllers
                                      address = usr.street_address, 
                                      application_type = appt.name, 
                                      permit_type = pT.name,
-                                     permit_status = pS.status,
+                                     permit_status = pSs.status,
+                                     permit_status_id = pSs.id,
                                      tbl_user_id = (int)usr.id,
                                      qty = a.qty
                                  };
@@ -337,6 +350,7 @@ namespace FMB_CIS.Controllers
                                  join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
+                                 join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
                                  where pT.name == "Permit to Purchase"
                                  select new ApplicantListViewModel 
                                  {
@@ -347,8 +361,9 @@ namespace FMB_CIS.Controllers
                                      contact = usr.contact_no,
                                      address = usr.street_address,
                                      application_type = appt.name,
-                                     permit_type = pT.name, 
-                                     permit_status = pS.status,
+                                     permit_type = pT.name,
+                                     permit_status = pSs.status,
+                                     permit_status_id = pSs.id,
                                      tbl_user_id = (int)usr.id,
                                      qty = a.qty
                                  };
@@ -378,6 +393,7 @@ namespace FMB_CIS.Controllers
                                  join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
+                                 join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
                                  where pT.name == "Permit to Import"
                                  select new ApplicantListViewModel 
                                  { 
@@ -389,7 +405,8 @@ namespace FMB_CIS.Controllers
                                      address = usr.street_address,
                                      application_type = appt.name,
                                      permit_type = pT.name,
-                                     permit_status = pS.status,
+                                     permit_status = pSs.status,
+                                     permit_status_id = pSs.id,
                                      tbl_user_id = (int)usr.id,
                                      status=(int)a.status,
                                      qty = a.qty
@@ -557,6 +574,7 @@ namespace FMB_CIS.Controllers
                                           join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                           join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                           join pS in _context.tbl_permit_status on a.status equals pS.id
+                                          join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
                                           join reg in _context.tbl_region on usr.tbl_region_id equals reg.id
                                           join prov in _context.tbl_province on usr.tbl_province_id equals prov.id
                                           join ct in _context.tbl_city on usr.tbl_city_id equals ct.id
@@ -572,6 +590,8 @@ namespace FMB_CIS.Controllers
                                               email = usr.email,
                                               permit_type = pT.name,
                                               permit_status = pS.status,
+                                              permit_status_id  = a.status,
+                                              permit_statuses = pSs.status,
                                               status = Convert.ToInt32(a.status),
                                               //user_type = usrtyps.name,
                                               comment = usr.comment,
@@ -610,6 +630,7 @@ namespace FMB_CIS.Controllers
                                           join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                           join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                           join pS in _context.tbl_permit_status on a.status equals pS.id
+                                          join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
                                           join reg in _context.tbl_region on usr.tbl_region_id equals reg.id
                                           join prov in _context.tbl_province on usr.tbl_province_id equals prov.id
                                           join ct in _context.tbl_city on usr.tbl_city_id equals ct.id
@@ -624,6 +645,8 @@ namespace FMB_CIS.Controllers
                                               email = usr.email,
                                               permit_type = pT.name,
                                               permit_status = pS.status,
+                                              permit_status_id = a.status,
+                                              permit_statuses = pSs.status,
                                               status = Convert.ToInt32(a.status),
                                              // user_type = usrtyps.name,
                                               comment = usr.comment,
@@ -645,6 +668,9 @@ namespace FMB_CIS.Controllers
                     //mymodel.tbl_Users = UserInfo;
                 }
 
+                //Proof of Payment
+                var paymentDetails = _context.tbl_application_payment.Where(p => p.tbl_application_id == applid).FirstOrDefault();
+                mymodel.tbl_Application_Payment = paymentDetails;
                 //Check if this application has applied for renewal
                 var checkRenewal = _context.tbl_application.Where(a => a.renew_from == applid).FirstOrDefault();
                 if (checkRenewal != null)
@@ -833,8 +859,9 @@ namespace FMB_CIS.Controllers
                 }
                 //Email
                 var subject = "Permit Application Status";
-                    var body = "Greetings! \n You have successfully edited your application.";
-                    EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);                                                
+                var body = "Greetings! \n You have successfully edited your application.";
+                EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);
+                
             }
 
             var applicationlist = from a in _context.tbl_application
@@ -1018,6 +1045,14 @@ namespace FMB_CIS.Controllers
                 }
             }
 
+            var applicationPayment = model.tbl_Application_Payment;
+            applicationPayment.tbl_application_id = applicationID;
+            applicationPayment.allow_edit = true;
+            applicationPayment.date_created = DateTime.Now;
+            applicationPayment.date_modified = DateTime.Now;
+            _context.tbl_application_payment.Add(applicationPayment);
+            _context.SaveChanges();
+
             //modify permit status
             int stats = 7; // 7 - Payment Verification (Inspector)
             //SAVE CHANGES TO DATABASE
@@ -1037,6 +1072,19 @@ namespace FMB_CIS.Controllers
             //return View();
             //return new EmptyResult();
             return RedirectToAction(actionName, "Application");
+        }
+
+        [HttpPost]
+        public IActionResult EditPayment(int? uid, int? appid, ViewModel model)
+        {
+            //Editing of Payment
+            var applicationPayment = _context.tbl_application_payment.Where(ap => ap.tbl_application_id == appid).FirstOrDefault();
+            applicationPayment.Amount = model.tbl_Application_Payment.Amount;
+            applicationPayment.OR_Number = model.tbl_Application_Payment.OR_Number;
+            applicationPayment.Date_of_Payment = model.tbl_Application_Payment.Date_of_Payment;
+            applicationPayment.date_modified = DateTime.Now;
+            _context.SaveChanges();
+            return RedirectToAction("EditApplication", "Application", new { uid = uid, appid = appid });
         }
 
         [HttpPost]
@@ -1066,8 +1114,23 @@ namespace FMB_CIS.Controllers
                 _context.tbl_application.Add(renewApplication);
                 _context.SaveChanges();
 
-                //
-                //var oldApplicationGroup
+                //copy contents of tbl_application group
+                var isOldApplicationGroupExist = _context.tbl_application_group.Any(a => a.tbl_application_id == oldApplicationID);
+                if(isOldApplicationGroupExist == true)
+                {
+                    var oldApplicationGroup = _context.tbl_application_group.Where(a => a.tbl_application_id == oldApplicationID).ToList();
+                    List<tbl_application_group> newApplicationGroup = oldApplicationGroup;
+                    for (int a = 0; a < newApplicationGroup.Count; a++)
+                    {
+                        newApplicationGroup[a].id = 0;
+                        newApplicationGroup[a].tbl_application_id = (int)renewApplication.id;
+                        newApplicationGroup[a].date_modified = DateTime.Now;
+
+                        _context.tbl_application_group.Add(newApplicationGroup[a]);
+                        _context.SaveChanges();
+                    }
+                }
+                
                 //Copy contents of files
 
                 string folderName = loggedUserID + "_" + renewApplication.id;

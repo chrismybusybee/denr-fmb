@@ -71,7 +71,7 @@
                                 @Html.DisplayFor(modelItem => item.permit_status)
                             </td>
                             <td>
-                                @if (item.permit_status == "For Payment" || item.permit_status == "Payment Rejected (Inspector)" || item.permit_status == "Payment Rejected (CENRO)")
+                                @if (item.permit_status_id == 6 || item.permit_status_id == 8 || item.permit_status_id == 10)
                                 {
                                     <div class="d-flex justify-content-center">
                                         <a href="#" id="uploadPOP" class="bg-green text-white pt-0 pb-1 px-2 rounded text-decoration-none" data-application-id="@item.id" onclick="uploadPaymentClicked(this)">
@@ -79,11 +79,11 @@
                                         </a>
                                     </div>
                                 }
-                                else if (item.permit_status == "Payment Verification (Inspector)" || item.permit_status == "Payment Verification (CENRO)")
+                                else if (item.permit_status_id == 7 || item.permit_status_id == 9)
                                 {
                                     <div class="d-flex justify-content-center">Payment Verification In Progress</div>
                                 }
-                                else if (item.permit_status == "Payment and Application Approved (Inspector and CENRO)")
+                                else if (item.permit_status_id == 11)
                                 {
                                     <div class="d-flex justify-content-center">Payment Approved</div>
                                 }

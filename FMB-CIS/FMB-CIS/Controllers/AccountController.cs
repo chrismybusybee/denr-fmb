@@ -454,7 +454,7 @@ namespace FMB_CIS.Controllers
             }
             if (isNew == true)
             {
-                ViewBag.Title = "New Password";
+                ViewBag.Title = "Create Password";
             }
             else
             {
