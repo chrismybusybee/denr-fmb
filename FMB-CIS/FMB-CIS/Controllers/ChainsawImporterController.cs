@@ -1042,7 +1042,10 @@ namespace FMB_CIS.Controllers
                                      join usr in _context.tbl_user on a.tbl_user_id equals usr.id
                                      join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                      join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
-                                     join pS in _context.tbl_permit_status on a.status equals pS.id
+                                    //  join pS in _context.tbl_permit_status on a.status equals pS.id
+                                    //  join pSS in _context.tbl_permit_statuses on a.status equals pSS.id
+                                    //  join wf in _context.tbl_permit_workflow on pT.id.ToString() equals wf.permit_type_code
+                                     join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code } 
                                      where usr.tbl_region_id == userRegion
                                      //where a.tbl_user_id == userID
                                      select new ApplicantListViewModel 
@@ -1056,9 +1059,12 @@ namespace FMB_CIS.Controllers
                                          address = usr.street_address,
                                          application_type = appt.name,
                                          permit_type = pT.name,
-                                         permit_status = pS.status,
+                                         permit_status = wfs.name,
                                          tbl_user_id = (int)usr.id,
-                                         date_due_for_officers = a.date_due_for_officers                                         
+                                         date_due_for_officers = a.date_due_for_officers,
+                                         isRead = false,
+                                         currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
+                                         currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic                              
                                      }).ToList();
                                 
                 bool isReadExist;
@@ -1086,6 +1092,9 @@ namespace FMB_CIS.Controllers
                         //false
                         applicationMod[i].isRead = false;
                     }
+                }
+                foreach(ApplicantListViewModel mod in applicationMod) {
+                    mod.currentPercentage = (mod.currentStepCount * 100 / mod.currentMaxCount);
                 }
                 mymodel.applicantListViewModels = applicationMod;
 

@@ -10,6 +10,7 @@ namespace FMB_CIS.Models
         public int? tbl_user_id { get; set; }
         public int? tbl_application_type_id { get; set; }
         public int? tbl_permit_type_id { get; set; }
+        public string? new_email_address { get; set; } = "";
         public string? supplier_fname { get; set; }
         public string? supplier_mname { get; set; }
         public string? supplier_lname { get; set; }

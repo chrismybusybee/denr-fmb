@@ -3,7 +3,7 @@
 @* @model IEnumerable<FMB_CIS.Models.tbl_application> *@
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
-    ViewBag.Title = "Chainsaw Importer";
+    ViewBag.Title = "List of Import Permit Application";
     var loggedUsrRole = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
 }
 
@@ -52,12 +52,22 @@
                                 @Html.DisplayFor(modelItem => item.qty)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.permit_status)
+                                <div class="progress-text">
+                                    <span class="progress-status">
+                                        @Html.DisplayFor(modelItem => item.permit_status)
+                                    </span>
+                                    <span class="progress-count">
+                                        @Html.DisplayFor(modelItem => item.currentStepCount) /
+                                        @Html.DisplayFor(modelItem => item.currentMaxCount)
+                                    </span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: @Html.DisplayFor(modelItem => item.currentPercentage)%" aria-valuenow="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemin="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemax="@Html.DisplayFor(modelItem => item.currentMaxCount)"></div>
+                                </div>
                             </td>
                             <td>
                                 @* @Html.ActionLink("Take Action", "ChainsawImporterApproval?uid="+ item.tbl_user_id + "&appid=" + item.id) *@
                                 <a href="ChainsawImporterApproval?uid=@item.tbl_user_id&appid=@item.id">View</a>
-
                             </td>
                         }
                         else
@@ -76,7 +86,18 @@
                                 @Html.DisplayFor(modelItem => item.qty)
                             </td>
                             <td style="font-weight:bold;">
-                                @Html.DisplayFor(modelItem => item.permit_status)
+                                <div class="progress-text">
+                                    <span class="progress-status">
+                                        @Html.DisplayFor(modelItem => item.permit_status)
+                                    </span>
+                                    <span class="progress-count">
+                                        @Html.DisplayFor(modelItem => item.currentStepCount) /
+                                        @Html.DisplayFor(modelItem => item.currentMaxCount)
+                                    </span>
+                                </div>
+                                <div class="progress">
+  <div class="progress-bar" role="progressbar" style="width: @Html.DisplayFor(modelItem => item.currentPercentage)%" aria-valuenow="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemin="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemax="@Html.DisplayFor(modelItem => item.currentMaxCount)"></div>
+</div>
                             </td>
                             <td style="font-weight:bold;">
                                 @* @Html.ActionLink("Take Action", "ChainsawImporterApproval?uid="+ item.tbl_user_id + "&appid=" + item.id) *@
@@ -96,3 +117,16 @@
 <script type="text/javascript">
     //location.reload
 </script>
+<style>
+    .progress {
+        height: 5px;
+    }
+    .progress-text {
+        display: flex;
+    }
+    .progress-status {
+        flex: 1;
+    }
+    .progress-count {
+    }
+</style>
