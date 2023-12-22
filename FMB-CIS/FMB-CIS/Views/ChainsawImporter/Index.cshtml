@@ -381,15 +381,6 @@
             // else
             // {
 
-            if(applications.length == 0){
-                Swal.fire({
-                    title: "No Supplier Information",
-                    text: "Please add atleast one supplier information.",
-                    icon: "error",
-                    confirmButtonColor: '#14984a'
-                });
-            }
-
             //Check if required fields are filled up
             if ($("#ImporterRegForm")[0].checkValidity()) {
 
@@ -402,14 +393,25 @@
 
                 x.value = JSON.stringify(applications);
                 //formFiles.files = dt.files;
-                if (formFiles.files.length == 0) {
+                    if (formFiles.files.length == 0) {
+                        Swal.fire({
+                            title: "No File Selected",
+                            text: "Please upload the required documents to proceed with the application.",
+                            icon: "error",
+                            confirmButtonColor: '#14984a'
+                        });
+                    }else if(applications.length == 0){
                     Swal.fire({
-                        title: "No File Selected",
-                        text: "Please upload the required documents to proceed with the application.",
+                        title: "No Supplier Information",
+                        text: "Please add atleast one supplier information.",
                         icon: "error",
                         confirmButtonColor: '#14984a'
                     });
-                }
+                    } else {
+                    $('#confirmSubmitModal').modal("show"); //proceed to submit modal
+                    }   
+
+
                 // else if (formFiles.files.length < @Model.tbl_Document_Checklist.Count() && formFiles.files.length !=0) {
                 //     Swal.fire({
                 //         title: "Incomplete Documents",
@@ -418,9 +420,7 @@
                 //         confirmButtonColor: '#14984a'
                 //     });
                 // }
-                else {
-                    $('#confirmSubmitModal').modal("show"); //proceed to submit modal
-                }
+               
             }
             //If fields are not filled up
             else {
