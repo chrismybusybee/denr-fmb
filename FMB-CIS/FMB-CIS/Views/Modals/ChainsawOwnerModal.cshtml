@@ -39,6 +39,26 @@
     </div>
 </div>
 
+<div class="modal fade" id="confirmTransferOfOwnershipSuccessModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex flex-column align-items-center gap-4 p-5">
+                    <div>
+                        <img src="~/assets/images/success.png" />
+                    </div>
+                    <p class="fw-bold fs-5">
+                        Application submitted successfully. Email sent to new owner!
+                    </p>
+                    <div class="d-flex justify-content-center w-100">
+                        <button class="btn btn-primary w-50" onclick="window.location.href = '@Url.Action("Index", "ChainsawOwner")'">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="confirmApproveModal" aria-hidden="true" style="z-index:1050 !important;">
     <div class="modal-dialog modal-dialog-centered" style="z-index:1050 !important;">
         <div class="modal-content">

@@ -3,7 +3,7 @@
 @* @model FMB_CIS.Models.ApplicantListViewModel *@
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
-    ViewBag.Title = "Chainsaw Seller";
+    ViewBag.Title = "Chainsaw Seller Approval";
     ViewBag.Cenro = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO");
     ViewBag.Inspector = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector");
     var baseurl = ViewBag.BaseUrl;
