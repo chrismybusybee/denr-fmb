@@ -381,6 +381,15 @@
             // else
             // {
 
+            if(applications.length == 0){
+                Swal.fire({
+                    title: "No Supplier Information",
+                    text: "Please add atleast one supplier information.",
+                    icon: "error",
+                    confirmButtonColor: '#14984a'
+                });
+            }
+
             //Check if required fields are filled up
             if ($("#ImporterRegForm")[0].checkValidity()) {
 
@@ -620,6 +629,32 @@
                 showCancelButton: true,
                 confirmButtonText: 'Submit',
                 preConfirm: () => {
+
+                     //Swal.showValidationMessage('First input missing')   ;
+
+      
+
+
+                    if (document.getElementById('quantity').value == '')
+                        Swal.showValidationMessage('Quantity field is required');
+                               
+                    if (document.getElementById('engineSerialNo').value == '')
+                        Swal.showValidationMessage('Enginer Serial No. field is required');
+
+                    if (document.getElementById('model').value == '')
+                        Swal.showValidationMessage('Model field is required');
+
+                    if (document.getElementById('brand').value == '')
+                        Swal.showValidationMessage('Brand field is required');
+
+                    //if (document.getElementById('newExpectedTimeArrival').value == '')
+                    //    Swal.showValidationMessage('Expected Time of Arrival field is required');
+
+                    if (document.getElementById('supplierAddress').value == '')
+                        Swal.showValidationMessage('Suplier Address field is required');
+
+                    if (document.getElementById('supplierName').value == '')
+                        Swal.showValidationMessage('Suplier Name is required');
                     return [
                         document.getElementById('supplierName').value,
                         document.getElementById('supplierAddress').value,
@@ -742,9 +777,9 @@
 
 <style>
 
-    h2#swal2-title {
+   /* h2#swal2-title {
         font-size: 30px;
-    }
+    }*/
 
     textarea {
         resize: none;
@@ -802,11 +837,11 @@
     padding: 12px 5px 0 5px;
     overflow: hidden;
 }
-.swal2-title {
+/*.swal2-title {
         display: block;
     padding: 48px 40px 0 40px;
     text-align: left;
-}
+}*/
 div:where(.swal2-container) .swal2-html-container{
     margin-top: 12px;
     margin-bottom: 0;
