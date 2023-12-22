@@ -11,7 +11,9 @@ public class RequiresAccessAttribute : ActionFilterAttribute
     {
         var c = filterContext.Controller as Controller;
 
-        var userAccessRights = ((ClaimsIdentity)c.User.Identity).FindFirst("accessRights").Value;
+        var userAccessRights = string.Empty;
+        if (((ClaimsIdentity)c.User.Identity).FindFirst("accessRights") != null)
+            userAccessRights = ((ClaimsIdentity)c.User.Identity).FindFirst("accessRights").Value;
 
         if (AccessRightsUtilities.IsInAccessRights(userAccessRights, allowedAccessRights))
         {

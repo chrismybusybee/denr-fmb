@@ -61,10 +61,17 @@ builder.Services.AddSession(options =>
 builder.Services.AddTransient<IEmailSender, MailKitEmailSender>();
 builder.Services.Configure<MailKitEmailSenderOptions>(options =>
 {
-    options.Host_Address = "smtp-relay.sendinblue.com";
+    //options.Host_Address = "smtp-relay.sendinblue.com";
+    //options.Host_Port = 587;
+    //options.Host_Username = "support@mybusybee.net";
+    //options.Host_Password = "A0M26PbZUN5TYF3s";
+    //options.Sender_EMail = "support@mybusybee.net";
+    //options.Sender_Name = "FMB-CIS Bot";
+
+    options.Host_Address = "smtp-relay.brevo.com";
     options.Host_Port = 587;
     options.Host_Username = "support@mybusybee.net";
-    options.Host_Password = "A0M26PbZUN5TYF3s";
+    options.Host_Password = "OBAq9p8GtLM5g2KS";
     options.Sender_EMail = "support@mybusybee.net";
     options.Sender_Name = "FMB-CIS Bot";
 });

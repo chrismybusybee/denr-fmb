@@ -805,10 +805,10 @@
 
 
         $('.dataTable').DataTable({
-            retrieve: true,
+            destroy: true,
             order: [[0, 'desc']],
             dom: 'Bfrtip',
-            buttons: ['csv']
+            buttons: ['csv', 'excel']
         });
 
 
@@ -820,11 +820,11 @@
             //table.clear();
             //table.destroy();
 
-            var table = $('#applicationTable').DataTable({
-                order: [[0, 'desc']],
-                dom: 'Bfartip',
-                buttons: ['csv']
-            });
+            //var table = $('#applicationTable').DataTable({
+            //    order: [[0, 'desc']],
+            //    dom: 'Bfartip',
+            //    buttons: ['csv']
+            //});
         
 
 
