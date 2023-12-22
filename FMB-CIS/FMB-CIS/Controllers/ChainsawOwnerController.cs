@@ -441,7 +441,10 @@ namespace FMB_CIS.Controllers
                                           join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
                                           join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                           join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
-                                          join pS in _context.tbl_permit_status on a.status equals pS.id
+                                     join pS in _context.tbl_permit_status on a.status equals pS.id
+                                    //  join pSS in _context.tbl_permit_statuses on a.status equals pSS.id
+                                    //  join wf in _context.tbl_permit_workflow on pT.id.ToString() equals wf.permit_type_code
+                                     join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code } 
                                           join reg in _context.tbl_region on usr.tbl_region_id equals reg.id
                                           join prov in _context.tbl_province on usr.tbl_province_id equals prov.id
                                           join ct in _context.tbl_city on usr.tbl_city_id equals ct.id
@@ -462,7 +465,8 @@ namespace FMB_CIS.Controllers
                                               contact = usr.contact_no,
                                               application_type = appt.name,
                                               permit_type = pT.name,
-                                              permit_status = pS.status,
+                                          permit_status = pS.status,
+                                          permit_statuses = wfs.name,
                                               status = Convert.ToInt32(a.status),
                                               qty = a.qty,
                                               user_type = usrtyps.name,
@@ -486,8 +490,12 @@ namespace FMB_CIS.Controllers
                                               purpose = a.purpose,
                                               date_of_registration = a.date_of_registration,
                                               date_of_expiration = a.date_of_expiration,
-                                              renew_from = a.renew_from
+                                              renew_from = a.renew_from,
+                                         currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
+                                         currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic   
                                           }).FirstOrDefault();
+                                         applicationMod.currentPercentage = (applicationMod.currentStepCount * 100 / applicationMod.currentMaxCount);
+   
                     mymodel.applicantViewModels = applicationMod;
                 }
                 else
@@ -497,8 +505,11 @@ namespace FMB_CIS.Controllers
                                           join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
                                           join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                           join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
-                                          join pS in _context.tbl_permit_status on a.status equals pS.id
-                                          join reg in _context.tbl_region on usr.tbl_region_id equals reg.id
+
+                                     join pS in _context.tbl_permit_status on a.status equals pS.id
+                                    //  join pSS in _context.tbl_permit_statuses on a.status equals pSS.id
+                                    //  join wf in _context.tbl_permit_workflow on pT.id.ToString() equals wf.permit_type_code
+                                     join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }                                           join reg in _context.tbl_region on usr.tbl_region_id equals reg.id
                                           join prov in _context.tbl_province on usr.tbl_province_id equals prov.id
                                           join ct in _context.tbl_city on usr.tbl_city_id equals ct.id
                                           join brngy in _context.tbl_brgy on usr.tbl_brgy_id equals brngy.id
@@ -517,7 +528,8 @@ namespace FMB_CIS.Controllers
                                               contact = usr.contact_no,
                                               application_type = appt.name,
                                               permit_type = pT.name,
-                                              permit_status = pS.status,
+                                          permit_status = pS.status,
+                                          permit_statuses = wfs.name,
                                               status = Convert.ToInt32(a.status),
                                               qty = a.qty,
                                               user_type = usrtyps.name,
@@ -531,8 +543,12 @@ namespace FMB_CIS.Controllers
                                               purpose = a.purpose,
                                               date_of_registration = a.date_of_registration,
                                               date_of_expiration = a.date_of_expiration,
-                                              renew_from = a.renew_from
+                                              renew_from = a.renew_from,
+                                         currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
+                                         currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic   
                                           }).FirstOrDefault();
+                                         applicationMod.currentPercentage = (applicationMod.currentStepCount * 100 / applicationMod.currentMaxCount);
+
                     mymodel.applicantViewModels = applicationMod;
                 }
 
@@ -1210,7 +1226,7 @@ namespace FMB_CIS.Controllers
                                      join usr in _context.tbl_user on a.tbl_user_id equals usr.id
                                      join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                      join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
-                                    //  join pS in _context.tbl_permit_status on a.status equals pS.id
+                                     join pS in _context.tbl_permit_status on a.status equals pS.id
                                     //  join pSS in _context.tbl_permit_statuses on a.status equals pSS.id
                                     //  join wf in _context.tbl_permit_workflow on pT.id.ToString() equals wf.permit_type_code
                                      join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code } 
@@ -1227,7 +1243,8 @@ namespace FMB_CIS.Controllers
                                          address = usr.street_address,
                                          application_type = appt.name,
                                          permit_type = pT.name,
-                                         permit_status = wfs.name,
+                                          permit_status = pS.status,
+                                          permit_statuses = wfs.name,
                                          tbl_user_id = (int)usr.id,
                                          date_due_for_officers = a.date_due_for_officers,
                                          isRead = false,
