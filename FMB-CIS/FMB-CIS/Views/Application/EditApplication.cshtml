@@ -96,17 +96,17 @@
                     <div class="row">
                         <div class="col-md-10">
                             <div class="row mb-5">
-                                <div class="col-md-3">
+                         @*       <div class="col-md-3">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
                                             User Type
                                         </label>
                                         <span class="fw-bold">
-                                            @* @Html.DisplayFor(model => model.user_type) *@
+                                             @Html.DisplayFor(model => model.user_type) 
                                             <label asp-for="applicantViewModels.user_type" value="@Model.applicantViewModels.user_type">@Model.applicantViewModels.user_type</label>     
                                         </span>
                                     </div>
-                                </div>
+                                </div>*@
                                 <div class="col-md-3">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
@@ -567,7 +567,7 @@
                         <div class="row">
                             <div class="col-md-10">
                                 <div class="row mb-5">
-                                    <div class="col-md-3">
+                                    @*<div class="col-md-3">
                                         <div class="form-group d-flex flex-column gap-1">
                                             <label class="text-secondary small">
                                                 User Type
@@ -576,7 +576,7 @@
                                                 <label asp-for="applicantViewModels.user_type" value="@Model.applicantViewModels.user_type">@Model.applicantViewModels.user_type</label>
                                             </span>
                                         </div>
-                                    </div>
+                                    </div>*@
                                     <div class="col-md-3">
                                         <div class="form-group d-flex flex-column gap-1">
                                             <label class="text-secondary small">

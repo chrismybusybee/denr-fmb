@@ -806,31 +806,26 @@
 
         $('.dataTable').DataTable({
             retrieve: true,
-            destroy: true,
             order: [[0, 'desc']],
             dom: 'Bfrtip',
-            buttons: []
+            buttons: ['csv']
         });
 
 
 
-        if ($.fn.dataTable.isDataTable('#applicationTable')) {
-            table.clear();
-            table.destroy();
-            var x = 0;
-        }
-        else {
+
            // table.clear();
            // table.destroy();
+            // var table = $.fn.dataTable.isDataTable('#applicationTable');
+            //table.clear();
+            //table.destroy();
 
-            table = $('#applicationTable').DataTable({
-                retrieve: true,
-                destroy: true,
+            var table = $('#applicationTable').DataTable({
                 order: [[0, 'desc']],
-                dom: 'Bfrtip',
+                dom: 'Bfartip',
                 buttons: ['csv']
             });
-        }
+        
 
 
         function toggleDropdown(menuItem, dropdown) {
