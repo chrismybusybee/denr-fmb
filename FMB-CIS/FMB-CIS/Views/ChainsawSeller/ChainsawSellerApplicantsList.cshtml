@@ -50,8 +50,19 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.qty)
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.permit_status)
+                            <td style="font-weight:bold;">
+                                <div class="progress-text">
+                                    <span class="progress-status">
+                                        @Html.DisplayFor(modelItem => item.permit_status)
+                                    </span>
+                                    <span class="progress-count">
+                                        @Html.DisplayFor(modelItem => item.currentStepCount) /
+                                        @Html.DisplayFor(modelItem => item.currentMaxCount)
+                                    </span>
+                                </div>
+                                <div class="progress">
+  <div class="progress-bar" role="progressbar" style="width: @Html.DisplayFor(modelItem => item.currentPercentage)%" aria-valuenow="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemin="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemax="@Html.DisplayFor(modelItem => item.currentMaxCount)"></div>
+</div>
                             </td>
                             <td>
                                 <a href="ChainsawSellerApproval?uid=@item.tbl_user_id&appid=@item.id">View</a>
@@ -72,7 +83,18 @@
                                 @Html.DisplayFor(modelItem => item.qty)
                             </td>
                             <td style="font-weight:bold;">
-                                @Html.DisplayFor(modelItem => item.permit_status)
+                                <div class="progress-text">
+                                    <span class="progress-status">
+                                        @Html.DisplayFor(modelItem => item.permit_status)
+                                    </span>
+                                    <span class="progress-count">
+                                        @Html.DisplayFor(modelItem => item.currentStepCount) /
+                                        @Html.DisplayFor(modelItem => item.currentMaxCount)
+                                    </span>
+                                </div>
+                                <div class="progress">
+  <div class="progress-bar" role="progressbar" style="width: @Html.DisplayFor(modelItem => item.currentPercentage)%" aria-valuenow="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemin="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemax="@Html.DisplayFor(modelItem => item.currentMaxCount)"></div>
+</div>
                             </td>
                             <td style="font-weight:bold;">
                                 <a href="ChainsawSellerApproval?uid=@item.tbl_user_id&appid=@item.id">View</a>
@@ -90,3 +112,16 @@
 <script type="text/javascript">
 
 </script>
+<style>
+    .progress {
+        height: 5px;
+    }
+    .progress-text {
+        display: flex;
+    }
+    .progress-status {
+        flex: 1;
+    }
+    .progress-count {
+    }
+</style>

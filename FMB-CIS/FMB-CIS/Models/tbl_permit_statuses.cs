@@ -6,6 +6,8 @@ namespace FMB_CIS.Models
     {
         public int id { get; set; }
         public string status { get; set; }
+        public string page_status { get; set; }
+        public string grid_status { get; set; }
         public string comment { get; set; }
         public int application_type { get; set; }
     }

@@ -74,5 +74,9 @@ namespace FMB_CIS.Models
         //FOR ApplicantList
         public bool? isRead { get; set; }
 
+        public int? currentStepCount { get; set; }
+        public int? currentMaxCount { get; set; }
+        public int? currentPercentage { get; set; }
+
     }
 }
