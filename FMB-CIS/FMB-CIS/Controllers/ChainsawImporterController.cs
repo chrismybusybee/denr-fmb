@@ -400,7 +400,8 @@ namespace FMB_CIS.Controllers
                                                      tbl_files_id = f.Id,
                                                      filename = f.filename,
                                                      tbl_application_id = f.tbl_application_id,
-                                                     tbl_files_status = br.status
+                                                     tbl_files_status = br.status,
+                                                     bridge_id = br.id
                                                      //comment = c.comment
                                                  }).OrderBy(o=>o.filename).ToList();
 
@@ -429,7 +430,7 @@ namespace FMB_CIS.Controllers
 
             for (int i = 0; i < fileWithCommentsforDocTagging.Count; i++)
             {
-                var latestComment = commentsList.Where(c => c.tbl_files_id == fileWithCommentsforDocTagging[i].tbl_files_id).LastOrDefault();
+                var latestComment = commentsList.Where(c => c.bridge_id == fileWithCommentsforDocTagging[i].bridge_id).LastOrDefault();
                 if (latestComment != null)
                 {
                     fileWithCommentsforDocTagging[i].comment = latestComment.comment;
@@ -1140,6 +1141,13 @@ namespace FMB_CIS.Controllers
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             string Role = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
 
+            // var fileDB = _context.tbl_files.Where(f => f.Id == tbl_files_id).FirstOrDefault();
+            // fileDB.status = tbl_files_status;
+            var m = _context.tbl_files_checklist_bridge.Where(d => d.tbl_document_checklist_id == documentChecklistId && d.tbl_files_id == tbl_files_id).FirstOrDefault();
+            m.status = tbl_files_status;
+            // m.status = tbl_files_comment;
+            _context.SaveChanges();
+
             var commentsTbl = new tbl_comments();
             //commentsTbl.id = model.tbl_Comments.id;
             commentsTbl.tbl_application_id = Convert.ToInt32(appid);
@@ -1150,18 +1158,8 @@ namespace FMB_CIS.Controllers
             commentsTbl.modified_by = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             commentsTbl.date_created = DateTime.Now;
             commentsTbl.date_modified = DateTime.Now;
+            commentsTbl.bridge_id = m.id;
             _context.tbl_comments.Add(commentsTbl);
-            _context.SaveChanges();
-
-            // var fileDB = _context.tbl_files.Where(f => f.Id == tbl_files_id).FirstOrDefault();
-            // fileDB.status = tbl_files_status;
-
-            var filesChecklistBridgeTbl = new tbl_files_checklist_bridge();
-            //commentsTbl.id = model.tbl_Comments.id;
-            filesChecklistBridgeTbl.tbl_document_checklist_id = documentChecklistId;
-            filesChecklistBridgeTbl.tbl_files_id = tbl_files_id;
-            filesChecklistBridgeTbl.status = tbl_files_status;
-            _context.tbl_files_checklist_bridge.Add(filesChecklistBridgeTbl);
             _context.SaveChanges();
 
             // _context.SaveChanges();
