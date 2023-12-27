@@ -32,11 +32,11 @@
                     <div class="form-floating mb-3">
                         <select class="form-control form-select rounded-3"
                                 asp-items="ViewBag.RegionData"
-                                id="region_id" onchange="loadProvince(this)" asp-for="@Model.region_id"></select>
+                                id="region_id" asp-for="@Model.region_id"></select>
                         <label for="region_id">Region Id</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <select class="form-control form-select rounded-3" asp-items="ViewBag.ProvinceData" id="province_id" onchange="loadCity(this)" asp-for="@Model.province_id"></select>
+                        <select class="form-control form-select rounded-3" asp-items="ViewBag.ProvinceData" id="province_id" asp-for="@Model.province_id"></select>
                         <label for="province_id">Province Id</label>
                     </div>
                     <div class="form-floating mb-3">
@@ -56,6 +56,7 @@
     </div>
 </div>
 
+
 <script type="text/javascript">
     $("#cancelBtn").click(function () {
         closeModal();
@@ -63,6 +64,20 @@
 
     $("#btnUpdate").click(function () {
         console.log("btnUpdate");
+        updateOffice();
+    });
+
+    $("#region_id").change(function () {
+        loadProvince(this.value);
+        loadCity(-1);
+    });
+
+    $("#province_id").change(function () {
+        loadCity(this.value);
+    });
+    
+    function updateOffice() {
+
         let id = document.getElementById("officeId").value;
         let parameters = {
             id: id,
@@ -86,13 +101,11 @@
                 console.log(e);
             }
         });
-
-
-    });
+    }
 
     function closeModal() {
         $("#updateOfficeModal").modal("hide");
-        var elem = document.querySelector('#updateOfficeTypeModal');
+        let elem = document.querySelector('#updateOfficeModal');
         elem.parentNode.removeChild(elem);
     }
 
@@ -100,8 +113,7 @@
     $(document).ready(function () {
         var a = 0;
     });
-    function loadProvince(obj) {
-        var value = obj.value;
+    function loadProvince(value) {
         var url = "@baseurl";
 
         $.post(url + "Account/GetProvinceByRegionId", { tbl_region_id: value }, function (data) {
@@ -122,9 +134,7 @@
         var a = 0;
         //$("#region_id").change();
     });
-
-    function loadCity(obj) {
-        var value = obj.value;
+    function loadCity(value) {
         var url = "@baseurl";
 
         $.post(url + "Account/GetCityByProvinceId", { tbl_province_id: value }, function (data) {

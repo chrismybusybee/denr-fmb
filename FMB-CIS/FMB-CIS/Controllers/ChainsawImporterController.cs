@@ -314,7 +314,7 @@ namespace FMB_CIS.Controllers
             }
 
             mymodel.tbl_Files = files;
-
+            
             //FILES UPLOADED BY INSPECTOR
             var filesFromInspector = (from f in _context.tbl_files
                                       join usr in _context.tbl_user on f.created_by equals usr.id
@@ -400,7 +400,7 @@ namespace FMB_CIS.Controllers
                                                      tbl_files_id = f.Id,
                                                      filename = f.filename,
                                                      tbl_application_id = f.tbl_application_id,
-                                                     tbl_files_status = f.status
+                                                     tbl_files_status = br.status
                                                      //comment = c.comment
                                                  }).OrderBy(o=>o.filename).ToList();
 
@@ -1142,7 +1142,7 @@ namespace FMB_CIS.Controllers
 
 
         [HttpPost, ActionName("FileTaggingChanges")]
-        public JsonResult FileTaggingChanges(int tbl_files_id, string tbl_files_status, string comment, int appid)
+        public JsonResult FileTaggingChanges(int tbl_files_id, string tbl_files_status, string comment, int appid, int documentChecklistId)
         {
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             string Role = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
@@ -1160,9 +1160,18 @@ namespace FMB_CIS.Controllers
             _context.tbl_comments.Add(commentsTbl);
             _context.SaveChanges();
 
-            var fileDB = _context.tbl_files.Where(f => f.Id == tbl_files_id).FirstOrDefault();
-            fileDB.status = tbl_files_status;
+            // var fileDB = _context.tbl_files.Where(f => f.Id == tbl_files_id).FirstOrDefault();
+            // fileDB.status = tbl_files_status;
+
+            var filesChecklistBridgeTbl = new tbl_files_checklist_bridge();
+            //commentsTbl.id = model.tbl_Comments.id;
+            filesChecklistBridgeTbl.tbl_document_checklist_id = documentChecklistId;
+            filesChecklistBridgeTbl.tbl_files_id = tbl_files_id;
+            filesChecklistBridgeTbl.status = tbl_files_status;
+            _context.tbl_files_checklist_bridge.Add(filesChecklistBridgeTbl);
             _context.SaveChanges();
+
+            // _context.SaveChanges();
 
             return Json(true);
         }
