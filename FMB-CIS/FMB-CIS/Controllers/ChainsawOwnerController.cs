@@ -373,7 +373,7 @@ namespace FMB_CIS.Controllers
                                                      tbl_files_id = f.Id,
                                                      filename = f.filename,
                                                      tbl_application_id = f.tbl_application_id,
-                                                     tbl_files_status = br.status,                                                tbl_files_status = br.status,
+                                                     tbl_files_status = br.status,                                   
                                                      bridge_id = br.id
                                                      //comment = c.comment
                                                  }).OrderBy(o => o.filename).ToList();
