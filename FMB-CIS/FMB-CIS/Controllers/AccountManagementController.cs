@@ -420,9 +420,9 @@ namespace FMB_CIS.Controllers
                         _tbl_user_type_user.created_by = uid;
                         _tbl_user_type_user.modified_by = uid;
                         _tbl_user_type_user.date_created = DateTime.Now;
-                        _tbl_user_type_usere.date_modified = DateTime.Now;
+                        _tbl_user_type_user.date_modified = DateTime.Now;
 
-                _context.tbl_user_type_user.Add(_tbl_user_type_user)
+                _context.tbl_user_type_user.Add(_tbl_user_type_user);
                 _context.SaveChanges();
 
                 //var tblUsrTempPass = new tbl_user_temp_passwords();
