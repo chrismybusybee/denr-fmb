@@ -1055,11 +1055,11 @@ namespace FMB_CIS.Controllers
                             }
 
                             //stats = 11; //Payment and Application Approved (Inspector and CENRO)
-                            registrationDateToBeChanged = true;
-                            dateRegistration = DateTime.Now; //Permit will be considered registered once it has been approved
-                            expirationDateToBeChanged = true;
-                            dateExpiration = DateTime.Now.AddYears(3); //Permit to Expire after 3 years
-                            dateDueOfficer = null; //Since task is done, no more due date for officer
+                            //registrationDateToBeChanged = true;
+                            //dateRegistration = DateTime.Now; //Permit will be considered registered once it has been approved
+                            //expirationDateToBeChanged = true;
+                            //dateExpiration = DateTime.Now.AddYears(3); //Permit to Expire after 3 years
+                            //dateDueOfficer = null; //Since task is done, no more due date for officer
                             break;
                         case (int)PermitStatusEnum.PENRO_FOCAL_APPROVAL:
                             break;
