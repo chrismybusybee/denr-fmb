@@ -555,7 +555,7 @@ namespace FMB_CIS.Controllers
                                                   join usr in _context.tbl_user on c.created_by equals usr.id
                                                   select new CommentsViewModel
                                                   {
-                                                      tbl_application_id = c.tbl_application_id,
+                                                      tbl_application_id = c.tbl_application_id.GetValueOrDefault(),
                                                       //tbl_files_id = c.tbl_files_id,
                                                       //fileName = f.filename,
                                                       comment_to = c.comment_to,
@@ -574,7 +574,7 @@ namespace FMB_CIS.Controllers
                                                   join usr in _context.tbl_user on c.created_by equals usr.id
                                                   select new CommentsViewModel
                                                   {
-                                                      tbl_application_id = c.tbl_application_id,
+                                                      tbl_application_id = c.tbl_application_id.GetValueOrDefault(),
                                                       //tbl_files_id = c.tbl_files_id,
                                                       //fileName = f.filename,
                                                       comment_to = c.comment_to,
