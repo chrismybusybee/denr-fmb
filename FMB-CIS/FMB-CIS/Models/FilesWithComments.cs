@@ -33,5 +33,6 @@
         public int permit_type_id { get; set; }
         public string tbl_document_checklist_name { get; set; }
         public string tbl_document_checklist_description { get; set; }
+        public int? bridge_id { get; set; }
     }
 }

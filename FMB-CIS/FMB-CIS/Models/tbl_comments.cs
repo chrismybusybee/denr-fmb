@@ -12,5 +12,6 @@
         public DateTime date_created { get; set; }
         public DateTime date_modified { get; set;}
         public string? comment_to { get; set; }
+        public int bridge_id { get; set; }
     }
 }
