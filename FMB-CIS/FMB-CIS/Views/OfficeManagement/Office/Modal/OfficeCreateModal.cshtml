@@ -26,11 +26,11 @@
                     <div class="form-floating mb-3">
                         <select class="form-control form-select rounded-3"
                                 asp-items="ViewBag.RegionData"
-                                id="region_id" onchange="loadProvince(this)"></select>
+                                id="region_id"></select>
                         <label for="region_id">Region Id</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <select class="form-control form-select rounded-3" asp-items="ViewBag.ProvinceData" id="province_id" onchange="loadCity(this)"></select>
+                        <select class="form-control form-select rounded-3" asp-items="ViewBag.ProvinceData" id="province_id"></select>
                         <label for="province_id">Province Id</label>
                     </div>
                     <div class="form-floating mb-3">
@@ -56,8 +56,27 @@
     });
 
     $("#btnCreate").click(function () {
-        console.log("btnCreate");
+        createOffice();
+    });
 
+    $("#region_id").on("change", function () {
+        loadProvince(this.value);
+    });
+
+    $("#province_id").on("change", function () {
+        loadCity(this.value);
+        loadCity(-1);
+    });
+
+
+    function closeModal() {
+        $("#createOfficeModal").modal("hide");
+        let elem = document.querySelector('#createOfficeModal');
+        elem.parentNode.removeChild(elem);
+    }
+
+
+    function createOffice() {
         let parameters = {
             office_name: document.getElementById("office_name").value,
             department: document.getElementById("department").value,
@@ -66,26 +85,37 @@
             city_id: document.getElementById("city_id").value ? document.getElementById("city_id").value : 0,
             company_name: document.getElementById("company_name").value
         };
-
-        $.post("/OfficeManagement/OfficeCreate", parameters, function (data) 
-            // NOTE: TO DO better way of calling callback function from parent
-            $('#officeListPartialContainer').load('/OfficeManagement/OfficeListPartialView');
-            closeModal();
+        $.ajax({
+            type: "POST",
+            url: "/OfficeManagement/OfficeCreate",
+            data: parameters,
+            success: function() {
+                $('#officeListPartialContainer').load('/OfficeManagement/OfficeListPartialView');
+                closeModal();
+            }, error: function(e) {
+                console.log(e);
+            }
         });
-    });
-    function closeModal() {
+    }
+        function closeModal() {
         $("#createOfficeModal").modal("hide");
         let elem = document.querySelector('#createOfficeModal');
         elem.parentNode.removeChild(elem);
     }
 
-    function loadProvince(obj) {
-        var value = obj.value;
+    function loadProvince(value) {
+        @* var value = obj.value; *@
         var url = "@baseurl";
-
-        $.post(url + "Account/GetProvinceByRegionId", { tbl_region_id: value }, function (data) {
-            PopulateProvinceDropDown("#province_id", data);
+        $.ajax({
+            type: "POST",
+            url: url + "Account/GetProvinceByRegionId",
+            data: { tbl_region_id: value },
+            success: function(data) {
+                PopulateProvinceDropDown("#province_id", data)
+            }
         });
+@* ,
+  dataType: dataType *@
     }
 
     function PopulateProvinceDropDown(dropDownId, list, selectedId) {
@@ -100,9 +130,7 @@
     $(document).ready(function () {
         var a = 0;
     });
-
-    function loadCity(obj) {
-        var value = obj.value;
+    function loadCity(value) {
         var url = "@baseurl";
 
         $.post(url + "Account/GetCityByProvinceId", { tbl_province_id: value }, function (data) {
