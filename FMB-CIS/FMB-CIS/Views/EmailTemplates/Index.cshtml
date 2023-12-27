@@ -27,12 +27,12 @@
                         <td class="text-nowrap">@item.template_description</td>
                         <td class="text-nowrap">
                             <div class="d-flex justify-content-center gap-3">
-                                <a href="#" id="viewEmailTemplate" class="bg-green text-white px-1 pb-1 rounded" title="view" data-template-id="@item.id" onclick="getEmailDetails(this)">
+                                @* <a href="#" id="viewEmailTemplate" class="bg-green text-white px-1 pb-1 rounded" title="view" data-template-id="@item.id" onclick="getEmailDetails(this)">
                                     <i data-feather="eye" class="data-feather-20"></i>
-                                    @* <input type="hidden" id="templateID" value="@item.id" /> *@
-                                </a>
-                                <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="edit" data-template-id="@item.id" onclick="editEmailDetails(this)">
-                                    <i data-feather="edit" class="data-feather-20"></i>
+                                </a> *@
+                                <a href="#" @* class="bg-green text-white px-1 pb-1 rounded" *@ title="edit" data-template-id="@item.id" onclick="editEmailDetails(this)">
+                                    <button class="btn btn-primary float-end" type="button">Take Action</button>
+                                    @* <i data-feather="edit" class="data-feather-20"></i> *@
                                 </a>
                             </div>
                         </td>

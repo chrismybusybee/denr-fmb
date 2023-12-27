@@ -33,7 +33,7 @@
                                 Permit Status
                             </label>
                             <span class="fw-bold">
-                                <label asp-for="applicantViewModels.permit_status" value="@Model.applicantViewModels.permit_status">@Model.applicantViewModels.permit_status</label>                               
+                                <label asp-for="applicantViewModels.permit_statuses" value="@Model.applicantViewModels.permit_statuses">@Model.applicantViewModels.permit_statuses</label>                               
                             </span>
                         </div>
                     </div>
@@ -76,6 +76,10 @@
                     {
                         @* <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" /> *@
                         <button id="btnSave" class="btn btn-primary w-105" type="button">Submit</button>
+                    }    
+                    @if (Model.applicantViewModels.permit_status_id == 7 || Model.applicantViewModels.permit_status_id == 8 && Model.applicantViewModels.permit_status_id == 10)
+                    {
+                        <button id="btnSubmitPaymentEdit" class="btn btn-primary w-105" type="button">Submit</button>
                     }
                     @if (DateTime.Now.AddMonths(2) >= Model.applicantViewModels.date_of_expiration && ViewBag.hasRenewal == false)
                     {
@@ -96,17 +100,17 @@
                     <div class="row">
                         <div class="col-md-10">
                             <div class="row mb-5">
-                                <div class="col-md-3">
+                         @*       <div class="col-md-3">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
                                             User Type
                                         </label>
                                         <span class="fw-bold">
-                                            @* @Html.DisplayFor(model => model.user_type) *@
+                                             @Html.DisplayFor(model => model.user_type) 
                                             <label asp-for="applicantViewModels.user_type" value="@Model.applicantViewModels.user_type">@Model.applicantViewModels.user_type</label>     
                                         </span>
                                     </div>
-                                </div>
+                                </div>*@
                                 <div class="col-md-3">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
@@ -155,6 +159,7 @@
                                                 @if (Model.applicantViewModels.permit_status != "For Inspector Approval" && Model.applicantViewModels.permit_status != "Rejected (Inspector)" && Model.applicantViewModels.permit_status != "Rejected (CENRO)")
                                                 {
                                                     <label asp-for="applicantViewModels.qty" value="@Model.applicantViewModels.qty">@Model.applicantViewModels.qty</label>
+                                                        @Html.HiddenFor(model => model.applicantViewModels.qty)
                                                 }
                                                 else
                                                 {
@@ -174,6 +179,7 @@
                                             @if (Model.applicantViewModels.permit_status != "For Inspector Approval" && Model.applicantViewModels.permit_status != "Rejected (Inspector)" && Model.applicantViewModels.permit_status != "Rejected (CENRO)")
                                             {
                                                 <label asp-for="applicantViewModels.specification" value="@Model.applicantViewModels.specification">@Model.applicantViewModels.specification</label>
+                                                    @Html.HiddenFor(model => model.applicantViewModels.specification)
                                             }
                                             else
                                             {
@@ -261,6 +267,7 @@
                                                     @if (Model.applicantViewModels.permit_status != "For Inspector Approval" && Model.applicantViewModels.permit_status != "Rejected (Inspector)" && Model.applicantViewModels.permit_status != "Rejected (CENRO)")
                                                     {
                                                         <label asp-for="applicantViewModels.date_purchase" value="@Model.applicantViewModels.date_purchase">@Model.applicantViewModels.date_purchase</label>
+                                                            @Html.HiddenFor(model => model.applicantViewModels.date_purchase)
                                                     }
                                                     else
                                                     {
@@ -367,6 +374,7 @@
                                                 @if (Model.applicantViewModels.permit_status != "For Inspector Approval" && Model.applicantViewModels.permit_status != "Rejected (Inspector)" && Model.applicantViewModels.permit_status != "Rejected (CENRO)")
                                                 {
                                                     <label asp-for="applicantViewModels.chainsawModel" value="@Model.applicantViewModels.chainsawModel">@Model.applicantViewModels.chainsawModel</label>
+                                                        @Html.HiddenFor(model => model.applicantViewModels.chainsawModel)
                                                 }
                                                 else
                                                 {
@@ -387,6 +395,7 @@
                                                 @if (Model.applicantViewModels.permit_status != "For Inspector Approval" && Model.applicantViewModels.permit_status != "Rejected (Inspector)" && Model.applicantViewModels.permit_status != "Rejected (CENRO)")
                                                 {
                                                     <label asp-for="applicantViewModels.Engine" value="@Model.applicantViewModels.Engine">@Model.applicantViewModels.Engine</label>
+                                                        @Html.HiddenFor(model => model.applicantViewModels.Engine)
                                                 }
                                                 else
                                                 {
@@ -404,6 +413,7 @@
                                                 @if (Model.applicantViewModels.permit_status != "For Inspector Approval" && Model.applicantViewModels.permit_status != "Rejected (Inspector)" && Model.applicantViewModels.permit_status != "Rejected (CENRO)")
                                                 {
                                                     <label asp-for="applicantViewModels.powerSource" value="@Model.applicantViewModels.powerSource">@Model.applicantViewModels.powerSource</label>
+                                                        @Html.HiddenFor(model => model.applicantViewModels.powerSource)
                                                 }
                                                 else
                                                 {
@@ -430,6 +440,7 @@
                                                     </label>
                                                     <span class="fw-bold">
                                                         <label asp-for="applicantViewModels.hp" value="@Model.applicantViewModels.hp">@Model.applicantViewModels.hp</label>
+                                                            @Html.HiddenFor(model => model.applicantViewModels.hp)
                                                     </span>
                                                 }
                                                 else
@@ -439,6 +450,7 @@
                                                     </label>
                                                     <span class="fw-bold">
                                                         <label asp-for="applicantViewModels.Watt" value="@Model.applicantViewModels.Watt">@Model.applicantViewModels.Watt</label>
+                                                            @Html.HiddenFor(model => model.applicantViewModels.Watt)
                                                     </span>
                                                 }
                                             }
@@ -504,6 +516,7 @@
                                                 @if (Model.applicantViewModels.permit_status != "For Inspector Approval" && Model.applicantViewModels.permit_status != "Rejected (Inspector)" && Model.applicantViewModels.permit_status != "Rejected (CENRO)")
                                                 {
                                                     <label asp-for="applicantViewModels.gb" value="@Model.applicantViewModels.gb">@Model.applicantViewModels.gb</label>
+                                                        @Html.HiddenFor(model => model.applicantViewModels.gb)
                                                 }
                                                 else
                                                 {
@@ -523,6 +536,7 @@
                                                 @if (Model.applicantViewModels.permit_status != "For Inspector Approval" && Model.applicantViewModels.permit_status != "Rejected (Inspector)" && Model.applicantViewModels.permit_status != "Rejected (CENRO)")
                                                 {
                                                     <label asp-for="applicantViewModels.chainsaw_serial_number" value="@Model.applicantViewModels.chainsaw_serial_number">@Model.applicantViewModels.chainsaw_serial_number</label>
+                                                        @Html.HiddenFor(model => model.applicantViewModels.chainsaw_serial_number)
                                                 }
                                                 else
                                                 {
@@ -540,6 +554,7 @@
                                                 @if (Model.applicantViewModels.permit_status != "For Inspector Approval" && Model.applicantViewModels.permit_status != "Rejected (Inspector)" && Model.applicantViewModels.permit_status != "Rejected (CENRO)")
                                                 {
                                                     <label asp-for="applicantViewModels.chainsawSupplier" value="@Model.applicantViewModels.chainsawSupplier">@Model.applicantViewModels.chainsawSupplier</label>
+                                                        @Html.HiddenFor(model => model.applicantViewModels.chainsawSupplier)
                                                 }
                                                 else
                                                 {
@@ -567,7 +582,7 @@
                         <div class="row">
                             <div class="col-md-10">
                                 <div class="row mb-5">
-                                    <div class="col-md-3">
+                                    @*<div class="col-md-3">
                                         <div class="form-group d-flex flex-column gap-1">
                                             <label class="text-secondary small">
                                                 User Type
@@ -576,7 +591,7 @@
                                                 <label asp-for="applicantViewModels.user_type" value="@Model.applicantViewModels.user_type">@Model.applicantViewModels.user_type</label>
                                             </span>
                                         </div>
-                                    </div>
+                                    </div>*@
                                     <div class="col-md-3">
                                         <div class="form-group d-flex flex-column gap-1">
                                             <label class="text-secondary small">
@@ -820,6 +835,8 @@
                     </div>
                 </div>
             }
+
+
             @* @if (@Model.applicantViewModels.permit_type == "Permit to Import")
             {
                 <hr />
@@ -858,7 +875,7 @@
                 </div>
             } *@
 
-            
+        </form>
             <hr/>
             <div class="row d-flex justify-content-center m-0">
 
@@ -1017,14 +1034,76 @@
                     </div>
                 </div>
             </div>
-            @if (Model.applicantViewModels.status >= 7)
+            @* @if (Model.applicantViewModels.status >= 7) *@
+            @if (Model.proofOfPaymentFiles != null)
             {
                 <hr />
                 <div class="row d-flex justify-content-center m-0">
                     <div class="row d-flex justify-content-center px-0 mb-5">
                         <div class="col-md-12 d-flex flex-column gap-2">
-                            <h2 class="text-secondary fw-bold m-0">Attached Proof of Payment</h2>
+                            <h2 class="text-secondary fw-bold m-0">Proof of Payment</h2>
                         </div>
+                        @if(Model.tbl_Application_Payment != null)
+                        {
+                            <form asp-action="EditPayment" asp-controller="Application" method="post" enctype="multipart/form-data" id="EditAppPayment">
+                                <input asp-for="uid" type="hidden" />
+                                <input asp-for="appid" type="hidden" />
+                            
+                                <div class="row mt-5 mb-5">
+                                    <div class="col-md-4">                                    
+                                    <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                OR Number
+                                            </label>
+                                            <span class="fw-bold">
+                                                @if (Model.applicantViewModels.permit_status_id == 7 || Model.applicantViewModels.permit_status_id == 8 || Model.applicantViewModels.permit_status_id == 10)
+                                                {
+                                                    <input asp-for="tbl_Application_Payment.OR_Number" value="@Model.tbl_Application_Payment.OR_Number" class="form-control" />
+                                                }
+                                                else
+                                                {
+                                                    <label asp-for="tbl_Application_Payment.OR_Number" value="@Model.tbl_Application_Payment.OR_Number">@Model.tbl_Application_Payment.OR_Number</label>
+                                                }
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Amount
+                                            </label>
+                                            <span class="fw-bold">
+                                                @if (Model.applicantViewModels.permit_status_id == 7 || Model.applicantViewModels.permit_status_id == 8 || Model.applicantViewModels.permit_status_id == 10)
+                                                {
+                                                    <input asp-for="tbl_Application_Payment.Amount" value="@Model.tbl_Application_Payment.Amount" class="form-control" type="number" min="0" step="0.01" />
+                                                }
+                                                else
+                                                {
+                                                    <label asp-for="tbl_Application_Payment.Amount" value="@Model.tbl_Application_Payment.Amount">@Model.tbl_Application_Payment.Amount</label>
+                                                }
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Date of Payment
+                                            </label>
+                                            <span class="fw-bold">
+                                                @if (Model.applicantViewModels.permit_status_id == 7 || Model.applicantViewModels.permit_status_id == 8 || Model.applicantViewModels.permit_status_id == 10)
+                                                {
+                                                    <input asp-for="tbl_Application_Payment.Date_of_Payment" type="date" class="form-control" />
+                                                }
+                                                else
+                                                {
+                                                    <label asp-for="tbl_Application_Payment.Date_of_Payment" value="@Model.tbl_Application_Payment.Date_of_Payment">@Convert.ToDateTime(Model.tbl_Application_Payment.Date_of_Payment).ToString("MMM dd yyyy")</label>
+                                                }
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        }
                         <div class="d-flex mb-4 gap-3">
                             @foreach (tbl_files file in Model.proofOfPaymentFiles)
                             {
@@ -1089,7 +1168,7 @@
                     </div>
                 </div>
             }            
-        </form>
+        
         <hr />
         <form id="commentSection" asp-action="CommentSection">
             <div class="row d-flex justify-content-center px-0 mb-5 mt-3">
@@ -1209,6 +1288,36 @@
             $("#confirmSaveSuccessModal").modal("show");
         });
 
+        $("#btnSubmitPaymentEdit").click(function () {
+            const paymentForm = document.getElementById('EditAppPayment');
+            
+
+            Swal.fire({
+                title: "Are you sure you want to save changes for this application?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                confirmButtonColor: '#14984a'
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                console.log("result", result);
+                if (result.isConfirmed) { 
+
+                    paymentForm.submit();
+                    Swal.fire({
+                        title: "Success!",
+                        icon: "success",
+                        text: "Changes in your payment details were saved.",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: '#14984a'
+                    });
+
+                }
+                
+            });
+
+        });
+
         $("#btnRenew").click(function () {
             Swal.fire({
                 title: "Are you sure you want to renew this application?",
@@ -1219,40 +1328,39 @@
             }).then((result) => {
                 /* Read more about isConfirmed, isDenied below */
                 console.log("result", result);
+                if (result.isConfirmed) { 
                 
-                $.post(baseURL + "Application/RenewApplication", { oldApplicationID: appID }, function (data) {
-                    console.log("data: ", data);
-                    
-                    if (data != false) {
-                        var renewedAppLink = baseURL + "Application/EditApplication?uid=" + uid + "&appid=" + data;
-                        var innerHTML = "<div>Application for renewal has been submitted! You may view your application for renewal on this link: </div><br>" + "<a href=\"" + renewedAppLink + "\">" + renewedAppLink + "</a>";
-                        Swal.fire({
-                            title: "Success!",
-                            icon: "success",
-                            //text: "Application for renewal has been submitted! You may view your application for renewal on this link: ",
-                            html: innerHTML,
-                            confirmButtonText: "Ok",
-                            confirmButtonColor: '#14984a'
-                        });
-                    }
+                    $.post(baseURL + "Application/RenewApplication", { oldApplicationID: appID }, function (data) {
+                        console.log("data: ", data);
 
-                    else
-                    {
-                        Swal.fire({
-                            title: "Failed!",
-                            icon: "error",
-                            text: "Your application is not qualified for renewal.",
-                            confirmButtonText: "Ok",
-                            confirmButtonColor: '#14984a'
-                        });
-                    }
+                        if (data != false) {
+                            var renewedAppLink = baseURL + "Application/EditApplication?uid=" + uid + "&appid=" + data;
+                            var innerHTML = "<div>Application for renewal has been submitted! You may view your application for renewal on this link: </div><br>" + "<a href=\"" + renewedAppLink + "\">" + renewedAppLink + "</a>";
+                            Swal.fire({
+                                title: "Success!",
+                                icon: "success",
+                                //text: "Application for renewal has been submitted! You may view your application for renewal on this link: ",
+                                html: innerHTML,
+                                confirmButtonText: "Ok",
+                                confirmButtonColor: '#14984a'
+                            });
+                        }
 
-                });
+                        else {
+                            Swal.fire({
+                                title: "Failed!",
+                                icon: "error",
+                                text: "Your application is not qualified for renewal.",
+                                confirmButtonText: "Ok",
+                                confirmButtonColor: '#14984a'
+                            });
+                        }
+
+                    });
+
+                }                
 
             });
-
-
-
 
         });
     });

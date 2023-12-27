@@ -805,32 +805,27 @@
 
 
         $('.dataTable').DataTable({
-            retrieve: true,
             destroy: true,
             order: [[0, 'desc']],
             dom: 'Bfrtip',
-            buttons: []
+            buttons: ['csv', 'excel']
         });
 
 
 
-        if ($.fn.dataTable.isDataTable('#applicationTable')) {
-            table.clear();
-            table.destroy();
-            var x = 0;
-        }
-        else {
+
            // table.clear();
            // table.destroy();
+            // var table = $.fn.dataTable.isDataTable('#applicationTable');
+            //table.clear();
+            //table.destroy();
 
-            table = $('#applicationTable').DataTable({
-                retrieve: true,
-                destroy: true,
-                order: [[0, 'desc']],
-                dom: 'Bfrtip',
-                buttons: ['csv']
-            });
-        }
+            //var table = $('#applicationTable').DataTable({
+            //    order: [[0, 'desc']],
+            //    dom: 'Bfartip',
+            //    buttons: ['csv']
+            //});
+        
 
 
         function toggleDropdown(menuItem, dropdown) {
