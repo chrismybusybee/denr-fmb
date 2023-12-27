@@ -217,3 +217,18 @@ button {
     max-width: 1600px;
 }
 /* BOOTSTRAP OVERRIDE END */
+.c-banner-container {
+
+}
+.c-banner-title {
+    width: 100%;
+    height: unset;
+    padding: 24px;
+    box-sizing: border-box;
+    max-width: 888px;
+}
+
+.c-title-info {
+    font-family: roboto;
+    font-size: 1.3em;
+}

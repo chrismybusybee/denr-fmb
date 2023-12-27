@@ -374,6 +374,8 @@ namespace FMB_CIS.Controllers
         [HttpPost]
         public IActionResult AddAccount(ViewModel model)
         {
+                        int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+
             //Check if email exist
             bool emailExist = _context.tbl_user.Where(u => u.email == model.tbl_User.email).Any();
             if (emailExist == true)
@@ -408,6 +410,19 @@ namespace FMB_CIS.Controllers
 
                 //Save Info to Database
                 _context.tbl_user.Add(model.tbl_User);
+                _context.SaveChanges();
+
+                tbl_user_type_user _tbl_user_type_user = new tbl_user_type_user();
+                
+                        _tbl_user_type_user.user_type_id = model.tbl_User.tbl_user_types_id;
+                        _tbl_user_type_user.user_id = model.tbl_User.id;
+                        _tbl_user_type_user.is_active = true;
+                        _tbl_user_type_user.created_by = uid;
+                        _tbl_user_type_user.modified_by = uid;
+                        _tbl_user_type_user.date_created = DateTime.Now;
+                        _tbl_user_type_user.date_modified = DateTime.Now;
+
+                _context.tbl_user_type_user.Add(_tbl_user_type_user);
                 _context.SaveChanges();
 
                 //var tblUsrTempPass = new tbl_user_temp_passwords();

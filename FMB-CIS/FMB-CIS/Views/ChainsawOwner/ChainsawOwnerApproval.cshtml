@@ -65,7 +65,7 @@
                                 (workflowNextStep.division_parameter == "notequal" && workflowNextStep.division_id != @Model.applicantViewModels.tbl_region_id)))
                                 {
                                     <button type="button" class="customBtn btn @workflowNextStep.button_class w-125" data-next_step_code="@workflowNextStep.next_step_code" data-button_text="@workflowNextStep.button_text">
-                                    @workflowNextStep.button_text
+                                    @workflowNextStep.button_text @Model.applicantViewModels.tbl_region_id
                                     </button>
                                 }
                             }
@@ -588,10 +588,10 @@
                                     }
                                 </td>
                                 <td>
-                                    @if (item.filename != "N/A")
+                                    @if (item.filename != "N/A" && item.tbl_files_status != "Complied" && item.tbl_files_status != "Not Complied")
                                     {
-                                        <button type="button" class="btn btn-primary w-125" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="ApproveDocStatus(this)">Complied</button>
-                                        <button type="button" class="btn btn-danger w-125" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DenyDocStatus(this)">Not Complied</button>
+                                         <button type="button" class="btn btn-primary w-125" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" data-documentChecklistId="@item.tbl_document_checklist_id" data-documentChecklistName="@item.tbl_document_checklist_name" onclick="ApproveDocStatus(this)">Complied</button>
+                                        <button type="button" class="btn btn-danger w-125" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" data-documentChecklistId="@item.tbl_document_checklist_id" data-documentChecklistName="@item.tbl_document_checklist_name" onclick="DenyDocStatus(this)">Not Complied</button>
                                     }
                                     else
                                     {
@@ -1187,6 +1187,8 @@
         var fileID = that.dataset.fileid;
         var status = "Complied";
         var comment = "";
+        var documentChecklistId = that.dataset.documentChecklistId;
+        var documentChecklistName = that.dataset.documentChecklistName;
         var url = "@baseurl";
         const queryString = window.location.search;
         console.log("queryString: ", queryString);
@@ -1195,7 +1197,7 @@
         console.log("applicationID: ", applicationID);
 
         Swal.fire({
-            title: "Are you sure you want to mark " + filename + " as \"Complied\"?",
+            title: "Are you sure you want to mark " + filename + " for " + documentChecklistName + " as \"Complied\"?",
             showCancelButton: true,
             confirmButtonText: "Yes",
             cancelButtonText: "No",
@@ -1223,7 +1225,7 @@
                         console.log("comment: ", comment);
                         console.log("status: ", status);
 
-                        $.post(url + "ChainsawImporter/FileTaggingChanges", { tbl_files_id: fileID, tbl_files_status: status, comment: comment, appid: applicationID }, function (data) {
+                        $.post(url + "ChainsawImporter/FileTaggingChanges", { tbl_files_id: fileID, tbl_files_status: status, comment: comment, appid: applicationID, documentChecklistId: documentChecklistId }, function (data) {
                             console.log("data: ", data);
                             $("#checklistTBLdiv").load("ChainsawOwnerApproval?uid=" + "@Model.applicantViewModels.tbl_user_id" + "&appid=" + "@Model.applicantViewModels.id" + " #checklistTBLdiv");
                             Swal.fire("Success!", "Document marked as \"Complied\"", "success");
@@ -1241,6 +1243,8 @@
         var fileID = that.dataset.fileid;
         var status = "Not Complied";
         var comment = "";
+        var documentChecklistId = that.dataset.documentChecklistId;
+        var documentChecklistName = that.dataset.documentChecklistName;
         var url = "@baseurl";
         const queryString = window.location.search;
         console.log("queryString: ", queryString);
@@ -1249,7 +1253,7 @@
         console.log("applicationID: ", applicationID);
 
         Swal.fire({
-            title: "Are you sure you want to mark " + filename + " as \"Not Complied\"?",
+            title: "Are you sure you want to mark " + filename + " for " + documentChecklistName + " as \"Not Complied\"?",
             showCancelButton: true,
             confirmButtonText: "Yes",
             cancelButtonText: "No",
@@ -1277,7 +1281,7 @@
                         console.log("comment: ", comment);
                         console.log("status: ", status);
 
-                        $.post(url + "ChainsawImporter/FileTaggingChanges", { tbl_files_id: fileID, tbl_files_status: status, comment: comment, appid: applicationID }, function (data) {
+                        $.post(url + "ChainsawImporter/FileTaggingChanges", { tbl_files_id: fileID, tbl_files_status: status, comment: comment, appid: applicationID, documentChecklistId: documentChecklistId }, function (data) {
                             console.log("data: ", data);
                             $("#checklistTBLdiv").load("ChainsawOwnerApproval?uid=" + "@Model.applicantViewModels.tbl_user_id" + "&appid=" + "@Model.applicantViewModels.id" + " #checklistTBLdiv");
                             Swal.fire("Success!", "Document marked as \"Not Complied\"", "success");

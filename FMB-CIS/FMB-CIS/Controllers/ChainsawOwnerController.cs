@@ -373,7 +373,7 @@ namespace FMB_CIS.Controllers
                                                      tbl_files_id = f.Id,
                                                      filename = f.filename,
                                                      tbl_application_id = f.tbl_application_id,
-                                                     tbl_files_status = f.status
+                                                     tbl_files_status = br.status
                                                      //comment = c.comment
                                                  }).OrderBy(o => o.filename).ToList();
 
@@ -473,6 +473,10 @@ namespace FMB_CIS.Controllers
                                               valid_id = usr.valid_id,
                                               valid_id_no = usr.valid_id_no,
                                               birth_date = usr.birth_date.ToString(),
+                                          region = reg.name,
+                                          province = prov.name,
+                                          city = ct.name,
+                                          brgy = brngy.name,
                                               comment = usr.comment,
                                               chainsawBrand = csaw.Brand,
                                               chainsawModel = csaw.Model,
@@ -537,6 +541,10 @@ namespace FMB_CIS.Controllers
                                               valid_id_no = usr.valid_id_no,
                                               birth_date = usr.birth_date.ToString(),
                                               comment = usr.comment,
+                                               region = reg.name,
+                                          province = prov.name,
+                                          city = ct.name,
+                                          brgy = brngy.name,
                                               initial_date_of_inspection = a.initial_date_of_inspection,
                                               inspectionDate = a.date_of_inspection,
                                               specification = a.tbl_specification_id,
