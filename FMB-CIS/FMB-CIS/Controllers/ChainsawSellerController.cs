@@ -559,11 +559,11 @@ namespace FMB_CIS.Controllers
                                       //join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
                                       join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                       join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
-
                                      join pS in _context.tbl_permit_status on a.status equals pS.id
                                     //  join pSS in _context.tbl_permit_statuses on a.status equals pSS.id
                                     //  join wf in _context.tbl_permit_workflow on pT.id.ToString() equals wf.permit_type_code
-                                     join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }                                       join reg in _context.tbl_region on usr.tbl_region_id equals reg.id
+                                     join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }                                       
+                                     join reg in _context.tbl_region on usr.tbl_region_id equals reg.id
                                       join prov in _context.tbl_province on usr.tbl_province_id equals prov.id
                                       join ct in _context.tbl_city on usr.tbl_city_id equals ct.id
                                       join brngy in _context.tbl_brgy on usr.tbl_brgy_id equals brngy.id
