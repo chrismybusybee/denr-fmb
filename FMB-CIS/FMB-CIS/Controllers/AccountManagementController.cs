@@ -420,6 +420,7 @@ namespace FMB_CIS.Controllers
                         _tbl_user_type_usere.date_modified = DateTime.Now;
 
                 _context.tbl_user_type_user.Add(_tbl_user_type_user)
+                _context.SaveChanges();
 
                 //var tblUsrTempPass = new tbl_user_temp_passwords();
                 //tblUsrTempPass.tbl_user_id = model.tbl_User.id;
