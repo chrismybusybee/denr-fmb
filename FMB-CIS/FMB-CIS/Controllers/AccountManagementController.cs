@@ -26,7 +26,7 @@ namespace FMB_CIS.Controllers
             this._configuration = configuration;
             _context = context;
             EmailSender = emailSender;
-            EnvironmentWebHost = _environment;  
+            EnvironmentWebHost = _environment;
         }
         public IActionResult Index()
         {
@@ -39,30 +39,33 @@ namespace FMB_CIS.Controllers
                 ViewModel model = new ViewModel();
                 //var userinfoList                    
                 model.acctList = (from u in _context.tbl_user
-                                   join utype in _context.tbl_user_types on u.tbl_user_types_id equals utype.id
-                                   join reg in _context.tbl_region on u.tbl_region_id equals reg.id
-                                   join prov in _context.tbl_province on u.tbl_province_id equals prov.id
-                                   join ct in _context.tbl_city on u.tbl_city_id equals ct.id
-                                   join brngy in _context.tbl_brgy on u.tbl_brgy_id equals brngy.id
-                                   select new AcctApprovalViewModel
-                                   {
-                                       FullName = u.first_name + " " + u.middle_name + " " + u.last_name + " " + u.suffix,
-                                       userID = (int)u.id,
-                                       userType = utype.name,
-                                       email = u.email,
-                                       contact_no = u.contact_no,
-                                       //valid_id = u.valid_id,
-                                       //valid_id_no = u.valid_id_no,
-                                       //birth_date = u.birth_date,
-                                       street_address = u.street_address,
-                                       //region = reg.name,
-                                       //province = prov.name,
-                                       city = ct.name,
-                                       status = (bool)u.status,
-                                       date_created = u.date_created,
-                                       //brgy = brngy.name
-                                       is_active = (bool)u.is_active
-                                   }).OrderByDescending(u => u.date_created);
+
+                                  join utypes in _context.tbl_user_type_user on u.id equals utypes.user_id
+
+                                  join utype in _context.tbl_user_types on utypes.user_type_id equals utype.id
+                                  //join reg in _context.tbl_region on u.tbl_region_id equals reg.id
+                                  //join prov in _context.tbl_province on u.tbl_province_id equals prov.id
+                                  //join ct in _context.tbl_city on u.tbl_city_id equals ct.id
+                                  //join brngy in _context.tbl_brgy on u.tbl_brgy_id equals brngy.id
+                                  select new AcctApprovalViewModel
+                                  {
+                                      FullName = u.first_name + " " + u.middle_name + " " + u.last_name + " " + u.suffix,
+                                      userID = (int)u.id,
+                                      //  userType = utype.name,
+                                      email = u.email,
+                                      contact_no = u.contact_no,
+                                      //valid_id = u.valid_id,
+                                      //valid_id_no = u.valid_id_no,
+                                      //birth_date = u.birth_date,
+                                      street_address = u.street_address,
+                                      //region = reg.name,
+                                      //province = prov.name,
+                                      // city = ct.name,
+                                      status = (bool)u.status,
+                                      date_created = u.date_created,
+                                      //brgy = brngy.name
+                                      is_active = (bool)u.is_active
+                                  }).OrderByDescending(u => u.date_created).GroupBy(u => u.userID).Select(group => group.First());
                 //OrderByDescending(d => d.date_created)
                 //model.acctList = userinfoList;
                 return View(model);
@@ -111,7 +114,7 @@ namespace FMB_CIS.Controllers
             {
                 return RedirectToAction("Index", "AccountManagement");
             }
-            
+
         }
         public IActionResult RequestToChangeAccountInfo()
         {
@@ -217,7 +220,7 @@ namespace FMB_CIS.Controllers
             {
                 return RedirectToAction("RequestToChangeAccountInfo", "AccountManagement");
             }
-            
+
         }
         public IActionResult EditAccount()
         {
@@ -281,47 +284,47 @@ namespace FMB_CIS.Controllers
 
                 //Profile Photo Source
                 bool profilePhotoExist = _context.tbl_files.Where(f => f.tbl_user_id == uid && f.path.Contains("UserPhotos") && f.is_active == true).Any();
-                if(profilePhotoExist == true)
+                if (profilePhotoExist == true)
                 {
                     var folderName = "USER_" + uid;
                     var profilePhoto = _context.tbl_files.Where(f => f.tbl_user_id == uid && f.path.Contains("UserPhotos") && f.is_active == true).FirstOrDefault();
-                    ViewBag.profilePhotoSource = "/Files/UserPhotos/"+folderName+"/"+ profilePhoto.filename;
+                    ViewBag.profilePhotoSource = "/Files/UserPhotos/" + folderName + "/" + profilePhoto.filename;
                 }
                 else
                 {
                     ViewBag.profilePhotoSource = "/assets/images/default-avatar.png";
                 }
                 //END for Profile Photo Source
-                
+
                 //Display List of Comments
                 model.commentsViewModelsList = (from c in _context.tbl_comments
-                                                  where c.tbl_user_id == uid
-                                                  join f in _context.tbl_files on c.tbl_files_id equals f.Id
-                                                  join usr in _context.tbl_user on c.created_by equals usr.id
-                                                  select new CommentsViewModel
-                                                  {
-                                                      tbl_user_id = c.tbl_user_id,
-                                                      tbl_files_id = c.tbl_files_id,
-                                                      fileName = f.filename,
-                                                      comment = c.comment,
-                                                      commenterName = usr.first_name + " " + usr.last_name + " " + usr.suffix,
-                                                      created_by = c.created_by,
-                                                      modified_by = c.modified_by,
-                                                      date_created = c.date_created,
-                                                      date_modified = c.date_modified
-                                                  }).OrderBy(f => f.fileName).ThenByDescending(d => d.date_created);
+                                                where c.tbl_user_id == uid
+                                                join f in _context.tbl_files on c.tbl_files_id equals f.Id
+                                                join usr in _context.tbl_user on c.created_by equals usr.id
+                                                select new CommentsViewModel
+                                                {
+                                                    tbl_user_id = c.tbl_user_id,
+                                                    tbl_files_id = c.tbl_files_id,
+                                                    fileName = f.filename,
+                                                    comment = c.comment,
+                                                    commenterName = usr.first_name + " " + usr.last_name + " " + usr.suffix,
+                                                    created_by = c.created_by,
+                                                    modified_by = c.modified_by,
+                                                    date_created = c.date_created,
+                                                    date_modified = c.date_modified
+                                                }).OrderBy(f => f.fileName).ThenByDescending(d => d.date_created);
                 return View(model);
             }
-            
+
         }
         [Authorize]
         public IActionResult ChangePassword()
         {
-            ChangePasswordViewModel model = new ChangePasswordViewModel(); 
+            ChangePasswordViewModel model = new ChangePasswordViewModel();
             model.isSuccess = false;
             return View(model);
         }
-                
+
         [HttpPost, ActionName("GetProvinceByRegionId")]
         public JsonResult GetProvinceByRegionId(string tbl_region_id)
         {
@@ -438,7 +441,7 @@ namespace FMB_CIS.Controllers
                 //return View(model);
                 return RedirectToAction("Index", "AccountManagement");
             }
-            
+
         }
 
         [HttpPost]
@@ -463,10 +466,10 @@ namespace FMB_CIS.Controllers
             usrDB.middle_name = model.tbl_User.middle_name;
             usrDB.last_name = model.tbl_User.last_name;
             usrDB.suffix = model.tbl_User.suffix;
-            if(model.tbl_User.user_classification == "Corporation" || model.tbl_User.user_classification == "Corporate/Cooperative")
+            if (model.tbl_User.user_classification == "Corporation" || model.tbl_User.user_classification == "Corporate/Cooperative")
             {
                 usrDB.company_name = model.tbl_User.company_name;
-            }            
+            }
             usrDB.contact_no = model.tbl_User.contact_no;
             usrDB.birth_date = model.tbl_User.birth_date;
             usrDB.valid_id = model.tbl_User.valid_id;
@@ -567,7 +570,7 @@ namespace FMB_CIS.Controllers
             var subject = "User Registration Status";
             var body = "Greetings! \n We would like to inform you have successfully edited some information on your User Account.";
             EmailSender.SendEmailAsync(usrDB.email, subject, body);
-            return RedirectToAction("Index","AccountManagement");
+            return RedirectToAction("Index", "AccountManagement");
         }
 
         [HttpPost]
@@ -624,8 +627,8 @@ namespace FMB_CIS.Controllers
             string encrPw = EncryptDecrypt.ConvertToEncrypt(decrPw);
 
             var usrDB = _context.tbl_user.Where(m => m.id == uid).FirstOrDefault();
-            
-            if(model.OldPassword == EncryptDecrypt.ConvertToDecrypt(usrDB.password))
+
+            if (model.OldPassword == EncryptDecrypt.ConvertToDecrypt(usrDB.password))
             {
                 usrDB.password = encrPw;
                 _context.Update(usrDB);
@@ -669,7 +672,7 @@ namespace FMB_CIS.Controllers
             if (roleOfLoggedUser.Contains("Chainsaw") == true)
             {
                 return RedirectToAction("Index", "Dashboard");
-            }            
+            }
             else if (usrTypeID == 8 || usrTypeID == 9 || usrTypeID == 13 || usrTypeID == 14 || usrTypeID == 17)
             {
                 //Only the following user roles can access this page:
@@ -680,7 +683,7 @@ namespace FMB_CIS.Controllers
                 //17 - DENR Regional Executive Director(RED)
 
                 ViewModel model = new ViewModel();
-                
+
                 //Set condition of which User roles can be viewed
                 string condition = "";
                 if (roleOfLoggedUser.Contains("Administrator") == true || roleOfLoggedUser.Contains("Super Admin") == true)
@@ -692,28 +695,58 @@ namespace FMB_CIS.Controllers
                     condition = "Chainsaw";
                     //CENRO, Implementing PENRO, and RED are the only allowed to view request for account changes of Chainsaw Owners
                 }
-                model.RequestChangeAcctInfoViewModelList = (from rcui in _context.tbl_user_change_info_request
-                                                            join utype in _context.tbl_user_types on rcui.tbl_user_types_id equals utype.id
-                                                            join reqstat in _context.tbl_user_change_info_request_status on rcui.tbl_user_change_info_request_status_id equals reqstat.id
-                                                            join reg in _context.tbl_region on rcui.tbl_region_id equals reg.id
-                                                            join prov in _context.tbl_province on rcui.tbl_province_id equals prov.id
-                                                            join ct in _context.tbl_city on rcui.tbl_city_id equals ct.id
-                                                            join brngy in _context.tbl_brgy on rcui.tbl_brgy_id equals brngy.id
-                                                            select new RequestChangeAcctInfoViewModel
-                                                            {
-                                                                id = rcui.id,
-                                                                ticket_no = rcui.ticket_no,
-                                                                FullName = rcui.first_name + " " + rcui.middle_name + " " + rcui.last_name + " " + rcui.suffix,
-                                                                tbl_user_id = rcui.tbl_user_id,
-                                                                userType = utype.name,
-                                                                email = rcui.email,
-                                                                contact_no = rcui.contact_no,
-                                                                street_address = rcui.street_address,
-                                                                city = ct.name,
-                                                                status = reqstat.status_name,
-                                                                date_created = rcui.date_created
-                                                            }).Where(rcui => rcui.userType.Contains(condition)).OrderByDescending(rcui => rcui.ticket_no);
-                
+                //model.RequestChangeAcctInfoViewModelList = (from rcui in _context.tbl_user_change_info_request
+                //                                            join utype in _context.tbl_user_type_user on rcui.tbl_user_types_id equals utype.user_type_id
+                //                                            join reqstat in _context.tbl_user_change_info_request_status on rcui.tbl_user_change_info_request_status_id equals reqstat.id
+                //                                            join reg in _context.tbl_region on rcui.tbl_region_id equals reg.id
+                //                                            join prov in _context.tbl_province on rcui.tbl_province_id equals prov.id
+                //                                            join ct in _context.tbl_city on rcui.tbl_city_id equals ct.id
+                //                                            join brngy in _context.tbl_brgy on rcui.tbl_brgy_id equals brngy.id
+                //                                            select new RequestChangeAcctInfoViewModel
+                //                                            {
+                //                                                id = rcui.id,
+                //                                                ticket_no = rcui.ticket_no,
+                //                                                FullName = rcui.first_name + " " + rcui.middle_name + " " + rcui.last_name + " " + rcui.suffix,
+                //                                                tbl_user_id = rcui.tbl_user_id,
+                //                                                // userType = utype.,
+                //                                                email = rcui.email,
+                //                                                contact_no = rcui.contact_no,
+                //                                                street_address = rcui.street_address,
+                //                                                city = ct.name,
+                //                                                status = reqstat.status_name,
+                //                                                date_created = rcui.date_created
+                //                                            }).Distinct().Where(rcui => rcui.userType.Contains(condition)).OrderByDescending(rcui => rcui.ticket_no).ToList();
+
+
+                var query = (from rcui in _context.tbl_user_change_info_request
+                             join u in _context.tbl_user on rcui.tbl_user_id equals u.id
+                             join utypes in _context.tbl_user_type_user on u.id equals utypes.user_id
+                             join utype in _context.tbl_user_types on utypes.user_type_id equals utype.id
+                             join reqstat in _context.tbl_user_change_info_request_status on rcui.tbl_user_change_info_request_status_id equals reqstat.id
+                             join reg in _context.tbl_region on rcui.tbl_region_id equals reg.id
+                             join prov in _context.tbl_province on rcui.tbl_province_id equals prov.id
+                             join ct in _context.tbl_city on rcui.tbl_city_id equals ct.id
+                             join brngy in _context.tbl_brgy on rcui.tbl_brgy_id equals brngy.id
+                             select new RequestChangeAcctInfoViewModel
+                             {
+                                 id = rcui.id,
+                                 ticket_no = rcui.ticket_no,
+                                 FullName = rcui.first_name + " " + rcui.middle_name + " " + rcui.last_name + " " + rcui.suffix,
+                                 tbl_user_id = rcui.tbl_user_id,
+                                 email = rcui.email,
+                                 contact_no = rcui.contact_no,
+                                 street_address = rcui.street_address,
+                                 //  city = ct.name,
+                                 status = reqstat.status_name,
+                                 date_created = rcui.date_created,
+                                 userType = utype.name // Replace with the actual property representing user types
+                             }).OrderByDescending(rcui => rcui.id);
+
+                // Applying filtering condition
+                var filteredResult = query.AsEnumerable().GroupBy(rcui => rcui.ticket_no).Select(group => group.First()).ToList();
+
+
+                model.RequestChangeAcctInfoViewModelList = filteredResult;
                 return View(model);
             }
             else
@@ -726,10 +759,10 @@ namespace FMB_CIS.Controllers
         [HttpGet]
         public IActionResult RequestToChangeAcctInfoApproval(int id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return RedirectToAction("RequestToChangeAcctInfoList", "AccountManagement");
-                
+
             }
             else
             {
@@ -763,7 +796,9 @@ namespace FMB_CIS.Controllers
                         model.RequestChangeAcctInfoViewModelApproval = (from rcui in _context.tbl_user_change_info_request
                                                                         where rcui.id == id
                                                                         join utbl in _context.tbl_user on rcui.tbl_user_id equals utbl.id
-                                                                        join utype in _context.tbl_user_types on rcui.tbl_user_types_id equals utype.id
+                                                                        join utypes in _context.tbl_user_type_user on utbl.id equals utypes.user_id
+
+                                                                        join utype in _context.tbl_user_types on utypes.user_type_id equals utype.id
                                                                         join reqstat in _context.tbl_user_change_info_request_status on rcui.tbl_user_change_info_request_status_id equals reqstat.id
                                                                         join reg in _context.tbl_region on rcui.tbl_region_id equals reg.id
                                                                         join prov in _context.tbl_province on rcui.tbl_province_id equals prov.id
@@ -782,7 +817,7 @@ namespace FMB_CIS.Controllers
                                                                             valid_id = rcui.valid_id,
                                                                             valid_id_no = rcui.valid_id_no,
                                                                             birth_date = rcui.birth_date,
-                                                                            userType = utype.name,
+                                                                            // userType = utype.name,
                                                                             tbl_user_types_id = rcui.tbl_user_types_id,
                                                                             user_classification = rcui.user_classification,
                                                                             gender = rcui.gender,
@@ -797,14 +832,16 @@ namespace FMB_CIS.Controllers
                                                                             tbl_city_id = rcui.tbl_city_id,
                                                                             tbl_province_id = rcui.tbl_province_id,
                                                                             tbl_region_id = rcui.tbl_region_id,
-                                                                            status = reqstat.status_name,
+                                                                            //status = reqstat.status_name,
                                                                             date_created = rcui.date_created
                                                                         }).FirstOrDefault();
 
 
                         model.acctApprovalViewModels = (from u in _context.tbl_user
                                                         where u.id == model.RequestChangeAcctInfoViewModelApproval.tbl_user_id
-                                                        join utype in _context.tbl_user_types on u.tbl_user_types_id equals utype.id
+                                                        join utypes in _context.tbl_user_type_user on u.id equals utypes.user_id
+
+                                                        join utype in _context.tbl_user_types on utypes.user_type_id equals utype.id
                                                         join reg in _context.tbl_region on u.tbl_region_id equals reg.id
                                                         join prov in _context.tbl_province on u.tbl_province_id equals prov.id
                                                         join ct in _context.tbl_city on u.tbl_city_id equals ct.id
@@ -840,7 +877,7 @@ namespace FMB_CIS.Controllers
                     return RedirectToAction("Index", "Dashboard");
                 }
             }
-            
+
 
         }
 
@@ -876,34 +913,38 @@ namespace FMB_CIS.Controllers
 
                     //var userinfoList
                     mymodel.acctApprovalViewModels = (from u in _context.tbl_user
-                                   where u.id == usid
-                                   join utype in _context.tbl_user_types on u.tbl_user_types_id equals utype.id
-                                   join reg in _context.tbl_region on u.tbl_region_id equals reg.id
-                                   join prov in _context.tbl_province on u.tbl_province_id equals prov.id
-                                   join ct in _context.tbl_city on u.tbl_city_id equals ct.id
-                                   join brngy in _context.tbl_brgy on u.tbl_brgy_id equals brngy.id
-                                   select new AcctApprovalViewModel {FullName = u.first_name + " " + u.middle_name + " " + u.last_name + " " + u.suffix,
-                                       first_name = u.first_name,
-                                       middle_name = u.middle_name,
-                                       last_name = u.last_name,
-                                       suffix = u.suffix,
-                                       userType = utype.name,
-                                       email = u.email,
-                                       contact_no = u.contact_no,
-                                       valid_id = u.valid_id,
-                                       valid_id_no = u.valid_id_no,
-                                       birth_date = u.birth_date.ToString(),
-                                       street_address = u.street_address,
-                                       region = reg.name, 
-                                       province = prov.name, 
-                                       city = ct.name, 
-                                       brgy = brngy.name,
-                                       comment = u.comment,
-                                       user_classification = u.user_classification,
-                                       gender = u.gender,
-                                       company_name = u.company_name,
-                                       is_active = u.is_active
-                                   }).FirstOrDefault();
+                                                      where u.id == usid
+                                                      join utypes in _context.tbl_user_type_user on u.id equals utypes.user_id
+
+                                                      join utype in _context.tbl_user_types on utypes.user_type_id equals utype.id
+                                                      join reg in _context.tbl_region on u.tbl_region_id equals reg.id
+                                                      join prov in _context.tbl_province on u.tbl_province_id equals prov.id
+                                                      join ct in _context.tbl_city on u.tbl_city_id equals ct.id
+                                                      join brngy in _context.tbl_brgy on u.tbl_brgy_id equals brngy.id
+                                                      select new AcctApprovalViewModel
+                                                      {
+                                                          FullName = u.first_name + " " + u.middle_name + " " + u.last_name + " " + u.suffix,
+                                                          first_name = u.first_name,
+                                                          middle_name = u.middle_name,
+                                                          last_name = u.last_name,
+                                                          suffix = u.suffix,
+                                                          userType = utype.name,
+                                                          email = u.email,
+                                                          contact_no = u.contact_no,
+                                                          valid_id = u.valid_id,
+                                                          valid_id_no = u.valid_id_no,
+                                                          birth_date = u.birth_date.ToString(),
+                                                          street_address = u.street_address,
+                                                          region = reg.name,
+                                                          province = prov.name,
+                                                          city = ct.name,
+                                                          brgy = brngy.name,
+                                                          comment = u.comment,
+                                                          user_classification = u.user_classification,
+                                                          gender = u.gender,
+                                                          company_name = u.company_name,
+                                                          is_active = u.is_active
+                                                      }).FirstOrDefault();
 
                     //mymodel.acctApprovalViewModels = (AcctApprovalViewModel?)userinfoList;
 
@@ -913,7 +954,7 @@ namespace FMB_CIS.Controllers
 
                     foreach (var fileList in filesFromDB)
                     {
-                        files.Add(new tbl_files { Id= fileList.Id, filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, date_created = fileList.date_created, file_size = fileList.file_size });
+                        files.Add(new tbl_files { Id = fileList.Id, filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, date_created = fileList.date_created, file_size = fileList.file_size });
                         //files.Add(new tbl_files { filename = f });
                     }
 
@@ -935,21 +976,21 @@ namespace FMB_CIS.Controllers
                     //Display List of Comments
                     mymodel.commentsViewModelsList = (from c in _context.tbl_comments
                                                       where c.tbl_user_id == usid
-                                              join f in _context.tbl_files on c.tbl_files_id equals f.Id
-                                              join usr in _context.tbl_user on c.created_by equals usr.id
-                                              select new CommentsViewModel
-                                              {
-                                                  tbl_user_id = c.tbl_user_id,
-                                                  tbl_files_id = c.tbl_files_id,
-                                                  fileName = f.filename,
-                                                  comment = c.comment,
-                                                  commenterName = usr.first_name + " " + usr.last_name + " " + usr.suffix,
-                                                  created_by = c.created_by,
-                                                  modified_by = c.modified_by,
-                                                  date_created = c.date_created,
-                                                  date_modified = c.date_modified
-                                              }).OrderBy(f => f.fileName).ThenByDescending(d => d.date_created);
-           
+                                                      join f in _context.tbl_files on c.tbl_files_id equals f.Id
+                                                      join usr in _context.tbl_user on c.created_by equals usr.id
+                                                      select new CommentsViewModel
+                                                      {
+                                                          tbl_user_id = c.tbl_user_id,
+                                                          tbl_files_id = c.tbl_files_id,
+                                                          fileName = f.filename,
+                                                          comment = c.comment,
+                                                          commenterName = usr.first_name + " " + usr.last_name + " " + usr.suffix,
+                                                          created_by = c.created_by,
+                                                          modified_by = c.modified_by,
+                                                          date_created = c.date_created,
+                                                          date_modified = c.date_modified
+                                                      }).OrderBy(f => f.fileName).ThenByDescending(d => d.date_created);
+
                     return View(mymodel);
                 }
             }
@@ -971,7 +1012,7 @@ namespace FMB_CIS.Controllers
         [HttpPost]
         public IActionResult RequestToChangeAcctInfoApproval(ViewModel model)
         {
-            if(model.decision == "Approve") //Approve
+            if (model.decision == "Approve") //Approve
             {
                 var usrTbl = _context.tbl_user.Where(m => m.id == model.tbl_User_Change_Info_Request.tbl_user_id).FirstOrDefault();
                 usrTbl.first_name = model.tbl_User_Change_Info_Request.first_name;
@@ -1005,7 +1046,7 @@ namespace FMB_CIS.Controllers
                 EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
                 return RedirectToAction("RequestToChangeAcctInfoList", "AccountManagement");
 
-            }                
+            }
             else //Decline
             {
                 var reqTbl = _context.tbl_user_change_info_request.Where(m => m.id == model.tbl_User_Change_Info_Request.id).FirstOrDefault();
@@ -1030,7 +1071,7 @@ namespace FMB_CIS.Controllers
 
             string roleOfLoggedUser = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
             int usrTypeID = _context.tbl_user_types.Where(utype => utype.name == roleOfLoggedUser).Select(utype => utype.id).FirstOrDefault();
-            
+
             //viewMod.applicantListViewModels.FirstOrDefault(x=>x.comment)
             //string newComment = viewMod.applicantListViewModels.Where(x => x.tbl_user_id == uid).Select(v => v.comment).ToList().ToString();
 
@@ -1073,7 +1114,7 @@ namespace FMB_CIS.Controllers
                         //var subject = "Account Registration Status";
                         //var body = "Greetings! \n We would like to inform your account has been approved.\nThe officer left the following comment:\n" + model.acctApprovalViewModels.comment;
 
-                        
+
                         var subject = emailTemplate.email_subject;
                         var BODY = emailTemplate.email_content.Replace("{FirstName}", model.acctApprovalViewModels.first_name);
                         var body = BODY.Replace(Environment.NewLine, "<br/>");
@@ -1163,7 +1204,7 @@ namespace FMB_CIS.Controllers
             _context.SaveChanges();
             //return RedirectToAction("AccountsApproval?uid="+uid, "AccountManagement");
             //Url.Action("A","B",new{a="x"})
-            
+
             if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw") == true)
             {
                 return RedirectToAction("EditAccount", "AccountManagement");
