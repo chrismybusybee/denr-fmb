@@ -5,6 +5,11 @@
     ViewBag.Title = "Chainsaw Import Permit Application";
 }
 
+<!-- Selectize -->
+@* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css" integrity="sha512-pTaEn+6gF1IeWv3W1+7X7eM60TFu/agjgoHmYhAfLEU8Phuf6JKiiE8YmsNC0aCgQv4192s4Vai8YZ6VNM6vyQ==" crossorigin="anonymous" referrerpolicy="no-referrer" /> *@
+@* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.min.css"> *@
+<!-- End for Selectize -->
+
 <div id="card-container">
     <div id="card">
         @if (ViewBag.message != null)
@@ -96,7 +101,7 @@
                         @* <input id="testDragAndDrop" name="testDragAndDrop" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload..."> *@
                         <div class="gap-4 mb-5">
                             <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
-                            <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-allowed-file-extensions='["pdf"]' accept="application/pdf" data-show-caption="true" data-msg-placeholder="Select {files} for upload..." onchange="fileChange(this)">
+                            <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-allowed-file-extensions='["pdf"]' accept="application/pdf" data-show-caption="true" data-msg-placeholder="Select {files} for upload..."> <!-- onchange="fileChange(this)" -->
                         </div>
                     </div>
                 </div>
@@ -129,8 +134,9 @@
                                 </td>
                                 <input type="hidden" asp-for="fileChecklistViewModel[i].tbl_document_checklist_id" value="@item.id" />
                                 <td>
-                                    <select class="form-select fileListDropDown" id="fileListDropDown_@i" data-prevVal="" data-curVal="" onchange="fileSelected(this)" asp-for="fileChecklistViewModel[i].FileName" required>
-                                        <option selected disabled>--Please select your uploaded file--</option>
+                                    <select class="form-select fileListDropDown" id="fileListDropDown_@i" data-prevVal="" data-curVal="" onchange="fileSelected(this)" asp-for="fileChecklistViewModel[i].FileNames" multiple required>
+                                        @* <option selected disabled>--Please select your uploaded file--</option> *@
+                                        @* <option value="N/A">N/A</option> *@
                                     </select>
                                 </td>
                                 @{
@@ -155,6 +161,11 @@
 <script src="/js/jquery-3.7.1.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Selectize -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js" integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+@* <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js"></script> *@
+<!-- End for Selectize -->
 
 <script type="text/javascript">
 
@@ -363,7 +374,7 @@
         //     console.log("cFile.files", cFile.files)
         // });
 
-
+        
         $("#btnSubmit").click(function () {
 
             // //Check if user selected some files
@@ -711,6 +722,91 @@
 
     });
 
+    //Multiple Select
+    $('.form-select.fileListDropDown').each(function () {
+        //Initialize Selectize on the select element with the specified class
+
+        var $select = $(this).selectize({
+            create: true,
+            placeholder: 'Please select your uploaded file',
+            plugins: ['remove_button'], // Enable the remove button
+        })[0].selectize;
+
+
+        $('.file').on('change', function (event) {
+            var files = event.target.files;
+            //var formFiles = document.forms['ImporterRegForm']['filesUpload.Files'];
+            //console.log("formFiles.files jq: ", formFiles.files);
+
+            $select.clear();
+            // Clear existing options
+            $select.clearOptions();
+            $select.addOption({ value: "N/A", text: "N/A" });
+            // Loop through each selected file
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+
+                // Get the file name
+                var fileName = file.name;
+                
+                // Add options based on the file name
+                //var options = fileName.split('.')[0].split('_');
+                var options = fileName.split('_');
+                //console.log("fileName.split('.')[0]: ", fileName.split('.')[0]);
+                options.forEach(function (option) {
+                    option = option.trim();
+                    if (option !== '') {
+                        $select.addOption({ value: option, text: option });
+                    }
+                });
+            }
+
+            // Refresh the Selectize control to update the UI
+            //$select.refreshOptions();
+        });
+        
+        //If files were placed using drag and drop feature
+        $(document).on('drop', '.file-drop-zone.clearfix', function () {
+            console.log("dropped");
+            $select.clear();
+            $select.clearOptions();
+
+            var formFiles = document.forms['ImporterRegForm']['filesUpload.Files'];
+            var files = formFiles.files;
+            
+            $select.addOption({ value: "N/A", text: "N/A" });
+            // Loop through each selected file
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+
+                // Get the file name
+                var fileName = file.name;
+
+                // Add options based on the file name
+                //var options = fileName.split('.')[0].split('_');
+                var options = fileName.split('_');
+                //console.log("fileName.split('.')[0]: ", fileName.split('.')[0]);
+                options.forEach(function (option) {
+                    option = option.trim();
+                    if (option !== '') {
+                        $select.addOption({ value: option, text: option });
+                    }
+                });
+            }
+
+        });
+
+        //If remove button of files will be clicked
+        $(document).on('click', '.fileinput-remove-button', function () {
+            console.log("remove button clicked");
+            $select.clear();
+            $select.clearOptions();
+        });
+
+    });
+
+    //End of Multiple Select
+
     //FOR CHECKLIST OF DOCUMENTS
     function fileChange(that) {
         var formFiles = document.forms['ImporterRegForm']['filesUpload.Files'];
@@ -723,7 +819,7 @@
         // for (let i = 0; i < formFiles.files.length; i++) {
         //     console.log("formFiles.files["+i+"].name: ", formFiles.files[i].name);
         // }
-        PopulateFileDropDown(".fileListDropDown", formFiles.files);
+        //PopulateFileDropDown(".fileListDropDown", formFiles.files);
     }
 
     function PopulateFileDropDown(fileDropDownClass, list) {

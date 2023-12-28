@@ -138,7 +138,7 @@
                         </div>
                         <div class="gap-4 mb-5">
                             <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
-                            <input asp-for="filesUpload.Files" type="file" class="file" multiple data-allowed-file-extensions='["pdf"]' accept="application/pdf" data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload..." onchange="fileChange(this)">
+                            <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-allowed-file-extensions='["pdf"]' accept="application/pdf" data-show-caption="true" data-msg-placeholder="Select {files} for upload..."> <!-- onchange="fileChange(this)" -->
                         </div>                                               
                     </div>
                 </div>
@@ -163,6 +163,9 @@
 
 <script src="/js/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@* <!-- Selectize -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js" integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- End for Selectize --> *@
 
 <script type="text/javascript">
     var isTransferOfOwnership = false;
@@ -171,7 +174,89 @@
         console.log("that.value: ", that.value);
         var permitTypeID = that.value;
         console.log("permitTypeID: ", permitTypeID);
-        $('#requiredDocForOwnerPermitsPartialContainer').load('/ChainsawOwner/ChecklistForChainsawOwnerPartialView?permitTypeID=' + permitTypeID);
+        $('#requiredDocForOwnerPermitsPartialContainer').load('/ChainsawOwner/ChecklistForChainsawOwnerPartialView?permitTypeID=' + permitTypeID, function (data) {
+            //Multiple Select
+            $('.form-select.fileListDropDown').each(function () {
+                //Initialize Selectize on the select element with the specified class
+
+                var $select = $(this).selectize({
+                    create: true,
+                    placeholder: 'Please select your uploaded file',
+                    plugins: ['remove_button'], // Enable the remove button
+                })[0].selectize;
+
+
+                $('.file').on('change', function (event) {
+                    var files = event.target.files;
+                    //var formFiles = document.forms['OwnerRegForm']['filesUpload.Files'];
+
+                    $select.clear();
+                    // Clear existing options
+                    $select.clearOptions();
+                    $select.addOption({ value: "N/A", text: "N/A" });
+                    // Loop through each selected file
+                    for (var i = 0; i < files.length; i++) {
+                        var file = files[i];
+
+                        // Get the file name
+                        var fileName = file.name;
+
+                        // Add options based on the file name
+                        //var options = fileName.split('.')[0].split('_');
+                        var options = fileName.split('_');
+                        options.forEach(function (option) {
+                            option = option.trim();
+                            if (option !== '') {
+                                $select.addOption({ value: option, text: option });
+                            }
+                        });
+                    }
+
+                    // Refresh the Selectize control to update the UI
+                    //$select.refreshOptions();
+                });
+
+                //If files were placed using drag and drop feature
+                $(document).on('drop', '.file-drop-zone.clearfix', function () {
+                    console.log("dropped");
+                    $select.clear();
+                    $select.clearOptions();
+
+                    var formFiles = document.forms['OwnerRegForm']['filesUpload.Files'];
+                    var files = formFiles.files;
+
+                    $select.addOption({ value: "N/A", text: "N/A" });
+                    // Loop through each selected file
+                    for (var i = 0; i < files.length; i++) {
+                        var file = files[i];
+
+                        // Get the file name
+                        var fileName = file.name;
+
+                        // Add options based on the file name
+                        var options = fileName.split('_');
+                        options.forEach(function (option) {
+                            option = option.trim();
+                            if (option !== '') {
+                                $select.addOption({ value: option, text: option });
+                            }
+                        });
+                    }
+
+                });
+
+                //If remove button of files will be clicked
+                $(document).on('click', '.fileinput-remove-button', function () {
+                    console.log("remove button clicked");
+                    $select.clear();
+                    $select.clearOptions();
+                });
+
+            });
+
+            //End of Multiple Select
+        });
+        
 
         //remove files when changing permit type
         const removeFileButton = document.querySelector('.fileinput-remove-button');
@@ -256,6 +341,9 @@
         //     $("#confirmSubmitModal").modal("hide");
         //     $("#confirmSuccessModal").modal("show");
         // });
+
+        
+
     });
 
 
