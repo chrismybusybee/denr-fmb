@@ -49,6 +49,7 @@
                     }
                 </div>
                 <div class="d-flex justify-content-end gap-2">
+                    @* @Model.applicantViewModels.tbl_region_id *@
                     @foreach (WorkflowStep worklowStep in Model.workflow.steps)
                     {
                         @if (@worklowStep.workflow_step_code == @Model.applicantViewModels.status.ToString())
@@ -61,7 +62,8 @@
                                 (workflowNextStep.division_parameter == "notequal" && workflowNextStep.division_id != @Model.applicantViewModels.tbl_region_id)))
                                 {
                                     <button type="button" class="customBtn btn @workflowNextStep.button_class w-125" data-next_step_code="@workflowNextStep.next_step_code" data-button_text="@workflowNextStep.button_text">
-                                    @workflowNextStep.button_text
+                                    @workflowNextStep.button_text 
+                                    @* @Model.applicantViewModels.tbl_region_id *@
                                     </button>
                                 }
                             }

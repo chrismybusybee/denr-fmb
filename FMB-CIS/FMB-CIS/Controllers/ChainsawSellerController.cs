@@ -600,6 +600,7 @@ namespace FMB_CIS.Controllers
                                           initial_date_of_inspection = a.initial_date_of_inspection,
                                           inspectionDate = a.date_of_inspection,
                                           specification = a.tbl_specification_id,
+                                          tbl_region_id = reg.id,
                                           purpose = a.purpose,
                                           date_of_registration = a.date_of_registration,
                                           date_of_expiration = a.date_of_expiration,
