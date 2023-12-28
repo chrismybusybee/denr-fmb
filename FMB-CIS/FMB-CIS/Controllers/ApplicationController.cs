@@ -552,7 +552,7 @@ namespace FMB_CIS.Controllers
 
                 for (int i = 0; i < fileWithCommentsforDocTagging.Count; i++)
                 {
-                    var latestComment = commentsList.Where(c => c.tbl_files_id == fileWithCommentsforDocTagging[i].tbl_files_id).LastOrDefault();
+                    var latestComment = commentsList.Where(c => c.bridge_id == fileWithCommentsforDocTagging[i].bridge_id).LastOrDefault();
                     if (latestComment != null)
                     {
                         fileWithCommentsforDocTagging[i].comment = latestComment.comment;
@@ -691,7 +691,7 @@ namespace FMB_CIS.Controllers
                                                   join usr in _context.tbl_user on c.created_by equals usr.id
                                                   select new CommentsViewModel
                                                   {
-                                                      tbl_application_id = c.tbl_application_id,
+                                                      tbl_application_id = c.tbl_application_id.GetValueOrDefault(),
                                                       //tbl_files_id = c.tbl_files_id,
                                                       //fileName = f.filename,
                                                       comment_to = c.comment_to,
@@ -710,7 +710,7 @@ namespace FMB_CIS.Controllers
                                                   join usr in _context.tbl_user on c.created_by equals usr.id
                                                   select new CommentsViewModel
                                                   {
-                                                      tbl_application_id = c.tbl_application_id,
+                                                      tbl_application_id = c.tbl_application_id.GetValueOrDefault(),
                                                       //tbl_files_id = c.tbl_files_id,
                                                       //fileName = f.filename,
                                                       comment_to = c.comment_to,
