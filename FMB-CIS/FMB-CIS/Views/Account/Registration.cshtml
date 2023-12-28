@@ -64,7 +64,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label text-secondary small mb-1">User Type</label>
-                                    <input type="hidden" asp-for="tbl_user_types_string" id="tbl_user_types_ids" />
+                                    <input type="hidden" required="required" asp-for="tbl_user_types_string" id="tbl_user_types_ids" />
                                     @*  <select asp-for="tbl_Users.tbl_user_types_id" class="form-select" aria-label="User Type" required="required">
                                     <option value="" selected disabled>--Select User Type--</option>
                                     <option value="1">Chainsaw Importer Only</option>
@@ -102,7 +102,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label text-secondary small mb-1">User Classification</label>
-                                    <select asp-for="tbl_Users.user_classification" class="form-select" aria-label="User Classification" onchange="userClassification(this)" required>
+                                    <select id="user_classification" asp-for="tbl_Users.user_classification" class="form-select" aria-label="User Classification" onchange="userClassification(this)"  required="required">
                                         <option value="" selected disabled>--Select User Classification--</option>
                                         <option value="Individual">Individual</option>
                                         <option value="Corporate/Cooperative">Corporate/Cooperative</option>
@@ -723,6 +723,23 @@
                 }
             }
 
+            if($("#tbl_user_types_ids").val().length === 0) {
+                isValid = false;
+                $("#tbl_user_types_ids").closest(".form-group").addClass("has-error");
+            }
+            else {
+                $("#tbl_user_types_ids").closest(".form-group").removeClass("has-error");
+            }
+
+            if($("#user_classification").val() === null) {
+                isValid = false;
+                $("#user_classification").closest(".form-group").addClass("has-error");
+            }
+            else {
+                $("#user_classification").closest(".form-group").removeClass("has-error");
+            }
+            
+
             if (isValid && curStepBtn != 'step-2') {
                 //console.log(curStepBtn);
                 nextStepWizard.removeAttr('disabled').trigger('click');
@@ -969,5 +986,10 @@
     }
 
     .form-check-border {
+    }
+
+    .has-error .form-check-border,
+    .has-error .form-select {
+        border: solid 1px red;
     }
 </style>
