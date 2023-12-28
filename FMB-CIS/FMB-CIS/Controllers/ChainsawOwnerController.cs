@@ -124,6 +124,9 @@ namespace FMB_CIS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Index(ViewModel model)
         {
+
+            List<tbl_application_group> myDeserializedObjList = (List<tbl_application_group>)Newtonsoft.Json.JsonConvert.DeserializeObject(model.Dataxxx, typeof(List<tbl_application_group>));
+
             //try
             //{
             if (ModelState.IsValid)
@@ -147,6 +150,22 @@ namespace FMB_CIS.Controllers
                 _context.tbl_application.Add(model.tbl_Application);
                 _context.SaveChanges();
                 int? appID = model.tbl_Application.id;
+
+                //Application Grouping
+
+                foreach (tbl_application_group childApplication in myDeserializedObjList)
+                {
+                    childApplication.id = 0;
+                    childApplication.tbl_application_id = appID;
+                    childApplication.created_by = userID;
+                    childApplication.modified_by = userID;
+                    childApplication.date_created = DateTime.Now;
+                    childApplication.date_modified = DateTime.Now;
+
+                    _context.tbl_application_group.Add(childApplication);
+                }
+
+                _context.SaveChanges();
 
                 //File Upload
                 if (model.filesUpload != null)
@@ -649,6 +668,10 @@ namespace FMB_CIS.Controllers
                     ViewBag.RequiredDocsList = requirements.announcement_content;
                     //End for required documents
                 }
+
+                //Application Grouping
+                var applicationGroups = _context.tbl_application_group.Where(g => g.tbl_application_id == applicID).ToList();
+                mymodel.tbl_Application_Group = applicationGroups;
 
                 //Proof of Payment
                 var paymentDetails = _context.tbl_application_payment.Where(p => p.tbl_application_id == applid).FirstOrDefault();
