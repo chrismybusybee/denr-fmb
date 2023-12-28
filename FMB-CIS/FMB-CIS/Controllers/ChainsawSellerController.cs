@@ -608,6 +608,7 @@ namespace FMB_CIS.Controllers
                                          currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic   
                                           //coordinatedWithEnforcementDivision = a.coordinatedWithEnforcementDivision
                                       }).FirstOrDefault();
+                                                                               applicationMod.currentPercentage = (applicationMod.currentStepCount * 100 / applicationMod.currentMaxCount);
                 mymodel.applicantViewModels = applicationMod;
 
                 //Check if this application has applied for renewal
