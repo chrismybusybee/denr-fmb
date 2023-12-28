@@ -183,14 +183,17 @@ namespace FMB_CIS.Controllers
                         //Matching of tbl_files to tbl_document_checklist
                         foreach (var item in model.fileChecklistViewModel)
                         {
-                            if (item.FileName == file.FileName)
+                            foreach (var item2 in item.FileNames)
                             {
-                                var filesChecklistBridge = new tbl_files_checklist_bridge();
+                                if (item2 == file.FileName)
+                                {
+                                    var filesChecklistBridge = new tbl_files_checklist_bridge();
 
-                                filesChecklistBridge.tbl_document_checklist_id = item.tbl_document_checklist_id;
-                                filesChecklistBridge.tbl_files_id = filesDB.Id;
-                                _context.tbl_files_checklist_bridge.Add(filesChecklistBridge);
-                                _context.SaveChanges();
+                                    filesChecklistBridge.tbl_document_checklist_id = item.tbl_document_checklist_id;
+                                    filesChecklistBridge.tbl_files_id = filesDB.Id;
+                                    _context.tbl_files_checklist_bridge.Add(filesChecklistBridge);
+                                    _context.SaveChanges();
+                                }
                             }
                         }
                     }
@@ -367,14 +370,17 @@ namespace FMB_CIS.Controllers
                         //Matching of tbl_files to tbl_document_checklist
                         foreach (var item in model.fileChecklistViewModel)
                         {
-                            if (item.FileName == file.FileName)
+                            foreach (var item2 in item.FileNames)
                             {
-                                var filesChecklistBridge = new tbl_files_checklist_bridge();
+                                if (item2 == file.FileName)
+                                {
+                                    var filesChecklistBridge = new tbl_files_checklist_bridge();
 
-                                filesChecklistBridge.tbl_document_checklist_id = item.tbl_document_checklist_id;
-                                filesChecklistBridge.tbl_files_id = filesDB.Id;
-                                _context.tbl_files_checklist_bridge.Add(filesChecklistBridge);
-                                _context.SaveChanges();
+                                    filesChecklistBridge.tbl_document_checklist_id = item.tbl_document_checklist_id;
+                                    filesChecklistBridge.tbl_files_id = filesDB.Id;
+                                    _context.tbl_files_checklist_bridge.Add(filesChecklistBridge);
+                                    _context.SaveChanges();
+                                }
                             }
                         }
                     }
@@ -646,6 +652,7 @@ namespace FMB_CIS.Controllers
                                          currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic   
                                           //coordinatedWithEnforcementDivision = a.coordinatedWithEnforcementDivision
                                       }).FirstOrDefault();
+                                                                               applicationMod.currentPercentage = (applicationMod.currentStepCount * 100 / applicationMod.currentMaxCount);
                 mymodel.applicantViewModels = applicationMod;
 
                 //Check if this application has applied for renewal

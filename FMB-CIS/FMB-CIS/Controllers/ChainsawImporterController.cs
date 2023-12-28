@@ -196,15 +196,18 @@ namespace FMB_CIS.Controllers
                             //Matching of tbl_files to tbl_document_checklist
                             foreach (var item in model.fileChecklistViewModel)
                             {
-                                if (item.FileName == file.FileName)
+                                foreach(var item2 in item.FileNames)
                                 {
-                                    var filesChecklistBridge = new tbl_files_checklist_bridge();
+                                    if (item2 == file.FileName)
+                                    {
+                                        var filesChecklistBridge = new tbl_files_checklist_bridge();
 
-                                    filesChecklistBridge.tbl_document_checklist_id = item.tbl_document_checklist_id;
-                                    filesChecklistBridge.tbl_files_id = filesDB.Id;
-                                    _context.tbl_files_checklist_bridge.Add(filesChecklistBridge);
-                                    _context.SaveChanges();
-                                }
+                                        filesChecklistBridge.tbl_document_checklist_id = item.tbl_document_checklist_id;
+                                        filesChecklistBridge.tbl_files_id = filesDB.Id;
+                                        _context.tbl_files_checklist_bridge.Add(filesChecklistBridge);
+                                        _context.SaveChanges();
+                                    }
+                                }                                
                             }
                         }
                         catch (ArgumentNullException e)
@@ -1044,7 +1047,7 @@ namespace FMB_CIS.Controllers
                                      join usr in _context.tbl_user on a.tbl_user_id equals usr.id
                                      join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                      join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
-                                    //  join pS in _context.tbl_permit_status on a.status equals pS.id
+                                     join pS in _context.tbl_permit_status on a.status equals pS.id
                                     //  join pSS in _context.tbl_permit_statuses on a.status equals pSS.id
                                     //  join wf in _context.tbl_permit_workflow on pT.id.ToString() equals wf.permit_type_code
                                      join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code } 
