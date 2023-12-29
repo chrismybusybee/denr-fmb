@@ -196,15 +196,18 @@ namespace FMB_CIS.Controllers
                             //Matching of tbl_files to tbl_document_checklist
                             foreach (var item in model.fileChecklistViewModel)
                             {
-                                if (item.FileName == file.FileName)
+                                foreach(var item2 in item.FileNames)
                                 {
-                                    var filesChecklistBridge = new tbl_files_checklist_bridge();
+                                    if (item2 == file.FileName)
+                                    {
+                                        var filesChecklistBridge = new tbl_files_checklist_bridge();
 
-                                    filesChecklistBridge.tbl_document_checklist_id = item.tbl_document_checklist_id;
-                                    filesChecklistBridge.tbl_files_id = filesDB.Id;
-                                    _context.tbl_files_checklist_bridge.Add(filesChecklistBridge);
-                                    _context.SaveChanges();
-                                }
+                                        filesChecklistBridge.tbl_document_checklist_id = item.tbl_document_checklist_id;
+                                        filesChecklistBridge.tbl_files_id = filesDB.Id;
+                                        _context.tbl_files_checklist_bridge.Add(filesChecklistBridge);
+                                        _context.SaveChanges();
+                                    }
+                                }                                
                             }
                         }
                         catch (ArgumentNullException e)
@@ -247,8 +250,11 @@ namespace FMB_CIS.Controllers
                 model.tbl_Document_Checklist = myChecklist;
                 //End for Document Checklist
 
-                return View(model);
-                }
+                //return View(model);
+
+                return RedirectToAction("ImportPermits", "Application");
+                
+            }
                 return View(model);
             //}
             //catch

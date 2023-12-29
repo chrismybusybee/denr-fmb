@@ -124,6 +124,9 @@ namespace FMB_CIS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Index(ViewModel model)
         {
+
+            List<tbl_application_group> myDeserializedObjList = (List<tbl_application_group>)Newtonsoft.Json.JsonConvert.DeserializeObject(model.Dataxxx, typeof(List<tbl_application_group>));
+
             //try
             //{
             if (ModelState.IsValid)
@@ -147,6 +150,22 @@ namespace FMB_CIS.Controllers
                 _context.tbl_application.Add(model.tbl_Application);
                 _context.SaveChanges();
                 int? appID = model.tbl_Application.id;
+
+                //Application Grouping
+
+                foreach (tbl_application_group childApplication in myDeserializedObjList)
+                {
+                    childApplication.id = 0;
+                    childApplication.tbl_application_id = appID;
+                    childApplication.created_by = userID;
+                    childApplication.modified_by = userID;
+                    childApplication.date_created = DateTime.Now;
+                    childApplication.date_modified = DateTime.Now;
+
+                    _context.tbl_application_group.Add(childApplication);
+                }
+
+                _context.SaveChanges();
 
                 //File Upload
                 if (model.filesUpload != null)
@@ -186,32 +205,40 @@ namespace FMB_CIS.Controllers
                         //Matching of tbl_files to tbl_document_checklist
                         foreach (var item in model.fileChecklistViewModel)
                         {
-                            if (item.FileName == file.FileName)
+                            foreach (var item2 in item.FileNames)
                             {
-                                var filesChecklistBridge = new tbl_files_checklist_bridge();
+                                if (item2 == file.FileName)
+                                {
+                                    var filesChecklistBridge = new tbl_files_checklist_bridge();
 
-                                filesChecklistBridge.tbl_document_checklist_id = item.tbl_document_checklist_id;
-                                filesChecklistBridge.tbl_files_id = filesDB.Id;
-                                _context.tbl_files_checklist_bridge.Add(filesChecklistBridge);
-                                _context.SaveChanges();
+                                    filesChecklistBridge.tbl_document_checklist_id = item.tbl_document_checklist_id;
+                                    filesChecklistBridge.tbl_files_id = filesDB.Id;
+                                    _context.tbl_files_checklist_bridge.Add(filesChecklistBridge);
+                                    _context.SaveChanges();
+                                }
                             }
                         }
                     }
                 }
                 int emailTemplateID = 0;
+                string actionNameForReturn = "";
                 switch (model.tbl_Application.tbl_permit_type_id)
                 {
                     case 5: //Authority to Lease
                         emailTemplateID = 17; //Permit to Lease/ Rent/ Lend (Application Sent)
+                        actionNameForReturn = "LeasePermits";
                         break;
                     case 6: //Authority to Rent
                         emailTemplateID = 17; //Permit to Lease/ Rent/ Lend (Application Sent)
+                        actionNameForReturn = "RentPermits";
                         break;
                     case 7: //Authority to Lend
                         emailTemplateID = 17; //Permit to Lease/ Rent/ Lend (Application Sent)
+                        actionNameForReturn = "LendPermits";
                         break;
                     case 14: //Permit to Re-sell/Transfer Ownership
                         emailTemplateID = 34; //Permit to Transfer Ownership (Application Sent)
+                        actionNameForReturn = "ResellPermits";
                         break;
                 }
                 //Email
@@ -227,7 +254,8 @@ namespace FMB_CIS.Controllers
 
                 ModelState.Clear();
                 ViewBag.Message = "Save Success";
-                return View();
+                //return View();
+                return RedirectToAction(actionNameForReturn, "Application");
             }
             return View(model);
             //}
@@ -648,6 +676,10 @@ namespace FMB_CIS.Controllers
                     ViewBag.RequiredDocsList = requirements.announcement_content;
                     //End for required documents
                 }
+
+                //Application Grouping
+                var applicationGroups = _context.tbl_application_group.Where(g => g.tbl_application_id == applicID).ToList();
+                mymodel.tbl_Application_Group = applicationGroups;
 
                 //Proof of Payment
                 var paymentDetails = _context.tbl_application_payment.Where(p => p.tbl_application_id == applid).FirstOrDefault();

@@ -32,8 +32,7 @@
                     </td>
                     <input type="hidden" asp-for="fileChecklistViewModel[i].tbl_document_checklist_id" value="@item.id" />
                     <td>
-                        <select class="form-select fileListDropDown" data-prevVal="" data-curVal="" id="fileListDropDown_@i" onchange="fileSelected(this)" asp-for="fileChecklistViewModel[i].FileName" required>
-                            <option selected disabled>--Please select your uploaded file--</option>
+                        <select class="form-select fileListDropDown" id="fileListDropDown_@i" data-prevVal="" data-curVal="" onchange="fileSelected(this)" asp-for="fileChecklistViewModel[i].FileNames" multiple required>
                         </select>
                     </td>
                     @{
@@ -44,6 +43,94 @@
         </tbody>
     </table>
 </div>
+
+@* <script src="/js/jquery-3.7.1.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        //Multiple Select
+        $('.form-select.fileListDropDown').each(function () {
+            //Initialize Selectize on the select element with the specified class
+
+            var $select = $(this).selectize({
+                create: true,
+                placeholder: 'Please select your uploaded file',
+                plugins: ['remove_button'], // Enable the remove button
+            })[0].selectize;
+
+
+            $('.file').on('change', function (event) {
+                var files = event.target.files;
+                //var formFiles = document.forms['OwnerRegForm']['filesUpload.Files'];
+
+                $select.clear();
+                // Clear existing options
+                $select.clearOptions();
+                $select.addOption({ value: "N/A", text: "N/A" });
+                // Loop through each selected file
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+
+                    // Get the file name
+                    var fileName = file.name;
+
+                    // Add options based on the file name
+                    //var options = fileName.split('.')[0].split('_');
+                    var options = fileName.split('_');
+                    options.forEach(function (option) {
+                        option = option.trim();
+                        if (option !== '') {
+                            $select.addOption({ value: option, text: option });
+                        }
+                    });
+                }
+
+                // Refresh the Selectize control to update the UI
+                //$select.refreshOptions();
+            });
+
+            //If files were placed using drag and drop feature
+            $(document).on('drop', '.file-drop-zone.clearfix', function () {
+                console.log("dropped");
+                $select.clear();
+                $select.clearOptions();
+
+                var formFiles = document.forms['OwnerRegForm']['filesUpload.Files'];
+                var files = formFiles.files;
+
+                $select.addOption({ value: "N/A", text: "N/A" });
+                // Loop through each selected file
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+
+                    // Get the file name
+                    var fileName = file.name;
+
+                    // Add options based on the file name
+                    var options = fileName.split('_');
+                    options.forEach(function (option) {
+                        option = option.trim();
+                        if (option !== '') {
+                            $select.addOption({ value: option, text: option });
+                        }
+                    });
+                }
+
+            });
+
+            //If remove button of files will be clicked
+            $(document).on('click', '.fileinput-remove-button', function () {
+                console.log("remove button clicked");
+                $select.clear();
+                $select.clearOptions();
+            });
+
+        });
+
+        //End of Multiple Select
+    });
+</script> *@
+
 
 
 @* <div>
