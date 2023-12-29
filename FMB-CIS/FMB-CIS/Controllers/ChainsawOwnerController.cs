@@ -221,19 +221,24 @@ namespace FMB_CIS.Controllers
                     }
                 }
                 int emailTemplateID = 0;
+                string actionNameForReturn = "";
                 switch (model.tbl_Application.tbl_permit_type_id)
                 {
                     case 5: //Authority to Lease
                         emailTemplateID = 17; //Permit to Lease/ Rent/ Lend (Application Sent)
+                        actionNameForReturn = "LeasePermits";
                         break;
                     case 6: //Authority to Rent
                         emailTemplateID = 17; //Permit to Lease/ Rent/ Lend (Application Sent)
+                        actionNameForReturn = "RentPermits";
                         break;
                     case 7: //Authority to Lend
                         emailTemplateID = 17; //Permit to Lease/ Rent/ Lend (Application Sent)
+                        actionNameForReturn = "LendPermits";
                         break;
                     case 14: //Permit to Re-sell/Transfer Ownership
                         emailTemplateID = 34; //Permit to Transfer Ownership (Application Sent)
+                        actionNameForReturn = "ResellPermits";
                         break;
                 }
                 //Email
@@ -249,7 +254,8 @@ namespace FMB_CIS.Controllers
 
                 ModelState.Clear();
                 ViewBag.Message = "Save Success";
-                return View();
+                //return View();
+                return RedirectToAction(actionNameForReturn, "Application");
             }
             return View(model);
             //}

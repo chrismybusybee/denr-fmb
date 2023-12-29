@@ -220,7 +220,8 @@ namespace FMB_CIS.Controllers
                 model.tbl_Document_Checklist = myChecklist;
                 //End for Document Checklist
 
-                return View(model);
+                //return View(model);
+                return RedirectToAction("SellPermits", "Application");
             }
             return View(model);
             //}
@@ -407,7 +408,8 @@ namespace FMB_CIS.Controllers
                 model.tbl_Document_Checklist = myChecklist;
                 //End for Document Checklist
 
-                return View(model);
+                //return View(model);
+                return RedirectToAction("PurchasePermits", "Application");
             }
             return View(model);
             //}
