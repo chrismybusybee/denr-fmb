@@ -523,6 +523,7 @@ namespace FMB_CIS.Controllers
                                               purpose = a.purpose,
                                               date_of_registration = a.date_of_registration,
                                               date_of_expiration = a.date_of_expiration,
+                                          tbl_region_id = usr.tbl_region_id,
                                               renew_from = a.renew_from,
                                          currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
                                          currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic   
@@ -581,6 +582,7 @@ namespace FMB_CIS.Controllers
                                               date_of_registration = a.date_of_registration,
                                               date_of_expiration = a.date_of_expiration,
                                               renew_from = a.renew_from,
+                                          tbl_region_id = usr.tbl_region_id,
                                          currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
                                          currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic   
                                           }).FirstOrDefault();
