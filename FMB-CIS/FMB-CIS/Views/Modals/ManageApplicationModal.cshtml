@@ -39,7 +39,7 @@
                             </div>
                         </div>
                         <div class="row w-100">
-                            <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload...">
+                            <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-allowed-file-extensions='["pdf"]' accept="application/pdf" data-show-caption="true" data-msg-placeholder="Select {files} for upload...">
                         </div>
                         @* <div class="row w-100">                            
                             <div class="col-md-12">
