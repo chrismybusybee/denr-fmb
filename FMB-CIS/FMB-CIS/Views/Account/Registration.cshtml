@@ -193,7 +193,7 @@
 
                             <label asp-for="tbl_Users.email" class="c-formcontrol-label c-formcontrol-inline">Email <span class="s-required">*</span></label>
                             <p class="c-formcontrol-sublabel c-formcontrol-inline">Please use official email address</p>
-                                        <input asp-for="tbl_Users.email" class="form-control"
+                                        <input asp-for="tbl_Users.email" class="form-control" type="email" 
                                             placeholder="name@address.com" required="required" id="emailInput"
                                             onchange="checkExistingEmail()" />
                                         <span asp-validation-for="tbl_Users.email" class="text-danger"></span>
@@ -567,7 +567,7 @@
             var curStep = $(this).closest(".setup-content"),
                 curStepBtn = curStep.attr("id"),
                 nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
-                curInputs = curStep.find("input[type='text'],input[type='url'],input[type='date'],input[type='tel']"),
+                curInputs = curStep.find("input[type='text'],input[type='url'],input[type='date'],input[type='tel'],input[type='email']"),
                 isValid = true;
 
             $(".form-group").removeClass("has-error");
