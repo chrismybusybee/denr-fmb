@@ -511,8 +511,12 @@ namespace FMB_CIS.Controllers
                 var applicationGroups = _context.tbl_application_group.Where(g => g.tbl_application_id == applicID).ToList();
                 mymodel.tbl_Application_Group= applicationGroups;
 
+                //Document Checklist (For New Upload)
+                var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == permitTypeID && c.is_active == true).ToList();
+                mymodel.tbl_Document_Checklist = myChecklist;                
+                //End for Document Checklist
 
-                //Document Tagging and Checklist
+                //Document Tagging and Checklist (Displaying uploaded documents)
                 //Get uploaded files and requirements
                 var fileWithCommentsforDocTagging = (from br in _context.tbl_files_checklist_bridge
                                                      join dc in _context.tbl_document_checklist on br.tbl_document_checklist_id equals dc.id
@@ -525,7 +529,8 @@ namespace FMB_CIS.Controllers
                                                          tbl_files_id = f.Id,
                                                          filename = f.filename,
                                                          tbl_application_id = f.tbl_application_id,
-                                                         tbl_files_status = f.status
+                                                         tbl_files_status = br.status,
+                                                         bridge_id = br.id
                                                          //comment = c.comment
                                                      }).OrderBy(o => o.filename).ToList();
 
@@ -855,6 +860,27 @@ namespace FMB_CIS.Controllers
                         filesDB.file_size = Convert.ToInt32(file.Length);
                         _context.tbl_files.Add(filesDB);
                         _context.SaveChanges();
+
+                        //Matching of tbl_files to tbl_document_checklist
+                        foreach (var item in viewMod.fileChecklistViewModel)
+                        {
+                            if (item.FileNames != null)
+                            {
+                                foreach (var item2 in item.FileNames)
+                                {
+                                    if (item2 == file.FileName)
+                                    {
+                                        var filesChecklistBridge = new tbl_files_checklist_bridge();
+
+                                        filesChecklistBridge.tbl_document_checklist_id = item.tbl_document_checklist_id;
+                                        filesChecklistBridge.tbl_files_id = filesDB.Id;
+                                        filesChecklistBridge.status = "Pending";
+                                        _context.tbl_files_checklist_bridge.Add(filesChecklistBridge);
+                                        _context.SaveChanges();
+                                    }
+                                }
+                            }                            
+                        }
                     }
                 }
                 //Email
@@ -1103,6 +1129,8 @@ namespace FMB_CIS.Controllers
                 renewApplication.id = null; //remove id here
                 renewApplication.date_of_registration = null;
                 renewApplication.date_of_expiration = null;
+                renewApplication.date_of_inspection = null;
+                renewApplication.initial_date_of_inspection = null;
                 renewApplication.created_by = loggedUserID;
                 renewApplication.modified_by = loggedUserID;
                 renewApplication.date_created = DateTime.Now;
@@ -1142,7 +1170,8 @@ namespace FMB_CIS.Controllers
                 string newPath = Path.Combine(EnvironmentHosting.ContentRootPath, "wwwroot/Files/" + folderName); ;
                 CopyFiles.CopyFilesRecursively(oldFilePath, newPath);
 
-                var newApplicationFiles = oldApplicationFiles.ToList();
+                //var newApplicationFiles = oldApplicationFiles.ToList();
+                var newApplicationFiles = oldApplicationFiles.Where(f=>f.is_proof_of_payment!=true).ToList(); //copy old application files to newApplicationFiles except proof of payment
                 //newApplicationFiles.Select(n => n.path).ToList();
 
                 //Copy contents from tbl_files based on previous application
@@ -1166,10 +1195,33 @@ namespace FMB_CIS.Controllers
                         //Copy tagged checklist of files based from previous application
                         for (int j = 0; j < filesChcklstBrdge.Count; j++)
                         {
+                            int oldBridgeID = filesChcklstBrdge[j].id;
                             filesChcklstBrdge[j].id = 0;
                             filesChcklstBrdge[j].tbl_files_id = newApplicationFiles[i].Id;
                             _context.tbl_files_checklist_bridge.Add(filesChcklstBrdge[j]);
                             _context.SaveChanges();
+
+                            //renewApplication.id is the new application ID
+                            //newApplicationFiles[i].Id is the new file ID
+                            //filesChcklstBrdge[j].id is the new bridge ID
+
+                            //Copy comments from previous application and replace bridge id and files id
+
+                            //check if bridge id exist on tbl_comments
+                            var isCommentExistOnBridgeID = _context.tbl_comments.Where(f => f.bridge_id == oldBridgeID).Any();
+                            if (isCommentExistOnBridgeID == true)
+                            {
+                                var commentsTBL = _context.tbl_comments.Where(c=>c.bridge_id==oldBridgeID).ToList();
+                                for (int k = 0; k < commentsTBL.Count; k++)
+                                {
+                                    commentsTBL[k].id = 0;
+                                    commentsTBL[k].tbl_application_id = renewApplication.id;
+                                    commentsTBL[k].tbl_files_id = newApplicationFiles[i].Id;
+                                    commentsTBL[k].bridge_id = filesChcklstBrdge[j].id;
+                                    _context.tbl_comments.Add(commentsTBL[k]);
+                                    _context.SaveChanges();
+                                }
+                            }
                         }
                     }                    
 

@@ -346,7 +346,9 @@ namespace FMB_CIS.Controllers
                             {
                                 if (Convert.ToBoolean(rdr["ReturnCode"]))
                                 {
-                                    string passResetLink = "https://fmb-cis.beesuite.ph/Account/ResetPassword?email=" + rdr["email"].ToString() + "&tokencode=" + rdr["UniqueId"].ToString() +"&isNew=true";
+                                    string urlSafeEmail = Uri.EscapeDataString(rdr["email"].ToString());
+                                    string urlSafeTokencode = Uri.EscapeDataString(rdr["UniqueId"].ToString());
+                                    string passResetLink = "https://fmb-cis.beesuite.ph/Account/ResetPassword?email=" + urlSafeEmail + "&tokencode=" + urlSafeTokencode + "&isNew=true";
                                 
                                     Console.WriteLine("Link for Password Reset:");
                                     Console.WriteLine(passResetLink);
@@ -411,7 +413,9 @@ namespace FMB_CIS.Controllers
                         {
                             if (Convert.ToBoolean(rdr["ReturnCode"]))
                             {
-                                string passResetLink = "https://fmb-cis.beesuite.ph/Account/ResetPassword?email=" + rdr["email"].ToString() + "&tokencode=" + rdr["UniqueId"].ToString() + "&isNew=false";
+                                string urlSafeEmail = Uri.EscapeDataString(rdr["email"].ToString());
+                                string urlSafeTokencode = Uri.EscapeDataString(rdr["UniqueId"].ToString());
+                                string passResetLink = "https://fmb-cis.beesuite.ph/Account/ResetPassword?email=" + urlSafeEmail + "&tokencode=" + urlSafeTokencode + "&isNew=false";
                                 //string passResetLink = "https://localhost:7270/Account/ResetPassword?email=" + rdr["email"].ToString() + "&tokencode=" + rdr["UniqueId"].ToString();
 
 
@@ -514,6 +518,15 @@ namespace FMB_CIS.Controllers
                 }
                 else
                 {
+                    //if (linkValidCheck == false)
+                    //{
+                    //    ModelState.AddModelError("", "Invalid password reset link");
+                    //}
+                    //if (eMailExist == true)
+                    //{
+                    //    ModelState.AddModelError("", "Invalid password reset link");
+                    //}
+                    ModelState.AddModelError("", "Invalid password reset link");
                     return View();
                 }
 
