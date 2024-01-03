@@ -1158,7 +1158,24 @@ namespace FMB_CIS.Controllers
                         _context.SaveChanges();
                     }
                 }
-                
+
+                //Copy Contents of tbl_chainsaw
+                var isOldChainsawExist = _context.tbl_chainsaw.Any(a => a.tbl_application_id == oldApplicationID);
+                if (isOldChainsawExist == true)
+                {
+                    var oldTBLChainsaw = _context.tbl_chainsaw.Where(a => a.tbl_application_id == oldApplicationID).ToList();
+                    List<tbl_chainsaw> newTBLChainsaw = oldTBLChainsaw;
+                    for (int a = 0; a < newTBLChainsaw.Count; a++)
+                    {
+                        newTBLChainsaw[a].Id = 0;
+                        newTBLChainsaw[a].tbl_application_id = (int)renewApplication.id;
+                        newTBLChainsaw[a].date_modified = DateTime.Now;
+
+                        _context.tbl_chainsaw.Add(newTBLChainsaw[a]);
+                        _context.SaveChanges();
+                    }
+                }
+
                 //Copy contents of files
 
                 string folderName = loggedUserID + "_" + renewApplication.id;
@@ -1226,25 +1243,8 @@ namespace FMB_CIS.Controllers
                     }                    
 
                 }
-
                 
                 //folder format loggedUserID_renewApplication.id
-
-
-                //string path = Path.Combine(EnvironmentHosting.ContentRootPath, "wwwroot/Files/" + folderName);
-
-                ////create folder if not exist
-                //if (!Directory.Exists(path))
-                //    Directory.CreateDirectory(path);
-
-
-                //string fileNameWithPath = Path.Combine(path, file.FileName);
-
-                //using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
-                //{
-                //    file.CopyTo(stream);
-                //}
-
                 return Json(renewApplication.id);
             }
             else
