@@ -327,16 +327,17 @@ namespace FMB_CIS.Controllers
                 {
                     var folderName = userID + "_" + appID;
 
-                    var folder = @"/INSPECTOR UPLOADS/";
+                    //THIS PART IS THE TEMPLATE FOR APPROVAL
+                    //var folder = @"/INSPECTOR UPLOADS/";
 
 
-                    if (Role == "DENR CENRO")
-                    {
-                        folder = @"/CENRO UPLOADS/";
-                    }
-                    string path = Path.Combine(WebHostEnvironment.ContentRootPath, "wwwroot/Files/" + folderName + folder);
+                    //if (Role == "DENR CENRO")
+                    //{
+                    //    folder = @"/CENRO UPLOADS/";
+                    //}
+                    //string path = Path.Combine(WebHostEnvironment.ContentRootPath, "wwwroot/Files/" + folderName + folder);
 
-
+                    string path = Path.Combine(WebHostEnvironment.ContentRootPath, "wwwroot/Files/" + folderName);
 
                     foreach (var file in model.filesUpload.Files)
                     {
