@@ -1090,7 +1090,7 @@
                                     }
                                     <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="~/Files/@folder/@file.filename" target="_blank">View</a></li>
+                                    <li><a class="dropdown-item" href="~/Files/@folder/@Uri.EscapeDataString(file.filename)" target="_blank">View</a></li>
                                     @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
                                         <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
                                     </ul>
@@ -1179,6 +1179,7 @@
                         <div class="d-flex mb-4 gap-3">
                             @foreach (tbl_files file in Model.proofOfPaymentFiles)
                             {
+                                var folder = Model.uid + "_" + Model.appid;
                                 <div class="card mw-18rem">
                                     <div class="card-body">
                                         @if (file.tbl_file_type_id == ".pdf")
@@ -1199,7 +1200,7 @@
                                         }
                                         <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="~/Files/UserDocs/@file.filename" target="_blank">View</a></li>
+                                        <li><a class="dropdown-item" href="~/Files/@folder/ProofofPayment/@Uri.EscapeDataString(file.filename)" target="_blank">View</a></li>
                                             @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
                                             <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
                                         </ul>

@@ -689,7 +689,7 @@
                                 }
                                 <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="~/Files/@folder/@file.filename" target="_blank">View</a></li>
+                                    <li><a class="dropdown-item" href="~/Files/@folder/@Uri.EscapeDataString(file.filename)" target="_blank">View</a></li>
                                     @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
                                     <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
                                 </ul>
@@ -771,7 +771,7 @@
                                     }
                                     <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="~/Files/@folder/ProofofPayment/@file.filename" target="_blank">View</a></li>
+                                        <li><a class="dropdown-item" href="~/Files/@folder/ProofofPayment/@Uri.EscapeDataString(file.filename)" target="_blank">View</a></li>
                                         @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
                                         <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
                                     </ul>
@@ -816,7 +816,7 @@
                                     }
                                     <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="~/Files/@folder/INSPECTOR UPLOADS/@file.filename" target="_blank">View</a></li>
+                                        <li><a class="dropdown-item" href="~/Files/@folder/INSPECTOR UPLOADS/@Uri.EscapeDataString(file.filename)" target="_blank">View</a></li>
                                         @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
                                         <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
                                     </ul>

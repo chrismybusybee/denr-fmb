@@ -558,7 +558,7 @@ namespace FMB_CIS.Controllers
                 for (int i = 0; i < fileWithCommentsforDocTagging.Count; i++)
                 {
                     var latestComment = commentsList.Where(c => c.bridge_id == fileWithCommentsforDocTagging[i].bridge_id).LastOrDefault();
-                    if (latestComment != null)
+                    if (latestComment != null && latestComment.bridge_id != null)
                     {
                         fileWithCommentsforDocTagging[i].comment = latestComment.comment;
                         fileWithCommentsforDocTagging[i].tbl_comments_created_by = latestComment.created_by;
