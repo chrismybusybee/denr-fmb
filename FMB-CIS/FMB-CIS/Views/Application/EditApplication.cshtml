@@ -1443,15 +1443,16 @@
                 var fileName = file.name;
 
                 // Add options based on the file name
+                $select.addOption({ value: fileName, text: fileName });
                 //var options = fileName.split('.')[0].split('_');
-                var options = fileName.split('_');
+                //var options = fileName.split('_');
                 //console.log("fileName.split('.')[0]: ", fileName.split('.')[0]);
-                options.forEach(function (option) {
-                    option = option.trim();
-                    if (option !== '') {
-                        $select.addOption({ value: option, text: option });
-                    }
-                });
+                //options.forEach(function (option) {
+                //    option = option.trim();
+                //    if (option !== '') {
+                //        $select.addOption({ value: option, text: option });
+                //    }
+                //});
             }
 
             // Refresh the Selectize control to update the UI
@@ -1476,15 +1477,16 @@
                 var fileName = file.name;
 
                 // Add options based on the file name
+                $select.addOption({ value: fileName, text: fileName });
                 //var options = fileName.split('.')[0].split('_');
-                var options = fileName.split('_');
+                //var options = fileName.split('_');
                 //console.log("fileName.split('.')[0]: ", fileName.split('.')[0]);
-                options.forEach(function (option) {
-                    option = option.trim();
-                    if (option !== '') {
-                        $select.addOption({ value: option, text: option });
-                    }
-                });
+                //options.forEach(function (option) {
+                //    option = option.trim();
+                //    if (option !== '') {
+                //        $select.addOption({ value: option, text: option });
+                //    }
+                //});
             }
 
         });
