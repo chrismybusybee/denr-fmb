@@ -239,14 +239,13 @@
                                     </div>
                                 </div>
                             }
-                            <div class="row mb-5">
+                            @* <div class="row mb-5">
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
                                             Chainsaw Quantity
                                         </label>
                                         <span class="fw-bold">
-                                            @* <label asp-for="applicantViewModels.birth_date" value="@Model.applicantViewModels.birth_date">@Model.applicantViewModels.birth_date</label> *@
                                             @Html.DisplayFor(model => model.applicantViewModels.qty)
                                         </span>
                                     </div>
@@ -257,7 +256,6 @@
                                             Specification
                                         </label>
                                         <span class="fw-bold">
-                                            @* <label asp-for="applicantViewModels.birth_date" value="@Model.applicantViewModels.birth_date">@Model.applicantViewModels.birth_date</label> *@
                                             @Html.DisplayFor(model => model.applicantViewModels.specification)
                                         </span>
                                     </div>
@@ -270,12 +268,11 @@
                                             Purpose
                                         </label>
                                         <span class="fw-bold">
-                                            @* <label asp-for="applicantViewModels.address" value="@Model.applicantViewModels.address">@Model.applicantViewModels.address</label> *@
                                             @Html.DisplayFor(model => model.applicantViewModels.purpose)
                                         </span>
                                     </div>
                                 </div>
-                            </div>
+                            </div> *@
                             @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true) @* && Model.applicantViewModels.permit_type == "Permit to Sell" *@
                             {
                                 <div class="row mb-5">
