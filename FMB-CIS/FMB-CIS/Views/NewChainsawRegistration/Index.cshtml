@@ -75,6 +75,9 @@
                         </div>
                         <div class="gap-4 mb-5">
                             <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
+                            <div class="alert alert-warning mt-3 mb-3" role="alert">
+                                When uploading multiple files, drag all files at once on the field.
+                            </div>
                             <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-allowed-file-extensions='["pdf"]' accept="application/pdf" data-show-caption="true" data-msg-placeholder="Select {files} for upload..."> <!-- onchange="fileChange(this)" -->
                         </div>                        
                     </div>
@@ -192,6 +195,10 @@
             $("#confirmSubmitModal").modal("hide");
             csawRegform.submit();
             $("#confirmSuccessModal").modal("show");
+        });
+
+        $("#finalOKBtn").click(function () {
+            $("#confirmSuccessModal").modal("hide");
         });
         //END FOR MODAL FORM SUBMISSION CONFIRMATION
 
@@ -614,14 +621,15 @@
                 //}
 
                 // Add options based on the file name
+                $select.addOption({ value: fileName, text: fileName });
                 //var options = fileName.split('.')[0].split('_');
-                var options = fileName.split('_');
-                options.forEach(function (option) {
-                    option = option.trim();
-                    if (option !== '') {
-                        $select.addOption({ value: option, text: option });
-                    }
-                });
+                // var options = fileName.split('_');
+                // options.forEach(function (option) {
+                //     option = option.trim();
+                //     if (option !== '') {
+                //         $select.addOption({ value: option, text: option });
+                //     }
+                // });
             }
 
             // Refresh the Selectize control to update the UI
@@ -646,13 +654,14 @@
                 var fileName = file.name;
 
                 // Add options based on the file name
-                var options = fileName.split('_');
-                options.forEach(function (option) {
-                    option = option.trim();
-                    if (option !== '') {
-                        $select.addOption({ value: option, text: option });
-                    }
-                });
+                $select.addOption({ value: fileName, text: fileName });
+                // var options = fileName.split('_');
+                // options.forEach(function (option) {
+                //     option = option.trim();
+                //     if (option !== '') {
+                //         $select.addOption({ value: option, text: option });
+                //     }
+                // });
             }
 
         });

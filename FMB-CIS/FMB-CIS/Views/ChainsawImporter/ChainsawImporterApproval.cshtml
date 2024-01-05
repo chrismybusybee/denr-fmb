@@ -689,7 +689,7 @@
                                 }
                                 <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="~/Files/@folder/@file.filename" target="_blank">View</a></li>
+                                    <li><a class="dropdown-item" href="~/Files/@folder/@Uri.EscapeDataString(file.filename)" target="_blank">View</a></li>
                                     @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
                                     <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
                                 </ul>
@@ -771,7 +771,7 @@
                                     }
                                     <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="~/Files/@folder/ProofofPayment/@file.filename" target="_blank">View</a></li>
+                                        <li><a class="dropdown-item" href="~/Files/@folder/ProofofPayment/@Uri.EscapeDataString(file.filename)" target="_blank">View</a></li>
                                         @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
                                         <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
                                     </ul>
@@ -816,7 +816,7 @@
                                     }
                                     <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="~/Files/@folder/INSPECTOR UPLOADS/@file.filename" target="_blank">View</a></li>
+                                        <li><a class="dropdown-item" href="~/Files/@folder/INSPECTOR UPLOADS/@Uri.EscapeDataString(file.filename)" target="_blank">View</a></li>
                                         @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
                                         <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
                                     </ul>
@@ -879,6 +879,9 @@
                 {
                     <div class="gap-4 mb-5">
                         <h3 class="text-secondary fw-bold m-0">Upload Documents</h3>
+                        <div class="alert alert-warning mt-3 mb-3" role="alert">
+                                When uploading multiple files, drag all files at once on the field.
+                            </div>
                         <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload...">
                     </div>
                 }
@@ -1027,9 +1030,9 @@
     $(document).ready(function () {
 
 
-        $('#commentBtn').click(function () {
-            alert('make ajax call here');
-        });
+        // $('#commentBtn').click(function () {
+        //     alert('make ajax call here');
+        // });
 
 
         $('#approveBtn').click(function () {

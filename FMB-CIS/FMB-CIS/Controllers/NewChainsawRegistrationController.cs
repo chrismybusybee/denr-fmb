@@ -239,7 +239,8 @@ namespace FMB_CIS.Controllers
 
                 ViewBag.RequiredDocsList = requirements.announcement_content;
                 //End for required documents
-                return View(model);
+                //return View(model);
+                return RedirectToAction("RegistrationPermits", "Application");
             }
             return View(model);
             //}

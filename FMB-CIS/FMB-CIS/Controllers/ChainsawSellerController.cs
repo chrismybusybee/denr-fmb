@@ -220,7 +220,8 @@ namespace FMB_CIS.Controllers
                 model.tbl_Document_Checklist = myChecklist;
                 //End for Document Checklist
 
-                return View(model);
+                //return View(model);
+                return RedirectToAction("SellPermits", "Application");
             }
             return View(model);
             //}
@@ -326,16 +327,17 @@ namespace FMB_CIS.Controllers
                 {
                     var folderName = userID + "_" + appID;
 
-                    var folder = @"/INSPECTOR UPLOADS/";
+                    //THIS PART IS THE TEMPLATE FOR APPROVAL
+                    //var folder = @"/INSPECTOR UPLOADS/";
 
 
-                    if (Role == "DENR CENRO")
-                    {
-                        folder = @"/CENRO UPLOADS/";
-                    }
-                    string path = Path.Combine(WebHostEnvironment.ContentRootPath, "wwwroot/Files/" + folderName + folder);
+                    //if (Role == "DENR CENRO")
+                    //{
+                    //    folder = @"/CENRO UPLOADS/";
+                    //}
+                    //string path = Path.Combine(WebHostEnvironment.ContentRootPath, "wwwroot/Files/" + folderName + folder);
 
-
+                    string path = Path.Combine(WebHostEnvironment.ContentRootPath, "wwwroot/Files/" + folderName);
 
                     foreach (var file in model.filesUpload.Files)
                     {
@@ -407,7 +409,8 @@ namespace FMB_CIS.Controllers
                 model.tbl_Document_Checklist = myChecklist;
                 //End for Document Checklist
 
-                return View(model);
+                //return View(model);
+                return RedirectToAction("PurchasePermits", "Application");
             }
             return View(model);
             //}
@@ -644,6 +647,7 @@ namespace FMB_CIS.Controllers
                                           initial_date_of_inspection = a.initial_date_of_inspection,
                                           inspectionDate = a.date_of_inspection,
                                           specification = a.tbl_specification_id,
+                                          tbl_region_id = reg.id,
                                           purpose = a.purpose,
                                           date_of_registration = a.date_of_registration,
                                           date_of_expiration = a.date_of_expiration,

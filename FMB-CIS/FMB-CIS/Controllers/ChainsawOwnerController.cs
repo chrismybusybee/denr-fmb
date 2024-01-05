@@ -221,19 +221,24 @@ namespace FMB_CIS.Controllers
                     }
                 }
                 int emailTemplateID = 0;
+                string actionNameForReturn = "";
                 switch (model.tbl_Application.tbl_permit_type_id)
                 {
                     case 5: //Authority to Lease
                         emailTemplateID = 17; //Permit to Lease/ Rent/ Lend (Application Sent)
+                        actionNameForReturn = "LeasePermits";
                         break;
                     case 6: //Authority to Rent
                         emailTemplateID = 17; //Permit to Lease/ Rent/ Lend (Application Sent)
+                        actionNameForReturn = "RentPermits";
                         break;
                     case 7: //Authority to Lend
                         emailTemplateID = 17; //Permit to Lease/ Rent/ Lend (Application Sent)
+                        actionNameForReturn = "LendPermits";
                         break;
                     case 14: //Permit to Re-sell/Transfer Ownership
                         emailTemplateID = 34; //Permit to Transfer Ownership (Application Sent)
+                        actionNameForReturn = "ResellPermits";
                         break;
                 }
                 //Email
@@ -249,7 +254,8 @@ namespace FMB_CIS.Controllers
 
                 ModelState.Clear();
                 ViewBag.Message = "Save Success";
-                return View();
+                //return View();
+                return RedirectToAction(actionNameForReturn, "Application");
             }
             return View(model);
             //}
@@ -517,6 +523,7 @@ namespace FMB_CIS.Controllers
                                               purpose = a.purpose,
                                               date_of_registration = a.date_of_registration,
                                               date_of_expiration = a.date_of_expiration,
+                                          tbl_region_id = usr.tbl_region_id,
                                               renew_from = a.renew_from,
                                          currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
                                          currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic   
@@ -575,6 +582,7 @@ namespace FMB_CIS.Controllers
                                               date_of_registration = a.date_of_registration,
                                               date_of_expiration = a.date_of_expiration,
                                               renew_from = a.renew_from,
+                                          tbl_region_id = usr.tbl_region_id,
                                          currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
                                          currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic   
                                           }).FirstOrDefault();

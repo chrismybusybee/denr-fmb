@@ -511,8 +511,12 @@ namespace FMB_CIS.Controllers
                 var applicationGroups = _context.tbl_application_group.Where(g => g.tbl_application_id == applicID).ToList();
                 mymodel.tbl_Application_Group= applicationGroups;
 
+                //Document Checklist (For New Upload)
+                var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == permitTypeID && c.is_active == true).ToList();
+                mymodel.tbl_Document_Checklist = myChecklist;                
+                //End for Document Checklist
 
-                //Document Tagging and Checklist
+                //Document Tagging and Checklist (Displaying uploaded documents)
                 //Get uploaded files and requirements
                 var fileWithCommentsforDocTagging = (from br in _context.tbl_files_checklist_bridge
                                                      join dc in _context.tbl_document_checklist on br.tbl_document_checklist_id equals dc.id
@@ -525,7 +529,8 @@ namespace FMB_CIS.Controllers
                                                          tbl_files_id = f.Id,
                                                          filename = f.filename,
                                                          tbl_application_id = f.tbl_application_id,
-                                                         tbl_files_status = f.status
+                                                         tbl_files_status = br.status,
+                                                         bridge_id = br.id
                                                          //comment = c.comment
                                                      }).OrderBy(o => o.filename).ToList();
 
@@ -553,7 +558,7 @@ namespace FMB_CIS.Controllers
                 for (int i = 0; i < fileWithCommentsforDocTagging.Count; i++)
                 {
                     var latestComment = commentsList.Where(c => c.bridge_id == fileWithCommentsforDocTagging[i].bridge_id).LastOrDefault();
-                    if (latestComment != null)
+                    if (latestComment != null && latestComment.bridge_id != null)
                     {
                         fileWithCommentsforDocTagging[i].comment = latestComment.comment;
                         fileWithCommentsforDocTagging[i].tbl_comments_created_by = latestComment.created_by;
@@ -783,90 +788,177 @@ namespace FMB_CIS.Controllers
 
             if (viewMod.applicantViewModels.id != null)
             {
+                
 
                 //string buttonClicked = SubmitButton;
 
                 //updating the application
                 var appliDB = _context.tbl_application.Where(m => m.id == viewMod.applicantViewModels.id).FirstOrDefault();
-                
-                //appliDB.id = applid;
-                appliDB.qty = viewMod.applicantViewModels.qty;
-                appliDB.purpose = viewMod.applicantViewModels.purpose;
-                //appliDB.expected_time_arrival = viewMod.applicantViewModels.expectedTimeArrived;
-                //appliDB.expected_time_release = viewMod.applicantViewModels.expectedTimeRelease;
-                appliDB.date_modified = DateTime.Now;
-                appliDB.modified_by = viewMod.applicantViewModels.tbl_user_id;
-                appliDB.supplier_address = viewMod.applicantViewModels.address;
-                appliDB.date_of_inspection = viewMod.applicantViewModels.inspectionDate;
-                appliDB.tbl_specification_id = viewMod.applicantViewModels.specification;
-                //if (appliDB.tbl_permit_type_id == 2 || appliDB.tbl_permit_type_id == 3) //For Permit to Purchase and Permit to Sell
-                //{
-                //    appliDB.coordinatedWithEnforcementDivision = viewMod.applicantViewModels.coordinatedWithEnforcementDivision;
-                //}
-                _context.SaveChanges();
 
-                if(appliDB.tbl_permit_type_id == 13)
+                //if application is new (not for renewal)
+                if (appliDB.renew_from == null)
                 {
-                    var csawDB = _context.tbl_chainsaw.Where(c => c.tbl_application_id == appliDB.id).FirstOrDefault();
-                    csawDB.Brand = viewMod.applicantViewModels.chainsawBrand;
-                    csawDB.Model = viewMod.applicantViewModels.chainsawModel;
-                    csawDB.Engine = viewMod.applicantViewModels.Engine;
-                    csawDB.Power = viewMod.applicantViewModels.powerSource;
-                    if (viewMod.applicantViewModels.powerSource == "Gas")
-                    {
-                        csawDB.hp = viewMod.applicantViewModels.hp;
-                        csawDB.watt = null;
-                    }
-                    else
-                    {
-                        csawDB.watt = viewMod.applicantViewModels.Watt;
-                        csawDB.hp = null;
-                    }                    
-                    csawDB.gb = viewMod.applicantViewModels.gb;
-                    csawDB.chainsaw_serial_number = viewMod.applicantViewModels.chainsaw_serial_number;
-                    csawDB.supplier = viewMod.applicantViewModels.chainsawSupplier;
-                    csawDB.date_purchase = viewMod.applicantViewModels.date_purchase;
+                    //appliDB.id = applid;
+                    appliDB.qty = viewMod.applicantViewModels.qty;
+                    appliDB.purpose = viewMod.applicantViewModels.purpose;
+                    //appliDB.expected_time_arrival = viewMod.applicantViewModels.expectedTimeArrived;
+                    //appliDB.expected_time_release = viewMod.applicantViewModels.expectedTimeRelease;
+                    appliDB.date_modified = DateTime.Now;
+                    appliDB.modified_by = viewMod.applicantViewModels.tbl_user_id;
+                    appliDB.supplier_address = viewMod.applicantViewModels.address;
+                    appliDB.date_of_inspection = viewMod.applicantViewModels.inspectionDate;
+                    appliDB.tbl_specification_id = viewMod.applicantViewModels.specification;
+                    //if (appliDB.tbl_permit_type_id == 2 || appliDB.tbl_permit_type_id == 3) //For Permit to Purchase and Permit to Sell
+                    //{
+                    //    appliDB.coordinatedWithEnforcementDivision = viewMod.applicantViewModels.coordinatedWithEnforcementDivision;
+                    //}
                     _context.SaveChanges();
-                }
-                //Saving a file
-                if (viewMod.filesUpload != null)
-                {
-                    var folderName = usid + "_" + applid;
-                    foreach (var file in viewMod.filesUpload.Files)
+
+                    if (appliDB.tbl_permit_type_id == 13)
                     {
-                        var filesDB = new tbl_files();
-                        FileInfo fileInfo = new FileInfo(file.FileName);
-                        string path = Path.Combine(WebHostEnvironment.ContentRootPath, "wwwroot/Files/" + folderName);
-
-                        //create folder if not exist
-                        if (!Directory.Exists(path))
-                            Directory.CreateDirectory(path);
-
-
-                        string fileNameWithPath = Path.Combine(path, file.FileName);
-
-                        using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                        var csawDB = _context.tbl_chainsaw.Where(c => c.tbl_application_id == appliDB.id).FirstOrDefault();
+                        csawDB.Brand = viewMod.applicantViewModels.chainsawBrand;
+                        csawDB.Model = viewMod.applicantViewModels.chainsawModel;
+                        csawDB.Engine = viewMod.applicantViewModels.Engine;
+                        csawDB.Power = viewMod.applicantViewModels.powerSource;
+                        if (viewMod.applicantViewModels.powerSource == "Gas")
                         {
-                            file.CopyTo(stream);
+                            csawDB.hp = viewMod.applicantViewModels.hp;
+                            csawDB.watt = null;
                         }
-                        filesDB.tbl_application_id = viewMod.applicantViewModels.id;
-                        filesDB.created_by = viewMod.applicantViewModels.tbl_user_id;
-                        filesDB.modified_by = viewMod.applicantViewModels.tbl_user_id;
-                        filesDB.date_created = DateTime.Now;
-                        filesDB.date_modified = DateTime.Now;
-                        filesDB.filename = file.FileName;
-                        filesDB.path = path;
-                        filesDB.tbl_file_type_id = fileInfo.Extension;
-                        filesDB.tbl_file_sources_id = fileInfo.Extension;
-                        filesDB.file_size = Convert.ToInt32(file.Length);
-                        _context.tbl_files.Add(filesDB);
+                        else
+                        {
+                            csawDB.watt = viewMod.applicantViewModels.Watt;
+                            csawDB.hp = null;
+                        }
+                        csawDB.gb = viewMod.applicantViewModels.gb;
+                        csawDB.chainsaw_serial_number = viewMod.applicantViewModels.chainsaw_serial_number;
+                        csawDB.supplier = viewMod.applicantViewModels.chainsawSupplier;
+                        csawDB.date_purchase = viewMod.applicantViewModels.date_purchase;
                         _context.SaveChanges();
                     }
+                    //Saving a file
+                    if (viewMod.filesUpload != null)
+                    {
+                        var folderName = usid + "_" + applid;
+                        foreach (var file in viewMod.filesUpload.Files)
+                        {
+                            var filesDB = new tbl_files();
+                            FileInfo fileInfo = new FileInfo(file.FileName);
+                            string path = Path.Combine(WebHostEnvironment.ContentRootPath, "wwwroot/Files/" + folderName);
+
+                            //create folder if not exist
+                            if (!Directory.Exists(path))
+                                Directory.CreateDirectory(path);
+
+
+                            string fileNameWithPath = Path.Combine(path, file.FileName);
+
+                            using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                            {
+                                file.CopyTo(stream);
+                            }
+                            filesDB.tbl_application_id = viewMod.applicantViewModels.id;
+                            filesDB.created_by = viewMod.applicantViewModels.tbl_user_id;
+                            filesDB.modified_by = viewMod.applicantViewModels.tbl_user_id;
+                            filesDB.date_created = DateTime.Now;
+                            filesDB.date_modified = DateTime.Now;
+                            filesDB.filename = file.FileName;
+                            filesDB.path = path;
+                            filesDB.tbl_file_type_id = fileInfo.Extension;
+                            filesDB.tbl_file_sources_id = fileInfo.Extension;
+                            filesDB.file_size = Convert.ToInt32(file.Length);
+                            _context.tbl_files.Add(filesDB);
+                            _context.SaveChanges();
+
+                            //Matching of tbl_files to tbl_document_checklist
+                            foreach (var item in viewMod.fileChecklistViewModel)
+                            {
+                                if (item.FileNames != null)
+                                {
+                                    foreach (var item2 in item.FileNames)
+                                    {
+                                        if (item2 == file.FileName)
+                                        {
+                                            var filesChecklistBridge = new tbl_files_checklist_bridge();
+
+                                            filesChecklistBridge.tbl_document_checklist_id = item.tbl_document_checklist_id;
+                                            filesChecklistBridge.tbl_files_id = filesDB.Id;
+                                            filesChecklistBridge.status = "Pending";
+                                            _context.tbl_files_checklist_bridge.Add(filesChecklistBridge);
+                                            _context.SaveChanges();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //Email
+                    var subject = "Permit Application Status";
+                    var body = "Greetings! \n You have successfully edited your application.";
+                    EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);
+
                 }
-                //Email
-                var subject = "Permit Application Status";
-                var body = "Greetings! \n You have successfully edited your application.";
-                EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);
+
+                else //this means that application is for renewal
+                {
+                    //Saving a file
+                    if (viewMod.filesUpload != null)
+                    {
+                        var folderName = usid + "_" + applid;
+                        foreach (var file in viewMod.filesUpload.Files)
+                        {
+                            var filesDB = new tbl_files();
+                            FileInfo fileInfo = new FileInfo(file.FileName);
+                            string path = Path.Combine(WebHostEnvironment.ContentRootPath, "wwwroot/Files/" + folderName);
+
+                            //create folder if not exist
+                            if (!Directory.Exists(path))
+                                Directory.CreateDirectory(path);
+
+
+                            string fileNameWithPath = Path.Combine(path, file.FileName);
+
+                            using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                            {
+                                file.CopyTo(stream);
+                            }
+                            filesDB.tbl_application_id = viewMod.applicantViewModels.id;
+                            filesDB.created_by = viewMod.applicantViewModels.tbl_user_id;
+                            filesDB.modified_by = viewMod.applicantViewModels.tbl_user_id;
+                            filesDB.date_created = DateTime.Now;
+                            filesDB.date_modified = DateTime.Now;
+                            filesDB.filename = file.FileName;
+                            filesDB.path = path;
+                            filesDB.tbl_file_type_id = fileInfo.Extension;
+                            filesDB.tbl_file_sources_id = fileInfo.Extension;
+                            filesDB.file_size = Convert.ToInt32(file.Length);
+                            _context.tbl_files.Add(filesDB);
+                            _context.SaveChanges();
+
+                            //Matching of tbl_files to tbl_document_checklist
+                            foreach (var item in viewMod.fileChecklistViewModel)
+                            {
+                                if (item.FileNames != null)
+                                {
+                                    foreach (var item2 in item.FileNames)
+                                    {
+                                        if (item2 == file.FileName)
+                                        {
+                                            var filesChecklistBridge = new tbl_files_checklist_bridge();
+
+                                            filesChecklistBridge.tbl_document_checklist_id = item.tbl_document_checklist_id;
+                                            filesChecklistBridge.tbl_files_id = filesDB.Id;
+                                            filesChecklistBridge.status = "Pending";
+                                            _context.tbl_files_checklist_bridge.Add(filesChecklistBridge);
+                                            _context.SaveChanges();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 
             }
 
@@ -1109,6 +1201,8 @@ namespace FMB_CIS.Controllers
                 renewApplication.id = null; //remove id here
                 renewApplication.date_of_registration = null;
                 renewApplication.date_of_expiration = null;
+                renewApplication.date_of_inspection = null;
+                renewApplication.initial_date_of_inspection = null;
                 renewApplication.created_by = loggedUserID;
                 renewApplication.modified_by = loggedUserID;
                 renewApplication.date_created = DateTime.Now;
@@ -1136,7 +1230,24 @@ namespace FMB_CIS.Controllers
                         _context.SaveChanges();
                     }
                 }
-                
+
+                //Copy Contents of tbl_chainsaw
+                var isOldChainsawExist = _context.tbl_chainsaw.Any(a => a.tbl_application_id == oldApplicationID);
+                if (isOldChainsawExist == true)
+                {
+                    var oldTBLChainsaw = _context.tbl_chainsaw.Where(a => a.tbl_application_id == oldApplicationID).ToList();
+                    List<tbl_chainsaw> newTBLChainsaw = oldTBLChainsaw;
+                    for (int a = 0; a < newTBLChainsaw.Count; a++)
+                    {
+                        newTBLChainsaw[a].Id = 0;
+                        newTBLChainsaw[a].tbl_application_id = (int)renewApplication.id;
+                        newTBLChainsaw[a].date_modified = DateTime.Now;
+
+                        _context.tbl_chainsaw.Add(newTBLChainsaw[a]);
+                        _context.SaveChanges();
+                    }
+                }
+
                 //Copy contents of files
 
                 string folderName = loggedUserID + "_" + renewApplication.id;
@@ -1148,7 +1259,8 @@ namespace FMB_CIS.Controllers
                 string newPath = Path.Combine(EnvironmentHosting.ContentRootPath, "wwwroot/Files/" + folderName); ;
                 CopyFiles.CopyFilesRecursively(oldFilePath, newPath);
 
-                var newApplicationFiles = oldApplicationFiles.ToList();
+                //var newApplicationFiles = oldApplicationFiles.ToList();
+                var newApplicationFiles = oldApplicationFiles.Where(f=>f.is_proof_of_payment!=true).ToList(); //copy old application files to newApplicationFiles except proof of payment
                 //newApplicationFiles.Select(n => n.path).ToList();
 
                 //Copy contents from tbl_files based on previous application
@@ -1172,33 +1284,39 @@ namespace FMB_CIS.Controllers
                         //Copy tagged checklist of files based from previous application
                         for (int j = 0; j < filesChcklstBrdge.Count; j++)
                         {
+                            int oldBridgeID = filesChcklstBrdge[j].id;
                             filesChcklstBrdge[j].id = 0;
                             filesChcklstBrdge[j].tbl_files_id = newApplicationFiles[i].Id;
                             _context.tbl_files_checklist_bridge.Add(filesChcklstBrdge[j]);
                             _context.SaveChanges();
+
+                            //renewApplication.id is the new application ID
+                            //newApplicationFiles[i].Id is the new file ID
+                            //filesChcklstBrdge[j].id is the new bridge ID
+
+                            //Copy comments from previous application and replace bridge id and files id
+
+                            //check if bridge id exist on tbl_comments
+                            var isCommentExistOnBridgeID = _context.tbl_comments.Where(f => f.bridge_id == oldBridgeID).Any();
+                            if (isCommentExistOnBridgeID == true)
+                            {
+                                var commentsTBL = _context.tbl_comments.Where(c=>c.bridge_id==oldBridgeID).ToList();
+                                for (int k = 0; k < commentsTBL.Count; k++)
+                                {
+                                    commentsTBL[k].id = 0;
+                                    commentsTBL[k].tbl_application_id = renewApplication.id;
+                                    commentsTBL[k].tbl_files_id = newApplicationFiles[i].Id;
+                                    commentsTBL[k].bridge_id = filesChcklstBrdge[j].id;
+                                    _context.tbl_comments.Add(commentsTBL[k]);
+                                    _context.SaveChanges();
+                                }
+                            }
                         }
                     }                    
 
                 }
-
                 
                 //folder format loggedUserID_renewApplication.id
-
-
-                //string path = Path.Combine(EnvironmentHosting.ContentRootPath, "wwwroot/Files/" + folderName);
-
-                ////create folder if not exist
-                //if (!Directory.Exists(path))
-                //    Directory.CreateDirectory(path);
-
-
-                //string fileNameWithPath = Path.Combine(path, file.FileName);
-
-                //using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
-                //{
-                //    file.CopyTo(stream);
-                //}
-
                 return Json(renewApplication.id);
             }
             else

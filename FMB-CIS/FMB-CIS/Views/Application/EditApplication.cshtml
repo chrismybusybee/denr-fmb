@@ -85,6 +85,12 @@
                     {
                         <button id="btnRenew" class="btn btn-primary" type="button">Renew Application</button>
                     }
+
+                    @* Allow Applicant to submit new files *@
+                    @if (Model.applicantViewModels.permit_status_id == 1 && Model.applicantViewModels.renew_from != null) 
+                    {
+                        <button id="btnSave" class="btn btn-primary w-105" type="button">Submit</button>
+                    }
                 </div>
             </div>
             <hr />
@@ -875,6 +881,72 @@
                 </div>
             } *@
 
+            @if (Model.applicantViewModels.permit_status == "For Inspector Approval" || Model.applicantViewModels.permit_status == "Rejected (Inspector)" || Model.applicantViewModels.permit_status == "Rejected (CENRO)") @* (@Model.applicantViewModels.permit_status != "Approved") *@
+            {
+                <hr />
+                <div class="row d-flex justify-content-center m-0">
+                    <div class="row d-flex justify-content-center px-0 mb-5">
+                        <div class="mb-4">
+                            <span style="white-space: pre-line">@ViewBag.RequiredDocsList</span>
+                        </div>
+                        <div class="gap-4 mb-5">
+                            <h2 class="text-secondary fw-bold m-0">Attach Additional Required Documents</h2>
+                            <div class="alert alert-warning mt-3 mb-3" role="alert">
+                                When uploading multiple files, drag all files at once on the field.
+                            </div>
+                            <input asp-for="filesUpload.Files" type="file" class="file" multiple data-allowed-file-extensions='["pdf"]' accept="application/pdf" data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload...">
+                        </div>
+                    </div>
+                    @* <hr>
+                    <div class="row d-flex justify-content-center px-0 mb-5">
+                        <div class="col-md-11 d-flex flex-column gap-2">
+                            <span>
+                                Purpose
+                            </span>
+                            <textarea asp-for="applicantViewModels.purpose" class="form-control"></textarea>
+                        </div>
+                    </div> *@
+                </div>
+                <hr />
+                <div class="row d-flex justify-content-center m-0">
+                    <h5 class="text-secondary">Please match your additional uploaded file based on the checklist of requirements.</h5>
+                    <table class="table dataTable" id="tblApplicantFilesNew">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Required Document
+                                </th>
+                                <th>
+                                    Uploaded Document
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int i = 0;
+                            }
+                            @foreach (tbl_document_checklist item in Model.tbl_Document_Checklist)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.name)
+                                    </td>
+                                    <input type="hidden" asp-for="fileChecklistViewModel[i].tbl_document_checklist_id" value="@item.id" />
+                                    <td>
+                                        <select class="form-select fileListDropDown" id="fileListDropDown_@i" data-prevVal="" data-curVal="" asp-for="fileChecklistViewModel[i].FileNames" multiple>
+                                        </select>
+                                    </td>
+                                    @{
+                                        i++;
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
         </form>
             <hr/>
             <div class="row d-flex justify-content-center m-0">
@@ -1068,7 +1140,7 @@
                                     }
                                     <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="~/Files/@folder/@file.filename" target="_blank">View</a></li>
+                                    <li><a class="dropdown-item" href="~/Files/@folder/@Uri.EscapeDataString(file.filename)" target="_blank">View</a></li>
                                     @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
                                         <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
                                     </ul>
@@ -1157,6 +1229,7 @@
                         <div class="d-flex mb-4 gap-3">
                             @foreach (tbl_files file in Model.proofOfPaymentFiles)
                             {
+                                var folder = Model.uid + "_" + Model.appid;
                                 <div class="card mw-18rem">
                                     <div class="card-body">
                                         @if (file.tbl_file_type_id == ".pdf")
@@ -1177,7 +1250,7 @@
                                         }
                                         <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="~/Files/UserDocs/@file.filename" target="_blank">View</a></li>
+                                        <li><a class="dropdown-item" href="~/Files/@folder/ProofofPayment/@Uri.EscapeDataString(file.filename)" target="_blank">View</a></li>
                                             @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
                                             <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
                                         </ul>
@@ -1194,30 +1267,7 @@
                     </div>
                 </div>
             }
-            @if (Model.applicantViewModels.permit_status == "For Inspector Approval" || Model.applicantViewModels.permit_status == "Rejected (Inspector)" || Model.applicantViewModels.permit_status == "Rejected (CENRO)") @* (@Model.applicantViewModels.permit_status != "Approved") *@
-            {
-                <hr/>
-                <div class="row d-flex justify-content-center m-0">
-                    <div class="row d-flex justify-content-center px-0 mb-5">
-                        <div class="mb-4">
-                            <span style="white-space: pre-line">@ViewBag.RequiredDocsList</span>
-                        </div>
-                        <div class="gap-4 mb-5">
-                            <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
-                            <input asp-for="filesUpload.Files" type="file" class="file" multiple data-allowed-file-extensions='["pdf"]' accept="application/pdf" data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload...">
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row d-flex justify-content-center px-0 mb-5">
-                        <div class="col-md-11 d-flex flex-column gap-2">
-                            <span>
-                                Purpose
-                            </span>
-                            <textarea asp-for="applicantViewModels.purpose" class="form-control"></textarea>
-                        </div>
-                    </div>
-                </div>
-            }            
+                        
         
         <hr />
         <form id="commentSection" asp-action="CommentSection">
@@ -1307,6 +1357,7 @@
 
 <script src="/js/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js" integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script type="text/javascript">
 
@@ -1414,6 +1465,93 @@
 
         });
     });
+
+    //Multiple Select
+    $('.form-select.fileListDropDown').each(function () {
+        //Initialize Selectize on the select element with the specified class
+
+        var $select = $(this).selectize({
+            create: true,
+            placeholder: 'Please select your uploaded file',
+            plugins: ['remove_button'], // Enable the remove button
+        })[0].selectize;
+
+
+        $('.file').on('change', function (event) {
+            var files = event.target.files;
+            //var formFiles = document.forms['ImporterRegForm']['filesUpload.Files'];
+            //console.log("formFiles.files jq: ", formFiles.files);
+
+            $select.clear();
+            // Clear existing options
+            $select.clearOptions();
+            $select.addOption({ value: "N/A", text: "N/A" });
+            // Loop through each selected file
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+
+                // Get the file name
+                var fileName = file.name;
+
+                // Add options based on the file name
+                $select.addOption({ value: fileName, text: fileName });
+                //var options = fileName.split('.')[0].split('_');
+                //var options = fileName.split('_');
+                //console.log("fileName.split('.')[0]: ", fileName.split('.')[0]);
+                //options.forEach(function (option) {
+                //    option = option.trim();
+                //    if (option !== '') {
+                //        $select.addOption({ value: option, text: option });
+                //    }
+                //});
+            }
+
+            // Refresh the Selectize control to update the UI
+            //$select.refreshOptions();
+        });
+
+        //If files were placed using drag and drop feature
+        $(document).on('drop', '.file-drop-zone.clearfix', function () {
+            console.log("dropped");
+            $select.clear();
+            $select.clearOptions();
+
+            var formFiles = document.forms['EditApplicationForm']['filesUpload.Files'];
+            var files = formFiles.files;
+
+            $select.addOption({ value: "N/A", text: "N/A" });
+            // Loop through each selected file
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+
+                // Get the file name
+                var fileName = file.name;
+
+                // Add options based on the file name
+                $select.addOption({ value: fileName, text: fileName });
+                //var options = fileName.split('.')[0].split('_');
+                //var options = fileName.split('_');
+                //console.log("fileName.split('.')[0]: ", fileName.split('.')[0]);
+                //options.forEach(function (option) {
+                //    option = option.trim();
+                //    if (option !== '') {
+                //        $select.addOption({ value: option, text: option });
+                //    }
+                //});
+            }
+
+        });
+
+        //If remove button of files will be clicked
+        $(document).on('click', '.fileinput-remove-button', function () {
+            console.log("remove button clicked");
+            $select.clear();
+            $select.clearOptions();
+        });
+
+    });
+
+    //End of Multiple Select
 
     // // Function to display the modal
     // function showModal() {
