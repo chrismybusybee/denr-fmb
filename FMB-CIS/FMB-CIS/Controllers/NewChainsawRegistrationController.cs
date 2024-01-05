@@ -87,6 +87,9 @@ namespace FMB_CIS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Index(ViewModel model)
         {
+
+            List<tbl_chainsaw> myDeserializedObjList = (List<tbl_chainsaw>)Newtonsoft.Json.JsonConvert.DeserializeObject(model.Dataxxx, typeof(List<tbl_chainsaw>));
+
             //try
             //{
             if (ModelState.IsValid)
@@ -100,6 +103,7 @@ namespace FMB_CIS.Controllers
                 var emailTemplates = _context.tbl_email_template.ToList();
 
                 //SAVE permit application
+                model.tbl_Application = new tbl_application();
                 model.tbl_Application.tbl_application_type_id = 1; //Chainsaw Owner
                 model.tbl_Application.status = 1;
                 model.tbl_Application.tbl_user_id = userID;
@@ -113,30 +117,51 @@ namespace FMB_CIS.Controllers
                 _context.tbl_application.Add(model.tbl_Application);
                 _context.SaveChanges();
 
+
                 //SAVE to tbl_chainsaw
-                model.TBL_Chainsaw.user_id = userID;
-                model.TBL_Chainsaw.tbl_application_id = model.tbl_Application.id;
-                model.TBL_Chainsaw.status = "Owner";
-                model.TBL_Chainsaw.is_active = true;
-                model.TBL_Chainsaw.created_by = userID;
-                model.TBL_Chainsaw.modified_by = userID;
-                model.TBL_Chainsaw.date_created = DateTime.Now;
-                model.TBL_Chainsaw.date_modified = DateTime.Now;
+                foreach (tbl_chainsaw chainsaw in myDeserializedObjList) {
 
-                model.TBL_Chainsaw.chainsaw_date_of_registration = DateTime.Now;
-                model.TBL_Chainsaw.chainsaw_date_of_expiration = DateTime.Now.AddYears(3);
+                    tbl_chainsaw newChainsaw = new tbl_chainsaw();
+                    newChainsaw.user_id = userID;
+                    newChainsaw.tbl_application_id = model.tbl_Application.id;
+                    newChainsaw.status = "Owner";
+                    newChainsaw.is_active = true;
+                    newChainsaw.created_by = userID;
+                    newChainsaw.modified_by = userID;
+                    newChainsaw.date_created = DateTime.Now;
+                    newChainsaw.date_modified = DateTime.Now;
+                    newChainsaw.created_by = userID;
+                    newChainsaw.modified_by = userID;
 
-                if (model.TBL_Chainsaw.Power == "Gas")
-                {
-                    model.TBL_Chainsaw.watt = null;
+                    newChainsaw.chainsaw_date_of_registration = DateTime.Now;
+                    newChainsaw.chainsaw_date_of_expiration = DateTime.Now.AddYears(3);
+
+                    newChainsaw.supplier = chainsaw.supplier;
+                    newChainsaw.Power = chainsaw.Power;
+                    newChainsaw.Brand = chainsaw.Brand;
+                    newChainsaw.Model = chainsaw.Model;
+                    newChainsaw.Engine = chainsaw.Engine;
+                    newChainsaw.chainsaw_serial_number = chainsaw.chainsaw_serial_number;
+                    newChainsaw.gb = chainsaw.gb;
+                    newChainsaw.specification = chainsaw.specification;
+                    newChainsaw.purpose = chainsaw.purpose;
+                    
+
+                    if (chainsaw.Power == "Gas")
+                    {
+                        newChainsaw.watt = null;
+                    }
+                    else if (chainsaw.Power == "Electric" || chainsaw.Power == "Battery")
+                    {
+                        newChainsaw.hp = null;
+                    }
+
+                    _context.tbl_chainsaw.Add(newChainsaw);
                 }
-                else if (model.TBL_Chainsaw.Power == "Electric" || model.TBL_Chainsaw.Power == "Battery")
-                {
-                    model.TBL_Chainsaw.hp = null;
-                }
-                
-                _context.tbl_chainsaw.Add(model.TBL_Chainsaw);
+
+              
                 _context.SaveChanges();
+
                 int? appID = model.tbl_Application.id;
 
                 //File Upload

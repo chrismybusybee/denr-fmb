@@ -951,7 +951,9 @@
             <hr/>
             <div class="row d-flex justify-content-center m-0">
 
-                 <table class="table dataTable" id="tblApplicationGroup">
+                  @if (Model.applicantViewModels.permit_type != "Certificate of Registration")
+                    {
+                <table class="table dataTable" id="tblApplicationGroup">
                     <thead>
                         <tr>
                             <th>
@@ -963,9 +965,9 @@
                             <th>
                                 Quantity
                             </th>
-                           @* <th>
-                                Comment
-                            </th>*@
+                            @* <th>
+                        Comment
+                        </th>*@
 
                         </tr>
                     </thead>
@@ -979,7 +981,7 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.supplier_address)
                                 </td>
-                                 <td>
+                                <td>
                                     @Html.DisplayFor(modelItem => item.quantity)
                                 </td>
 
@@ -987,6 +989,54 @@
                         }
                     </tbody>
                 </table>
+                    }
+
+             @if (Model.applicantViewModels.permit_type == "Certificate of Registration")
+                {
+                   <table class="table dataTable" id="tblChainsawList">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Supplier Name
+                                </th>
+                                <th>
+                                    Brand
+                                </th>
+                                <th>
+                                    Model
+                                </th>
+                                <th>
+                                    Engine
+                                </th>
+                                @* <th>
+                            Comment
+                            </th>*@
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (tbl_chainsaw item in Model.tbl_Chainsaws)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Brand)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Model)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.supplier)
+                                    </td>
+                                     <td>
+                                        @Html.DisplayFor(modelItem => item.Engine)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                
+                }
+
 
                 <table class="table dataTable" id="tblApplicantFiles">
                     <thead>

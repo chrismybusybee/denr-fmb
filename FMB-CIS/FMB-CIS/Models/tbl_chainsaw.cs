@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FMB_CIS.Models
 {
@@ -12,7 +13,7 @@ namespace FMB_CIS.Models
         public string? Model { get; set; }
         public string? Engine { get; set; }
         public string? Power { get; set; }
-
+        public string? remarks { get; set; }
         public string? status { get; set; }
         public int? watt { get; set; }
         public int? hp { get; set; }
@@ -27,5 +28,9 @@ namespace FMB_CIS.Models
         public string? chainsaw_serial_number { get; set; }
         public DateTime? chainsaw_date_of_registration { get; set; }
         public DateTime? chainsaw_date_of_expiration { get; set; }
+
+
+        public string? specification { get; set; }
+        public string? purpose { get; set; }
     }
 }

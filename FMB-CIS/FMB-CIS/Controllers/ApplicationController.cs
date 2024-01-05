@@ -624,6 +624,8 @@ namespace FMB_CIS.Controllers
                                           }).FirstOrDefault();
 
                     mymodel.applicantViewModels = applicationMod;
+
+
                 }
                 else
                 {
@@ -765,6 +767,10 @@ namespace FMB_CIS.Controllers
                 var requirements = _context.tbl_announcement.Where(a => a.id == announcementID).FirstOrDefault();
                 ViewBag.RequiredDocsList = requirements.announcement_content;
                 //End for required documents
+
+                //Application ChaisawList
+                var applicationChainsaws = _context.tbl_chainsaw.Where(g => g.tbl_application_id == applicID).ToList();
+                mymodel.tbl_Chainsaws = applicationChainsaws;
                 return View(mymodel);
             }
         }
