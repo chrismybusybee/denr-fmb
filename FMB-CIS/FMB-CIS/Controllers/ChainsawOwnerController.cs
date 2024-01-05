@@ -72,52 +72,47 @@ namespace FMB_CIS.Controllers
             //     return RedirectToAction("Index", "Dashboard");
             // }
         }
+
+        [RequiresAccess(allowedAccessRights = "allow_page_create_chainsaw_registration,allow_page_create_other_permits")]
         public IActionResult ChecklistForChainsawOwnerPartialView(int permitTypeID)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
 
             ViewModel model = new ViewModel();
-            
-            
-            if (usrRoleID == 3 || usrRoleID == 5 || usrRoleID == 6 || usrRoleID == 7)
-            {
-                string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
-                ViewData["BaseUrl"] = host;
 
+            string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
+            ViewData["BaseUrl"] = host;
 
-                //var checklistDocs = (from dc in _context.tbl_document_checklist
-                //                     join pt in _context.tbl_permit_type on dc.permit_type_id equals pt.id
-                //                     select new ChecklistManagementModel
-                //                     {
-                //                         tbl_document_checklist_id = dc.id,
-                //                         permit_type_id = dc.permit_type_id,
-                //                         tbl_permit_type_name = pt.name,
-                //                         tbl_document_checklist_name = dc.name,
-                //                         tbl_document_checklist_description = dc.description,
-                //                         is_active = dc.is_active
+            //Document Checklist
+            var myChecklist = _context.tbl_document_checklist.Where(c => c.is_active == true && c.permit_type_id == permitTypeID).ToList();
+            model.tbl_Document_Checklist = myChecklist;
+            //End for Document Checklist
 
-                //                     }).OrderBy(ptype => ptype.tbl_permit_type_name).ToList();
+            return PartialView("~/Views/ChainsawOwner/ChecklistForChainsawOwnerPartialView.cshtml", model);
 
-                //model.checklistManagementModels = checklistDocs;
+            //if (usrRoleID == 3 || usrRoleID == 5 || usrRoleID == 6 || usrRoleID == 7)
+            //{
+            //    string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
+            //    ViewData["BaseUrl"] = host;
 
-                //Document Checklist
-                var myChecklist = _context.tbl_document_checklist.Where(c => c.is_active == true && c.permit_type_id == permitTypeID).ToList();
-                model.tbl_Document_Checklist = myChecklist;
-                //End for Document Checklist
+            //    //Document Checklist
+            //    var myChecklist = _context.tbl_document_checklist.Where(c => c.is_active == true && c.permit_type_id == permitTypeID).ToList();
+            //    model.tbl_Document_Checklist = myChecklist;
+            //    //End for Document Checklist
 
-                return PartialView("~/Views/ChainsawOwner/ChecklistForChainsawOwnerPartialView.cshtml", model);
-            }
-            else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11 || usrRoleID == 17) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
-            {
+            //    return PartialView("~/Views/ChainsawOwner/ChecklistForChainsawOwnerPartialView.cshtml", model);
+            //}
+            //else if (usrRoleID == 8 || usrRoleID == 9 || usrRoleID == 10 || usrRoleID == 11 || usrRoleID == 17) //(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("DENR") == true)
+            //{
 
-                return RedirectToAction("ChainsawOwnerApplicantsList", "ChainsawOwner");
+            //    return RedirectToAction("ChainsawOwnerApplicantsList", "ChainsawOwner");
 
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
 
         [HttpPost]

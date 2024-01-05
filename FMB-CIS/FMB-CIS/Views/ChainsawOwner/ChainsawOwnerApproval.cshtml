@@ -242,7 +242,9 @@
                                     </div>
                                 </div>
                             }
-                            <div class="row mb-5">
+                            @Html.HiddenFor(model => model.applicantViewModels.specification)
+                            @Html.HiddenFor(model => model.applicantViewModels.purpose)
+                            @* <div class="row mb-5">
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
@@ -250,7 +252,6 @@
                                         </label>
                                         <span class="fw-bold">
                                             @Html.DisplayFor(model => model.applicantViewModels.specification)
-                                            @Html.HiddenFor(model => model.applicantViewModels.specification)
                                         </span>
                                     </div>
                                 </div>
@@ -261,12 +262,11 @@
                                         </label>
                                         <span class="fw-bold">
                                             @Html.DisplayFor(model => model.applicantViewModels.purpose)
-                                            @Html.HiddenFor(model => model.applicantViewModels.purpose)
                                         </span>
                                     </div>
                                 </div>
-                            </div>
-
+                            </div> *@
+@* 
                             @if (Model.applicantViewModels.permit_type != "Certificate of Registration")
                             {
                                 <div class="row mb-5">
@@ -276,7 +276,6 @@
                                                 Chainsaw Quantity
                                             </label>
                                             <span class="fw-bold">
-                                                @* <label asp-for="applicantViewModels.birth_date" value="@Model.applicantViewModels.birth_date">@Model.applicantViewModels.birth_date</label> *@
                                                 @Html.DisplayFor(model => model.applicantViewModels.qty)
                                             </span>
                                         </div>
@@ -294,7 +293,6 @@
                                                 Chainsaw Brand
                                             </label>
                                             <span class="fw-bold">
-                                                @* <label asp-for="applicantViewModels.address" value="@Model.applicantViewModels.address">@Model.applicantViewModels.address</label> *@
                                                 @Html.DisplayFor(model => model.applicantViewModels.chainsawBrand)
                                             </span>
                                         </div>
@@ -305,7 +303,6 @@
                                                 Chainsaw Model
                                             </label>
                                             <span class="fw-bold">
-                                                @* <label asp-for="applicantViewModels.valid_id" value="@Model.applicantViewModels.valid_id">@Model.applicantViewModels.valid_id</label> *@
                                                 @Html.DisplayFor(model => model.applicantViewModels.chainsawModel)
                                             </span>
                                         </div>
@@ -316,7 +313,6 @@
                                                 Chainsaw Engine
                                             </label>
                                             <span class="fw-bold">
-                                                @* <label asp-for="applicantViewModels.valid_id_no" value="@Model.applicantViewModels.valid_id_no">@Model.applicantViewModels.valid_id_no</label> *@
                                                 @Html.DisplayFor(model => model.applicantViewModels.Engine)
                                             </span>
                                         </div>
@@ -329,7 +325,6 @@
                                                 Chainsaw Power Source
                                             </label>
                                             <span class="fw-bold">
-                                                @* <label asp-for="applicantViewModels.valid_id" value="@Model.applicantViewModels.valid_id">@Model.applicantViewModels.valid_id</label> *@
                                                 @Html.DisplayFor(model => model.applicantViewModels.powerSource)
                                             </span>
                                         </div>
@@ -342,7 +337,6 @@
                                                     Watt
                                                 </label>
                                                 <span class="fw-bold">
-                                                    @* <label asp-for="applicantViewModels.valid_id_no" value="@Model.applicantViewModels.valid_id_no">@Model.applicantViewModels.valid_id_no</label> *@
                                                     @Html.DisplayFor(model => model.applicantViewModels.Watt)
                                                 </span>
                                             </div>
@@ -356,7 +350,6 @@
                                                     Horsepower
                                                 </label>
                                                 <span class="fw-bold">
-                                                    @* <label asp-for="applicantViewModels.valid_id_no" value="@Model.applicantViewModels.valid_id_no">@Model.applicantViewModels.valid_id_no</label> *@
                                                     @Html.DisplayFor(model => model.applicantViewModels.hp)
                                                 </span>
                                             </div>
@@ -370,7 +363,6 @@
                                                 Length of Guidebar
                                             </label>
                                             <span class="fw-bold">
-                                                @* <label asp-for="applicantViewModels.valid_id" value="@Model.applicantViewModels.valid_id">@Model.applicantViewModels.valid_id</label> *@
                                                 @Html.DisplayFor(model => model.applicantViewModels.gb)
                                             </span>
                                         </div>
@@ -381,7 +373,6 @@
                                                 Chainsaw Serial Number
                                             </label>
                                             <span class="fw-bold">
-                                                @* <label asp-for="applicantViewModels.valid_id_no" value="@Model.applicantViewModels.valid_id_no">@Model.applicantViewModels.valid_id_no</label> *@
                                                 @Html.DisplayFor(model => model.applicantViewModels.chainsaw_serial_number)
                                             </span>
                                         </div>
@@ -394,7 +385,6 @@
                                                 Chainsaw Supplier
                                             </label>
                                             <span class="fw-bold">
-                                                @* <label asp-for="applicantViewModels.valid_id" value="@Model.applicantViewModels.valid_id">@Model.applicantViewModels.valid_id</label> *@
                                                 @Html.DisplayFor(model => model.applicantViewModels.chainsawSupplier)
                                             </span>
                                         </div>
@@ -405,13 +395,12 @@
                                                 Date of Purchase
                                             </label>
                                             <span class="fw-bold">
-                                                @* <label asp-for="applicantViewModels.valid_id_no" value="@Model.applicantViewModels.valid_id_no">@Model.applicantViewModels.valid_id_no</label> *@
                                                 @Html.DisplayFor(model => model.applicantViewModels.date_purchase)
                                             </span>
                                         </div>
                                     </div>
                                 </div>                                
-                            }
+                            } *@
                             @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true)
                             {
                                 <div class="row mb-5">

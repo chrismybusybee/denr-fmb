@@ -241,14 +241,16 @@
                                     </div>
                                 </div>
                             }
-                            <div class="row mb-5">                                
+                            @Html.HiddenFor(model => model.applicantViewModels.specification)
+                            @Html.HiddenFor(model => model.applicantViewModels.purpose)
+
+                            @* <div class="row mb-5">                                
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
                                             Chainsaw Quantity
                                         </label>
                                         <span class="fw-bold">
-                                            @* <label asp-for="applicantViewModels.birth_date" value="@Model.applicantViewModels.birth_date">@Model.applicantViewModels.birth_date</label> *@
                                             @Html.DisplayFor(model => model.applicantViewModels.qty)
                                         </span>
                                     </div>
@@ -277,7 +279,7 @@
                                         </span>
                                     </div>
                                 </div>
-                            </div>
+                            </div> *@
                             @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true)
                             {
                                 <div class="row mb-5">

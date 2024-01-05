@@ -52,6 +52,35 @@ namespace FMB_CIS.Controllers
                 if (((ClaimsIdentity)User.Identity).FindFirst("userID").Value != null)
                 {    
 
+                    var dashboardView = new DashboardView();
+                    dashboardView.UserActiveCount = _context.tbl_user.Count();
+                    dashboardView.UserChangeRequestCount =  _context.tbl_user_change_info_request.Count();
+                    dashboardView.OfficeTypesCount = _context.tbl_office_type.Where(a => a.is_active == true).Count();
+                    dashboardView.OfficesCount = _context.tbl_office.Where(a => a.is_active == true).Count();
+                    dashboardView.UserTypesCount = _context.tbl_user_types.Where(a => a.is_active == true).Count();
+                    dashboardView.AccessRightsCount = _context.tbl_access_right.Where(a => a.is_active == true).Count();
+                    dashboardView.WorkflowsCount = _context.tbl_permit_workflow.Where(a => a.is_active == true).Count();
+                    dashboardView.AnnouncementsCount = _context.tbl_announcement.Where(a => a.is_active == true).Count();
+                    dashboardView.EmailsCount = _context.tbl_email_template.Where(a => a.is_active == true).Count();
+                    dashboardView.ChecklistsCount = _context.tbl_document_checklist.Where(a => a.is_active == true).Count();
+                    dashboardView.SellerPendingCount = _context.tbl_application.Where(a => a.is_active == true).Count();
+                    dashboardView.SellerApprovedCount = _context.tbl_application.Where(a => a.is_active == true).Count();
+                    dashboardView.SellerDeclinedCount = _context.tbl_application.Where(a => a.is_active == true).Count();
+                    dashboardView.SellerTotalCount = _context.tbl_application.Where(a => a.is_active == true).Count();
+                    dashboardView.OwnerPendingCount = _context.tbl_application.Where(a => a.is_active == true).Count();
+                    dashboardView.OwnerApprovedCount = _context.tbl_application.Where(a => a.is_active == true).Count();
+                    dashboardView.OwnerDeclinedCount = _context.tbl_application.Where(a => a.is_active == true).Count();
+                    dashboardView.OwnerTotalCount = _context.tbl_application.Where(a => a.is_active == true).Count();
+                    dashboardView.ImporterPendingCount = _context.tbl_application.Where(a => a.is_active == true).Count();
+                    dashboardView.ImporterApprovedCount = _context.tbl_application.Where(a => a.is_active == true).Count();
+                    dashboardView.ImporterDeclinedCount = _context.tbl_application.Where(a => a.is_active == true).Count();
+                    dashboardView.ImporterTotalCount = _context.tbl_application.Where(a => a.is_active == true).Count();
+
+
+                    mymodel.dashboardView = dashboardView;
+
+
+
                     if(userRole.Contains("Owner") == true || userRole.Contains("Seller") == true || userRole.Contains("Importer") == true)
                     {
 
@@ -93,7 +122,6 @@ namespace FMB_CIS.Controllers
                     //mymodel.tbl_Chainsaws = ChainsawOwnedList;
                     mymodel.applicationModels = applicationMod;
 
-
                         return View(mymodel);
                     }
                     else if(userRole.Contains("CENRO") == true)
@@ -119,7 +147,7 @@ namespace FMB_CIS.Controllers
                     }                
                 }
             }
-            return View();
+            return View(mymodel);
             
         }
 
