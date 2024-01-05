@@ -1,13 +1,198 @@
 
 @using System.Security.Claims;
+@using Services.Utilities;
+@model FMB_CIS.Models.ViewModel
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Dashboard";
+    ViewBag.AccessRights = ((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value;
     ViewBag.UserType = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
 }
+
+<div class="c-dashboard-container">
+                                         @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_users")) {
+                                
+    <div class="c-dashboard-item">
+        <div class="c-dashboard-item-icon">
+        <img src="~/assets/images/menu-icons/account-management.png" /></div>
+        <div class="c-dashboard-item-row-container">
+        <div class="c-dashboard-item-row">
+        <h3 class="c-dashboard-item-title-main">Users </h3></div>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Active</h3><span class="c-dashboard-item-count">@Model.dashboardView.UserActiveCount</span></a>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Change Requests</h3><span class="c-dashboard-item-count">@Model.dashboardView.UserChangeRequestCount</span></a>
+        <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Users active number and how to use the system properly.</p></div>
+        </div>
+    </div>
+    }
+                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_office_management"))
+                                        {
+    <div class="c-dashboard-item">
+        <div class="c-dashboard-item-icon">
+        <img src="~/assets/images/menu-icons/creation-of-new-denr-office.png" /></div>
+        <div class="c-dashboard-item-row-container">
+        <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Office</h3></div>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Office types</h3><span class="c-dashboard-item-count">@Model.dashboardView.OfficeTypesCount</span></a>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Offices</h3><span class="c-dashboard-item-count">@Model.dashboardView.OfficesCount</span></a>
+        <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Used to represent different types of office functions.</p></div>
+                </div>
+
+    </div>
+    }
+                                @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_access_rights_management"))
+                                {
+    <div class="c-dashboard-item">
+        <div class="c-dashboard-item-icon">
+        <img src="~/assets/images/menu-icons/account-management.png" /></div>
+        <div class="c-dashboard-item-row-container">
+        <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Access</h3></div>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">User Types</h3><span class="c-dashboard-item-count">@Model.dashboardView.UserTypesCount</span></a>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Access Rights</h3><span class="c-dashboard-item-count">@Model.dashboardView.AccessRightsCount</span></a>
+        <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Assign user types and access rights to users.</p></div>
+                </div>
+
+    </div>
+    }
+                                @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_workflow_management"))
+                                {
+    <div class="c-dashboard-item">
+        <div class="c-dashboard-item-icon">
+        <img src="~/assets/images/menu-icons/account-management.png" /></div>
+        <div class="c-dashboard-item-row-container">
+        <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Workflows</h3></div>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Total</h3><span class="c-dashboard-item-count">@Model.dashboardView.WorkflowsCount</span></a>
+        <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Workflow settings of different permit types.</p></div>
+                </div>
+
+    </div>
+    }
+                                @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_announcement_management") || AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_email_management"))
+                                {
+    <div class="c-dashboard-item">
+        <div class="c-dashboard-item-icon">
+        <img src="~/assets/images/menu-icons/announcement-templates.png" /></div>
+        <div class="c-dashboard-item-row-container">
+        <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Notes</h3></div>
+                                @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_announcement_management"))
+                                {
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Announcements</h3><span class="c-dashboard-item-count">@Model.dashboardView.AnnouncementsCount</span></a>
+                                }
+                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_email_management"))
+                                        {
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Emails</h3><span class="c-dashboard-item-count">@Model.dashboardView.EmailsCount</span></a>
+        }
+        <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Sitewide notifications and email templates.</p></div>
+                </div>
+
+    </div>
+                                }
+                                @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_checklist_management"))
+                                {
+    <div class="c-dashboard-item">
+        <div class="c-dashboard-item-icon">
+        <img src="~/assets/images/menu-icons/checklist-management.png" /></div>
+        <div class="c-dashboard-item-row-container">
+        <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Checklist</h3></div>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Total</h3><span class="c-dashboard-item-count">@Model.dashboardView.ChecklistsCount</span></a>
+        <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Checklist for required documents.</p></div>
+                </div>
+
+    </div>
+    }
+
+
+@* 
+    @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_own_applications"))// || usrRoleList.Contains("Chainsaw Importer")
+    {
+    <div class="c-dashboard-item">
+        <div class="c-dashboard-item-icon">
+        <img src="~/assets/images/menu-icons/checklist-management.png" /></div>
+        <div class="c-dashboard-item-row-container">
+        <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Renewal</h3></div>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Pending</h3><span class="c-dashboard-item-count">100</span></a>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">100</span></a>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">100</span></a>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Total</h3><span class="c-dashboard-item-count">300</span></a>
+        <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Checklist for required documents.</p></div>
+                </div>
+
+    </div>
+    } *@
+
+
+
+    @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_sell_applications"))// || usrRoleList.Contains("Chainsaw Importer")
+    {
+    <div class="c-dashboard-item">
+        <div class="c-dashboard-item-icon">
+        <img src="~/assets/images/menu-icons/checklist-management.png" /></div>
+        <div class="c-dashboard-item-row-container">
+        <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Seller</h3></div>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Pending</h3><span class="c-dashboard-item-count">@Model.dashboardView.SellerPendingCount</span></a>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">@Model.dashboardView.SellerApprovedCount</span></a>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">@Model.dashboardView.SellerDeclinedCount</span></a>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Submitted Applications</h3><span class="c-dashboard-item-count">@Model.dashboardView.SellerTotalCount</span></a>
+        <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Checklist for required documents.</p></div>
+                </div>
+
+    </div>
+    }
+
+
+    @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_own_applications"))// || usrRoleList.Contains("Chainsaw Importer")
+    {
+    <div class="c-dashboard-item">
+        <div class="c-dashboard-item-icon">
+        <img src="~/assets/images/menu-icons/checklist-management.png" /></div>
+        <div class="c-dashboard-item-row-container">
+        <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Owner</h3></div>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Pending</h3><span class="c-dashboard-item-count">@Model.dashboardView.OwnerPendingCount</span></a>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">@Model.dashboardView.OwnerApprovedCount</span></a>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">@Model.dashboardView.OwnerDeclinedCount</span></a>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Submitted Applications</h3><span class="c-dashboard-item-count">@Model.dashboardView.OwnerTotalCount</span></a>
+        <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Checklist for required documents.</p></div>
+                </div>
+
+    </div>
+    }
+
+    @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_import_applications"))// || usrRoleList.Contains("Chainsaw Importer")
+    {
+    <div class="c-dashboard-item">
+        <div class="c-dashboard-item-icon">
+        <img src="~/assets/images/menu-icons/checklist-management.png" /></div>
+        <div class="c-dashboard-item-row-container">
+        <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Importer</h3></div>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Pending</h3><span class="c-dashboard-item-count">@Model.dashboardView.ImporterPendingCount</span></a>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">@Model.dashboardView.ImporterApprovedCount</span></a>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">@Model.dashboardView.ImporterDeclinedCount</span></a>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Submitted Applications</h3><span class="c-dashboard-item-count">@Model.dashboardView.ImporterTotalCount</span></a>
+        <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Checklist for required documents.</p></div>
+                </div>
+
+    </div>
+    }
+
+@* 
+    <div class="c-dashboard-item">
+        <div class="c-dashboard-item-icon">
+        <img src="~/assets/images/menu-icons/checklist-management.png" /></div>
+        <div class="c-dashboard-item-row-container">
+        <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Renewal</h3></div>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Pending</h3><span class="c-dashboard-item-count">100</span></a>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">100</span></a>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">100</span></a>
+        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Total</h3><span class="c-dashboard-item-count">300</span></a>
+        <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Checklist for required documents.</p></div>
+                </div>
+
+    </div> *@
+</div>
+
+
+
 @*Cards region*@
-<div id="card-container" class="border-0 bg-none">
-    <div class="row m-0">
+<div id="card-container" class="border-0 bg-none" >
+    <div class="row m-0" style="display: none;">
         @* IMPORTER COLUMN *@
         @if (ViewBag.UserType.Contains("Importer") == true)
         {
@@ -341,6 +526,7 @@
     </div>
 }
 </div>
+
 
 <script type="text/javascript">
     var js = jQuery.noConflict(true);
