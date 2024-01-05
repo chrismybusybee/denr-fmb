@@ -759,8 +759,11 @@
                     <div class="gap-4 mb-5">
                         <h2 class="text-secondary fw-bold m-0">Upload Documents</h2>
                         <div class="alert alert-warning mt-3 mb-3" role="alert">
-                                When uploading multiple files, drag all files at once on the field.
-                            </div>
+                            <ul style="margin-bottom: 0px;">
+                                <li>When uploading multiple files, drag all files at once on the field.</li>
+                                <li>Only alphanumeric characters (A-Z), (a-z), (0-9), underscores (_), and hyphen (-) are allowed for filenames. Spaces are not allowed. Please rename before uploading.</li>
+                            </ul>
+                        </div>
                         <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload...">
                     </div>
                 }

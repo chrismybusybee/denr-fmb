@@ -76,7 +76,10 @@
                         <div class="gap-4 mb-5">
                             <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
                             <div class="alert alert-warning mt-3 mb-3" role="alert">
-                                When uploading multiple files, drag all files at once on the field.
+                                <ul style="margin-bottom: 0px;">
+                                    <li>When uploading multiple files, drag all files at once on the field.</li>
+                                    <li>Only alphanumeric characters (A-Z), (a-z), (0-9), underscores (_), and hyphen (-) are allowed for filenames. Spaces are not allowed. Please rename before uploading.</li>
+                                </ul>
                             </div>
                             <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-allowed-file-extensions='["pdf"]' accept="application/pdf" data-show-caption="true" data-msg-placeholder="Select {files} for upload..."> <!-- onchange="fileChange(this)" -->
                         </div>                        
@@ -605,31 +608,24 @@
 
                 // Get the file name
                 var fileName = file.name;
-
-                //validate 
-
-               // if(contains special characters)
-
-               
-                //.remove()
-                 //swal
-                // break
-
-                //else{
-                
-                
-                //}
-
-                // Add options based on the file name
-                $select.addOption({ value: fileName, text: fileName });
-                //var options = fileName.split('.')[0].split('_');
-                // var options = fileName.split('_');
-                // options.forEach(function (option) {
-                //     option = option.trim();
-                //     if (option !== '') {
-                //         $select.addOption({ value: option, text: option });
-                //     }
-                // });
+                //Check if filename contains special characters
+                if (fileName.search(/(?:\.(?![^.]+$)|[^\w.-])+/g) >= 0) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "File name not allowed!",
+                        text: "Only upload filenames without special characters and spaces. Only alphanumeric characters (A-Z), (a-z), (0-9), underscores (_), and hyphen (-) are allowed ",
+                        confirmButtonColor: '#14984a'
+                    });
+                    const removeFileButton = document.querySelector('.fileinput-remove-button');
+                    removeFileButton.click();
+                    $select.clear();
+                    $select.clearOptions();
+                    break;
+                }
+                else {
+                    // Add options based on the file name
+                    $select.addOption({ value: fileName, text: fileName });
+                }
             }
 
             // Refresh the Selectize control to update the UI
@@ -652,16 +648,24 @@
 
                 // Get the file name
                 var fileName = file.name;
-
-                // Add options based on the file name
-                $select.addOption({ value: fileName, text: fileName });
-                // var options = fileName.split('_');
-                // options.forEach(function (option) {
-                //     option = option.trim();
-                //     if (option !== '') {
-                //         $select.addOption({ value: option, text: option });
-                //     }
-                // });
+                //Check if filename contains special characters
+                if (fileName.search(/(?:\.(?![^.]+$)|[^\w.-])+/g) >= 0) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "File name not allowed!",
+                        text: "Only upload filenames without special characters and spaces. Only alphanumeric characters (A-Z), (a-z), (0-9), underscores (_), and hyphen (-) are allowed ",
+                        confirmButtonColor: '#14984a'
+                    });
+                    const removeFileButton = document.querySelector('.fileinput-remove-button');
+                    removeFileButton.click();
+                    $select.clear();
+                    $select.clearOptions();
+                    break;
+                }
+                else {
+                    // Add options based on the file name
+                    $select.addOption({ value: fileName, text: fileName });
+                }
             }
 
         });
