@@ -374,6 +374,7 @@
             }
 
             if (!regex.test(emailValue)) {
+                emailExist = true;
                 document.getElementById("emailValidation").innerHTML = "Invalid email format. Only '.' and '_' special characters are allowed";
             }
         });
