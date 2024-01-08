@@ -565,15 +565,24 @@
                 // Get the file name
                 var fileName = file.name;
 
-                // Add options based on the file name
-                $select.addOption({ value: fileName, text: fileName });
-                // var options = fileName.split('_');
-                // options.forEach(function (option) {
-                //     option = option.trim();
-                //     if (option !== '') {
-                //         $select.addOption({ value: option, text: option });
-                //     }
-                // });
+                //Check if filename contains special characters
+                if (fileName.search(/(?:\.(?![^.]+$)|[^\w.-])+/g) >= 0) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "File name not allowed!",
+                        text: "Only upload filenames without special characters and spaces. Only alphanumeric characters (A-Z), (a-z), (0-9), underscores (_), and hyphen (-) are allowed ",
+                        confirmButtonColor: '#14984a'
+                    });
+                    const removeFileButton = document.querySelector('.fileinput-remove-button');
+                    removeFileButton.click();
+                    $select.clear();
+                    $select.clearOptions();
+                    break;
+                }
+                else {
+                    // Add options based on the file name
+                    $select.addOption({ value: fileName, text: fileName });
+                }
             }
 
         });
