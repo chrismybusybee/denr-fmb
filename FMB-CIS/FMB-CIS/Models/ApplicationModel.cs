@@ -16,3 +16,9 @@ namespace FMB_CIS.Models
 
     }
 }
+enum ApplicationTypeEnum : ushort
+{
+    CHAINSAW_OWNER = 1,
+    CHAINSAW_IMPORTER = 2,
+    CHAINSAW_SELLER = 3
+}

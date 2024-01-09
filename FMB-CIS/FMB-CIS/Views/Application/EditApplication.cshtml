@@ -1402,7 +1402,33 @@
                     </div>
                 </div>
             }
-                        
+            @if (Model.applicantViewModels.permit_status == "For Inspector Approval" || Model.applicantViewModels.permit_status == "Rejected (Inspector)" || Model.applicantViewModels.permit_status == "Rejected (CENRO)") @* (@Model.applicantViewModels.permit_status != "Approved") *@
+            {
+                <hr/>
+                <div class="row d-flex justify-content-center m-0">
+                    <div class="row d-flex justify-content-center px-0 mb-5">
+                        <div class="mb-4">
+                            <span class="c-preline" style="white-space: pre-line">@ViewBag.RequiredDocsList</span>
+                        </div>
+                        <div class="gap-4 mb-5">
+                            <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
+                            <div class="alert alert-warning mt-3 mb-3" role="alert">
+                                When uploading multiple files, drag all files at once on the field.
+                            </div>
+                            <input asp-for="filesUpload.Files" type="file" class="file" multiple data-allowed-file-extensions='["pdf"]' accept="application/pdf" data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload...">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row d-flex justify-content-center px-0 mb-5">
+                        <div class="col-md-11 d-flex flex-column gap-2">
+                            <span>
+                                Purpose
+                            </span>
+                            <textarea asp-for="applicantViewModels.purpose" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+            } 
         
         <hr />
         <form id="commentSection" asp-action="CommentSection">
