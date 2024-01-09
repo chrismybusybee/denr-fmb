@@ -940,6 +940,127 @@
                     </div>
                 </div>
             }
+            @if (Model.applicantViewModels.permit_type != "Certificate of Registration")
+            {
+                <table class="table dataTable" id="tblApplicationGroup">
+                    <thead>
+                        <tr>
+                            <th>
+                                Supplier Name
+                            </th>
+                            <th>
+                                Supplier Address
+                            </th>
+                            <th>
+                                Brand
+                            </th>
+                            <th>
+                                Model
+                            </th>
+                            <th>
+                                Power Source
+                            </th>
+                            <th>
+                                Unit Of Measure
+                            </th>
+                            <th>
+                                Enginer Serial No.
+                            </th>
+                            <th>
+                                Expected Time Of Arrival
+                            </th>
+                            <th>
+                                Quantity
+                            </th>
+                            @* <th>
+                        Comment
+                        </th>*@
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (tbl_application_group item in Model.tbl_Application_Group)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.supplier_name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.supplier_address)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.brand)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.model)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.power_source)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.unit_of_measure)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.engine_serialNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.expected_time_arrival)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.quantity)
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+            @if (Model.applicantViewModels.permit_type == "Certificate of Registration")
+            {
+                <table class="table dataTable" id="tblChainsawList">
+                    <thead>
+                        <tr>
+                            <th>
+                                Supplier Name
+                            </th>
+                            <th>
+                                Brand
+                            </th>
+                            <th>
+                                Model
+                            </th>
+                            <th>
+                                Engine
+                            </th>
+                            @* <th>
+                        Comment
+                        </th>*@
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (tbl_chainsaw item in Model.tbl_Chainsaws)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.supplier)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Brand)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Model)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Engine)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            }
 
 
             @* @if (@Model.applicantViewModels.permit_type == "Permit to Import")
@@ -1051,131 +1172,7 @@
 
         </form>
             <hr/>
-            <div class="row d-flex justify-content-center m-0">
-
-                  @if (Model.applicantViewModels.permit_type != "Certificate of Registration")
-                    {
-                <table class="table dataTable" id="tblApplicationGroup">
-                    <thead>
-                        <tr>
-                            <th>
-                                Supplier Name
-                            </th>
-                            <th>
-                                Supplier Address
-                            </th>
-                            <th>
-                                Brand
-                            </th>
-                             <th>
-                                Model
-                            </th>
-                             <th>
-                                Power Source
-                            </th>
-                            <th>
-                                Unit Of Measure
-                            </th>
-                            <th>
-                                Enginer Serial No.
-                            </th>
-                            <th>
-                                Expected Time Of Arrival
-                            </th>
-                            <th>
-                                Quantity
-                            </th>
-                           @* <th>
-                                Comment
-                            </th>*@
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (tbl_application_group item in Model.tbl_Application_Group)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.supplier_name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.supplier_address)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.brand)
-                                </td>
-                                   <td>
-                                    @Html.DisplayFor(modelItem => item.model)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.power_source)
-                                </td>
-                                   <td>
-                                    @Html.DisplayFor(modelItem => item.unit_of_measure)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.engine_serialNo)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.expected_time_arrival)
-                                </td>
-                                 <td>
-                                    @Html.DisplayFor(modelItem => item.quantity)
-                                </td>
-
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-                    }
-
-             @if (Model.applicantViewModels.permit_type == "Certificate of Registration")
-                {
-                   <table class="table dataTable" id="tblChainsawList">
-                        <thead>
-                            <tr>
-                                <th>
-                                    Supplier Name
-                                </th>
-                                <th>
-                                    Brand
-                                </th>
-                                <th>
-                                    Model
-                                </th>
-                                <th>
-                                    Engine
-                                </th>
-                                @* <th>
-                            Comment
-                            </th>*@
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (tbl_chainsaw item in Model.tbl_Chainsaws)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.supplier)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Brand)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Model)
-                                    </td>
-                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Engine)
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                
-                }
-
-
+            <div class="row d-flex justify-content-center m-0">                
                 <table class="table dataTable" id="tblApplicantFiles">
                     <thead>
                         <tr>
