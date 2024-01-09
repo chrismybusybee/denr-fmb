@@ -1077,6 +1077,9 @@ body.show-datatables-headers
     margin-left: 0 !important;
     margin-bottom: 24px !important;
 }
+#menu-items {
+    padding: 30px 0 0 30px !important;
+}
 #menu-items ul {
     display: block;
     position: relative;
