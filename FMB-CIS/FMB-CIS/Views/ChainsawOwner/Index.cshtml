@@ -52,7 +52,6 @@
                         @*   <th>ID</th>*@
                         <th>Supplier Name</th>
                         <th>Supplier Address</th>
-                        <th>Expected Time Of Arrival</th>
                         <th>PowerSource</th>
                         <th>UnitOfMeasure</th>
                         <th>Brand</th>
@@ -113,8 +112,11 @@
                         </div>
                         <div class="gap-4 mb-5">
                             <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
-                            <div class="alert alert-warning mt-3 mb-3" role="alert">
-                                When uploading multiple files, drag all files at once on the field.
+                            <div class="alert alert-warning mt-3 mb-3" role="alert">                                
+                                <ul style="margin-bottom: 0px;">
+                                    <li>When uploading multiple files, drag all files at once on the field.</li>
+                                    <li>Only alphanumeric characters (A-Z), (a-z), (0-9), underscores (_), and hyphen (-) are allowed for filenames. Spaces are not allowed. Please rename before uploading.</li>
+                                </ul>                                
                             </div>
                             <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-allowed-file-extensions='["pdf"]' accept="application/pdf" data-show-caption="true" data-msg-placeholder="Select {files} for upload..."> <!-- onchange="fileChange(this)" -->
                         </div>                                               
@@ -179,15 +181,26 @@
                         // Get the file name
                         var fileName = file.name;
 
-                        // Add options based on the file name
-                        //var options = fileName.split('.')[0].split('_');
-                        var options = fileName.split('_');
-                        options.forEach(function (option) {
-                            option = option.trim();
-                            if (option !== '') {
-                                $select.addOption({ value: option, text: option });
-                            }
-                        });
+                        //Check if filename contains special characters
+                        if (fileName.search(/(?:\.(?![^.]+$)|[^\w.-])+/g) >= 0) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "File name not allowed!",
+                                text: "Only upload filenames without special characters and spaces. Only alphanumeric characters (A-Z), (a-z), (0-9), underscores (_), and hyphen (-) are allowed ",
+                                confirmButtonColor: '#14984a'
+                            });
+                            const rFB = document.querySelector('.fileinput-remove-button');
+                            setTimeout(function () {
+                                rFB.click();
+                            }, 1000);                            
+                            $select.clear();
+                            $select.clearOptions();
+                            break;
+                        }
+                        else {
+                            // Add options based on the file name
+                            $select.addOption({ value: fileName, text: fileName });
+                        }
                     }
 
                     // Refresh the Selectize control to update the UI
@@ -210,15 +223,24 @@
 
                         // Get the file name
                         var fileName = file.name;
-
-                        // Add options based on the file name
-                        var options = fileName.split('_');
-                        options.forEach(function (option) {
-                            option = option.trim();
-                            if (option !== '') {
-                                $select.addOption({ value: option, text: option });
-                            }
-                        });
+                        //Check if filename contains special characters
+                        if (fileName.search(/(?:\.(?![^.]+$)|[^\w.-])+/g) >= 0) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "File name not allowed!",
+                                text: "Only upload filenames without special characters and spaces. Only alphanumeric characters (A-Z), (a-z), (0-9), underscores (_), and hyphen (-) are allowed ",
+                                confirmButtonColor: '#14984a'
+                            });
+                            const removeFileButton = document.querySelector('.fileinput-remove-button');
+                            removeFileButton.click();
+                            $select.clear();
+                            $select.clearOptions();
+                            break;
+                        }
+                        else {
+                            // Add options based on the file name
+                            $select.addOption({ value: fileName, text: fileName });
+                        }
                     }
 
                 });
@@ -339,7 +361,6 @@
                 row.append(`<td style="display:none;">${app.id}</td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="supplier_name" name="supplier_name">${app.supplier_name}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="supplier_address" name="supplier_address">${app.supplier_address}</span></td>`);
-                row.append(`<td><span class="editable" data-id="${app.id}" data-field="expected_time_arrival" name="expected_time_arrival">${app.expected_time_arrival}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="power_source" name="power_source">${app.power_source}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="unit_of_measure" name="unit_of_measure">${app.unit_of_measure}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="brand" name="brand">${app.brand}</span></td>`);
@@ -460,8 +481,7 @@
     <div class="row">
     <div class="col-md-5 mb-3">
         <div class="form-floating">
-            <input class="form-control rounded-3" type="datetime-local" id="newExpectedTimeArrival"
-                placeholder="Expected Time Of Arrival" />
+            <input class="form-control rounded-3" type="date" id="xxx" placeholder="Expected Time Of Arrival" />
             <label class="form-label">Expected Time Of Arrival</label>
         </div>
     </div>
@@ -540,7 +560,7 @@
                     return [
                         document.getElementById('supplierName').value,
                         document.getElementById('supplierAddress').value,
-                        document.getElementById('newExpectedTimeArrival').value,
+                        document.getElementById('xxx').value,
                         document.getElementById('powerSource').value,
                         document.getElementById('unitOfMeasure').value,
                         document.getElementById('brand').value,

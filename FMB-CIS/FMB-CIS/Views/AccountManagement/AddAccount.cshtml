@@ -358,6 +358,7 @@
 
 <script type="text/javascript">
     var emailExist = false;
+    const regex = /^[\w-\.]+@@([\w-]+\.)+[\w-]{2,4}$/g;
     //Check Existing Email
     function checkExistingEmail() {
         var emailValue = document.getElementById("emailInput").value;
@@ -370,6 +371,11 @@
             }
             else {
                 document.getElementById("emailValidation").innerHTML = "";
+            }
+
+            if (!regex.test(emailValue)) {
+                emailExist = true;
+                document.getElementById("emailValidation").innerHTML = "Invalid email format. Only '.' and '_' special characters are allowed";
             }
         });
     }

@@ -239,14 +239,13 @@
                                     </div>
                                 </div>
                             }
-                            <div class="row mb-5">
+                            @* <div class="row mb-5">
                                 <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
                                             Chainsaw Quantity
                                         </label>
                                         <span class="fw-bold">
-                                            @* <label asp-for="applicantViewModels.birth_date" value="@Model.applicantViewModels.birth_date">@Model.applicantViewModels.birth_date</label> *@
                                             @Html.DisplayFor(model => model.applicantViewModels.qty)
                                         </span>
                                     </div>
@@ -257,7 +256,6 @@
                                             Specification
                                         </label>
                                         <span class="fw-bold">
-                                            @* <label asp-for="applicantViewModels.birth_date" value="@Model.applicantViewModels.birth_date">@Model.applicantViewModels.birth_date</label> *@
                                             @Html.DisplayFor(model => model.applicantViewModels.specification)
                                         </span>
                                     </div>
@@ -270,12 +268,11 @@
                                             Purpose
                                         </label>
                                         <span class="fw-bold">
-                                            @* <label asp-for="applicantViewModels.address" value="@Model.applicantViewModels.address">@Model.applicantViewModels.address</label> *@
                                             @Html.DisplayFor(model => model.applicantViewModels.purpose)
                                         </span>
                                     </div>
                                 </div>
-                            </div>
+                            </div> *@
                             @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector") == true) @* && Model.applicantViewModels.permit_type == "Permit to Sell" *@
                             {
                                 <div class="row mb-5">
@@ -403,12 +400,30 @@
                 
                   <table class="table dataTable" id="tblApplicationGroup">
                     <thead>
-                        <tr>
+                         <tr>
                             <th>
                                 Supplier Name
                             </th>
                             <th>
                                 Supplier Address
+                            </th>
+                            <th>
+                                Brand
+                            </th>
+                             <th>
+                                Model
+                            </th>
+                             <th>
+                                Power Source
+                            </th>
+                            <th>
+                                Unit Of Measure
+                            </th>
+                            <th>
+                                Enginer Serial No.
+                            </th>
+                            <th>
+                                Expected Time Of Arrival
                             </th>
                             <th>
                                 Quantity
@@ -428,6 +443,24 @@
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.supplier_address)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.brand)
+                                </td>
+                                   <td>
+                                    @Html.DisplayFor(modelItem => item.model)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.power_source)
+                                </td>
+                                   <td>
+                                    @Html.DisplayFor(modelItem => item.unit_of_measure)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.engine_serialNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.expected_time_arrival)
                                 </td>
                                  <td>
                                     @Html.DisplayFor(modelItem => item.quantity)
@@ -570,7 +603,7 @@
                                 }
                                 <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="~/Files/@folder/@file.filename" target="_blank">View</a></li>
+                                    <li><a class="dropdown-item" href="~/Files/@folder/@Uri.EscapeDataString(file.filename)" target="_blank">View</a></li>
                                 @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
                                     <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
                                 </ul>
@@ -650,7 +683,7 @@
                                     }
                                     <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="~/Files/@folder/@file.filename" target="_blank">View</a></li>
+                                        <li><a class="dropdown-item" href="~/Files/@folder/ProofofPayment/@Uri.EscapeDataString(file.filename)" target="_blank">View</a></li>
                                         @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
                                         <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
                                     </ul>
@@ -696,7 +729,7 @@
                                     }
                                     <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="~/Files/@folder/INSPECTOR UPLOADS/@file.filename" target="_blank">View</a></li>
+                                        <li><a class="dropdown-item" href="~/Files/@folder/INSPECTOR UPLOADS/@Uri.EscapeDataString(file.filename)" target="_blank">View</a></li>
                                         @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
                                         <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
                                     </ul>
@@ -759,9 +792,12 @@
                     <div class="gap-4 mb-5">
                         <h2 class="text-secondary fw-bold m-0">Upload Documents</h2>
                         <div class="alert alert-warning mt-3 mb-3" role="alert">
-                                When uploading multiple files, drag all files at once on the field.
-                            </div>
-                        <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload...">
+                            <ul style="margin-bottom: 0px;">
+                                <li>When uploading multiple files, drag all files at once on the field.</li>
+                                <li>Only alphanumeric characters (A-Z), (a-z), (0-9), underscores (_), and hyphen (-) are allowed for filenames. Spaces are not allowed. Please rename before uploading.</li>
+                            </ul>
+                        </div>
+                        <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-allowed-file-extensions='["pdf"]' accept="application/pdf" data-show-caption="true" data-msg-placeholder="Select {files} for upload...">
                     </div>
                 }
                 @* <div class="row d-flex justify-content-center px-0 mb-5">
@@ -1038,6 +1074,62 @@
         // });
 
     });
+
+    //Check if filename contains special characters
+    //If browse button was used
+    $('.file').on('change', function (event) {
+        var files = event.target.files;
+
+        // Loop through each selected file
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            // Get the file name
+            var fileName = file.name;
+
+            if (fileName.search(/(?:\.(?![^.]+$)|[^\w.-])+/g) >= 0) {
+                Swal.fire({
+                    icon: "error",
+                    title: "File name not allowed!",
+                    text: "Only upload filenames without special characters and spaces. Only alphanumeric characters (A-Z), (a-z), (0-9), underscores (_), and hyphen (-) are allowed ",
+                    confirmButtonColor: '#14984a'
+                });
+                const removeFileButton = document.querySelector('.fileinput-remove-button');
+                removeFileButton.click();
+                break;
+            }
+        }
+
+    });
+
+    //If files were placed using drag and drop feature
+    $(document).on('drop', '.file-drop-zone.clearfix', function () {
+        console.log("dropped");
+
+        var formFiles = document.forms['ApplApprvlForm']['filesUpload.Files'];
+        var files = formFiles.files;
+
+        // Loop through each selected file
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+
+            // Get the file name
+            var fileName = file.name;
+
+            if (fileName.search(/(?:\.(?![^.]+$)|[^\w.-])+/g) >= 0) {
+                Swal.fire({
+                    icon: "error",
+                    title: "File name not allowed!",
+                    text: "Only upload filenames without special characters and spaces. Only alphanumeric characters (A-Z), (a-z), (0-9), underscores (_), and hyphen (-) are allowed ",
+                    confirmButtonColor: '#14984a'
+                });
+                const removeFileButton = document.querySelector('.fileinput-remove-button');
+                removeFileButton.click();
+                break;
+            }
+        }
+
+    });
+    //End for checking if filename contains special characters
 
     function DocHistory(that) {
         console.log("test");
