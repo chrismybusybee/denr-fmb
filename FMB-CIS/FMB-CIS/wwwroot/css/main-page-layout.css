@@ -102,7 +102,7 @@
     height: min(100vh, 100%);
     transition: all 0.2s ease-in-out;
     overflow-y:  auto;
-    width: 100%;
+    /* width: 100%; */
 }
 
 #card-container {
@@ -111,8 +111,9 @@
     margin: 0 330px 190px 30px;
     /*box-shadow: 0 0 11px 0px;*/
     padding: 10px;
+    padding-bottom: 24px;
     border-radius: 5px;
-    overflow-y: auto;
+    /* overflow-y: auto; */
     border: solid 0.5px lightgray;
     transition: all 0.2s ease-in-out;
 }

@@ -182,6 +182,11 @@
                     </div>
                     </div>
                     <div id="menu-items">
+                <div id="main-menu-toggle-2" class="c-menu-burger c-menu-burger-close">
+                    <span class="c-menu-line"></span>
+                    <span class="c-menu-line"></span>
+                    <span class="c-menu-line"></span>
+                </div>
                         <ul class="list-unstyled text-secondary fw-bold">
                             @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_dashboard"))
                             {
@@ -941,7 +946,7 @@
 
 
 
-        $("#main-menu-toggle").on("click", function(){
+        $("#main-menu-toggle, #main-menu-toggle-2").on("click", function(){
             toggleMenu();
         });
 
