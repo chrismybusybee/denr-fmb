@@ -53,7 +53,7 @@
                         <th>Supplier Name</th>
                         <th>Supplier Address</th>
                         <th>PowerSource</th>
-                        <th>UnitOfMeasure</th>
+                        @* <th>UnitOfMeasure</th> *@
                         <th>Brand</th>
                         <th>Model</th>
                         <th>EngineSerialNo</th>
@@ -362,7 +362,7 @@
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="supplier_name" name="supplier_name">${app.supplier_name}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="supplier_address" name="supplier_address">${app.supplier_address}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="power_source" name="power_source">${app.power_source}</span></td>`);
-                row.append(`<td><span class="editable" data-id="${app.id}" data-field="unit_of_measure" name="unit_of_measure">${app.unit_of_measure}</span></td>`);
+                //row.append(`<td><span class="editable" data-id="${app.id}" data-field="unit_of_measure" name="unit_of_measure">${app.unit_of_measure}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="brand" name="brand">${app.brand}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="model" name="model">${app.model}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="engine_serialNo" name="engine_serialNo">${app.engine_serialNo}</span></td>`);
@@ -479,24 +479,22 @@
         </div>
     </div>
     <div class="row">
-    <div class="col-md-5 mb-3">
+    <div class="col-md-6 mb-3">
         <div class="form-floating">
             <input class="form-control rounded-3" type="date" id="xxx" placeholder="Expected Time Of Arrival" />
             <label class="form-label">Expected Time Of Arrival</label>
         </div>
     </div>
-    <div class="col-md-4 mb-3">
+    <div class="col-md-6 mb-3">
         <div class="form-floating">
-            <input type="text" class="form-control rounded-3" id="powerSource" placeholder="" />
+                <select id="powerSource" class="form-select" >
+                    <option value="Electric">Electric</option>
+                    <option value="Gas">Gas</option>
+                    <option value="Battery">Battery</option>
+                </select>
             <label class="form-label">Power Source</label>
         </div>
-    </div>
-    <div class="col-md-3 mb-3">
-        <div class="form-floating">
-            <input type="text" class="form-control rounded-3" id="unitOfMeasure" placeholder="" />
-            <label class="form-label">Unit of Measure</label>
-        </div>
-    </div>
+    </div>    
     </div>
     <div class="row">
     <div class="col-md-4 mb-3">
@@ -529,6 +527,7 @@
                 width: '800px',
                 focusConfirm: false,
                 showCancelButton: true,
+                confirmButtonColor: '#14984a',
                 confirmButtonText: 'Submit',
                 preConfirm: () => {
 
@@ -562,7 +561,7 @@
                         document.getElementById('supplierAddress').value,
                         document.getElementById('xxx').value,
                         document.getElementById('powerSource').value,
-                        document.getElementById('unitOfMeasure').value,
+                        //document.getElementById('unitOfMeasure').value,
                         document.getElementById('brand').value,
                         document.getElementById('model').value,
                         document.getElementById('engineSerialNo').value,
@@ -576,11 +575,11 @@
                     const supplierAddress = values[1];
                     const newExpectedTimeArrival = values[2];
                     const powerSource = values[3];
-                    const unitOfMeasure = values[4];
-                    const brand = values[5];
-                    const model = values[6];
-                    const engineSerialNo = values[7];
-                    const quantity = values[8];
+                    //const unitOfMeasure = values[4];
+                    const brand = values[4];
+                    const model = values[5];
+                    const engineSerialNo = values[6];
+                    const quantity = values[7];
                     //console.log('Input 1:', value1);
                     //console.log('Input 2:', value2);
                     // Perform actions with the input values here
@@ -592,7 +591,7 @@
                         supplier_address: supplierAddress,
                         expected_time_arrival: newExpectedTimeArrival,
                         power_source: powerSource,
-                        unit_of_measure: unitOfMeasure,
+                        //unit_of_measure: unitOfMeasure,
                         brand: brand,
                         model: model,
                         engine_serialNo: engineSerialNo,
