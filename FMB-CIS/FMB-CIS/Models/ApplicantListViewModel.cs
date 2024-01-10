@@ -80,5 +80,7 @@ namespace FMB_CIS.Models
         public int? currentMaxCount { get; set; }
         public int? currentPercentage { get; set; }
 
+        public string? ReferenceNo{ get; set; }
+
     }
 }

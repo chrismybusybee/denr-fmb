@@ -21,6 +21,7 @@ using System.Security.Cryptography;
 using Mapster;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNet.Identity;
+using Services.Utilities;
 
 namespace FMB_CIS.Controllers
 {
@@ -127,6 +128,24 @@ namespace FMB_CIS.Controllers
                 _context.tbl_application.Add(model.tbl_Application);
                 _context.SaveChanges();
                 int? appID = model.tbl_Application.id;
+
+                //Generate Reference Number
+
+                var referenceNo = string.Empty;
+                var legend = string.Empty;
+
+                if (model.tbl_Application.tbl_permit_type_id.HasValue && appID.HasValue)
+                {
+                    var legendEntity = _context.tbl_reference_legend.Where(a => a.permit_type_id == model.tbl_Application.tbl_permit_type_id.Value).FirstOrDefault();
+
+                    legend = legendEntity.legend;
+                    referenceNo = ReferenceNumberGenerator.GenerateTransactionReference(legend, appID.Value);
+                }
+
+
+                var application = _context.tbl_application.Where(a => a.id == appID.Value).First<tbl_application>();
+                application.ReferenceNo = referenceNo;
+                _context.SaveChanges();
 
                 //Application Grouping
 
@@ -305,6 +324,24 @@ namespace FMB_CIS.Controllers
                 _context.tbl_application.Add(model.tbl_Application);
                 _context.SaveChanges();
                 int? appID = model.tbl_Application.id;
+
+                //Generate Reference Number
+
+                var referenceNo = string.Empty;
+                var legend = string.Empty;
+
+                if (model.tbl_Application.tbl_permit_type_id.HasValue && appID.HasValue)
+                {
+                    var legendEntity = _context.tbl_reference_legend.Where(a => a.permit_type_id == model.tbl_Application.tbl_permit_type_id.Value).FirstOrDefault();
+
+                    legend = legendEntity.legend;
+                    referenceNo = ReferenceNumberGenerator.GenerateTransactionReference(legend, appID.Value);
+                }
+
+
+                var application = _context.tbl_application.Where(a => a.id == appID.Value).First<tbl_application>();
+                application.ReferenceNo = referenceNo;
+                _context.SaveChanges();
 
                 //Application Grouping
 
@@ -1248,7 +1285,8 @@ namespace FMB_CIS.Controllers
                                      where usr.tbl_region_id == userRegion
                                      //where a.tbl_user_id == userID
                                      select new ApplicantListViewModel 
-                                     { 
+                                     {
+                                         ReferenceNo = a.ReferenceNo,
                                          id = a.id, 
                                          applicationDate = a.date_created,
                                          full_name = usr.user_classification == "Individual" ? usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix : usr.company_name,
@@ -1330,7 +1368,9 @@ namespace FMB_CIS.Controllers
                                          application_type = appt.name, 
                                          permit_type = pT.name, 
                                          permit_status = pS.status, 
-                                         tbl_user_id = (int)usr.id };
+                                         tbl_user_id = (int)usr.id,
+                                         ReferenceNo = a.ReferenceNo
+                                     };
 
                 mymodel.applicantListViewModels = applicationMod;
 

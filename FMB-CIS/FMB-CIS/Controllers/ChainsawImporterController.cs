@@ -139,6 +139,23 @@ namespace FMB_CIS.Controllers
                     _context.SaveChanges();
                     int? appID = model.tbl_Application.id;
 
+                //Generate Reference Number
+
+                    var referenceNo = string.Empty;
+                    var legend = string.Empty;
+
+                if (model.tbl_Application.tbl_permit_type_id.HasValue && appID.HasValue) {
+                    var legendEntity = _context.tbl_reference_legend.Where(a => a.permit_type_id == model.tbl_Application.tbl_permit_type_id.Value).FirstOrDefault();
+
+                    legend = legendEntity.legend;
+                    referenceNo = ReferenceNumberGenerator.GenerateTransactionReference(legend, appID.Value);
+                }
+                    
+
+                    var application = _context.tbl_application.Where(a => a.id == appID.Value).First<tbl_application>();
+                    application.ReferenceNo = referenceNo;
+                    _context.SaveChanges();
+
                 //Application Grouping
 
                 foreach (tbl_application_group childApplication in myDeserializedObjList)
@@ -1056,8 +1073,9 @@ namespace FMB_CIS.Controllers
                                      join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code } 
                                      where usr.tbl_region_id == userRegion
                                      //where a.tbl_user_id == userID
-                                     select new ApplicantListViewModel 
-                                     { 
+                                     select new ApplicantListViewModel
+                                     {
+                                         ReferenceNo = a.ReferenceNo,
                                          id = a.id, 
                                          applicationDate = a.date_created,
                                          qty = a.qty,

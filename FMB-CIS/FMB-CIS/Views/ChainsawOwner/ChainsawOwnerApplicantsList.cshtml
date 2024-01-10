@@ -39,7 +39,7 @@
                         @if (item.isRead == true)
                         {
                             <td>
-                                @Html.DisplayFor(modelItem => item.id)
+                                @Html.DisplayFor(modelItem => item.ReferenceNo)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.full_name)
@@ -72,7 +72,7 @@
                         else
                         {
                             <td style="font-weight:bold;">
-                                @Html.DisplayFor(modelItem => item.id)
+                                @Html.DisplayFor(modelItem => item.ReferenceNo)
                             </td>
                             <td style="font-weight:bold;">
                                 @Html.DisplayFor(modelItem => item.full_name)

@@ -19,6 +19,7 @@ using FMB_CIS.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Web.Helpers;
 using Microsoft.Extensions.Hosting;
+using Services.Utilities;
 
 namespace FMB_CIS.Controllers
 {
@@ -116,6 +117,25 @@ namespace FMB_CIS.Controllers
                 model.tbl_Application.date_due_for_officers = BusinessDays.AddBusinessDays(DateTime.Now, 2).AddHours(4).AddMinutes(30);
                 _context.tbl_application.Add(model.tbl_Application);
                 _context.SaveChanges();
+                int? appID = model.tbl_Application.id;
+
+                //Generate Reference Number
+
+                var referenceNo = string.Empty;
+                var legend = string.Empty;
+
+                if (model.tbl_Application.tbl_permit_type_id.HasValue && appID.HasValue)
+                {
+                    var legendEntity = _context.tbl_reference_legend.Where(a => a.permit_type_id == model.tbl_Application.tbl_permit_type_id.Value).FirstOrDefault();
+
+                    legend = legendEntity.legend;
+                    referenceNo = ReferenceNumberGenerator.GenerateTransactionReference(legend, appID.Value);
+                }
+
+
+                var application = _context.tbl_application.Where(a => a.id == appID.Value).First<tbl_application>();
+                application.ReferenceNo = referenceNo;
+                _context.SaveChanges();
 
 
                 //SAVE to tbl_chainsaw
@@ -162,7 +182,7 @@ namespace FMB_CIS.Controllers
               
                 _context.SaveChanges();
 
-                int? appID = model.tbl_Application.id;
+                //int? appID = model.tbl_Application.id;
 
                 //File Upload
                 if (model.filesUpload != null)
