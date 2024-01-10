@@ -397,7 +397,7 @@
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="d-flex flex-column justify-content-start">
                                 <div class="mb-4">
-                                    <span
+                                    <span class="c-preline"
                                         style="white-space: pre-line">@Model.soloAnnouncement.announcement_content</span>
                                 </div>
                                 <div class="gap-4 mb-5">
@@ -408,7 +408,7 @@
                                             </ul>
                                     </div>
                                     <input asp-for="filesUpload.Files" type="file" class="file" multiple
-                                        data-show-upload="false" data-show-caption="true"
+                                        data-show-upload="false" data-allowed-file-extensions='["pdf"]' accept="application/pdf" data-show-caption="true"
                                         data-msg-placeholder="Select {files} for upload...">
                                 </div>
                             </div>
@@ -690,6 +690,62 @@
         //END FOR CONFIRMATION MODALS
 
     });
+
+    //Check if filename contains special characters
+    //If browse button was used
+    $('.file').on('change', function (event) {
+        var files = event.target.files;
+
+        // Loop through each selected file
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            // Get the file name
+            var fileName = file.name;
+
+            if (fileName.search(/(?:\.(?![^.]+$)|[^\w.-])+/g) >= 0) {
+                Swal.fire({
+                    icon: "error",
+                    title: "File name not allowed!",
+                    text: "Only upload filenames without special characters and spaces. Only alphanumeric characters (A-Z), (a-z), (0-9), underscores (_), and hyphen (-) are allowed ",
+                    confirmButtonColor: '#14984a'
+                });
+                const removeFileButton = document.querySelector('.fileinput-remove-button');
+                removeFileButton.click();
+                break;
+            }
+        }
+
+    });
+
+    //If files were placed using drag and drop feature
+    $(document).on('drop', '.file-drop-zone.clearfix', function () {
+        console.log("dropped");
+
+        var formFiles = document.forms['RegForm']['filesUpload.Files'];
+        var files = formFiles.files;
+
+        // Loop through each selected file
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+
+            // Get the file name
+            var fileName = file.name;
+
+            if (fileName.search(/(?:\.(?![^.]+$)|[^\w.-])+/g) >= 0) {
+                Swal.fire({
+                    icon: "error",
+                    title: "File name not allowed!",
+                    text: "Only upload filenames without special characters and spaces. Only alphanumeric characters (A-Z), (a-z), (0-9), underscores (_), and hyphen (-) are allowed ",
+                    confirmButtonColor: '#14984a'
+                });
+                const removeFileButton = document.querySelector('.fileinput-remove-button');
+                removeFileButton.click();
+                break;
+            }
+        }
+
+    });
+    //End for checking if filename contains special characters
 
     // //const form = document.getElementById('RegForm');
     // const showModalButton = document.getElementById('submitBtn');

@@ -657,7 +657,7 @@ namespace FMB_CIS.Controllers
                                               id = a.id,
                                               tbl_user_id = usid,
                                               full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
-                                              full_address = usr.street_address ,//+ " " + brngy.name + " " + ct.name + " " + prov.name + " " + reg.name,
+                                              full_address = usr.street_address + " " + brngy.name + " " + ct.name + " " + prov.name + " " + reg.name,
                                               email = usr.email,
                                               permit_type = pT.name,
                                               permit_status = pS.status,
@@ -809,44 +809,44 @@ namespace FMB_CIS.Controllers
                 if (appliDB.renew_from == null)
                 {
                     //appliDB.id = applid;
-                    appliDB.qty = viewMod.applicantViewModels.qty;
-                    appliDB.purpose = viewMod.applicantViewModels.purpose;
+                    //appliDB.qty = viewMod.applicantViewModels.qty; //Commented 2024-01-08
+                    //appliDB.purpose = viewMod.applicantViewModels.purpose; //Commented 2024-01-08
                     //appliDB.expected_time_arrival = viewMod.applicantViewModels.expectedTimeArrived;
                     //appliDB.expected_time_release = viewMod.applicantViewModels.expectedTimeRelease;
                     appliDB.date_modified = DateTime.Now;
                     appliDB.modified_by = viewMod.applicantViewModels.tbl_user_id;
-                    appliDB.supplier_address = viewMod.applicantViewModels.address;
-                    appliDB.date_of_inspection = viewMod.applicantViewModels.inspectionDate;
-                    appliDB.tbl_specification_id = viewMod.applicantViewModels.specification;
+                    //appliDB.supplier_address = viewMod.applicantViewModels.address; //Commented 2024-01-08
+                    //appliDB.date_of_inspection = viewMod.applicantViewModels.inspectionDate; //Commented 2024-01-08
+                    //appliDB.tbl_specification_id = viewMod.applicantViewModels.specification; //Commented 2024-01-08
                     //if (appliDB.tbl_permit_type_id == 2 || appliDB.tbl_permit_type_id == 3) //For Permit to Purchase and Permit to Sell
                     //{
                     //    appliDB.coordinatedWithEnforcementDivision = viewMod.applicantViewModels.coordinatedWithEnforcementDivision;
                     //}
                     _context.SaveChanges();
 
-                    if (appliDB.tbl_permit_type_id == 13)
-                    {
-                        var csawDB = _context.tbl_chainsaw.Where(c => c.tbl_application_id == appliDB.id).FirstOrDefault();
-                        csawDB.Brand = viewMod.applicantViewModels.chainsawBrand;
-                        csawDB.Model = viewMod.applicantViewModels.chainsawModel;
-                        csawDB.Engine = viewMod.applicantViewModels.Engine;
-                        csawDB.Power = viewMod.applicantViewModels.powerSource;
-                        if (viewMod.applicantViewModels.powerSource == "Gas")
-                        {
-                            csawDB.hp = viewMod.applicantViewModels.hp;
-                            csawDB.watt = null;
-                        }
-                        else
-                        {
-                            csawDB.watt = viewMod.applicantViewModels.Watt;
-                            csawDB.hp = null;
-                        }
-                        csawDB.gb = viewMod.applicantViewModels.gb;
-                        csawDB.chainsaw_serial_number = viewMod.applicantViewModels.chainsaw_serial_number;
-                        csawDB.supplier = viewMod.applicantViewModels.chainsawSupplier;
-                        csawDB.date_purchase = viewMod.applicantViewModels.date_purchase;
-                        _context.SaveChanges();
-                    }
+                    //if (appliDB.tbl_permit_type_id == 13)
+                    //{
+                    //    var csawDB = _context.tbl_chainsaw.Where(c => c.tbl_application_id == appliDB.id).FirstOrDefault();
+                    //    csawDB.Brand = viewMod.applicantViewModels.chainsawBrand;
+                    //    csawDB.Model = viewMod.applicantViewModels.chainsawModel;
+                    //    csawDB.Engine = viewMod.applicantViewModels.Engine;
+                    //    csawDB.Power = viewMod.applicantViewModels.powerSource;
+                    //    if (viewMod.applicantViewModels.powerSource == "Gas")
+                    //    {
+                    //        csawDB.hp = viewMod.applicantViewModels.hp;
+                    //        csawDB.watt = null;
+                    //    }
+                    //    else
+                    //    {
+                    //        csawDB.watt = viewMod.applicantViewModels.Watt;
+                    //        csawDB.hp = null;
+                    //    }
+                    //    csawDB.gb = viewMod.applicantViewModels.gb;
+                    //    csawDB.chainsaw_serial_number = viewMod.applicantViewModels.chainsaw_serial_number;
+                    //    csawDB.supplier = viewMod.applicantViewModels.chainsawSupplier;
+                    //    csawDB.date_purchase = viewMod.applicantViewModels.date_purchase;
+                    //    _context.SaveChanges();
+                    //}
                     //Saving a file
                     if (viewMod.filesUpload != null)
                     {
@@ -972,94 +972,95 @@ namespace FMB_CIS.Controllers
                 
             }
 
-            var applicationlist = from a in _context.tbl_application
-                                  where a.tbl_user_id == usid && a.id == applid
-                                  select a;
-            //CODE FOR FILE DOWNLOAD
-            int applicID = Convert.ToInt32(viewMod.applicantViewModels.id);
-            //File Paths from Database
-            var filesFromDB = _context.tbl_files.Where(f => f.tbl_application_id == applicID).ToList();
-            List<tbl_files> files = new List<tbl_files>();
+            //(for return view)
+            //var applicationlist = from a in _context.tbl_application
+            //                      where a.tbl_user_id == usid && a.id == applid
+            //                      select a;
+            ////CODE FOR FILE DOWNLOAD
+            //int applicID = Convert.ToInt32(viewMod.applicantViewModels.id);
+            ////File Paths from Database
+            //var filesFromDB = _context.tbl_files.Where(f => f.tbl_application_id == applicID).ToList();
+            //List<tbl_files> files = new List<tbl_files>();
 
-            foreach (var fileList in filesFromDB)
-            {
-                files.Add(new tbl_files { Id = fileList.Id, filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, file_size = fileList.file_size, date_created = fileList.date_created });
-                //files.Add(new tbl_files { filename = f });
-            }
+            //foreach (var fileList in filesFromDB)
+            //{
+            //    files.Add(new tbl_files { Id = fileList.Id, filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, file_size = fileList.file_size, date_created = fileList.date_created });
+            //    //files.Add(new tbl_files { filename = f });
+            //}
 
-            viewMod.tbl_Files = files;
-            //END FOR FILE DOWNLOAD
+            //viewMod.tbl_Files = files;
+            ////END FOR FILE DOWNLOAD
 
-            //HISTORY
-            var applicationtypelist = _context.tbl_application_type;
-            var applicationMod = (from a in applicationlist
-                                  join usr in _context.tbl_user on a.tbl_user_id equals usr.id
-                                  //join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
-                                  join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
-                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
-                                  join pS in _context.tbl_permit_status on a.status equals pS.id
-                                  where a.tbl_user_id == usid && a.id == applid
-                                  select new ApplicantListViewModel
-                                  {
-                                      id = a.id,
-                                      tbl_user_id = usid,
-                                      full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
-                                      email = usr.email,
-                                      permit_type = pT.name,
-                                      permit_status = pS.status,
-                                      //user_type = usrtyps.name,
-                                      comment = usr.comment,
-                                      qty = a.qty,
-                                      specification = a.tbl_specification_id,
-                                      inspectionDate = a.date_of_inspection,
-                                      address = a.supplier_address,
-                                      //expectedTimeArrived = a.expected_time_arrival,
-                                      //expectedTimeRelease = a.expected_time_release,
-                                      purpose = a.purpose
-                                  }).FirstOrDefault();
+            ////HISTORY
+            //var applicationtypelist = _context.tbl_application_type;
+            //var applicationMod = (from a in applicationlist
+            //                      join usr in _context.tbl_user on a.tbl_user_id equals usr.id
+            //                      //join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
+            //                      join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
+            //                      join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
+            //                      join pS in _context.tbl_permit_status on a.status equals pS.id
+            //                      where a.tbl_user_id == usid && a.id == applid
+            //                      select new ApplicantListViewModel
+            //                      {
+            //                          id = a.id,
+            //                          tbl_user_id = usid,
+            //                          full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
+            //                          email = usr.email,
+            //                          permit_type = pT.name,
+            //                          permit_status = pS.status,
+            //                          //user_type = usrtyps.name,
+            //                          comment = usr.comment,
+            //                          qty = a.qty,
+            //                          specification = a.tbl_specification_id,
+            //                          inspectionDate = a.date_of_inspection,
+            //                          address = a.supplier_address,
+            //                          //expectedTimeArrived = a.expected_time_arrival,
+            //                          //expectedTimeRelease = a.expected_time_release,
+            //                          purpose = a.purpose
+            //                      }).FirstOrDefault();
             
-            //Set the value for announcementID (used to display the required documents depending on permit type)
-            int announcementID = 0;
-            var applicationInfo = _context.tbl_application.Where(a => a.id == applid).FirstOrDefault();
-            switch (applicationInfo.tbl_permit_type_id)
-            {
+            ////Set the value for announcementID (used to display the required documents depending on permit type)
+            //int announcementID = 0;
+            //var applicationInfo = _context.tbl_application.Where(a => a.id == applid).FirstOrDefault();
+            //switch (applicationInfo.tbl_permit_type_id)
+            //{
 
-                case 1: //1   Permit to Import
-                    announcementID = 2; //2   Permit to Import Requirements
-                    break;
-                case 2: //2   Permit to Purchase
-                    announcementID = 3; //3   Permit to Purchase Requirements
-                    break;
-                case 3: //3   Permit to Sell
-                    announcementID = 4; //4   Permit to Sell Requirements
-                    break;
-                case 4: //4   Transfer of Ownership
-                    announcementID = 7; //7   Transfer of Ownership Requirements
-                    break;
-                case 5: //5   Authority to Lease
-                    announcementID = 6; //6   Permit to Lease / Rent / Lend Requirements
-                    break;
-                case 6: //6   Authority to Rent
-                    announcementID = 6; //6   Permit to Lease / Rent / Lend Requirements
-                    break;
-                case 7: //7   Authority to Lend
-                    announcementID = 6; //6   Permit to Lease / Rent / Lend Requirements
-                    break;
-                case 13: //13  Certificate of Registration
-                    announcementID = 5; //5   Certificate of Registration Requirements
-                    break;
-                case 14: //14  Permit to Re - sell / Transfer Ownership
-                    announcementID = 7; //7   Transfer of Ownership Requirements
-                    break;
-            }
-            //Get list of required documents from tbl_announcement
-            var requirements = _context.tbl_announcement.Where(a => a.id == announcementID).FirstOrDefault();
-            ViewBag.RequiredDocsList = requirements.announcement_content;
-            //End for required documents
-            ViewBag.Message = "Save Success";
-            viewMod.applicantViewModels = applicationMod;
+            //    case 1: //1   Permit to Import
+            //        announcementID = 2; //2   Permit to Import Requirements
+            //        break;
+            //    case 2: //2   Permit to Purchase
+            //        announcementID = 3; //3   Permit to Purchase Requirements
+            //        break;
+            //    case 3: //3   Permit to Sell
+            //        announcementID = 4; //4   Permit to Sell Requirements
+            //        break;
+            //    case 4: //4   Transfer of Ownership
+            //        announcementID = 7; //7   Transfer of Ownership Requirements
+            //        break;
+            //    case 5: //5   Authority to Lease
+            //        announcementID = 6; //6   Permit to Lease / Rent / Lend Requirements
+            //        break;
+            //    case 6: //6   Authority to Rent
+            //        announcementID = 6; //6   Permit to Lease / Rent / Lend Requirements
+            //        break;
+            //    case 7: //7   Authority to Lend
+            //        announcementID = 6; //6   Permit to Lease / Rent / Lend Requirements
+            //        break;
+            //    case 13: //13  Certificate of Registration
+            //        announcementID = 5; //5   Certificate of Registration Requirements
+            //        break;
+            //    case 14: //14  Permit to Re - sell / Transfer Ownership
+            //        announcementID = 7; //7   Transfer of Ownership Requirements
+            //        break;
+            //}
+            ////Get list of required documents from tbl_announcement
+            //var requirements = _context.tbl_announcement.Where(a => a.id == announcementID).FirstOrDefault();
+            //ViewBag.RequiredDocsList = requirements.announcement_content;
+            ////End for required documents
+            //ViewBag.Message = "Save Success";
+            //viewMod.applicantViewModels = applicationMod;
 
-            //return View(viewMod);
+            ////return View(viewMod);
             return RedirectToAction("EditApplication", "Application", new { uid = usid, appid = applid });
         }
 
