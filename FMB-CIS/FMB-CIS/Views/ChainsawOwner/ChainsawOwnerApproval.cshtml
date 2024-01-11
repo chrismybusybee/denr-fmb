@@ -600,6 +600,21 @@
                                 <th>
                                     Engine
                                 </th>
+                                <th>
+                                    Power Source
+                                </th>
+                                <th>
+                                    Watts
+                                </th>
+                                <th>
+                                    Horsepower
+                                </th>
+                                <th>
+                                    Chainsaw Serial No.
+                                </th>
+                                <th>
+                                    Guidebar Length
+                                </th>
                                 @* <th>
                             Comment
                             </th>*@
@@ -621,6 +636,21 @@
                                     </td>
                                      <td>
                                         @Html.DisplayFor(modelItem => item.Engine)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Power)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.watt_dec)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.hp_dec)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.chainsaw_serial_number)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.gb)
                                     </td>
                                 </tr>
                             }
