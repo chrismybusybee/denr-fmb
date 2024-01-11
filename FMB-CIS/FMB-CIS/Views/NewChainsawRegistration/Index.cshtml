@@ -25,9 +25,12 @@
                         <th>Brand</th>
                         <th>Model</th>
                         <th>Power Source</th>
+                        <th>Watt</th>
+                        <th>Horsepower</th>
                         <th>Supplier</th>
                         <th>Engine</th>
                         <th>SerialNo</th>
+                        <th>Guidebar Length</th>
                         <!-- ... Other headers ... -->
                         <th>Actions</th>
                     </tr>
@@ -235,9 +238,12 @@
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="brand" name="brand">${app.Brand}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="model" name="model">${app.Model}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="Power" name="Power">${app.Power}</span></td>`);
+                row.append(`<td><span class="editable" data-id="${app.id}" data-field="watt_dec" name="watt_dec">${app.Power=="Gas"? "N/A":app.watt_dec}</span></td>`);
+                row.append(`<td><span class="editable" data-id="${app.id}" data-field="hp_dec" name="hp_dec">${app.Power=="Gas"?app.hp_dec:"N/A"}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="supplier" name="supplier">${app.supplier}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="engine_serialNo" name="engine_serialNo">${app.Engine}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="chainsaw_serial_number" name="chainsaw_serial_number">${app.chainsaw_serial_number}</span></td>`);
+                row.append(`<td><span class="editable" data-id="${app.id}" data-field="gb" name="gb">${app.gb}</span></td>`);
                 // Add other fields similarly...
 
                 // Actions column with Edit and Delete buttons
@@ -351,13 +357,13 @@
                         <label class="form-label">Brand</label>
                     </div>
                 </div>
-                <div class="col-md-3 mb-3">
+                <div class="col-md-4 mb-3">
                     <div class="form-floating">
                         <input type="text" class="form-control rounded-3" id="model" placeholder="" />
                         <label class="form-label">Model</label>
                     </div>
                 </div>
-                <div class="col-md-3 mb-3">
+                <div class="col-md-4 mb-3">
                     <div class="form-floating">
                         <input type="text" class="form-control rounded-3" id="engineSerialNo" placeholder="" />
                         <label class="form-label">Engine Serial No.</label>
@@ -367,8 +373,8 @@
 
             <div class="row">
               
-                <div class="col-md-4 mb-3">
-                         <div class="form-group mb-3">
+                <div class="col-md-6 mb-3">
+                         
                          <div class="form-floating">
     @* <input type="text" class="form-control" placeholder="Enter suffix (if any)" /> *@
                                       <select id="powerSource" class="form-select" >
@@ -379,19 +385,29 @@
                                           <label class="form-label">Power Source</label>
                                     <span class="text-danger"></span>
                           </div>
-                     </div>
+                     
                 </div>
 
-                <div class="col-md-4 mb-3">
+                <div class="col-md-6 mb-3">
+                    <div class="form-floating">
+                        <input type="number" step=".01" class="form-control rounded-3" id="watts_hp_input" placeholder="" />
+                        <label class="form-label" id="watts_hp_label">Watts</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+              
+                <div class="col-md-6 mb-3">
                     <div class="form-floating">
                         <input type="text" class="form-control rounded-3" id="chainsawSerialNo" placeholder="" />
                         <label class="form-label">Chainsaw Serial No.</label>
                     </div>
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-6 mb-3">
                         <div class="form-floating">
-                            <input class="form-control" id="guidebar"/>
-                            <label class="form-label">Enter the length of Guidebar</label>
+                            <input type="text" class="form-control rounded-3" id="guidebar" placeholder="" />
+                            <label class="form-label">Length of Guidebar</label>
                         </div>
                  </div>
             </div>
@@ -419,6 +435,7 @@
                 width: '820px',
                 focusConfirm: false,
                 showCancelButton: true,
+                confirmButtonColor: '#14984a',
                 confirmButtonText: 'Submit',
                 preConfirm: () => {
 
@@ -457,6 +474,7 @@
                         document.getElementById('powerSource').value,
                     
                         //document.getElementById('unitOfMeasure').value,
+                        document.getElementById('watts_hp_input').value,
                         document.getElementById('brand').value,
                         document.getElementById('model').value,
                         document.getElementById('engineSerialNo').value,
@@ -469,19 +487,30 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     const values = result.value;
+                    console.log("values: ", values);
                     const supplierName = values[0];
                     //const supplierAddress = values[1];
                     //const newExpectedTimeArrival = values[2];
                     const powerSource = values[1];
                     //  const unitOfMeasure = values[2];
-                    const brand = values[2];
-                    const model = values[3];
-                    const engineSerialNo = values[4];
-                    const chainsawSerialNo = values[5];
+                    var hp = 0;
+                    var watts = 0;
+                    if (values[1] == "Gas") {
+                        hp = values[2];
+                        watts = null;
+                    }
+                    else { 
+                        watts = values[2];
+                        hp = null;
+                    }
+                    const brand = values[3];
+                    const model = values[4];
+                    const engineSerialNo = values[5];
+                    const chainsawSerialNo = values[6];
 
-                    const guidebar = values[6];
-                    const specification = values[7];
-                    const purpose = values[8];
+                    const guidebar = values[7];
+                    const specification = values[8];
+                    const purpose = values[9];
                     //const quantity = values[8];
                     //console.log('Input 1:', value1);
                     //console.log('Input 2:', value2);
@@ -494,6 +523,8 @@
                         // supplier_address: supplierAddress,
                         // expected_time_arrival: newExpectedTimeArrival,
                         Power: powerSource,
+                        watt_dec: watts,
+                        hp_dec: hp,
                         //   unit_of_measure: unitOfMeasure,
                         Brand: brand,
                         Model: model,
@@ -516,6 +547,19 @@
 
         // Initial display of applications
         displayApplications();
+
+        $(document).on('change', '#powerSource', function () {
+            console.log("selected val changed");
+            var selectedValue = $(this).val();
+
+            if (selectedValue == "Gas") {
+                document.getElementById("watts_hp_label").innerHTML = "Horsepower";
+            }
+            else {
+                document.getElementById("watts_hp_label").innerHTML = "Watts";
+            }
+
+        });
     });
 
 

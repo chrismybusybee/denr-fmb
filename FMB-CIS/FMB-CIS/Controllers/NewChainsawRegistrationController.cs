@@ -169,11 +169,13 @@ namespace FMB_CIS.Controllers
 
                     if (chainsaw.Power == "Gas")
                     {
-                        newChainsaw.watt = null;
+                        newChainsaw.watt_dec = null;
+                        newChainsaw.hp_dec = chainsaw.hp_dec;
                     }
                     else if (chainsaw.Power == "Electric" || chainsaw.Power == "Battery")
                     {
-                        newChainsaw.hp = null;
+                        newChainsaw.hp_dec = null;
+                        newChainsaw.watt_dec = chainsaw.watt_dec;
                     }
 
                     _context.tbl_chainsaw.Add(newChainsaw);

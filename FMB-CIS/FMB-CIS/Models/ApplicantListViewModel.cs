@@ -69,6 +69,8 @@ namespace FMB_CIS.Models
         public string? powerSource { get; set; }
         public int? Watt { get; set; }
         public int? hp { get; set; }
+        public decimal? watt_dec { get; set; }
+        public decimal? hp_dec { get; set; }
         public string? gb { get; set; }
         public string? chainsaw_serial_number { get; set; }
         public string? chainsawSupplier { get; set; }

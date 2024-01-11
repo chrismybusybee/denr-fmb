@@ -17,6 +17,8 @@ namespace FMB_CIS.Models
         public string? status { get; set; }
         public int? watt { get; set; }
         public int? hp { get; set; }
+        public decimal? watt_dec { get; set; }
+        public decimal? hp_dec { get; set; }
         public string? gb { get; set; }
         public string? supplier { get; set; }
         public DateTime? date_purchase { get; set; }
