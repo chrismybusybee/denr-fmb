@@ -45,5 +45,7 @@ namespace FMB_CIS.Data
         public DbSet<FMB_CIS.Models.tbl_application_read> tbl_application_read { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_files_checklist_bridge> tbl_files_checklist_bridge { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_application_payment> tbl_application_payment { get; set; } = default!;
+
+        public DbSet<FMB_CIS.Models.tbl_reference_legend> tbl_reference_legend { get; set; } = default!;
     }
 }

@@ -41,5 +41,7 @@ namespace FMB_CIS.Models
         public DateTime? initial_date_of_inspection { get; set; }
         public int? renew_from { get; set; }
 
+        public string? ReferenceNo { get; set; }
+
     }
 }

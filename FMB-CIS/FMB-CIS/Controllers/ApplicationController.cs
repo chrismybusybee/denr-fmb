@@ -62,7 +62,7 @@ namespace FMB_CIS.Controllers
                                      join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                      join pS in _context.tbl_permit_status on a.status equals pS.id
                                      //where a.tbl_user_id == userID
-                                     select new ApplicantListViewModel { id = a.id, applicationDate = a.date_created, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id };
+                                     select new ApplicantListViewModel { id = a.id, applicationDate = a.date_created, full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix, email = usr.email, contact = usr.contact_no, address = usr.street_address, application_type = appt.name, permit_type = pT.name, permit_status = pS.status, tbl_user_id = (int)usr.id, ReferenceNo = a.ReferenceNo };
 
                 mymodel.applicantListViewModels = applicationMod;
 
@@ -105,7 +105,8 @@ namespace FMB_CIS.Controllers
                                      permit_status = pSs.status,
                                      permit_status_id = pSs.id,
                                      tbl_user_id = (int)usr.id,
-                                     qty = a.qty
+                                     qty = a.qty,
+                                     ReferenceNo = a.ReferenceNo
                                  };
 
             mymodel.applicantListViewModels = applicationMod;
@@ -148,7 +149,8 @@ namespace FMB_CIS.Controllers
                                      permit_status = pSs.status,
                                      permit_status_id = pSs.id,
                                      tbl_user_id = (int)usr.id,
-                                     qty = a.qty
+                                     qty = a.qty,
+                                     ReferenceNo = a.ReferenceNo
                                  };
 
             mymodel.applicantListViewModels = applicationMod;
@@ -192,7 +194,8 @@ namespace FMB_CIS.Controllers
                                      permit_status_id = pSs.id,
                                      tbl_user_id = (int)usr.id,
                                      date_of_expiration = a.date_of_expiration,
-                                     qty = a.qty
+                                     qty = a.qty,
+                                     ReferenceNo = a.ReferenceNo
                                  };
 
             mymodel.applicantListViewModels = applicationMod;
@@ -235,7 +238,8 @@ namespace FMB_CIS.Controllers
                                      permit_status = pSs.status,
                                      permit_status_id = pSs.id,
                                      tbl_user_id = (int)usr.id,
-                                     qty = a.qty
+                                     qty = a.qty,
+                                     ReferenceNo = a.ReferenceNo
                                  };
 
             mymodel.applicantListViewModels = applicationMod;
@@ -278,7 +282,8 @@ namespace FMB_CIS.Controllers
                                      permit_status = pSs.status,
                                      permit_status_id = pSs.id,
                                      tbl_user_id = (int)usr.id,
-                                     qty = a.qty
+                                     qty = a.qty,
+                                     ReferenceNo = a.ReferenceNo
                                  };
 
             mymodel.applicantListViewModels = applicationMod;
@@ -321,7 +326,8 @@ namespace FMB_CIS.Controllers
                                      permit_status = pSs.status,
                                      permit_status_id = pSs.id,
                                      tbl_user_id = (int)usr.id,
-                                     qty = a.qty
+                                     qty = a.qty,
+                                     ReferenceNo = a.ReferenceNo
                                  };
 
             mymodel.applicantListViewModels = applicationMod;
@@ -365,7 +371,8 @@ namespace FMB_CIS.Controllers
                                      permit_status = pSs.status,
                                      permit_status_id = pSs.id,
                                      tbl_user_id = (int)usr.id,
-                                     qty = a.qty
+                                     qty = a.qty,
+                                     ReferenceNo = a.ReferenceNo
                                  };
 
             mymodel.applicantListViewModels = applicationMod;
@@ -409,7 +416,8 @@ namespace FMB_CIS.Controllers
                                      permit_status_id = pSs.id,
                                      tbl_user_id = (int)usr.id,
                                      status=(int)a.status,
-                                     qty = a.qty
+                                     qty = a.qty,
+                                     ReferenceNo = a.ReferenceNo
                                  };
 
             mymodel.applicantListViewModels = applicationMod;
@@ -620,7 +628,8 @@ namespace FMB_CIS.Controllers
                                               chainsaw_serial_number = csaw.chainsaw_serial_number,
                                               chainsawSupplier = csaw.supplier,
                                               date_purchase = csaw.date_purchase,
-                                              renew_from = a.renew_from
+                                              renew_from = a.renew_from,
+                                              ReferenceNo = a.ReferenceNo
                                           }).FirstOrDefault();
 
                     mymodel.applicantViewModels = applicationMod;
@@ -667,7 +676,8 @@ namespace FMB_CIS.Controllers
                                               purpose = a.purpose,
                                               date_of_registration = a.date_of_registration,
                                               date_of_expiration = a.date_of_expiration,
-                                              renew_from = a.renew_from
+                                              renew_from = a.renew_from,
+                                              ReferenceNo = a.ReferenceNo
                                               //coordinatedWithEnforcementDivision = a.coordinatedWithEnforcementDivision
                                           }).FirstOrDefault();
                     //mymodel.email = UserList.email;
