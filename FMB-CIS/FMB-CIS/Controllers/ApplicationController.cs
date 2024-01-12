@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using NuGet.Configuration;
 using Org.BouncyCastle.Pqc.Crypto.Lms;
 using Org.BouncyCastle.Tls;
+using Services.Utilities;
 using System.Drawing.Drawing2D;
 using System.Drawing.Printing;
 using System.Security.Claims;
@@ -1223,8 +1224,28 @@ namespace FMB_CIS.Controllers
                 renewApplication.date_due_for_officers = BusinessDays.AddBusinessDays(DateTime.Now, 2).AddHours(4).AddMinutes(30);
                 renewApplication.status = 1;
                 renewApplication.renew_from = oldApplicationID;
+                renewApplication.ReferenceNo = null;
 
                 _context.tbl_application.Add(renewApplication);
+                _context.SaveChanges();
+
+                int? appID = renewApplication.id;
+                //Generate Reference Number
+
+                var referenceNo = string.Empty;
+                var legend = string.Empty;
+
+                if (renewApplication.tbl_permit_type_id.HasValue && appID.HasValue)
+                {
+                    var legendEntity = _context.tbl_reference_legend.Where(a => a.permit_type_id == renewApplication.tbl_permit_type_id.Value).FirstOrDefault();
+
+                    legend = legendEntity.legend;
+                    referenceNo = ReferenceNumberGenerator.GenerateTransactionReference(legend, appID.Value);
+                }
+
+
+                var application = _context.tbl_application.Where(a => a.id == appID.Value).First<tbl_application>();
+                application.ReferenceNo = referenceNo;
                 _context.SaveChanges();
 
                 //copy contents of tbl_application group
