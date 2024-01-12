@@ -261,6 +261,7 @@ namespace FMB_CIS.Controllers
                     var emailTemplate = emailTemplates.Where(e => e.id == emailTemplateID).FirstOrDefault();
                     var subject = emailTemplate.email_subject;
                     var BODY = emailTemplate.email_content.Replace("{FirstName}", usrDB.first_name);
+                    BODY = BODY.Replace("{ReferenceNo}", referenceNo);
                     var body = BODY.Replace(Environment.NewLine, "<br/>");
 
                     EmailSender.SendEmailAsync(((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value, subject, body);
