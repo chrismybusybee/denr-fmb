@@ -68,11 +68,18 @@ builder.Services.Configure<MailKitEmailSenderOptions>(options =>
     //options.Sender_EMail = "support@mybusybee.net";
     //options.Sender_Name = "FMB-CIS Bot";
 
+    //options.Host_Address = "smtp-relay.brevo.com";
+    //options.Host_Port = 587;
+    //options.Host_Username = "support@mybusybee.net";
+    //options.Host_Password = "OBAq9p8GtLM5g2KS";
+    //options.Sender_EMail = "support@mybusybee.net";
+    //options.Sender_Name = "FMB-CIS Bot";
+
     options.Host_Address = "smtp-relay.brevo.com";
     options.Host_Port = 587;
-    options.Host_Username = "support@mybusybee.net";
-    options.Host_Password = "OBAq9p8GtLM5g2KS";
-    options.Sender_EMail = "support@mybusybee.net";
+    options.Host_Username = "franz@mybusybee.net";
+    options.Host_Password = "IJg2qdh8y9WSCcUZ";
+    options.Sender_EMail = "franz@mybusybee.net";
     options.Sender_Name = "FMB-CIS Bot";
 });
 
