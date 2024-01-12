@@ -783,6 +783,14 @@
                                     </li>
                                 }
                             }
+                            <li id="tutorialMenuItem">
+                                <a id="tutorialSideMenu" class="d-flex gap-2 text-decoration-none fs-6">
+                                    <div>
+                                        <img src="~/assets/images/menu-icons/tutorial-icon.png" />
+                                    </div>
+                                    <span>Chainsaw Information System Tutorial</span>
+                                </a>
+                            </li>
                             <hr class="me-4 my-4" />
                             <li>
                                 @Html.ActionLink("Logout", "Signout", "Home", new { area = "" }, new { @class = "text-decoration-none" })
@@ -909,6 +917,7 @@
     <script src="/bootstrap-fileinput-master/js/fileinput.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.0.9/themes/fas/theme.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js" integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
@@ -1106,6 +1115,15 @@
             setActiveMenuItem(storedActiveMenuItem);
         }
 
+        $('#tutorialSideMenu').click(function () {
+            console.log("tutorial side menu clicked");
+            Swal.fire({
+                title: 'Chainsaw Information System Tutorial',
+                showCloseButton: true,
+                showConfirmButton: false,
+                width: '970px'
+            });
+        });
         // toggle filter
         //var asideElement = $("#side-bar");
 
