@@ -1085,4 +1085,7 @@ body.show-datatables-headers
     position: relative;
     clear: both;
 }
+    .c-form-container {
+        width: unset;
+    }
   }
