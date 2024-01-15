@@ -926,6 +926,15 @@
     $(document).ready(function () {
         feather.replace();
 
+        $('#tutorialSideMenu').click(function () {
+            Swal.fire({
+                title: 'Chainsaw Information System Tutorial',
+                html: '<video width="100%" controls autoplay><source src="/assets/videos/DENR-FMB-CIS-Tutorial-Video.mp4" type="video/mp4">Your browser does not support the video tag.</video>',
+                showCloseButton: true,
+                showConfirmButton: false,
+                width: '970px'
+            });
+        });
 
         $.fn.dataTable.moment('DD/MM/YYYY h:mm:ss a');
 
@@ -1114,16 +1123,7 @@
         if (storedActiveMenuItem) {
             setActiveMenuItem(storedActiveMenuItem);
         }
-
-        $('#tutorialSideMenu').click(function () {
-            Swal.fire({
-                title: 'Chainsaw Information System Tutorial',
-                html: '<video width="100%" controls autoplay><source src="/assets/videos/DENR-FMB-CIS-Tutorial-Video.mp4" type="video/mp4">Your browser does not support the video tag.</video>',
-                showCloseButton: true,
-                showConfirmButton: false,
-                width: '970px'
-            });
-        });
+        
         // toggle filter
         //var asideElement = $("#side-bar");
 
