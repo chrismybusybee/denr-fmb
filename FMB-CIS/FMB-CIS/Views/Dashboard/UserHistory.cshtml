@@ -27,28 +27,48 @@
                     <th>
                         Action
                     </th>
-
-
                 </tr>
             </thead>
             <tbody>
                 @foreach (ApplicationModel item in Model.applicationModels)
                 {
                     <tr>
-                        <td>
+                        <td class="hide-on-mobile">
                             @Html.DisplayFor(modelItem => item.id)
                         </td>
-                        <td>
+                        <td class="hide-on-mobile">
                             @Html.DisplayFor(modelItem => item.application_type)
                         </td>
-                        <td>
+                        <td class="hide-on-mobile">
                             @Html.DisplayFor(modelItem => item.permit_type)
                         </td>
-                        <td>
+                        <td class="hide-on-mobile">
                             @Html.DisplayFor(modelItem => item.permit_status)
                         </td>
                         <td>
-                            <a>edit</a>
+                            <a class="hide-on-mobile">edit</a>
+                            @* <a class="hide-on-mobile">edit</a> *@
+                             @* href="ChainsawImporterApproval?uid=@item.application.tbl_user_id&appid=@item.id" *@
+                            <div class="show-on-mobile">
+                                <div class="c-card">
+                                    <div class="c-card-pre">
+                                        @Html.DisplayFor(modelItem => item.id)
+                                    </div>
+                                    <div class="c-card-main">
+                                        @Html.DisplayFor(modelItem => item.application_type)
+                                    </div>
+                                    <div class="c-card-sub">
+                                        @Html.DisplayFor(modelItem => item.permit_type)
+                                    </div>
+                                    <div class="c-card-sub">
+                                        @Html.DisplayFor(modelItem => item.permit_status)
+                                    </div>
+                                    <div class="c-card-action">
+                                        <a>edit</a>
+                                         @* href="ChainsawImporterApproval?uid=@item.application.tbl_user_id&appid=@item.id" *@
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 }
