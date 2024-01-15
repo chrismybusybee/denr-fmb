@@ -907,7 +907,35 @@ border: solid 1px #cccccc;
     padding: 12px 24px;
     margin-left: 5px;
   }
+
+.hide-on-mobile {
+}
+
+.show-on-mobile {
+    display: none;
+}
+.c-card {
+
+}
+.c-card-pre {
+    font-size: .88em;
+}
+.c-card-main {
+    font-weight: bolder;
+    font-size: 1.27em;
+}
+.c-card-sub {
+}
+.c-card-action {
+}
 @media (max-width: 768px) {
+    .hide-on-mobile {
+        display: none !important;
+    }
+
+    .show-on-mobile {
+        display: block;
+    }
     #header {
         position: relative !important;
         height: unset !important;
