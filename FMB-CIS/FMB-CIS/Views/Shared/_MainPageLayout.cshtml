@@ -152,13 +152,13 @@
                     <span class="c-menu-line"></span>
                     <span class="c-menu-line"></span>
                 </div>
-                <div class="col-md-12 d-flex justify-content-end d-flex align-items-center gap-2">
-
-                    <span class="fw-bold">@(((ClaimsIdentity)User.Identity).FindFirst("FullName").Value)</span>
+                <div id="header-top-user"class="col-md-12 d-flex justify-content-end d-flex align-items-center gap-2">
+                    <span id="header-top-usertext">
+                    <span class="fw-bold" id="header-top-fullname">@(((ClaimsIdentity)User.Identity).FindFirst("FullName").Value)</span>
                     
-                    <span>@(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value)</span>
-                  
-                    <span><img src="/assets/images/default-avatar.png" class="border rounded-circle bg-white" height="40" width="40" /></span>
+                    <span id="header-top-userrole">@(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value)</span>
+                  </span>
+                    <span id="header-top-userimage"><img src="/assets/images/default-avatar.png" class="border rounded-circle bg-white" height="40" width="40" /></span>
                 </div>
             </div>
         </div>
