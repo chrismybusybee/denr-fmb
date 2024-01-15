@@ -12,6 +12,9 @@
                 <table class="table dataTable" id="tblUserHistory">
             <thead>
                 <tr>
+                    <th class="hidden-column">
+                        ID
+                    </th>
                     <th>
                         Reference Number
                     </th>
@@ -38,6 +41,9 @@
                     <tr>
                         @if (item.isRead == true)
                         {
+                            <td class="hidden-column">
+                                @Html.DisplayFor(modelItem => item.id)
+                            </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.ReferenceNo)
                             </td>
@@ -71,6 +77,9 @@
 
                         else
                         {
+                            <td class="hidden-column" style="font-weight:bold;">
+                                @Html.DisplayFor(modelItem => item.id)
+                            </td>
                             <td style="font-weight:bold;">
                                 @Html.DisplayFor(modelItem => item.ReferenceNo)
                             </td>

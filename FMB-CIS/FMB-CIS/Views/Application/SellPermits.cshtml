@@ -19,6 +19,9 @@
         <table class="table dataTable">
             <thead>
                 <tr>
+                    <th class="hidden-column">
+                        ID
+                    </th>
                     <th>
                         Reference Number
                     </th>
@@ -88,6 +91,9 @@
                 @foreach (ApplicantListViewModel item in Model.applicantListViewModels)
                 {
                     <tr>
+                        <td class="hidden-column">
+                            @Html.DisplayFor(modelItem => item.id)
+                        </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.ReferenceNo)
                         </td>
