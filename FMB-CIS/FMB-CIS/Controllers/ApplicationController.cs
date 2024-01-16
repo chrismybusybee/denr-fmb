@@ -2,6 +2,7 @@
 using FMB_CIS.Models;
 using Humanizer.Localisation;
 using Microsoft.Ajax.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -426,6 +427,7 @@ namespace FMB_CIS.Controllers
             return View(mymodel);
 
         }
+        [Authorize]
         [HttpGet]
         public IActionResult EditApplication(string uid, string appid)
         {

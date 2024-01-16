@@ -1721,7 +1721,8 @@
                     //Check if filename exists on the application
                     var fileModel = @Html.Raw(Json.Serialize(Model.tbl_Files));
                     var hasFile = fileModel.some(f => f.filename === fileName);
-                    if (hasFile == true) {
+                    var renewFrom = "@Model.applicantViewModels.renew_from";
+                    if (hasFile == true && renewFrom != "") {
                         Swal.fire({
                             icon: "error",
                             title: "Duplicate Filename!",
@@ -1779,7 +1780,8 @@
                     //Check if filename exists on the application
                     var fileModel = @Html.Raw(Json.Serialize(Model.tbl_Files));
                     var hasFile = fileModel.some(f => f.filename === fileName);
-                    if (hasFile == true) {
+                    var renewFrom = "@Model.applicantViewModels.renew_from";
+                    if (hasFile == true && renewFrom != "") {
                         Swal.fire({
                             icon: "error",
                             title: "Duplicate Filename!",
