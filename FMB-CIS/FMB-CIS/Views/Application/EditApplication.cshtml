@@ -30,10 +30,10 @@
                     <div class="col-md-4">
                         <div class="form-group d-flex flex-column gap-1">
                             <label class="text-secondary small">
-                                Permit Status
+                                Reference No.
                             </label>
                             <span class="fw-bold">
-                                <label asp-for="applicantViewModels.permit_statuses" value="@Model.applicantViewModels.permit_statuses">@Model.applicantViewModels.permit_statuses</label>                               
+                                <label asp-for="applicantViewModels.ReferenceNo">@Model.applicantViewModels.ReferenceNo</label>
                             </span>
                         </div>
                     </div>
@@ -141,7 +141,7 @@
                                 </div>
                             </div>
                             <div class="row mb-5">
-                                <div class="col-md-6">
+                                <div class="col-md-5">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
                                             Permit Type
@@ -151,6 +151,16 @@
                                         </span>
                                     </div>
                                 </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Permit Status
+                                            </label>
+                                            <span class="fw-bold">
+                                                <label asp-for="applicantViewModels.permit_statuses" value="@Model.applicantViewModels.permit_statuses">@Model.applicantViewModels.permit_statuses</label>
+                                            </span>
+                                        </div>
+                                    </div>
                             </div>
                             <!-- Permit Application Details-->
                             @* <div class="row mb-5">
@@ -672,13 +682,23 @@
                                     </div>
                                 </div>
                                 <div class="row mb-5">
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
                                         <div class="form-group d-flex flex-column gap-1">
                                             <label class="text-secondary small">
                                                 Permit Type
                                             </label>
                                             <span class="fw-bold">
                                                 <label asp-for="applicantViewModels.permit_type" value="@Model.applicantViewModels.permit_type">@Model.applicantViewModels.permit_type</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Permit Status
+                                            </label>
+                                            <span class="fw-bold">
+                                                <label asp-for="applicantViewModels.permit_statuses" value="@Model.applicantViewModels.permit_statuses">@Model.applicantViewModels.permit_statuses</label>
                                             </span>
                                         </div>
                                     </div>
@@ -1698,8 +1718,26 @@
                     break;
                 }
                 else {
-                    // Add options based on the file name
-                    $select.addOption({ value: fileName, text: fileName });
+                    //Check if filename exists on the application
+                    var fileModel = @Html.Raw(Json.Serialize(Model.tbl_Files));
+                    var hasFile = fileModel.some(f => f.filename === fileName);
+                    if (hasFile == true) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Duplicate Filename!",
+                            text: "The filename exists in your application, please rename it before uploading.",
+                            confirmButtonColor: '#14984a'
+                        });
+                        const removeFileButton = document.querySelector('.fileinput-remove-button');
+                        removeFileButton.click();
+                        $select.clear();
+                        $select.clearOptions();
+                        break;
+                    }
+                    else {
+                        // Add options based on the file name
+                        $select.addOption({ value: fileName, text: fileName });
+                    }
                 }
             }
 
@@ -1738,8 +1776,26 @@
                     break;
                 }
                 else {
-                    // Add options based on the file name
-                    $select.addOption({ value: fileName, text: fileName });
+                    //Check if filename exists on the application
+                    var fileModel = @Html.Raw(Json.Serialize(Model.tbl_Files));
+                    var hasFile = fileModel.some(f => f.filename === fileName);
+                    if (hasFile == true) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Duplicate Filename!",
+                            text: "The filename exists in your application, please rename it before uploading.",
+                            confirmButtonColor: '#14984a'
+                        });
+                        const removeFileButton = document.querySelector('.fileinput-remove-button');
+                        removeFileButton.click();
+                        $select.clear();
+                        $select.clearOptions();
+                        break;
+                    }
+                    else {
+                        // Add options based on the file name
+                        $select.addOption({ value: fileName, text: fileName });
+                    }
                 }
             }
 
