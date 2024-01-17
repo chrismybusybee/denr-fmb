@@ -1,11 +1,13 @@
-﻿@{
+﻿@using System.Security.Claims;
+@model FMB_CIS.Models.ViewModel
+@{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
-    ViewBag.Title = "Profile Management";
+    ViewBag.Title = "Manage Profile";
 }
 
 <div id="card-container">
     <div id="card">
-        <div class="row m-0">
+        @* <div class="row m-0">
             <div id="editBtnSection" class="col-md-12">
                 <div class="d-flex justify-content-end gap-2">
                     <button id="btnSave" class="btn btn-primary w-105">Save</button>
@@ -18,162 +20,232 @@
                     <button class="btn btn-secondary w-105 btnCancel">Cancel</button>
                 </div>
             </div>
-        </div>
+        </div> *@
         <hr />
         <div id="profileSection" class="row m-0">
-            <div class="col-md-3">
+            @* <div class="col-md-3">
                 <div class="d-flex justify-content-center gap-1">
                     <img src="/assets/images/default-avatar.png" class="img-fluid rounded" />
                 </div>
                 <div class="d-flex justify-content-end align-items-center me-5 p-1">
                     <a href="#" class="text-decoration-none"><i data-feather="edit" class="me-1"></i>Edit Photo</a>
                 </div>
-            </div>
-            <div class="col-md-9">
+            </div> *@
+            <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-10">
+                    <div class="col-md-12">
                         <div class="row mb-5">
-                         @*   <div class="col-md-5">
+                            @if (Model.tbl_User.company_name != null || Model.tbl_User.company_name != "")
+                            {
+                                <div class="col-md-6">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Full Name
+                                        </label>
+                                        <span class="fw-bold">
+                                            @Model.tbl_User.first_name @Model.tbl_User.middle_name @Model.tbl_User.last_name @Model.tbl_User.suffix
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Gender
+                                        </label>
+                                        <span class="fw-bold">
+                                            @Model.tbl_User.gender
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-4">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Full Name
+                                        </label>
+                                        <span class="fw-bold">
+                                            @Model.tbl_User.first_name @Model.tbl_User.middle_name @Model.tbl_User.last_name @Model.tbl_User.suffix
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Company Name
+                                        </label>
+                                        <span class="fw-bold">
+                                            @Model.tbl_User.company_name
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group d-flex flex-column gap-1">
+                                        <label class="text-secondary small">
+                                            Gender
+                                        </label>
+                                        <span class="fw-bold">
+                                            @Model.tbl_User.gender
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="row mb-5">
+                            <div class="col-md-6">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
-                                        User Type
+                                        User Type(s)
                                     </label>
                                     <span class="fw-bold">
-                                        Chainsaw Importer
+                                        @if (ViewBag.UserTypes != null)
+                                        {
+                                            <ul>
+                                                @foreach (var userType in ViewBag.UserTypes)
+                                                {
+                                                    <li>@userType</li>
+                                                }
+                                            </ul>
+                                        }
+                                        else
+                                        {
+                                            <p>No user types available.</p>
+                                        }
                                     </span>
                                 </div>
-                            </div>*@
-                            <div class="col-md-5">
+                            </div>
+                            <div class="col-md-6">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
-                                        Name
+                                        User Classification
                                     </label>
                                     <span class="fw-bold">
-                                        Juan Dela Cruz
+                                        @Model.tbl_User.user_classification
                                     </span>
                                 </div>
                             </div>
                         </div>
                         <div class="row mb-5">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         Email Address
                                     </label>
                                     <span class="fw-bold">
-                                        juan@email.com
+                                        @Model.tbl_User.email
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         Contact Number
                                     </label>
                                     <span class="fw-bold">
-                                        0916 123 3456
+                                        @Model.tbl_User.contact_no
                                     </span>
                                 </div>
                             </div>
                         </div>
                         <div class="row mb-5">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         Valid ID
                                     </label>
                                     <span class="fw-bold">
-                                        SSS
+                                        @Model.tbl_User.valid_id
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         Valid ID Number
                                     </label>
                                     <span class="fw-bold">
-                                        001234567
+                                        @Model.tbl_User.valid_id_no
                                     </span>
                                 </div>
                             </div>
                         </div>
                         <div class="row mb-5">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         Birth Date
                                     </label>
                                     <span class="fw-bold">
-                                        December 27, 1989
+                                        @Model.tbl_User.birth_date
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         Street Address
                                     </label>
                                     <span class="fw-bold">
-                                        123 Mendiola St, Manila  City
+                                        @Model.tbl_User.street_address
                                     </span>
                                 </div>
                             </div>
                         </div>
                         <div class="row mb-5">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         Region
                                     </label>
                                     <span class="fw-bold">
-                                        NCR
+                                        @ViewBag.Region
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         Province
                                     </label>
                                     <span class="fw-bold">
-                                        Manila
+                                        @ViewBag.Province
                                     </span>
                                 </div>
                             </div>
                         </div>
                         <div class="row mb-5">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         City/Municipality
                                     </label>
                                     <span class="fw-bold">
-                                        Manila
+                                        @ViewBag.City
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         Barangay
                                     </label>
                                     <span class="fw-bold">
-                                        Mendiola
+                                        @ViewBag.Brgy
                                     </span>
                                 </div>
                             </div>
                         </div>
-                        <div class="row mb-2">
+                        @* <div class="row mb-2">
                             <div class="col-md-12">
                                 <button id="changePassword" class="btn text-secondary bg-gray border-0">Change Password</button>
                             </div>
 
-                        </div>
+                        </div> *@
                     </div>
-                    <div class="col-md-2 d-flex justify-content-end">
+                    @* <div class="col-md-2 d-flex justify-content-end">
                         <a href="#" class="text-decoration-none me-5"><i data-feather="settings" class="me-1"></i>Edit</a>
-                    </div>
+                    </div> *@
                 </div>
             </div>
         </div>

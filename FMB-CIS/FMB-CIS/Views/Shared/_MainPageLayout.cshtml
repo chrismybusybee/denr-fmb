@@ -576,7 +576,7 @@
                                         @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_profile"))
                                         {
                                             <li id="ManageProfileMenuItem">
-                                                <a href="@Url.Action("RequestToChangeAccountInfo", "AccountManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <a href="@Url.Action("Index", "ProfileManagement")" class="d-flex gap-2 text-decoration-none fs-6"> @* @Url.Action("RequestToChangeAccountInfo", "AccountManagement") *@
                                                     <div>
                                                         <img src="~/assets/images/menu-icons/line.png" />
                                                     </div>
@@ -1104,7 +1104,7 @@
             "/ChainsawSeller/ChainsawSellerApproval": "chainsawSellerApplication",
             "/ChainsawOwner/ChainsawOwnerApproval": "chainsawOwnerApplication",
             "/Renewal": "renewalMenuItem",
-            "/ProfileManagement": "profileManagementMenuItem",
+            "/ProfileManagement": "ManageProfileMenuItem",
             "/AccountManagement": "RegisteredAccountsMenuItem",
             "/AccountManagement/RequestToChangeAcctInfoList": "accountInfoMenuItem",
             "/AccountManagement/RequestToChangeAccountInfo": "ManageProfileMenuItem",
