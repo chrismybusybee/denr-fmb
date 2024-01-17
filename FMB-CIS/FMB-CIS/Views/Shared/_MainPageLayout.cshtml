@@ -787,6 +787,17 @@
                                     </li>
                                 }
                             }
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_report_generation"))
+                            {
+                                <li id="reportGenerationMenuItem">
+                                    <a href="@Url.Action("Index", "ReportGeneration")" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/reports.png" />
+                                        </div>
+                                        <span>Report Generation</span>
+                                    </a>
+                                </li>
+                            }
                             <li id="tutorialMenuItem">
                                 <a id="tutorialSideMenu" class="d-flex gap-2 text-decoration-none fs-6">
                                     <div>
@@ -1110,6 +1121,7 @@
             "/AnnouncementTemplates": "announcementTemplatesMenuItem",
             "/EmailTemplates": "emailTemplatesMenuItem",
             "/ChecklistManagement": "checklistManagementMenuItem",
+            "/ReportGeneration": "reportGenerationMenuItem",
         };
 
         if (currentPage.startsWith("/AccountManagement/ViewAccount/")) {
