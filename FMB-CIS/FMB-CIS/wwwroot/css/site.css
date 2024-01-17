@@ -314,9 +314,9 @@ font-weight: bolder;
 }
 
 .c-steps-container {
-    width: 500px;
+    /* width: 500px; */
     padding-top: 100px;
-    border-right: solid 1px #CCCCCC;
+    /* border-right: solid 1px #CCCCCC; */
 }
 
 .c-steps-content-container {
