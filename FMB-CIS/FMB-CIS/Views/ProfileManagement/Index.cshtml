@@ -23,21 +23,29 @@
         </div> *@
         <hr />
         <div id="profileSection" class="row m-0">
-            @* <div class="col-md-3">
-                <div class="d-flex justify-content-center gap-1">
-                    <img src="/assets/images/default-avatar.png" class="img-fluid rounded" />
+            <div class="col-md-3">
+                <div class="d-flex justify-content-center gap-1" id="ProfilePicDIV">
+                    <img src="@ViewBag.ProfilePhotoSource" class="img-fluid rounded" style="width: 100%;" id="ProfilePicIMG" />
                 </div>
-                <div class="d-flex justify-content-end align-items-center me-5 p-1">
-                    <a href="#" class="text-decoration-none"><i data-feather="edit" class="me-1"></i>Edit Photo</a>
+                <div class="d-flex justify-content-center align-items-center p-1 mb-5">
+                    <a class="text-decoration-none" id="EditPhoto"><i data-feather="edit" class="me-1"></i>Edit Photo</a>
                 </div>
-            </div> *@
-            <div class="col-md-12">
+
+                @* <div class="d-flex justify-content-end align-items-center me-5 p-1">
+                    <label for="profilePicInput" class="btn btn-primary custom-file-upload">
+                        <i data-feather="edit" class="me-1"></i> Change Photo
+                    </label>
+                    <input type="file" asp-for="profilePicUpload.Files" class="form-control" id="profilePicInput" hidden accept="image/jpeg" onchange="profilePicInputChange()" />
+                </div> *@
+                
+            </div>
+            <div class="col-md-9">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="row mb-5">
+                        <div class="row">
                             @if (Model.tbl_User.company_name != null || Model.tbl_User.company_name != "")
                             {
-                                <div class="col-md-6">
+                                <div class="col-md-6 mb-4">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
                                             Full Name
@@ -47,7 +55,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 mb-4">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
                                             Gender
@@ -60,7 +68,7 @@
                             }
                             else
                             {
-                                <div class="col-md-4">
+                                <div class="col-md-4 mb-4">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
                                             Full Name
@@ -70,7 +78,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4 mb-4">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
                                             Company Name
@@ -80,7 +88,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4 mb-4">
                                     <div class="form-group d-flex flex-column gap-1">
                                         <label class="text-secondary small">
                                             Gender
@@ -92,8 +100,8 @@
                                 </div>
                             }
                         </div>
-                        <div class="row mb-5">
-                            <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         User Type(s)
@@ -115,7 +123,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 mb-4">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         User Classification
@@ -126,8 +134,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mb-5">
-                            <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         Email Address
@@ -137,7 +145,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 mb-4">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         Contact Number
@@ -148,8 +156,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mb-5">
-                            <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         Valid ID
@@ -159,7 +167,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 mb-4">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         Valid ID Number
@@ -170,8 +178,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mb-5">
-                            <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         Birth Date
@@ -181,7 +189,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 mb-4">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         Street Address
@@ -192,8 +200,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mb-5">
-                            <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         Region
@@ -203,7 +211,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 mb-4">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         Province
@@ -214,8 +222,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mb-5">
-                            <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         City/Municipality
@@ -225,7 +233,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 mb-4">
                                 <div class="form-group d-flex flex-column gap-1">
                                     <label class="text-secondary small">
                                         Barangay
@@ -291,6 +299,7 @@
 </div>
 
 <script src="/js/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.12/dist/cropper.min.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -326,5 +335,60 @@
         $(".btnCancel").click(function () {
             location.reload(true);
         });
+
+        $("#EditPhoto").click(function () {
+            console.log("EditPhoto Clicked");
+            Swal.fire({
+                title: 'Change Profile Photo',
+                input: 'file',
+                inputAttributes: {
+                    accept: 'image/*',
+                    'aria-label': 'Upload your profile picture',
+                    required: 'true'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Upload',
+                confirmButtonColor: '#14984a',
+                cancelButtonText: 'Cancel',
+                showLoaderOnConfirm: true,
+                preConfirm: (file) => {
+                    return new Promise((resolve) => {
+                        let formData = new FormData();
+                        formData.append('ProfilePhoto', file);
+
+                        fetch('/ProfileManagement/UploadProfilePhoto', {
+                            method: 'POST',
+                            body: formData
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('File upload failed.');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                resolve(data.webPathWithFilename);
+                                document.getElementById('ProfilePicIMG').src = data.webPathWithFilename;
+                            })
+                            .catch(error => {
+                                Swal.showValidationMessage(`Upload failed: ${error}`);
+                            });
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("result is ", result);
+                    Swal.fire({
+                        title: 'Profile Photo Uploaded!',
+                        icon: 'success',
+                        confirmButtonColor: '#14984a'
+                    });
+                }
+            });
+
+
+        });
+
     });
 </script>

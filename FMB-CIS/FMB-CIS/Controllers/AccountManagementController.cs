@@ -28,14 +28,16 @@ namespace FMB_CIS.Controllers
             EmailSender = emailSender;
             EnvironmentWebHost = _environment;
         }
+
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_users")]
         public IActionResult Index()
         {
-            if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw") == true)
-            {
-                return RedirectToAction("EditAccount", "AccountManagement");
-            }
-            else
-            {
+            //if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw") == true)
+            //{
+            //    return RedirectToAction("EditAccount", "AccountManagement");
+            //}
+            //else
+            //{
                 ViewModel model = new ViewModel();
                 //var userinfoList                    
                 model.acctList = (from u in _context.tbl_user
@@ -69,7 +71,7 @@ namespace FMB_CIS.Controllers
                 //OrderByDescending(d => d.date_created)
                 //model.acctList = userinfoList;
                 return View(model);
-            }
+            //}
         }
         public IActionResult AddAccount()
         {
@@ -961,12 +963,12 @@ namespace FMB_CIS.Controllers
                     mymodel.tbl_Files = files;
                     //END FOR FILE DOWNLOAD
 
-                    //Profile Photo Source
-                    bool profilePhotoExist = _context.tbl_files.Where(f => f.tbl_user_id == usid && f.path.Contains("UserPhotos") && f.is_active == true).Any();
+                    //Profile Photo Source                    
+                    bool profilePhotoExist = _context.tbl_profile_pictures.Where(p => p.tbl_user_id == usid && p.is_active == true).Any();
                     if (profilePhotoExist == true)
                     {
-                        var profilePhoto = _context.tbl_files.Where(f => f.tbl_user_id == usid && f.path.Contains("UserPhotos") && f.is_active == true).FirstOrDefault();
-                        ViewBag.profilePhotoSource = "/Files/UserPhotos/" + profilePhoto.filename;
+                        var profilePhoto = _context.tbl_profile_pictures.Where(p => p.tbl_user_id == usid && p.is_active == true).FirstOrDefault();
+                        ViewBag.profilePhotoSource = profilePhoto.webPath + "/" + profilePhoto.filename;
                     }
                     else
                     {
