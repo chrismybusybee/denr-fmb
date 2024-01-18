@@ -26,13 +26,11 @@ namespace FMB_CIS.Controllers
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             var usInfo = _context.tbl_user.Where(u => u.id == uid).SingleOrDefault();
-            //bool? status = usInfo.status;
             ViewModel model = new ViewModel();
 
 
             var currentUser = _context.tbl_user.Find(uid);
             model.tbl_User = currentUser;
-            //model.tbl_User.id = uid;
 
             //var _regions = _context.tbl_region.ToList();
             //var _provinces = _context.tbl_province.Where(p => p.regCode == usInfo.tbl_region_id).ToList();
@@ -51,12 +49,7 @@ namespace FMB_CIS.Controllers
             //ViewData["BrgyData"] = new SelectList(_barangays.OrderBy(s => s.name), "id", "name");
 
             //string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
-            //ViewData["BaseUrl"] = host;
-
-            //Get list of required documents from tbl_announcement
-            //var requirements = _context.tbl_announcement.Where(a => a.id == 1).FirstOrDefault();
-            //model.soloAnnouncement = requirements;
-            //End for required documents
+            //ViewData["BaseUrl"] = host;           
 
             //User Types
             var myUserTypes = (from usrRoles in _context.tbl_user_type_user
@@ -73,50 +66,98 @@ namespace FMB_CIS.Controllers
             ViewBag.Province = _context.tbl_province.Where(p => p.id == currentUser.tbl_province_id).Select(p => p.name).FirstOrDefault();
             ViewBag.City = _context.tbl_city.Where(c => c.id == currentUser.tbl_city_id).Select(c => c.name).FirstOrDefault();
             ViewBag.Brgy = _context.tbl_brgy.Where(b => b.id == currentUser.tbl_brgy_id).Select(b => b.name).FirstOrDefault();
-            //File Paths from Database
-            //var filesFromDB = _context.tbl_files.Where(f => f.tbl_user_id == uid && !f.path.Contains("UserPhotos")).ToList();
-            //List<tbl_files> files = new List<tbl_files>();
-
-            //foreach (var fileList in filesFromDB)
-            //{
-            //    files.Add(new tbl_files { Id = fileList.Id, filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, date_created = fileList.date_created, file_size = fileList.file_size });
-            //}
-
-            //model.tbl_Files = files;
-            //END FOR FILE DOWNLOAD
-
+            
             //Profile Photo Source
-            //bool profilePhotoExist = _context.tbl_files.Where(f => f.tbl_user_id == uid && f.path.Contains("UserPhotos") && f.is_active == true).Any();
-            //if (profilePhotoExist == true)
-            //{
-            //    var profilePhoto = _context.tbl_files.Where(f => f.tbl_user_id == uid && f.path.Contains("UserPhotos") && f.is_active == true).FirstOrDefault();
-            //    ViewBag.profilePhotoSource = "/Files/UserPhotos/" + profilePhoto.filename;
-            //}
-            //else
-            //{
-            //    ViewBag.profilePhotoSource = "/assets/images/default-avatar.png";
-            //}
+            bool profilePhotoExist = _context.tbl_profile_pictures.Where(p => p.tbl_user_id == uid && p.is_active == true).Any();
+            if (profilePhotoExist == true)
+            {
+                var profilePhoto = _context.tbl_profile_pictures.Where(p => p.tbl_user_id == uid && p.is_active == true).FirstOrDefault();
+                ViewBag.ProfilePhotoSource = profilePhoto.webPath + "/" + profilePhoto.filename;//"/Files/UserPhotos/" + profilePhoto.filename;
+            }
+            else
+            {
+                ViewBag.ProfilePhotoSource = "/assets/images/default-avatar.png";
+            }
             //END for Profile Photo Source
-
-            //Display List of Comments
-            //model.commentsViewModelsList = (from c in _context.tbl_comments
-            //                                where c.tbl_user_id == uid
-            //                                join f in _context.tbl_files on c.tbl_files_id equals f.Id
-            //                                join usr in _context.tbl_user on c.created_by equals usr.id
-            //                                select new CommentsViewModel
-            //                                {
-            //                                    tbl_user_id = c.tbl_user_id,
-            //                                    tbl_files_id = c.tbl_files_id,
-            //                                    fileName = f.filename,
-            //                                    comment = c.comment,
-            //                                    commenterName = usr.first_name + " " + usr.last_name + " " + usr.suffix,
-            //                                    created_by = c.created_by,
-            //                                    modified_by = c.modified_by,
-            //                                    date_created = c.date_created,
-            //                                    date_modified = c.date_modified
-            //                                }).OrderBy(f => f.fileName).ThenByDescending(d => d.date_created);
+                        
             return View(model);
-            //return View();
+        }
+
+        [HttpPost]
+        public IActionResult UploadProfilePhoto(ProfilePhotoUploadModel model)
+        {
+            int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            if (model.ProfilePhoto != null && model.ProfilePhoto.Length > 0)
+            {
+                
+                FileInfo fileInfo = new FileInfo(model.ProfilePhoto.FileName);
+                
+                //Foler Name : USER_id
+                string folderName = "USER_" + loggedUserID;
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.ProfilePhoto.FileName);
+                string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserPhotos/" + folderName);
+                string webPath = "/Files/UserPhotos/" + folderName;
+                //create folder if not exist
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+
+                string filePath = Path.Combine(path, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.ProfilePhoto.CopyTo(stream);
+                }
+
+                bool profilePhotoExist = _context.tbl_profile_pictures.Where(p => p.tbl_user_id == loggedUserID).Any();
+                //if profile picture doesn't exist
+                if(profilePhotoExist == false)
+                {
+                    var profilePicsDB = new tbl_profile_pictures();
+                    profilePicsDB.file_type = fileInfo.Extension;
+                    profilePicsDB.tbl_user_id = loggedUserID;
+                    profilePicsDB.filename = fileName;
+                    profilePicsDB.path = path;
+                    profilePicsDB.webPath = webPath;
+                    profilePicsDB.file_size = Convert.ToInt32(model.ProfilePhoto.Length);
+                    profilePicsDB.is_active = true;
+                    profilePicsDB.created_by = loggedUserID;
+                    profilePicsDB.modified_by = loggedUserID;
+                    profilePicsDB.date_created = DateTime.Now;
+                    profilePicsDB.date_modified = DateTime.Now;
+                    _context.tbl_profile_pictures.Add(profilePicsDB);
+                    _context.SaveChanges();
+                }
+                // if profile picture exist, remove the previous picture and edit the current row on database
+                else
+                {
+                    var profilePicsDB = _context.tbl_profile_pictures.Where(p => p.tbl_user_id == loggedUserID).FirstOrDefault();
+                    var oldInfo = profilePicsDB;
+                    var oldPathWithFilename = Path.Combine(oldInfo.path, oldInfo.filename);
+                    //Delete Old Profile Pic on Folder
+                    if (System.IO.File.Exists(oldPathWithFilename))
+                    {
+                        System.IO.File.Delete(oldPathWithFilename);
+                    }
+                    profilePicsDB.file_type = fileInfo.Extension;
+                    profilePicsDB.tbl_user_id = loggedUserID;
+                    profilePicsDB.filename = fileName;
+                    profilePicsDB.path = path;
+                    profilePicsDB.webPath = webPath;
+                    profilePicsDB.file_size = Convert.ToInt32(model.ProfilePhoto.Length);
+                    profilePicsDB.is_active = true;
+                    profilePicsDB.created_by = loggedUserID;
+                    profilePicsDB.modified_by = loggedUserID;
+                    profilePicsDB.date_created = DateTime.Now;
+                    profilePicsDB.date_modified = DateTime.Now;
+                    _context.SaveChanges();
+                }
+                
+                var webPathWithFilename = webPath + "/" + fileName;
+
+                return Ok(new { webPathWithFilename });
+            }
+
+            return BadRequest("Invalid file.");
         }
     }
 }

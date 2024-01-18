@@ -798,14 +798,17 @@
                                     </a>
                                 </li>
                             }
-                            <li id="tutorialMenuItem">
-                                <a id="tutorialSideMenu" class="d-flex gap-2 text-decoration-none fs-6">
-                                    <div>
-                                        <img src="~/assets/images/menu-icons/tutorial-icon.png" />
-                                    </div>
-                                    <span>Chainsaw Information System Tutorial</span>
-                                </a>
-                            </li>
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_modal_cis_tutorial"))
+                            {
+                                <li id="tutorialMenuItem">
+                                    <a id="tutorialSideMenu" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/tutorial-icon.png" />
+                                        </div>
+                                        <span>Chainsaw Information System Tutorial</span>
+                                    </a>
+                                </li>
+                            }
                             <hr class="me-4 my-4" />
                             <li>
                                 @Html.ActionLink("Logout", "Signout", "Home", new { area = "" }, new { @class = "text-decoration-none" })
