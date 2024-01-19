@@ -18,5 +18,6 @@
         public bool? is_proof_of_payment { get; set; }
         public string? status { get; set; }
         public int? checklist_id { get; set; }
+        public int? version { get; set; }
     }
 }
