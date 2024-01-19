@@ -883,6 +883,7 @@ namespace FMB_CIS.Controllers
                             filesDB.tbl_file_type_id = fileInfo.Extension;
                             filesDB.tbl_file_sources_id = fileInfo.Extension;
                             filesDB.file_size = Convert.ToInt32(file.Length);
+                            filesDB.version = 1;
                             _context.tbl_files.Add(filesDB);
                             _context.SaveChanges();
 
@@ -948,6 +949,7 @@ namespace FMB_CIS.Controllers
                             filesDB.tbl_file_type_id = fileInfo.Extension;
                             filesDB.tbl_file_sources_id = fileInfo.Extension;
                             filesDB.file_size = Convert.ToInt32(file.Length);
+                            filesDB.version = 1;
                             _context.tbl_files.Add(filesDB);
                             _context.SaveChanges();
 
@@ -1154,6 +1156,7 @@ namespace FMB_CIS.Controllers
                     filesDB.tbl_file_sources_id = fileInfo.Extension;
                     filesDB.is_proof_of_payment = true;
                     filesDB.file_size = Convert.ToInt32(file.Length);
+                    filesDB.version = 1;
                     _context.tbl_files.Add(filesDB);
                     _context.SaveChanges();
                 }
@@ -1360,6 +1363,92 @@ namespace FMB_CIS.Controllers
                 return Json(false);
             }
             
+        }
+
+        [HttpPost]
+        public IActionResult ReplaceDocument(IFormFile replacementFile, int fileID)
+        {
+            int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            if (replacementFile != null && replacementFile.Length > 0)
+            {
+                //GET CONTENTS FROM DATABASE
+                var filesDB = _context.tbl_files.Where(f=>f.Id == fileID).FirstOrDefault();
+                var applicationFromDB = _context.tbl_application.Where(a=>a.id == filesDB.tbl_application_id).FirstOrDefault();
+
+                FileInfo fileInfo = new FileInfo(replacementFile.FileName);
+
+                //Foler Name : userID_applicationID
+                string folderName = applicationFromDB.tbl_user_id + "_" + filesDB.tbl_application_id;
+                string fileName = filesDB.filename;//Guid.NewGuid().ToString() + Path.GetExtension(model.ProfilePhoto.FileName);
+                
+                //Remove the version identifer on filename
+                if(filesDB.version != 1)
+                {
+                    // Find the index of 'v'
+                    int indexOfdash = fileName.IndexOf('-');
+
+                    // Check if 'v' is found and get the substring after it
+                    if (indexOfdash != -1 && indexOfdash + 1 < fileName.Length)
+                    {
+                        fileName = fileName.Substring(indexOfdash + 1);
+                    }                                        
+                }
+                fileName = "v" + (Convert.ToInt32(filesDB.version) + 1) + "-" + fileName;
+
+                string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/" + folderName);
+
+                //Delete the old one before writing
+                var oldPathWithFilename = Path.Combine(filesDB.path, filesDB.filename);
+                if (System.IO.File.Exists(oldPathWithFilename))
+                {
+                    System.IO.File.Delete(oldPathWithFilename);
+                }
+
+                //create folder if not exist
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+
+                string filePath = Path.Combine(path, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    replacementFile.CopyTo(stream);
+                }
+
+                //Changes for tbl_files
+                filesDB.filename = fileName;
+                filesDB.date_modified = DateTime.Now;
+                filesDB.modified_by = loggedUserID;
+                filesDB.version = Convert.ToInt32(filesDB.version) + 1; ;
+                filesDB.file_size = Convert.ToInt32(replacementFile.Length);
+                _context.SaveChanges();
+
+                //Changes for tbl_files_checklist_bridge (set to pending)
+                var fChBridge = _context.tbl_files_checklist_bridge.Where(b => b.tbl_files_id == fileID).ToList();
+                for (int i = 0; i < fChBridge.Count; i++)
+                {
+                    fChBridge[i].status = "Pending";
+                    _context.SaveChanges();
+                    //fChBridge[i].id;
+                    //Add new comment on tbl_comments
+                    var commentsTbl = new tbl_comments();
+                    commentsTbl.tbl_application_id = Convert.ToInt32(filesDB.tbl_application_id);
+                    commentsTbl.tbl_files_id = fileID;
+                    commentsTbl.comment = "Document was replaced at " + DateTime.Now.ToString("MMMM dd, yyyy hh:mm:ss tt") + " status was changed to pending for re-checking.";
+                    commentsTbl.created_by = loggedUserID;
+                    commentsTbl.modified_by = loggedUserID;
+                    commentsTbl.date_created = DateTime.Now;
+                    commentsTbl.date_modified = DateTime.Now;
+                    commentsTbl.bridge_id = fChBridge[i].id;
+                    _context.tbl_comments.Add(commentsTbl);
+                    _context.SaveChanges();
+                }
+
+                string success = "success";
+                return Ok(new { success });
+            }
+
+            return BadRequest("Invalid file.");
         }
     }
 }

@@ -1238,7 +1238,9 @@
                             <th>
                                 Comment
                             </th>
-
+                            <th>
+                                Action
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1275,6 +1277,7 @@
                                         <div class="text-danger px-3 pb-2 pt-1" style="font-weight: bold">
                                             @item.tbl_files_status
                                         </div>
+                                    @* <button type="button" id="ReplaceFile" class="btn btn-primary w-125" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" data-documentChecklistId="@item.tbl_document_checklist_id" data-documentChecklistName="@item.tbl_document_checklist_name">Replace File</button> *@
                                     }
                                     else @* if (item.tbl_files_status == "Pending") *@
                                     {
@@ -1287,7 +1290,16 @@
                                 <td>                                    
                                     @Html.DisplayFor(modelItem => item.comment)
                                 </td>
-
+                                <td>
+                                    @if (item.tbl_files_status == "Not Complied")
+                                    {                                    
+                                        <button type="button" id="ReplaceFile" class="btn btn-primary w-125" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" data-documentChecklistId="@item.tbl_document_checklist_id" data-documentChecklistName="@item.tbl_document_checklist_name">Replace File</button>
+                                    }
+                                    else
+                                    {
+                                        <label>N/A</label>
+                                    }
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -1675,6 +1687,71 @@
             });
 
         });
+
+        $("#ReplaceFile").click(function () {
+            console.log("this.dataset: ", this.dataset);
+            console.log("this.dataset.documentchecklistid: ", this.dataset.documentchecklistid);
+            console.log("this.dataset.documentchecklistname: ", this.dataset.documentchecklistname);
+            console.log("this.dataset.fileid: ", this.dataset.fileid);
+            console.log("this.dataset.filename: ", this.dataset.filename);
+            
+            var tblFileID = this.dataset.fileid;
+
+            Swal.fire({
+                title: 'Replace Document',
+                input: 'file',
+                inputAttributes: {
+                    accept: 'application/pdf',
+                    'aria-label': 'Upload your new document',
+                    required: 'true'
+                },
+                customClass: {
+                    input: "file"
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Upload',
+                confirmButtonColor: '#14984a',
+                cancelButtonText: 'Cancel',
+                showLoaderOnConfirm: true,
+                preConfirm: (file) => {
+                    return new Promise((resolve) => {
+                        let formData = new FormData();
+                        formData.append('replacementFile', file);
+                        formData.append('fileID', tblFileID);
+
+                        fetch('/Application/ReplaceDocument', {
+                            method: 'POST',
+                            body: formData
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('File upload failed.');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                resolve(data.success);
+                            })
+                            .catch(error => {
+                                Swal.showValidationMessage(`Upload failed: ${error}`);
+                            });
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("result is ", result);
+                    Swal.fire({
+                        title: 'Document Replaced Successfully!',
+                        icon: 'success',
+                        confirmButtonColor: '#14984a'
+                    });
+                }
+            });
+
+        });
+
+
     });
 
     //Multiple Select
