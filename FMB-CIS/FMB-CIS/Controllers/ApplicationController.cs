@@ -1365,6 +1365,35 @@ namespace FMB_CIS.Controllers
             
         }
 
+        [HttpGet, ActionName("GetFileTags")]
+        public JsonResult GetFileTags(int fileID)
+        {
+            try
+            {
+                //int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+
+                var fileTags = (from br in _context.tbl_files_checklist_bridge
+                                join chck in _context.tbl_document_checklist on br.tbl_document_checklist_id equals chck.id
+                                join f in _context.tbl_files on br.tbl_files_id equals f.Id
+                                where br.tbl_files_id == fileID
+                                select new
+                                {
+                                    fileName = f.filename,
+                                    fileTag = chck.name
+                                }).ToList();
+
+                return Json(fileTags);
+            }
+            catch
+            {
+                // Log the exception or handle it as needed
+                Console.Error.WriteLine($"An error occurred.");
+
+                // You can return an error response or a default value as needed
+                return Json(new { error = "An error occurred while processing the request." });
+            }
+        }
+
         [HttpPost]
         public IActionResult ReplaceDocument(IFormFile replacementFile, int fileID)
         {
