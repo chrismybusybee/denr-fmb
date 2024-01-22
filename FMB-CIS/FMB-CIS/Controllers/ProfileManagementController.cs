@@ -3,6 +3,7 @@ using FMB_CIS.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.IO;
 using System.Security.Claims;
 
 namespace FMB_CIS.Controllers
@@ -158,6 +159,27 @@ namespace FMB_CIS.Controllers
             }
 
             return BadRequest("Invalid file.");
+        }
+
+        [HttpGet, ActionName("GetProfilePicSource")]
+        public JsonResult GetProfilePicSource()
+        {
+            int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            string profilePhotoSource = "/assets/images/default-avatar.png";
+
+            //Profile Photo Source
+            bool profilePhotoExist = _context.tbl_profile_pictures.Where(p => p.tbl_user_id == loggedUserID && p.is_active == true).Any();
+            if (profilePhotoExist == true)
+            {
+                var profilePhoto = _context.tbl_profile_pictures.Where(p => p.tbl_user_id == loggedUserID && p.is_active == true).FirstOrDefault();
+                if (Directory.Exists(profilePhoto.path) == true)
+                {
+                    profilePhotoSource = profilePhoto.webPath + "/" + profilePhoto.filename;
+                }
+            }
+            //END for Profile Photo Source
+
+            return Json(profilePhotoSource);
         }
     }
 }

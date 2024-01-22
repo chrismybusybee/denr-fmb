@@ -369,6 +369,7 @@
                             .then(data => {
                                 resolve(data.webPathWithFilename);
                                 document.getElementById('ProfilePicIMG').src = data.webPathWithFilename;
+                                document.getElementById('profilePhotoMainPage').src = data.webPathWithFilename;
                             })
                             .catch(error => {
                                 Swal.showValidationMessage(`Upload failed: ${error}`);
