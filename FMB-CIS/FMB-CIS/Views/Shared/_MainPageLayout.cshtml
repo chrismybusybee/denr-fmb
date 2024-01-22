@@ -954,6 +954,10 @@
             });
         });
 
+        $.get("/ProfileManagement/GetProfilePicSource", function (data) {
+            document.getElementById('profilePhotoMainPage').src = data;
+        });
+
         $.fn.dataTable.moment('DD/MM/YYYY h:mm:ss a');
 
         $('.dataTable').DataTable({
@@ -1143,13 +1147,7 @@
             setActiveMenuItem(storedActiveMenuItem);
         }
 
-        $.get("/ProfileManagement/GetProfilePicSource", function (data) {
-            console.log("data: ", data);
-
-            document.getElementById('profilePhotoMainPage').src = data;
-
-        });
-        
+               
         // toggle filter
         //var asideElement = $("#side-bar");
 
