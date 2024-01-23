@@ -1,8 +1,11 @@
 ﻿using FMB_CIS.Data;
 using FMB_CIS.Models;
+using FMB_CIS.Models.ManageProfile;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System.IO;
 using System.Security.Claims;
 
 namespace FMB_CIS.Controllers
@@ -26,7 +29,7 @@ namespace FMB_CIS.Controllers
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             var usInfo = _context.tbl_user.Where(u => u.id == uid).SingleOrDefault();
-            ViewModel model = new ViewModel();
+            ManageProfileViewModel model = new ManageProfileViewModel();
 
 
             var currentUser = _context.tbl_user.Find(uid);
@@ -81,6 +84,42 @@ namespace FMB_CIS.Controllers
             //END for Profile Photo Source
                         
             return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult ChangePassword([FromBody] ManageProfileViewModel model)
+        {
+            int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            if (ModelState.IsValid)
+            {
+                // Retrieve the user based on your authentication logic (e.g., by username)
+                var user = _context.tbl_user.Where(u=>u.id == loggedUserID).FirstOrDefault();
+
+                //Verify Old Password
+                if (model.OldPassword == EncryptDecrypt.ConvertToDecrypt(user.password))
+                {                   
+
+                    // Update the user's password
+                    user.password = EncryptDecrypt.ConvertToEncrypt(model.NewPassword);
+                    user.date_modified = DateTime.Now;
+
+                    // Save changes to the database
+                    _context.SaveChanges();
+                    return Json(new { success = true });
+
+                }
+                else
+                {
+                    return Json(new { success = false, error = "Invalid old password." });
+                }
+            }
+            // If model validation fails, return error details, including variables causing errors
+            var errors = ModelState.ToDictionary(
+                kvp => kvp.Key,
+                kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+            );
+            // If model validation fails, return error details
+            return Json(new { success = false, errors});
         }
 
         [HttpPost]
@@ -158,6 +197,27 @@ namespace FMB_CIS.Controllers
             }
 
             return BadRequest("Invalid file.");
+        }
+
+        [HttpGet, ActionName("GetProfilePicSource")]
+        public JsonResult GetProfilePicSource()
+        {
+            int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            string profilePhotoSource = "/assets/images/default-avatar.png";
+
+            //Profile Photo Source
+            bool profilePhotoExist = _context.tbl_profile_pictures.Where(p => p.tbl_user_id == loggedUserID && p.is_active == true).Any();
+            if (profilePhotoExist == true)
+            {
+                var profilePhoto = _context.tbl_profile_pictures.Where(p => p.tbl_user_id == loggedUserID && p.is_active == true).FirstOrDefault();
+                if (Directory.Exists(profilePhoto.path) == true)
+                {
+                    profilePhotoSource = profilePhoto.webPath + "/" + profilePhoto.filename;
+                }
+            }
+            //END for Profile Photo Source
+
+            return Json(profilePhotoSource);
         }
     }
 }

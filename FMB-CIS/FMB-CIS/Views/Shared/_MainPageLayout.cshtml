@@ -162,7 +162,7 @@
                     
                     <span id="header-top-userrole">@(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value)</span>
                   </span>
-                    <span id="header-top-userimage"><img src="/assets/images/default-avatar.png" class="border rounded-circle bg-white" height="40" width="40" /></span>
+                    <span id="header-top-userimage"><img id="profilePhotoMainPage" src="/assets/images/default-avatar.png" class="border rounded-circle bg-white" height="40" width="40" /></span>
                 </div>
             </div>
         </div>
@@ -954,6 +954,10 @@
             });
         });
 
+        $.get("/ProfileManagement/GetProfilePicSource", function (data) {
+            document.getElementById('profilePhotoMainPage').src = data;
+        });
+
         $.fn.dataTable.moment('DD/MM/YYYY h:mm:ss a');
 
         $('.dataTable').DataTable({
@@ -1142,7 +1146,8 @@
         if (storedActiveMenuItem) {
             setActiveMenuItem(storedActiveMenuItem);
         }
-        
+
+               
         // toggle filter
         //var asideElement = $("#side-bar");
 

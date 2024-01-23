@@ -1,5 +1,5 @@
 ﻿@using System.Security.Claims;
-@model FMB_CIS.Models.ViewModel
+@model FMB_CIS.Models.ManageProfile.ManageProfileViewModel
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Manage Profile";
@@ -7,20 +7,20 @@
 
 <div id="card-container">
     <div id="card">
-        @* <div class="row m-0">
-            <div id="editBtnSection" class="col-md-12">
+        <div class="row m-0">
+            @* <div id="editBtnSection" class="col-md-12">
                 <div class="d-flex justify-content-end gap-2">
                     <button id="btnSave" class="btn btn-primary w-105">Save</button>
                     <button class="btn btn-secondary w-105 btnCancel">Cancel</button>
                 </div>
-            </div>
+            </div> *@
             <div id="passwordBtnSection" class="col-md-12">
                 <div class="d-flex justify-content-end gap-2">
-                    <button id="btnSave" class="btn btn-primary w-105">Save</button>
-                    <button class="btn btn-secondary w-105 btnCancel">Cancel</button>
+                    <button id="btnSave" class="btn btn-primary w-105" type="button">Save</button>
+                    <button class="btn btn-secondary w-105 btnCancel" type="button">Cancel</button>
                 </div>
             </div>
-        </div> *@
+        </div>
         <hr />
         <div id="profileSection" class="row m-0">
             <div class="col-md-3">
@@ -29,6 +29,13 @@
                 </div>
                 <div class="d-flex justify-content-center align-items-center p-1 mb-5">
                     <a class="text-decoration-none" id="EditPhoto"><i data-feather="edit" class="me-1"></i>Edit Photo</a>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-12 text-center">
+                        <button id="changePassword" class="btn text-secondary bg-gray border-0">Change Password</button>
+                    </div>
+
                 </div>
 
                 @* <div class="d-flex justify-content-end align-items-center me-5 p-1">
@@ -244,12 +251,7 @@
                                 </div>
                             </div>
                         </div>
-                        @* <div class="row mb-2">
-                            <div class="col-md-12">
-                                <button id="changePassword" class="btn text-secondary bg-gray border-0">Change Password</button>
-                            </div>
-
-                        </div> *@
+                        
                     </div>
                     @* <div class="col-md-2 d-flex justify-content-end">
                         <a href="#" class="text-decoration-none me-5"><i data-feather="settings" class="me-1"></i>Edit</a>
@@ -257,43 +259,48 @@
                 </div>
             </div>
         </div>
-        <div id="passwordSection" class="row m-0 m-5">
-            <div class="col-md-12">
-                <p class="fw-bold text-md-start mb-1">
-                    New password must be:
-                </p>
-                <ul class="text-md-start text-secondary mb-5">
-                    <li>At least 8 characters long</li>
-                    <li>At least 1 number</li>
-                    <li>At least 1 lower case character</li>
-                    <li>At least 1 upper case character</li>
-                    <li>Minimum of 2 special characters</li>
-                </ul>
-                <div class="col-md-4 col-sm-12">
-                    <label class="form-label">Old Password</label>
-                    <div class="input-group password-toggle mb-md-2">
-                        @Html.Editor("OldPassword", new { htmlAttributes = new { @class = "form-control", @id = "OldPassword", @type = "password", @tabindex = "2", @style = "border-right:none;" } })
-                        <span class="input-group-text cursor-pointer show-password" title="show/hide password">
-                            <i data-feather="eye" class="data-feather"></i>
-                        </span>
-                    </div>
-                    <label class="form-label">New Password</label>
-                    <div class="input-group password-toggle mb-md-2">
-                        @Html.Editor("NewPassword", new { htmlAttributes = new { @class = "form-control", @id = "NewPassword", @type = "password", @tabindex = "2", @style = "border-right:none;" } })
-                        <span class="input-group-text cursor-pointer show-password" title="show/hide password">
-                            <i data-feather="eye" class="data-feather"></i>
-                        </span>
-                    </div>
-                    <label class="form-label">Confirm Password</label>
-                    <div class="input-group password-toggle mb-md-4">
-                        @Html.Editor("ConfirmPassword", new { htmlAttributes = new { @class = "form-control", @id = "ConfirmPassword", @type = "password", @tabindex = "2", @style = "border-right:none;" } })
-                        <span class="input-group-text cursor-pointer show-password" title="show/hide password">
-                            <i data-feather="eye" class="data-feather"></i>
-                        </span>
+        <form asp-controller="ProfileManagement" asp-action="Index" id="ChangePasswordForm">
+            <div id="passwordSection" class="row m-0 m-5">
+                <div class="col-md-12">
+                    <p class="fw-bold text-md-start mb-1">
+                        New password must be:
+                    </p>
+                    <ul class="text-md-start text-secondary mb-5">
+                        <li>At least 8 characters long</li>
+                        <li>At least 1 number</li>
+                        <li>At least 1 lower case character</li>
+                        <li>At least 1 upper case character</li>
+                        <li>At least of 1 special characters</li>
+                    </ul>
+                    <div class="col-md-4 col-sm-12">
+                        <label class="form-label">Old Password</label>
+                        <div class="input-group password-toggle mb-md-2">
+                            @Html.Editor("OldPassword", new { htmlAttributes = new { @class = "form-control", @id = "OldPassword", @type = "password", @tabindex = "2", @style = "border-right:none;", @required = "true"} })
+                            <span class="input-group-text cursor-pointer show-password" id="showOldPassword" title="show/hide password">
+                                <i data-feather="eye" class="data-feather"></i>
+                            </span>
+                        </div>
+                        <div id="oldPassValidationFeedback" class="invalid-feedback">Test</div>
+                        <label class="form-label">New Password</label>
+                        <div class="input-group password-toggle mb-md-2">
+                            @Html.Editor("NewPassword", new { htmlAttributes = new { @class = "form-control", @id = "NewPassword", @type = "password", @tabindex = "2", @style = "border-right:none;", @required = "true" } })
+                            <span class="input-group-text cursor-pointer show-password" id="showNewPassword" title="show/hide password">
+                                <i data-feather="eye" class="data-feather"></i>
+                            </span>
+                        </div>
+                        <div id="newPassValidationFeedback" class="invalid-feedback"></div>
+                        <label class="form-label">Confirm Password</label>
+                        <div class="input-group password-toggle mb-md-4">
+                            @Html.Editor("ConfirmPassword", new { htmlAttributes = new { @class = "form-control", @id = "ConfirmPassword", @type = "password", @tabindex = "2", @style = "border-right:none;", @required = "true" } })
+                            <span class="input-group-text cursor-pointer show-password" id="showConfirmPassword" title="show/hide password">
+                                <i data-feather="eye" class="data-feather"></i>
+                            </span>
+                        </div>
+                        <div id="confirmPassValidationFeedback" class="invalid-feedback"></div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
         <hr />
     </div>
 </div>
@@ -320,15 +327,33 @@
 
         for (const togglePasswordElement of togglePasswordElements) {
             togglePasswordElement.addEventListener('click', function () {
-                if (oldPasswordInput.type === 'password' || newPasswordInput.type === 'password' || confirmPasswordInput.type === 'password') {
-                    oldPasswordInput.type = 'text';
-                    newPasswordInput.type = 'text';
-                    confirmPasswordInput.type = 'text';
-                } else {
-                    oldPasswordInput.type = 'password';
-                    newPasswordInput.type = 'password';
-                    confirmPasswordInput.type = 'password';
+                var toggleID = togglePasswordElement.id;
+                if (toggleID == "showOldPassword") {
+                    if (oldPasswordInput.type === 'password') {
+                        oldPasswordInput.type = 'text';
+                    }
+                    else {
+                        oldPasswordInput.type = 'password';
+                    }
                 }
+                if (toggleID == "showNewPassword") {
+                    if (newPasswordInput.type === 'password') {
+                        newPasswordInput.type = 'text';
+                    }
+                    else {
+                        newPasswordInput.type = 'password';
+                    }
+                }
+                if (toggleID == "showConfirmPassword") {
+                    if (confirmPasswordInput.type === 'password') {
+                        confirmPasswordInput.type = 'text';
+                    }
+                    else {
+                        confirmPasswordInput.type = 'password';
+                    }
+                }
+
+
             });
         }
 
@@ -369,6 +394,7 @@
                             .then(data => {
                                 resolve(data.webPathWithFilename);
                                 document.getElementById('ProfilePicIMG').src = data.webPathWithFilename;
+                                document.getElementById('profilePhotoMainPage').src = data.webPathWithFilename;
                             })
                             .catch(error => {
                                 Swal.showValidationMessage(`Upload failed: ${error}`);
@@ -389,6 +415,144 @@
 
 
         });
+
+        // Attach a click event handler to the button
+        $("#btnSave").click(function() {
+            if ($("#ChangePasswordForm")[0].checkValidity()) {
+                showConfirmationModal();
+            }
+            else {
+                //Validate Form
+                $("#ChangePasswordForm")[0].reportValidity();
+            }
+        });
+
+        function showConfirmationModal() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You are about to change your password.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#14984a',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, change it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // User clicked "Yes, change it!" button
+                    changePassword();
+                }
+            });
+        }
+
+        function changePassword() {
+            var oldPassword = $("#OldPassword").val();
+            var newPassword = $("#NewPassword").val();
+            var confirmPassword = $("#ConfirmPassword").val();
+
+            // Update the URL based on your endpoint
+            var url = "/ProfileManagement/ChangePassword";
+
+            // Create a JavaScript object to represent the password change model
+            var passwordChangeModel = {
+                OldPassword: oldPassword,
+                NewPassword: newPassword,
+                ConfirmPassword: confirmPassword
+            };
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(passwordChangeModel),
+                success: function (response) {
+                    // Handle success, maybe show a success message to the user
+                    if (response.success) {
+                        // Handle success
+                        console.log('Password changed successfully');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Password Changed Successfully',
+                            showConfirmButton: false,
+                            confirmButtonColor: '#14984a',
+                            timer: 1500
+                        });
+                    } else {
+                        // Handle failure
+                        //console.log('Password change failed:', response.errors || 'Unknown error');
+                        console.log("response.errors", response.errors);
+                        showErrorModal(response.errors || [response.error] || ['Unknown error']);
+                    }
+                },
+                error: function (error) {
+                    // Handle errors, maybe show an error message to the user
+                    //console.log('Password change failed:', error.responseText);
+                    showErrorModal([error.responseText] || ['Unknown error']);
+                }
+            });
+        }
+
+        function showErrorModal(errors) {
+            let errorMessages = [];
+
+            // Iterate through each field in the errors object
+            for (let field in errors) {
+                if (errors.hasOwnProperty(field)) {
+                    // Concatenate the error messages for each field
+                    errorMessages = errorMessages.concat(errors[field]);
+                }
+            }
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Password Change Failed',
+                confirmButtonColor: '#14984a',
+                html: '<ul style="text-align: left;">' +
+                    errorMessages.map(message => `<li>${message}</li>`).join('') +
+                    '</ul>'
+            });
+        }
+
+        // $("#btnSave").click(function () {
+        //     // Show SweetAlert2 modal
+        //     Swal.fire({
+        //         title: 'Are you sure?',
+        //         text: 'Do you really want to change your password?',
+        //         icon: 'warning',
+        //         showCancelButton: true,
+        //         confirmButtonColor: '#14984a',
+        //         cancelButtonColor: '#d33',
+        //         confirmButtonText: 'Yes, change it!'
+        //     }).then((result) => {
+        //         if (result.isConfirmed) {
+        //             // If user clicks "Yes, change it!", submit the form
+        //             submitChangePasswordForm();
+        //         }
+        //     });
+        // });
+
+        // function submitChangePasswordForm() {
+        //     try {
+        //         // Submit the form using form.submit()
+        //         document.getElementById('ChangePasswordForm').submit();
+
+        //         // Simulate success
+        //         Swal.fire({
+        //             title: 'Success!',
+        //             text: 'Your password has been changed successfully.',
+        //             icon: 'success',
+        //             confirmButtonColor: '#14984a'
+        //         });
+        //     } catch (error) {
+        //         // If an error occurs during form submission, show an error message
+        //         Swal.fire({
+        //             title: 'Error!',
+        //             text: 'Something went wrong while changing your password.',
+        //             icon: 'error',
+        //             confirmButtonColor: '#14984a'
+        //         });
+        //     }
+        // }
+
 
     });
 </script>

@@ -1277,7 +1277,6 @@
                                         <div class="text-danger px-3 pb-2 pt-1" style="font-weight: bold">
                                             @item.tbl_files_status
                                         </div>
-                                    @* <button type="button" id="ReplaceFile" class="btn btn-primary w-125" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" data-documentChecklistId="@item.tbl_document_checklist_id" data-documentChecklistName="@item.tbl_document_checklist_name">Replace File</button> *@
                                     }
                                     else @* if (item.tbl_files_status == "Pending") *@
                                     {
@@ -1696,58 +1695,80 @@
             console.log("this.dataset.filename: ", this.dataset.filename);
             
             var tblFileID = this.dataset.fileid;
-
-            Swal.fire({
-                title: 'Replace Document',
-                input: 'file',
-                inputAttributes: {
-                    accept: 'application/pdf',
-                    'aria-label': 'Upload your new document',
-                    required: 'true'
-                },
-                customClass: {
-                    input: "file"
-                },
-                showCancelButton: true,
-                confirmButtonText: 'Upload',
-                confirmButtonColor: '#14984a',
-                cancelButtonText: 'Cancel',
-                showLoaderOnConfirm: true,
-                preConfirm: (file) => {
-                    return new Promise((resolve) => {
-                        let formData = new FormData();
-                        formData.append('replacementFile', file);
-                        formData.append('fileID', tblFileID);
-
-                        fetch('/Application/ReplaceDocument', {
-                            method: 'POST',
-                            body: formData
-                        })
-                            .then(response => {
-                                if (!response.ok) {
-                                    throw new Error('File upload failed.');
-                                }
-                                return response.json();
-                            })
-                            .then(data => {
-                                resolve(data.success);
-                            })
-                            .catch(error => {
-                                Swal.showValidationMessage(`Upload failed: ${error}`);
-                            });
-                    });
-                },
-                allowOutsideClick: () => !Swal.isLoading()
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    console.log("result is ", result);
-                    Swal.fire({
-                        title: 'Document Replaced Successfully!',
-                        icon: 'success',
-                        confirmButtonColor: '#14984a'
-                    });
+            var myFileTag;
+            $.get("/Application/GetFileTags", { fileID: tblFileID }, function (data) {
+                console.log("data: ", data);
+                myFileTag = data;
+                
+                var listItem = "";
+                for (var x = 0; x < data.length; x++) {                                        
+                    listItem = listItem + "<li>"+ data[x].fileTag + "</li>";
                 }
+                const list = "<ul style=\"text-align: left;\">" + listItem + "</ul>";
+                console.log("list: ", list);
+                var myInnerHTML = "<div>The current document was tagged with requirements, please make sure that your new document still contains the following requirements: </div><br/ >" + list;
+                console.log("myInnerHTML: ", myInnerHTML);
+                Swal.fire({
+                    title: 'Replace Document?',
+                    html: myInnerHTML,
+                    icon: 'warning',
+                    input: 'file',
+                    inputAttributes: {
+                        accept: 'application/pdf',
+                        'aria-label': 'Upload your new document',
+                        required: 'true'
+                    },
+                    customClass: {
+                        input: "file"
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: 'Upload',
+                    confirmButtonColor: '#14984a',
+                    cancelButtonText: 'Cancel',
+                    showLoaderOnConfirm: true,
+                    preConfirm: (file) => {
+                        return new Promise((resolve) => {
+                            let formData = new FormData();
+                            formData.append('replacementFile', file);
+                            formData.append('fileID', tblFileID);
+
+                            fetch('/Application/ReplaceDocument', {
+                                method: 'POST',
+                                body: formData
+                            })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('File upload failed.');
+                                    }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    resolve(data.success);
+                                })
+                                .catch(error => {
+                                    Swal.showValidationMessage(`Upload failed: ${error}`);
+                                });
+                        });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        console.log("result is ", result);
+                        Swal.fire({
+                            title: 'Document Replaced Successfully!',
+                            icon: 'success',
+                            confirmButtonColor: '#14984a'
+                        });
+                    }
+                });
+            })
+            .fail(function (xhr, textStatus, errorThrown) {
+                // Error callback
+                console.error("Error occurred while fetching file tags:", errorThrown);
+                // Handle the error as needed, e.g., display an error message to the user
             });
+
+            
 
         });
 
