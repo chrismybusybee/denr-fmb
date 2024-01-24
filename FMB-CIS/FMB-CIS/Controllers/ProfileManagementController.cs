@@ -90,6 +90,7 @@ namespace FMB_CIS.Controllers
         public ActionResult ChangePassword([FromBody] ManageProfileViewModel model)
         {
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            var usrDB = _context.tbl_user.Where(u => u.id == loggedUserID).FirstOrDefault();
             if (ModelState.IsValid)
             {
                 // Retrieve the user based on your authentication logic (e.g., by username)
@@ -105,6 +106,23 @@ namespace FMB_CIS.Controllers
 
                     // Save changes to the database
                     _context.SaveChanges();
+                                        
+                    try
+                    {
+                        //Email
+                        var emailTemplate = _context.tbl_email_template.Where(e => e.id == 43).FirstOrDefault(); //id = 43 - Password Changed
+                        var subject = emailTemplate.email_subject;
+                        var BODY = emailTemplate.email_content.Replace("{FirstName}", usrDB.first_name);
+                        BODY = BODY.Replace("{DateTimeNow}", DateTime.Now.ToString("MMMM dd, yyyy hh:mm:ss tt"));
+                        var body = BODY.Replace(Environment.NewLine, "<br/>");
+
+                        EmailSender.SendEmailAsync(((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value, subject, body);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("An error occured on sending Email");
+                    }
+
                     return Json(new { success = true });
 
                 }

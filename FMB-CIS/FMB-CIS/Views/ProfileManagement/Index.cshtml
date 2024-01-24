@@ -5,23 +5,25 @@
     ViewBag.Title = "Manage Profile";
 }
 
-<div id="card-container">
+<div id="card-container" style="background-color: transparent; border: none;">
     <div id="card">
-        <div class="row m-0">
-            @* <div id="editBtnSection" class="col-md-12">
+        @* <div class="row m-0">
+            <div id="editBtnSection" class="col-md-12">
                 <div class="d-flex justify-content-end gap-2">
                     <button id="btnSave" class="btn btn-primary w-105">Save</button>
                     <button class="btn btn-secondary w-105 btnCancel">Cancel</button>
                 </div>
-            </div> *@
+            </div>
             <div id="passwordBtnSection" class="col-md-12">
                 <div class="d-flex justify-content-end gap-2">
                     <button id="btnSave" class="btn btn-primary w-105" type="button">Save</button>
                     <button class="btn btn-secondary w-105 btnCancel" type="button">Cancel</button>
                 </div>
             </div>
-        </div>
-        <hr />
+        </div> *@
+        
+        <!--
+            <hr />
         <div id="profileSection" class="row m-0">
             <div class="col-md-3">
                 <div class="d-flex justify-content-center gap-1" id="ProfilePicDIV">
@@ -258,8 +260,8 @@
                     </div> *@
                 </div>
             </div>
-        </div>
-        <form asp-controller="ProfileManagement" asp-action="Index" id="ChangePasswordForm">
+        </div> -->
+        @* <form asp-controller="ProfileManagement" asp-action="Index" id="ChangePasswordForm">
             <div id="passwordSection" class="row m-0 m-5">
                 <div class="col-md-12">
                     <p class="fw-bold text-md-start mb-1">
@@ -301,8 +303,249 @@
                 </div>
             </div>
         </form>
-        <hr />
+        <hr /> *@
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <img src="@ViewBag.ProfilePhotoSource" class="img-fluid rounded mb-5" style="width: 230px;" id="ProfilePicIMG" style="width: 150px;">
+
+                        <div class="d-flex justify-content-center mb-2">
+                            <a class="text-decoration-none" id="EditPhoto"><i data-feather="edit" class="me-1"></i>Edit Photo</a>
+                        </div>
+                        <div class="row mb-2" id="changePasswordBtnSection">
+                            <div class="col-md-12 text-center">
+                                <button id="changePassword" class="btn btn-primary"><i data-feather="settings" class="me-1"></i>Change Password</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4 mb-lg-0">
+                    <div class="card-body p-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="row">
+                                    <p class="mb-0">User Classification</p>
+                                </div>
+                                <div class="row">
+                                    <p class="text-dark fw-bold mb-0 ml-1">@Model.tbl_User.user_classification</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="row">
+                                    <p class="mb-0">User Type(s)</p>
+                                </div>
+                                <div>
+                                    @if (ViewBag.UserTypes != null)
+                                    {
+                                        <ul class="text-dark fw-bold">
+                                            @foreach (var userType in ViewBag.UserTypes)
+                                            {
+                                                <li>@userType</li>
+                                            }
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        <p>No user types available.</p>
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-body" id="profileSection">
+                        <div class="row mb-3">
+                            <h4 class="text-center">Personal Information</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Full Name</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-dark fw-bold mb-0">@Model.tbl_User.first_name @Model.tbl_User.middle_name @Model.tbl_User.last_name @Model.tbl_User.suffix</p>
+                            </div>
+                        </div>
+                        @if (Model.tbl_User.company_name != null)
+                        {
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Company Name</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-dark fw-bold mb-0">@Model.tbl_User.company_name</p>
+                                </div>
+                            </div>
+                        }
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Gender</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-dark fw-bold mb-0">@Model.tbl_User.gender</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Email</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-dark fw-bold mb-0">@Model.tbl_User.email</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Contact Number</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-dark fw-bold mb-0">@Model.tbl_User.contact_no</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Birth Date</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-dark fw-bold mb-0">@Convert.ToDateTime(Model.tbl_User.birth_date).ToString("MMMM dd, yyyy")</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Valid ID</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-dark fw-bold mb-0">@Model.tbl_User.valid_id</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Valid ID Number</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-dark fw-bold mb-0">@Model.tbl_User.valid_id_no</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Street Address</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-dark fw-bold mb-0">@Model.tbl_User.street_address</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Barangay</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-dark fw-bold mb-0">@ViewBag.Brgy</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">City/Municipality</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-dark fw-bold mb-0">@ViewBag.City</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Province</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-dark fw-bold mb-0">@ViewBag.Province</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Region</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-dark fw-bold mb-0">@ViewBag.Region</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form asp-controller="ProfileManagement" asp-action="Index" id="ChangePasswordForm">
+                        <div class="card-body" id="passwordSection">                            
+                            <div class="col-md-12 d-flex flex-column justify-content-center px-5 py-3">
+                                <div class="row mb-3">
+                                    <h4 class="text-center">Change Password</h4>
+                                </div>
+                                <div class="alert alert-warning mt-4 mb-5">
+                                    <p class="fw-bold text-md-start mb-1">
+                                        New password must be:
+                                    </p>
+                                    <ul class="text-md-start text-secondary">
+                                        <li>At least 8 characters long</li>
+                                        <li>At least 1 number</li>
+                                        <li>At least 1 lower case character</li>
+                                        <li>At least 1 upper case character</li>
+                                        <li>At least of 1 special characters</li>
+                                    </ul>
+                                </div>
+                                <div class="d-flex flex-column align-items-start px-4">
+                                    <label class="form-label">Old Password</label>
+                                    <div class="input-group password-toggle mb-md-2">
+                                        @Html.Editor("OldPassword", new { htmlAttributes = new { @class = "form-control", @id = "OldPassword", @type = "password", @tabindex = "2", @style = "border-right:none;", @required = "true"} })
+                                        <span class="input-group-text cursor-pointer show-password" id="showOldPassword" title="show/hide password">
+                                            <i data-feather="eye" class="data-feather"></i>
+                                        </span>
+                                    </div>
+                                    <div id="oldPassValidationFeedback" class="invalid-feedback">Test</div>
+                                    <label class="form-label">New Password</label>
+                                    <div class="input-group password-toggle mb-md-2">
+                                        @Html.Editor("NewPassword", new { htmlAttributes = new { @class = "form-control", @id = "NewPassword", @type = "password", @tabindex = "2", @style = "border-right:none;", @required = "true", @pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$" } })
+                                        <span class="input-group-text cursor-pointer show-password" id="showNewPassword" title="show/hide password">
+                                            <i data-feather="eye" class="data-feather"></i>
+                                        </span>
+                                    </div>
+                                    <div id="newPassValidationFeedback" class="invalid-feedback"></div>
+                                    <label class="form-label">Confirm Password</label>
+                                    <div class="input-group password-toggle mb-md-4">
+                                        @Html.Editor("ConfirmPassword", new { htmlAttributes = new { @class = "form-control", @id = "ConfirmPassword", @type = "password", @tabindex = "2", @style = "border-right:none;", @required = "true" } })
+                                        <span class="input-group-text cursor-pointer show-password" id="showConfirmPassword" title="show/hide password">
+                                            <i data-feather="eye" class="data-feather"></i>
+                                        </span>
+                                    </div>
+                                    <div id="confirmPassValidationFeedback" class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div id="passwordBtnSection" class="col-md-12">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button id="btnSave" class="btn btn-primary w-105" type="button">Save</button>
+                                    <button class="btn btn-secondary w-105 btnCancel" type="button">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                                
+            </div>
+        </div>        
     </div>
+
+
 </div>
 
 <script src="/js/jquery-3.7.1.min.js"></script>
@@ -318,6 +561,7 @@
             $('#profileSection').hide();
             $('#passwordSection').show();
             $('#passwordBtnSection').show();
+            $('#changePasswordBtnSection').hide();
         });
 
         const oldPasswordInput = document.getElementById('OldPassword');
@@ -418,13 +662,24 @@
 
         // Attach a click event handler to the button
         $("#btnSave").click(function() {
-            if ($("#ChangePasswordForm")[0].checkValidity()) {
-                showConfirmationModal();
-            }
-            else {
-                //Validate Form
+            var newPassword = document.getElementById("NewPassword").value;
+            var confirmPassword = document.getElementById("ConfirmPassword").value;
+            if (newPassword != confirmPassword) {
+                document.getElementById("ConfirmPassword").setCustomValidity("Passwords don't Match")
                 $("#ChangePasswordForm")[0].reportValidity();
             }
+            else
+            {
+                document.getElementById("ConfirmPassword").setCustomValidity("")
+                if ($("#ChangePasswordForm")[0].checkValidity()) {
+                    showConfirmationModal();
+                }
+                else {
+                    //Validate Form
+                    $("#ChangePasswordForm")[0].reportValidity();
+                }
+            }
+            
         });
 
         function showConfirmationModal() {
@@ -468,18 +723,21 @@
                     // Handle success, maybe show a success message to the user
                     if (response.success) {
                         // Handle success
-                        console.log('Password changed successfully');
+                        //console.log('Password changed successfully');
                         Swal.fire({
                             icon: 'success',
                             title: 'Password Changed Successfully',
                             showConfirmButton: false,
                             confirmButtonColor: '#14984a',
-                            timer: 1500
+                            timer: 1500,
+                            willClose: () => {
+                                location.reload(true);
+                            }
                         });
                     } else {
                         // Handle failure
                         //console.log('Password change failed:', response.errors || 'Unknown error');
-                        console.log("response.errors", response.errors);
+                        //console.log("response.errors", response.errors);
                         showErrorModal(response.errors || [response.error] || ['Unknown error']);
                     }
                 },
