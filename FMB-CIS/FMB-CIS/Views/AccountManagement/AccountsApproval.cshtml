@@ -3,20 +3,19 @@
 @* @model FMB_CIS.Models.ApplicantListViewModel *@
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
-    ViewBag.Title = "Account Management";
+    ViewBag.Title = "Manage Users";
+    string uidParam = Context.Request.Query["uid"];
 }
 
-<div id="card-container">
+<div id="card-container" style="background-color: transparent; border: none;">
     <div id="card">
         <form asp-controller="AccountManagement" asp-action="AccountsApproval" method="post" id="AcctApprvlForm">
             <div class="row m-0">
                 <input asp-for="uid" type="hidden" />
                 <input asp-for="appid" type="hidden" />
-                <div class="d-flex justify-content-end gap-2">
+                @* <div class="d-flex justify-content-end gap-2">
                     @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO") == true || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("RED") == true || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Implementing") == true)
                     {
-                        @* <input id="approveBtn" class="btn btn-primary w-105" name="SubmitButton" type="button" value="Approve" />
-                        <input id="declineBtn" class="btn btn-danger w-105 btnCancel" name="SubmitButton" type="button" value="Decline" /> *@
                         <button type="button" name="SubmitButton" id="approveBtn" class="btn btn-primary w-105">Approve</button>
                         <button type="button" name="SubmitButton" id="declineBtn" class="btn btn-danger w-105 btnCancel">Decline</button>
                         <input asp-for="decision" id="decisionID" type="hidden" />
@@ -30,14 +29,223 @@
                         <input asp-for="decision" id="decisionID" type="hidden" />
                     }
 
+                </div> *@
+            </div>
+            @* <hr /> *@
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <img src="@ViewBag.profilePhotoSource" class="img-fluid rounded mb-5" style="width: 230px;" id="ProfilePicIMG" style="width: 150px;">
+                            <h5 class="my-3">@Model.acctApprovalViewModels.FullName</h5>
+                            <div class="row mb-3" >
+                                <div style="display: inline;">
+                                    <span class="text-muted">Account Status:</span>
+                                    @if (@Model.acctApprovalViewModels.is_active == true)
+                                    {
+                                        <span class="text-green fw-bold">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-danger fw-bold">Disabled</span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center mb-2">
+                                @if (@Model.acctApprovalViewModels.is_active == true)
+                                {
+                                    <button type="button" name="SubmitButton" id="disableBtn" class="btn btn-danger btnCancel">Disable Account</button>
+                                }
+                                else
+                                {
+                                    <button type="button" name="SubmitButton" id="enableBtn" class="btn btn-primary">Enable Account</button>
+                                }
+                                <input asp-for="decision" id="decisionID" type="hidden" />
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="card mb-4 mb-lg-0">
+                        <div class="card-body p-0">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="row">
+                                        <p class="mb-0">User Classification</p>
+                                    </div>
+                                    <div class="row">
+                                        <p class="text-dark fw-bold mb-0 ml-1">@Html.DisplayFor(model => model.acctApprovalViewModels.user_classification)</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="row">
+                                        <p class="mb-0">User Type(s)</p>
+                                    </div>
+                                    <div>
+                                        @if (ViewBag.UserTypes != null)
+                                        {
+                                            <ul class="text-dark fw-bold">
+                                                @foreach (var userType in ViewBag.UserTypes)
+                                                {
+                                                    <li>@userType</li>
+                                                }
+                                            </ul>
+                                        }
+                                        else
+                                        {
+                                            <p>No user types available.</p>
+                                        }
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="card mb-4">
+                        <div class="card-body" id="profileSection">
+                            <div class="row mb-3">
+                                <h4 class="text-center">Personal Information</h4>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Full Name</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-dark fw-bold mb-0">@Html.DisplayFor(model => model.acctApprovalViewModels.FullName)</p>
+                                    <span>
+                                        @Html.HiddenFor(model => model.acctApprovalViewModels.first_name)
+                                        @Html.HiddenFor(model => model.acctApprovalViewModels.middle_name)
+                                        @Html.HiddenFor(model => model.acctApprovalViewModels.last_name)
+                                        @Html.HiddenFor(model => model.acctApprovalViewModels.suffix)
+                                        @Html.HiddenFor(model => model.acctApprovalViewModels.FullName)
+                                        @Html.HiddenFor(model => model.acctApprovalViewModels.userID)
+                                    </span>
+                                </div>
+                            </div>
+                            @if (Model.acctApprovalViewModels.company_name != null)
+                            {
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Company Name</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-dark fw-bold mb-0">@Html.DisplayFor(model => model.acctApprovalViewModels.company_name)</p>
+                                    </div>
+                                </div>
+                            }
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Gender</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-dark fw-bold mb-0">@Html.DisplayFor(model => model.acctApprovalViewModels.gender)</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Email</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-dark fw-bold mb-0">@Html.DisplayFor(model => model.acctApprovalViewModels.email)</p>
+                                    <span>
+                                        @Html.HiddenFor(model => model.acctApprovalViewModels.email)
+                                    </span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Contact Number</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-dark fw-bold mb-0">@Html.DisplayFor(model => model.acctApprovalViewModels.contact_no)</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Birth Date</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-dark fw-bold mb-0">@Convert.ToDateTime(Model.acctApprovalViewModels.birth_date).ToString("MMMM dd, yyyy")</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Valid ID</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-dark fw-bold mb-0">@Html.DisplayFor(model => model.acctApprovalViewModels.valid_id)</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Valid ID Number</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-dark fw-bold mb-0">@Html.DisplayFor(model => model.acctApprovalViewModels.valid_id_no)</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Street Address</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-dark fw-bold mb-0">@Html.DisplayFor(model => model.acctApprovalViewModels.street_address)</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Barangay</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-dark fw-bold mb-0">@Html.DisplayFor(model => model.acctApprovalViewModels.brgy)</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">City/Municipality</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-dark fw-bold mb-0">@Html.DisplayFor(model => model.acctApprovalViewModels.city)</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Province</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-dark fw-bold mb-0">@Html.DisplayFor(model => model.acctApprovalViewModels.province)</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Region</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-dark fw-bold mb-0">@Html.DisplayFor(model => model.acctApprovalViewModels.region)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <hr />
-            <div id="profileSection" class="row m-0">
+            
+            @* <div id="profileSection" class="row m-0">
                 <div class="col-md-3">
                     <div class="d-flex justify-content-center gap-1">
                         <img src="@ViewBag.profilePhotoSource" class="img-fluid rounded" width="220px"/>
-                        @* <img src="/assets/images/default-avatar.png" class="img-fluid rounded" /> *@
                     </div>
                 </div>
                 <div class="col-md-9">
@@ -140,7 +348,6 @@
                                             Email Address
                                         </label>
                                         <span class="fw-bold">
-                                            @* @Model.acctApprovalViewModels.email *@
                                             @Html.DisplayFor(model => model.acctApprovalViewModels.email)      
                                             @Html.HiddenFor(model => model.acctApprovalViewModels.email)
                                         </span>
@@ -253,130 +460,135 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <hr />
+            </div> *@
+            @* <hr /> *@
 
-            <div class="row d-flex justify-content-center m-0">
-                <div class="d-flex gap-4 mb-5">
-                    <h2 class="text-secondary fw-bold m-0">Attached Documents</h2>
-                </div>
-                <div class="d-flex mb-4 gap-3">
-                    @foreach (tbl_files file in Model.tbl_Files)
-                     {
-                        var folder = Model.uid + "_" + Model.appid;
-                        <div class="card mw-18rem">
-                            <div class="card-body">
-                                @if(file.tbl_file_type_id == ".pdf")
-                                {
-                                    <i class="fas fa-file-pdf text-light-green fs-1 mb-3"></i>
-                                }
-                                else if (file.tbl_file_type_id == ".docx")
-                                {
-                                    <i class="fas fa-file-word text-light-green fs-1 mb-3"></i>
-                                }
-                                else if (file.tbl_file_type_id == ".jpg")
-                                {
-                                    <i class="fas fa-file-image text-light-green fs-1 mb-3"></i>
-                                }
-                                else
-                                {
-                                    <i class="fas fa-file text-light-green fs-1 mb-3"></i>
-                                }
-                                <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="~/Files/UserDocs/@folder/@file.filename" target="_blank">View</a></li>
-                                    @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
-                                    <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
-                                </ul>
-                                <h6 class="card-title text-secondary">@file.filename</h6>
-                                <ul class="list-unstyled small mb-0">
-                                    <li><span class="text-muted">type: @file.tbl_file_type_id</span></li>
-                                    <li><span class="text-muted">size: @(file.file_size/1024) kB</span></li>
-                                    <li><span class="text-muted">uploaded: @file.date_created.ToString("MMM dd yyyy")</span></li>
-                                </ul>
+            <div class="row d-flex">
+
+                <div class="col-lg-12">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="d-flex gap-4 mb-5">
+                                <h2 class="text-secondary fw-bold m-0">Attached Documents</h2>
                             </div>
-                        </div>
-                     }
-                </div>
-                @* <div class="row d-flex justify-content-center px-0 mb-5">
-                    <div class="col-md-11 d-flex flex-column gap-2">
-                        <span>
-                            Comments
-                        </span>
-                        <textarea asp-for="acctApprovalViewModels.comment" class="form-control"></textarea>
-                        <button type="button" id="commentBtn" class="btn btn-primary w-105">Approve</button>
-                    </div>
-                </div> *@
-            </div>
-        </form>
-        <hr />
-        <form id="commentSection" asp-action="CommentSection">
-            <div class="row d-flex justify-content-center px-0 mb-5 mt-3">
-                <div class="col-md-12 d-flex flex-column px-4 gap-2">
-                    <input asp-for="uid" type="hidden" />
-                    <div class="row">
-                        <div class="col-md-2"></div>
-                        <div class="col-md-8">
-                            <span class="text-secondary">
-                                Please select the file you want to address a comment
-                            </span>
-                            @* Dropdown to select which file to comment *@
-                            <select asp-for="tbl_Comments.tbl_files_id" class="form-select mb-4">
+                            <div class="d-flex mb-4 gap-3">
                                 @foreach (tbl_files file in Model.tbl_Files)
                                 {
-                                    <option value="@file.Id">@file.filename</option>
+                                    var folder = "USER_" + uidParam;
+                                    <div class="card mw-18rem">
+                                        <div class="card-body">
+                                            @if (file.tbl_file_type_id == ".pdf")
+                                            {
+                                                <i class="fas fa-file-pdf text-light-green fs-1 mb-3"></i>
+                                            }
+                                            else if (file.tbl_file_type_id == ".docx")
+                                            {
+                                                <i class="fas fa-file-word text-light-green fs-1 mb-3"></i>
+                                            }
+                                            else if (file.tbl_file_type_id == ".jpg")
+                                            {
+                                                <i class="fas fa-file-image text-light-green fs-1 mb-3"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="fas fa-file text-light-green fs-1 mb-3"></i>
+                                            }
+                                            <i class="fas fa-ellipsis-v cursor-pointer fs-3 position-absolute end-0 me-3 text-secondary" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="~/Files/UserDocs/@folder/@file.filename" target="_blank">View</a></li>
+                                                @* <li><a class="dropdown-item" href="#">Delete</a></li> *@
+                                                <li><a href="@Url.Action("DownloadFile", new { filename = file.filename, path = file.path })" class="dropdown-item" href="#">Download</a></li>
+                                            </ul>
+                                            <h6 class="card-title text-secondary">@file.filename</h6>
+                                            <ul class="list-unstyled small mb-0">
+                                                <li><span class="text-muted">type: @file.tbl_file_type_id</span></li>
+                                                <li><span class="text-muted">size: @(file.file_size / 1024) kB</span></li>
+                                                <li><span class="text-muted">uploaded: @file.date_created.ToString("MMM dd yyyy")</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 }
-                            </select>
-                            @* @Html.DisplayFor(model => model.acctApprovalViewModels.birth_date) *@
-                            <textarea asp-for="tbl_Comments.comment" class="form-control mb-4" placeholder="Add comments here."></textarea>
-                            <button type="submit" id="commentBtn" class="btn btn-primary w-110">Add Comment</button>
+
+
+                            </div>
                         </div>
-                        <div class="col-md-2"></div>
                     </div>
                 </div>
             </div>
         </form>
-        <hr />
-        <div class="row d-flex justify-content-center px-0 mb-5">
-            @{var prev = " ";}
-            @foreach (CommentsViewModel item in Model.commentsViewModelsList)
-            {
+        @* <hr /> *@
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <form id="commentSection" asp-action="CommentSection">
+                            <div class="row d-flex justify-content-center px-0 mb-5 mt-3">
+                                <div class="col-md-12 d-flex flex-column px-4 gap-2">
+                                    <input asp-for="uid" type="hidden" />
+                                    <div class="row">
+                                        <div class="col-md-2"></div>
+                                        <div class="col-md-8">
+                                            <span class="text-secondary">
+                                                Please select the file you want to address a comment
+                                            </span>
+                                            @* Dropdown to select which file to comment *@
+                                            <select asp-for="tbl_Comments.tbl_files_id" class="form-select mb-4">
+                                                @foreach (tbl_files file in Model.tbl_Files)
+                                                {
+                                                    <option value="@file.Id">@file.filename</option>
+                                                }
+                                            </select>
+                                            @* @Html.DisplayFor(model => model.acctApprovalViewModels.birth_date) *@
+                                            <textarea asp-for="tbl_Comments.comment" class="form-control mb-4" placeholder="Add comments here."></textarea>
+                                            <button type="submit" id="commentBtn" class="btn btn-primary w-110">Add Comment</button>
+                                        </div>
+                                        <div class="col-md-2"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <hr />
+                        <div class="row d-flex justify-content-center px-0 mb-5">
+                            @{
+                                var prev = " ";
+                            }
+                            @foreach (CommentsViewModel item in Model.commentsViewModelsList)
+                            {
+                                prev = item.fileName;
 
-                @* if (prev != item.fileName)
-                {
-                    <section id="@item.fileName.Trim().Replace(" ","_")"></section>
-                } *@
-                prev = item.fileName;
-
-                <div class="row">
-                    <div class="col-md-12 py-2">
-                        <div class="px-2 py-1">
-                            <div class="border px-3 py-2">
-                            <div class="row d-flex justify-content-between mb-1">
-                                <div class="col-md-6 fs-6 fw-bold text-secondary">
-                                    @item.commenterName
+                                <div class="row">
+                                    <div class="col-md-12 py-2">
+                                        <div class="px-2 py-1">
+                                            <div class="border px-3 py-2">
+                                                <div class="row d-flex justify-content-between mb-1">
+                                                    <div class="col-md-6 fs-6 fw-bold text-secondary">
+                                                        @item.commenterName
+                                                    </div>
+                                                    <div class="col-md-6 text-end">
+                                                        <span class="border rounded small px-2 fw-bold text-secondary">
+                                                            @item.fileName
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="row d-flex mb-3">
+                                                    <div class="col-md-12 fst-normal fs-6">
+                                                        @item.comment
+                                                    </div>
+                                                </div>
+                                                <div class="row d-flex">
+                                                    <div class="col-md-12 text-end small text-muted pe-3">
+                                                        @item.date_created
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-md-6 text-end">
-                                    <span class="border rounded small px-2 fw-bold text-secondary">
-                                        @item.fileName
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="row d-flex mb-3">
-                                <div class="col-md-12 fst-normal fs-6">
-                                    @item.comment
-                                </div>
-                            </div>
-                            <div class="row d-flex">
-                                <div class="col-md-12 text-end small text-muted pe-3">
-                                    @item.date_created
-                                </div>
-                            </div>
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>
-            }
+            </div>
         </div>
     </div>
 </div>
@@ -445,6 +657,9 @@
 
 
     $(document).ready(function () {
+
+        const form = document.getElementById('AcctApprvlForm');
+
         $('#approveBtn').click(function () {
             $('#confirmApproveModal').modal("show");
             document.getElementById("decisionID").value = "Approve";
@@ -471,6 +686,8 @@
             $("#confirmDeclineModal").modal('hide');
             $('#confirmSuccessDeclineModal').modal("show");
         });
+
+        //ENABLING AN ACCOUNT
         $('#enableBtn').click(function () {
             $('#confirmEnableModal').modal("show");
             document.getElementById("decisionID").value = "Enable";
@@ -481,9 +698,11 @@
         });
 
         $("#confirmEnableBtn").click(function () {
+            form.submit();
             $('#confirmSuccessEnableModal').modal("show");
         });
 
+        //DISABLING AN ACCOUNT
         $('#disableBtn').click(function () {
             $('#confirmDisableModal').modal("show");
             document.getElementById("decisionID").value = "Disable";
@@ -494,6 +713,7 @@
         });
 
         $("#confirmDisableBtn").click(function () {
+            form.submit();
             $("#confirmDisableModal").modal('hide');
             $('#confirmSuccessDisableModal').modal("show");
         });

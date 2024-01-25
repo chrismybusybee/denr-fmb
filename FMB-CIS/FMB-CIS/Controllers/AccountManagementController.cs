@@ -884,119 +884,130 @@ namespace FMB_CIS.Controllers
 
         }
 
-        //TO BE USED BY CENRO FOR APPROVAL OF NEWLY REGISTERED ACCOUNTS
+        //TO BE USED BY CENRO FOR APPROVAL OF NEWLY REGISTERED ACCOUNTS (REMOVED)
+        //TO BE USED BY SUPER ADMIN TO ENABLE/DISABLE ACCOUNTS (current purpose)
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_users")]
         [HttpGet]
         //[Url("?email={email}&code={code}")]
         public IActionResult AccountsApproval(string uid)
         {
-            if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw") == true)
+            ViewModel mymodel = new ViewModel();
+            int usid = Convert.ToInt32(uid);
+            var userExist = _context.tbl_user.Any(u => u.id == usid);
+            if (userExist == false) //Redirect to Dashboard if User doesn't exist
             {
-                //Temporary only
-                return RedirectToAction("Index", "Dashboard");
-                //Must allow external user to edit their own account.
+                ModelState.AddModelError("", "Invalid User");
+                return RedirectToAction("Index", "AccountManagement");
             }
+
             else
             {
+                //var UserList = _context.tbl_user.ToList();
+                //var UserInfo = UserList.Where(m => m.id == usid).ToList();
 
-                ViewModel mymodel = new ViewModel();
-                //tbl_user user = _context.tbl_user.Find(uid);
-                if (uid == null)
+                //ViewModel model = new ViewModel();
+
+                //var userinfoList
+                mymodel.acctApprovalViewModels = (from u in _context.tbl_user
+                                                  where u.id == usid
+                                                  join utypes in _context.tbl_user_type_user on u.id equals utypes.user_id
+
+                                                  join utype in _context.tbl_user_types on utypes.user_type_id equals utype.id
+                                                  join reg in _context.tbl_region on u.tbl_region_id equals reg.id
+                                                  join prov in _context.tbl_province on u.tbl_province_id equals prov.id
+                                                  join ct in _context.tbl_city on u.tbl_city_id equals ct.id
+                                                  join brngy in _context.tbl_brgy on u.tbl_brgy_id equals brngy.id
+                                                  select new AcctApprovalViewModel
+                                                  {
+                                                      FullName = u.first_name + " " + u.middle_name + " " + u.last_name + " " + u.suffix,
+                                                      first_name = u.first_name,
+                                                      middle_name = u.middle_name,
+                                                      last_name = u.last_name,
+                                                      suffix = u.suffix,
+                                                      userType = utype.name,
+                                                      email = u.email,
+                                                      contact_no = u.contact_no,
+                                                      valid_id = u.valid_id,
+                                                      valid_id_no = u.valid_id_no,
+                                                      birth_date = u.birth_date.ToString(),
+                                                      street_address = u.street_address,
+                                                      region = reg.name,
+                                                      province = prov.name,
+                                                      city = ct.name,
+                                                      brgy = brngy.name,
+                                                      comment = u.comment,
+                                                      user_classification = u.user_classification,
+                                                      gender = u.gender,
+                                                      company_name = u.company_name,
+                                                      is_active = u.is_active
+                                                  }).FirstOrDefault();
+
+                //mymodel.acctApprovalViewModels = (AcctApprovalViewModel?)userinfoList;
+                
+                //User Types
+                var myUserTypes = (from usrRoles in _context.tbl_user_type_user
+                                   where usrRoles.user_id == usid && usrRoles.is_active == true
+                                   join utypesName in _context.tbl_user_types on usrRoles.user_type_id equals utypesName.id
+                                   select new
+                                   {
+                                       Roles = utypesName.name
+                                   }).ToList();
+                ViewBag.UserTypes = myUserTypes.Select(r => r.Roles);
+                //End for User Types
+
+                //File Paths from Database
+                var filesFromDB = _context.tbl_files.Where(f => f.tbl_user_id == usid && !f.path.Contains("UserPhotos")).ToList();
+                List<tbl_files> files = new List<tbl_files>();
+
+                foreach (var fileList in filesFromDB)
                 {
-                    ModelState.AddModelError("", "Invalid Application");
-                    return RedirectToAction("Index", "AccountManagement");
+                    files.Add(new tbl_files { Id = fileList.Id, filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, date_created = fileList.date_created, file_size = fileList.file_size });
+                    //files.Add(new tbl_files { filename = f });
                 }
 
-                else
+                mymodel.tbl_Files = files;
+                //END FOR FILE DOWNLOAD
+
+                //Profile Photo Source                    
+                bool profilePhotoExist = _context.tbl_profile_pictures.Where(p => p.tbl_user_id == usid && p.is_active == true).Any();
+                if (profilePhotoExist == true)
                 {
-                    int usid = Convert.ToInt32(uid);
-                    //var UserList = _context.tbl_user.ToList();
-                    //var UserInfo = UserList.Where(m => m.id == usid).ToList();
-
-                    //ViewModel model = new ViewModel();
-
-                    //var userinfoList
-                    mymodel.acctApprovalViewModels = (from u in _context.tbl_user
-                                                      where u.id == usid
-                                                      join utypes in _context.tbl_user_type_user on u.id equals utypes.user_id
-
-                                                      join utype in _context.tbl_user_types on utypes.user_type_id equals utype.id
-                                                      join reg in _context.tbl_region on u.tbl_region_id equals reg.id
-                                                      join prov in _context.tbl_province on u.tbl_province_id equals prov.id
-                                                      join ct in _context.tbl_city on u.tbl_city_id equals ct.id
-                                                      join brngy in _context.tbl_brgy on u.tbl_brgy_id equals brngy.id
-                                                      select new AcctApprovalViewModel
-                                                      {
-                                                          FullName = u.first_name + " " + u.middle_name + " " + u.last_name + " " + u.suffix,
-                                                          first_name = u.first_name,
-                                                          middle_name = u.middle_name,
-                                                          last_name = u.last_name,
-                                                          suffix = u.suffix,
-                                                          userType = utype.name,
-                                                          email = u.email,
-                                                          contact_no = u.contact_no,
-                                                          valid_id = u.valid_id,
-                                                          valid_id_no = u.valid_id_no,
-                                                          birth_date = u.birth_date.ToString(),
-                                                          street_address = u.street_address,
-                                                          region = reg.name,
-                                                          province = prov.name,
-                                                          city = ct.name,
-                                                          brgy = brngy.name,
-                                                          comment = u.comment,
-                                                          user_classification = u.user_classification,
-                                                          gender = u.gender,
-                                                          company_name = u.company_name,
-                                                          is_active = u.is_active
-                                                      }).FirstOrDefault();
-
-                    //mymodel.acctApprovalViewModels = (AcctApprovalViewModel?)userinfoList;
-
-                    //File Paths from Database
-                    var filesFromDB = _context.tbl_files.Where(f => f.tbl_user_id == usid && !f.path.Contains("UserPhotos")).ToList();
-                    List<tbl_files> files = new List<tbl_files>();
-
-                    foreach (var fileList in filesFromDB)
+                    var profilePhoto = _context.tbl_profile_pictures.Where(p => p.tbl_user_id == usid && p.is_active == true).FirstOrDefault();
+                    if (Directory.Exists(profilePhoto.path) == true)
                     {
-                        files.Add(new tbl_files { Id = fileList.Id, filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, date_created = fileList.date_created, file_size = fileList.file_size });
-                        //files.Add(new tbl_files { filename = f });
-                    }
-
-                    mymodel.tbl_Files = files;
-                    //END FOR FILE DOWNLOAD
-
-                    //Profile Photo Source                    
-                    bool profilePhotoExist = _context.tbl_profile_pictures.Where(p => p.tbl_user_id == usid && p.is_active == true).Any();
-                    if (profilePhotoExist == true)
-                    {
-                        var profilePhoto = _context.tbl_profile_pictures.Where(p => p.tbl_user_id == usid && p.is_active == true).FirstOrDefault();
                         ViewBag.profilePhotoSource = profilePhoto.webPath + "/" + profilePhoto.filename;
                     }
                     else
                     {
                         ViewBag.profilePhotoSource = "/assets/images/default-avatar.png";
                     }
-                    //END for Profile Photo Source
-                    //Display List of Comments
-                    mymodel.commentsViewModelsList = (from c in _context.tbl_comments
-                                                      where c.tbl_user_id == usid
-                                                      join f in _context.tbl_files on c.tbl_files_id equals f.Id
-                                                      join usr in _context.tbl_user on c.created_by equals usr.id
-                                                      select new CommentsViewModel
-                                                      {
-                                                          tbl_user_id = c.tbl_user_id,
-                                                          tbl_files_id = c.tbl_files_id,
-                                                          fileName = f.filename,
-                                                          comment = c.comment,
-                                                          commenterName = usr.first_name + " " + usr.last_name + " " + usr.suffix,
-                                                          created_by = c.created_by,
-                                                          modified_by = c.modified_by,
-                                                          date_created = c.date_created,
-                                                          date_modified = c.date_modified
-                                                      }).OrderBy(f => f.fileName).ThenByDescending(d => d.date_created);
-
-                    return View(mymodel);
                 }
+                else
+                {
+                    ViewBag.profilePhotoSource = "/assets/images/default-avatar.png";
+                }
+                //END for Profile Photo Source
+                //Display List of Comments
+                mymodel.commentsViewModelsList = (from c in _context.tbl_comments
+                                                  where c.tbl_user_id == usid
+                                                  join f in _context.tbl_files on c.tbl_files_id equals f.Id
+                                                  join usr in _context.tbl_user on c.created_by equals usr.id
+                                                  select new CommentsViewModel
+                                                  {
+                                                      tbl_user_id = c.tbl_user_id,
+                                                      tbl_files_id = c.tbl_files_id,
+                                                      fileName = f.filename,
+                                                      comment = c.comment,
+                                                      commenterName = usr.first_name + " " + usr.last_name + " " + usr.suffix,
+                                                      created_by = c.created_by,
+                                                      modified_by = c.modified_by,
+                                                      date_created = c.date_created,
+                                                      date_modified = c.date_modified
+                                                  }).OrderBy(f => f.fileName).ThenByDescending(d => d.date_created);
+
+                return View(mymodel);
             }
+
 
         }
 
