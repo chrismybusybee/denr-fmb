@@ -12,7 +12,7 @@
                             <div class="col-md-12">
                                 <div class="form-group mb-3">
                                     <label class="form-label small">Type</label>
-                                    <select asp-for="soloAnnouncement.tbl_announcement_type_id" class="form-select" id="announcementTypeIDDropdown">
+                                    <select asp-for="soloAnnouncement.tbl_announcement_type_id" class="form-select" id="announcementTypeIDDropdown" required>
                                         @foreach (tbl_announcement_type item in Model.tbl_Announcement_Type_List)
                                         {
                                             <option value="@item.id">@item.name</option>
@@ -21,15 +21,15 @@
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="form-label small">Title</label>
-                                    <input asp-for="soloAnnouncement.title" id="announcementTitle" class="form-control" />
+                                    <input asp-for="soloAnnouncement.title" id="announcementTitle" class="form-control" required />
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="form-label small">Subject</label>
-                                    <input asp-for="soloAnnouncement.announcement_subject" id="announcementSubject" class="form-control" />
+                                    <input asp-for="soloAnnouncement.announcement_subject" id="announcementSubject" class="form-control" required />
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="form-label small">Content</label>
-                                    <textarea asp-for="soloAnnouncement.announcement_content" id="announcementContent" class="form-control" rows="8"></textarea>
+                                    <textarea asp-for="soloAnnouncement.announcement_content" id="announcementContent" class="form-control" rows="8" required></textarea>
                                 </div>
                             </div>
                         </div>
@@ -180,8 +180,14 @@
     });
 
     $("#confirmSaveBtn").click(function () {
-        $("#addAnnouncementTemplateModal").modal("hide");
-        $("#confirmAddModal").modal("show");
+        if ($("#CreateEditAnnouncementTemplateForm")[0].checkValidity()) {
+            $("#addAnnouncementTemplateModal").modal("hide");
+            $("#confirmAddModal").modal("show");
+        }
+        else {
+            //Validate Form
+            $("#CreateEditAnnouncementTemplateForm")[0].reportValidity();
+        }
     });
 
     $("#backAddBtn").click(function () {

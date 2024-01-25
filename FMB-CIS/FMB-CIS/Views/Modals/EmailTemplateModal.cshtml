@@ -12,22 +12,22 @@
                             <div class="col-md-12">
                                 <div class="form-group mb-3">
                                     <label class="form-label small">Template Title</label>
-                                    <input asp-for="tbl_Email_Template.template_name" id="EmailTemplateName" class="form-control" />
+                                    <input asp-for="tbl_Email_Template.template_name" id="EmailTemplateName" class="form-control" required/>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="form-label small">Short Description of Template</label>
                                     @* <label class="form-label small">Details</label> *@
-                                    <input asp-for="tbl_Email_Template.template_description" id="EmailTemplateDescription" class="form-control" />
+                                    <input asp-for="tbl_Email_Template.template_description" id="EmailTemplateDescription" class="form-control" required />
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="form-label small">E-mail Subject</label>
                                     @* <label class="form-label small">Details</label> *@
-                                    <input asp-for="tbl_Email_Template.email_subject" id="EmailTemplateSubject" class="form-control" />
+                                    <input asp-for="tbl_Email_Template.email_subject" id="EmailTemplateSubject" class="form-control" required />
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="form-label small">E-mail Content</label>
                                     @* <label class="form-label small">Details</label> *@
-                                    <textarea asp-for="tbl_Email_Template.email_content" id="EmailTemplateContent" class="form-control" rows="8"></textarea>
+                                    <textarea asp-for="tbl_Email_Template.email_content" id="EmailTemplateContent" class="form-control" rows="8" required></textarea>
                                 </div>
                             </div>
                         </div>
@@ -173,8 +173,14 @@
     });
 
     $("#confirmSaveBtn").click(function () {
-        $("#addEmailTemplateModal").modal("hide");
-        $("#confirmAddModal").modal("show");
+        if ($("#CreateEmailTemplateForm")[0].checkValidity()) {
+            $("#addEmailTemplateModal").modal("hide");
+            $("#confirmAddModal").modal("show");
+        }
+        else {
+            //Validate Form
+            $("#CreateEmailTemplateForm")[0].reportValidity();
+        }        
     });
 
     $("#backAddBtn").click(function () {
