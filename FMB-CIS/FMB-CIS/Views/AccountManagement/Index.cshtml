@@ -15,13 +15,13 @@
             <thead>
                 <tr>
                     <th class="text-nowrap">Date Registered</th>
-                    <th class="text-nowrap">User Type</th>
+                    @* <th class="text-nowrap">User Type</th> *@
                     <th class="text-nowrap">Name</th>
                     <th class="text-nowrap">Email</th>
-                    <th class="text-nowrap">Contact No.</th>
-                    <th class="text-nowrap">Address</th>
-                    <th class="text-nowrap">Municipality</th>
-                    <th class="text-nowrap text-center">Registration Status</th>
+                    @* <th class="text-nowrap">Contact No.</th> *@
+                    @* <th class="text-nowrap">Address</th>
+                    <th class="text-nowrap">Municipality</th> *@
+                    @* <th class="text-nowrap text-center">Registration Status</th> *@
                     <th class="text-nowrap text-center">Account Status</th>                    
                     <th class="text-nowrap text-center">Actions</th>
                 </tr>
@@ -34,25 +34,25 @@
                             @* @Html.DisplayFor(modelItem => item.date_created) *@
                             @Convert.ToDateTime(item.date_created).ToString("yyyy-MM-dd HH:mm:ss")
                         </td>
-                        <td class="text-nowrap">
+                        @* <td class="text-nowrap">
                             @Html.DisplayFor(modelItem => item.userType)
-                        </td>
+                        </td> *@
                         <td class="text-nowrap">
                             @Html.DisplayFor(modelItem => item.FullName)
                         </td>
                         <td class="text-nowrap">
                             @Html.DisplayFor(modelItem => item.email)
                         </td>
-                        <td class="text-nowrap">
+                        @* <td class="text-nowrap">
                             @Html.DisplayFor(modelItem => item.contact_no)
-                        </td>
-                        <td class="text-nowrap">
+                        </td> *@
+                        @* <td class="text-nowrap">
                             @Html.DisplayFor(modelItem => item.street_address)
                         </td>
                         <td class="text-nowrap">
                             @Html.DisplayFor(modelItem => item.city)
-                        </td>
-                        <td class="text-nowrap text-center justify-content-center">
+                        </td> *@
+                        @* <td class="text-nowrap text-center justify-content-center">
                             @if (item.status == true)
                             {
                                 <div class="bg-success text-white px-3 pb-2 pt-1 rounded-pill w-105">
@@ -66,7 +66,7 @@
                                 </div>
                             }
 
-                        </td>
+                        </td> *@
                         <td class="text-nowrap text-center d-flex justify-content-center">
                             @if (item.is_active == true)
                             {
