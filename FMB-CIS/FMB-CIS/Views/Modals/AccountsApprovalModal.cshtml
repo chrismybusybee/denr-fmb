@@ -212,129 +212,129 @@
 
 <script type="text/javascript">
 
-    const form = document.getElementById('AcctApprvlForm');
-    const showApproveModalButton = document.getElementById('approveBtn');
-    const confirmationApproveModal = document.getElementById('confirmApproveModal');
-    const confirmApproveButton = document.getElementById('confirmApproveBtn');
+    // const form = document.getElementById('AcctApprvlForm');
+    // const showApproveModalButton = document.getElementById('approveBtn');
+    // const confirmationApproveModal = document.getElementById('confirmApproveModal');
+    // const confirmApproveButton = document.getElementById('confirmApproveBtn');
 
-    const showDeclineModalButton = document.getElementById('declineBtn');
-    const confirmationDeclineModal = document.getElementById('confirmDeclineModal');
-    const confirmDeclineButton = document.getElementById('confirmDeclineBtn');
+    // const showDeclineModalButton = document.getElementById('declineBtn');
+    // const confirmationDeclineModal = document.getElementById('confirmDeclineModal');
+    // const confirmDeclineButton = document.getElementById('confirmDeclineBtn');
 
-    const showEnableModalButton = document.getElementById('enableBtn');
-    const confirmationEnableModal = document.getElementById('confirmEnableModal');
-    const confirmEnableButton = document.getElementById('confirmEnableBtn');
+    // const showEnableModalButton = document.getElementById('enableBtn');
+    // const confirmationEnableModal = document.getElementById('confirmEnableModal');
+    // const confirmEnableButton = document.getElementById('confirmEnableBtn');
 
-    const showDisableModalButton = document.getElementById('disableBtn');
-    const confirmationDisableModal = document.getElementById('confirmDisableModal');
-    const confirmDisableButton = document.getElementById('confirmDisableBtn');
+    // const showDisableModalButton = document.getElementById('disableBtn');
+    // const confirmationDisableModal = document.getElementById('confirmDisableModal');
+    // const confirmDisableButton = document.getElementById('confirmDisableBtn');
 
-    //FOR APPROVE
-    // Function to display the modal
-    function showApproveModal() {
-        confirmationApproveModal.style.display = 'block';
-    }
+    // //FOR APPROVE
+    // // Function to display the modal
+    // function showApproveModal() {
+    //     confirmationApproveModal.style.display = 'block';
+    // }
 
-    // Function to hide the modal
-    function hideApproveModal() {
-        confirmationApproveModal.style.display = 'none';
-    }
+    // // Function to hide the modal
+    // function hideApproveModal() {
+    //     confirmationApproveModal.style.display = 'none';
+    // }
 
-    // Event listener for the "Submit" button
-    showApproveModalButton.addEventListener('click', showApproveModal);
+    // // Event listener for the "Submit" button
+    // showApproveModalButton.addEventListener('click', showApproveModal);
 
-    // Event listener for the "Confirm" button
-    confirmApproveButton.addEventListener('click', function () {
-        // Submit the form when the "Confirm" button is clicked
-        form.submit();
-    });
+    // // Event listener for the "Confirm" button
+    // confirmApproveButton.addEventListener('click', function () {
+    //     // Submit the form when the "Confirm" button is clicked
+    //     form.submit();
+    // });
 
-    // Close the modal when the user clicks outside of it
-    window.addEventListener('click', function (event) {
-        if (event.target === confirmationApproveModal) {
-            hideApproveModal();
-        }
-    });
+    // // Close the modal when the user clicks outside of it
+    // window.addEventListener('click', function (event) {
+    //     if (event.target === confirmationApproveModal) {
+    //         hideApproveModal();
+    //     }
+    // });
 
-    //FOR DECLINE
-    // Function to display the modal
-    function showDeclineModal() {
-        confirmationDeclineModal.style.display = 'block';
-    }
+    // //FOR DECLINE
+    // // Function to display the modal
+    // function showDeclineModal() {
+    //     confirmationDeclineModal.style.display = 'block';
+    // }
 
-    // Function to hide the modal
-    function hideDeclineModal() {
-        confirmationDeclineModal.style.display = 'none';
-    }
+    // // Function to hide the modal
+    // function hideDeclineModal() {
+    //     confirmationDeclineModal.style.display = 'none';
+    // }
 
-    // Event listener for the "Submit" button
-    showDeclineModalButton.addEventListener('click', showDeclineModal);
+    // // Event listener for the "Submit" button
+    // showDeclineModalButton.addEventListener('click', showDeclineModal);
 
-    // Event listener for the "Confirm" button
-    confirmDeclineButton.addEventListener('click', function () {
-        // Submit the form when the "Confirm" button is clicked
-        form.submit();
-    });
+    // // Event listener for the "Confirm" button
+    // confirmDeclineButton.addEventListener('click', function () {
+    //     // Submit the form when the "Confirm" button is clicked
+    //     form.submit();
+    // });
 
-    // Close the modal when the user clicks outside of it
-    window.addEventListener('click', function (event) {
-        if (event.target === confirmationDeclineModal) {
-            hideDeclineModal();
-        }
-    });
+    // // Close the modal when the user clicks outside of it
+    // window.addEventListener('click', function (event) {
+    //     if (event.target === confirmationDeclineModal) {
+    //         hideDeclineModal();
+    //     }
+    // });
 
-    //FOR ENABLE
-    // Function to display the modal
-    function showEnableModal() {
-        confirmationEnableModal.style.display = 'block';
-    }
+    // //FOR ENABLE
+    // // Function to display the modal
+    // function showEnableModal() {
+    //     confirmationEnableModal.style.display = 'block';
+    // }
 
-    // Function to hide the modal
-    function hideEnableModal() {
-        confirmationEnableModal.style.display = 'none';
-    }
+    // // Function to hide the modal
+    // function hideEnableModal() {
+    //     confirmationEnableModal.style.display = 'none';
+    // }
 
-    // Event listener for the "Submit" button
-    showEnableModalButton.addEventListener('click', showEnableModal);
+    // // Event listener for the "Submit" button
+    // showEnableModalButton.addEventListener('click', showEnableModal);
 
-    // Event listener for the "Confirm" button
-    confirmEnableButton.addEventListener('click', function () {
-        // Submit the form when the "Confirm" button is clicked
-        form.submit();
-    });
+    // // Event listener for the "Confirm" button
+    // confirmEnableButton.addEventListener('click', function () {
+    //     // Submit the form when the "Confirm" button is clicked
+    //     form.submit();
+    // });
 
-    // Close the modal when the user clicks outside of it
-    window.addEventListener('click', function (event) {
-        if (event.target === confirmationEnableModal) {
-            hideEnableModal();
-        }
-    });
+    // // Close the modal when the user clicks outside of it
+    // window.addEventListener('click', function (event) {
+    //     if (event.target === confirmationEnableModal) {
+    //         hideEnableModal();
+    //     }
+    // });
 
-    //FOR DISABLE
-    // Function to display the modal
-    function showDisableModal() {
-        confirmationDisableModal.style.display = 'block';
-    }
+    // //FOR DISABLE
+    // // Function to display the modal
+    // function showDisableModal() {
+    //     confirmationDisableModal.style.display = 'block';
+    // }
 
-    // Function to hide the modal
-    function hideDisableModal() {
-        confirmationDisableModal.style.display = 'none';
-    }
+    // // Function to hide the modal
+    // function hideDisableModal() {
+    //     confirmationDisableModal.style.display = 'none';
+    // }
 
-    // Event listener for the "Submit" button
-    showDisableModalButton.addEventListener('click', showDisableModal);
+    // // Event listener for the "Submit" button
+    // showDisableModalButton.addEventListener('click', showDisableModal);
 
-    // Event listener for the "Confirm" button
-    confirmDisableButton.addEventListener('click', function () {
-        // Submit the form when the "Confirm" button is clicked
-        form.submit();
-    });
+    // // Event listener for the "Confirm" button
+    // confirmDisableButton.addEventListener('click', function () {
+    //     // Submit the form when the "Confirm" button is clicked
+    //     form.submit();
+    // });
 
-    // Close the modal when the user clicks outside of it
-    window.addEventListener('click', function (event) {
-        if (event.target === confirmationDisableModal) {
-            hideDisableModal();
-        }
-    });
+    // // Close the modal when the user clicks outside of it
+    // window.addEventListener('click', function (event) {
+    //     if (event.target === confirmationDisableModal) {
+    //         hideDisableModal();
+    //     }
+    // });
 
 </script>
