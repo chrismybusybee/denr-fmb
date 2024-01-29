@@ -902,12 +902,6 @@ namespace FMB_CIS.Controllers
 
             else
             {
-                //var UserList = _context.tbl_user.ToList();
-                //var UserInfo = UserList.Where(m => m.id == usid).ToList();
-
-                //ViewModel model = new ViewModel();
-
-                //var userinfoList
                 mymodel.acctApprovalViewModels = (from u in _context.tbl_user
                                                   where u.id == usid
                                                   join utypes in _context.tbl_user_type_user on u.id equals utypes.user_id
@@ -942,8 +936,6 @@ namespace FMB_CIS.Controllers
                                                       is_active = u.is_active
                                                   }).FirstOrDefault();
 
-                //mymodel.acctApprovalViewModels = (AcctApprovalViewModel?)userinfoList;
-                
                 //User Types
                 var myUserTypes = (from usrRoles in _context.tbl_user_type_user
                                    where usrRoles.user_id == usid && usrRoles.is_active == true
@@ -990,20 +982,21 @@ namespace FMB_CIS.Controllers
                 //Display List of Comments
                 mymodel.commentsViewModelsList = (from c in _context.tbl_comments
                                                   where c.tbl_user_id == usid
-                                                  join f in _context.tbl_files on c.tbl_files_id equals f.Id
+                                                  //join f in _context.tbl_files on c.tbl_files_id equals f.Id into fileGroup
+                                                  //from file in fileGroup.DefaultIfEmpty()
                                                   join usr in _context.tbl_user on c.created_by equals usr.id
                                                   select new CommentsViewModel
                                                   {
                                                       tbl_user_id = c.tbl_user_id,
                                                       tbl_files_id = c.tbl_files_id,
-                                                      fileName = f.filename,
+                                                      //fileName = file.filename,
                                                       comment = c.comment,
                                                       commenterName = usr.first_name + " " + usr.last_name + " " + usr.suffix,
                                                       created_by = c.created_by,
                                                       modified_by = c.modified_by,
                                                       date_created = c.date_created,
                                                       date_modified = c.date_modified
-                                                  }).OrderBy(f => f.fileName).ThenByDescending(d => d.date_created);
+                                                  }).OrderBy/*(f => f.fileName).ThenByDescending*/(d => d.date_created);
 
                 return View(mymodel);
             }
@@ -1077,128 +1070,174 @@ namespace FMB_CIS.Controllers
             //return View();
         }
 
+        //[HttpPost]
+        ////[Url("?email={email}&code={code}")]
+        //public IActionResult AccountsApproval(int? uid, ViewModel model)
+        //{
+        //    int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+
+        //    string roleOfLoggedUser = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
+        //    int usrTypeID = _context.tbl_user_types.Where(utype => utype.name == roleOfLoggedUser).Select(utype => utype.id).FirstOrDefault();
+
+        //    //viewMod.applicantListViewModels.FirstOrDefault(x=>x.comment)
+        //    //string newComment = viewMod.applicantListViewModels.Where(x => x.tbl_user_id == uid).Select(v => v.comment).ToList().ToString();
+
+        //    if (uid == null)
+        //    {
+        //        return View();
+        //    }
+        //    else
+        //    {
+        //        int usid = Convert.ToInt32(uid);
+        //        string buttonClicked = model.decision;
+
+        //        if (usrTypeID <= 7)
+        //        {
+        //            return RedirectToAction("Index", "AccountManagement");
+        //        }
+        //        else if (usrTypeID == 8 || usrTypeID == 9 || usrTypeID == 17)
+        //        {
+        //            //ONLY THE FOLLOWING ROLES CAN APPROVE OR DECLINE AN ACCOUNT REGISTRATION
+        //            //8 - DENR CENRO,
+        //            //9 - DENR Implementing PENRO,
+        //            //17 - DENR Regional Executive Director(RED)
+        //            if (buttonClicked == "Approve")
+        //            {
+        //                //Get email and subject from templates in DB
+        //                var emailTemplate = _context.tbl_email_template.Where(e => e.id == 2).FirstOrDefault();
+        //                // id = 2 - Account Registration (Notice of Acceptance)
+
+        //                var usr = new tbl_user() { id = usid, status = true, date_modified = DateTime.Now, comment = model.acctApprovalViewModels.comment };
+
+        //                using (_context)
+        //                {
+        //                    _context.tbl_user.Attach(usr);
+        //                    _context.Entry(usr).Property(x => x.status).IsModified = true;
+        //                    _context.Entry(usr).Property(x => x.date_modified).IsModified = true;
+        //                    _context.Entry(usr).Property(x => x.comment).IsModified = true;
+        //                    _context.SaveChanges();
+        //                }
+        //                //Email
+        //                //var subject = "Account Registration Status";
+        //                //var body = "Greetings! \n We would like to inform your account has been approved.\nThe officer left the following comment:\n" + model.acctApprovalViewModels.comment;
+
+
+        //                var subject = emailTemplate.email_subject;
+        //                var BODY = emailTemplate.email_content.Replace("{FirstName}", model.acctApprovalViewModels.first_name);
+        //                var body = BODY.Replace(Environment.NewLine, "<br/>");
+        //                EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
+        //            }
+        //            else //if (buttonClicked == "Decline")
+        //            {
+        //                //Get email and subject from templates in DB
+        //                var emailTemplate = _context.tbl_email_template.Where(e => e.id == 3).FirstOrDefault();
+        //                // id = 3 - Account Registration (Notice of Rejection)
+        //                var usr = new tbl_user() { id = usid, status = false, date_modified = DateTime.Now, comment = model.acctApprovalViewModels.comment };
+        //                using (_context)
+        //                {
+        //                    _context.tbl_user.Attach(usr);
+        //                    _context.Entry(usr).Property(x => x.status).IsModified = true;
+        //                    _context.Entry(usr).Property(x => x.date_modified).IsModified = true;
+        //                    _context.Entry(usr).Property(x => x.comment).IsModified = true;
+        //                    _context.SaveChanges();
+        //                }
+        //                //Email
+        //                //var subject = "Account Registration Status";
+        //                //var body = "Greetings! \n We regret to inform you that your Account has been rejected.\nThe officer left the following comment:\n" + model.acctApprovalViewModels.comment;
+        //                var subject = emailTemplate.email_subject;
+        //                var BODY = emailTemplate.email_content.Replace("{FirstName}", model.acctApprovalViewModels.first_name);
+        //                var body = BODY.Replace(Environment.NewLine, "<br/>");
+        //                EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
+        //            }
+        //        }
+        //        else if (usrTypeID == 13 || usrTypeID == 14)
+        //        {
+        //            //ONLY THE FOLLOWING ROLES CAN APPROVE OR DECLINE AN ACCOUNT REGISTRATION
+        //            //13 - DENR CIS Administrator,
+        //            //14 - DENR CIS Super Admin,
+        //            if (buttonClicked == "Enable")
+        //            {
+        //                var usr = new tbl_user() { id = usid, is_active = true, date_modified = DateTime.Now, comment = model.acctApprovalViewModels.comment };
+
+        //                using (_context)
+        //                {
+        //                    _context.tbl_user.Attach(usr);
+        //                    _context.Entry(usr).Property(x => x.is_active).IsModified = true;
+        //                    _context.Entry(usr).Property(x => x.date_modified).IsModified = true;
+        //                    _context.Entry(usr).Property(x => x.comment).IsModified = true;
+        //                    _context.SaveChanges();
+        //                }
+        //                //Email
+        //                var subject = "CIS Account Status";
+        //                var body = "Greetings! \n We would like to inform your account has been enabled.\nYou are now allowed to login in the CIS system. Thank you!";
+        //                EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
+        //            }
+        //            else //if (buttonClicked == "Disable")
+        //            {
+        //                var usr = new tbl_user() { id = usid, is_active = false, date_modified = DateTime.Now, comment = model.acctApprovalViewModels.comment };
+        //                using (_context)
+        //                {
+        //                    _context.tbl_user.Attach(usr);
+        //                    _context.Entry(usr).Property(x => x.is_active).IsModified = true;
+        //                    _context.Entry(usr).Property(x => x.date_modified).IsModified = true;
+        //                    _context.Entry(usr).Property(x => x.comment).IsModified = true;
+        //                    _context.SaveChanges();
+        //                }
+        //                //Email
+        //                var subject = "CIS Account Status";
+        //                var body = "Greetings! \n We regret to inform you that your Account has been disabled.\nYou will not be allowed to login in the CIS system.";
+        //                EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
+        //            }
+        //        }
+
+        //        return RedirectToAction("Index", "AccountManagement");
+        //    }
+
+        //}
+
         [HttpPost]
-        //[Url("?email={email}&code={code}")]
         public IActionResult AccountsApproval(int? uid, ViewModel model)
         {
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
 
-            string roleOfLoggedUser = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
-            int usrTypeID = _context.tbl_user_types.Where(utype => utype.name == roleOfLoggedUser).Select(utype => utype.id).FirstOrDefault();
+            int usid = Convert.ToInt32(uid); // (user ID from URL parameter) Convert nullable int to int
+            string buttonClicked = model.decision; // Enable/Disable of accounts
+            var userInfo = _context.tbl_user.FirstOrDefault(u => u.id == usid); // Get the user info from database
+            int emailTemplateID = 0; //To be initialized on if else statements
 
-            //viewMod.applicantListViewModels.FirstOrDefault(x=>x.comment)
-            //string newComment = viewMod.applicantListViewModels.Where(x => x.tbl_user_id == uid).Select(v => v.comment).ToList().ToString();
-
-            if (uid == null)
+            if (buttonClicked == "Enable")
             {
-                return View();
+                // Enable the user account by setting is_active to true
+                userInfo.is_active = true;
+                userInfo.date_modified = DateTime.Now;
+                _context.SaveChanges();
+                emailTemplateID = 45; //id = 45 - Account Enabled
             }
-            else
+            else //if (buttonClicked == "Disable")
             {
-                int usid = Convert.ToInt32(uid);
-                string buttonClicked = model.decision;
-
-                if (usrTypeID <= 7)
-                {
-                    return RedirectToAction("Index", "AccountManagement");
-                }
-                else if (usrTypeID == 8 || usrTypeID == 9 || usrTypeID == 17)
-                {
-                    //ONLY THE FOLLOWING ROLES CAN APPROVE OR DECLINE AN ACCOUNT REGISTRATION
-                    //8 - DENR CENRO,
-                    //9 - DENR Implementing PENRO,
-                    //17 - DENR Regional Executive Director(RED)
-                    if (buttonClicked == "Approve")
-                    {
-                        //Get email and subject from templates in DB
-                        var emailTemplate = _context.tbl_email_template.Where(e => e.id == 2).FirstOrDefault();
-                        // id = 2 - Account Registration (Notice of Acceptance)
-
-                        var usr = new tbl_user() { id = usid, status = true, date_modified = DateTime.Now, comment = model.acctApprovalViewModels.comment };
-
-                        using (_context)
-                        {
-                            _context.tbl_user.Attach(usr);
-                            _context.Entry(usr).Property(x => x.status).IsModified = true;
-                            _context.Entry(usr).Property(x => x.date_modified).IsModified = true;
-                            _context.Entry(usr).Property(x => x.comment).IsModified = true;
-                            _context.SaveChanges();
-                        }
-                        //Email
-                        //var subject = "Account Registration Status";
-                        //var body = "Greetings! \n We would like to inform your account has been approved.\nThe officer left the following comment:\n" + model.acctApprovalViewModels.comment;
-
-
-                        var subject = emailTemplate.email_subject;
-                        var BODY = emailTemplate.email_content.Replace("{FirstName}", model.acctApprovalViewModels.first_name);
-                        var body = BODY.Replace(Environment.NewLine, "<br/>");
-                        EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
-                    }
-                    else //if (buttonClicked == "Decline")
-                    {
-                        //Get email and subject from templates in DB
-                        var emailTemplate = _context.tbl_email_template.Where(e => e.id == 3).FirstOrDefault();
-                        // id = 3 - Account Registration (Notice of Rejection)
-                        var usr = new tbl_user() { id = usid, status = false, date_modified = DateTime.Now, comment = model.acctApprovalViewModels.comment };
-                        using (_context)
-                        {
-                            _context.tbl_user.Attach(usr);
-                            _context.Entry(usr).Property(x => x.status).IsModified = true;
-                            _context.Entry(usr).Property(x => x.date_modified).IsModified = true;
-                            _context.Entry(usr).Property(x => x.comment).IsModified = true;
-                            _context.SaveChanges();
-                        }
-                        //Email
-                        //var subject = "Account Registration Status";
-                        //var body = "Greetings! \n We regret to inform you that your Account has been rejected.\nThe officer left the following comment:\n" + model.acctApprovalViewModels.comment;
-                        var subject = emailTemplate.email_subject;
-                        var BODY = emailTemplate.email_content.Replace("{FirstName}", model.acctApprovalViewModels.first_name);
-                        var body = BODY.Replace(Environment.NewLine, "<br/>");
-                        EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
-                    }
-                }
-                else if (usrTypeID == 13 || usrTypeID == 14)
-                {
-                    //ONLY THE FOLLOWING ROLES CAN APPROVE OR DECLINE AN ACCOUNT REGISTRATION
-                    //13 - DENR CIS Administrator,
-                    //14 - DENR CIS Super Admin,
-                    if (buttonClicked == "Enable")
-                    {
-                        var usr = new tbl_user() { id = usid, is_active = true, date_modified = DateTime.Now, comment = model.acctApprovalViewModels.comment };
-
-                        using (_context)
-                        {
-                            _context.tbl_user.Attach(usr);
-                            _context.Entry(usr).Property(x => x.is_active).IsModified = true;
-                            _context.Entry(usr).Property(x => x.date_modified).IsModified = true;
-                            _context.Entry(usr).Property(x => x.comment).IsModified = true;
-                            _context.SaveChanges();
-                        }
-                        //Email
-                        var subject = "CIS Account Status";
-                        var body = "Greetings! \n We would like to inform your account has been enabled.\nYou are now allowed to login in the CIS system. Thank you!";
-                        EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
-                    }
-                    else //if (buttonClicked == "Disable")
-                    {
-                        var usr = new tbl_user() { id = usid, is_active = false, date_modified = DateTime.Now, comment = model.acctApprovalViewModels.comment };
-                        using (_context)
-                        {
-                            _context.tbl_user.Attach(usr);
-                            _context.Entry(usr).Property(x => x.is_active).IsModified = true;
-                            _context.Entry(usr).Property(x => x.date_modified).IsModified = true;
-                            _context.Entry(usr).Property(x => x.comment).IsModified = true;
-                            _context.SaveChanges();
-                        }
-                        //Email
-                        var subject = "CIS Account Status";
-                        var body = "Greetings! \n We regret to inform you that your Account has been disabled.\nYou will not be allowed to login in the CIS system.";
-                        EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
-                    }
-                }
-
-                return RedirectToAction("Index", "AccountManagement");
+                // Disable the user account by setting is_active to false
+                userInfo.is_active = false;
+                userInfo.date_modified = DateTime.Now;
+                _context.SaveChanges();
+                emailTemplateID = 44; //id = 44 - Account Disabled
             }
+
+            try
+            {
+                //Email
+                var emailTemplate = _context.tbl_email_template.Where(e => e.id == emailTemplateID).FirstOrDefault();
+                var subject = emailTemplate.email_subject;
+                var BODY = emailTemplate.email_content.Replace("{FirstName}", userInfo.first_name);
+                var body = BODY.Replace(Environment.NewLine, "<br/>");
+
+                EmailSender.SendEmailAsync(((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value, subject, body);
+            }
+            catch
+            {
+                Console.WriteLine("An error occured on sending Email");
+            }
+            return RedirectToAction("Index", "AccountManagement");
+            
 
         }
 
