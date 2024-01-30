@@ -1125,9 +1125,15 @@
                     document.getElementById("confirmCustomBtn").value = $(this).data('button_text');
                     document.getElementById("confirmCustomMessage").value = $(this).data('button_text');
                 }
-                else
-                {
-                    alert("Please make sure that all files are complied before accepting or rejecting an application. Some files may be pending or not compiled.");
+                else {
+                    Swal.fire({
+                        title: "Action Not Yet Allowed!",
+                        text: "Please make sure that all files are marked as complied before accepting or rejecting an application. Some files may be pending or not compiled.",
+                        icon: "warning",
+                        //showCancelButton: true,
+                        confirmButtonColor: "#14984a",
+                        confirmButtonText: "Ok"
+                    });
                 }
                 
             }
