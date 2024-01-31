@@ -1117,7 +1117,6 @@
         $('.customBtn').click(function (btn) {
             var allFilesComplied = filesComplied();
             if ($("#ApplApprvlForm")[0].checkValidity()) {
-                console.log("allFilesComplied: ", allFilesComplied);
                 if (allFilesComplied == true) {
                     $('#confirmCustomModal').modal("show");
                     document.getElementById("decisionID").value = "Custom";
@@ -1214,8 +1213,8 @@
             //check for not complied
             // Loop through each row in the table
             for (var j = 0, row; row = table.rows[j]; j++) {
-                // Get the cell value in the second column (index 1)
-                var cellValue = row.cells[1].textContent;
+                // Get the cell value in the third column (index 2)
+                var cellValue = row.cells[2].textContent;
 
                 // Check if the cell value does not contain the string "Not Complied"
                 if (cellValue.indexOf("Not Complied") === -1) {
