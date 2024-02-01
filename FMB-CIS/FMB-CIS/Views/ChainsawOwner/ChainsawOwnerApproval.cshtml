@@ -1247,12 +1247,25 @@
 
         //////
         $('.customBtn').click(function (btn) {
+            var allFilesComplied = filesComplied();
             if ($("#ApplApprvlForm")[0].checkValidity()) {
-                $('#confirmCustomModal').modal("show");
-                document.getElementById("decisionID").value = "Custom";
-                document.getElementById("next_step_code").value = $(this).data('next_step_code');
-                document.getElementById("confirmCustomBtn").value = $(this).data('button_text');
-                document.getElementById("confirmCustomMessage").value = $(this).data('button_text');
+                if (allFilesComplied == true) {
+                    $('#confirmCustomModal').modal("show");
+                    document.getElementById("decisionID").value = "Custom";
+                    document.getElementById("next_step_code").value = $(this).data('next_step_code');
+                    document.getElementById("confirmCustomBtn").value = $(this).data('button_text');
+                    document.getElementById("confirmCustomMessage").value = $(this).data('button_text');
+                }
+                else {
+                    Swal.fire({
+                        title: "Action Not Yet Allowed!",
+                        text: "Please make sure that all files are marked as complied before accepting or rejecting an application. Some files may be pending or not compiled.",
+                        icon: "warning",
+                        //showCancelButton: true,
+                        confirmButtonColor: "#14984a",
+                        confirmButtonText: "Ok"
+                    });
+                }                
             }
             else {
                 //Validate Form
@@ -1299,6 +1312,49 @@
         // });
 
     });
+
+    function filesComplied() {
+
+        // Get the table element by its id
+        var table = document.getElementById("tblApplicantFiles");
+        let returnValue = false;
+        // Loop through each row in the table
+        for (var i = 0, row; row = table.rows[i]; i++) {
+            // Get the cell in the fifth column (index 4)
+            var cell = row.cells[4];
+
+            // Check if the cell contains a button element
+            var buttonElement = cell.querySelector('button');
+
+            if (buttonElement) {
+                //console.log("Row " + (i + 1) + " contains a button");
+                returnValue = false;
+                break;
+            } else {
+                //console.log("Row " + (i + 1) + " does not contain a button");
+                returnValue = true;
+            }
+        }
+        if (returnValue == true) {
+            //check for not complied
+            // Loop through each row in the table
+            for (var j = 0, row; row = table.rows[j]; j++) {
+                // Get the cell value in the third column (index 2)
+                var cellValue = row.cells[2].textContent;
+
+                // Check if the cell value does not contain the string "Not Complied"
+                if (cellValue.indexOf("Not Complied") === -1) {
+                    //console.log("Row " + (j + 1) + " does not contain 'NOT COMPLIED'");
+                    returnValue = true;
+                } else {
+                    //console.log("Row " + (j + 1) + " contains 'NOT COMPLIED'");
+                    returnValue = false;
+                    break;
+                }
+            }
+        }
+        return returnValue;
+    }
 
     //Check if filename contains special characters
     //If browse button was used
