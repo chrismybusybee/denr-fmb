@@ -508,6 +508,7 @@ namespace FMB_CIS.Controllers
                                       join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                       join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                       join pS in _context.tbl_permit_status on a.status equals pS.id
+                                      join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }
                                       join reg in _context.tbl_region on usr.tbl_region_id equals reg.id
                                       join prov in _context.tbl_province on usr.tbl_province_id equals prov.id
                                       join ct in _context.tbl_city on usr.tbl_city_id equals ct.id
@@ -530,6 +531,7 @@ namespace FMB_CIS.Controllers
                                           permit_type = pT.name,
                                           permit_status = pS.status,
                                           status = Convert.ToInt32(a.status),
+                                          permit_statuses = wfs.name,
                                           //user_type = usrtyps.name,
                                           valid_id = usr.valid_id,
                                           valid_id_no = usr.valid_id_no,
@@ -548,8 +550,11 @@ namespace FMB_CIS.Controllers
                                           date_of_registration = a.date_of_registration,
                                           date_of_expiration = a.date_of_expiration,
                                           tbl_region_id = usr.tbl_region_id,
-                                          renew_from = a.renew_from
+                                          renew_from = a.renew_from,
+                                          currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
+                                          currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic  
                                       }).FirstOrDefault();
+                applicationMod.currentPercentage = (applicationMod.currentStepCount * 100 / applicationMod.currentMaxCount);
                 mymodel.applicantViewModels = applicationMod;
 
                 //Check if this application has applied for renewal
@@ -1089,7 +1094,7 @@ namespace FMB_CIS.Controllers
                                          address = usr.street_address,
                                          application_type = appt.name,
                                          permit_type = pT.name,
-                                         permit_status = wfs.name,
+                                         permit_statuses = wfs.name,
                                          tbl_user_id = (int)usr.id,
                                          date_due_for_officers = a.date_due_for_officers,
                                          isRead = false,
