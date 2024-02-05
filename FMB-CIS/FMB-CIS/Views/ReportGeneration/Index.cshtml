@@ -16,7 +16,7 @@
                         <a href="@Url.Action("Index", "Home")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>Report Generation
                     </h5>
                     <p class="card-text">Used to manage reports for all permit types.</p>
-                   @* <button id="btnCreateWorkflow" onclick="OpenCreateModal()" class="btn btn-primary">Create New Workflow</button>*@
+                    <button id="btnCreateWorkflow" onclick="location.href='@Url.Action("DynamicReportGeneration", "ReportGeneration")';return false;" class="btn btn-primary">Dynamic Report Generation</button>
                 </div>
             </div>
         </div>
