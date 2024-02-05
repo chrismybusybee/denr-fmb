@@ -308,12 +308,13 @@ namespace FMB_CIS.Controllers
             //HISTORY
             var applicationtypelist = _context.tbl_application_type;
 
-            var applicationMod = from a in applicationlist
+            var applicationMod = (from a in applicationlist
                                  join usr in _context.tbl_user on a.tbl_user_id equals usr.id
                                  join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
-                                 join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
+                                 //join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
+                                 join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }
                                  where pT.name == "Permit to Sell"
                                  select new ApplicantListViewModel 
                                  { 
@@ -325,12 +326,20 @@ namespace FMB_CIS.Controllers
                                      address = usr.street_address, 
                                      application_type = appt.name, 
                                      permit_type = pT.name,
-                                     permit_status = pSs.status,
-                                     permit_status_id = pSs.id,
+                                     permit_status = pS.status,
+                                     permit_status_id = pS.id,
+                                     permit_statuses = wfs.name,
                                      tbl_user_id = (int)usr.id,
                                      qty = a.qty,
-                                     ReferenceNo = a.ReferenceNo
-                                 };
+                                     ReferenceNo = a.ReferenceNo,
+                                     currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
+                                     currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic 
+                                 }).ToList();
+            
+            foreach (ApplicantListViewModel mod in applicationMod)
+            {
+                mod.currentPercentage = (mod.currentStepCount * 100 / mod.currentMaxCount);
+            }
 
             mymodel.applicantListViewModels = applicationMod;
 
@@ -353,12 +362,13 @@ namespace FMB_CIS.Controllers
             //HISTORY
             var applicationtypelist = _context.tbl_application_type;
 
-            var applicationMod = from a in applicationlist
+            var applicationMod = (from a in applicationlist
                                  join usr in _context.tbl_user on a.tbl_user_id equals usr.id
                                  join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
-                                 join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
+                                 //join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
+                                 join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }
                                  where pT.name == "Permit to Purchase"
                                  select new ApplicantListViewModel 
                                  {
@@ -370,12 +380,20 @@ namespace FMB_CIS.Controllers
                                      address = usr.street_address,
                                      application_type = appt.name,
                                      permit_type = pT.name,
-                                     permit_status = pSs.status,
-                                     permit_status_id = pSs.id,
+                                     permit_status = pS.status,
+                                     permit_status_id = pS.id,
+                                     permit_statuses = wfs.name,
                                      tbl_user_id = (int)usr.id,
                                      qty = a.qty,
-                                     ReferenceNo = a.ReferenceNo
-                                 };
+                                     ReferenceNo = a.ReferenceNo,
+                                     currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
+                                     currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic 
+                                 }).ToList();
+
+            foreach (ApplicantListViewModel mod in applicationMod)
+            {
+                mod.currentPercentage = (mod.currentStepCount * 100 / mod.currentMaxCount);
+            }
 
             mymodel.applicantListViewModels = applicationMod;
 
@@ -397,12 +415,13 @@ namespace FMB_CIS.Controllers
             //HISTORY
             var applicationtypelist = _context.tbl_application_type;
 
-            var applicationMod = from a in applicationlist
+            var applicationMod = (from a in applicationlist
                                  join usr in _context.tbl_user on a.tbl_user_id equals usr.id
                                  join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                  join pS in _context.tbl_permit_status on a.status equals pS.id
-                                 join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
+                                 //join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
+                                 join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }
                                  where pT.name == "Permit to Import"
                                  select new ApplicantListViewModel 
                                  { 
@@ -414,14 +433,20 @@ namespace FMB_CIS.Controllers
                                      address = usr.street_address,
                                      application_type = appt.name,
                                      permit_type = pT.name,
-                                     permit_status = pSs.status,
-                                     permit_status_id = pSs.id,
+                                     permit_status = pS.status,
+                                     permit_status_id = pS.id,
+                                     permit_statuses = wfs.name,
                                      tbl_user_id = (int)usr.id,
                                      status=(int)a.status,
                                      qty = a.qty,
-                                     ReferenceNo = a.ReferenceNo
-                                 };
-
+                                     ReferenceNo = a.ReferenceNo,
+                                     currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
+                                     currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic 
+                                 }).ToList();
+            foreach (ApplicantListViewModel mod in applicationMod)
+            {
+                mod.currentPercentage = (mod.currentStepCount * 100 / mod.currentMaxCount);
+            }
             mymodel.applicantListViewModels = applicationMod;
 
             return View(mymodel);
@@ -590,7 +615,8 @@ namespace FMB_CIS.Controllers
                                           join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                           join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                           join pS in _context.tbl_permit_status on a.status equals pS.id
-                                          join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
+                                          //join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
+                                          join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }
                                           join reg in _context.tbl_region on usr.tbl_region_id equals reg.id
                                           join prov in _context.tbl_province on usr.tbl_province_id equals prov.id
                                           join ct in _context.tbl_city on usr.tbl_city_id equals ct.id
@@ -607,7 +633,8 @@ namespace FMB_CIS.Controllers
                                               permit_type = pT.name,
                                               permit_status = pS.status,
                                               permit_status_id  = a.status,
-                                              permit_statuses = pSs.status,
+                                              //permit_statuses = pSs.status,
+                                              permit_statuses = wfs.name,
                                               status = Convert.ToInt32(a.status),
                                               //user_type = usrtyps.name,
                                               comment = usr.comment,
@@ -634,9 +661,11 @@ namespace FMB_CIS.Controllers
                                               chainsawSupplier = csaw.supplier,
                                               date_purchase = csaw.date_purchase,
                                               renew_from = a.renew_from,
-                                              ReferenceNo = a.ReferenceNo
+                                              ReferenceNo = a.ReferenceNo,
+                                              currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
+                                              currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic 
                                           }).FirstOrDefault();
-
+                    applicationMod.currentPercentage = (applicationMod.currentStepCount * 100 / applicationMod.currentMaxCount);
                     mymodel.applicantViewModels = applicationMod;
 
 
@@ -651,7 +680,8 @@ namespace FMB_CIS.Controllers
                                           join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                           join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
                                           join pS in _context.tbl_permit_status on a.status equals pS.id
-                                          join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
+                                          //join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
+                                          join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }
                                           join reg in _context.tbl_region on usr.tbl_region_id equals reg.id
                                           join prov in _context.tbl_province on usr.tbl_province_id equals prov.id
                                           join ct in _context.tbl_city on usr.tbl_city_id equals ct.id
@@ -667,7 +697,8 @@ namespace FMB_CIS.Controllers
                                               permit_type = pT.name,
                                               permit_status = pS.status,
                                               permit_status_id = a.status,
-                                              permit_statuses = pSs.status,
+                                              //permit_statuses = pSs.status,
+                                              permit_statuses = wfs.name,
                                               status = Convert.ToInt32(a.status),
                                              // user_type = usrtyps.name,
                                               comment = usr.comment,
@@ -682,9 +713,12 @@ namespace FMB_CIS.Controllers
                                               date_of_registration = a.date_of_registration,
                                               date_of_expiration = a.date_of_expiration,
                                               renew_from = a.renew_from,
-                                              ReferenceNo = a.ReferenceNo
+                                              ReferenceNo = a.ReferenceNo,
+                                              currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
+                                              currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic
                                               //coordinatedWithEnforcementDivision = a.coordinatedWithEnforcementDivision
                                           }).FirstOrDefault();
+                    applicationMod.currentPercentage = (applicationMod.currentStepCount * 100 / applicationMod.currentMaxCount);
                     //mymodel.email = UserList.email;
                     mymodel.applicantViewModels = applicationMod;
                     //mymodel.tbl_Users = UserInfo;

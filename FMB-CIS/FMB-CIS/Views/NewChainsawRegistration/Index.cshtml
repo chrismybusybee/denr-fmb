@@ -403,6 +403,7 @@
                         <input type="text" class="form-control rounded-3" id="chainsawSerialNo" placeholder="" />
                         <label class="form-label">Chainsaw Serial No.</label>
                     </div>
+                    <div class="text-danger" id="serialNumValidation"></div>
                 </div>
                 <div class="col-md-6 mb-3">
                         <div class="form-floating">
@@ -609,22 +610,30 @@
 
     var chainsawSerNumExist = false;
     //Check Existing Chainsaw on Database
-    function checkExistingSerialNum() {
-        var serialNumValue = document.getElementById("chSerNumInput").value;
+    //function checkExistingSerialNum() {
+    $(document).on('change', '#chainsawSerialNo', function () {
+    //$("#chainsawSerialNo").keyup(function () {
+        //var serialNumValue = document.getElementById("chSerNumInput").value;
+        var serialNumValue = document.getElementById("chainsawSerialNo").value;
         var url = "@baseurl";
         $.post(url + "NewChainsawRegistration/CheckExistingSerialNumOnField", { serialNum: serialNumValue }, function (data) {
             chainsawSerNumExist = data;
             if (data == true) {
                 //console.log(chainsawSerNumExist);
-                document.getElementById("serialNumValidation").innerHTML = "Serial number exists!";
-                //document.getElementById("submitbtnForChainsawReg").disabled = true;
+                //document.getElementById("serialNumValidation").innerHTML = "Serial number exists!";
+                Swal.showValidationMessage('Serial number exists!');
+                //document.getElementById("button.swal2-confirm.swal2-styled.swal2-default-outline").disabled = true;
+                $('button.swal2-confirm.swal2-styled.swal2-default-outline').prop('disabled', true);
             }
             else {
-                document.getElementById("serialNumValidation").innerHTML = "";
-                //document.getElementById("submitbtnForChainsawReg").disabled = false;
+                //document.getElementById("serialNumValidation").innerHTML = "";
+                //document.getElementById("button.swal2-confirm.swal2-styled.swal2-default-outline").disabled = false;
+                Swal.resetValidationMessage('');
+                $('button.swal2-confirm.swal2-styled.swal2-default-outline').prop('disabled', false);
             }
         });
-    }
+    });
+
 
     //Multiple Select
     $('.form-select.fileListDropDown').each(function () {
