@@ -45,10 +45,7 @@
                     <th>
                         Proof of Payment
                     </th>
-                    <th>
-                        Action
-                    </th>
-
+                  
 
                 </tr>
             </thead>
@@ -87,11 +84,7 @@
                             <td>
                                 @if (item.permit_status_id == 6 || item.permit_status_id == 8 || item.permit_status_id == 10)
                                 {
-                                    <div class="d-flex justify-content-center">
-                                        <a href="#" id="uploadPOP" class="bg-green text-white pt-0 pb-1 px-2 rounded text-decoration-none" data-application-id="@item.id" onclick="uploadPaymentClicked(this)">
-                                            <i data-feather="upload" class="data-feather-20"></i> Upload
-                                        </a>
-                                    </div>
+                                <div class="d-flex justify-content-center">Payment Pending</div>
                                 }
                                 else if (item.permit_status_id == 7 || item.permit_status_id == 9)
                                 {
@@ -106,22 +99,7 @@
                                     <div class="d-flex justify-content-center">Not Yet Approved for Payment</div>
                                 }
                             </td>
-                            <td>
-                                @* <a href="ChainsawImporterApproval?uid=@item.tbl_user_id&appid=@item.id">Take Action</a> *@
-                                @if (item.application_type.Contains("Importer"))
-                                {
-                                    <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">View</a>
-                                }
-                                @if (item.application_type.Contains("Seller"))
-                                {
-                                    <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">View</a>
-                                }
-                                @if (item.application_type.Contains("Owner"))
-                                {
-                                    <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">View</a>
-                                }
-
-                            </td>
+                       
                         </tr>
                     
                 }
