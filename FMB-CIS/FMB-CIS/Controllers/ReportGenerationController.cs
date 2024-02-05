@@ -24,6 +24,52 @@ namespace FMB_CIS.Controllers
             return View();
         }
 
+        public IActionResult DynamicReportGeneration()
+        {
+
+            int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            ViewModel mymodel = new ViewModel();
+
+            //var applicationlist = from a in _context.tbl_application
+            //                      where a.tbl_user_id == userID
+            //                      //where a.tbl_application_type_id == 3
+            //                      select a;
+
+            //HISTORY
+            var applicationtypelist = _context.tbl_application_type;
+
+            var applicationMod = from a in _context.tbl_application
+                                 join usr in _context.tbl_user on a.tbl_user_id equals usr.id
+                                 join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
+                                 join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
+                                 join pS in _context.tbl_permit_status on a.status equals pS.id
+                                 join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
+                                 //where pT.name == "Permit to Import"
+                                 select new ApplicantListViewModel
+                                 {
+                                     id = a.id,
+                                     applicationDate = a.date_created,
+                                     full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
+                                     email = usr.email,
+                                     contact = usr.contact_no,
+                                     address = usr.street_address,
+                                     application_type = appt.name,
+                                     permit_type = pT.name,
+                                     permit_status = pSs.status,
+                                     permit_status_id = pSs.id,
+                                     tbl_user_id = (int)usr.id,
+                                     status = (int)a.status,
+                                     qty = a.qty,
+                                     ReferenceNo = a.ReferenceNo
+                                 };
+
+            mymodel.applicantListViewModels = applicationMod;
+
+            return View(mymodel);
+
+        }
+
+
 
         public CsvResult GetCompletedImportPermit()
         {

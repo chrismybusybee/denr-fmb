@@ -1,0 +1,230 @@
+﻿@model FMB_CIS.Models.ViewModel
+@{
+    Layout = "~/Views/Shared/_MainPageLayout.cshtml";
+    ViewBag.Title = "Dynamic Report Generation";
+}
+
+<div id="card-container" style="overflow-y: scroll; height:800px;">
+    <div id="card">
+        <div class="c-info">
+            <div class="card">
+                @*<img src="..." class="card-img-top" alt="...">*@@*
+                <div class="card-head card-head-image">
+                </div>*@
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="@Url.Action("Index", "ReportGeneration")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>Dynamic Report Generation
+                    </h5>
+                    <p class="card-text">Used to manage reports for all permit types.</p>
+                   @* <button id="btnCreateWorkflow" onclick="location.href='@Url.Action("GetCompletedImportPermit", "ReportGeneration")';return false;" class="btn btn-primary">Dynamic Report Generation</button>*@
+                </div>
+            </div>
+        </div>
+       
+    </div>
+    <div id="card">
+      
+        <table class="table dataTable">
+            <thead>
+                <tr>
+                    <th class="hidden-column">
+                        ID
+                    </th>
+                    <th>
+                        Reference Number
+                    </th>
+                    <th>
+                        Application Date
+                    </th>
+                    <th>
+                        Permit Type
+                    </th>
+                    <th>
+                        Permit Status
+                    </th>
+                    <th>
+                        Proof of Payment
+                    </th>
+                    <th>
+                        Action
+                    </th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (ApplicantListViewModel item in Model.applicantListViewModels)
+                {
+                    
+                        <tr>
+                            <td class="hidden-column">
+                                @Html.DisplayFor(modelItem => item.id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ReferenceNo)
+                            </td>
+                            @* <td>
+                    @Html.DisplayFor(modelItem => item.full_name)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.email)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.contact)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.address)
+                    </td> *@
+                            <td>
+                                @Html.DisplayFor(modelItem => item.applicationDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.permit_type)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.permit_status)
+                            </td>
+                            <td>
+                                @if (item.permit_status_id == 6 || item.permit_status_id == 8 || item.permit_status_id == 10)
+                                {
+                                    <div class="d-flex justify-content-center">
+                                        <a href="#" id="uploadPOP" class="bg-green text-white pt-0 pb-1 px-2 rounded text-decoration-none" data-application-id="@item.id" onclick="uploadPaymentClicked(this)">
+                                            <i data-feather="upload" class="data-feather-20"></i> Upload
+                                        </a>
+                                    </div>
+                                }
+                                else if (item.permit_status_id == 7 || item.permit_status_id == 9)
+                                {
+                                    <div class="d-flex justify-content-center">Payment Verification In Progress</div>
+                                }
+                                else if (item.permit_status_id == 11)
+                                {
+                                    <div class="d-flex justify-content-center">Payment Approved</div>
+                                }
+                                else
+                                {
+                                    <div class="d-flex justify-content-center">Not Yet Approved for Payment</div>
+                                }
+                            </td>
+                            <td>
+                                @* <a href="ChainsawImporterApproval?uid=@item.tbl_user_id&appid=@item.id">Take Action</a> *@
+                                @if (item.application_type.Contains("Importer"))
+                                {
+                                    <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">View</a>
+                                }
+                                @if (item.application_type.Contains("Seller"))
+                                {
+                                    <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">View</a>
+                                }
+                                @if (item.application_type.Contains("Owner"))
+                                {
+                                    <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">View</a>
+                                }
+
+                            </td>
+                        </tr>
+                    
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<style>
+    .c-info {
+        width: 25%;
+        float: left;
+        padding: 12px;
+    }
+
+    .c-content {
+        width: 75%;
+        float: left;
+        padding: 12px;
+    }
+
+    .card-head {
+        width: 100%;
+        height: 30px;
+    }
+
+    .card-head-image {
+        width: 100%;
+        height: 30px;
+    }
+
+    .card-body {
+    }
+
+    .card-margin {
+        margin: 12px;
+    }
+
+    .list-group-style1 {
+    }
+
+        .list-group-style1 .list-group-item {
+            margin-bottom: 12px;
+        }
+
+            .list-group-style1 .list-group-item + .list-group-item {
+                border-top-width: 1px;
+            }
+
+    small a {
+        color: #14984a;
+        padding: 3px 0;
+        border: none;
+        border-bottom: solid 1px #14984a;
+        margin-right: 12px;
+        background: none;
+        box-shadow: unset !important;
+        outline: 0 !important;
+        margin: 0 !important;
+        margin-right: 12px !important;
+        margin-top: 12px !important;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .search-box-container, .search-box-container:hover {
+        background-color: #FFFFFF;
+    }
+
+        .search-box-container small {
+            padding: 13px 0;
+        }
+
+    .search-box {
+        border: none;
+        font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        font-style: normal;
+        padding: 8px 0;
+    }
+
+        .search-box:focus {
+            outline: none;
+        }
+
+    .c-hidden, .c-hidden-inline {
+        display: none;
+    }
+
+    .c-show-hidden .c-hidden-inline {
+        display: inline-block;
+    }
+
+    .c-show-hidden .c-hidden {
+        display: block;
+    }
+
+    .c-show-hidden .c-hidden-on-show {
+        display: none;
+    }
+
+    .clickable {
+        cursor: pointer;
+    }
+</style>
+
