@@ -1,19 +1,46 @@
 ﻿@{
     ViewBag.Title = "Email Confirmation";
 }
+<div class="c-fluid d-flex justify-content-center align-items-center min-vh-100">
+    <div class="c-box col-md-6 d-flex flex-column justify-content-center mb-5 pb-5">
+        @* <img src="~/assets/images/logo.png" /> *@
+        <div class="c-form-images-title-container">
+            <div class="c-form-images-container">
 
-<div class="container-fluid d-flex flex-column align-items-center justify-content-center vh-100">
-    <div class="col-md-12 p-md-2 text-start">
-        <img src="~/assets/images/logo.png" height="100"  />
-    </div>
-    <hr class="hr" />
-    <div class="col-md-12 d-flex flex-column align-items-center text-center my-auto pb-5">
-        <img src="~/assets/images/sent.png" class="mb-2" />
-        <h2 class="text-green mb-4">Email Confirmation</h2>
-        <p class="fw-bold fs-5 mt-4 mb-5 pb-5">
-            A confirmation link is sent to your registered email. Click the link and input your password using the link. <br />
+                <img class="c-form-image" src="~/assets/images/denr.png" />
+                <img class="c-form-image" src="~/assets/images/forestmanagementbureau.png" />
+            </div>
+            <div class="c-form-image-title-container">
+                <p class="c-form-image-pretitle">Department of Environment and Natural Resources</p>
+                <p class="c-form-image-title">Forest Management Bureau</p>
+            </div>
+        </div>
+        @if (ViewBag.message != null)
+        {
+            <div class="px-5">
+                <div class="alert alert-success" role="alert">
+                    @ViewBag.message
+                </div>
+            </div>
+        }
+        <div class="c-form-image-circle-container">
+            <img src="~/assets/images/sent.png" class="mb-2" />
+        </div>
+        <h1 class="c-form-title text-green">EMAIL CONFIRMATION</h1>
+        <p class="c-form-subtitle">Forest Management Bureau - Chainsaw Information System</p>
+        <p class="fw-bold">
+            A confirmation link is sent to your registered email.
+        </p>
+        <p class="fw-bold">
+            Click the link and input your password using the link.
+        </p>
+        <p class="fw-bold">
             If you have not received it, please contact your administrator.
         </p>
+
+        <div class="c-field">
+            <a href="@Url.Action("Index", "Home")" class="btn btn-primary w-100 mb-4">Go back to Login Page</a>
+        </div>
     </div>
 </div>
 
@@ -24,3 +51,20 @@
         
     });
 </script>
+<style>
+    .c-form-image-circle-container {
+        width: 100px;
+        height: 100px;
+        backgorund-image: rgb(20, 152, 74);
+        background: linear-gradient(325deg, rgba(132, 200, 106, 1) 0%, rgba(20, 152, 74, 1) 50%, rgba(20, 152, 74, 1) 100%);
+        padding: 30px;
+        border-radius: 100%;
+        border: none;
+        box-sizing: border-box;
+        margin-bottom: 12px;
+    }
+    .c-form-image-circle-container img {
+        width: 100%;
+            filter: brightness(0) invert(1);
+    }
+</style>

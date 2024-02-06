@@ -4,7 +4,8 @@
     ViewBag.Title = "Report Generation";
 }
 
-<div id="card-container" style="overflow-y: scroll; height:800px;">
+
+<div class="c-card-container c-card-container-box">
     <div id="card">
         <div class="c-info">
             <div class="card">
@@ -20,17 +21,16 @@
                 </div>
             </div>
         </div>
-        <div class="c-content" id="workflowListPartialContainer">
-
+        <div class="c-content" id="reportGenerationListPartialContainer">
             <div class="list-group list-group-style1">
                 @*<div href="#" class="list-group-item list-group-item-action flex-column align-items-start search-box-container">
-                     <div class="d-flex w-100 justify-content-between">
-                      <h5 class="mb-2">
-                            <input type="text" id="accessRightsSearch" class="search-box" placeholder="SEARCH" />
-                        </h5>
-                        <small class="text-muted clickable" onclick="ClearSearch()">Clear</small>
-                    </div>
-                    </div>*@
+                <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-2">
+                <input type="text" id="accessRightsSearch" class="search-box" placeholder="SEARCH" />
+                </h5>
+                <small class="search-clear-button text-muted clickable" onclick="ClearSearch()">Clear</small>
+                </div>
+                </div>*@
                 <div id="accessRights">
                     <div href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="item-73">
                         <div class="d-flex w-100 justify-content-between">
@@ -64,10 +64,10 @@
                         <small><a class="btnUpdateWorkflow" href="@Url.Action("GetCompletedPermitToPurchase", "ReportGeneration")">Completed Applications</a></small>
                         <small><a class="btnDeleteWorkflow" href="@Url.Action("GetPendingPermitToPurchase", "ReportGeneration")">Pending Applications</a></small>
                     </div>
-                    
+
 
                     <div href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="item-73">
-                           <div class="d-flex w-100 justify-content-between">
+                        <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1"> Certificate Of Registration Report</h5>
                             <small class="text-muted"></small>
                         </div>
@@ -77,9 +77,9 @@
                         <small><a class="btnUpdateWorkflow" href="@Url.Action("GetCompletedCertificateOfRegistration", "ReportGeneration")">Completed Applications</a></small>
                         <small><a class="btnDeleteWorkflow" href="@Url.Action("GetPendingCertificateOfRegistration", "ReportGeneration")">Pending Applications</a></small>
                     </div>
-                        
-                   
-                  
+
+
+
                     <div href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="item-73">
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">Authority to Lease Report</h5>
@@ -90,45 +90,43 @@
                         <small><a class="btnUpdateWorkflow" href="@Url.Action("GetCompletedPermitToLease", "ReportGeneration")">Completed Applications</a></small>
                         <small><a class="btnDeleteWorkflow" href="@Url.Action("GetPendingPermitToLease", "ReportGeneration")">Pending Applications</a></small>
                     </div>
-                      
+                    @*
                     <div href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="item-73">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">Authority to Rent Report</h5>
-                            <small class="text-muted"></small>
-                        </div>
-                        <p class="mb-1">All report regards to Renting Chainsaw</p>
-                        <p class="c-hidden">81</p>
-                        <small><a class="btnUpdateWorkflow" href="@Url.Action("GetCompletedPermitToRent", "ReportGeneration")">Completed Applications</a></small>
-                        <small><a class="btnDeleteWorkflow" href="@Url.Action("GetPendingPermitToRent", "ReportGeneration")">Pending Applications</a></small>
+                    <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Authority to Rent Report</h5>
+                    <small class="text-muted"></small>
+                    </div>
+                    <p class="mb-1">All report regards to Renting Chainsaw</p>
+                    <p class="c-hidden">81</p>
+                    <small><a class="btnUpdateWorkflow" href="@Url.Action("GetCompletedPermitToRent", "ReportGeneration")">Completed Applications</a></small>
+                    <small><a class="btnDeleteWorkflow" href="@Url.Action("GetPendingPermitToRent", "ReportGeneration")">Pending Applications</a></small>
                     </div>
                   
                     <div href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="item-73">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">Authority to Lend Report</h5>
-                            <small class="text-muted"></small>
-                        </div>
-                        <p class="mb-1">All report regards to Lending Chainsaw</p>
-                        <p class="c-hidden">81</p>
-                        <small><a class="btnUpdateWorkflow" href="@Url.Action("GetCompletedPermitToLend", "ReportGeneration")">Completed Applications</a></small>
-                        <small><a class="btnDeleteWorkflow" href="@Url.Action("GetPendingPermitToLend", "ReportGeneration")">Pending Applications</a></small>
+                    <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Authority to Lend Report</h5>
+                    <small class="text-muted"></small>
                     </div>
-                    
-                     <div href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="item-73">
-                       <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">Permit to Resell / Transfer of Ownership Report</h5>
-                            <small class="text-muted"></small>
-                        </div>
-                        <p class="mb-1">All report regards to reselling/transferring ownership of Chainsaw</p>
-                        <p class="c-hidden">81</p>
-                        <small><a class="btnUpdateWorkflow" href="@Url.Action("GetCompletedPermitToResellAndTransferOfOwnership", "ReportGeneration")">Completed Applications</a></small>
-                        <small><a class="btnDeleteWorkflow" href="@Url.Action("GetPendingPermitToResellAndTransferOfOwnership", "ReportGeneration")">Pending Applications</a></small>
+                    <p class="mb-1">All report regards to Lending Chainsaw</p>
+                    <p class="c-hidden">81</p>
+                    <small><a class="btnUpdateWorkflow" href="@Url.Action("GetCompletedPermitToLend", "ReportGeneration")">Completed Applications</a></small>
+                    <small><a class="btnDeleteWorkflow" href="@Url.Action("GetPendingPermitToLend", "ReportGeneration")">Pending Applications</a></small>
                     </div>
+
+                    <div href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="item-73">
+                    <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Permit to Resell / Transfer of Ownership Report</h5>
+                    <small class="text-muted"></small>
+                    </div>
+                    <p class="mb-1">All report regards to reselling/transferring ownership of Chainsaw</p>
+                    <p class="c-hidden">81</p>
+                    <small><a class="btnUpdateWorkflow" href="@Url.Action("GetCompletedPermitToResellAndTransferOfOwnership", "ReportGeneration")">Completed Applications</a></small>
+                    <small><a class="btnDeleteWorkflow" href="@Url.Action("GetPendingPermitToResellAndTransferOfOwnership", "ReportGeneration")">Pending Applications</a></small>
+                    </div>*@
                 </div>
             </div>
         </div>
     </div>
-
-
 </div>
 
 <style>

@@ -5,83 +5,26 @@
     var baseurl = ViewBag.BaseUrl;
 }
 
-<div id="card-container">
+<div class="c-card-container c-card-container-box">
     <div id="card">
-
         <div class="c-info">
             <div class="card">
-                
+                @*<img src="..." class="card-img-top" alt="...">*@@*
+                <div class="card-head card-head-image">
+                </div>*@
                 <div class="card-body">
                     <h5 class="card-title">
-                        <a href="@Url.Action("Index", "Home")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>                        Checklist
+                        <a href="@Url.Action("Index", "Home")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>Checklist Management
                     </h5>
                     <p class="card-text">Used to manage checklist for required documents.</p>
-                    <button id="btnCreateChecklist" class="btn btn-primary">Create New Checklist</button>
+                    <button id="btnCreateChecklist" class="btn btn-primary">Add New Checklist</button>
                 </div>
             </div>
         </div>
-        <div class="c-content"  id="requiredDocListPartialContainer">
+        <div class="c-content" id="requiredDocListPartialContainer">
         </div>
-
-        <br />
-        @* <div>
-            <table class="table dataTable">
-                <thead>
-                    <tr>
-                        <th>
-                            Permit Type
-                        </th>
-                        <th>
-                            Required Document Name
-                        </th>
-                        <th>
-                            Description
-                        </th>
-                        <th>
-                            is_active
-                        </th>
-                        <th>
-                            Action
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.checklistManagementModels)
-                    {
-                        <tr>
-                            <td>
-                                @item.tbl_permit_type_name
-                            </td>
-                            <td>
-                                @item.tbl_document_checklist_name
-                            </td>
-                            <td>
-                                @item.tbl_document_checklist_description
-                            </td>
-                            <td>
-                                @item.is_active
-                            </td>
-                            <td>
-                                <a href="#" data-reqDocName="@item.tbl_document_checklist_name" onclick="EditReq(@item.tbl_document_checklist_id, this)">Edit</a>
-                                @if(item.is_active)
-                                {                                    
-                                    <a href="#" data-reqDocName="@item.tbl_document_checklist_description" onclick="disableReq(@item.tbl_document_checklist_id, this)">Disable</a>
-                                }
-                                else
-                                {
-                                    <a href="#" data-reqDocName="@item.tbl_document_checklist_description" onclick="enableReq(@item.tbl_document_checklist_id, this)">Enable</a>
-                                }
-                                <a href="#" data-reqDocName="@item.tbl_document_checklist_description" onclick="DeleteReq(@item.tbl_document_checklist_id, this)">Delete</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div> *@
-
     </div>
 </div>
-
 <style>
     .c-info {
         width: 25%;
