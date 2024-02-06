@@ -11,100 +11,98 @@
 <script src="~/js/jquery/jquery-3.7.1/jquery-3.7.1.js"></script>
 <script src="~/js/DataTable/dataTables.min.js"></script>
 
-<div id="card-container">
+<div class="c-card-container c-card-container-box">
     <div id="card">
-        <h2>Permit to Re-sell/Transfer Ownership</h2>
-        <button type="button" id="btnAdd" class="btn btn-primary float-end" onclick="window.location.href = '@Url.Action("Index", "ChainsawOwner")'">Add New <i data-feather="plus"></i></button>
-        <table class="table dataTable">
-            <thead>
-                <tr>
-                    <th class="hidden-column">
-                        ID
-                    </th>
-                    <th>
-                            Reference Number
-                    </th>
-                    <th>
-                        Application Date
-                    </th>
-                    <th>
-                        Quantity
-                    </th>
-                    <th>
-                        Permit Status
-                    </th>
-                    <th>
-                        Proof of Payment
-                    </th>
-                    <th>
-                        Action
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (ApplicantListViewModel item in Model.applicantListViewModels)
-                {
+        <div class="c-info">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="@Url.Action("Index", "Home")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>Permit to Re-sell / Transfer Ownership
+                    </h5>
+                    <p class="card-text">Used to manage permit to resell or transfer ownership requests.</p>
+                    <button id="btnAdd" onclick="window.location.href = '@Url.Action("Index", "ChainsawOwner")'" class="btn btn-primary">Add New Permit To Resell / Transfer Ownership</button>
+                </div>
+            </div>
+        </div>
+        <div class="c-content">
+            <table class="table dataTable">
+                <thead>
                     <tr>
-                        <td class="hidden-column">
-                            @Html.DisplayFor(modelItem => item.id)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ReferenceNo)
-                        </td>
-
-                        <td>
-                            @Html.DisplayFor(modelItem => item.applicationDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.qty)
-                        </td>
-                        <td>
-                            @* @Html.DisplayFor(modelItem => item.permit_status) *@
-                            <div class="progress-text">
-                                <span class="progress-status">
-                                    @Html.DisplayFor(modelItem => item.permit_statuses)
-                                </span>
-                                <span class="progress-count">
-                                    @Html.DisplayFor(modelItem => item.currentStepCount) /
-                                    @Html.DisplayFor(modelItem => item.currentMaxCount)
-                                </span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: @Html.DisplayFor(modelItem => item.currentPercentage)%" aria-valuenow="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemin="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemax="@Html.DisplayFor(modelItem => item.currentMaxCount)"></div>
-                            </div>
-                        </td>
-                        <td>
-                            @if (item.permit_status_id == 6 || item.permit_status_id == 8 || item.permit_status_id == 10)
-                            {
-                                <div class="d-flex">
-                                    <a href="#" id="uploadPOP" class="bg-green text-white pt-0 pb-1 px-2 rounded text-decoration-none" data-application-id="@item.id" onclick="uploadPaymentClicked(this)">
-                                        <i data-feather="upload" class="data-feather-20"></i> Upload
-                                    </a>
-                                </div>
-                            }
-                            else if (item.permit_status_id == 7 || item.permit_status_id == 9)
-                            {
-                                <div class="d-flex">Payment Verification In Progress</div>
-                            }
-                            else if (item.permit_status_id == 11)
-                            {
-                                <div class="d-flex">Payment Approved</div>
-                            }
-                            else
-                            {
-                                <div class="d-flex">Not Yet Approved for Payment</div>
-                            }
-                        </td>
-                        <td>
-                            <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">View</a>
-                        </td>
+                        <th class="hidden-column">
+                            ID
+                        </th>
+                        <th>
+                            Reference Number
+                        </th>
+                        <th>
+                            Application Date
+                        </th>
+                        <th>
+                            Quantity
+                        </th>
+                        <th>
+                            Permit Status
+                        </th>
+                        <th>
+                            Proof of Payment
+                        </th>
+                        <th>
+                            Action
+                        </th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (ApplicantListViewModel item in Model.applicantListViewModels)
+                    {
+                        <tr>
+                            <td class="hidden-column">
+                                @Html.DisplayFor(modelItem => item.id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ReferenceNo)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.applicationDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.qty)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.permit_status)
+                            </td>
+                            <td>
+                                @if (item.permit_status_id == 6 || item.permit_status_id == 8 || item.permit_status_id == 10)
+                                {
+                                    <div class="d-flex">
+                                        <a href="#" id="uploadPOP" class="bg-green text-white pt-0 pb-1 px-2 rounded text-decoration-none" data-application-id="@item.id" onclick="uploadPaymentClicked(this)">
+                                            <i data-feather="upload" class="data-feather-20"></i> Upload
+                                        </a>
+                                    </div>
+                                }
+                                else if (item.permit_status_id == 7 || item.permit_status_id == 9)
+                                {
+                                    <div class="d-flex">Payment Verification In Progress</div>
+                                }
+                                else if (item.permit_status_id == 11)
+                                {
+                                    <div class="d-flex">Payment Approved</div>
+                                }
+                                else
+                                {
+                                    <div class="d-flex">Not Yet Approved for Payment</div>
+                                }
+                            </td>
+                            <td>
+                                <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">View</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-
 
 <script src="/js/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
