@@ -157,7 +157,7 @@
                     <span class="c-menu-line"></span>
                 </div>
                 <div class="top-user-container">
-                <div id="header-top-user"class="col-md-12 d-flex justify-content-end d-flex align-items-center gap-2">
+                    <div id="header-top-user" class="col-md-12 d-flex justify-content-end d-flex align-items-center gap-2 top-user-trigger">
                     <span id="header-top-usertext">
                     <span class="fw-bold" id="header-top-fullname">@(((ClaimsIdentity)User.Identity).FindFirst("FullName").Value)</span>
                     
@@ -194,6 +194,10 @@
                 z-index: 1;
                 right: 36px;
             }
+
+                .c-dropdown-content-container.always-show {
+                    display: block !important;
+                }
 
             .c-dropdown-content-container .c-dropdown-content {
                 background-color: #f8f8f8;
@@ -996,6 +1000,15 @@
 <script type="text/javascript">
     $(document).ready(function () {
         feather.replace();
+
+        $(".top-user-trigger").on("click", function () {
+            if ($(".c-dropdown-content-container").hasClass("always-show")) {
+                $(".c-dropdown-content-container").removeClass("always-show");
+            }
+            else {
+                $(".c-dropdown-content-container").addClass("always-show");
+            }
+        });
 
         $('#tutorialSideMenu').click(function () {
             Swal.fire({
