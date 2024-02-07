@@ -225,12 +225,44 @@
 .dataTables_wrapper {
     color: #5c5c5c;
     margin-top: 1.5rem !important;
+    display: block;
+    position: relative;
 }
 
     .dataTables_wrapper .dataTables_length {
         margin-bottom: 15px;
     }
 
+.dataTables_filter{
+    display: block;
+    position: relative;
+    float: left !important;
+    padding: 0 !important;
+    width: 100%;
+    max-width: 500px;
+}
+    .dataTables_filter label {
+        display: block;
+        position: relative;
+        width: 100%;
+        max-width: 500px;
+    }
+        .dataTables_filter label input[type="search"] {
+            display: block;
+            position: relative;
+            margin-left: 0;
+            margin-bottom: 12px;
+            max-width: 500px !important;
+            width: 100% !important;
+            padding: 1rem 1rem;
+            border: solid 2px #14984a !important;
+        }
+
+.dt-buttons {
+    display: block;
+    position: relative;
+    float: right;
+}
 .table > thead {
     color: white;
     background-color: #282d6d;
