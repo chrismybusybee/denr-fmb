@@ -5,55 +5,59 @@
     var baseurl = ViewBag.BaseUrl;
 }
 
-<div id="card-container">
+
+<div class="c-card-container c-card-container-box">
     <div id="card">
-        <a href="@Url.Action("Index", "Home")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
-        <button type="button" id="btnAdd" class="btn btn-primary float-end">Add New <i data-feather="plus" class=""></i></button>
-        <table id="denrOfficeTable" class="table table-striped dataTable">
-            <thead>
-                <tr>
-                    <th class="text-nowrap">Date Created</th>
-                    <th class="text-nowrap">Announcement Title</th>
-                    <th class="text-nowrap">Type</th>
-                    <th class="text-nowrap">Announcement Subject</th>
-                    <th class="text-nowrap text-center">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (AnnouncementViewModel item in Model.announcementViewModelList)
-                {
-                    <tr>
-                        <td class="text-nowrap">@Convert.ToDateTime(item.date_created).ToString("yyyy-MM-dd HH:mm")</td>
-                        <td class="text-nowrap">@item.title</td>
-                        <td class="text-nowrap">@item.tbl_announcement_type_name</td>
-                        <td class="text-nowrap">@item.announcement_subject</td>
-                        <td class="text-nowrap">
-                            <div class="d-flex justify-content-center gap-3">
-                                <a href="#" id="viewAnnouncementTemplate" class="bg-green text-white px-1 pb-1 rounded" title="view" data-template-id="@item.tbl_announcement_id" onclick="viewAnnouncementDetails(this)">
-                                    <i data-feather="eye" class="data-feather-20"></i>
-                                </a>
-                                <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="edit" data-template-id="@item.tbl_announcement_id" onclick="editAnnouncementDetails(this)">
-                                    <i data-feather="edit" class="data-feather-20"></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                }
-                @* <tr>
-                    <td class="text-nowrap">August 10, 2023</td>
-                    <td class="text-nowrap">Announcement Title 01</td>
-                    <td class="text-nowrap">Announcement Type 01</td>
-                    <td class="text-nowrap">Announcement for all registrants</td>
-                    <td class="text-nowrap">
-                        <div class="d-flex justify-content-center gap-3">
-                            <a href="#" id="viewAnnouncementTemplate" class="bg-green text-white px-1 pb-1 rounded" title="view">
-                                <i data-feather="eye" class="data-feather-20"></i>
-                            </a>
-                        </div>
-                    </td>
-                </tr> *@
-            </tbody>
-        </table>
+        <div class="c-info">
+            <div class="card">
+                @*<img src="..." class="card-img-top" alt="...">*@@*
+                <div class="card-head card-head-image">
+                </div>*@
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="@Url.Action("Index", "Home")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>Announcement Template Management
+                    </h5>
+                    <p class="card-text">Used to manage announcement templates.</p>
+                    <button id="btnAdd" class="btn btn-primary">Add New Annoucement Template</button>
+                </div>
+            </div>
+        </div>
+        <div class="c-content">
+            <div id="card">
+                <table id="denrOfficeTable" class="table table-striped dataTable">
+                    <thead>
+                        <tr>
+                            <th class="text-nowrap">Date Created</th>
+                            <th class="text-nowrap">Announcement Title</th>
+                            <th class="text-nowrap">Type</th>
+                            <th class="text-nowrap">Announcement Subject</th>
+                            <th class="text-nowrap text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (AnnouncementViewModel item in Model.announcementViewModelList)
+                        {
+                            <tr>
+                                <td class="text-nowrap">@Convert.ToDateTime(item.date_created).ToString("yyyy-MM-dd HH:mm")</td>
+                                <td class="text-nowrap">@item.title</td>
+                                <td class="text-nowrap">@item.tbl_announcement_type_name</td>
+                                <td class="text-nowrap">@item.announcement_subject</td>
+                                <td class="text-nowrap">
+                                    <div class="d-flex justify-content-center gap-3">
+                                        <a href="#" id="viewAnnouncementTemplate" class="bg-green text-white px-1 pb-1 rounded" title="view" data-template-id="@item.tbl_announcement_id" onclick="viewAnnouncementDetails(this)">
+                                            <i data-feather="eye" class="data-feather-20"></i>
+                                        </a>
+                                        <a href="#" class="bg-green text-white px-1 pb-1 rounded" title="edit" data-template-id="@item.tbl_announcement_id" onclick="editAnnouncementDetails(this)">
+                                            <i data-feather="edit" class="data-feather-20"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 

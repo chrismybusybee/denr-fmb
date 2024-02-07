@@ -156,16 +156,73 @@
                     <span class="c-menu-line"></span>
                     <span class="c-menu-line"></span>
                 </div>
-                <div id="header-top-user"class="col-md-12 d-flex justify-content-end d-flex align-items-center gap-2">
+                <div class="top-user-container">
+                    <div id="header-top-user" class="col-md-12 d-flex justify-content-end d-flex align-items-center gap-2 top-user-trigger">
                     <span id="header-top-usertext">
                     <span class="fw-bold" id="header-top-fullname">@(((ClaimsIdentity)User.Identity).FindFirst("FullName").Value)</span>
                     
                     <span id="header-top-userrole">@(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value)</span>
                   </span>
                     <span id="header-top-userimage"><img id="profilePhotoMainPage" src="/assets/images/default-avatar.png" class="border rounded-circle bg-white" height="40" width="40" /></span>
+
+                    </div>
+                    <div class="c-dropdown-content-container">
+                        <div class="c-dropdown-content">
+                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_profile"))
+                        {
+                                <a href="@Url.Action("Index", "ProfileManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                    <span>Manage Profile</span>
+                                </a>
+                        }
+                        @Html.ActionLink("Logout", "Signout", "Home", new { area = "" }, new { @class = "text-decoration-none" })
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        <style>
+            .top-user-container {
+            }
+
+            .c-dropdown-content-container {
+                display: none;
+                position: absolute;
+                background-color: transparent;
+                min-width: 160px;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                padding: 12px 0 0 0;
+                z-index: 1;
+                right: 36px;
+            }
+
+                .c-dropdown-content-container.always-show {
+                    display: block !important;
+                }
+
+            .c-dropdown-content-container .c-dropdown-content {
+                background-color: #f8f8f8;
+                min-width: 160px;
+                padding: 12px 12px;
+                z-index: 1;
+                border: solid 1px #EEEEEE;
+            }
+
+                    .c-dropdown-content-container .c-dropdown-content a {
+                display: inline-block;
+                padding-bottom: 24px !important;
+                /* color: #14984a; */
+                font-weight: bolder;
+                }
+
+                        .c-dropdown-content-container .c-dropdown-content a:last-child {
+                    padding-bottom: 0 !important;
+                }
+
+            .top-user-container:hover .c-dropdown-content-container {
+                display: block;
+            }
+        </style>
+
         <div id="header-bottom-container">
             <div class="ps-4 ms-1 py-2">
                 <h4>@ViewBag.Title</h4>
@@ -944,6 +1001,15 @@
     $(document).ready(function () {
         feather.replace();
 
+        $(".top-user-trigger").on("click", function () {
+            if ($(".c-dropdown-content-container").hasClass("always-show")) {
+                $(".c-dropdown-content-container").removeClass("always-show");
+            }
+            else {
+                $(".c-dropdown-content-container").addClass("always-show");
+            }
+        });
+
         $('#tutorialSideMenu').click(function () {
             Swal.fire({
                 title: 'Chainsaw Information System Tutorial',
@@ -980,6 +1046,10 @@
                 }
             }],
             responsive: true,
+            language: {
+                search: "",
+                searchPlaceholder: "SEARCH"
+            }
         });
 
         $('.dataTableResponsive').DataTable({
@@ -988,6 +1058,10 @@
             dom: 'Bfrtip',
             buttons: ['csv', 'excel', ],
             responsive: true,
+            language: {
+                search: "",
+                searchPlaceholder: "SEARCH"
+            }
         });
 
 

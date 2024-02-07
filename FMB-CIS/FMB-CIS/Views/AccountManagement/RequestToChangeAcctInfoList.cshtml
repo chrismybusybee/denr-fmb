@@ -4,156 +4,167 @@
     ViewBag.Title = "Manage Requests";
 }
 
-<div id="card-container">
+<div class="c-card-container c-card-container-box">
     <div id="card">
-        <a href="@Url.Action("Index", "Home")" class="me-auto pb-4" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
-        @* <button type="button" id="btnAdd" class="btn btn-primary float-end" onclick="window.location.href = '@Url.Action("AddAccount", "AccountManagement")'">Add New <i data-feather="plus"></i></button> *@
+        <div class="c-info">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="@Url.Action("Index", "Home")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>User Account Change Request Management
+                    </h5>
+                    <p class="card-text">Used to manage user change requests.</p>
+                </div>
+            </div>
+        </div>
+        <div class="c-content">
+            <div id="card">
+                <table id="accountManagementTable" class="table table-striped dataTable">
+                    <thead>
+                        <tr>
+                            <th class="text-nowrap">Date Requested</th>
+                            <th class="text-nowrap">Ticket No.</th>
+                            <th class="text-nowrap">Name</th>
+                            <th class="text-nowrap">User Type</th>
+                            <th class="text-nowrap">Email</th>
+                            <th class="text-nowrap">Address</th>
+                            <th class="text-nowrap">Municipality</th>
+                            <th class="text-nowrap text-center">Status</th>
+                            <th class="text-nowrap text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (RequestChangeAcctInfoViewModel item in Model.RequestChangeAcctInfoViewModelList)
+                        {
+                            <tr>
+                                <td class="text-nowrap">
+                                    @* @Html.DisplayFor(modelItem => item.date_created) *@
+                                    @Convert.ToDateTime(item.date_created).ToString("yyyy-MM-dd HH:mm:ss")
+                                </td>
+                                <td class="text-nowrap">
+                                    @Html.DisplayFor(modelItem => item.ticket_no)
+                                </td>
+                                <td class="text-nowrap">
+                                    @Html.DisplayFor(modelItem => item.FullName)
+                                </td>
+                                <td class="text-nowrap">
+                                    @Html.DisplayFor(modelItem => item.userType)
+                                </td>
+                                <td class="text-nowrap">
+                                    @Html.DisplayFor(modelItem => item.email)
+                                </td>
+                                <td class="text-nowrap">
+                                    @Html.DisplayFor(modelItem => item.street_address)
+                                </td>
+                                <td class="text-nowrap">
+                                    @Html.DisplayFor(modelItem => item.city)
+                                </td>
+                                <td class="text-nowrap text-center d-flex justify-content-center">
+                                    @if (item.status == "Approved")
+                                    {
+                                        <div class="bg-success text-white px-3 pb-2 pt-1 rounded-pill w-105">
+                                            Approved
+                                        </div>
+                                    }
+                                    else if (item.status == "Pending")
+                                    {
+                                        <div class="bg-secondary text-white px-3 pb-2 pt-1 rounded-pill w-105">
+                                            Pending
+                                        </div>
+                                    }
+                                    else if (item.status == "Declined")
+                                    {
+                                        <div class="bg-danger text-white px-3 pb-2 pt-1 rounded-pill w-105">
+                                            Declined
+                                        </div>
+                                    }
 
-        <table id="accountManagementTable" class="table table-striped dataTable">
-            <thead>
-                <tr>
-                    <th class="text-nowrap">Date Requested</th>
-                    <th class="text-nowrap">Ticket No.</th>
-                    <th class="text-nowrap">Name</th>
-                    <th class="text-nowrap">User Type</th>
-                    <th class="text-nowrap">Email</th>
-                    <th class="text-nowrap">Address</th>
-                    <th class="text-nowrap">Municipality</th>
-                    <th class="text-nowrap text-center">Status</th>
-                    <th class="text-nowrap text-center">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (RequestChangeAcctInfoViewModel item in Model.RequestChangeAcctInfoViewModelList)
-                {
-                    <tr>
-                        <td class="text-nowrap">
-                            @* @Html.DisplayFor(modelItem => item.date_created) *@
-                            @Convert.ToDateTime(item.date_created).ToString("yyyy-MM-dd HH:mm:ss")
-                        </td>
-                        <td class="text-nowrap">
-                            @Html.DisplayFor(modelItem => item.ticket_no)
-                        </td>
-                        <td class="text-nowrap">
-                            @Html.DisplayFor(modelItem => item.FullName)
-                        </td>
-                        <td class="text-nowrap">
-                            @Html.DisplayFor(modelItem => item.userType)
-                        </td>
-                        <td class="text-nowrap">
-                            @Html.DisplayFor(modelItem => item.email)
-                        </td>
-                        <td class="text-nowrap">
-                            @Html.DisplayFor(modelItem => item.street_address)
-                        </td>
-                        <td class="text-nowrap">
-                            @Html.DisplayFor(modelItem => item.city)
-                        </td>
-                        <td class="text-nowrap text-center d-flex justify-content-center">
-                            @if (item.status == "Approved")
-                            {
-                                <div class="bg-success text-white px-3 pb-2 pt-1 rounded-pill w-105">
-                                    Approved
-                                </div>
-                            }
-                            else if (item.status == "Pending")
-                            {
-                                <div class="bg-secondary text-white px-3 pb-2 pt-1 rounded-pill w-105">
-                                    Pending
-                                </div>
-                            }
-                            else if (item.status == "Declined")
-                            {
-                                <div class="bg-danger text-white px-3 pb-2 pt-1 rounded-pill w-105">
-                                    Declined
-                                </div>
-                            }
-
-                        </td>
-                        <td class="text-nowrap">
-                            <div class="d-flex justify-content-center gap-3">
-                                <a href="@Url.Action("RequestToChangeAcctInfoApproval", "AccountManagement", new { id = item.id })" @* class="bg-green text-white px-1 pb-1 rounded" *@ title="edit">
-                                    @* <i data-feather="edit" class="data-feather-20"></i> *@
-                                    Take Action
-                                </a>
-                                @* <a href="#" class="bg-green text-white px-1 pb-1 rounded btnDelete" title="delete">
+                                </td>
+                                <td class="text-nowrap">
+                                    <div class="d-flex justify-content-center gap-3">
+                                        <a href="@Url.Action("RequestToChangeAcctInfoApproval", "AccountManagement", new { id = item.id })" @* class="bg-green text-white px-1 pb-1 rounded" *@ title="edit">
+                                            @* <i data-feather="edit" class="data-feather-20"></i> *@
+                                            Take Action
+                                        </a>
+                                        @* <a href="#" class="bg-green text-white px-1 pb-1 rounded btnDelete" title="delete">
                                     <i data-feather="trash-2" class="data-feather-20"></i>
-                                </a> *@
-                            </div>
-                        </td>
-                    </tr>
-                }
-@*                 <tr>
-                    <td class="text-nowrap">Chainsaw Importer</td>
-                    <td class="text-nowrap">Juan Dela Cruz</td>
-                    <td class="text-nowrap">juan@email.com</td>
-                    <td class="text-nowrap">0916 123 3456</td>
-                    <td>123 Mendiola St, Manila  City</td>
-                    <td class="text-nowrap">Manila</td>
-                    <td class="text-nowrap text-center d-flex justify-content-center">
+                                    </a> *@
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        @*                 <tr>
+                        <td class="text-nowrap">Chainsaw Importer</td>
+                        <td class="text-nowrap">Juan Dela Cruz</td>
+                        <td class="text-nowrap">juan@email.com</td>
+                        <td class="text-nowrap">0916 123 3456</td>
+                        <td>123 Mendiola St, Manila  City</td>
+                        <td class="text-nowrap">Manila</td>
+                        <td class="text-nowrap text-center d-flex justify-content-center">
                         <div class="bg-secondary text-white px-3 pb-2 pt-1 rounded-pill w-105">
-                            Pending
+                        Pending
                         </div>
-                    </td>
-                    <td class="text-nowrap">
+                        </td>
+                        <td class="text-nowrap">
                         <div class="d-flex justify-content-center gap-3">
-                            <a href="@Url.Action("EditAccount", "AccountManagement")" class="bg-green text-white px-1 pb-1 rounded" title="edit">
-                                <i data-feather="edit" class="data-feather-20"></i>
-                            </a>
-                            <a href="#" class="bg-green text-white px-1 pb-1 rounded btnDelete" title="delete">
-                                <i data-feather="trash-2" class="data-feather-20"></i>
-                            </a>
+                        <a href="@Url.Action("EditAccount", "AccountManagement")" class="bg-green text-white px-1 pb-1 rounded" title="edit">
+                        <i data-feather="edit" class="data-feather-20"></i>
+                        </a>
+                        <a href="#" class="bg-green text-white px-1 pb-1 rounded btnDelete" title="delete">
+                        <i data-feather="trash-2" class="data-feather-20"></i>
+                        </a>
                         </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-nowrap">Chainsaw Seller</td>
-                    <td class="text-nowrap">Mariah Clara</td>
-                    <td class="text-nowrap">juan@email.com</td>
-                    <td class="text-nowrap">0916 123 3456</td>
-                    <td>123 Mendiola St, Manila  City</td>
-                    <td>Manila</td>
-                    <td class="text-nowrap text-center d-flex justify-content-center">
+                        </td>
+                        </tr>
+                        <tr>
+                        <td class="text-nowrap">Chainsaw Seller</td>
+                        <td class="text-nowrap">Mariah Clara</td>
+                        <td class="text-nowrap">juan@email.com</td>
+                        <td class="text-nowrap">0916 123 3456</td>
+                        <td>123 Mendiola St, Manila  City</td>
+                        <td>Manila</td>
+                        <td class="text-nowrap text-center d-flex justify-content-center">
                         <div class="bg-success text-white px-3 pb-2 pt-1 rounded-pill w-105">
-                            Approved
+                        Approved
                         </div>
-                    </td>
-                    <td class="text-nowrap">
+                        </td>
+                        <td class="text-nowrap">
                         <div class="d-flex justify-content-center gap-3">
-                            <a href="@Url.Action("EditAccount", "AccountManagement")" class="bg-green text-white px-1 pb-1 rounded" title="edit">
-                                <i data-feather="edit" class="data-feather-20"></i>
-                            </a>
-                            <a href="#" class="bg-green text-white px-1 pb-1 rounded btnDelete" title="delete">
-                                <i data-feather="trash-2" class="data-feather-20"></i>
-                            </a>
+                        <a href="@Url.Action("EditAccount", "AccountManagement")" class="bg-green text-white px-1 pb-1 rounded" title="edit">
+                        <i data-feather="edit" class="data-feather-20"></i>
+                        </a>
+                        <a href="#" class="bg-green text-white px-1 pb-1 rounded btnDelete" title="delete">
+                        <i data-feather="trash-2" class="data-feather-20"></i>
+                        </a>
                         </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-nowrap">Chainsaw Owner</td>
-                    <td class="text-nowrap">Mariah Clara</td>
-                    <td class="text-nowrap">juan@email.com</td>
-                    <td class="text-nowrap">0916 123 3456</td>
-                    <td>123 Mendiola St, Manila  City</td>
-                    <td class="text-nowrap">Manila</td>
-                    <td class="text-nowrap text-center d-flex justify-content-center">
+                        </td>
+                        </tr>
+                        <tr>
+                        <td class="text-nowrap">Chainsaw Owner</td>
+                        <td class="text-nowrap">Mariah Clara</td>
+                        <td class="text-nowrap">juan@email.com</td>
+                        <td class="text-nowrap">0916 123 3456</td>
+                        <td>123 Mendiola St, Manila  City</td>
+                        <td class="text-nowrap">Manila</td>
+                        <td class="text-nowrap text-center d-flex justify-content-center">
                         <div class="bg-danger text-white px-3 pb-2 pt-1 rounded-pill w-105">
-                            Denied
+                        Denied
                         </div>
-                    </td>
-                    <td class="text-nowrap">
+                        </td>
+                        <td class="text-nowrap">
                         <div class="d-flex justify-content-center gap-3">
-                            <a href="@Url.Action("EditAccount", "AccountManagement")" class="bg-green text-white px-1 pb-1 rounded" title="edit">
-                                <i data-feather="edit" class="data-feather-20"></i>
-                            </a>
-                            <a href="#" class="bg-green text-white px-1 pb-1 rounded btnDelete" title="delete">
-                                <i data-feather="trash-2" class="data-feather-20"></i>
-                            </a>
+                        <a href="@Url.Action("EditAccount", "AccountManagement")" class="bg-green text-white px-1 pb-1 rounded" title="edit">
+                        <i data-feather="edit" class="data-feather-20"></i>
+                        </a>
+                        <a href="#" class="bg-green text-white px-1 pb-1 rounded btnDelete" title="delete">
+                        <i data-feather="trash-2" class="data-feather-20"></i>
+                        </a>
                         </div>
-                    </td>
-                </tr> *@
-            </tbody>
-        </table>
+                        </td>
+                        </tr> *@
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
