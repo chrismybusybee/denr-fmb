@@ -103,6 +103,9 @@
         display: none;
     }
 
+    #RecentNotifPartial {
+        width:25rem;
+    }
 </style>
 <html lang="en">
 <head>
@@ -121,6 +124,9 @@
     <!--SELECTIZE-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css" integrity="sha512-pTaEn+6gF1IeWv3W1+7X7eM60TFu/agjgoHmYhAfLEU8Phuf6JKiiE8YmsNC0aCgQv4192s4Vai8YZ6VNM6vyQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     @* <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/scss/_close.scss" /> *@
+    <!--NOTIFICATION BELL--
+    <link rel="stylesheet" href="/css/notification-bell.css" />
+    -->
 </head>
 
 <body id="body" class="show-datatables-headers">
@@ -157,13 +163,26 @@
                     <span class="c-menu-line"></span>
                 </div>
                 <div class="top-user-container">
-                    <div id="header-top-user" class="col-md-12 d-flex justify-content-end d-flex align-items-center gap-2 top-user-trigger">
-                    <span id="header-top-usertext">
-                    <span class="fw-bold" id="header-top-fullname">@(((ClaimsIdentity)User.Identity).FindFirst("FullName").Value)</span>
-                    
-                    <span id="header-top-userrole">@(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value)</span>
-                  </span>
-                    <span id="header-top-userimage"><img id="profilePhotoMainPage" src="/assets/images/default-avatar.png" class="border rounded-circle bg-white" height="40" width="40" /></span>
+                    <div id="header-top-user" class="col-md-12 d-flex justify-content-end d-flex align-items-center gap-2">
+                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_notifications"))
+                        {
+                            <div class="dropdown" style="float: right; padding: 13px">
+                                <a href="#" onclick="loadRecentNotif();" role="button" data-toggle="dropdown" id="dropdownMenu1" data-target="#" style="float: left" aria-expanded="true">
+                                    <i class="fa fa-bell-o" style="font-size: 20px; float: left; color: white">
+                                    </i>
+                                </a>
+                                <div id="RecentNotifPartial" class="dropdown-menu dropdown-menu-left pull-right" role="menu">
+                                </div>
+                            </div>
+                        }
+                        <span id="header-top-usertext">
+                            <span class="fw-bold" id="header-top-fullname">@(((ClaimsIdentity)User.Identity).FindFirst("FullName").Value)</span>
+
+                            <span id="header-top-userrole">@(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value)</span>
+                        </span>
+                        <span id="header-top-userimage">
+                            <img id="profilePhotoMainPage" src="/assets/images/default-avatar.png" class="border rounded-circle bg-white" height="40" width="40" />
+                        </span>
 
                     </div>
                     <div class="c-dropdown-content-container">
@@ -855,6 +874,17 @@
                                     </a>
                                 </li>
                             }
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_notifications"))
+                            {
+                                <li id="manageNotifsMenuItem">
+                                    <a href="@Url.Action("ManageNotifications", "Notifications")" id="manageNotifsSideMenu" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/manage-notifications-icon.png" />
+                                        </div>
+                                        <span>Manage Notifications</span>
+                                    </a>
+                                </li>
+                            }
                             @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_modal_cis_tutorial"))
                             {
                                 <li id="tutorialMenuItem">
@@ -1204,6 +1234,7 @@
             "/EmailTemplates": "emailTemplatesMenuItem",
             "/ChecklistManagement": "checklistManagementMenuItem",
             "/ReportGeneration": "reportGenerationMenuItem",
+            "/Notifications/ManageNotifications": "manageNotifsMenuItem",
         };
 
         if (currentPage.startsWith("/AccountManagement/ViewAccount/")) {
@@ -1275,4 +1306,10 @@
         //    });
         //}
     });
+
+    function loadRecentNotif(){
+        $('#RecentNotifPartial').load('/Notifications/GetRecentNotificationsForBell', function (data) {
+
+        });
+    }
 </script>

@@ -1,0 +1,576 @@
+﻿@using FMB_CIS.Data;
+@model FMB_CIS.Models.Notifications.ManageNotificationsViewModel
+@{
+    Layout = "~/Views/Shared/_MainPageLayout.cshtml";
+    ViewBag.Title = "Manage Notifications";
+}
+
+<div class="c-card-container c-card-container-box">
+    <div id="card">
+        <div class="c-info">
+            <div class="card">
+
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="@Url.Action("Index", "Home")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>
+                        Manage Notifications
+                    </h5>
+                    <p class="card-text">Used to manage notifications.</p>
+                    <div class="form-group mb-3">
+                        <label class="text-secondary fw-bold">
+                            Notification Type
+                        </label>
+                        <select class="form-select" id="notifTypeSel" aria-label="Notification Type" onchange="notifSelection(this)" required>
+                            <option value="" selected disabled>Select Notification Type</option>
+                            @foreach (var item in Model.tbl_Notification_Types)
+                            {
+                                <option value="@item.id">@item.name</option>
+                            }
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="openNotificationModal()">Add New Notification</button>
+                </div>
+            </div>
+        </div>
+        <div class="c-content alert alert-info" role="alert" id="NoteToSelectValue">
+            Please select a value on the dropdown to manage existing notifications.
+        </div>
+        <div class="c-content" id="SelectedNotifsPartialContainer">
+            
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .c-info {
+        width: 25%;
+        float: left;
+        padding: 12px;
+    }
+
+    .c-content {
+        width: 75%;
+        float: left;
+        padding: 12px;
+    }
+
+    .card-head {
+        width: 100%;
+        height: 30px;
+    }
+
+    .card-head-image {
+        width: 100%;
+        height: 30px;
+    }
+
+    .card-body {
+    }
+
+    .card-margin {
+        margin: 12px;
+    }
+
+    .list-group-style1 {
+    }
+
+        .list-group-style1 .list-group-item {
+            margin-bottom: 12px;
+        }
+
+            .list-group-style1 .list-group-item + .list-group-item {
+                border-top-width: 1px;
+            }
+
+    small a {
+        color: #14984a;
+        padding: 3px 0;
+        border: none;
+        border-bottom: solid 1px #14984a;
+        margin-right: 12px;
+        background: none;
+        box-shadow: unset !important;
+        outline: 0 !important;
+        margin: 0 !important;
+        margin-right: 12px !important;
+        margin-top: 12px !important;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .search-box-container, .search-box-container:hover {
+        background-color: #FFFFFF;
+    }
+
+        .search-box-container small {
+            padding: 13px 0;
+        }
+
+    .search-box {
+        border: none;
+        font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        font-style: normal;
+        padding: 8px 0;
+    }
+
+        .search-box:focus {
+            outline: none;
+        }
+
+</style>
+
+<script src="/js/jquery-3.7.1.min.js"></script>
+<script>
+    function notifSelection(that) {
+        console.log("that.value: ", that.value);
+        var notifTypeID = that.value;
+        console.log("notifTypeID: ", notifTypeID);
+        $('#NoteToSelectValue').hide();
+        $('#SelectedNotifsPartialContainer').load('/Notifications/GetNotificationsFromType?notifTypeID=' + notifTypeID, function (data) {
+
+        });
+
+    }
+
+    function enableDisableNotif(id, that) {
+
+        var isChecked = that.checked;
+        var url = "/Notifications/EnableDisableNotification";
+
+        var enaDisaDiv = that.parentNode.parentNode.querySelector('.EnaDisa');
+
+        $.post(url, { notifID: id, enableOrDisable: isChecked }, function (data) {
+            console.log("data: ", data);
+            if (data == true) {
+                if (isChecked == true) {
+                    enaDisaDiv.textContent = 'Enabled';
+                }
+                else {
+                    enaDisaDiv.textContent = 'Disabled';
+                }
+            }
+        });
+    }
+
+
+
+    function ClearSearch() {
+        $("#notificationSearch").val("").keyup();
+    }
+
+
+    // Update/Edit Notification
+    //$(document).on('click', '.btnUpdateNotification', function () {
+        //this.dataset.notificationid;
+    function UpdateNotificationModal(notifyID) {
+        var url = "/Notifications/GetNotificationInfo";
+        $.get(url, { notifID: notifyID }, function (data) {
+            // Handle the data received from the server
+            console.log(data);
+            // Process the data as needed
+            const notificationTitle = data.notification_title;
+            const dateNotified = data.date_notified;
+            const notificationContent = data.notification_content;
+
+            Swal.fire({
+                title: 'Notification Details',
+                html: `
+                    <div class="d-flex flex-column align-items-center gap-4 p-3">            
+            <div class="row w-100">
+                <div class="col md-6">
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control rounded-3" id="notificationTitle" placeholder="" value="${notificationTitle}"/>
+                        <label for="notificationTitle">Notification Title</label>
+                    </div>
+                </div>
+                <div class="col md-6">
+                    <div class="form-floating mb-2">
+                            <input type="datetime-local" class="form-control rounded-3" id="dateNotified" placeholder="" value="${dateNotified}"/>
+                        <label for="dateNotified">Date and Time to Notify</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row w-100">
+                <div class="col md-12">
+                    <div class="form-floating mb-2">
+                        <textarea class="form-control rounded-3" id="notificationContent" placeholder="" style="height: 250px;">${notificationContent}</textarea>
+                        <label for="notificationContent">Notification Content</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+                    `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Save',
+                confirmButtonColor: "#14984a",
+                cancelButtonText: 'Cancel',
+                width: '600px',
+                preConfirm: () => {
+                    // Validate and handle user input
+                    const title = document.getElementById('notificationTitle').value;
+                    const content = document.getElementById('notificationContent').value;
+                    const dateNotified = document.getElementById('dateNotified').value;
+
+                    // Use AJAX to submit data to the controller action
+                    return saveUpdatedNotification(notifyID, title, content, dateNotified);
+                }
+            });
+
+
+        }).fail(function () {
+            // Handle errors if the request fails
+            console.error("Error fetching notification data");
+        });
+
+    }
+
+    // Save Updated/Edited Notification to Database
+    function saveUpdatedNotification(notifyID, title, content, dateNotified) {
+        return new Promise((resolve) => {
+            // Use AJAX to submit data to the controller action
+            $.ajax({
+                url: '/Notifications/SaveUpdatedNotification', // Adjust the URL to match your controller name
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    notificationID: notifyID,
+                    title: title,
+                    content: content,
+                    dateNotified: dateNotified
+                },
+                success: function (result) {
+                    // Handle success response
+                    if (result.success) {
+                        resolve();
+                        Swal.fire({
+                            title: "Success!",
+                            icon: "success",
+                            confirmButtonColor: "#14984a",
+                        });
+
+                        var sel = document.getElementById("notifTypeSel");
+                        if (sel.value != "") {
+                            $('#SelectedNotifsPartialContainer').load('/Notifications/GetNotificationsFromType?notifTypeID=' + sel.value, function (data) {
+                            });
+                        }
+                    } else {
+                        Swal.showValidationMessage('Failed to save notification');
+                    }
+                },
+                error: function () {
+                    // Handle error response
+                    Swal.showValidationMessage('An error occurred while saving the notification');
+                }
+            });
+        });
+    }
+
+    $(document).on('keyup', '#notificationSearch', function () {
+        // Retrieve the input field text and reset the count to zero
+        var filter = $(this).val(),
+            count = 0;
+
+        // Loop through the comment list
+        $('#Notifications .list-group-item').each(function () {
+
+
+            // If the list item does not contain the text phrase fade it out
+            if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+                $(this).hide();  // MY CHANGE
+
+                // Show the list item if the phrase matches and increase the count by 1
+            } else {
+                $(this).show(); // MY CHANGE
+                count++;
+            }
+
+        });
+
+    });
+
+
+    function openNotificationModal() {
+        // Display SweetAlert2 modal for notification type selection
+        Swal.fire({
+            title: 'Select Notification Type',
+            html: `
+            <div class="alert alert-info">
+                Opt for 'for individual' to notify a single user or 'for specific user roles' to broadcast messages to all users within a designated role.
+            </div>
+            <div class="form-group px-1 py-1">            
+                    <select id="notificationType" class="form-select" aria-label="Permit Type" required>
+                        <option value="" selected disabled>Select Notification Type</option>
+                            @foreach (var item in Model.tbl_Notification_Types)
+                            {
+                                <option value="@item.id">@item.name</option>
+                            }
+                    </select>
+            </div>
+                `,
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: 'Next',
+            confirmButtonColor: "#14984a",
+            cancelButtonText: 'Cancel',
+            preConfirm: () => {
+                const notificationType = document.getElementById('notificationType').value;
+                if (!notificationType) {
+                    Swal.showValidationMessage('Please select a notification type');
+                }
+                return { notificationType: notificationType };
+            }
+        }).then((result) => {
+            if (!result.dismiss && result.value) {
+                // Handle the next step based on the selected notification type
+                if (result.value.notificationType === '1') {
+                    // Handle "for individual" notification type
+                    showIndividualNotificationModal(result.value.notificationType);
+                } else if (result.value.notificationType === '2') {
+                    // Handle "for specific user role" notification type
+                    showUserRoleNotificationModal(result.value.notificationType);
+                }
+            }
+        });
+    }
+
+    function showIndividualNotificationModal(notifTypeID) {
+        // Logic to show modal for "for individual" notification type
+        // You can use SweetAlert2 or any other modal library for this
+        Swal.fire({
+            title: 'Notification Details',
+            html: `
+                <div class="d-flex flex-column align-items-center gap-4 p-3">
+        <div class="row w-100">
+            <!-- User list-->
+            <div class="col md-12">
+                <div class="form-floating mb-2">
+                    <input type="text" class="form-control rounded-3" id="userID" list="userIDList" />
+                    <datalist id="userIDList" aria-label="User ID">
+    @foreach (var item in Model.tbl_Users)
+    {
+                                <option value="@item.id">@item.first_name @item.middle_name @item.last_name @item.suffix @item.email</option>
+    }
+                    </datalist>
+                    <label for="userID">User to be Notified</label>
+                </div>
+            </div>
+
+        </div>
+        <div class="row w-100">
+            <div class="col md-6">
+                <div class="form-floating mb-2">
+                    <input type="text" class="form-control rounded-3" id="notificationTitle" placeholder="" />
+                    <label for="notificationTitle">Notification Title</label>
+                </div>
+            </div>
+            <div class="col md-6">
+                <div class="form-floating mb-2">
+                    <input type="datetime-local" class="form-control rounded-3" id="dateNotified" placeholder="" />
+                    <label for="dateNotified">Date and Time to Notify</label>
+                </div>
+            </div>
+        </div>
+        <div class="row w-100">
+            <div class="col md-12">
+                <div class="form-floating mb-2">
+                    <textarea class="form-control rounded-3" id="notificationContent" placeholder="" style="height: 250px;"> </textarea>
+                    <label for="notificationContent">Notification Content</label>
+                </div>
+            </div>
+        </div>
+    </div>
+                `,
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: 'Save',
+            confirmButtonColor: "#14984a",
+            cancelButtonText: 'Cancel',
+            width: '600px',
+            preConfirm: () => {
+                // Validate and handle user input
+                const userID = document.getElementById('userID').value;
+                const userTypeID = null;
+                const title = document.getElementById('notificationTitle').value;
+                const content = document.getElementById('notificationContent').value;
+                const dateNotified = document.getElementById('dateNotified').value;
+                swal.getConfirmButton().removeAttribute("disabled");
+                swal.getCancelButton().removeAttribute("disabled");
+                // Use AJAX to submit data to the controller action
+                return saveUserRoleNotification(userID, userTypeID, title, content, dateNotified, notifTypeID);
+            }
+        });
+    }
+
+    function showUserRoleNotificationModal(notifTypeID) {
+        // Logic to show modal for "for specific user role" notification type
+        Swal.fire({
+            title: 'Notification Details',
+            html: `
+                        <div class="d-flex flex-column align-items-center gap-4 p-3">
+        <div class="row w-100">
+            <!-- Dropdown for user roles -->
+            <div class="col md-12">
+                <div class="form-floating mb-2">
+                    <select id="userTypeID" class="form-select rounded-3" aria-label="User Type">
+                        <option value="" selected disabled>Select User Role</option>
+    @foreach (var item in Model.tbl_User_Types)
+    {
+                                <option value="@item.id">@item.name</option>
+    }
+                    </select>
+                    <label for="userTypeID">User Type</label>
+                </div>
+            </div>
+
+        </div>
+        <div class="row w-100">
+            <div class="col md-6">
+                <div class="form-floating mb-2">
+                    <input type="text" class="form-control rounded-3" id="notificationTitle" placeholder="" />
+                    <label for="notificationTitle">Notification Title</label>
+                </div>
+            </div>
+            <div class="col md-6">
+                <div class="form-floating mb-2">
+                    <input type="datetime-local" class="form-control rounded-3" id="dateNotified" placeholder="" />
+                    <label for="dateNotified">Date and Time to Notify</label>
+                </div>
+            </div>
+        </div>
+        <div class="row w-100">
+            <div class="col md-12">
+                <div class="form-floating mb-2">
+                    <textarea class="form-control rounded-3" id="notificationContent" placeholder="" style="height: 250px;"> </textarea>
+                    <label for="notificationContent">Notification Content</label>
+                </div>
+            </div>
+        </div>
+    </div>
+            `,
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: 'Save',
+            confirmButtonColor: "#14984a",
+            cancelButtonText: 'Cancel',
+            width: '600px',
+            preConfirm: () => {
+                // Validate and handle user input
+                const userID = null;
+                const userTypeID = document.getElementById('userTypeID').value;
+                const title = document.getElementById('notificationTitle').value;
+                const content = document.getElementById('notificationContent').value;
+                const dateNotified = document.getElementById('dateNotified').value;
+
+                swal.getConfirmButton().removeAttribute("disabled");
+                swal.getCancelButton().removeAttribute("disabled");
+                // Use AJAX to submit data to the controller action
+                return saveUserRoleNotification(userID, userTypeID, title, content, dateNotified, notifTypeID);
+            }
+        });
+    }
+
+    //Saving created Notification to Database (now used for both user role and individual notifs)
+    function saveUserRoleNotification(userID, userTypeID, title, content, dateNotified, notifTypeID) {
+        return new Promise((resolve) => {
+            // Use AJAX to submit data to the controller action
+            $.ajax({
+                url: '/Notifications/SaveNotification', // Adjust the URL to match your controller name
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    userID: userID,
+                    userTypeID: userTypeID,
+                    notifTypeID: notifTypeID,
+                    title: title,
+                    content: content,
+                    dateNotified: dateNotified
+                },
+                success: function (result) {
+                    // Handle success response
+                    if (result.success) {
+                        resolve();
+                        successAndReload();
+                    } else {
+                        Swal.showValidationMessage('Failed to save notification');
+                    }
+                },
+                error: function () {
+                    // Handle error response
+                    Swal.showValidationMessage('An error occurred while saving the notification');
+                }
+            });
+        });
+    }
+
+    function successAndReload() {
+        Swal.fire({
+            title: "Success!",
+            icon: "success",
+            confirmButtonColor: "#14984a",
+        });
+
+        var sel = document.getElementById("notifTypeSel");
+        if (sel.value != "") {
+            $('#SelectedNotifsPartialContainer').load('/Notifications/GetNotificationsFromType?notifTypeID=' + sel.value, function (data) {
+            });
+        }
+    }
+
+    function DeleteNotif(id, that) {
+        console.log("DeleteNotif id: ", id);
+        console.log("that: ", that);
+        console.log("that.dataset: ", that.dataset);
+        var url = "/Notifications/DeleteNotif";
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "By deleting this notification, you won't be able to revert this action.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            confirmButtonColor: '#14984a'
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            console.log("result", result);
+            if (result.isConfirmed) {
+
+                // Post action here to delete
+                console.log("deleted")
+                $.post(url, { notifID: id }, function (data) {
+                    console.log("data: ", data);
+
+                    if (data.success) {
+                        // Code for successful deletion
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Notification (" + data.deletedNotification.title + ") has been deleted.",
+                            icon: "success",
+                            confirmButtonColor: "#14984a"
+                        });
+                    } else {
+                        // Code for unsuccessful deletion
+                        Swal.fire({
+                            title: "Failed!",
+                            text: "An error occurred. Please try again.",
+                            icon: "error",
+                            confirmButtonColor: "#14984a"
+                        });
+                    }
+
+                    // Common code to reload notifications based on the selected type
+                    var sel = document.getElementById("notifTypeSel");
+                    if (sel.value !== "") {
+                        $('#SelectedNotifsPartialContainer').load('/Notifications/GetNotificationsFromType?notifTypeID=' + sel.value, function (data) {
+                            // Callback function after reloading notifications
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+   
+</script>
