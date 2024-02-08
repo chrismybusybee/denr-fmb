@@ -1,0 +1,36 @@
+﻿@using System.Security.Claims;
+@using System.Globalization;
+@using FMB_CIS.Data;
+@model FMB_CIS.Models.Notifications.NotificationsViewModel
+@{
+
+}
+<div class="list-group list-group-style1">
+    <div id="Notifications">
+        <div class="box rounded bg-white mb-0">
+            <div class="box-body p-0">
+                @foreach (var item in Model.tbl_Notifications)
+                {
+                    <div class="p-3 d-flex justify-content-between border-bottom text-dark">
+                        <div class="mr-3">
+                            <div class="fw-bold">@item.notification_title</div>
+                            <div class="small">@item.notification_content</div>
+                        </div>
+
+                        <span class="ml-auto mb-auto">
+                            <div class="text-right text-muted pt-1">
+                                @DateTimeAgo.TimeAgo(Convert.ToDateTime(item.date_notified))
+                            </div>
+                        </span>
+                    </div>
+                }
+            </div>
+            <div class="text-center py-2">
+                <a href="/Notifications">See all Notifications</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+

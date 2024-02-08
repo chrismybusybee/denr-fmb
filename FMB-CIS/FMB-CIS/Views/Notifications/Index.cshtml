@@ -1,0 +1,136 @@
+﻿@using FMB_CIS.Data;
+@model FMB_CIS.Models.Notifications.NotificationsViewModel
+@{
+    Layout = "~/Views/Shared/_MainPageLayout.cshtml";
+    ViewBag.Title = "Notifications";
+}
+
+
+<div class="c-card-container c-card-container-box">
+    <div id="card">
+        @* <div class="c-info">
+            <div class="card">                
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="@Url.Action("Index", "Home")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>Checklist Management
+                    </h5>
+                    <p class="card-text">Used to manage checklist for required documents.</p>
+                    <button id="btnCreateChecklist" class="btn btn-primary">Add New Checklist</button>
+                </div>
+            </div>
+        </div> *@
+        <div id="notificationsContainer">
+            <div class="row">
+                <div class="col-lg-12 right">
+                    <div class="box shadow-sm rounded bg-white mb-3">
+                        <div class="box-title border-bottom p-3">
+                            <h6 class="m-0">All Notifications</h6>
+                        </div>
+                        <div class="box-body p-0">
+                            @foreach (var item in Model.tbl_Notifications)
+                            {
+                                <div class="p-3 d-flex justify-content-between border-bottom">
+                                    <div class="mr-3">
+                                        <div class="fw-bold">@item.notification_title</div>
+                                        <div class="small">@item.notification_content</div>
+                                    </div>
+
+                                    <span class="ml-auto mb-auto">
+                                        <div class="text-right text-muted pt-1">
+                                            @DateTimeAgo.TimeAgo(Convert.ToDateTime(item.date_notified))
+                                        </div>
+                                    </span>
+                                </div>
+                            }
+                            @* <div class="p-3 d-flex justify-content-between bg-light border-bottom">
+                            <div class="mr-3">
+                            <div class="fw-bold">UNREAD RECENT NOTIF</div>
+                            <div class="small">This is an unread recent notification.</div>
+                            </div>
+
+                            <span class="ml-auto mb-auto">
+                            <div class="btn-group">
+                            <button type="button" class="btn btn-light btn-sm rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="bi bi-three-dots-vertical"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                            <button class="dropdown-item" type="button">Mark as Read</button>
+                            </div>
+                            </div>
+                            <br />
+                            <div class="text-right text-muted pt-1">3d</div>
+                            </span>
+                            </div>
+                            <div class="p-3 d-flex justify-content-between">
+                            <div class="mr-3">
+                            <div class="fw-bold">READ RECENT NOTIF</div>
+                            <div class="mb-2">This is a recent notification that has been read by the user.</div>
+                            </div>
+                            <span class="ml-auto mb-auto">
+                            <div class="btn-group">
+                            <button type="button" class="btn btn-light btn-sm rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="bi bi-three-dots-vertical"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                            <button class="dropdown-item" type="button">Mark as Read</button>
+                            </div>
+                            </div>
+                            <br />
+                            <div class="text-right text-muted pt-1">4d</div>
+                            </span>
+                            </div> *@
+                        </div>
+                    </div>
+                    @* <div class="box shadow-sm rounded bg-white mb-3">
+                    <div class="box-title border-bottom p-3">
+                    <h6 class="m-0">Earlier</h6>
+                    </div>
+                    <div class="box-body p-0">
+                    <div class="p-3 d-flex justify-content-between">
+                    <div class="mr-3">
+                    <div class="fw-bold">READ EARLIER NOTIF</div>
+                    <div class="mb-2">This is an earlier notification that has been read by the user.</div>
+                    </div>
+                    <span class="ml-auto mb-auto">
+                    <div class="btn-group">
+                    <button type="button" class="btn btn-light btn-sm rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                    <button class="dropdown-item" type="button">Mark as Read</button>
+                    </div>
+                    </div>
+                    <br />
+                    <div class="text-right text-muted pt-1">4d</div>
+                    </span>
+                    </div>
+                    </div>
+                    </div> *@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .dropdown-list-image {
+        position: relative;
+        height: 2.5rem;
+        width: 2.5rem;
+    }
+
+        .dropdown-list-image img {
+            height: 2.5rem;
+            width: 2.5rem;
+        }
+</style>
+
+<script>
+    // Example usage
+    var dateTime = "2024-01-31T12:34:56"; // Replace with your actual DateTime string
+    var formattedTimeAgo = moment(dateTime).fromNow();
+
+    // Output the result
+    console.log(formattedTimeAgo);
+</script>
