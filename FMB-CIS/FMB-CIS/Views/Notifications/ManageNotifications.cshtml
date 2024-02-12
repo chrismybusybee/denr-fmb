@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="c-content alert alert-info" role="alert" id="NoteToSelectValue">
-            Please select a value on the dropdown to manage existing notifications.
+            Please select a value from the dropdown to manage existing notifications. Choose 'for individual' to view notifications for a single user or 'for specific user roles' to access notifications for all users within that designated role.
         </div>
         <div class="c-content" id="SelectedNotifsPartialContainer">
             
@@ -476,7 +476,7 @@
         return new Promise((resolve) => {
             // Use AJAX to submit data to the controller action
             $.ajax({
-                url: '/Notifications/SaveNotification', // Adjust the URL to match your controller name
+                url: '/Notifications/CreateNotification',
                 type: 'POST',
                 dataType: 'json',
                 data: {

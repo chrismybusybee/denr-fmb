@@ -230,7 +230,7 @@ namespace FMB_CIS.Controllers
         //Creates New Notification
         [RequiresAccess(allowedAccessRights = "allow_page_manage_notifications")]
         [HttpPost]
-        public IActionResult SaveNotification(int? userID, int? userTypeID, int notifTypeID, string title, string content, DateTime dateNotified)
+        public IActionResult CreateNotification(int? userID, int? userTypeID, int notifTypeID, string title, string content, DateTime dateNotified)
         {
             try
             {
