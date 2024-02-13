@@ -339,7 +339,7 @@
         // Logic to show modal for "for individual" notification type
         // You can use SweetAlert2 or any other modal library for this
         Swal.fire({
-            title: 'Notification Details',
+            title: 'Create Notification',
             html: `
                 <div class="d-flex flex-column align-items-center gap-4 p-3">
         <div class="row w-100">
@@ -375,7 +375,7 @@
         <div class="row w-100">
             <div class="col md-12">
                 <div class="form-floating mb-2">
-                    <textarea class="form-control rounded-3" id="notificationContent" placeholder="" style="height: 250px;"> </textarea>
+                    <textarea class="form-control rounded-3" id="notificationContent" placeholder="" style="height: 250px;"></textarea>
                     <label for="notificationContent">Notification Content</label>
                 </div>
             </div>
@@ -406,7 +406,7 @@
     function showUserRoleNotificationModal(notifTypeID) {
         // Logic to show modal for "for specific user role" notification type
         Swal.fire({
-            title: 'Notification Details',
+            title: 'Create Notification',
             html: `
                         <div class="d-flex flex-column align-items-center gap-4 p-3">
         <div class="row w-100">
@@ -414,7 +414,7 @@
             <div class="col md-12">
                 <div class="form-floating mb-2">
                     <select id="userTypeID" class="form-select rounded-3" aria-label="User Type">
-                        <option value="" selected disabled>Select User Role</option>
+                        <option value="" selected disabled>Select User Type</option>
     @foreach (var item in Model.tbl_User_Types)
     {
                                 <option value="@item.id">@item.name</option>
@@ -442,7 +442,7 @@
         <div class="row w-100">
             <div class="col md-12">
                 <div class="form-floating mb-2">
-                    <textarea class="form-control rounded-3" id="notificationContent" placeholder="" style="height: 250px;"> </textarea>
+                    <textarea class="form-control rounded-3" id="notificationContent" placeholder="" style="height: 250px;"></textarea>
                     <label for="notificationContent">Notification Content</label>
                 </div>
             </div>
