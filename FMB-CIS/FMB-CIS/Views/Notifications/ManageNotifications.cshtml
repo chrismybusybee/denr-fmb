@@ -123,9 +123,7 @@
 <script src="/js/jquery-3.7.1.min.js"></script>
 <script>
     function notifSelection(that) {
-        console.log("that.value: ", that.value);
         var notifTypeID = that.value;
-        console.log("notifTypeID: ", notifTypeID);
         $('#NoteToSelectValue').hide();
         $('#SelectedNotifsPartialContainer').load('/Notifications/GetNotificationsFromType?notifTypeID=' + notifTypeID, function (data) {
 
@@ -167,14 +165,13 @@
         var url = "/Notifications/GetNotificationInfo";
         $.get(url, { notifID: notifyID }, function (data) {
             // Handle the data received from the server
-            console.log(data);
             // Process the data as needed
             const notificationTitle = data.notification_title;
             const dateNotified = data.date_notified;
             const notificationContent = data.notification_content;
 
             Swal.fire({
-                title: 'Notification Details',
+                title: 'Update Notification Details',
                 html: `
                     <div class="d-flex flex-column align-items-center gap-4 p-3">            
             <div class="row w-100">
@@ -231,7 +228,7 @@
         return new Promise((resolve) => {
             // Use AJAX to submit data to the controller action
             $.ajax({
-                url: '/Notifications/SaveUpdatedNotification', // Adjust the URL to match your controller name
+                url: '/Notifications/EditNotification',
                 type: 'POST',
                 dataType: 'json',
                 data: {

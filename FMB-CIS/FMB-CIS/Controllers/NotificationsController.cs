@@ -264,7 +264,7 @@ namespace FMB_CIS.Controllers
         // Update/Edit a Notification
         [RequiresAccess(allowedAccessRights = "allow_page_manage_notifications")]
         [HttpPost]
-        public IActionResult SaveUpdatedNotification(int? notificationID, string title, string content, DateTime dateNotified)
+        public IActionResult EditNotification(int? notificationID, string title, string content, DateTime dateNotified)
         {
             try
             {
@@ -281,7 +281,6 @@ namespace FMB_CIS.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception or handle it accordingly
                 return Json(new { success = false });
             }
         }
