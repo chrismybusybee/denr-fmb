@@ -6,6 +6,7 @@
 
 }
 <div class="list-group list-group-style1">
+    <!--SEARCH BAR-->
     <div href="#" class="list-group-item list-group-item-action flex-column align-items-start search-box-container">
         <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-2">
@@ -14,53 +15,58 @@
             <small class="text-muted clickable" onclick="ClearSearch()">Clear</small>
         </div>
     </div>
+    <!--NOTIFICATION LIST-->
     <div id="Notifications">
+        @foreach (var item in Model.notificationsJoinedValues)
+        {
+            <div class="list-group-item list-group-item-action flex-column align-items-start" id="item-@Html.DisplayFor(modelItem=>item.tbl_notifications_id)">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">@Html.DisplayFor(modelItem => item.notification_title)</h5>
+                    <small class="text-muted">#@Html.DisplayFor(modelItem => item.tbl_notifications_id) Modified @Html.DisplayFor(modelItem => item.date_modified)</small>
+                </div>
+                <p class="text-dark mb-1">@Html.DisplayFor(modelItem => item.notification_content)</p>
+                <p class="text-muted mt-2 mb-0">
+                    @(item.tbl_notification_type_id == 1
+                        ? "Notified User: " + item.notified_user_name
+                        : "Notified User Type: " + item.notified_user_type_name)
+                </p>
+                <p class="text-muted mt-0 mb-1">Notified at @Html.DisplayFor(modelItem => item.date_notified)</p>
+                @* <div class="text-right text-muted mt-1 mb-2">
+            <div class="form-check form-switch align-middle">
+            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" asp-for="@item.is_active" onclick="enableDisableNotif(@item.tbl_notifications_id, this)">
+            <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+            <span class="EnaDisa">@(item.is_active ? "Enabled" : "Disabled")</span>
+            </div>
+            </div> *@
+                <small>
+                    <a class="btnUpdateNotification" data-notificationID="@item.tbl_notifications_id" onclick="UpdateNotificationModal(@item.tbl_notifications_id)">Update</a>
+                </small>
+                @* <small>
+            <a class="btnDeleteNotification" data-notificationID="@item.tbl_notifications_id" onclick="DeleteNotif(@item.tbl_notifications_id, this)">Delete</a>
+            </small> *@
+            </div>
+        }
+    </div>
+
+    @*<div id="Notifications">
         <div class="box rounded bg-white mb-3">
             <div class="box-body p-0">
                 @foreach (var item in Model.notificationsJoinedValues)
                 {
                     <div class="list-group-item">
-
-                        @* <div class="mr-3">
-                            <div class="row text-dark">
-                                <div class="col md-2">Notify To</div>
-                                <div class="col md-10">@(item.tbl_notification_type_id == 1 ? item.notified_user_name : item.notified_user_type_name)</div>
-                            </div>
-                            <div class="row fw-bold">
-                                <div class="col md-2">Title</div>
-                                <div class="col md-10">@item.notification_title</div>
-                            </div>
-                            <div class="row text-dark">
-                                <div class="col md-2">Content</div>
-                                <div class="col md-10">@item.notification_content</div>
-                            </div>
-                            <div class="row text-dark">
-                                <div class="col md-2">Date and Time Notified</div>
-                                <div class="col md-10">@item.date_notified</div>
-                            </div>                            
-                        </div>
-
-                        <span class="ml-auto mb-auto">
-                            <div class="text-right text-muted pt-1">
-                                <div class="form-check form-switch align-middle">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" asp-for="@item.is_active" onclick="enableDisableNotif(@item.tbl_notifications_id, this)">
-                                    <label class="form-check-label" for="flexSwitchCheckDefault"></label>
-                                </div>
-                            </div>
-                        </span> *@
-
+                                                
                         <div class="d-flex p-3 justify-content-between">
                             <div class="mr-3">
                                 <div class="text-dark">Notify To: @(item.tbl_notification_type_id == 1 ? item.notified_user_name : item.notified_user_type_name)</div>
                                 <div class="fw-bold">Title: @item.notification_title</div>
                                 <div class="text-dark">Content: @item.notification_content</div>
                                 <div class="text-right text-muted pt-1">Date and Time Notified: @item.date_notified</div>
-                                @* <small><a class="btnUpdateNotification" data-notificationID="@item.tbl_notifications_id" onclick="UpdateNotificationModal(@item.tbl_notifications_id)">Update</a></small> *@
-                                @* <small><a class="btnDeleteNotification" data-notificationID="@item.tbl_notifications_id" onclick="DeleteNotif(@item.tbl_notifications_id, this)">Delete</a></small> *@
+                                <small><a class="btnUpdateNotification" data-notificationID="@item.tbl_notifications_id" onclick="UpdateNotificationModal(@item.tbl_notifications_id)">Update</a></small>
+                                <small><a class="btnDeleteNotification" data-notificationID="@item.tbl_notifications_id" onclick="DeleteNotif(@item.tbl_notifications_id, this)">Delete</a></small>
                                 
                             </div>
 
-                            @* <span class="ml-auto mb-auto">
+                            <span class="ml-auto mb-auto">
                                 <div class="text-right text-muted pt-1">
                                     <div class="EnaDisa">@(item.is_active == true ? "Enabled" : "Disabled")</div>
                                     <div class="form-check form-switch align-middle">
@@ -68,14 +74,14 @@
                                         <label class="form-check-label" for="flexSwitchCheckDefault"></label>
                                     </div>
                                 </div>
-                            </span> *@
+                            </span>
                         </div>
                     </div>
                 }
             </div>
-        </div>
-    </div>
-
+        </div> 
+    </div>*@
+        
 </div>
 
 <script src="/js/jquery-3.7.1.min.js"></script>
@@ -92,11 +98,11 @@
 
             // If the list item does not contain the text phrase fade it out
             if ($(this).text().search(new RegExp(filter, "i")) < 0) {
-                $(this).hide();  // MY CHANGE
+                $(this).hide();
 
                 // Show the list item if the phrase matches and increase the count by 1
             } else {
-                $(this).show(); // MY CHANGE
+                $(this).show();
                 count++;
             }
 
