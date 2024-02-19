@@ -176,48 +176,48 @@
     @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_approve_reject_applications"))
     {
         <!--DENR PERMIT APPROVER VIEW-->
-        <!--IMPORTER COUNT-->
+        <!--IMPORTER COUNT (Filtered per region)-->
         <div class="c-dashboard-item">
             <div class="c-dashboard-item-icon">
                 <img src="~/assets/images/menu-icons/checklist-management.png" />
             </div>
             <div class="c-dashboard-item-row-container">
                 <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Importer</h3></div>
-                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Pending</h3><span class="c-dashboard-item-count">@Model.dashboardView.ImporterPendingCount</span></a>
-                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">@Model.dashboardView.ImporterApprovedCount</span></a>
-                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">@Model.dashboardView.ImporterDeclinedCount</span></a>
-                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Submitted Applications</h3><span class="c-dashboard-item-count">@Model.dashboardView.ImporterTotalCount</span></a>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Pending</h3><span class="c-dashboard-item-count">@Model.dashboardView.officerViewImporterPendingCount</span></a>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">@Model.dashboardView.officerViewImporterApprovedCount</span></a>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">@Model.dashboardView.officerViewImporterDeclinedCount</span></a>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Submitted Applications</h3><span class="c-dashboard-item-count">@Model.dashboardView.officerViewImporterTotalCount</span></a>
                 <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Checklist for required documents.</p></div>
             </div>
 
         </div>
-        <!--SELLER COUNT-->
+        <!--SELLER COUNT (Filtered per region)-->
         <div class="c-dashboard-item">
             <div class="c-dashboard-item-icon">
                 <img src="~/assets/images/menu-icons/checklist-management.png" />
             </div>
             <div class="c-dashboard-item-row-container">
                 <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Seller</h3></div>
-                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Pending</h3><span class="c-dashboard-item-count">@Model.dashboardView.SellerPendingCount</span></a>
-                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">@Model.dashboardView.SellerApprovedCount</span></a>
-                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">@Model.dashboardView.SellerDeclinedCount</span></a>
-                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Submitted Applications</h3><span class="c-dashboard-item-count">@Model.dashboardView.SellerTotalCount</span></a>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Pending</h3><span class="c-dashboard-item-count">@Model.dashboardView.officerViewSellerPendingCount</span></a>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">@Model.dashboardView.officerViewSellerApprovedCount</span></a>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">@Model.dashboardView.officerViewSellerDeclinedCount</span></a>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Submitted Applications</h3><span class="c-dashboard-item-count">@Model.dashboardView.officerViewSellerTotalCount</span></a>
                 <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Checklist for required documents.</p></div>
             </div>
 
         </div>
 
-        <!--OWNER COUNT-->
+        <!--OWNER COUNT (Filtered per region)-->
         <div class="c-dashboard-item">
             <div class="c-dashboard-item-icon">
                 <img src="~/assets/images/menu-icons/checklist-management.png" />
             </div>
             <div class="c-dashboard-item-row-container">
                 <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Owner</h3></div>
-                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Pending</h3><span class="c-dashboard-item-count">@Model.dashboardView.OwnerPendingCount</span></a>
-                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">@Model.dashboardView.OwnerApprovedCount</span></a>
-                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">@Model.dashboardView.OwnerDeclinedCount</span></a>
-                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Submitted Applications</h3><span class="c-dashboard-item-count">@Model.dashboardView.OwnerTotalCount</span></a>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Pending</h3><span class="c-dashboard-item-count">@Model.dashboardView.officerViewOwnerPendingCount</span></a>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">@Model.dashboardView.officerViewOwnerApprovedCount</span></a>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">@Model.dashboardView.officerViewOwnerDeclinedCount</span></a>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Submitted Applications</h3><span class="c-dashboard-item-count">@Model.dashboardView.officerViewOwnerTotalCount</span></a>
                 <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Checklist for required documents.</p></div>
             </div>
 

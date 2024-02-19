@@ -115,101 +115,199 @@ namespace FMB_CIS.Controllers
                     dashboardView.AnnouncementsCount = _context.tbl_announcement.Where(a => a.is_active == true).Count();
                     dashboardView.EmailsCount = _context.tbl_email_template.Where(a => a.is_active == true).Count();
                     dashboardView.ChecklistsCount = _context.tbl_document_checklist.Where(a => a.is_active == true).Count();
-                                        
+
+                    //Count for Chainsaw Applicants
+                    dashboardView.SellerPendingCount = _context.tbl_application.Where(a => a.is_active == true &&
+                        a.tbl_user_id == userID &&
+                        a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_SELLER &&
+                        pendingIds.Contains((int)a.status)).Count();
+                    dashboardView.SellerApprovedCount = _context.tbl_application.Where(a => a.is_active == true &&
+                        a.tbl_user_id == userID &&
+                        a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_SELLER &&
+                        approvedIds.Contains((int)a.status)).Count();
+                    dashboardView.SellerDeclinedCount = _context.tbl_application.Where(a => a.is_active == true &&
+                        a.tbl_user_id == userID &&
+                        a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_SELLER &&
+                        declinedIds.Contains((int)a.status)).Count();
+                    dashboardView.SellerTotalCount = _context.tbl_application.Where(a => a.is_active == true &&
+                        a.tbl_user_id == userID &&
+                        a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_SELLER).Count();
+
+                    dashboardView.OwnerPendingCount = _context.tbl_application.Where(a => a.is_active == true &&
+                        a.tbl_user_id == userID &&
+                        a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_OWNER &&
+                        pendingIds.Contains((int)a.status)
+                    ).Count();
+                    dashboardView.OwnerApprovedCount = _context.tbl_application.Where(a => a.is_active == true &&
+                        a.tbl_user_id == userID &&
+                        a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_OWNER &&
+                        approvedIds.Contains((int)a.status)).Count();
+                    dashboardView.OwnerDeclinedCount = _context.tbl_application.Where(a => a.is_active == true &&
+                        a.tbl_user_id == userID &&
+                        a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_OWNER &&
+                        declinedIds.Contains((int)a.status)).Count();
+                    dashboardView.OwnerTotalCount = _context.tbl_application.Where(a => a.is_active == true &&
+                        a.tbl_user_id == userID &&
+                        a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_OWNER).Count();
+
+                    dashboardView.ImporterPendingCount = _context.tbl_application.Where(a => a.is_active == true &&
+                        a.tbl_user_id == userID &&
+                        a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_IMPORTER &&
+                        pendingIds.Contains((int)a.status)).Count();
+                    dashboardView.ImporterApprovedCount = _context.tbl_application.Where(a => a.is_active == true &&
+                        a.tbl_user_id == userID &&
+                        a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_IMPORTER &&
+                        approvedIds.Contains((int)a.status)).Count();
+                    dashboardView.ImporterDeclinedCount = _context.tbl_application.Where(a => a.is_active == true &&
+                        a.tbl_user_id == userID &&
+                        a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_IMPORTER &&
+                        declinedIds.Contains((int)a.status)).Count();
+                    dashboardView.ImporterTotalCount = _context.tbl_application.Where(a => a.is_active == true &&
+                        a.tbl_user_id == userID &&
+                        a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_IMPORTER).Count();
+
 
                     //Count for DENR Side
                     //Regions are also filtered
+
                     if (AccessRightsUtilities.IsAccessRights(myAccessRights, "allow_page_manage_approve_reject_applications"))
                     {
-                        //Count for Chainsaw Applicants
-                        dashboardView.SellerPendingCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_SELLER &&
-                            pendingIds.Contains((int)a.status)).Count();
-                        dashboardView.SellerApprovedCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_SELLER &&
-                            approvedIds.Contains((int)a.status)).Count();
-                        dashboardView.SellerDeclinedCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_SELLER &&
-                            declinedIds.Contains((int)a.status)).Count();
-                        dashboardView.SellerTotalCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_SELLER).Count();
+                        //Get my region id
+                        var myRegionID = _context.tbl_user.Where(u => u.id == loggedUserID).Select(u => u.tbl_region_id).FirstOrDefault();
+                        
+                        dashboardView.officerViewSellerPendingCount = _context.tbl_application
+                        .Join(_context.tbl_user,
+                            app => app.tbl_user_id,
+                            user => user.id,
+                            (app, user) => new { Application = app, User = user })
+                        .Count(joinResult =>
+                            joinResult.Application.is_active == true &&
+                            joinResult.Application.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_SELLER &&
+                            pendingIds.Contains((int)joinResult.Application.status) &&
+                            (joinResult.User.tbl_region_id == myRegionID));
 
-                        dashboardView.OwnerPendingCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_OWNER &&
-                            pendingIds.Contains((int)a.status)).Count();
-                        dashboardView.OwnerApprovedCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_OWNER &&
-                            approvedIds.Contains((int)a.status)).Count();
-                        dashboardView.OwnerDeclinedCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_OWNER &&
-                            declinedIds.Contains((int)a.status)).Count();
-                        dashboardView.OwnerTotalCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_OWNER).Count();
+                        dashboardView.officerViewSellerApprovedCount = _context.tbl_application
+                        .Join(_context.tbl_user,
+                            app => app.tbl_user_id,
+                            user => user.id,
+                            (app, user) => new { Application = app, User = user })
+                        .Count(joinResult =>
+                            joinResult.Application.is_active == true &&
+                            joinResult.Application.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_SELLER &&
+                            approvedIds.Contains((int)joinResult.Application.status) &&
+                            (joinResult.User.tbl_region_id == myRegionID));
 
-                        dashboardView.ImporterPendingCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_IMPORTER &&
-                            pendingIds.Contains((int)a.status)).Count();
-                        dashboardView.ImporterApprovedCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_IMPORTER &&
-                            approvedIds.Contains((int)a.status)).Count();
-                        dashboardView.ImporterDeclinedCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_IMPORTER &&
-                            declinedIds.Contains((int)a.status)).Count();
-                        dashboardView.ImporterTotalCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_IMPORTER).Count();
+                        dashboardView.officerViewSellerDeclinedCount = _context.tbl_application
+                        .Join(_context.tbl_user,
+                            app => app.tbl_user_id,
+                            user => user.id,
+                            (app, user) => new { Application = app, User = user })
+                        .Count(joinResult =>
+                            joinResult.Application.is_active == true &&
+                            joinResult.Application.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_SELLER &&
+                            declinedIds.Contains((int)joinResult.Application.status) &&
+                            (joinResult.User.tbl_region_id == myRegionID));
+
+
+                        dashboardView.officerViewSellerTotalCount = _context.tbl_application
+                        .Join(_context.tbl_user,
+                            app => app.tbl_user_id,
+                            user => user.id,
+                            (app, user) => new { Application = app, User = user })
+                        .Count(joinResult =>
+                            joinResult.Application.is_active == true &&
+                            joinResult.Application.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_SELLER &&
+                            (joinResult.User.tbl_region_id == myRegionID));
+
+
+                        dashboardView.officerViewOwnerPendingCount = _context.tbl_application
+                        .Join(_context.tbl_user,
+                            app => app.tbl_user_id,
+                            user => user.id,
+                            (app, user) => new { Application = app, User = user })
+                        .Count(joinResult =>
+                            joinResult.Application.is_active == true &&
+                            joinResult.Application.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_OWNER &&
+                            pendingIds.Contains((int)joinResult.Application.status) &&
+                            (joinResult.User.tbl_region_id == myRegionID));
+
+                        dashboardView.officerViewOwnerApprovedCount = _context.tbl_application
+                        .Join(_context.tbl_user,
+                            app => app.tbl_user_id,
+                            user => user.id,
+                            (app, user) => new { Application = app, User = user })
+                        .Count(joinResult =>
+                            joinResult.Application.is_active == true &&
+                            joinResult.Application.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_OWNER &&
+                            approvedIds.Contains((int)joinResult.Application.status) &&
+                            (joinResult.User.tbl_region_id == myRegionID));
+
+                        dashboardView.officerViewOwnerDeclinedCount = _context.tbl_application
+                        .Join(_context.tbl_user,
+                            app => app.tbl_user_id,
+                            user => user.id,
+                            (app, user) => new { Application = app, User = user })
+                        .Count(joinResult =>
+                            joinResult.Application.is_active == true &&
+                            joinResult.Application.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_OWNER &&
+                            declinedIds.Contains((int)joinResult.Application.status) &&
+                            (joinResult.User.tbl_region_id == myRegionID));
+
+                        dashboardView.officerViewOwnerTotalCount = _context.tbl_application
+                        .Join(_context.tbl_user,
+                            app => app.tbl_user_id,
+                            user => user.id,
+                            (app, user) => new { Application = app, User = user })
+                        .Count(joinResult =>
+                            joinResult.Application.is_active == true &&
+                            joinResult.Application.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_OWNER &&
+                            (joinResult.User.tbl_region_id == myRegionID));
+
+
+                        dashboardView.officerViewImporterPendingCount = _context.tbl_application
+                        .Join(_context.tbl_user,
+                            app => app.tbl_user_id,
+                            user => user.id,
+                            (app, user) => new { Application = app, User = user })
+                        .Count(joinResult =>
+                            joinResult.Application.is_active == true &&
+                            joinResult.Application.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_IMPORTER &&
+                            pendingIds.Contains((int)joinResult.Application.status) &&
+                            (joinResult.User.tbl_region_id == myRegionID));
+
+                        dashboardView.officerViewImporterApprovedCount = _context.tbl_application
+                        .Join(_context.tbl_user,
+                            app => app.tbl_user_id,
+                            user => user.id,
+                            (app, user) => new { Application = app, User = user })
+                        .Count(joinResult =>
+                            joinResult.Application.is_active == true &&
+                            joinResult.Application.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_IMPORTER &&
+                            approvedIds.Contains((int)joinResult.Application.status) &&
+                            (joinResult.User.tbl_region_id == myRegionID));
+
+                        dashboardView.officerViewImporterDeclinedCount = _context.tbl_application
+                        .Join(_context.tbl_user,
+                            app => app.tbl_user_id,
+                            user => user.id,
+                            (app, user) => new { Application = app, User = user })
+                        .Count(joinResult =>
+                            joinResult.Application.is_active == true &&
+                            joinResult.Application.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_IMPORTER &&
+                            declinedIds.Contains((int)joinResult.Application.status) &&
+                            (joinResult.User.tbl_region_id == myRegionID));
+
+                        dashboardView.officerViewImporterTotalCount = _context.tbl_application
+                        .Join(_context.tbl_user,
+                            app => app.tbl_user_id,
+                            user => user.id,
+                            (app, user) => new { Application = app, User = user })
+                        .Count(joinResult =>
+                            joinResult.Application.is_active == true &&
+                            joinResult.Application.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_IMPORTER &&
+                            (joinResult.User.tbl_region_id == myRegionID));
                     }
-                    else
-                    {
-                        //Count for Chainsaw Applicants
-                        dashboardView.SellerPendingCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_user_id == userID &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_SELLER &&
-                            pendingIds.Contains((int)a.status)).Count();
-                        dashboardView.SellerApprovedCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_user_id == userID &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_SELLER &&
-                            approvedIds.Contains((int)a.status)).Count();
-                        dashboardView.SellerDeclinedCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_user_id == userID &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_SELLER &&
-                            declinedIds.Contains((int)a.status)).Count();
-                        dashboardView.SellerTotalCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_user_id == userID &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_SELLER).Count();
 
-                        dashboardView.OwnerPendingCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_user_id == userID &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_OWNER &&
-                            pendingIds.Contains((int)a.status)
-                        ).Count();
-                        dashboardView.OwnerApprovedCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_user_id == userID &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_OWNER &&
-                            approvedIds.Contains((int)a.status)).Count();
-                        dashboardView.OwnerDeclinedCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_user_id == userID &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_OWNER &&
-                            declinedIds.Contains((int)a.status)).Count();
-                        dashboardView.OwnerTotalCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_user_id == userID &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_OWNER).Count();
-
-                        dashboardView.ImporterPendingCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_user_id == userID &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_IMPORTER &&
-                            pendingIds.Contains((int)a.status)).Count();
-                        dashboardView.ImporterApprovedCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_user_id == userID &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_IMPORTER &&
-                            approvedIds.Contains((int)a.status)).Count();
-                        dashboardView.ImporterDeclinedCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_user_id == userID &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_IMPORTER &&
-                            declinedIds.Contains((int)a.status)).Count();
-                        dashboardView.ImporterTotalCount = _context.tbl_application.Where(a => a.is_active == true &&
-                            a.tbl_user_id == userID &&
-                            a.tbl_application_type_id == (int)ApplicationTypeEnum.CHAINSAW_IMPORTER).Count();
-                    }
                     mymodel.dashboardView = dashboardView;
 
 
