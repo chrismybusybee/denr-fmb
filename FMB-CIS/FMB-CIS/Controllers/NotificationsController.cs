@@ -41,14 +41,42 @@ namespace FMB_CIS.Controllers
                 .Select(u => u.user_type_id)
                 .ToList();
 
+            //var combinedNotifs = _context.tbl_notifications
+            //    .Where(n => (n.notified_user_id == loggedUserID && n.is_active && currentDateAndTimeNow >= n.date_notified)
+            //                || (myUserTypes.Contains((int)n.notified_user_type) && n.is_active && currentDateAndTimeNow >= n.date_notified))
+            //    .OrderByDescending(n => n.date_notified)
+            //    .ToList();
             var combinedNotifs = _context.tbl_notifications
                 .Where(n => (n.notified_user_id == loggedUserID && n.is_active && currentDateAndTimeNow >= n.date_notified)
-                            || (myUserTypes.Contains((int)n.notified_user_type) && n.is_active && currentDateAndTimeNow >= n.date_notified))
+                || (myUserTypes.Contains((int)n.notified_user_type) && n.is_active && currentDateAndTimeNow >= n.date_notified))
                 .OrderByDescending(n => n.date_notified)
-                .ToList();
+                .GroupJoin(
+                _context.tbl_notification_read
+                .Where(nr => nr.tbl_user_id == loggedUserID),
+                n => n.id,
+                nr => nr.tbl_notifications_id,
+                (notification, notificationReads) => new userNotificationsWithRead
+                {
+                    id = notification.id,
+                    source_user_id = notification.source_user_id,
+                    tbl_notification_type_id = notification.tbl_notification_type_id,
+                    notified_user_id = notification.notified_user_id,
+                    notified_user_type = notification.notified_user_type,
+                    notification_title = notification.notification_title,
+                    notification_content = notification.notification_content,
+                    date_notified = notification.date_notified,
+                    is_active = notification.is_active,
+                    created_by = notification.created_by,
+                    modified_by = notification.modified_by,
+                    date_created = notification.date_created,
+                    date_modified = notification.date_modified,
+                    is_about_permit = notification.is_about_permit,
+                    is_read = notificationReads.Any() ? (bool?)notificationReads.First().is_read : false
+                }).ToList();
 
             var model = new NotificationsViewModel();
-            model.tbl_Notifications = combinedNotifs;
+            model.userNotifications = combinedNotifs;
+            //model.tbl_Notifications = combinedNotifs;
             return View(model);
         }
 
@@ -104,22 +132,154 @@ namespace FMB_CIS.Controllers
             var pageSize = 3; // Set the desired page size
             var pageNumber = 1; // Set the desired page number
 
+            //var combinedNotifs = _context.tbl_notifications
+            //    .Where(n => (n.notified_user_id == loggedUserID && n.is_active && currentDateAndTimeNow >= n.date_notified)
+            //                || (myUserTypes.Contains((int)n.notified_user_type) && n.is_active && currentDateAndTimeNow >= n.date_notified))
+            //    .OrderByDescending(n => n.date_notified)
+            //    .Skip((pageNumber - 1) * pageSize)
+            //    .Take(pageSize)
+            //    .ToList();
+
             var combinedNotifs = _context.tbl_notifications
                 .Where(n => (n.notified_user_id == loggedUserID && n.is_active && currentDateAndTimeNow >= n.date_notified)
-                            || (myUserTypes.Contains((int)n.notified_user_type) && n.is_active && currentDateAndTimeNow >= n.date_notified))
+                || (myUserTypes.Contains((int)n.notified_user_type) && n.is_active && currentDateAndTimeNow >= n.date_notified))
+                .OrderByDescending(n => n.date_notified)
+                .GroupJoin(
+                _context.tbl_notification_read
+                .Where(nr => nr.tbl_user_id == loggedUserID),
+                n => n.id,
+                nr => nr.tbl_notifications_id,
+                (notification, notificationReads) => new userNotificationsWithRead
+                {
+                    id = notification.id,
+                    source_user_id = notification.source_user_id,
+                    tbl_notification_type_id = notification.tbl_notification_type_id,
+                    notified_user_id = notification.notified_user_id,
+                    notified_user_type = notification.notified_user_type,
+                    notification_title = notification.notification_title,
+                    notification_content = notification.notification_content,
+                    date_notified = notification.date_notified,
+                    is_active = notification.is_active,
+                    created_by = notification.created_by,
+                    modified_by = notification.modified_by,
+                    date_created = notification.date_created,
+                    date_modified = notification.date_modified,
+                    is_about_permit = notification.is_about_permit,
+                    is_read = notificationReads.Any() ? (bool?)notificationReads.First().is_read : false
+                })
                 .OrderByDescending(n => n.date_notified)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
 
-
             var model = new NotificationsViewModel();
-            model.tbl_Notifications = combinedNotifs;
+            //model.tbl_Notifications = combinedNotifs;
+            model.userNotifications = combinedNotifs;
             //myNotifs.Concat(allUserTypeNotifs).OrderByDescending(o => o.date_notified).ToList();
             return PartialView("~/Views/Notifications/RecentNotifsPartialView.cshtml", model);
 
         }
 
+        [HttpPost, ActionName("ReadNotif")]
+        [RequiresAccess(allowedAccessRights = "allow_page_notifications")]
+        public JsonResult ReadNotif(int notifID, bool isRead)
+        {
+            try
+            {
+                var tblNotifFromDB = _context.tbl_notifications.Any(n => n.id == notifID);
+                if (tblNotifFromDB != false)
+                {
+                    int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+
+                    bool notifReadExists = _context.tbl_notification_read.Any(n => n.tbl_notifications_id == notifID && n.tbl_user_id == loggedUserID);
+
+                    if (notifReadExists == true)
+                    {
+                        var myReadNotif = _context.tbl_notification_read.FirstOrDefault(n => n.tbl_notifications_id == notifID && n.tbl_user_id == loggedUserID);
+                        myReadNotif.is_read = isRead;
+                        myReadNotif.is_active = true;
+                        myReadNotif.modified_by = loggedUserID;
+                        myReadNotif.date_modified = DateTime.Now;
+                        _context.SaveChanges();
+                    }
+                    else
+                    {
+                        var createNotifRead = new tbl_notification_read();
+                        createNotifRead.tbl_notifications_id = notifID;
+                        createNotifRead.tbl_user_id = loggedUserID;
+                        createNotifRead.is_read = isRead;
+                        createNotifRead.is_active = true;
+                        createNotifRead.created_by = loggedUserID;
+                        createNotifRead.modified_by = loggedUserID;
+                        createNotifRead.date_created = DateTime.Now;
+                        createNotifRead.date_modified = DateTime.Now;
+                        _context.tbl_notification_read.Add(createNotifRead);
+                        _context.SaveChanges();
+                    }
+
+                    return Json(new { success = true, is_Read = isRead });
+                }
+                else
+                {
+                    return Json(new { error = "Notification not found." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = "An error occurred while deleting the notification." });
+            }
+        }
+
+        [HttpGet, ActionName("UnreadNotifCounter")]
+        [RequiresAccess(allowedAccessRights = "allow_page_notifications")]
+        public JsonResult UnreadNotifCounter()
+        {
+            try
+            {
+                int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+                DateTime currentDateAndTimeNow = DateTime.Now;
+
+                var myUserTypes = _context.tbl_user_type_user
+                    .Where(u => u.user_id == loggedUserID && u.is_active == true)
+                    .Select(u => u.user_type_id)
+                    .ToList();
+
+                var countUnreadNotifs = _context.tbl_notifications
+                .Where(n => (n.notified_user_id == loggedUserID && n.is_active && currentDateAndTimeNow >= n.date_notified)
+                || (myUserTypes.Contains((int)n.notified_user_type) && n.is_active && currentDateAndTimeNow >= n.date_notified))
+                .OrderByDescending(n => n.date_notified)
+                .GroupJoin(
+                _context.tbl_notification_read
+                .Where(nr => nr.tbl_user_id == loggedUserID),
+                n => n.id,
+                nr => nr.tbl_notifications_id,
+                (notification, notificationReads) => new userNotificationsWithRead
+                {
+                    id = notification.id,
+                    source_user_id = notification.source_user_id,
+                    tbl_notification_type_id = notification.tbl_notification_type_id,
+                    notified_user_id = notification.notified_user_id,
+                    notified_user_type = notification.notified_user_type,
+                    notification_title = notification.notification_title,
+                    notification_content = notification.notification_content,
+                    date_notified = notification.date_notified,
+                    is_active = notification.is_active,
+                    created_by = notification.created_by,
+                    modified_by = notification.modified_by,
+                    date_created = notification.date_created,
+                    date_modified = notification.date_modified,
+                    is_about_permit = notification.is_about_permit,
+                    is_read = notificationReads.Any() ? (bool?)notificationReads.First().is_read : false
+                }).Count(n => n.is_read == false);
+
+                return Json(new { success = true, unreadNotifsCount = countUnreadNotifs });
+                
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = "An error occurred while deleting the notification." });
+            }
+        }
 
         //FOR MANAGE NOTIFICATIONS
         [Authorize]

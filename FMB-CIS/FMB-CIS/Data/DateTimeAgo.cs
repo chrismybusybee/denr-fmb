@@ -37,7 +37,7 @@
             if (delta < 12 * MONTH)
             {
                 int months = Convert.ToInt32(Math.Floor((double)ts.Days / 30));
-                return months <= 1 ? "1m ago" : months + "m ago";
+                return months <= 1 ? "1mo ago" : months + "mo ago";
             }
             else
             {

@@ -27,57 +27,75 @@
                             <h6 class="m-0">All Notifications</h6>
                         </div>
                         <div class="box-body p-0">
-                            @foreach (var item in Model.tbl_Notifications)
+                            @foreach (var item in Model.userNotifications)
                             {
-                                <div class="p-3 d-flex justify-content-between border-bottom">
+                               var unreadclass = item.is_read == false ? "unread-notif" : "";
+                               var unreadDot = item.is_read == false ? "unread-dot" : "";
+                                <div class="p-3 d-flex justify-content-between border-bottom @unreadclass notifDiv">
                                     <div class="mr-3">
                                         <div class="fw-bold">@item.notification_title</div>
                                         <div class="small">@item.notification_content</div>
                                     </div>
-
-                                    <span class="ml-auto mb-auto">
+                                    <div class="ml-auto mb-auto" data-is_unread="@(item.is_read)!" onload="autoMarkRead(this, @item.id)">
+                                        <div class="btn-group" style="float: right;">
+                                            <button type="button" class="btn btn-light btn-sm rounded " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="bi bi-three-dots-vertical"></i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                @if(item.is_read == true)
+                                                {
+                                                    <button class="dropdown-item read-mark-btn" type="button" data-is_unread="false" onclick="ReadUnreadMark(this, @item.id)">Mark as Unread</button>
+                                                } 
+                                                else
+                                                {
+                                                    <button class="dropdown-item read-mark-btn" type="button" data-is_unread="true" onclick="ReadUnreadMark(this, @item.id)">Mark as Read</button>
+                                                }
+                                                @* <button class="dropdown-item unread-mark-btn" type="button" onclick="ReadUnreadMark(this, false, @item.id)">Mark as Unread</button> *@
+                                            </div>
+                                        </div>
+                                        <span class="@unreadDot @item.id-myUnreadDot"></span>
                                         <div class="text-right text-muted pt-1">
                                             @DateTimeAgo.TimeAgo(Convert.ToDateTime(item.date_notified))
                                         </div>
-                                    </span>
+                                    </div>
                                 </div>
                             }
                             @* <div class="p-3 d-flex justify-content-between bg-light border-bottom">
-                            <div class="mr-3">
-                            <div class="fw-bold">UNREAD RECENT NOTIF</div>
-                            <div class="small">This is an unread recent notification.</div>
-                            </div>
+                                <div class="mr-3">
+                                    <div class="fw-bold">UNREAD RECENT NOTIF</div>
+                                    <div class="small">This is an unread recent notification.</div>
+                                </div>
 
-                            <span class="ml-auto mb-auto">
-                            <div class="btn-group">
-                            <button type="button" class="btn btn-light btn-sm rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="bi bi-three-dots-vertical"></i>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                            <button class="dropdown-item" type="button">Mark as Read</button>
-                            </div>
-                            </div>
-                            <br />
-                            <div class="text-right text-muted pt-1">3d</div>
-                            </span>
+                                <span class="ml-auto mb-auto">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-light btn-sm rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="bi bi-three-dots-vertical"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <button class="dropdown-item" type="button">Mark as Read</button>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="text-right text-muted pt-1">3d</div>
+                                </span>
                             </div>
                             <div class="p-3 d-flex justify-content-between">
-                            <div class="mr-3">
-                            <div class="fw-bold">READ RECENT NOTIF</div>
-                            <div class="mb-2">This is a recent notification that has been read by the user.</div>
-                            </div>
-                            <span class="ml-auto mb-auto">
-                            <div class="btn-group">
-                            <button type="button" class="btn btn-light btn-sm rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="bi bi-three-dots-vertical"></i>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                            <button class="dropdown-item" type="button">Mark as Read</button>
-                            </div>
-                            </div>
-                            <br />
-                            <div class="text-right text-muted pt-1">4d</div>
-                            </span>
+                                <div class="mr-3">
+                                    <div class="fw-bold">READ RECENT NOTIF</div>
+                                    <div class="mb-2">This is a recent notification that has been read by the user.</div>
+                                </div>
+                                <span class="ml-auto mb-auto">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-light btn-sm rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="bi bi-three-dots-vertical"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <button class="dropdown-item" type="button">Mark as Read</button>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="text-right text-muted pt-1">4d</div>
+                                </span>
                             </div> *@
                         </div>
                     </div>
@@ -124,13 +142,57 @@
             height: 2.5rem;
             width: 2.5rem;
         }
+
+    .unread-notif
+    {
+        background-color: #F3F3F3;
+    }
+
+    .unread-dot
+    {
+        height: 10px;
+        width: 10px;
+        background-color: #282D6D;
+        border-radius: 50%;
+        display: inline-block;
+    }
 </style>
 
+@* <script src="/js/jquery-3.7.1.min.js"></script> *@
 <script>
-    // Example usage
-    var dateTime = "2024-01-31T12:34:56"; // Replace with your actual DateTime string
-    var formattedTimeAgo = moment(dateTime).fromNow();
+    
+    function ReadUnreadMark(that, notifID) {        
+        var url = "/Notifications/ReadNotif";
+        //var enaDisaDiv = that.parentNode.parentNode.querySelector('.unread-mark-btn');
+        
+        var is_unread = that.dataset.is_unread;
+        var changeToRead = is_unread;
+        var parent = that.parentNode.parentNode.parentNode.parentNode;
+        var unreadDots = document.getElementsByClassName(notifID + "-myUnreadDot");
+        console.log("parent: ", parent);
+        $.post(url, { notifID: notifID, isRead: changeToRead }, function (data) {
+            console.log("data: ", data);
+            if (data.success == true) { 
+                if (data.is_Read == true) { 
+                    that.textContent = "Mark as Unread";
+                    that.dataset.is_unread = false;
+                    parent.classList.remove("unread-notif");
 
-    // Output the result
-    console.log(formattedTimeAgo);
+                    for (var i = 0; i < unreadDots.length; i++) {
+                        unreadDots[i].classList.remove("unread-dot");
+                    }
+                    
+                }
+                else {
+                    that.textContent = "Mark as Read";
+                    that.dataset.is_unread = true;
+                    parent.classList.add("unread-notif");
+                    for (var i = 0; i < unreadDots.length; i++) {
+                        unreadDots[i].classList.add("unread-dot");
+                    }
+                }
+            }
+        });
+    }
+    
 </script>
