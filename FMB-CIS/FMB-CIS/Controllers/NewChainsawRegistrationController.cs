@@ -30,7 +30,44 @@ namespace FMB_CIS.Controllers
         private IEmailSender EmailSender { get; set; }
         private IWebHostEnvironment EnvironmentHosting;
 
+        public void LogUserActivity(string entity, string userAction, string remarks, int userId = 0, string source = "Web", DateTime? apkDateTime = null)
+        {
+            try
+            {
+                if (entity.ToUpper() == "LOGOUT"
+                    && source.ToUpper() == "WEB")
+                {
+                    var fullname = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("FullName").Value);
+                    remarks = "User logged out. Username: " + fullname;
+                }
 
+                int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+                //Inserting record to UserActivityLog database
+                tbl_user_activitylog activityLog = new tbl_user_activitylog()
+                {
+                    UserId = uid,
+                    Entity = entity,
+                    UserAction = (userAction ?? ""),
+                    Remarks = (remarks ?? ""),
+                    CreatedDt = DateTime.Now.Date,
+                    CreatedTimestamp = DateTime.Now,
+                    ApkDatetime = apkDateTime,
+                    Source = source
+                };
+                _context.Add(activityLog);
+                _context.SaveChanges();
+
+                ////Inserting record to UserActivity Log file
+                //var userdata = _userRepository.TableNoTracking.Where(x => x.Id == (_userSession.UserId != 0 ? _userSession.UserId : userId))
+                //              .Select(y => y.UserCode + " (" + y.FirstName + ")").FirstOrDefault();
+                //Utility.Logger.UserLog("The " + userdata + " In Module " + entity + "-" + (userAction ?? "") + ":" + (remarks ?? ""));
+
+
+            }
+            catch (Exception ex)
+            {
+            }
+        }
         public NewChainsawRegistrationController(IConfiguration configuration, LocalContext context, IEmailSender emailSender, IWebHostEnvironment _environment)
         {
             this._configuration = configuration;
