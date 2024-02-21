@@ -171,7 +171,6 @@
         var unreadDots = document.getElementsByClassName(notifID + "-myUnreadDot");
         console.log("parent: ", parent);
         $.post(url, { notifID: notifID, isRead: changeToRead }, function (data) {
-            console.log("data: ", data);
             if (data.success == true) { 
                 if (data.is_Read == true) { 
                     that.textContent = "Mark as Unread";
@@ -181,7 +180,17 @@
                     for (var i = 0; i < unreadDots.length; i++) {
                         unreadDots[i].classList.remove("unread-dot");
                     }
-                    
+                    //Change Number in Badge
+                    $.get("/Notifications/UnreadNotifCounter", function (data2) {
+                        if (data2.unreadNotifsCount != 0) {
+                            $('#notifCount').show();
+                            document.getElementById('notifCount').innerHTML = data2.unreadNotifsCount;
+                        }
+                        else {
+                            $('#notifCount').hide();
+                        }
+
+                    });
                 }
                 else {
                     that.textContent = "Mark as Read";
@@ -190,6 +199,17 @@
                     for (var i = 0; i < unreadDots.length; i++) {
                         unreadDots[i].classList.add("unread-dot");
                     }
+                    //Change Number in Badge
+                    $.get("/Notifications/UnreadNotifCounter", function (data2) {
+                        if (data2 != 0) {
+                            $('#notifCount').show();
+                            document.getElementById('notifCount').innerHTML = data2.unreadNotifsCount;
+                        }
+                        else {
+                            $('#notifCount').hide();
+                        }
+                        
+                    });
                 }
             }
         });
