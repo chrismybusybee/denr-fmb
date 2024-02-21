@@ -1054,7 +1054,7 @@ a {
         width: 100% !important;
     }
 }
-@media (max-width: 768px) {
+@media (max-width: 1080px) {
     .hide-on-mobile {
         display: none !important;
     }
