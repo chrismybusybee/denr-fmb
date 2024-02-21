@@ -9,7 +9,24 @@
     <div id="Notifications">
         <div class="box rounded bg-white mb-0">
             <div class="box-body p-0">
-                @foreach (var item in Model.tbl_Notifications)
+                @foreach (var item in Model.userNotifications)
+                {
+                    var unreadclass = item.is_read == false ? "unread-notif" : "";
+                    var unreadDot = item.is_read == false ? "unread-dot" : "";
+                    <div class="p-3 d-flex justify-content-between border-bottom @unreadclass notifDiv">
+                        <div class="mr-3">
+                            <div class="fw-bold">@item.notification_title</div>
+                            <div class="small">@item.notification_content</div>
+                        </div>
+                        <div class="ml-auto mb-auto" data-is_unread="@(item.is_read)!" onload="autoMarkRead(this, @item.id)">
+                            <span class="@unreadDot @item.id-myUnreadDot"></span>
+                            <div class="text-right text-muted pt-1">
+                                @DateTimeAgo.TimeAgo(Convert.ToDateTime(item.date_notified))
+                            </div>
+                        </div>
+                    </div>
+                }
+                @* @foreach (var item in Model.userNotifications)
                 {
                     <div class="p-3 d-flex justify-content-between border-bottom text-dark">
                         <div class="mr-3">
@@ -23,7 +40,7 @@
                             </div>
                         </span>
                     </div>
-                }
+                } *@
             </div>
             <div class="text-center py-2">
                 <a href="/Notifications">See all Notifications</a>
@@ -34,3 +51,16 @@
 </div>
 
 
+<style>
+    .unread-notif {
+        background-color: #F3F3F3;
+    }
+
+    .unread-dot {
+        height: 10px;
+        width: 10px;
+        background-color: #282D6D;
+        border-radius: 50%;
+        display: inline-block;
+    }
+</style>

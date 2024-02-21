@@ -106,6 +106,27 @@
     #RecentNotifPartial {
         width:25rem;
     }
+
+    /* NOTIF COUNT BADGE */
+    .notif-count {
+        padding: 3px 5px 2px;
+        position: absolute;
+        top: 2px;
+        right: 5px;
+        display: inline-block;
+        min-width: 10px;
+        font-size: 12px;
+        font-weight: bold;
+        color: #ffffff;
+        line-height: 1;
+        vertical-align: baseline;
+        white-space: nowrap;
+        text-align: center;
+        border-radius: 10px;
+        background-color: #db5565;
+        display: none;
+    }
+
 </style>
 <html lang="en">
 <head>
@@ -171,6 +192,7 @@
                                     <i class="fa fa-bell-o" style="font-size: 20px; float: left; color: white">
                                     </i>
                                 </a>
+                                <span class="notif-count" id="notifCount"></span>
                                 <div id="RecentNotifPartial" class="dropdown-menu dropdown-menu-left pull-right" role="menu">
                                 </div>
                             </div>
@@ -1054,6 +1076,17 @@
             document.getElementById('profilePhotoMainPage').src = data;
         });
 
+        $.get("/Notifications/UnreadNotifCounter", function (data) {
+            if (data.unreadNotifsCount != 0) {
+                $('#notifCount').show();
+                document.getElementById('notifCount').innerHTML = data.unreadNotifsCount;
+            }
+            else {
+                $('#notifCount').hide();
+            }
+
+        });
+
         $.fn.dataTable.moment('DD/MM/YYYY h:mm:ss a');
 
         $('.dataTable').DataTable({
@@ -1094,6 +1127,7 @@
             }
         });
 
+        $("#btnAdd").appendTo(".dt-buttons");
 
 
         $("#main-menu-toggle, #main-menu-toggle-2").on("click", function(){
