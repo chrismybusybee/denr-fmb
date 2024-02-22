@@ -332,7 +332,13 @@ namespace FMB_CIS.Controllers
                                              join pT in _context.tbl_permit_type on a.tbl_application_type_id equals pT.id
                                              join pS in _context.tbl_permit_status on a.status equals pS.id
                                              where a.tbl_user_id == userID
-                                             select new ApplicationModel { id = a.id, application_type = appt.name, permit_type = pT.name, permit_status = pS.status };
+                                             select new ApplicationModel { 
+                                                 id = a.id, 
+                                                 application_type = appt.name, 
+                                                 permit_type = pT.name, 
+                                                 permit_status = pS.status,
+                                                 application = a
+                                             };
                         mymodel.tbl_Chainsaws = ChainsawOwnedList;
                         mymodel.applicationModels = applicationMod;
 
