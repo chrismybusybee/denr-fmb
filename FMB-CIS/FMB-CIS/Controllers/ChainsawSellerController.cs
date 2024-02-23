@@ -1328,6 +1328,8 @@ namespace FMB_CIS.Controllers
                                      join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code } 
                                      where usr.tbl_region_id == userRegion
                                      //where a.tbl_user_id == userID
+                                     let current_step_count = (int)Math.Ceiling((decimal)a.status / 2) // Soon be dynamic
+                                     let current_max_count = usr.tbl_region_id == 13 ? 6 : 10 // Soon be dynamic 
                                      select new ApplicantListViewModel 
                                      {
                                          ReferenceNo = a.ReferenceNo,
@@ -1340,44 +1342,44 @@ namespace FMB_CIS.Controllers
                                          address = usr.street_address,
                                          application_type = appt.name, 
                                          permit_type = pT.name,
-                                          permit_status = pS.status,
-                                          permit_statuses = wfs.name,
+                                         permit_statuses = wfs.name,
                                          tbl_user_id = (int)usr.id,
                                          date_due_for_officers = a.date_due_for_officers,
-                                         isRead = false,
-                                         currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
-                                         currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic        
+                                         currentStepCount = current_step_count,
+                                         currentMaxCount = current_max_count,
+                                         isRead = _context.tbl_application_read.Any(r => r.tbl_application_id == a.id && r.tbl_user_id == loggedUserID && r.is_read),
+                                         currentPercentage = (current_step_count * 100 / current_max_count)
                                      }).ToList();
 
-                bool isReadExist;
-                bool isAppRead;
+                //bool isReadExist;
+                //bool isAppRead;
 
-                for (int i = 0; i < applicationMod.Count(); i++)
-                {
-                    isReadExist = _context.tbl_application_read.Any(r => r.tbl_application_id == applicationMod[i].id && r.tbl_user_id == loggedUserID);
-                    if (isReadExist)
-                    {
-                        isAppRead = _context.tbl_application_read.Where(r => r.tbl_application_id == applicationMod[i].id && r.tbl_user_id == loggedUserID).Select(r => r.is_read).FirstOrDefault();
-                        if (isAppRead)
-                        {
-                            //true
-                            applicationMod[i].isRead = true;
-                        }
-                        else
-                        {
-                            //false
-                            applicationMod[i].isRead = false;
-                        }
-                    }
-                    else
-                    {
-                        //false
-                        applicationMod[i].isRead = false;
-                    }
-                }
-                foreach(ApplicantListViewModel mod in applicationMod) {
-                    mod.currentPercentage = (mod.currentStepCount * 100 / mod.currentMaxCount);
-                }
+                //for (int i = 0; i < applicationMod.Count(); i++)
+                //{
+                //    isReadExist = _context.tbl_application_read.Any(r => r.tbl_application_id == applicationMod[i].id && r.tbl_user_id == loggedUserID);
+                //    if (isReadExist)
+                //    {
+                //        isAppRead = _context.tbl_application_read.Where(r => r.tbl_application_id == applicationMod[i].id && r.tbl_user_id == loggedUserID).Select(r => r.is_read).FirstOrDefault();
+                //        if (isAppRead)
+                //        {
+                //            //true
+                //            applicationMod[i].isRead = true;
+                //        }
+                //        else
+                //        {
+                //            //false
+                //            applicationMod[i].isRead = false;
+                //        }
+                //    }
+                //    else
+                //    {
+                //        //false
+                //        applicationMod[i].isRead = false;
+                //    }
+                //}
+                //foreach(ApplicantListViewModel mod in applicationMod) {
+                //    mod.currentPercentage = (mod.currentStepCount * 100 / mod.currentMaxCount);
+                //}
                 mymodel.applicantListViewModels = applicationMod;
 
                 return View(mymodel);
