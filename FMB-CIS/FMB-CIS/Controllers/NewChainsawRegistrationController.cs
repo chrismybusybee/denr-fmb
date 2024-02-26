@@ -94,6 +94,11 @@ namespace FMB_CIS.Controllers
             //End for required documents
 
             ViewModel model = new ViewModel();
+
+            // Get Brands for DropdownList
+            var brandList = _context.tbl_brands.Where(c => c.is_active == true).ToList();
+            ViewBag.brandList = brandList;
+
             //Document Checklist
             var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == 13 && c.is_active == true).ToList();
             model.tbl_Document_Checklist = myChecklist;
