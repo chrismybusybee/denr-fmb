@@ -24,7 +24,7 @@
         opacity: .5;
     }
 
-    .c-form-container{
+    .c-form-container {
         width: 728px;
         padding-left: 10px;
         padding-top: 5px;
@@ -32,8 +32,8 @@
 
 
     button {
-  cursor: pointer;
-}
+        cursor: pointer;
+    }
 
     a {
         cursor: pointer;
@@ -61,7 +61,7 @@
         font-size: 1rem;
         border-radius: .25rem;
         transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-        color: #fff;        
+        color: #fff;
         background-color: #14984a;
         border-color: #14984a;
         cursor: pointer;
@@ -104,7 +104,7 @@
     }
 
     #RecentNotifPartial {
-        width:25rem;
+        width: 25rem;
     }
 
     /* NOTIF COUNT BADGE */
@@ -152,16 +152,16 @@
 
 <body id="body" class="show-datatables-headers">
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
-  <symbol id="check-circle-fill" viewBox="0 0 16 16">
-    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-  </symbol>
-  <symbol id="info-fill" viewBox="0 0 16 16">
-    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-  </symbol>
-  <symbol id="exclamation-triangle-fill" viewBox="0 0 16 16">
-    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-  </symbol>
-</svg>
+        <symbol id="check-circle-fill" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+        </symbol>
+        <symbol id="info-fill" viewBox="0 0 16 16">
+            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+        </symbol>
+        <symbol id="exclamation-triangle-fill" viewBox="0 0 16 16">
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+        </symbol>
+    </svg>
     <div id="header">
         <div id="header-pre-container">
             <div class="logo-title">
@@ -176,7 +176,7 @@
         <div id="header-top-container">
             <div class="row h-100 d-flex align-items-center ps-2 ms-2 pe-1 me-3">
                 @*<div class="col-md-1">
-                    <span id="toggle-btn" class="cursor-pointer" title="toggle menu"><i data-feather="align-justify"></i></span>
+                <span id="toggle-btn" class="cursor-pointer" title="toggle menu"><i data-feather="align-justify"></i></span>
                 </div>*@
                 <div id="main-menu-toggle" class="c-menu-burger c-menu-burger-close">
                     <span class="c-menu-line"></span>
@@ -209,13 +209,13 @@
                     </div>
                     <div class="c-dropdown-content-container">
                         <div class="c-dropdown-content">
-                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_profile"))
-                        {
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_profile"))
+                            {
                                 <a href="@Url.Action("Index", "ProfileManagement")" class="d-flex gap-2 text-decoration-none fs-6">
                                     <span>Manage Profile</span>
                                 </a>
-                        }
-                        @Html.ActionLink("Logout", "Signout", "Home", new { area = "" }, new { @class = "text-decoration-none" })
+                            }
+                            @Html.ActionLink("Logout", "Signout", "Home", new { area = "" }, new { @class = "text-decoration-none" })
                         </div>
                     </div>
                 </div>
@@ -240,24 +240,24 @@
                     display: block !important;
                 }
 
-            .c-dropdown-content-container .c-dropdown-content {
-                background-color: #f8f8f8;
-                min-width: 160px;
-                padding: 12px 12px;
-                z-index: 1;
-                border: solid 1px #EEEEEE;
-            }
+                .c-dropdown-content-container .c-dropdown-content {
+                    background-color: #f8f8f8;
+                    min-width: 160px;
+                    padding: 12px 12px;
+                    z-index: 1;
+                    border: solid 1px #EEEEEE;
+                }
 
                     .c-dropdown-content-container .c-dropdown-content a {
-                display: inline-block;
-                padding-bottom: 24px !important;
-                /* color: #14984a; */
-                font-weight: bolder;
-                }
+                        display: inline-block;
+                        padding-bottom: 24px !important;
+                        /* color: #14984a; */
+                        font-weight: bolder;
+                    }
 
                         .c-dropdown-content-container .c-dropdown-content a:last-child {
-                    padding-bottom: 0 !important;
-                }
+                            padding-bottom: 0 !important;
+                        }
 
             .top-user-container:hover .c-dropdown-content-container {
                 display: block;
@@ -268,7 +268,7 @@
             <div class="ps-4 ms-1 py-2">
                 <h4>@ViewBag.Title</h4>
                 <div class="small fw-bold d-flex gap-3">
-                    <span>Main</span> 
+                    <span>Main</span>
                     <span class="d-flex gap-3">
                         <span>&rsaquo;</span>
                         <span>@ViewBag.Title</span>
@@ -282,19 +282,19 @@
             <div class="side-bar-header w-100 p-2">
                 <div class="row">
                     <div class="logo-title">
-                    <div id="systemImg">
-                        <img src="~/assets/images/logo-only.png" />
-                    </div>
-                    <div>
-                        <span id="systemTitle">CHAINSAW INFORMATION SYSTEM (CIS)</span>
-                    </div>
+                        <div id="systemImg">
+                            <img src="~/assets/images/logo-only.png" />
+                        </div>
+                        <div>
+                            <span id="systemTitle">CHAINSAW INFORMATION SYSTEM (CIS)</span>
+                        </div>
                     </div>
                     <div id="menu-items">
-                <div id="main-menu-toggle-2" class="c-menu-burger c-menu-burger-close">
-                    <span class="c-menu-line"></span>
-                    <span class="c-menu-line"></span>
-                    <span class="c-menu-line"></span>
-                </div>
+                        <div id="main-menu-toggle-2" class="c-menu-burger c-menu-burger-close">
+                            <span class="c-menu-line"></span>
+                            <span class="c-menu-line"></span>
+                            <span class="c-menu-line"></span>
+                        </div>
                         <ul class="list-unstyled text-secondary fw-bold">
                             @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_dashboard"))
                             {
@@ -306,111 +306,111 @@
                                         <span>Dashboard</span>
                                     </a>
                                 </li>
-                            } 
+                            }
                             @* @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_applications"))//ViewBag.UserType.Contains("DENR") == false
                             {
-                                <li id="applicationMenuItem">
-                                    <a href="#" id="applicationSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
-                                        <div>
-                                            <img src="~/assets/images/menu-icons/application.png" />
-                                        </div>
-                                        <span>Manage Applications</span>
-                                    </a>
-                                    
-                                    <ul id="authorityToLeaseDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
-                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_authority_to_lease"))//ViewBag.UserType.Contains("Owner") == true
-                                        {
-                                            <li id="authorityToLease" class="mb-3">
-                                                <a href="@Url.Action("LeasePermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
-                                                    <div>
-                                                        <img src="~/assets/images/menu-icons/line.png" />
-                                                    </div>
-                                                    <span>Authority to Lease</span>
-                                                </a>
-                                            </li>
-                                        }
-                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_authority_to_rent"))//ViewBag.UserType.Contains("Owner") == true
-                                        {
-                                        <li id="authorityToRent" class="mb-3">
-                                                <a href="@Url.Action("RentPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
-                                                        <div>
-                                                            <img src="~/assets/images/menu-icons/line.png" />
-                                                        </div>
-                                                        <span>Authority to Rent</span>
-                                                    </a>
-                                            </li>
-                                        }
-                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_authority_to_lend"))//ViewBag.UserType.Contains("Owner") == true
-                                        {
-                                                <li id="authorityToLend" class="mb-3">
-                                                <a href="@Url.Action("LendPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
-                                                        <div>
-                                                            <img src="~/assets/images/menu-icons/line.png" />
-                                                        </div>
-                                                        <span>Authority to Lend</span>
-                                                    </a>
-                                            </li>
-                                        }
-                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_certification_of_registration"))//ViewBag.UserType.Contains("Owner") == true
-                                        {
-                                                <li id="certificationOfRegistration" class="mb-3">
-                                                <a href="@Url.Action("RegistrationPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
-                                                        <div>
-                                                            <img src="~/assets/images/menu-icons/line.png" />
-                                                        </div>
-                                                        <span>Certification of Registration</span>
-                                                    </a>
-                                            </li>
-                                        }
-                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_permit_to_resell"))//ViewBag.UserType.Contains("Owner") == true
-                                        {
-                                                <li id="permitToResellTransferOwnership" class="mb-3">
-                                                <a href="@Url.Action("ResellPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
-                                                        <div>
-                                                            <img src="~/assets/images/menu-icons/line.png" />
-                                                        </div>
-                                                        <span>Permit to Resell/Transfer Ownership</span>
-                                                    </a>
-                                                </li>
-                                            }
+                            <li id="applicationMenuItem">
+                            <a href="#" id="applicationSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
+                            <div>
+                            <img src="~/assets/images/menu-icons/application.png" />
+                            </div>
+                            <span>Manage Applications</span>
+                            </a>
 
-                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_permit_to_sell"))//ViewBag.UserType.Contains("Seller") == true
-                                            {
-                                                <li id="permitToSell" class="mb-3">
-                                                    <a href="@Url.Action("SellPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
-                                                        <div>
-                                                            <img src="~/assets/images/menu-icons/line.png" />
-                                                        </div>
-                                                        <span>Permit to Sell</span>
-                                                    </a>
-                                                </li>
-                                        }
-                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_permit_to_purchase"))//ViewBag.UserType.Contains("Seller") == true
-                                        {
-                                                <li id="permitToPurchase" class="mb-3">
-                                                    <a href="@Url.Action("PurchasePermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
-                                                        <div>
-                                                            <img src="~/assets/images/menu-icons/line.png" />
-                                                        </div>
-                                                        <span>Permit to Purchase</span>
-                                                    </a>
-                                                </li>
-                                            }
-                                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_permit_to_import"))//ViewBag.UserType.Contains("Importer") == true
-                                            {
-                                                <li id="permitToImport" class="mb-3">
-                                                    <a href="@Url.Action("ImportPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
-                                                        <div>
-                                                            <img src="~/assets/images/menu-icons/line.png" />
-                                                        </div>
-                                                        <span>Permit to Import</span>
-                                                    </a>
-                                                </li>
-                                            }
-                                        </ul>
-                                </li>
+                            <ul id="authorityToLeaseDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_authority_to_lease"))//ViewBag.UserType.Contains("Owner") == true
+                            {
+                            <li id="authorityToLease" class="mb-3">
+                            <a href="@Url.Action("LeasePermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
+                            <div>
+                            <img src="~/assets/images/menu-icons/line.png" />
+                            </div>
+                            <span>Authority to Lease</span>
+                            </a>
+                            </li>
+                            }
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_authority_to_rent"))//ViewBag.UserType.Contains("Owner") == true
+                            {
+                            <li id="authorityToRent" class="mb-3">
+                            <a href="@Url.Action("RentPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
+                            <div>
+                            <img src="~/assets/images/menu-icons/line.png" />
+                            </div>
+                            <span>Authority to Rent</span>
+                            </a>
+                            </li>
+                            }
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_authority_to_lend"))//ViewBag.UserType.Contains("Owner") == true
+                            {
+                            <li id="authorityToLend" class="mb-3">
+                            <a href="@Url.Action("LendPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
+                            <div>
+                            <img src="~/assets/images/menu-icons/line.png" />
+                            </div>
+                            <span>Authority to Lend</span>
+                            </a>
+                            </li>
+                            }
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_certification_of_registration"))//ViewBag.UserType.Contains("Owner") == true
+                            {
+                            <li id="certificationOfRegistration" class="mb-3">
+                            <a href="@Url.Action("RegistrationPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
+                            <div>
+                            <img src="~/assets/images/menu-icons/line.png" />
+                            </div>
+                            <span>Certification of Registration</span>
+                            </a>
+                            </li>
+                            }
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_permit_to_resell"))//ViewBag.UserType.Contains("Owner") == true
+                            {
+                            <li id="permitToResellTransferOwnership" class="mb-3">
+                            <a href="@Url.Action("ResellPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
+                            <div>
+                            <img src="~/assets/images/menu-icons/line.png" />
+                            </div>
+                            <span>Permit to Resell/Transfer Ownership</span>
+                            </a>
+                            </li>
+                            }
+
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_permit_to_sell"))//ViewBag.UserType.Contains("Seller") == true
+                            {
+                            <li id="permitToSell" class="mb-3">
+                            <a href="@Url.Action("SellPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
+                            <div>
+                            <img src="~/assets/images/menu-icons/line.png" />
+                            </div>
+                            <span>Permit to Sell</span>
+                            </a>
+                            </li>
+                            }
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_permit_to_purchase"))//ViewBag.UserType.Contains("Seller") == true
+                            {
+                            <li id="permitToPurchase" class="mb-3">
+                            <a href="@Url.Action("PurchasePermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
+                            <div>
+                            <img src="~/assets/images/menu-icons/line.png" />
+                            </div>
+                            <span>Permit to Purchase</span>
+                            </a>
+                            </li>
+                            }
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_permit_to_import"))//ViewBag.UserType.Contains("Importer") == true
+                            {
+                            <li id="permitToImport" class="mb-3">
+                            <a href="@Url.Action("ImportPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
+                            <div>
+                            <img src="~/assets/images/menu-icons/line.png" />
+                            </div>
+                            <span>Permit to Import</span>
+                            </a>
+                            </li>
+                            }
+                            </ul>
+                            </li>
                             } *@
-                            
+
                             @*@if ()*@
                             @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_import_applications"))// || usrRoleList.Contains("Chainsaw Importer")
                             {
@@ -440,13 +440,13 @@
                             @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_sell_applications"))// || usrRoleList.Contains("Chainsaw Importer")
                             {
                                 <li id="chainsawSellerMenuItem">
-                                        <a href="#" id="chainsawSellerSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
-                                            <div>
-                                                <img src="~/assets/images/menu-icons/chainsaw-seller.png" />
-                                            </div>
-                                            <span>Chainsaw Seller</span>
-                                        </a>
-                                        <ul id="chainsawSellerDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
+                                    <a href="#" id="chainsawSellerSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/chainsaw-seller.png" />
+                                        </div>
+                                        <span>Chainsaw Seller</span>
+                                    </a>
+                                    <ul id="chainsawSellerDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
                                         @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_permit_to_sell"))// || usrRoleList.Contains("Chainsaw Importer")
                                         {
                                             <li id="chainsawSellerApplication" class="my-0">
@@ -470,7 +470,7 @@
                                             </li>
                                         }
                                     </ul>
-                                </li>                                
+                                </li>
                             }
 
                             @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_own_applications"))// || usrRoleList.Contains("Chainsaw Importer")
@@ -485,14 +485,14 @@
                                     <ul id="chainsawOwnerDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
                                         @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_chainsaw_registration"))// || usrRoleList.Contains("Chainsaw Importer")
                                         {
-                                        <li id="newChainsawRegistrationMenuItem">
+                                            <li id="newChainsawRegistrationMenuItem">
                                                 <a href="@Url.Action("RegistrationPermits", "Application")" class="d-flex gap-2 text-decoration-none fs-6">
-                                                <div>
-                                                    <img src="~/assets/images/menu-icons/line.png" />
-                                                </div>
-                                                <span>Chainsaw Registration</span>
-                                            </a>
-                                        </li>
+                                                    <div>
+                                                        <img src="~/assets/images/menu-icons/line.png" />
+                                                    </div>
+                                                    <span>Chainsaw Registration</span>
+                                                </a>
+                                            </li>
                                         }
                                         @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_authority_to_lease"))//ViewBag.UserType.Contains("Owner") == true
                                         {
@@ -539,24 +539,24 @@
                                             </li>
                                         }
                                         @* @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_other_permits"))// || usrRoleList.Contains("Chainsaw Importer")
-                                        {
-                                            <li id="chainsawOwnerApplication" class="my-0">
-                                                <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
-                                                    <div>
-                                                        <img src="~/assets/images/menu-icons/line.png" />
-                                                    </div>
+                                    {
+                                    <li id="chainsawOwnerApplication" class="my-0">
+                                    <a href="@Url.Action("Index", "ChainsawOwner")" class="d-flex gap-2 text-decoration-none fs-6">
+                                    <div>
+                                    <img src="~/assets/images/menu-icons/line.png" />
+                                    </div>
 
-                                                    <span>Other Permits</span>
-                                                </a>
-                                            </li>
-                                        } *@
+                                    <span>Other Permits</span>
+                                    </a>
+                                    </li>
+                                    } *@
                                     </ul>
                                 </li>
                             }
 
                             @if (
                             AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_approve_reject_applications")
-                           @* usrRoleList.Contains("DENR CENRO")
+                            @* usrRoleList.Contains("DENR CENRO")
                             || usrRoleList.Contains("DENR Inspector")
                             || usrRoleList.Contains("DENR Regional Executive Director (RED)")
                             || usrRoleList.Contains("DENR Implementing PENRO")*@
@@ -619,29 +619,29 @@
                                 </li>
                             }
 
-                            
+
                             @* <li id="renewalMenuItem">
-                                <a href="@Url.Action("Index", "Renewal")" class="d-flex gap-2 text-decoration-none fs-6">
-                                    <div>
-                                        <img src="~/assets/images/menu-icons/renewal.png" />
-                                    </div>
-                                    <span>Renewal</span>
-                                </a>
+                            <a href="@Url.Action("Index", "Renewal")" class="d-flex gap-2 text-decoration-none fs-6">
+                            <div>
+                            <img src="~/assets/images/menu-icons/renewal.png" />
+                            </div>
+                            <span>Renewal</span>
+                            </a>
                             </li> *@
                             @* <li id="profileManagementMenuItem">
-                                <a href="@Url.Action("Index", "ProfileManagement")" class="d-flex gap-2 text-decoration-none fs-6">
-                                    <div>
-                                        <img src="~/assets/images/menu-icons/profile-management.png" />
-                                    </div>
-                                    <span>Profile Management</span>
-                                </a>
+                            <a href="@Url.Action("Index", "ProfileManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                            <div>
+                            <img src="~/assets/images/menu-icons/profile-management.png" />
+                            </div>
+                            <span>Profile Management</span>
+                            </a>
                             </li> *@
                             @* Only allow CENRO/Implementing PENRO/RED/Admin/Super Admin to access this *@
                             @* @if (ViewBag.UserType.Contains("DENR") == true) *@
-                        @*    @if (ViewBag.UserType.Contains("CENRO") == true || ViewBag.UserType.Contains("Implementing") == true || ViewBag.UserType.Contains("RED") == true || ViewBag.UserType.Contains("Administrator") == true || ViewBag.UserType.Contains("Super Admin") == true)
+                            @*    @if (ViewBag.UserType.Contains("CENRO") == true || ViewBag.UserType.Contains("Implementing") == true || ViewBag.UserType.Contains("RED") == true || ViewBag.UserType.Contains("Administrator") == true || ViewBag.UserType.Contains("Super Admin") == true)
                             {*@
-                                @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_account_management") || AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_profile"))
-                                {
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_account_management") || AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_profile"))
+                            {
                                 <li id="accountManagementMenuItem">
                                     <a href="#" id="accountManagementSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
                                         <div>
@@ -650,15 +650,16 @@
                                         <span>Account Management</span>
                                     </a>
                                     <ul id="accountManagementDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
-                                         @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_users")) {
-                                        <li id="RegisteredAccountsMenuItem">
-                                            <a href="@Url.Action("Index", "AccountManagement")" class="d-flex gap-2 text-decoration-none fs-6">
-                                                <div>
-                                                    <img src="~/assets/images/menu-icons/line.png" />
-                                                </div>
-                                                <span>Manage Users</span>
-                                            </a>
-                                        </li>
+                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_users"))
+                                        {
+                                            <li id="RegisteredAccountsMenuItem">
+                                                <a href="@Url.Action("Index", "AccountManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                    <div>
+                                                        <img src="~/assets/images/menu-icons/line.png" />
+                                                    </div>
+                                                    <span>Manage Users</span>
+                                                </a>
+                                            </li>
                                         }
                                         @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_requests"))
                                         {
@@ -674,7 +675,8 @@
                                         @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_profile"))
                                         {
                                             <li id="ManageProfileMenuItem">
-                                                <a href="@Url.Action("Index", "ProfileManagement")" class="d-flex gap-2 text-decoration-none fs-6"> @* @Url.Action("RequestToChangeAccountInfo", "AccountManagement") *@
+                                                <a href="@Url.Action("Index", "ProfileManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                    @* @Url.Action("RequestToChangeAccountInfo", "AccountManagement") *@
                                                     <div>
                                                         <img src="~/assets/images/menu-icons/line.png" />
                                                     </div>
@@ -685,52 +687,52 @@
                                     </ul>
                                 </li>
                             }
-                          @*  @if (ViewBag.UserType.Contains("Administrator") == true)
+                            @*  @if (ViewBag.UserType.Contains("Administrator") == true)
                             {*@
-                                
-                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_monitoring"))
-                                        {
-                            <li id="monitoringMenuItem">
-                                <a href="@Url.Action("Index", "Monitoring")" class="d-flex gap-2 text-decoration-none fs-6">
-                                    <div>
-                                        <img src="~/assets/images/menu-icons/monitoring.png" />
-                                    </div>
-                                    <span>Monitoring</span>
-                                </a>
-                            </li>
+
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_monitoring"))
+                            {
+                                <li id="monitoringMenuItem">
+                                    <a href="@Url.Action("Index", "Monitoring")" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/monitoring.png" />
+                                        </div>
+                                        <span>Monitoring</span>
+                                    </a>
+                                </li>
 
                                 @*@if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw")!=true)
                             {*@
                                 @* <li id="creationOfNewDenrOfficeMenuItem">
-                                    <a href="@Url.Action("Index", "CreationOfNewDenrOffice")" class="d-flex gap-2 text-decoration-none fs-6">
-                                        <div>
-                                            <img src="~/assets/images/menu-icons/creation-of-new-denr-office.png" />
-                                        </div>
-                                        <span>Creation of New DENR Office</span>
-                                    </a>
-                                </li>
-                                
-                                <li id="announcementTemplatesMenuItem">
-                                    <a href="@Url.Action("Index", "AnnouncementTemplates")" class="d-flex gap-2 text-decoration-none fs-6">
-                                        <div>
-                                            <img src="~/assets/images/menu-icons/announcement-templates.png" />
-                                        </div>
-                                        <span>Announcement Templates</span>
-                                    </a>
-                                </li>
-                                <li id="emailTemplatesMenuItem">
-                                    <a href="@Url.Action("Index", "EmailTemplates")" class="d-flex gap-2 text-decoration-none fs-6">
-                                        <div>
-                                            <img src="~/assets/images/menu-icons/email-templates.png" />
-                                        </div>
-                                        <span>Email Templates</span>
-                                    </a>
-                                </li> *@
+                            <a href="@Url.Action("Index", "CreationOfNewDenrOffice")" class="d-flex gap-2 text-decoration-none fs-6">
+                            <div>
+                            <img src="~/assets/images/menu-icons/creation-of-new-denr-office.png" />
+                            </div>
+                            <span>Creation of New DENR Office</span>
+                            </a>
+                            </li>
+
+                            <li id="announcementTemplatesMenuItem">
+                            <a href="@Url.Action("Index", "AnnouncementTemplates")" class="d-flex gap-2 text-decoration-none fs-6">
+                            <div>
+                            <img src="~/assets/images/menu-icons/announcement-templates.png" />
+                            </div>
+                            <span>Announcement Templates</span>
+                            </a>
+                            </li>
+                            <li id="emailTemplatesMenuItem">
+                            <a href="@Url.Action("Index", "EmailTemplates")" class="d-flex gap-2 text-decoration-none fs-6">
+                            <div>
+                            <img src="~/assets/images/menu-icons/email-templates.png" />
+                            </div>
+                            <span>Email Templates</span>
+                            </a>
+                            </li> *@
                             }
-                        @*    @if (ViewBag.UserType.Contains("Super Admin") == true)
+                            @*    @if (ViewBag.UserType.Contains("Super Admin") == true)
                             {*@
-                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_office_management"))
-                                        {
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_office_management"))
+                            {
                                 <li id="officeManagementMenuItem">
                                     <a href="#" id="officeManagementSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
                                         <div>
@@ -741,14 +743,14 @@
                                     <ul id="officeManagementDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
                                         @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_office_types"))
                                         {
-                                        <li id="officeTypeListMenuItem">
-                                            <a href="@Url.Action("OfficeTypeList", "OfficeManagement")" class="d-flex gap-2 text-decoration-none fs-6">
-                                                <div>
-                                                    <img src="~/assets/images/menu-icons/line.png" />
-                                                </div>
-                                                <span>Manage Office Types</span>
-                                            </a>
-                                        </li>
+                                            <li id="officeTypeListMenuItem">
+                                                <a href="@Url.Action("OfficeTypeList", "OfficeManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                    <div>
+                                                        <img src="~/assets/images/menu-icons/line.png" />
+                                                    </div>
+                                                    <span>Manage Office Types</span>
+                                                </a>
+                                            </li>
                                         }
                                         @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_offices"))
                                         {
@@ -762,8 +764,8 @@
                                             </li>
                                         }
 
-                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_brands"))
-                                        { 
+@*                                         @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_brands"))
+                                        {
                                             <li id="brandListMenuItem">
                                                 <a href="@Url.Action("BrandList", "OfficeManagement")" class="d-flex gap-2 text-decoration-none fs-6">
                                                     <div>
@@ -772,30 +774,60 @@
                                                     <span>Manage Brands</span>
                                                 </a>
                                             </li>
-                                        } 
+                                        } *@
 
                                         @*            <li id="creationOfNewDenrOfficeMenuItem">
-                                            <a href="@Url.Action("Index", "CreationOfNewDenrOffice")" class="d-flex gap-2 text-decoration-none fs-6">
-                                                <div>
-                                                    <img src="~/assets/images/menu-icons/line.png" />
-                                                </div>
-                                                <span>Manage Offices (original)</span>
-                                            </a>
-                                        </li>*@
+                                    <a href="@Url.Action("Index", "CreationOfNewDenrOffice")" class="d-flex gap-2 text-decoration-none fs-6">
+                                    <div>
+                                    <img src="~/assets/images/menu-icons/line.png" />
+                                    </div>
+                                    <span>Manage Offices (original)</span>
+                                    </a>
+                                    </li>*@
                                     </ul>
                                 </li>
-                                @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_access_rights_management"))
-                                {
-                                    <li id="accessRightsManagementMenuItem">
-                                        <a href="#" id="accessRightsManagementSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
-                                            <div>
-                                                <img src="~/assets/images/menu-icons/account-management.png" />
-                                            </div>
-                                            <span>Access Rights Management</span>
-                                        </a>
-                                        <ul id="accessRightsManagementDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
-                                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_assign_access_rights"))
-                                            {
+                            }
+
+
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_brand_management"))
+                            {
+                                <li id="brandManagementMenuItem">
+                                    <a href="#" id="brandManagementSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/chainsaw-seller.png" />
+                                        </div>
+                                        <span>Brand Management</span>
+                                    </a>
+                                    <ul id="brandManagementDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
+
+                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_brands"))
+                                        {
+                                            <li id="brandListMenuItem">
+                                                <a href="@Url.Action("BrandList", "BrandManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                    <div>
+                                                        <img src="~/assets/images/menu-icons/line.png" />
+                                                    </div>
+                                                    <span>Manage Brands</span>
+                                                </a>
+                                            </li>
+                                        }
+
+                                    </ul>
+                                </li>
+                            }
+
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_access_rights_management"))
+                            {
+                                <li id="accessRightsManagementMenuItem">
+                                    <a href="#" id="accessRightsManagementSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/account-management.png" />
+                                        </div>
+                                        <span>Access Rights Management</span>
+                                    </a>
+                                    <ul id="accessRightsManagementDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
+                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_assign_access_rights"))
+                                        {
                                             <li id="assignAccessRightsListMenuItem">
                                                 <a href="@Url.Action("UserTypeAccessRightsList", "AccessRightsManagement")" class="d-flex gap-2 text-decoration-none fs-6">
                                                     <div>
@@ -804,7 +836,7 @@
                                                     <span>Assign Access Rights</span>
                                                 </a>
                                             </li>
-                                            }
+                                        }
                                         @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_access_rights"))
                                         {
                                             <li id="accessRightsListMenuItem">
@@ -814,10 +846,10 @@
                                                     </div>
                                                     <span>Manage Access Rights</span>
                                                 </a>
-                                                </li>
-                                            }
-                                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_user_types"))
-                                            {
+                                            </li>
+                                        }
+                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_user_types"))
+                                        {
                                             <li id="userTypeListMenuItem">
                                                 <a href="@Url.Action("UserTypeList", "AccessRightsManagement")" class="d-flex gap-2 text-decoration-none fs-6">
                                                     <div>
@@ -826,57 +858,58 @@
                                                     <span>Manage User Types</span>
                                                 </a>
                                             </li>
-                                            }
+                                        }
                                         @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_assign_user_types"))
-                                            {
-                                                <li id="userTypeListMenuItem">
-                                                    <a href="@Url.Action("UserTypeUserList", "AccessRightsManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                        {
+                                            <li id="userTypeListMenuItem">
+                                                <a href="@Url.Action("UserTypeUserList", "AccessRightsManagement")" class="d-flex gap-2 text-decoration-none fs-6">
                                                     <div>
                                                         <img src="~/assets/images/menu-icons/line.png" />
                                                     </div>
                                                     <span>Assign User Types</span>
                                                 </a>
-                                            </li>}
-                                        </ul>
-                                    </li>
-                                }
-
-                                @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_workflow_management"))
-                                {
-                                    <li id="workflowManagementMenuItem">
-                                        <a href="#" id="workflowManagementSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
-                                            <div>
-                                                <img src="~/assets/images/menu-icons/account-management.png" />
-                                            </div>
-                                            <span>Workflow Management</span>
-                                        </a>
-                                        <ul id="workflowManagementDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
-                                            <li id="workflowListMenuItem">
-                                                <a href="@Url.Action("WorkflowList", "WorkflowManagement")" class="d-flex gap-2 text-decoration-none fs-6">
-                                                    <div>
-                                                        <img src="~/assets/images/menu-icons/line.png" />
-                                                    </div>
-                                                    <span>Workflow Management</span>
-                                                </a>
                                             </li>
-                                        </ul>
-                                    </li>
-                                    @*}*@
-                                }
+                                        }
+                                    </ul>
+                                </li>
+                            }
 
-                                @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_announcement_management"))
-                                {
-                                    <li id="announcementTemplatesMenuItem">
-                                        <a href="@Url.Action("Index", "AnnouncementTemplates")" class="d-flex gap-2 text-decoration-none fs-6">
-                                            <div>
-                                                <img src="~/assets/images/menu-icons/announcement-templates.png" />
-                                            </div>
-                                            <span>Announcement Templates</span>
-                                        </a>
-                                    </li>
-                                }
-                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_email_management"))
-                                        {
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_workflow_management"))
+                            {
+                                <li id="workflowManagementMenuItem">
+                                    <a href="#" id="workflowManagementSubMenuItem" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/account-management.png" />
+                                        </div>
+                                        <span>Workflow Management</span>
+                                    </a>
+                                    <ul id="workflowManagementDropdown" class="list-unstyled text-secondary fw-bold ms-2 ps-2">
+                                        <li id="workflowListMenuItem">
+                                            <a href="@Url.Action("WorkflowList", "WorkflowManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                <div>
+                                                    <img src="~/assets/images/menu-icons/line.png" />
+                                                </div>
+                                                <span>Workflow Management</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                @*}*@
+                            }
+
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_announcement_management"))
+                            {
+                                <li id="announcementTemplatesMenuItem">
+                                    <a href="@Url.Action("Index", "AnnouncementTemplates")" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/announcement-templates.png" />
+                                        </div>
+                                        <span>Announcement Templates</span>
+                                    </a>
+                                </li>
+                            }
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_email_management"))
+                            {
                                 <li id="emailTemplatesMenuItem">
                                     <a href="@Url.Action("Index", "EmailTemplates")" class="d-flex gap-2 text-decoration-none fs-6">
                                         <div>
@@ -885,19 +918,19 @@
                                         <span>Email Templates</span>
                                     </a>
                                 </li>
-                                }
-                                @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_checklist_management"))
-                                {
-                                    <li id="checklistManagementMenuItem">
-                                        <a href="@Url.Action("Index", "ChecklistManagement")" class="d-flex gap-2 text-decoration-none fs-6">
-                                            <div>
-                                                <img src="~/assets/images/menu-icons/checklist-management.png" />
-                                            </div>
-                                            <span>Checklist Management</span>
-                                        </a>
-                                    </li>
-                                }
                             }
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_checklist_management"))
+                            {
+                                <li id="checklistManagementMenuItem">
+                                    <a href="@Url.Action("Index", "ChecklistManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/checklist-management.png" />
+                                        </div>
+                                        <span>Checklist Management</span>
+                                    </a>
+                                </li>
+                            }
+
                             @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_report_generation"))
                             {
                                 <li id="reportGenerationMenuItem">
@@ -1112,21 +1145,21 @@
             destroy: true,
             order: [[0, 'desc']],
             dom: 'Bfrtip',
-            buttons: ['csv', 'excel', 
-            {
-                text: 'Show Headers',
-                className:'show-datatables-header',
-                action: function ( e, dt, node, config ) {
-                    @* alert( 'Button activated' ); *@
-                }
-            }, 
-            {
-                text: 'Hide Headers',
-                className:'hide-datatables-header',
-                action: function ( e, dt, node, config ) {
-                    @* alert( 'Button activated' ); *@
-                }
-            }],
+            buttons: ['csv', 'excel',
+                {
+                    text: 'Show Headers',
+                    className: 'show-datatables-header',
+                    action: function (e, dt, node, config) {
+    @* alert( 'Button activated' ); *@
+                        }
+                },
+                {
+                    text: 'Hide Headers',
+                    className: 'hide-datatables-header',
+                    action: function (e, dt, node, config) {
+    @* alert( 'Button activated' ); *@
+                        }
+                }],
             responsive: true,
             language: {
                 search: "",
@@ -1138,7 +1171,7 @@
             destroy: true,
             order: [[0, 'desc']],
             dom: 'Bfrtip',
-            buttons: ['csv', 'excel', ],
+            buttons: ['csv', 'excel',],
             responsive: true,
             language: {
                 search: "",
@@ -1149,20 +1182,20 @@
         $("#btnAdd").appendTo(".dt-buttons");
 
 
-        $("#main-menu-toggle, #main-menu-toggle-2").on("click", function(){
+        $("#main-menu-toggle, #main-menu-toggle-2").on("click", function () {
             toggleMenu();
         });
 
-        $(".show-datatables-header").on("click", function(){
+        $(".show-datatables-header").on("click", function () {
             toggleDataTableHeader();
         });
 
-        $(".hide-datatables-header").on("click", function(){
+        $(".hide-datatables-header").on("click", function () {
             toggleDataTableHeader();
         });
 
         function toggleDataTableHeader() {
-            if($("#body").hasClass("show-datatables-headers")) {
+            if ($("#body").hasClass("show-datatables-headers")) {
                 $("#body").removeClass("show-datatables-headers");
             }
             else {
@@ -1171,7 +1204,7 @@
         }
 
         function toggleMenu() {
-            if($("#body").hasClass("menu-toggled")) {
+            if ($("#body").hasClass("menu-toggled")) {
                 $("#body").removeClass("menu-toggled");
             }
             else {
@@ -1180,18 +1213,18 @@
         }
 
 
-           // table.clear();
-           // table.destroy();
-            // var table = $.fn.dataTable.isDataTable('#applicationTable');
-            //table.clear();
-            //table.destroy();
+        // table.clear();
+        // table.destroy();
+        // var table = $.fn.dataTable.isDataTable('#applicationTable');
+        //table.clear();
+        //table.destroy();
 
-            //var table = $('#applicationTable').DataTable({
-            //    order: [[0, 'desc']],
-            //    dom: 'Bfartip',
-            //    buttons: ['csv']
-            //});
-        
+        //var table = $('#applicationTable').DataTable({
+        //    order: [[0, 'desc']],
+        //    dom: 'Bfartip',
+        //    buttons: ['csv']
+        //});
+
 
 
         function toggleDropdown(menuItem, dropdown) {
@@ -1226,6 +1259,8 @@
         setupDropdown("accountManagementSubMenuItem", "accountManagementDropdown");
 
         setupDropdown("officeManagementSubMenuItem", "officeManagementDropdown");
+
+        setupDropdown("brandManagementSubMenuItem", "brandManagementDropdown");
 
         setupDropdown("accessRightsManagementSubMenuItem", "accessRightsManagementDropdown");
 
@@ -1277,7 +1312,7 @@
             "/AccountManagement/EditAccount": "accountManagementMenuItem",
             "/OfficeManagement/OfficeList": "officeListMenuItem",
             "/OfficeManagement/OfficeTypeList": "officeTypeListMenuItem",
-            "/OfficeManagement/BrandList": "brandListMenuItem",
+            "/BrandManagement/BrandList": "brandListMenuItem",
             "/AccessRightsManagement/UserTypeList": "userTypeListMenuItem",
             "/AccessRightsManagement/AccessRightsList": "accessRightsListMenuItem",
             "/AccessRightsManagement/UserTypeAccessRightsList": "assignAccessRightsListMenuItem",
@@ -1307,7 +1342,7 @@
             setActiveMenuItem(storedActiveMenuItem);
         }
 
-               
+
         // toggle filter
         //var asideElement = $("#side-bar");
 
@@ -1361,7 +1396,7 @@
         //}
     });
 
-    function loadRecentNotif(){
+    function loadRecentNotif() {
         $('#RecentNotifPartial').load('/Notifications/GetRecentNotificationsForBell', function (data) {
 
         });

@@ -1,0 +1,50 @@
+﻿@*@model BrandCreateViewModel*@
+<div class="modal modal-sheet fade  bg-body-secondary p-4 py-md-5" id="createBrandModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header p-5 pb-4 border-bottom-0">
+                <h1 class="fw-bold mb-0 fs-2">Create New Brand</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body p-5 pt-0">
+                <form class="" id="BrandCreateForm" role="form" method="post">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-3" id="brandName" placeholder="" />
+                        <label for="brandName">Brand Name</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-3" id="brandDescription" placeholder="" />
+                        <label for="brandDescription">Brand Description</label>
+                    </div>
+                    <button id="btnCreate" class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="button">Create</button>
+                    <small class="text-body-secondary">By clicking Create, a brand will be registered on the system.</small>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#cancelBtn").click(function () {
+        closeModal();
+    });
+
+    $("#btnCreate").click(function () {
+        let parameters = {
+            name: document.getElementById("brandName").value,
+            description: document.getElementById("brandDescription").value
+        };
+        $.post("/BrandManagement/BrandCreate", parameters, function (data) {
+            // NOTE: TO DO better way of calling callback function from parent
+            $('#brandListPartialContainer').load('/BrandManagement/BrandListPartialView');
+            closeModal();
+        });
+    });
+
+    function closeModal() {
+        $("#createBrandModal").modal("hide");
+        let elem = document.querySelector('#createBrandModal');
+        elem.parentNode.removeChild(elem);
+    }
+</script>               
