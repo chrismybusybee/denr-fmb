@@ -28,7 +28,11 @@
                 <p class="text-muted mt-2 mb-0">
                     @(item.tbl_notification_type_id == 1
                         ? "Notified User: " + item.notified_user_name
-                        : "Notified User Type: " + item.notified_user_type_name)
+                        : item.tbl_notification_type_id == 2
+                        ? "Notified User Type: " + item.notified_user_type_name
+                        : item.tbl_notification_type_id == 3
+                        ? "Notified all users"
+                        : "")
                 </p>
                 <p class="text-muted mt-0 mb-1">Notified at @Html.DisplayFor(modelItem => item.date_notified)</p>
                 <div class="text-right text-muted mt-1 mb-2">

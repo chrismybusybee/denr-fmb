@@ -86,7 +86,8 @@ namespace FMB_CIS.Controllers
             //    .ToList();
             var combinedNotifs = _context.tbl_notifications
                 .Where(n => (n.notified_user_id == loggedUserID && n.is_active && currentDateAndTimeNow >= n.date_notified)
-                || (myUserTypes.Contains((int)n.notified_user_type) && n.is_active && currentDateAndTimeNow >= n.date_notified))
+                || (myUserTypes.Contains((int)n.notified_user_type) && n.is_active && currentDateAndTimeNow >= n.date_notified)
+                || (n.tbl_notification_type_id == 3 && n.is_active && currentDateAndTimeNow >= n.date_notified))
                 .OrderByDescending(n => n.date_notified)
                 .GroupJoin(
                 _context.tbl_notification_read
@@ -180,7 +181,8 @@ namespace FMB_CIS.Controllers
 
             var combinedNotifs = _context.tbl_notifications
                 .Where(n => (n.notified_user_id == loggedUserID && n.is_active && currentDateAndTimeNow >= n.date_notified)
-                || (myUserTypes.Contains((int)n.notified_user_type) && n.is_active && currentDateAndTimeNow >= n.date_notified))
+                || (myUserTypes.Contains((int)n.notified_user_type) && n.is_active && currentDateAndTimeNow >= n.date_notified)
+                || (n.tbl_notification_type_id == 3 && n.is_active && currentDateAndTimeNow >= n.date_notified))
                 .OrderByDescending(n => n.date_notified)
                 .GroupJoin(
                 _context.tbl_notification_read
@@ -284,7 +286,8 @@ namespace FMB_CIS.Controllers
 
                 var countUnreadNotifs = _context.tbl_notifications
                 .Where(n => (n.notified_user_id == loggedUserID && n.is_active && currentDateAndTimeNow >= n.date_notified)
-                || (myUserTypes.Contains((int)n.notified_user_type) && n.is_active && currentDateAndTimeNow >= n.date_notified))
+                || (myUserTypes.Contains((int)n.notified_user_type) && n.is_active && currentDateAndTimeNow >= n.date_notified)
+                || (n.tbl_notification_type_id == 3 && n.is_active && currentDateAndTimeNow >= n.date_notified))
                 .OrderByDescending(n => n.date_notified)
                 .GroupJoin(
                 _context.tbl_notification_read
