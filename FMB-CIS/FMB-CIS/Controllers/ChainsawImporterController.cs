@@ -102,6 +102,10 @@ namespace FMB_CIS.Controllers
             bool? usrStatus = _context.tbl_user.Where(u => u.id == uid).Select(u => u.status).SingleOrDefault();
             ViewModel model = new ViewModel();
 
+            // Get Brands for DropdownList
+            var brandList = _context.tbl_brands.Where(c=> c.is_active == true).ToList();
+            ViewBag.brandList = brandList;
+
             model.tbl_Application_Group = new List<tbl_application_group>();
             //Get list of required documents from tbl_announcement
             var requirements = _context.tbl_announcement.Where(a => a.id == 2).FirstOrDefault(); // id = 2 for Permit to Import Requirements

@@ -97,6 +97,11 @@ namespace FMB_CIS.Controllers
             bool? usrStatus = _context.tbl_user.Where(u => u.id == uid).Select(u => u.status).SingleOrDefault();
             //Get list of required documents from tbl_announcement
             ViewModel model = new ViewModel();
+
+            // Get Brands for DropdownList
+            var brandList = _context.tbl_brands.Where(c => c.is_active == true).ToList();
+            ViewBag.brandList = brandList;
+
             //Document Checklist
             var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == 3 && c.is_active == true).ToList();
             model.tbl_Document_Checklist = myChecklist;
@@ -307,6 +312,11 @@ namespace FMB_CIS.Controllers
             //End for required documents
 
             ViewModel model = new ViewModel();
+
+            // Get Brands for DropdownList
+            var brandList = _context.tbl_brands.Where(c => c.is_active == true).ToList();
+            ViewBag.brandList = brandList;
+
             //Document Checklist
             var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == 2 && c.is_active == true).ToList();
             model.tbl_Document_Checklist = myChecklist;

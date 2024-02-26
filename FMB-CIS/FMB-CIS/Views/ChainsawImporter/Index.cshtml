@@ -1,8 +1,10 @@
 ﻿@using System.Security.Claims;
+@using System.Collections
 @model FMB_CIS.Models.ViewModel
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "New Chainsaw Import Permit Application";
+
 }
 
 <!-- Selectize -->
@@ -622,11 +624,7 @@
     <div class="row">
     <div class="col-md-4 mb-3">
         <div class="form-floating">
-                <select id="brand" class="form-select" >
-                        <option value="stihl">Stilh</option>
-                        <option value="makita">Makita</option>
-                        <option value="hitachi">Hitachi</option>
-                </select>
+            @Html.DropDownList("brandList", new SelectList(ViewBag.brandList, "id", "name"), new {@class="form-control"})
             <label class="form-label">Brand</label>
         </div>
     </div>

@@ -277,7 +277,7 @@
             </div>
         </div>
     </div>
-    <div id="side-bar">
+    <div id="side-bar" class="overflow-auto">
         <div class="side-bar-container">
             <div class="side-bar-header w-100 p-2">
                 <div class="row">
@@ -761,6 +761,19 @@
                                                 </a>
                                             </li>
                                         }
+
+                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_brands"))
+                                        { 
+                                            <li id="brandListMenuItem">
+                                                <a href="@Url.Action("BrandList", "OfficeManagement")" class="d-flex gap-2 text-decoration-none fs-6">
+                                                    <div>
+                                                        <img src="~/assets/images/menu-icons/line.png" />
+                                                    </div>
+                                                    <span>Manage Brands</span>
+                                                </a>
+                                            </li>
+                                        } 
+
                                         @*            <li id="creationOfNewDenrOfficeMenuItem">
                                             <a href="@Url.Action("Index", "CreationOfNewDenrOffice")" class="d-flex gap-2 text-decoration-none fs-6">
                                                 <div>
@@ -959,6 +972,12 @@
     else if (currentUrl.Contains("CreationOfNewDenrOffice"))
     {
         <partial name="~/Views/Modals/CreationOfNewDenrOfficeModal.cshtml" />
+    }
+    else if (currentUrl.Contains("BrandList"))
+    {
+        <div id="brandCreateModalContainer"></div>
+        <div id="brandUpdateModalContainer"></div>
+        <div id="brandDeleteModalContainer"></div>
     }
     else if (currentUrl.Contains("OfficeTypeList"))
     {
@@ -1258,6 +1277,7 @@
             "/AccountManagement/EditAccount": "accountManagementMenuItem",
             "/OfficeManagement/OfficeList": "officeListMenuItem",
             "/OfficeManagement/OfficeTypeList": "officeTypeListMenuItem",
+            "/OfficeManagement/BrandList": "brandListMenuItem",
             "/AccessRightsManagement/UserTypeList": "userTypeListMenuItem",
             "/AccessRightsManagement/AccessRightsList": "accessRightsListMenuItem",
             "/AccessRightsManagement/UserTypeAccessRightsList": "assignAccessRightsListMenuItem",

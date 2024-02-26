@@ -85,6 +85,11 @@ namespace FMB_CIS.Controllers
             var requirementsForTransferOfOwnership = _context.tbl_announcement.Where(a => a.id == 7).FirstOrDefault(); // id = 7 for Transfer of Ownership
             ViewBag.RequiredDocsList_PermitToLeaseRentLend = requirementsForPermitToLeaseRentLend.announcement_content;
             ViewBag.RequiredDocsList_TransferOfOwnership = requirementsForTransferOfOwnership.announcement_content;
+
+            // Get Brands for DropdownList
+            var brandList = _context.tbl_brands.Where(c => c.is_active == true).ToList();
+            ViewBag.brandList = brandList;
+
             //End for required documents
             //ViewModel model = new ViewModel();
             ////Document Checklist

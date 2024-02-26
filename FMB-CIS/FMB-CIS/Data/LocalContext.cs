@@ -51,5 +51,6 @@ namespace FMB_CIS.Data
         public DbSet<FMB_CIS.Models.tbl_notifications> tbl_notifications { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_notification_read> tbl_notification_read { get; set; } = default!;
         public DbSet<FMB_CIS.Models.tbl_notification_type> tbl_notification_type { get; set; } = default!;
+        public DbSet<FMB_CIS.Models.tbl_brand> tbl_brands { get; set; } = default!;
     }
 }
