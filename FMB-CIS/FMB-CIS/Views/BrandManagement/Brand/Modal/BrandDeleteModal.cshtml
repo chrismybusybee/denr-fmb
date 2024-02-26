@@ -30,12 +30,12 @@
         let id = document.getElementById("brandId").value;
         let parameters = { id: id};
         $.ajax({
-            url: '/OfficeManagement/BrandDelete/' + id,
+            url: '/BrandManagement/BrandDelete/' + id,
             type: 'DELETE',
             data: parameters,
             success: function (data) {
                 // NOTE: TO DO better way of calling callback function from parent
-                $('#brandPartialContainer').load('/OfficeManagement/BrandListPartialView');
+                $('#brandPartialContainer').load('/BrandManagement/BrandListPartialView');
             }
         });
     });
