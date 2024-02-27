@@ -320,23 +320,107 @@
             }
         }).then((result) => {
             if (!result.dismiss && result.value) {
-                // Handle the next step based on the selected notification type
-                if (result.value.notificationType === '1') {
-                    // Handle "for individual" notification type
-                    showIndividualNotificationModal(result.value.notificationType);
-                } else if (result.value.notificationType === '2') {
-                    // Handle "for specific user role" notification type
-                    showUserRoleNotificationModal(result.value.notificationType);
-                } else if (result.value.notificationType === '3') {
-                    // Handle "for for all users" notification type
-                    showCreateAllUserNotificationModal(result.value.notificationType);
-                }
+                    askUseTemplate(result.value.notificationType);
+                
             }
         });
     }
 
+    // Ask the user if they will use a template
+    function askUseTemplate(notifType) {
+        Swal.fire({
+            title: 'Use Template?',
+            text: 'Do you want to use a template for creating a notification?',
+            icon: 'question',
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: 'Yes, use a template',
+            confirmButtonColor: "#14984a",
+            cancelButtonText: 'No, create from scratch'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // User clicked "Yes, use template"
+                // Handle the logic for using a template
+                selectNotifTemplate(notifType);
+            } else {
+                redirectSelectedNotifTypeToModal(notifType, false, null, null);
+            }
+        });
+    }
+
+    // Select Template
+    function selectNotifTemplate(notifType) {
+
+        var url = "/Notifications/GetNotificationTemplate";
+        $.get(url, function (data) { 
+            console.log("data: ", data);
+
+            var myOptions = "";
+            for (let i = 0; i < data.length; i++) {                
+                myOptions += `<option value="${i}">${data[i].title}</option>`;
+            }
+
+            Swal.fire({
+                title: 'Select Notification Template',
+                html: `
+                <div class="alert alert-info">
+                    Please select a template to be used.
+                </div>
+                <div class="form-group px-1 py-1">
+                            <select id="notificationTemplate" class="form-select" aria-label="Permit Type" required>
+                            <option value="" selected disabled>Select Notification Template</option>
+                                ${myOptions}
+                        </select>
+                </div>
+                    `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Next',
+                confirmButtonColor: "#14984a",
+                cancelButtonText: 'Cancel',
+                preConfirm: () => {
+                    const notificationTemplate = document.getElementById('notificationTemplate').value;
+                    if (!notificationTemplate) {
+                        Swal.showValidationMessage('Please select a notification template');
+                    }
+                    return { notificationTemplate: notificationTemplate };
+                }
+            }).then((result) => {
+                if (!result.dismiss && result.value) {
+                    var notifTitle = data[result.value.notificationTemplate].title;
+                    var notifContent = data[result.value.notificationTemplate].announcement_content;
+                    console.log("notifTitle: ", notifTitle);
+                    console.log("notifContent: ", notifContent);
+
+                    redirectSelectedNotifTypeToModal(notifType, true, notifTitle, notifContent);
+                }
+            });
+        });
+    }
+
+    //function to redirect notif type
+    function redirectSelectedNotifTypeToModal(notifTypeID, isTemplate, title, content) {
+        // Handle the next step based on the selected notification type
+        if (notifTypeID === '1') {
+            // Handle "for individual" notification type
+            showIndividualNotificationModal(notifTypeID, isTemplate, title, content);
+        } else if (notifTypeID === '2') {
+            // Handle "for specific user role" notification type
+            showUserRoleNotificationModal(notifTypeID, isTemplate, title, content);
+        } else if (notifTypeID === '3') {
+            // Handle "for for all users" notification type
+            showCreateAllUserNotificationModal(notifTypeID, isTemplate, title, content);
+        }
+    }
+
     //Create Notification for an individual user
-    function showIndividualNotificationModal(notifTypeID) {
+    function showIndividualNotificationModal(notifTypeID, isTemplate, title, content) {
+        var notifTitle = "";
+        var notifContent = "";
+        if (isTemplate == true) { 
+            notifTitle = title;
+            notifContent = content;
+        }
         // Logic to show modal for "for individual" notification type
         // You can use SweetAlert2 or any other modal library for this
         Swal.fire({
@@ -362,7 +446,7 @@
         <div class="row w-100">
             <div class="col md-6">
                 <div class="form-floating mb-2">
-                    <input type="text" class="form-control rounded-3" id="notificationTitle" placeholder="" />
+                    <input type="text" class="form-control rounded-3" id="notificationTitle" placeholder="" value="${notifTitle}"/>
                     <label for="notificationTitle">Notification Title</label>
                 </div>
             </div>
@@ -376,7 +460,7 @@
         <div class="row w-100">
             <div class="col md-12">
                 <div class="form-floating mb-2">
-                    <textarea class="form-control rounded-3" id="notificationContent" placeholder="" style="height: 250px;"></textarea>
+                    <textarea class="form-control rounded-3" id="notificationContent" placeholder="" style="height: 250px;">${notifContent}</textarea>
                     <label for="notificationContent">Notification Content</label>
                 </div>
             </div>
@@ -405,7 +489,13 @@
     }
 
     //Create Notification for a specific user role
-    function showUserRoleNotificationModal(notifTypeID) {
+    function showUserRoleNotificationModal(notifTypeID, isTemplate, title, content) {
+        var notifTitle = "";
+        var notifContent = "";
+        if (isTemplate == true) {
+            notifTitle = title;
+            notifContent = content;
+        }
         // Logic to show modal for "for specific user role" notification type
         Swal.fire({
             title: 'Create Notification',
@@ -430,7 +520,7 @@
         <div class="row w-100">
             <div class="col md-6">
                 <div class="form-floating mb-2">
-                    <input type="text" class="form-control rounded-3" id="notificationTitle" placeholder="" />
+                    <input type="text" class="form-control rounded-3" id="notificationTitle" placeholder="" value="${notifTitle}"/>
                     <label for="notificationTitle">Notification Title</label>
                 </div>
             </div>
@@ -444,7 +534,7 @@
         <div class="row w-100">
             <div class="col md-12">
                 <div class="form-floating mb-2">
-                    <textarea class="form-control rounded-3" id="notificationContent" placeholder="" style="height: 250px;"></textarea>
+                    <textarea class="form-control rounded-3" id="notificationContent" placeholder="" style="height: 250px;">${notifContent}</textarea>
                     <label for="notificationContent">Notification Content</label>
                 </div>
             </div>
@@ -474,7 +564,13 @@
     }
 
     //Create Notification for all users
-    function showCreateAllUserNotificationModal(notifTypeID) {
+    function showCreateAllUserNotificationModal(notifTypeID, isTemplate, title, content) {
+        var notifTitle = "";
+        var notifContent = "";
+        if (isTemplate == true) {
+            notifTitle = title;
+            notifContent = content;
+        }
         // Logic to show modal for "for individual" notification type
         // You can use SweetAlert2 or any other modal library for this
         Swal.fire({
@@ -484,7 +580,7 @@
                     <div class="row w-100">
                         <div class="col md-6">
                             <div class="form-floating mb-2">
-                                <input type="text" class="form-control rounded-3" id="notificationTitle" placeholder="" />
+                                <input type="text" class="form-control rounded-3" id="notificationTitle" placeholder="" value="${notifTitle}"/>
                                 <label for="notificationTitle">Notification Title</label>
                             </div>
                         </div>
@@ -498,7 +594,7 @@
                     <div class="row w-100">
                         <div class="col md-12">
                             <div class="form-floating mb-2">
-                                <textarea class="form-control rounded-3" id="notificationContent" placeholder="" style="height: 250px;"></textarea>
+                                <textarea class="form-control rounded-3" id="notificationContent" placeholder="" style="height: 250px;">${notifContent}</textarea>
                                 <label for="notificationContent">Notification Content</label>
                             </div>
                         </div>

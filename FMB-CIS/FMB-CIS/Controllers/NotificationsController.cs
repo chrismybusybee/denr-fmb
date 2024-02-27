@@ -522,6 +522,14 @@ namespace FMB_CIS.Controllers
             }
         }
 
+        [HttpGet]
+        public JsonResult GetNotificationTemplate()
+        {
+            var notificationTemplates = _context.tbl_announcement.Where(a => a.tbl_announcement_type_id == 2);
+            return Json(notificationTemplates);
+
+        }
+
     }
 
 }
