@@ -466,7 +466,18 @@ namespace FMB_CIS.Controllers
                                 Console.WriteLine(passResetLink);
                                 var subject = "Password Reset";
                                 var body = "Your Password Reset Link is: " + passResetLink;
-                                await EmailSender.SendEmailAsync(model.email, subject, body);
+                                try
+                                {
+                                    await EmailSender.SendEmailAsync(model.email, subject, body);
+                                    // Code to execute if the email sending is successful
+                                }
+                                catch (Exception ex)
+                                {
+                                    // Code to handle the exception
+                                    Console.WriteLine($"An error occurred while sending the email: {ex.Message}");
+                                    // You can log the exception, show a user-friendly message, or take appropriate actions
+                                }
+
                                 return RedirectToAction("EmailConfirmation");
                             }
                             else
@@ -507,6 +518,7 @@ namespace FMB_CIS.Controllers
             {
                 ViewBag.Title = "Reset Password";
             }
+            ViewBag.isNewParam = isNew;
             return View();
         }
         [HttpPost]
