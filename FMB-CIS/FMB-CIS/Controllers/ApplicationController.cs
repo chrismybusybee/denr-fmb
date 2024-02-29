@@ -238,6 +238,8 @@ namespace FMB_CIS.Controllers
                                  //join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
                                  join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }
                                  where pT.name == "Certificate of Registration"
+                                 let current_step_count = (int)Math.Ceiling((decimal)a.status / 2) // Soon be dynamic
+                                 let current_max_count = usr.tbl_region_id == 13 ? 6 : 10// Soon be dynamic 
                                  select new ApplicantListViewModel 
                                  { 
                                      id = a.id,
@@ -255,14 +257,15 @@ namespace FMB_CIS.Controllers
                                      date_of_expiration = a.date_of_expiration,
                                      qty = a.qty,
                                      ReferenceNo = a.ReferenceNo,
-                                     currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
-                                     currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic 
+                                     currentStepCount = current_step_count,
+                                     currentMaxCount = current_max_count,
+                                     currentPercentage = (current_step_count * 100 / current_max_count)
                                  }).ToList();
 
-            foreach (ApplicantListViewModel mod in applicationMod)
-            {
-                mod.currentPercentage = (mod.currentStepCount * 100 / mod.currentMaxCount);
-            }
+            //foreach (ApplicantListViewModel mod in applicationMod)
+            //{
+            //    mod.currentPercentage = (mod.currentStepCount * 100 / mod.currentMaxCount);
+            //}
 
             mymodel.applicantListViewModels = applicationMod;
 
