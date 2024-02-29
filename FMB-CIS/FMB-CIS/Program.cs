@@ -48,6 +48,8 @@ builder.Services.Configure<RecaptchaSettings>(builder.Configuration.GetSection("
 builder.Services.AddRecaptcha(builder.Configuration.GetSection("RecaptchaSettings")); //Added 2023-Oct-5
 
 builder.Services.Configure<GoogleCaptchaConfig>(builder.Configuration.GetSection("GoogleReCaptcha")); //Added 2023-Oct-6
+builder.Services.Configure<SMTPCredentials>(builder.Configuration.GetSection("SMTPCredentials")); //Added 2024-Feb-28
+builder.Services.Configure<SMTPCredentialsSecondary>(builder.Configuration.GetSection("SMTPCredentialsSecondary")); //Added 2024-Feb-28
 builder.Services.AddTransient(typeof(GoogleCaptchaService));
 
 builder.Services.AddSession(options =>
@@ -68,19 +70,27 @@ builder.Services.Configure<MailKitEmailSenderOptions>(options =>
     //options.Sender_EMail = "support@mybusybee.net";
     //options.Sender_Name = "FMB-CIS Bot";
 
-    options.Host_Address = "smtp-relay.brevo.com";
-    options.Host_Port = 587;
-    options.Host_Username = "support@mybusybee.net";
-    options.Host_Password = "OBAq9p8GtLM5g2KS";
-    options.Sender_EMail = "support@mybusybee.net";
-    options.Sender_Name = "FMB-CIS Bot";
+    //try
+    //{
+    //    options.Host_Address = "smtp-relay.brevo.com";
+    //    options.Host_Port = 587;
+    //    options.Host_Username = "support@mybusybee.net";
+    //    options.Host_Password = "OBAq9p8GtLM5g2KS";
+    //    options.Sender_EMail = "support@mybusybee.net";
+    //    options.Sender_Name = "FMB-CIS Bot";
 
-    //options.Host_Address = "smtp-relay.brevo.com";
-    //options.Host_Port = 587;
-    //options.Host_Username = "franz@mybusybee.net";
-    //options.Host_Password = "IJg2qdh8y9WSCcUZ";
-    //options.Sender_EMail = "franz@mybusybee.net";
-    //options.Sender_Name = "FMB-CIS Bot";
+    //}
+
+    //catch
+    //{
+    //    options.Host_Address = "smtp-relay.brevo.com";
+    //    options.Host_Port = 587;
+    //    options.Host_Username = "franz@mybusybee.net";
+    //    options.Host_Password = "IJg2qdh8y9WSCcUZ";
+    //    options.Sender_EMail = "franz@mybusybee.net";
+    //    options.Sender_Name = "FMB-CIS Bot";
+    //}
+
 });
 
 var app = builder.Build();
