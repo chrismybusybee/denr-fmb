@@ -30,7 +30,8 @@
         public DateTime? expected_time_arrival { get; set; }
         public string power_source { get; set; }
         public string? unit_of_measure { get; set; }
-        public string brand { get; set; }
+        public int? brand_id { get; set; }
+        public string? brand { get; set; }
         public string model { get; set; }
         public string engine_serialNo { get; set; }
         public int? quantity { get; set; }

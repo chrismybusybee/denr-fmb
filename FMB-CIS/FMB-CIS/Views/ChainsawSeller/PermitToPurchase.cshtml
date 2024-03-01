@@ -249,7 +249,7 @@
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="supplier_address" name="supplier_address">${app.supplier_address}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="power_source" name="power_source">${app.power_source}</span></td>`);
                 //row.append(`<td><span class="editable" data-id="${app.id}" data-field="unit_of_measure" name="unit_of_measure">${app.unit_of_measure}</span></td>`);
-                row.append(`<td><span class="editable" data-id="${app.id}" data-field="brand" name="brand">${app.brand}</span></td>`);
+                row.append(`<td><span class="editable" data-id="${app.id}" data-field="brand_id" name="brand_id">${app.brand}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="model" name="model">${app.model}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="engine_serialNo" name="engine_serialNo">${app.engine_serialNo}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="quantity" name="quantity">${app.quantity}</span></td>`);
@@ -385,7 +385,12 @@
     <div class="row">
     <div class="col-md-4 mb-3">
         <div class="form-floating">
-    @Html.DropDownList("brandList", new SelectList(ViewBag.brandList, "id", "name"), new { @class = "form-control" })
+                 <select class="form-select" id="brand_id">
+                    @foreach (var item in ViewBag.brandList)
+                    {
+                    <option value="@item.id" data-brand-name="@item.name">@item.name</option>
+                    }
+                  </select>
             <label class="form-label">Brand</label>
         </div>
     </div>
@@ -431,7 +436,7 @@
                     if (document.getElementById('model').value == '')
                         Swal.showValidationMessage('Model field is required');
 
-                    if (document.getElementById('brand').value == '')
+                    if (document.getElementById('brand_id').value == '')
                         Swal.showValidationMessage('Brand field is required');
 
                     //if (document.getElementById('newExpectedTimeArrival').value == '')
@@ -448,10 +453,11 @@
                         document.getElementById('xxx').value,
                         document.getElementById('powerSource').value,
                         //document.getElementById('unitOfMeasure').value,
-                        document.getElementById('brand').value,
+                        document.getElementById('brand_id').value,
                         document.getElementById('model').value,
                         document.getElementById('engineSerialNo').value,
-                        document.getElementById('quantity').value
+                        document.getElementById('quantity').value,
+                        document.getElementById("brand_id").options[document.getElementById("brand_id").selectedIndex].getAttribute("data-brand-name"),
                     ];
                 }
             }).then((result) => {
@@ -462,7 +468,8 @@
                     const newExpectedTimeArrival = values[2];
                     const powerSource = values[3];
                     //const unitOfMeasure = values[4];
-                    const brand = values[4];
+                    const brand_id = values[4];
+                    const brand = values[8];
                     const model = values[5];
                     const engineSerialNo = values[6];
                     const quantity = values[7];
@@ -478,6 +485,7 @@
                         expected_time_arrival: newExpectedTimeArrival,
                         power_source: powerSource,
                         //unit_of_measure: unitOfMeasure,
+                        brand_id: brand_id,
                         brand: brand,
                         model: model,
                         engine_serialNo: engineSerialNo,

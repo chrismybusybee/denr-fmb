@@ -235,7 +235,7 @@
             applications.forEach(app => {
                 let row = $('<tr>');
                 row.append(`<td style="display:none;">${app.id}</td>`);
-                row.append(`<td><span class="editable" data-id="${app.id}" data-field="brand" name="brand">${app.Brand}</span></td>`);
+                row.append(`<td><span class="editable" data-id="${app.id}" data-field="brand_id" name="brand_id">${app.Brand}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="model" name="model">${app.Model}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="Power" name="Power">${app.Power}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="watt_dec" name="watt_dec">${app.Power=="Gas"? "N/A":app.watt_dec}</span></td>`);
@@ -353,7 +353,12 @@
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <div class="form-floating">
-    @Html.DropDownList("brandList", new SelectList(ViewBag.brandList, "id", "name"), new { @class = "form-control" })
+                            <select class="form-select" id="brand_id">
+                                @foreach (var item in ViewBag.brandList)
+                                {
+                                <option value="@item.id" data-brand-name="@item.name">@item.name</option>
+                                }
+                            </select>
                         <label class="form-label">Brand</label>
                     </div>
                 </div>
@@ -454,7 +459,7 @@
                     if (document.getElementById('model').value == '')
                         Swal.showValidationMessage('Model field is required');
 
-                    if (document.getElementById('brand').value == '')
+                    if (document.getElementById('brand_id').value == '')
                         Swal.showValidationMessage('Brand field is required');
 
                     if (document.getElementById('chainsawSerialNo').value == '')
@@ -476,13 +481,14 @@
                     
                         //document.getElementById('unitOfMeasure').value,
                         document.getElementById('watts_hp_input').value,
-                        document.getElementById('brand').value,
+                        document.getElementById('brand_id').value,
                         document.getElementById('model').value,
                         document.getElementById('engineSerialNo').value,
                         document.getElementById('chainsawSerialNo').value,
                         document.getElementById('guidebar').value,
                         document.getElementById('specification').value,
                         document.getElementById('purpose').value,
+                        document.getElementById("brand_id").options[document.getElementById("brand_id").selectedIndex].getAttribute("data-brand-name"),
                     ];
                 }
             }).then((result) => {
@@ -504,7 +510,8 @@
                         watts = values[2];
                         hp = null;
                     }
-                    const brand = values[3];
+                    const brand = values[10];
+                    const brand_id = values[3];
                     const model = values[4];
                     const engineSerialNo = values[5];
                     const chainsawSerialNo = values[6];
@@ -528,6 +535,7 @@
                         hp_dec: hp,
                         //   unit_of_measure: unitOfMeasure,
                         Brand: brand,
+                        brand_id: brand_id,
                         Model: model,
                         Engine: engineSerialNo,
                         chainsaw_serial_number : chainsawSerialNo,

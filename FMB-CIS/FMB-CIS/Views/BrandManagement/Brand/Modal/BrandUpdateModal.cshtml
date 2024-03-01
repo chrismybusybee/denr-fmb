@@ -45,12 +45,12 @@
             description: document.getElementById("brandDescription").value
         };
         $.ajax({
-            url: '/OfficeManagement/BrandUpdate/' + id,
+            url: '/BrandManagement/BrandUpdate/' + id,
             type: 'PUT',
             data: parameters,
             success: function (data) {
                 // NOTE: TO DO better way of calling callback function from parent
-                $('#brandListPartialContainer').load('/OfficeManagement/BrandListPartialView');
+                $('#brandListPartialContainer').load('/BrandManagement/BrandListPartialView');
                 closeModal();
             }
         });
