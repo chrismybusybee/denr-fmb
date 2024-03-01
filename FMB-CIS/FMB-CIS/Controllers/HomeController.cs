@@ -26,12 +26,12 @@ namespace FMB_CIS.Controllers
         {
             try
             {
-                if (entity.ToUpper() == "LOGOUT"
-                    && source.ToUpper() == "WEB")
-                {
-                    var fullname = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("FullName").Value);
-                    remarks = "User logged out. Username: " + fullname;
-                }
+                //if (entity.ToUpper() == "LOGOUT"
+                //    && source.ToUpper() == "WEB")
+                //{
+                //    var fullname = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("FullName").Value);
+                //    remarks = "User logged out. Username: " + fullname;
+                //}
 
                 int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
                 //Inserting record to UserActivityLog database
@@ -225,12 +225,13 @@ namespace FMB_CIS.Controllers
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
+            LogUserActivity("Logout", "Logout", "Logout from system", apkDateTime: DateTime.Now);
             return RedirectToAction("Index");
         }
 
         public IActionResult TermsPolicy()
         {
             return View();
-        }
+        }   
     }
 }
