@@ -33,14 +33,18 @@ namespace FMB_CIS.Controllers
         {
             try
             {
+                int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+
                 if (entity.ToUpper() == "LOGOUT"
                     && source.ToUpper() == "WEB")
                 {
-                    var fullname = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("FullName").Value);
-                    remarks = "User logged out. Username: " + fullname;
+                    var userFullName = _context.tbl_user.Where(x => x.id == uid)
+                     .Select(y => y.FullName).FirstOrDefault();
+
+                    remarks = "User logged out. Username: " + userFullName;
                 }
 
-                int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+     
                 //Inserting record to UserActivityLog database
                 tbl_user_activitylog activityLog = new tbl_user_activitylog()
                 {
@@ -55,13 +59,6 @@ namespace FMB_CIS.Controllers
                 };
                 _context.Add(activityLog);
                 _context.SaveChanges();
-
-                ////Inserting record to UserActivity Log file
-                //var userdata = _userRepository.TableNoTracking.Where(x => x.Id == (_userSession.UserId != 0 ? _userSession.UserId : userId))
-                //              .Select(y => y.UserCode + " (" + y.FirstName + ")").FirstOrDefault();
-                //Utility.Logger.UserLog("The " + userdata + " In Module " + entity + "-" + (userAction ?? "") + ":" + (remarks ?? ""));
-
-
             }
             catch (Exception ex)
             {
@@ -80,6 +77,8 @@ namespace FMB_CIS.Controllers
             {
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
+
+                LogUserActivity("AccessRightsList", "AccessRightsList", "getting access rights list", apkDateTime : DateTime.Now);
 
                 return View();
             }
@@ -102,6 +101,8 @@ namespace FMB_CIS.Controllers
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
+
+                LogUserActivity("AccessRightsListPartialView", "AccessRightsListPartialView", "partial view access", apkDateTime: DateTime.Now);
                 return PartialView("~/Views/AccessRightsManagement/Manage/Partial/AccessRightsListPartial.cshtml", model);
             }
             else
