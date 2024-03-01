@@ -162,6 +162,7 @@ namespace FMB_CIS.Controllers
                     var usrDB = _context.tbl_user.Where(u => u.id == userID).FirstOrDefault();
                     //Get email and subject from templates in DB
                     var emailTemplates = _context.tbl_email_template.ToList();
+                    var brandList = _context.tbl_brands.ToList();
                 //DAL dal = new DAL();
 
                 //SAVE permit application
@@ -201,13 +202,15 @@ namespace FMB_CIS.Controllers
 
                 foreach (tbl_application_group childApplication in myDeserializedObjList)
                 {
+                    var brand = brandList.FirstOrDefault(a => a.id == childApplication.brand_id);
+
                     childApplication.id = 0;
                     childApplication.tbl_application_id = appID;
                     childApplication.created_by = userID;
                     childApplication.modified_by = userID;
                     childApplication.date_created = DateTime.Now;
                     childApplication.date_modified = DateTime.Now;
-
+                    childApplication.brand = brand?.name;
                     _context.tbl_application_group.Add(childApplication);
                 }
 
@@ -676,7 +679,29 @@ namespace FMB_CIS.Controllers
 
 
                 //Application Grouping
-                var applicationGroups = _context.tbl_application_group.Where(g => g.tbl_application_id == applicID).ToList();
+                //var applicationGroups = _context.tbl_application_group.Where(g => g.tbl_application_id == applicID).ToList();
+                var applicationGroups = (from ag in _context.tbl_application_group
+                                         join b in _context.tbl_brands on ag.brand_id equals b.id
+                                         where ag.tbl_application_id == applicID
+                                         select new tbl_application_group
+                                         {
+                                             id = ag.id,
+                                             tbl_application_id = ag.tbl_application_id,
+                                             supplier_name = ag.supplier_name,
+                                             supplier_address = ag.supplier_name,
+                                             expected_time_arrival = ag.expected_time_arrival,
+                                             power_source = ag.power_source,
+                                             unit_of_measure = ag.unit_of_measure,
+                                             brand_id = ag.brand_id,
+                                             brand = b.name,
+                                             model = ag.model,
+                                             engine_serialNo = ag.engine_serialNo,
+                                             quantity = ag.quantity,
+                                             created_by = ag.created_by,
+                                             modified_by = ag.modified_by,
+                                             date_created = ag.date_created,
+                                             date_modified = ag.date_modified
+                                         }).ToList();
                 mymodel.tbl_Application_Group = applicationGroups;
 
                 //Proof of Payment

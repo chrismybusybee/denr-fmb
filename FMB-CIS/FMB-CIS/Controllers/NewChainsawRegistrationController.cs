@@ -142,6 +142,7 @@ namespace FMB_CIS.Controllers
                 var usrDB = _context.tbl_user.Where(u => u.id == userID).FirstOrDefault();
                 //DAL dal = new DAL();
 
+                var brandList = _context.tbl_brands.ToList();
                 //Get email and subject from templates in DB
                 var emailTemplates = _context.tbl_email_template.ToList();
 
@@ -181,9 +182,13 @@ namespace FMB_CIS.Controllers
 
 
                 //SAVE to tbl_chainsaw
-                foreach (tbl_chainsaw chainsaw in myDeserializedObjList) {
+                foreach (tbl_chainsaw chainsaw in myDeserializedObjList) 
+                {
 
                     tbl_chainsaw newChainsaw = new tbl_chainsaw();
+
+                    var brand = brandList.FirstOrDefault(a => a.id == chainsaw.brand_id);
+
                     newChainsaw.user_id = userID;
                     newChainsaw.tbl_application_id = model.tbl_Application.id;
                     newChainsaw.status = "Owner";
@@ -200,7 +205,8 @@ namespace FMB_CIS.Controllers
 
                     newChainsaw.supplier = chainsaw.supplier;
                     newChainsaw.Power = chainsaw.Power;
-                    newChainsaw.Brand = chainsaw.Brand;
+                    newChainsaw.Brand = brand?.name is not null ? brand?.name : chainsaw.Brand;
+                    newChainsaw.brand_id = brand?.id is not null ? brand.id : chainsaw.brand_id;
                     newChainsaw.Model = chainsaw.Model;
                     newChainsaw.Engine = chainsaw.Engine;
                     newChainsaw.chainsaw_serial_number = chainsaw.chainsaw_serial_number;

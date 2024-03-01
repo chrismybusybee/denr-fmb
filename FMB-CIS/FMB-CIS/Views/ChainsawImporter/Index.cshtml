@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "New Chainsaw Import Permit Application";
 
+
 }
 
 <!-- Selectize -->
@@ -80,37 +81,37 @@
 
             <div class="row m-0 mb-4">
                 <div class="col-md-12">
-                        <div class="mb-4">
-                            <span class="c-preline" style="white-space: pre-line">@ViewBag.RequiredDocsList</span>
-                        </div>
-                        @* <div class="d-flex gap-4 mb-5">
-                        <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
-                        <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
-                        <i data-feather="upload"></i> Upload
-                        </label>
-                        <input type="file" asp-for="filesUpload.Files" class="form-control file" accept="application/pdf" id="filesUpload_Files" multiple hidden />
-                        <button type="button" class="btn btn-primary"><i data-feather="upload"></i> Upload</button>
-                        </div>
-                        <div class="d-flex mb-4 gap-3 output">
-                        Cards for files
-                        <p id="files-area">
-                        <span id="filesList">
-                        <span id="files-names"></span>
-                        </span>
-                        </p>
-                        </div> *@
+                    <div class="mb-4">
+                        <span class="c-preline" style="white-space: pre-line">@ViewBag.RequiredDocsList</span>
+                    </div>
+                    @* <div class="d-flex gap-4 mb-5">
+                    <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
+                    <label asp-for="filesUpload.Files" class="btn btn-primary custom-file-upload">
+                    <i data-feather="upload"></i> Upload
+                    </label>
+                    <input type="file" asp-for="filesUpload.Files" class="form-control file" accept="application/pdf" id="filesUpload_Files" multiple hidden />
+                    <button type="button" class="btn btn-primary"><i data-feather="upload"></i> Upload</button>
+                    </div>
+                    <div class="d-flex mb-4 gap-3 output">
+                    Cards for files
+                    <p id="files-area">
+                    <span id="filesList">
+                    <span id="files-names"></span>
+                    </span>
+                    </p>
+                    </div> *@
 
-                        @* <input id="testDragAndDrop" name="testDragAndDrop" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload..."> *@
-                        <div class="gap-4 mb-5">
-                            <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
-                            <div class="alert alert-warning mt-3 mb-3" role="alert">
-                                <ul style="margin-bottom: 0px;">
-                                    <li>When uploading multiple files, drag all files at once on the field.</li>
-                                    <li>Only alphanumeric characters (A-Z), (a-z), (0-9), underscores (_), and hyphen (-) are allowed for filenames. Spaces are not allowed. Please rename before uploading.</li>
-                                </ul>
-                            </div>
-                            <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-allowed-file-extensions='["pdf"]' accept="application/pdf" data-show-caption="true" data-msg-placeholder="Select {files} for upload..."> <!-- onchange="fileChange(this)" -->
+                    @* <input id="testDragAndDrop" name="testDragAndDrop" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload..."> *@
+                    <div class="gap-4 mb-5">
+                        <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
+                        <div class="alert alert-warning mt-3 mb-3" role="alert">
+                            <ul style="margin-bottom: 0px;">
+                                <li>When uploading multiple files, drag all files at once on the field.</li>
+                                <li>Only alphanumeric characters (A-Z), (a-z), (0-9), underscores (_), and hyphen (-) are allowed for filenames. Spaces are not allowed. Please rename before uploading.</li>
+                            </ul>
                         </div>
+                        <input asp-for="filesUpload.Files" type="file" class="file" multiple data-show-upload="false" data-allowed-file-extensions='["pdf"]' accept="application/pdf" data-show-caption="true" data-msg-placeholder="Select {files} for upload..."> <!-- onchange="fileChange(this)" -->
+                    </div>
 
                 </div>
             </div>
@@ -156,16 +157,18 @@
                 </table>
             </div>
             <div class="row">
-            <div class="text-center mb-4">
-                <small class="text-secondary fw-bold fst-italic">
-                    By submitting this form, you agree to our <a href="@Url.Action("TermsPolicy", "Home")" target="_blank" class="text-decoration-none">Privacy Policy and Terms & Conditions.</a>
-                </small>
-            </div>
+                <div class="text-center mb-4">
+                    <small class="text-secondary fw-bold fst-italic">
+                        By submitting this form, you agree to our <a href="@Url.Action("TermsPolicy", "Home")" target="_blank" class="text-decoration-none">Privacy Policy and Terms & Conditions.</a>
+                    </small>
+                </div>
 
-            <div class="col-md-12">
-            <div class="d-flex justify-content-end pe-2 me-1">
-                <button type="button" id="btnSubmit" class="btn btn-primary w-125" style="float:right;">Submit</button>
-            </div></div> </div>
+                <div class="col-md-12">
+                    <div class="d-flex justify-content-end pe-2 me-1">
+                        <button type="button" id="btnSubmit" class="btn btn-primary w-125" style="float:right;">Submit</button>
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
 </div>
@@ -386,7 +389,7 @@
         //     console.log("cFile.files", cFile.files)
         // });
 
-        
+
         $("#btnSubmit").click(function () {
 
             // //Check if user selected some files
@@ -416,23 +419,23 @@
 
                 x.value = JSON.stringify(applications);
                 //formFiles.files = dt.files;
-                    if (formFiles.files.length == 0) {
-                        Swal.fire({
-                            title: "No File Selected",
-                            text: "Please upload the required documents to proceed with the application.",
-                            icon: "error",
-                            confirmButtonColor: '#14984a'
-                        });
-                    }else if(applications.length == 0){
+                if (formFiles.files.length == 0) {
+                    Swal.fire({
+                        title: "No File Selected",
+                        text: "Please upload the required documents to proceed with the application.",
+                        icon: "error",
+                        confirmButtonColor: '#14984a'
+                    });
+                } else if (applications.length == 0) {
                     Swal.fire({
                         title: "No Supplier Information",
                         text: "Please add atleast one supplier information.",
                         icon: "error",
                         confirmButtonColor: '#14984a'
                     });
-                    } else {
+                } else {
                     $('#confirmSubmitModal').modal("show"); //proceed to submit modal
-                    }   
+                }
 
 
                 // else if (formFiles.files.length < @Model.tbl_Document_Checklist.Count() && formFiles.files.length !=0) {
@@ -443,7 +446,7 @@
                 //         confirmButtonColor: '#14984a'
                 //     });
                 // }
-               
+
             }
             //If fields are not filled up
             else {
@@ -486,7 +489,7 @@
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="supplier_address" name="supplier_address">${app.supplier_address}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="power_source" name="power_source">${app.power_source}</span></td>`);
                 //row.append(`<td><span class="editable" data-id="${app.id}" data-field="unit_of_measure" name="unit_of_measure">${app.unit_of_measure}</span></td>`);
-                row.append(`<td><span class="editable" data-id="${app.id}" data-field="brand" name="brand">${app.brand}</span></td>`);
+                row.append(`<td><span class="editable" data-id="${app.id}" data-field="brand_id" name="brand_id">${app.brand}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="model" name="model">${app.model}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="engine_serialNo" name="engine_serialNo">${app.engine_serialNo}</span></td>`);
                 row.append(`<td><span class="editable" data-id="${app.id}" data-field="quantity" name="quantity">${app.quantity}</span></td>`);
@@ -494,8 +497,8 @@
 
                 // Actions column with Edit and Delete buttons
                 let actions = `<td>
-                            <button  type="button" onclick="deleteApplication(${app.id})">Delete</button>
-                                   </td>`;
+                                <button  type="button" onclick="deleteApplication(${app.id})">Delete</button>
+                                       </td>`;
                 row.append(actions);
 
                 tableBody.append(row);
@@ -587,68 +590,75 @@
                 //    'Quantity :<input type=number id="quantity" class="swal2-input" placeholder="Quantity">'
                 //    ,
                 html: `<div class="c-form-container">
-<form>
+    <form>
 
-    <div class="g-3">
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control rounded-3" id="supplierName" placeholder="" />
-            <label class="form-label">Supplier Name</label>
+        <div class="g-3">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control rounded-3" id="supplierName" placeholder="" />
+                <label class="form-label">Supplier Name</label>
+            </div>
         </div>
-    </div>
-    <div class="g-3">
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control rounded-3" id="supplierAddress" placeholder="" />
-            <label class="form-label">Supplier Address</label>
+        <div class="g-3">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control rounded-3" id="supplierAddress" placeholder="" />
+                <label class="form-label">Supplier Address</label>
+            </div>
         </div>
-    </div>
-    <div class="row">
-    <div class="col-md-6 mb-3">
-        <div class="form-floating">
-            <input class="form-control rounded-3" type="date" id="xxx" placeholder="Expected Time Of Arrival" />
-            <label class="form-label">Expected Time Of Arrival</label>
+        <div class="row">
+        <div class="col-md-6 mb-3">
+            <div class="form-floating">
+                <input class="form-control rounded-3" type="date" id="xxx" placeholder="Expected Time Of Arrival" />
+                <label class="form-label">Expected Time Of Arrival</label>
+            </div>
         </div>
-    </div>
-    <div class="col-md-6 mb-3">
-        <div class="form-floating">
-            <select id="powerSource" class="form-select" >
-                <option value="Electric">Electric</option>
-                <option value="Gas">Gas</option>
-                <option value="Battery">Battery</option>
-            </select>
-            <label class="form-label">Power Source</label>
+        <div class="col-md-6 mb-3">
+            <div class="form-floating">
+                <select id="powerSource" class="form-select" >
+                    <option value="Electric">Electric</option>
+                    <option value="Gas">Gas</option>
+                    <option value="Battery">Battery</option>
+                </select>
+                <label class="form-label">Power Source</label>
+            </div>
         </div>
-    </div>
 
-    </div>
-    </div>
-    <div class="row">
-    <div class="col-md-4 mb-3">
-        <div class="form-floating">
-            @Html.DropDownList("brandList", new SelectList(ViewBag.brandList, "id", "name"), new {@class="form-control"})
-            <label class="form-label">Brand</label>
         </div>
-    </div>
-    <div class="col-md-3 mb-3">
-        <div class="form-floating">
-            <input type="text" class="form-control rounded-3" id="model" placeholder="" />
-            <label class="form-label">Model</label>
         </div>
-    </div>
-    <div class="col-md-3 mb-3">
-        <div class="form-floating">
-            <input type="text" class="form-control rounded-3" id="engineSerialNo" placeholder="" />
-            <label class="form-label">Engine Serial No.</label>
+        <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="form-floating">
+
+                    <select class="form-select" id="brand_id">
+                    @foreach (var item in ViewBag.brandList)
+                    {
+                       <option value="@item.id" data-brand-name="@item.name">@item.name</option>
+                    }
+                    </select>
+
+                <label class="form-label">Brand</label>
+            </div>
         </div>
-    </div>
-    <div class="col-md-2 mb-3">
-        <div class="form-floating mb-3">
-            <input type="number" class="form-control rounded-3" id="quantity" placeholder="" />
-            <label class="form-label">Quantity</label>
+        <div class="col-md-3 mb-3">
+            <div class="form-floating">
+                <input type="text" class="form-control rounded-3" id="model" placeholder="" />
+                <label class="form-label">Model</label>
+            </div>
         </div>
-    </div>
-    </div>
-</form>
-</div>`,
+        <div class="col-md-3 mb-3">
+            <div class="form-floating">
+                <input type="text" class="form-control rounded-3" id="engineSerialNo" placeholder="" />
+                <label class="form-label">Engine Serial No.</label>
+            </div>
+        </div>
+        <div class="col-md-2 mb-3">
+            <div class="form-floating mb-3">
+                <input type="number" class="form-control rounded-3" id="quantity" placeholder="" />
+                <label class="form-label">Quantity</label>
+            </div>
+        </div>
+        </div>
+    </form>
+    </div>`,
                 width: '800px',
                 focusConfirm: false,
                 showCancelButton: true,
@@ -656,21 +666,21 @@
                 confirmButtonText: 'Submit',
                 preConfirm: () => {
 
-                     //Swal.showValidationMessage('First input missing')   ;
+                    //Swal.showValidationMessage('First input missing')   ;
 
-      
+
 
 
                     if (document.getElementById('quantity').value == '')
                         Swal.showValidationMessage('Quantity field is required');
-                               
+
                     if (document.getElementById('engineSerialNo').value == '')
                         Swal.showValidationMessage('Enginer Serial No. field is required');
 
                     if (document.getElementById('model').value == '')
                         Swal.showValidationMessage('Model field is required');
 
-                    if (document.getElementById('brand').value == '')
+                    if (document.getElementById('brand_id').value == '')
                         Swal.showValidationMessage('Brand field is required');
 
                     //if (document.getElementById('newExpectedTimeArrival').value == '')
@@ -687,13 +697,16 @@
                         document.getElementById('xxx').value,
                         document.getElementById('powerSource').value,
                         //document.getElementById('unitOfMeasure').value,
-                        document.getElementById('brand').value,
+                        document.getElementById('brand_id').value,
+
                         document.getElementById('model').value,
                         document.getElementById('engineSerialNo').value,
-                        document.getElementById('quantity').value
+                        document.getElementById('quantity').value,
+                        document.getElementById("brand_id").options[document.getElementById("brand_id").selectedIndex].getAttribute("data-brand-name"),
                     ];
                 }
             }).then((result) => {
+
                 if (result.isConfirmed) {
                     const values = result.value;
                     const supplierName = values[0];
@@ -701,7 +714,8 @@
                     const newExpectedTimeArrival = values[2];
                     const powerSource = values[3];
                     //const unitOfMeasure = values[4];
-                    const brand = values[4];
+                    const brand_id = values[4];
+                    const brand = values[8];
                     const model = values[5];
                     const engineSerialNo = values[6];
                     const quantity = values[7];
@@ -717,6 +731,7 @@
                         expected_time_arrival: newExpectedTimeArrival,
                         power_source: powerSource,
                         //unit_of_measure: unitOfMeasure,
+                        brand_id: brand_id,
                         brand: brand,
                         model: model,
                         engine_serialNo: engineSerialNo,
@@ -785,7 +800,7 @@
                 //var options = fileName.split('_');
 
                 //console.log("fileName.split('.')[0]: ", fileName.split('.')[0]);
-                
+
                 // options.forEach(function (option) {
                 //     option = option.trim();
                 //     if (option !== '') {
@@ -797,7 +812,7 @@
             // Refresh the Selectize control to update the UI
             //$select.refreshOptions();
         });
-        
+
         //If files were placed using drag and drop feature
         $(document).on('drop', '.file-drop-zone.clearfix', function () {
             console.log("dropped");
@@ -806,7 +821,7 @@
 
             var formFiles = document.forms['ImporterRegForm']['filesUpload.Files'];
             var files = formFiles.files;
-            
+
             $select.addOption({ value: "N/A", text: "N/A" });
             // Loop through each selected file
             for (var i = 0; i < files.length; i++) {
@@ -917,15 +932,16 @@
         //     }
         // }
     }
-        //END FOR CHECKLIST OF DOCUMENTS
+    //END FOR CHECKLIST OF DOCUMENTS
 
 </script>
 
+
 <style>
 
-   /* h2#swal2-title {
-        font-size: 30px;
-    }*/
+    /* h2#swal2-title {
+            font-size: 30px;
+        }*/
 
     textarea {
         resize: none;
@@ -979,25 +995,27 @@
     .app-card-doc .app-doc-meta {
         font-size: .75rem;
     }
-.c-form-container {
-    padding: 12px 5px 0 5px;
-    overflow: hidden;
-}
-/*.swal2-title {
-        display: block;
-    padding: 48px 40px 0 40px;
-    text-align: left;
-}*/
-div:where(.swal2-container) .swal2-html-container{
-    margin-top: 12px;
-    margin-bottom: 0;
-}
-div:where(.swal2-container) div:where(.swal2-actions) {
-    justify-content: right;
-    width: 100%;
-    padding-left: 30px;
-    padding-right: 30px;
-    margin-top: 0;
-}
+
+    .c-form-container {
+        padding: 12px 5px 0 5px;
+        overflow: hidden;
+    }
+    /*.swal2-title {
+            display: block;
+        padding: 48px 40px 0 40px;
+        text-align: left;
+    }*/
+    div:where(.swal2-container) .swal2-html-container {
+        margin-top: 12px;
+        margin-bottom: 0;
+    }
+
+    div:where(.swal2-container) div:where(.swal2-actions) {
+        justify-content: right;
+        width: 100%;
+        padding-left: 30px;
+        padding-right: 30px;
+        margin-top: 0;
+    }
 
 </style>

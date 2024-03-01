@@ -568,6 +568,7 @@ namespace FMB_CIS.Controllers
                 int usid = Convert.ToInt32(uid);
                 int applid = Convert.ToInt32(appid);
                 var UserList = _context.tbl_user.Single(i => i.id == usid);
+                
                 //var UserInfo = UserList.Where(m => m.id == usid).ToList();
 
                 //ViewModel mymodel = new ViewModel();
@@ -638,8 +639,34 @@ namespace FMB_CIS.Controllers
                 //Application Group
                 //Get all chainsaw registered to application id
 
-                var applicationGroups = _context.tbl_application_group.Where(g => g.tbl_application_id == applicID).ToList();
-                mymodel.tbl_Application_Group= applicationGroups;
+                //var applicationGroups = _context.tbl_application_group.Where(
+                //                                                    g => g.tbl_application_id == applicID
+                //                                                    ).ToList();
+
+                var applicationGroups = (from ag in _context.tbl_application_group
+                                         join b in _context.tbl_brands on ag.brand_id equals b.id
+                                         where ag.tbl_application_id == applicID
+                                         select new tbl_application_group
+                                         {
+                                             id = ag.id,
+                                             tbl_application_id = ag.tbl_application_id,
+                                             supplier_name = ag.supplier_name,
+                                             supplier_address = ag.supplier_name,
+                                             expected_time_arrival = ag.expected_time_arrival,
+                                             power_source = ag.power_source,
+                                             unit_of_measure = ag.unit_of_measure,
+                                             brand_id = ag.brand_id,
+                                             brand = b.name,
+                                             model = ag.model,
+                                             engine_serialNo = ag.engine_serialNo,
+                                             quantity = ag.quantity,
+                                             created_by = ag.created_by,
+                                             modified_by = ag.modified_by,
+                                             date_created = ag.date_created,
+                                             date_modified = ag.date_modified
+                                         }).ToList();
+
+                mymodel.tbl_Application_Group = applicationGroups;
 
                 //Document Checklist (For New Upload)
                 var myChecklist = _context.tbl_document_checklist.Where(c => c.permit_type_id == permitTypeID && c.is_active == true).ToList();
@@ -912,7 +939,42 @@ namespace FMB_CIS.Controllers
                 //End for required documents
 
                 //Application ChaisawList
-                var applicationChainsaws = _context.tbl_chainsaw.Where(g => g.tbl_application_id == applicID).ToList();
+                //var applicationChainsaws = _context.tbl_chainsaw.Where(g => g.tbl_application_id == applicID).ToList();
+
+                var applicationChainsaws = (from cs in _context.tbl_chainsaw
+                                            join b in _context.tbl_brands on cs.brand_id equals b.id
+                                             where cs.tbl_application_id == applicID
+                                             select new tbl_chainsaw
+                                             {
+                                                Id = cs.Id,
+                                                user_id = cs.user_id,
+                                                tbl_application_id = cs.tbl_application_id,
+                                                brand_id = b.id,
+                                                Brand = b.name,
+                                                Model = cs.Model,
+                                                Engine = cs.Engine,
+                                                Power = cs.Power,
+                                                remarks = cs.remarks,
+                                                status = cs.status,
+                                                watt = cs.watt,
+                                                hp = cs.hp,
+                                                watt_dec = cs.watt_dec,
+                                                hp_dec = cs.hp_dec,
+                                                gb = cs.gb,
+                                                supplier = cs.supplier,
+                                                date_purchase = cs.date_purchase,
+                                                is_active  = cs.is_active,
+                                                date_created = cs.date_created,
+                                                date_modified = cs.date_modified,
+                                                created_by = cs.created_by,
+                                                modified_by = cs.modified_by,
+                                                chainsaw_serial_number = cs.chainsaw_serial_number,
+                                                chainsaw_date_of_registration = cs.chainsaw_date_of_registration,
+                                                chainsaw_date_of_expiration = cs.chainsaw_date_of_expiration,
+                                                specification = cs.specification,
+                                                purpose = cs.purpose,
+                                                    }).ToList();
+
                 mymodel.tbl_Chainsaws = applicationChainsaws;
                 return View(mymodel);
             }
