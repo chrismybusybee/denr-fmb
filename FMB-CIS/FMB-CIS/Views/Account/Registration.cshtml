@@ -252,7 +252,7 @@
                                         <label asp-for="tbl_Users.valid_id"
                                             class="c-formcontrol-label c-formcontrol-inline">Valid ID</label>
                                         <select asp-for="tbl_Users.valid_id" class="form-select" required="required">
-                                            <option selected disabled>--Select Valid ID--</option>
+                                            <option value="" selected disabled>--Select Valid ID--</option>
                                             <option value="AFP Beneficiary ID">AFP Beneficiary ID</option>
                                             <option value="AFPSLAI ID">AFPSLAI ID</option>
                                             <option value="Barangay ID">Barangay ID</option>
@@ -600,7 +600,7 @@
             var curStep = $(this).closest(".setup-content"),
                 curStepBtn = curStep.attr("id"),
                 nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
-                curInputs = curStep.find("input[type='text'],input[type='url'],input[type='date'],input[type='tel'],input[type='email']"),
+                curInputs = curStep.find("input[type='text'],input[type='url'],input[type='date'],input[type='tel'],input[type='email'],select[id='tbl_Users_gender'], select[id='tbl_Users_valid_id'], select[id='RegionId'], select[id='ddlProvinceId'], select[id='ddlCityId'], select[id='ddlBrgyId'], textarea"),
                 isValid = true;
 
             $(".form-group").removeClass("has-error");
@@ -661,21 +661,22 @@
             }
             else {
                 //captcha upon submission
-                //var response = grecaptcha.getResponse();
-                //if (response.length == 0) {
-                //    $("#rfvCaptcha").show();
-                //}
-                //else {
-                //    $("#rfvCaptcha").hide();
-                $("#confirmSubmitModal").modal("show");
+                var response = grecaptcha.getResponse();
+                if (response.length == 0) {
+                    $("#rfvCaptcha").show();
+                }
+                else {
+                    $("#rfvCaptcha").hide();
+
+                    $("#confirmSubmitModal").modal("show");
 
 
-                $('#check').on('change', function () {
-                    var val = this.checked ? this.value : '';
-                    $('#show').html(val);
-                });
+                    $('#check').on('change', function () {
+                        var val = this.checked ? this.value : '';
+                        $('#show').html(val);
+                    });
 
-
+                }
             }
 
         });
@@ -799,7 +800,7 @@
 
     function PopulateProvinceDropDown(dropDownId, list, selectedId) {
         $(dropDownId).empty();
-        $(dropDownId).append("<option selected disabled>--Please Select a Province--</option>")
+        $(dropDownId).append("<option value selected disabled>--Please Select a Province--</option>")
         $.each(list, function (index, row) {
             $(dropDownId).append("<option value='" + row.id + "'>" + row.name + "</option>")
         });
@@ -827,7 +828,7 @@
 
     function PopulateCityDropDown(ctDropDownId, list, selectedId) {
         $(ctDropDownId).empty();
-        $(ctDropDownId).append("<option selected disabled>--Please Select a City--</option>")
+        $(ctDropDownId).append("<option value selected disabled>--Please Select a City--</option>")
         $.each(list, function (index, row) {
             $(ctDropDownId).append("<option value='" + row.id + "'>" + row.name + "</option>")
         });
@@ -849,7 +850,7 @@
 
     function PopulateBrgyDropDown(brgyDropDownId, list, selectedId) {
         $(brgyDropDownId).empty();
-        $(brgyDropDownId).append("<option selected disabled>--Please Select a Barangay--</option>")
+        $(brgyDropDownId).append("<option value selected disabled>--Please Select a Barangay--</option>")
         $.each(list, function (index, row) {
             $(brgyDropDownId).append("<option value='" + row.id + "'>" + row.name + "</option>")
         });

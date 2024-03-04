@@ -18,6 +18,7 @@ using Newtonsoft;
 using WebGrease.Css.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Ajax.Utilities;
+using Microsoft.Extensions.Hosting;
 
 namespace FMB_CIS.Controllers
 {
@@ -226,6 +227,7 @@ namespace FMB_CIS.Controllers
         {
             model.tbl_user_types_ids = model.tbl_user_types_string.Split(',').Select(item => int.Parse(item));
             //[Bind("first_name,middle_name,last_name,suffix,contact_no,valid_id,valid_id_no,birth_date,tbl_region_id,tbl_province_id,tbl_city_id,tbl_brgy_id,street_address,tbl_division_id,email,password,confirmPassword,comment,tbl_user_types_id")]
+            string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
 
             if (ModelState.IsValid)
             {
@@ -391,9 +393,10 @@ namespace FMB_CIS.Controllers
                                 {
                                     string urlSafeEmail = Uri.EscapeDataString(rdr["email"].ToString());
                                     string urlSafeTokencode = Uri.EscapeDataString(rdr["UniqueId"].ToString());
-                                    string passResetLink = "https://fmb-cis.beesuite.ph/Account/ResetPassword?email=" + urlSafeEmail + "&tokencode=" + urlSafeTokencode + "&isNew=true";
-                                
-                                    Console.WriteLine("Link for Password Reset:");
+                                    //string passResetLink = "https://fmb-cis.beesuite.ph/Account/ResetPassword?email=" + urlSafeEmail + "&tokencode=" + urlSafeTokencode + "&isNew=true";
+                                    string passResetLink = host + "Account/ResetPassword?email=" + urlSafeEmail + "&tokencode=" + urlSafeTokencode + "&isNew=true";
+
+                                Console.WriteLine("Link for Password Reset:");
                                     Console.WriteLine(passResetLink);
                                     var subject = "Account Created";
                                     var body = "We would like to inform you that you have created an account with FMB-CIS.\nPlease click the link to verify your email and set your password. " + passResetLink + "\nThank You!";
@@ -440,6 +443,7 @@ namespace FMB_CIS.Controllers
             {
                 DAL dal = new DAL();
                 bool eMailExist = dal.emailExist(model.email, _configuration.GetConnectionString("ConnStrng"));
+                string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 if (eMailExist)
                 {
                     //CODE TO GENERATE A LINK FOR PASSWORD RESET.
@@ -458,10 +462,10 @@ namespace FMB_CIS.Controllers
                             {
                                 string urlSafeEmail = Uri.EscapeDataString(rdr["email"].ToString());
                                 string urlSafeTokencode = Uri.EscapeDataString(rdr["UniqueId"].ToString());
-                                string passResetLink = "https://fmb-cis.beesuite.ph/Account/ResetPassword?email=" + urlSafeEmail + "&tokencode=" + urlSafeTokencode + "&isNew=false";
+                                string passResetLink = host + "Account/ResetPassword?email=" + urlSafeEmail + "&tokencode=" + urlSafeTokencode + "&isNew=false";
+                                //string passResetLink = "https://fmb-cis.beesuite.ph/Account/ResetPassword?email=" + urlSafeEmail + "&tokencode=" + urlSafeTokencode + "&isNew=false";
                                 //string passResetLink = "https://localhost:7270/Account/ResetPassword?email=" + rdr["email"].ToString() + "&tokencode=" + rdr["UniqueId"].ToString();
-
-
+                                
                                 Console.WriteLine("Link for Password Reset:");
                                 Console.WriteLine(passResetLink);
                                 var subject = "Password Reset";

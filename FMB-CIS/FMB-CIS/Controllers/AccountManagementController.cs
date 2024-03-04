@@ -415,7 +415,8 @@ namespace FMB_CIS.Controllers
         [HttpPost]
         public IActionResult AddAccount(ViewModel model)
         {
-                        int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
 
             //Check if email exist
             bool emailExist = _context.tbl_user.Where(u => u.email == model.tbl_User.email).Any();
@@ -476,7 +477,7 @@ namespace FMB_CIS.Controllers
                 //_context.SaveChanges();
 
                 var subject = "Account Created";
-                var body = "We would like to inform you that an admin created an account using your email for FMB-CIS.\nPlease login with your temporary password: " + decrPw + "\nPleace replace your password by visiting https://fmb-cis.beesuite.ph/AccountManagement/ChangePassword after you login. Thank You!";
+                var body = "We would like to inform you that an admin created an account using your email for FMB-CIS.\nPlease login with your temporary password: " + decrPw + "\nPleace replace your password by visiting " + host + "ProfileManagement after you login. Thank You!";
                 EmailSender.SendEmailAsync(model.tbl_User.email, subject, body);
 
                 //return View(model);
