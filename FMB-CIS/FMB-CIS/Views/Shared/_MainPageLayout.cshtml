@@ -953,6 +953,17 @@
                                     </a>
                                 </li>
                             }
+                            @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_activity_logs"))
+                            {
+                                <li id="activityLogsMenuItem">
+                                    <a href="@Url.Action("Index", "ActivityLogs")" id="activityLogsSideMenu" class="d-flex gap-2 text-decoration-none fs-6">
+                                        <div>
+                                            <img src="~/assets/images/menu-icons/activity-logs.png" />
+                                        </div>
+                                        <span>Activity Logs</span>
+                                    </a>
+                                </li>
+                            }
                             @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_modal_cis_tutorial"))
                             {
                                 <li id="tutorialMenuItem">
@@ -1324,6 +1335,7 @@
             "/ChecklistManagement": "checklistManagementMenuItem",
             "/ReportGeneration": "reportGenerationMenuItem",
             "/Notifications/ManageNotifications": "manageNotifsMenuItem",
+            "/ActivityLogs": "activityLogsMenuItem",
         };
 
         if (currentPage.startsWith("/AccountManagement/ViewAccount/")) {
