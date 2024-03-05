@@ -314,6 +314,10 @@ namespace FMB_CIS.Controllers
                 ModelState.Clear();
                 ViewBag.Message = "Save Success";
                 //return View();
+                //Log User Activity
+                var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                string permitName = _context.tbl_permit_type.Where(p=>p.id == model.tbl_Application.tbl_permit_type_id).Select(p => p.name).FirstOrDefault();
+                LogUserActivity("Owner", "Submitted Application", $"{permitName} Application Submitted by {userEmail}. {referenceNo}", apkDateTime: DateTime.Now);
                 return RedirectToAction(actionNameForReturn, "Application");
             }
             return View(model);
@@ -544,6 +548,7 @@ namespace FMB_CIS.Controllers
                                               id = a.id,
                                               tbl_user_id = usid,
                                               full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
+                                              company_name = usr.company_name,
                                               first_name = usr.first_name,
                                               middle_name = usr.middle_name,
                                               last_name = usr.last_name,
@@ -587,7 +592,8 @@ namespace FMB_CIS.Controllers
                                           tbl_region_id = usr.tbl_region_id,
                                               renew_from = a.renew_from,
                                          currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
-                                         currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic   
+                                         currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic
+                                              ReferenceNo = a.ReferenceNo
                                           }).FirstOrDefault();
                                          applicationMod.currentPercentage = (applicationMod.currentStepCount * 100 / applicationMod.currentMaxCount);
    
@@ -614,6 +620,7 @@ namespace FMB_CIS.Controllers
                                               id = a.id,
                                               tbl_user_id = usid,
                                               full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
+                                              company_name = usr.company_name,
                                               first_name = usr.first_name,
                                               middle_name = usr.middle_name,
                                               last_name = usr.last_name,
@@ -645,7 +652,8 @@ namespace FMB_CIS.Controllers
                                               renew_from = a.renew_from,
                                           tbl_region_id = usr.tbl_region_id,
                                          currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
-                                         currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic   
+                                         currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic
+                                              ReferenceNo = a.ReferenceNo
                                           }).FirstOrDefault();
                                          applicationMod.currentPercentage = (applicationMod.currentStepCount * 100 / applicationMod.currentMaxCount);
 
@@ -821,6 +829,8 @@ namespace FMB_CIS.Controllers
             //Read the File data into Byte Array.
             byte[] bytes = System.IO.File.ReadAllBytes(pathWithFilename);
 
+            //Log Download Initiated
+            LogUserActivity("Download", "Download File", $"File download initiated. {fileName}", apkDateTime: DateTime.Now);
             //Send the File to Download.
             return File(bytes, "application/octet-stream", fileName);
         }
@@ -922,6 +932,9 @@ namespace FMB_CIS.Controllers
                         _context.tbl_files.Add(filesDB);
                         _context.SaveChanges();
                     }
+
+                    //Log User Activity
+                    LogUserActivity("OwnerApproval", "File Upload", $"The file(s) were uploaded to wwwroot/Files/{folderName}{folder}", apkDateTime: DateTime.Now);
                 }
 
                 int permitTypeID = Convert.ToInt32(_context.tbl_application.Where(a => a.id == id).Select(a => a.tbl_permit_type_id).FirstOrDefault());
@@ -1306,6 +1319,11 @@ namespace FMB_CIS.Controllers
                         _context.Entry(appli).Property(x => x.date_due_for_officers).IsModified = true;
                         _context.Entry(usrdet).Property(x => x.comment).IsModified = true;
                         _context.SaveChanges();
+
+                        //Log User Activity
+                        var statsName = _context.tbl_permit_workflow_step.Where(pwfs => pwfs.permit_type_code == permitTypeID.ToString() && pwfs.workflow_step_code == stats.ToString()).Select(pwfs=>pwfs.name).FirstOrDefault();
+                        var referenceNo = viewMod.applicantViewModels.ReferenceNo;
+                        LogUserActivity("OwnerApproval", "Application Status Moved", $"{referenceNo} status moved to {statsName}.", apkDateTime: DateTime.Now);
                     }
 
                     //if (emailTemplateID != 0) //If emailTemplateID is 0, no email should be sent.
@@ -1365,7 +1383,7 @@ namespace FMB_CIS.Controllers
                     //    //Email
                     //    var subject = "Permit Application Status";
                     //    var body = "Greetings! \n An inspector viewed your application.\nThe officer left the following comment:\n" + viewMod.applicantViewModels.comment;
-                    //    EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);
+                    //    EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);                  
                 }
                 return RedirectToAction("ChainsawOwnerApplicantsList", "ChainsawOwner");
             }
@@ -1478,17 +1496,11 @@ namespace FMB_CIS.Controllers
             commentsTbl.date_modified = DateTime.Now;
             _context.tbl_comments.Add(commentsTbl);
             _context.SaveChanges();
-            //return RedirectToAction("AccountsApproval?uid="+uid, "AccountManagement");
-            //Url.Action("A","B",new{a="x"})
 
-            if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw") == true)
-            {
-                return RedirectToAction("EditApplication", "Application", new { uid = uid, appid = appid });
-            }
-            else
-            {
-                return RedirectToAction("ChainsawOwnerApproval", "ChainsawOwner", new { uid = uid, appid = model.appid });
-            }
+            //Log User Activity
+            LogUserActivity("Comments", "New Comment", $"Added new comment on Application#{appid}", apkDateTime: DateTime.Now);
+
+            return RedirectToAction("ChainsawOwnerApproval", "ChainsawOwner", new { uid = uid, appid = model.appid });                      
         }
     }
 }
