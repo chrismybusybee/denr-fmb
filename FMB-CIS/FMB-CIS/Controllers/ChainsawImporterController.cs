@@ -563,6 +563,7 @@ namespace FMB_CIS.Controllers
                                           id = a.id,
                                           tbl_user_id = usid,
                                           full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
+                                          company_name = usr.company_name,
                                           first_name = usr.first_name,
                                           middle_name = usr.middle_name,
                                           last_name = usr.last_name,
@@ -597,6 +598,7 @@ namespace FMB_CIS.Controllers
                                           renew_from = a.renew_from,
                                           currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
                                           currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic  
+                                          ReferenceNo = a.ReferenceNo
                                       }).FirstOrDefault();
                 applicationMod.currentPercentage = (applicationMod.currentStepCount * 100 / applicationMod.currentMaxCount);
                 mymodel.applicantViewModels = applicationMod;

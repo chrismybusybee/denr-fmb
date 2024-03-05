@@ -48,7 +48,18 @@
                                 <a href='@string.Format("{0}ChainsawImporter/ChainsawImporterApproval?uid={1}&appid={2}", baseurl,ViewBag.uid,ViewBag.RenewalID)'>A renewal for this application was applied. Please click this to view.</a>
                             }
                         </div>
-                    }
+                    }                    
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group d-flex flex-column gap-1">
+                        <label class="text-secondary small">
+                            Reference No.
+                        </label>
+                        <span class="fw-bold">
+                            @Html.DisplayFor(model => model.applicantViewModels.ReferenceNo)
+                            @Html.HiddenFor(model => model.applicantViewModels.ReferenceNo)
+                        </span>
+                    </div>
                 </div>
                 <div class="d-flex justify-content-end gap-2">
                     @foreach (WorkflowStep worklowStep in Model.workflow.steps)
@@ -136,6 +147,19 @@
                                         </span>
                                     </div>
                                 </div>
+                                @if (Model.applicantViewModels.company_name != null)
+                                {
+                                    <div class="col-md-5">
+                                        <div class="form-group d-flex flex-column gap-1">
+                                            <label class="text-secondary small">
+                                                Company Name
+                                            </label>
+                                            <span class="fw-bold">
+                                                @Html.DisplayFor(model => model.applicantViewModels.company_name)
+                                            </span>
+                                        </div>
+                                    </div>
+                                }
                             </div>
                             <div class="row mb-5">
                                 <div class="col-md-5">
