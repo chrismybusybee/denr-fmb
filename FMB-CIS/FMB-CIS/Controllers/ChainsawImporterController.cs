@@ -315,6 +315,11 @@ namespace FMB_CIS.Controllers
 
                 //return View(model);
 
+                //Log User Activity
+                var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                string permitName = _context.tbl_permit_type.Where(p => p.id == model.tbl_Application.tbl_permit_type_id).Select(p => p.name).FirstOrDefault();
+                LogUserActivity("Importer", "Submitted Application", $"{permitName} Application Submitted by {userEmail}. {referenceNo}", apkDateTime: DateTime.Now);
+
                 return RedirectToAction("ImportPermits", "Application");
                 
             }
@@ -722,6 +727,9 @@ namespace FMB_CIS.Controllers
             //Read the File data into Byte Array.
             byte[] bytes = System.IO.File.ReadAllBytes(pathWithFilename);
 
+            //Log Download Initiated
+            LogUserActivity("Download", "Download File", $"File download initiated. {fileName}", apkDateTime: DateTime.Now);
+
             //Send the File to Download.
             return File(bytes, "application/octet-stream", fileName);
         }
@@ -815,6 +823,9 @@ namespace FMB_CIS.Controllers
                         _context.tbl_files.Add(filesDB);
                         _context.SaveChanges();
                     }
+
+                    //Log User Activity
+                    LogUserActivity("ImporterApproval", "File Upload", $"The file(s) were uploaded to wwwroot/Files/{folderName}/{folder}", apkDateTime: DateTime.Now);
                 }
 
                 if (buttonClicked == "Approve")
@@ -1051,6 +1062,11 @@ namespace FMB_CIS.Controllers
                         _context.Entry(appli).Property(x => x.date_due_for_officers).IsModified = true;
                         _context.Entry(usrdet).Property(x => x.comment).IsModified = true;
                         _context.SaveChanges();
+
+                        //Log User Activity
+                        var statsName = _context.tbl_permit_workflow_step.Where(pwfs => pwfs.permit_type_code == "1" && pwfs.workflow_step_code == stats.ToString()).Select(pwfs => pwfs.name).FirstOrDefault();
+                        var referenceNo = viewMod.applicantViewModels.ReferenceNo;
+                        LogUserActivity("ImporterApproval", "Application Status Moved", $"{referenceNo} status moved to {statsName}.", apkDateTime: DateTime.Now);
                     }
                     //Email
                     if (emailTemplateID != 0) //If emailTemplateID is 0, no email should be sent.
@@ -1115,6 +1131,7 @@ namespace FMB_CIS.Controllers
                 //    var body = "Greetings! \n An inspector viewed your application.\nThe officer left the following comment:\n" + viewMod.applicantViewModels.comment;
                 //    EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);
                 //}
+
                 return RedirectToAction("ChainsawImporterApplicantsList", "ChainsawImporter");
             }
 
@@ -1225,6 +1242,10 @@ namespace FMB_CIS.Controllers
             commentsTbl.date_modified = DateTime.Now;
             _context.tbl_comments.Add(commentsTbl);
             _context.SaveChanges();
+
+            //Log User Activity
+            LogUserActivity("Comments", "New Comment", $"Added new comment on Application#{appid}", apkDateTime: DateTime.Now);
+
             //return RedirectToAction("AccountsApproval?uid="+uid, "AccountManagement");
             //Url.Action("A","B",new{a="x"})
 
@@ -1265,6 +1286,9 @@ namespace FMB_CIS.Controllers
             commentsTbl.bridge_id = m.id;
             _context.tbl_comments.Add(commentsTbl);
             _context.SaveChanges();
+
+            //Log User Activity
+            LogUserActivity("DocumentTags", "Document Tag Action", $"Document tag for file #{tbl_files_id} changed to {tbl_files_status}", apkDateTime: DateTime.Now);
 
             // _context.SaveChanges();
 

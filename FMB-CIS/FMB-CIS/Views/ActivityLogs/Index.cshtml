@@ -1,4 +1,96 @@
-﻿@{
+﻿@using System.Security.Claims;
+@model FMB_CIS.Models.ViewModel
+@{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Activity Logs";
 }
+
+<div class="c-card-container c-card-container-box">
+    <div id="card">
+        <div class="c-info">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="@Url.Action("Index", "Home")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>Activity Logs
+                    </h5>
+                    <p class="card-text">Used to view user activity logs.</p>
+                   @*  @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Administrator") == true || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Super Admin") == true)
+                    {
+                        <button id="btnAdd" class="btn btn-primary" onclick="window.location.href = '@Url.Action("AddAccount", "AccountManagement")'">Add New Account</button>
+                    } *@
+                </div>
+            </div>
+        </div>
+        <div class="c-content">
+            <div id="card">
+                <table id="activityLogsTable" class="table table-striped dataTable">
+                    <thead>
+                        <tr>
+                            <th class="text-nowrap hidden-column">Id</th>
+                            <th class="text-nowrap">UserId</th>
+                            <th class="text-nowrap">Entity</th>
+                            <th class="text-nowrap">UserAction</th>
+                            <th class="text-nowrap">Remarks</th>
+                            <th class="text-nowrap">CreatedDt</th>
+                            <th class="text-nowrap">CreatedTimestamp</th>
+                            <th class="text-nowrap">ApkDatetime</th>
+                            <th class="text-nowrap">Source</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (tbl_user_activitylog item in Model.tbl_Activity_logs)
+                        {
+                            <tr>
+                                <td class="text-nowrap hidden-column">
+                                    @Html.DisplayFor(modelItem => item.id)
+                                </td>
+                                <td class="text-nowrap">
+                                    @Html.DisplayFor(modelItem => item.UserId)
+                                </td>
+
+                                <td class="text-nowrap">
+                                    @Html.DisplayFor(modelItem => item.Entity)
+                                </td>
+                                <td class="text-nowrap">
+                                    @Html.DisplayFor(modelItem => item.UserAction)
+                                </td>
+      
+                                <td class="text-nowrap">
+                                    @Html.DisplayFor(modelItem => item.Remarks)
+                                </td>
+
+                                <td class="text-nowrap">
+                                    @Html.DisplayFor(modelItem => item.CreatedDt)
+                                </td>
+
+                                <td class="text-nowrap">
+                                    @Html.DisplayFor(modelItem => item.CreatedTimestamp)
+                                </td>
+
+                                <td class="text-nowrap">
+                                    @Html.DisplayFor(modelItem => item.ApkDatetime)
+                                </td>
+
+                                <td class="text-nowrap">
+                                    @Html.DisplayFor(modelItem => item.Source)
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/jquery-3.7.1.min.js"></script>
+<script src="/js/datatables.min.js"></script>
+
+<script type="text/javascript">
+    $(".btnDelete").click(function () {
+        $("#confirmDeleteModal").modal("show");
+    });
+</script>
+
