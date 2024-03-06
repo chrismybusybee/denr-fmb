@@ -14,9 +14,9 @@
                         <a href="@Url.Action("Index", "Home")" class="me-auto" title="back"><i data-feather="arrow-left" class="text-secondary backBtn"></i></a>Activity Logs
                     </h5>
                     <p class="card-text">Used to view user activity logs.</p>
-                   @*  @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Administrator") == true || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Super Admin") == true)
+                    @*  @if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Administrator") == true || ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Super Admin") == true)
                     {
-                        <button id="btnAdd" class="btn btn-primary" onclick="window.location.href = '@Url.Action("AddAccount", "AccountManagement")'">Add New Account</button>
+                    <button id="btnAdd" class="btn btn-primary" onclick="window.location.href = '@Url.Action("AddAccount", "AccountManagement")'">Add New Account</button>
                     } *@
                 </div>
             </div>
@@ -27,7 +27,8 @@
                     <thead>
                         <tr>
                             <th class="text-nowrap hidden-column">Id</th>
-                            <th class="text-nowrap">UserId</th>
+                            <th class="text-nowrap hidden-column">UserId</th>
+                            <th class="text-nowrap">Email</th>
                             <th class="text-nowrap">Entity</th>
                             <th class="text-nowrap">UserAction</th>
                             <th class="text-nowrap">Remarks</th>
@@ -44,18 +45,20 @@
                                 <td class="text-nowrap hidden-column">
                                     @Html.DisplayFor(modelItem => item.id)
                                 </td>
-                                <td class="text-nowrap">
+                                <td class="text-nowrap hidden-column">
                                     @Html.DisplayFor(modelItem => item.UserId)
                                 </td>
-
+                                <td class="text-nowrap">
+                                    @Html.DisplayFor(modelItem => item.email)
+                                </td>
                                 <td class="text-nowrap">
                                     @Html.DisplayFor(modelItem => item.Entity)
                                 </td>
                                 <td class="text-nowrap">
                                     @Html.DisplayFor(modelItem => item.UserAction)
                                 </td>
-      
-                                <td class="text-nowrap">
+
+                                <td class="text-nowrap" style="white-space:normal;">
                                     @Html.DisplayFor(modelItem => item.Remarks)
                                 </td>
 
@@ -92,5 +95,6 @@
     $(".btnDelete").click(function () {
         $("#confirmDeleteModal").modal("show");
     });
+
 </script>
 

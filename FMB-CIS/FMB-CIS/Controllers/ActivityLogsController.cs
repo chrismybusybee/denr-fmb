@@ -18,7 +18,7 @@ namespace FMB_CIS.Controllers
             _context = context;
             EmailSender = emailSender;
         }
-
+        [RequiresAccess(allowedAccessRights = "allow_page_activity_logs")]
         public IActionResult Index()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
@@ -27,31 +27,26 @@ namespace FMB_CIS.Controllers
             {
                 ViewModel model = new ViewModel();
                 //Get the list of activity logs
-                var activityLogsList = _context.tbl_user_activitylog.OrderByDescending(u => u.id).ToList();
+
+                var activityLogsList = (from ua in _context.tbl_user_activitylog
+                                        join user in _context.tbl_user on ua.UserId equals user.id
+                                        orderby ua.id descending
+                                        select new tbl_user_activitylog
+                                        {
+                                            id = ua.id,
+                                            email = user.email,
+                                            UserId = ua.UserId,
+                                            Entity = ua.Entity,
+                                            UserAction = ua.UserAction,
+                                            Remarks = ua.Remarks,
+                                            CreatedDt = ua.CreatedDt,
+                                            CreatedTimestamp = ua.CreatedTimestamp,
+                                            ApkDatetime = ua.ApkDatetime,
+                                            Source = ua.Source
+                                        });
                 model.tbl_Activity_logs = activityLogsList;
 
                 return View(model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
-        }
-        public IActionResult ActivityLogsListPartialView()
-        {
-            int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
-                ActivityLogsListViewModel model = new ActivityLogsListViewModel();
-                //Get the list of users
-                var entities = _context.tbl_user_activitylog.OrderByDescending(u=>u.CreatedDt).ToList();
-                model.activityLogs = entities.Adapt<List<ActivityLog>>();
-                
-                string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
-                ViewData["BaseUrl"] = host;
-
-                return PartialView("~/Views/ActivityLogs/Partial/ActivityLogsListPartial.cshtml", model);
             }
             else
             {
