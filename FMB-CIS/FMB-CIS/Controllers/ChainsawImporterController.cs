@@ -825,7 +825,7 @@ namespace FMB_CIS.Controllers
                     }
 
                     //Log User Activity
-                    LogUserActivity("ImporterApproval", "File Upload", $"The file(s) were uploaded to wwwroot/Files/{folderName}/{folder}", apkDateTime: DateTime.Now);
+                    LogUserActivity("ImporterApproval", "File Upload", $"The file(s) were uploaded to wwwroot/Files/{folderName}{folder}", apkDateTime: DateTime.Now);
                 }
 
                 if (buttonClicked == "Approve")

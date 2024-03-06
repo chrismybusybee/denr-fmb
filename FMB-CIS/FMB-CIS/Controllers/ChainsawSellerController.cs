@@ -288,7 +288,11 @@ namespace FMB_CIS.Controllers
                 model.tbl_Document_Checklist = myChecklist;
                 //End for Document Checklist
 
-                //return View(model);
+                //Log User Activity
+                var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                string permitName = _context.tbl_permit_type.Where(p => p.id == model.tbl_Application.tbl_permit_type_id).Select(p => p.name).FirstOrDefault();
+                LogUserActivity("Seller", "Submitted Application", $"{permitName} Application Submitted by {userEmail}. {referenceNo}", apkDateTime: DateTime.Now);
+
                 return RedirectToAction("SellPermits", "Application");
             }
             return View(model);
@@ -502,7 +506,11 @@ namespace FMB_CIS.Controllers
                 model.tbl_Document_Checklist = myChecklist;
                 //End for Document Checklist
 
-                //return View(model);
+                //Log User Activity
+                var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                string permitName = _context.tbl_permit_type.Where(p => p.id == model.tbl_Application.tbl_permit_type_id).Select(p => p.name).FirstOrDefault();
+                LogUserActivity("Seller", "Submitted Application", $"{permitName} Application Submitted by {userEmail}. {referenceNo}", apkDateTime: DateTime.Now);
+
                 return RedirectToAction("PurchasePermits", "Application");
             }
             return View(model);
@@ -879,7 +887,8 @@ namespace FMB_CIS.Controllers
             string pathWithFilename = path + "//" + fileName;
             //Read the File data into Byte Array.
             byte[] bytes = System.IO.File.ReadAllBytes(pathWithFilename);
-
+            //Log Download Initiated
+            LogUserActivity("Download", "Download File", $"File download initiated. {fileName}", apkDateTime: DateTime.Now);
             //Send the File to Download.
             return File(bytes, "application/octet-stream", fileName);
         }
@@ -975,6 +984,9 @@ namespace FMB_CIS.Controllers
                         _context.tbl_files.Add(filesDB);
                         _context.SaveChanges();
                     }
+
+                    //Log User Activity
+                    LogUserActivity("SellerApproval", "File Upload", $"The file(s) were uploaded to wwwroot/Files/{folderName}{folder}", apkDateTime: DateTime.Now);
                 }
 
                 int permitTypeID = Convert.ToInt32(_context.tbl_application.Where(a => a.id == id).Select(a => a.tbl_permit_type_id).FirstOrDefault());
@@ -1267,6 +1279,11 @@ namespace FMB_CIS.Controllers
                         _context.Entry(appli).Property(x => x.date_due_for_officers).IsModified = true;
                         _context.Entry(usrdet).Property(x => x.comment).IsModified = true;
                         _context.SaveChanges();
+
+                        //Log User Activity
+                        var statsName = _context.tbl_permit_workflow_step.Where(pwfs => pwfs.permit_type_code == permitTypeID.ToString() && pwfs.workflow_step_code == stats.ToString()).Select(pwfs => pwfs.name).FirstOrDefault();
+                        var referenceNo = viewMod.applicantViewModels.ReferenceNo;
+                        LogUserActivity("SellerApproval", "Application Status Moved", $"{referenceNo} status moved to {statsName}.", apkDateTime: DateTime.Now);
                     }
                     //Email
                     if (emailTemplateID != 0) //If emailTemplateID is 0, no email should be sent.
@@ -1478,17 +1495,11 @@ namespace FMB_CIS.Controllers
             commentsTbl.date_modified = DateTime.Now;
             _context.tbl_comments.Add(commentsTbl);
             _context.SaveChanges();
-            //return RedirectToAction("AccountsApproval?uid="+uid, "AccountManagement");
-            //Url.Action("A","B",new{a="x"})
 
-            if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw") == true)
-            {
-                return RedirectToAction("EditApplication", "Application", new { uid = uid, appid = appid });
-            }
-            else
-            {
-                return RedirectToAction("ChainsawSellerApproval", "ChainsawSeller", new { uid = uid, appid = model.appid });
-            }
+            //Log User Activity
+            LogUserActivity("Comments", "New Comment", $"Added new comment on Application#{appid}", apkDateTime: DateTime.Now);
+
+            return RedirectToAction("ChainsawSellerApproval", "ChainsawSeller", new { uid = uid, appid = model.appid });
         }
         
     }
