@@ -1,5 +1,5 @@
 ﻿@using System.Security.Claims;
-@model FMB_CIS.Models.ViewModel
+@model FMB_CIS.Models.ActivityLogsViewModel
 @{
     Layout = "~/Views/Shared/_MainPageLayout.cshtml";
     ViewBag.Title = "Activity Logs";
@@ -39,7 +39,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (tbl_user_activitylog item in Model.tbl_Activity_logs)
+                        @foreach (var item in Model.activityLogs)
                         {
                             <tr>
                                 <td class="text-nowrap hidden-column">
@@ -49,7 +49,7 @@
                                     @Html.DisplayFor(modelItem => item.UserId)
                                 </td>
                                 <td class="text-nowrap">
-                                    @Html.DisplayFor(modelItem => item.email)
+                                    @Html.DisplayFor(modelItem => item.Email)
                                 </td>
                                 <td class="text-nowrap">
                                     @Html.DisplayFor(modelItem => item.Entity)

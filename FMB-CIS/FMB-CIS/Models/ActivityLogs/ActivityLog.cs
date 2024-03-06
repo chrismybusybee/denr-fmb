@@ -4,6 +4,7 @@
     {
         public int id { get; set; }
         public int UserId { get; set; }
+        public string? Email { get; set; }  
         public string Entity { get; set; }
         public string UserAction { get; set; }
         public string Remarks { get; set; }

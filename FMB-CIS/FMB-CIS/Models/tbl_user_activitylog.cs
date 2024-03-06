@@ -5,7 +5,6 @@ namespace FMB_CIS.Models
     public class tbl_user_activitylog
     {
         public int id { get; set; }
-        public string? email { get; set; }
         public int UserId { get; set; }
         public string Entity { get; set; }
         public string UserAction { get; set; }

@@ -15,9 +15,6 @@
         public IEnumerable<tbl_files>? filesUploadedByCENRO { get; set; }
         public IEnumerable<tbl_files>? proofOfPaymentFiles { get; set; }
 
-        public IEnumerable<tbl_user_activitylog>? tbl_Activity_logs { get; set; }
-
-
 public DashboardView? dashboardView { get; set; }
         public string? uid { get; set; }
         public string? appid { get; set; }

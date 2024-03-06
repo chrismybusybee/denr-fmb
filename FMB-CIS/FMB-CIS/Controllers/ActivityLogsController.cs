@@ -25,16 +25,16 @@ namespace FMB_CIS.Controllers
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             if (usrRoleID == 14) // Super Admin
             {
-                ViewModel model = new ViewModel();
+                ActivityLogsViewModel model = new ActivityLogsViewModel();
                 //Get the list of activity logs
 
                 var activityLogsList = (from ua in _context.tbl_user_activitylog
                                         join user in _context.tbl_user on ua.UserId equals user.id
                                         orderby ua.id descending
-                                        select new tbl_user_activitylog
+                                        select new ActivityLog
                                         {
                                             id = ua.id,
-                                            email = user.email,
+                                            Email = user.email,
                                             UserId = ua.UserId,
                                             Entity = ua.Entity,
                                             UserAction = ua.UserAction,
@@ -44,7 +44,7 @@ namespace FMB_CIS.Controllers
                                             ApkDatetime = ua.ApkDatetime,
                                             Source = ua.Source
                                         });
-                model.tbl_Activity_logs = activityLogsList;
+                model.activityLogs = activityLogsList.ToList();
 
                 return View(model);
             }
