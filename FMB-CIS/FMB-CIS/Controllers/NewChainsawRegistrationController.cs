@@ -312,6 +312,11 @@ namespace FMB_CIS.Controllers
                 ViewBag.RequiredDocsList = requirements.announcement_content;
                 //End for required documents
                 //return View(model);
+
+                var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                string permitName = _context.tbl_permit_type.Where(p => p.id == model.tbl_Application.tbl_permit_type_id).Select(p => p.name).FirstOrDefault();
+                LogUserActivity("ChainsawRegistration", "Submitted Application", $"{permitName} Application Submitted by {userEmail}. {referenceNo}", apkDateTime: DateTime.Now);
+
                 return RedirectToAction("RegistrationPermits", "Application");
             }
             return View(model);
