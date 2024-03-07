@@ -8,10 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NuGet.Configuration;
 using Org.BouncyCastle.Pqc.Crypto.Lms;
 using Org.BouncyCastle.Tls;
 using Services.Utilities;
+using System;
 using System.Drawing.Drawing2D;
 using System.Drawing.Printing;
 using System.Security.Claims;
@@ -1031,6 +1033,10 @@ namespace FMB_CIS.Controllers
                     //}
                     _context.SaveChanges();
 
+                    //Log User Activity
+                    var referenceNo = appliDB.ReferenceNo;
+                    LogUserActivity("EditApplication", "Application Changes", $"Changes saved on {referenceNo}", apkDateTime: DateTime.Now);
+
                     //if (appliDB.tbl_permit_type_id == 13)
                     //{
                     //    var csawDB = _context.tbl_chainsaw.Where(c => c.tbl_application_id == appliDB.id).FirstOrDefault();
@@ -1089,6 +1095,8 @@ namespace FMB_CIS.Controllers
                             _context.tbl_files.Add(filesDB);
                             _context.SaveChanges();
 
+                            //Log User Activity
+                            LogUserActivity("EditApplication", "File Upload", $"File(s) uploaded on {folderName} for {referenceNo}", apkDateTime: DateTime.Now);
                             //Matching of tbl_files to tbl_document_checklist
                             foreach (var item in viewMod.fileChecklistViewModel)
                             {
@@ -1113,7 +1121,7 @@ namespace FMB_CIS.Controllers
                     }
                     //Email
                     var subject = "Permit Application Status";
-                    var body = "Greetings! \n You have successfully edited your application.";
+                    var body = "Greetings! \n You have successfully updated your application.";
                     EmailSender.SendEmailAsync(viewMod.applicantViewModels.email, subject, body);
 
                 }
@@ -1155,6 +1163,9 @@ namespace FMB_CIS.Controllers
                             _context.tbl_files.Add(filesDB);
                             _context.SaveChanges();
 
+                            //Log User Activity
+                            var referenceNo = appliDB.ReferenceNo;
+                            LogUserActivity("EditApplication", "File Upload", $"File(s) uploaded on {folderName} for {referenceNo}", apkDateTime: DateTime.Now);
                             //Matching of tbl_files to tbl_document_checklist
                             foreach (var item in viewMod.fileChecklistViewModel)
                             {
@@ -1280,7 +1291,8 @@ namespace FMB_CIS.Controllers
             string pathWithFilename = path + "//" + fileName;
             //Read the File data into Byte Array.
             byte[] bytes = System.IO.File.ReadAllBytes(pathWithFilename);
-
+            //Log Download Initiated
+            LogUserActivity("Download", "Download File", $"File download initiated. {fileName}", apkDateTime: DateTime.Now);
             //Send the File to Download.
             return File(bytes, "application/octet-stream", fileName);
         }
@@ -1303,7 +1315,8 @@ namespace FMB_CIS.Controllers
             //return RedirectToAction("AccountsApproval?uid="+uid, "AccountManagement");
             //Url.Action("A","B",new{a="x"})
 
-            
+            //Log User Activity
+            LogUserActivity("Comments", "New Comment", $"Added new comment on Application#{appid}", apkDateTime: DateTime.Now);
             return RedirectToAction("EditApplication", "Application", new { uid = uid, appid = appid });
         }
 
@@ -1327,6 +1340,7 @@ namespace FMB_CIS.Controllers
             //}
 
 
+            var referenceNo = _context.tbl_application.Where(a => a.id == applicationID).Select(a => a.ReferenceNo).FirstOrDefault();
             //Saving a file
             if (model.filesUpload != null)
             {
@@ -1362,6 +1376,8 @@ namespace FMB_CIS.Controllers
                     _context.tbl_files.Add(filesDB);
                     _context.SaveChanges();
                 }
+                //Log User Activity
+                LogUserActivity("Proof of Payment", "File Upload", $"File(s) uploaded on {folderName} for {referenceNo}", apkDateTime: DateTime.Now);
             }
 
             var applicationPayment = model.tbl_Application_Payment;
@@ -1372,6 +1388,8 @@ namespace FMB_CIS.Controllers
             _context.tbl_application_payment.Add(applicationPayment);
             _context.SaveChanges();
 
+            //Log User Activity
+            LogUserActivity("Proof of Payment", "Payment Details saved", $"Payment info saved for {referenceNo}", apkDateTime: DateTime.Now);
             //modify permit status
             int stats = 7; // 7 - Payment Verification (Inspector)
             //SAVE CHANGES TO DATABASE
@@ -1403,6 +1421,11 @@ namespace FMB_CIS.Controllers
             applicationPayment.Date_of_Payment = model.tbl_Application_Payment.Date_of_Payment;
             applicationPayment.date_modified = DateTime.Now;
             _context.SaveChanges();
+
+            var referenceNo = _context.tbl_application.Where(a => a.id == appid).Select(a => a.ReferenceNo).FirstOrDefault();
+            //Log User Activity
+            LogUserActivity("Proof of Payment", "Payment Details updated", $"Payment info updated for {referenceNo}", apkDateTime: DateTime.Now);
+
             return RedirectToAction("EditApplication", "Application", new { uid = uid, appid = appid });
         }
 
@@ -1556,7 +1579,10 @@ namespace FMB_CIS.Controllers
                     }                    
 
                 }
-                
+
+                //Log User Activity
+                LogUserActivity("RenewApplication", "Application Renewal", $"Application has been renewed. {referenceNo}", apkDateTime: DateTime.Now);
+
                 //folder format loggedUserID_renewApplication.id
                 return Json(renewApplication.id);
             }
@@ -1674,6 +1700,9 @@ namespace FMB_CIS.Controllers
                     _context.tbl_comments.Add(commentsTbl);
                     _context.SaveChanges();
                 }
+
+                //Log User Activity
+                LogUserActivity("Application", "Replace rejected document", $"Rejected document has been replaced with {fileName}", apkDateTime: DateTime.Now);
 
                 string success = "success";
                 return Ok(new { success });

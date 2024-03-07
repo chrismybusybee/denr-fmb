@@ -538,6 +538,9 @@
                                                 </a>
                                             </li>
                                         }
+
+                                        <li id="invisibleMap" class="mb-3" style="display: none;">
+                                        </li>
                                         @* @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_other_permits"))// || usrRoleList.Contains("Chainsaw Importer")
                                     {
                                     <li id="chainsawOwnerApplication" class="my-0">
@@ -1302,6 +1305,7 @@
             "/Application/SellPermits": "chainsawSellerApplication",
             "/Application/PurchasePermits": "permitToPurchaseApplication",
             "/Application/ImportPermits": "chainsawImporterApplication",
+            "/Application/EditApplication": "invisibleMap",
             "/ChainsawImporter": "chainsawImporterApplication",
             "/ChainsawImporter/ChainsawImporterApplicantsList": "chainsawImporterApplication",
             "/ChainsawSeller": "chainsawSellerApplication",

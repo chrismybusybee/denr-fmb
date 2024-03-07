@@ -1268,87 +1268,91 @@
 
         </form>
             <hr/>
-            <div class="row d-flex justify-content-center m-0">                
-                <table class="table dataTable" id="tblApplicantFiles">
-                    <thead>
-                        <tr>
-                            <th>
-                                Requirement
-                            </th>
-                            <th>
-                                Uploaded Document
-                            </th>
-                            <th>
-                                Status
-                            </th>
-                            <th>
-                                Comment
-                            </th>
-                            <th>
-                                Action
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (FilesWithComments item in Model.filesWithComments)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.tbl_document_checklist_name)
-                                </td>
-                                <td>
-                                    @* @Html.DisplayFor(modelItem => item.filename) *@
-                                    @if(item.filename!="N/A")
-                                    {
-                                        @* <a href="#" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DocHistory(this)">@item.filename</a> *@
-                                        @item.filename
-                                    }
-                                    else
-                                    {
-                                        @item.filename
-                                    }
-                                </td>
+            <div class="row d-flex justify-content-center m-0">
+                <div id="tblApplicantFilesContainerReloader">
+                    <div id="tblApplicantFilesContainer">
+                        <table class="table dataTable" id="tblApplicantFiles">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Requirement
+                                    </th>
+                                    <th>
+                                        Uploaded Document
+                                    </th>
+                                    <th>
+                                        Status
+                                    </th>
+                                    <th>
+                                        Comment
+                                    </th>
+                                    <th>
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (FilesWithComments item in Model.filesWithComments)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.tbl_document_checklist_name)
+                                        </td>
+                                        <td>
+                                            @* @Html.DisplayFor(modelItem => item.filename) *@
+                                            @if(item.filename!="N/A")
+                                            {
+                                                @* <a href="#" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DocHistory(this)">@item.filename</a> *@
+                                                @item.filename
+                                            }
+                                            else
+                                            {
+                                                @item.filename
+                                            }
+                                        </td>
 
-                                <td>
-                                    @if (item.tbl_files_status == "Complied")
-                                    {
-                                        @* <div class="bg-success text-white px-3 pb-2 pt-1 rounded-pill w-105"> *@
-                                        <div class="text-success px-3 pb-2 pt-1" style="font-weight: bold">
-                                            @item.tbl_files_status
-                                        </div>
-                                    }
-                                    else if (item.tbl_files_status == "Not Complied")
-                                    {
-                                        @* <div class="bg-danger text-white px-3 pb-2 pt-1 rounded-pill w-105"> *@
-                                        <div class="text-danger px-3 pb-2 pt-1" style="font-weight: bold">
-                                            @item.tbl_files_status
-                                        </div>
-                                    }
-                                    else @* if (item.tbl_files_status == "Pending") *@
-                                    {
-                                        @* <div class="bg-secondary text-white px-3 pb-2 pt-1 rounded-pill w-105"> *@
-                                        <div class="text-secondary px-3 pb-2 pt-1" style="font-weight: bold">
-                                            @item.tbl_files_status
-                                        </div>
-                                    }
-                                </td>
-                                <td>                                    
-                                    @Html.DisplayFor(modelItem => item.comment)
-                                </td>
-                                <td>
-                                    @if (item.tbl_files_status == "Not Complied")
-                                    {                                    
-                                        <button type="button" id="ReplaceFile" class="btn btn-primary w-125" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" data-documentChecklistId="@item.tbl_document_checklist_id" data-documentChecklistName="@item.tbl_document_checklist_name">Replace File</button>
-                                    }
-                                    else
-                                    {
-                                        <label>N/A</label>
-                                    }
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                                        <td>
+                                            @if (item.tbl_files_status == "Complied")
+                                            {
+                                                @* <div class="bg-success text-white px-3 pb-2 pt-1 rounded-pill w-105"> *@
+                                                <div class="text-success px-3 pb-2 pt-1" style="font-weight: bold">
+                                                    @item.tbl_files_status
+                                                </div>
+                                            }
+                                            else if (item.tbl_files_status == "Not Complied")
+                                            {
+                                                @* <div class="bg-danger text-white px-3 pb-2 pt-1 rounded-pill w-105"> *@
+                                                <div class="text-danger px-3 pb-2 pt-1" style="font-weight: bold">
+                                                    @item.tbl_files_status
+                                                </div>
+                                            }
+                                            else @* if (item.tbl_files_status == "Pending") *@
+                                            {
+                                                @* <div class="bg-secondary text-white px-3 pb-2 pt-1 rounded-pill w-105"> *@
+                                                <div class="text-secondary px-3 pb-2 pt-1" style="font-weight: bold">
+                                                    @item.tbl_files_status
+                                                </div>
+                                            }
+                                        </td>
+                                        <td>                                    
+                                            @Html.DisplayFor(modelItem => item.comment)
+                                        </td>
+                                        <td>
+                                            @if (item.tbl_files_status == "Not Complied")
+                                            {                                    
+                                                <button type="button" class="btn btn-primary w-125 ReplaceFileBtn" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" data-documentChecklistId="@item.tbl_document_checklist_id" data-documentChecklistName="@item.tbl_document_checklist_name">Replace File</button>
+                                            }
+                                            else
+                                            {
+                                                <label>N/A</label>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                 <hr />
                 <div class="row d-flex justify-content-center px-0 mb-5">
                     <div class="col-md-12 d-flex flex-column gap-2">
@@ -1357,7 +1361,8 @@
                         </div>
                     </div>
                     <br /> <br />
-                    <div class="d-flex mb-4 gap-3">
+                    <div id="PermitFilesContainerReloader">
+                    <div class="d-flex mb-4 gap-3" id="PermitFilesContainer">
                         @foreach (tbl_files file in Model.tbl_Files)
                         {
                             var folder = Model.uid + "_" + Model.appid;
@@ -1395,6 +1400,7 @@
                                 </div>
                             </div>
                         }
+                    </div>
                     </div>
                 </div>
             </div>
@@ -1733,7 +1739,8 @@
 
         });
 
-        $("#ReplaceFile").click(function () {
+        /*
+        $(".ReplaceFileBtn").click(function () {
             console.log("this.dataset: ", this.dataset);
             console.log("this.dataset.documentchecklistid: ", this.dataset.documentchecklistid);
             console.log("this.dataset.documentchecklistname: ", this.dataset.documentchecklistname);
@@ -1805,6 +1812,7 @@
                             icon: 'success',
                             confirmButtonColor: '#14984a'
                         });
+                        $('#tblApplicantFilesContainer').load(location.href + ' #tblApplicantFilesContainer');
                     }
                 });
             })
@@ -1816,8 +1824,94 @@
 
             
 
-        });
+        }); */
 
+
+    });
+
+    //Replace File
+    $(document).on('click', '.ReplaceFileBtn', function () {
+        console.log("this.dataset: ", this.dataset);
+        console.log("this.dataset.documentchecklistid: ", this.dataset.documentchecklistid);
+        console.log("this.dataset.documentchecklistname: ", this.dataset.documentchecklistname);
+        console.log("this.dataset.fileid: ", this.dataset.fileid);
+        console.log("this.dataset.filename: ", this.dataset.filename);
+
+        var tblFileID = this.dataset.fileid;
+        var myFileTag;
+        $.get("/Application/GetFileTags", { fileID: tblFileID }, function (data) {
+            console.log("data: ", data);
+            myFileTag = data;
+
+            var listItem = "";
+            for (var x = 0; x < data.length; x++) {
+                listItem = listItem + "<li>" + data[x].fileTag + "</li>";
+            }
+            const list = "<ul style=\"text-align: left;\">" + listItem + "</ul>";
+            console.log("list: ", list);
+            var myInnerHTML = "<div>The current document was tagged with requirements, please make sure that your new document still contains the following requirements: </div><br/ >" + list;
+            console.log("myInnerHTML: ", myInnerHTML);
+            Swal.fire({
+                title: 'Replace Document?',
+                html: myInnerHTML,
+                icon: 'warning',
+                input: 'file',
+                inputAttributes: {
+                    accept: 'application/pdf',
+                    'aria-label': 'Upload your new document',
+                    required: 'true'
+                },
+                customClass: {
+                    input: "file"
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Upload',
+                confirmButtonColor: '#14984a',
+                cancelButtonText: 'Cancel',
+                showLoaderOnConfirm: true,
+                preConfirm: (file) => {
+                    return new Promise((resolve) => {
+                        let formData = new FormData();
+                        formData.append('replacementFile', file);
+                        formData.append('fileID', tblFileID);
+
+                        fetch('/Application/ReplaceDocument', {
+                            method: 'POST',
+                            body: formData
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('File upload failed.');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                resolve(data.success);
+                            })
+                            .catch(error => {
+                                Swal.showValidationMessage(`Upload failed: ${error}`);
+                            });
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("result is ", result);
+                    Swal.fire({
+                        title: 'Document Replaced Successfully!',
+                        icon: 'success',
+                        confirmButtonColor: '#14984a'
+                    });
+                    $('#tblApplicantFilesContainerReloader').load(location.href + ' #tblApplicantFilesContainer');
+                    $('#PermitFilesContainerReloader').load(location.href + ' #PermitFilesContainer');
+                }
+            });
+        })
+        .fail(function (xhr, textStatus, errorThrown) {
+            // Error callback
+            console.error("Error occurred while fetching file tags:", errorThrown);
+            // Handle the error as needed, e.g., display an error message to the user
+        });
 
     });
 
