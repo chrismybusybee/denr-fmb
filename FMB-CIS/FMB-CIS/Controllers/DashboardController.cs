@@ -84,14 +84,14 @@ namespace FMB_CIS.Controllers
 
             if (userStatus == false)
             {
-                LogUserActivity("Login", "Login", "Logged in but account is not approved yet", apkDateTime: DateTime.Now);
+                //LogUserActivity("Login", "Login", "Logged in but account is not approved yet", apkDateTime: DateTime.Now);
                 return RedirectToAction("EditAccount", "AccountManagement");
             }
             else
             {
 
 
-                LogUserActivity("Login", "Login", "Logged in to system", apkDateTime: DateTime.Now);
+                //LogUserActivity("Login", "Login", "Logged in to system", apkDateTime: DateTime.Now);
 
                 if (((ClaimsIdentity)User.Identity).FindFirst("userID").Value != null)
                 {    

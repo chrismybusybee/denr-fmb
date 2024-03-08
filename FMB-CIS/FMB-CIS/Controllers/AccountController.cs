@@ -49,7 +49,7 @@ namespace FMB_CIS.Controllers
                     remarks = "User logged out. Username: " + fullname;
                 }
 
-                int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+                int uid = userId;// Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
                 //Inserting record to UserActivityLog database
                 tbl_user_activitylog activityLog = new tbl_user_activitylog()
                 {
@@ -300,7 +300,7 @@ namespace FMB_CIS.Controllers
                         _context.tbl_user_type_user.Add(new_tbl_user_type_user);
                     });
                     _context.SaveChanges();
-
+                    LogUserActivity("Account", "Registration", "New User Registration: User's information saved to database.", userId: (int)usrID, apkDateTime: DateTime.Now);
                     //File Upload
                     if (model.filesUpload != null)
                     {
@@ -337,6 +337,7 @@ namespace FMB_CIS.Controllers
                             _context.tbl_files.Add(filesDB);
                             _context.SaveChanges();
                         }
+                        LogUserActivity("Account", "Registration", "New User Registration: User's documents saved to database.", userId: (int)usrID, apkDateTime: DateTime.Now);
                     }
                     //END FOR FILE UPLOAD
 
@@ -403,9 +404,10 @@ namespace FMB_CIS.Controllers
                                     //Get email and subject from templates in DB
                                     //var emailTemplate = _context.tbl_email_template.Where(e => e.id == 1).FirstOrDefault();
                                     EmailSender.SendEmailAsync(model.tbl_Users.email, subject, body);
-                                    //return RedirectToAction("EmailConfirmation");
-                                    return RedirectToAction("Index", "Home", new { success = true });
-                            }
+                                //return RedirectToAction("EmailConfirmation");
+                                LogUserActivity("Account", "Registration", "New User Registration: Password creation link generated and email sent.", userId: (int)usrID, apkDateTime: DateTime.Now);
+                                return RedirectToAction("Index", "Home", new { success = true });
+                                }
                                 else
                                 {
                                     //Do not reveal if email doesn't exist.
@@ -414,7 +416,6 @@ namespace FMB_CIS.Controllers
                                 }
                             }
                         }
-
                     //var subject = "Account has been created";
                     //var body = "We would like to inform you that you have created an account with FMB-CIS.\nIf you forgot your password or if you wish to change it, you may proceed on this link: https://fmb-cis.beesuite.ph/Account/ForgotPassword";
                     //EmailSender.SendEmailAsync(userRegistrationViewModel.email, subject, body);
@@ -470,16 +471,19 @@ namespace FMB_CIS.Controllers
                                 Console.WriteLine(passResetLink);
                                 var subject = "Password Reset";
                                 var body = "Your Password Reset Link is: " + passResetLink;
+                                var userID = _context.tbl_user.Where(u => u.email == model.email).Select(u => u.id).FirstOrDefault();
                                 try
                                 {
                                     await EmailSender.SendEmailAsync(model.email, subject, body);
                                     // Code to execute if the email sending is successful
+                                    LogUserActivity("Account", "Forgot Password", "Forgot Password", userId: userID, apkDateTime: DateTime.Now);
                                 }
                                 catch (Exception ex)
                                 {
                                     // Code to handle the exception
                                     Console.WriteLine($"An error occurred while sending the email: {ex.Message}");
                                     // You can log the exception, show a user-friendly message, or take appropriate actions
+                                    LogUserActivity("Account", "Forgot Password", $"Forgot Password Failed: {ex.Message}", userId: userID, apkDateTime: DateTime.Now);
                                 }
 
                                 return RedirectToAction("EmailConfirmation");
@@ -535,6 +539,7 @@ namespace FMB_CIS.Controllers
                 DAL dal = new DAL();
                 bool linkValidCheck = dal.isLinkValid(model.tokencode, cstr);
                 bool eMailExist = dal.emailExist(model.email, cstr);
+                var userID = _context.tbl_user.Where(u=>u.email== model.email).Select(u=>u.id).FirstOrDefault();
                 if (linkValidCheck == true && eMailExist == true)
                 {
                     string encrPw = EncryptDecrypt.ConvertToEncrypt(model.Password);
@@ -560,12 +565,14 @@ namespace FMB_CIS.Controllers
                             var BODY = emailTemplate.email_content.Replace("{FirstName}", usrDB.first_name);
                             var body = BODY.Replace(Environment.NewLine, "<br/>");
                             EmailSender.SendEmailAsync(model.email, subject, body);
+                            LogUserActivity("Account", $"{(model.isNew == true ? "Create" : "Reset")} Password", $"{(model.isNew == true ? "Create" : "Reset")} Password Success", userId: userID, apkDateTime: DateTime.Now);
                         }
                         else
                         {
                             var subject = "Password changed";
                             var body = "You have successfully changed your password! You may now login with your credentials!\nThank You!";
                             EmailSender.SendEmailAsync(model.email, subject, body);
+                            LogUserActivity("Account", $"{(model.isNew == true ? "Create" : "Reset")} Password", $"{(model.isNew == true ? "Create" : "Reset")} Password Success", userId: userID, apkDateTime: DateTime.Now);
                         }
                         return RedirectToAction("Index", "Home");
                     }
@@ -585,7 +592,8 @@ namespace FMB_CIS.Controllers
                     //{
                     //    ModelState.AddModelError("", "Invalid password reset link");
                     //}
-                    ModelState.AddModelError("", "Invalid password reset link");
+                    ModelState.AddModelError("", $"Invalid {(model.isNew == true? "create": "reset")} password link");
+                    LogUserActivity("Account", $"{(model.isNew == true ? "Create" : "Reset")} Password", $"{(model.isNew == true ? "Create" : "Reset")} Password Failed", userId: userID, apkDateTime: DateTime.Now);
                     return View();
                 }
 

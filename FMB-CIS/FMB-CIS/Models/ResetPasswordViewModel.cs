@@ -18,5 +18,6 @@ namespace FMB_CIS.Models
         public string ConfirmPassword { get; set; }
         public string tokencode { get; set; }
         public tbl_user_temp_passwords? tbl_User_Temp_Passwords { get; set; }
+        public bool? isNew { get; set; }
     }
 }

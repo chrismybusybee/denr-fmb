@@ -33,7 +33,7 @@ namespace FMB_CIS.Controllers
                 //    remarks = "User logged out. Username: " + fullname;
                 //}
 
-                int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+                int uid = userId; //Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
                 //Inserting record to UserActivityLog database
                 tbl_user_activitylog activityLog = new tbl_user_activitylog()
                 {
@@ -202,6 +202,7 @@ namespace FMB_CIS.Controllers
 
                         _logger.LogInformation("User {Email} logged in at {Time}.", credentials.email, DateTime.UtcNow);
                         //isLoggedIn = true;
+                        LogUserActivity("Login", "Login", "Logged in to system", userId: userID, apkDateTime: DateTime.Now);
                         return RedirectToAction("Index", "Dashboard");
                     }
                 }
@@ -225,7 +226,8 @@ namespace FMB_CIS.Controllers
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            LogUserActivity("Logout", "Logout", "Logout from system", apkDateTime: DateTime.Now);
+            //LogUserActivity("Logout", "Logout", "Logout from system", apkDateTime: DateTime.Now);
+            LogUserActivity("Logout", "Logout", "Logout from system", userId: Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value), apkDateTime: DateTime.Now);
             return RedirectToAction("Index");
         }
 
