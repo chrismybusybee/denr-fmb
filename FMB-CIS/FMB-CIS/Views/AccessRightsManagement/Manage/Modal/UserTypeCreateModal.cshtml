@@ -41,6 +41,13 @@
             closeModal();
             $('#userTypeListPartialContainer').load('/AccessRightsManagement/UserTypeListPartialView');
         });
+
+        Swal.fire({
+            title: "Success!",
+            icon: "success",
+            confirmButtonText: "Ok",
+            confirmButtonColor: '#14984a'
+        });
     });
 
     function closeModal() {

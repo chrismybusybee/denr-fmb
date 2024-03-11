@@ -278,7 +278,8 @@ namespace FMB_CIS.Controllers
                     _context.tbl_division.Add(entity);
 
                     // 3. TO DO: Add logging / historical data
-
+                    var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                    LogUserActivity("OfficeManagement", "Create Office", $"Office {entity.office_name} has been created", apkDateTime: DateTime.Now);
                     // 4. Save changes
                     _context.SaveChanges();
 
@@ -330,7 +331,8 @@ namespace FMB_CIS.Controllers
                     _context.Update(entity);
 
                     // 3. TO DO: Add logging / historical data
-
+                    var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                    LogUserActivity("OfficeManagement", "Update Office", $"Office {entity.office_name} has been updated", apkDateTime: DateTime.Now);
                     // 4. Save changes
                     _context.SaveChanges();
 
@@ -378,7 +380,8 @@ namespace FMB_CIS.Controllers
                     _context.Update(entity);
 
                     // 3. TO DO: Add logging / historical data
-
+                    var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                    LogUserActivity("OfficeManagement", "Delete Office", $"Office {entity.office_name} has been deleted", apkDateTime: DateTime.Now);
                     // 4. Save changes
                     _context.SaveChanges();
 
@@ -533,7 +536,8 @@ namespace FMB_CIS.Controllers
                     _context.tbl_office_type.Add(entity);
 
                     // 3. TO DO: Add logging / historical data
-
+                    var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                    LogUserActivity("OfficeManagement", "Create Office Type", $"Office type {entity.name} has been created", apkDateTime: DateTime.Now);
                     // 4. Save changes
                     _context.SaveChanges();
 
@@ -582,7 +586,8 @@ namespace FMB_CIS.Controllers
                     _context.Update(entity);
 
                     // 3. TO DO: Add logging / historical data
-
+                    var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                    LogUserActivity("OfficeManagement", "Update Office Type", $"Office type {entity.name} has been updated", apkDateTime: DateTime.Now);
                     // 4. Save changes
                     _context.SaveChanges();
 
@@ -630,7 +635,8 @@ namespace FMB_CIS.Controllers
                     _context.Update(entity);
 
                     // 3. TO DO: Add logging / historical data
-
+                    var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                    LogUserActivity("OfficeManagement", "Delete Office Type", $"Office type {entity.name} has been deleted", apkDateTime: DateTime.Now);
                     // 4. Save changes
                     _context.SaveChanges();
 

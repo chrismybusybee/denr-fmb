@@ -95,8 +95,17 @@
             data: parameters,
             success: function (data) {
                 // NOTE: TO DO better way of calling callback function from parent
-                $('#officeListPartialContainer').load('/OfficeManagement/OfficeListPartialView');
+                
                 closeModal();
+
+                Swal.fire({
+                    title: "Success!",
+                    icon: "success",
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: '#14984a'
+                });
+
+                $('#officeListPartialContainer').load('/OfficeManagement/OfficeListPartialView');
             }, error: function(e) {
                 console.log(e);
             }

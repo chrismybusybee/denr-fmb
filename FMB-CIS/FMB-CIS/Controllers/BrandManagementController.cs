@@ -209,7 +209,8 @@ namespace FMB_CIS.Controllers
                     _context.tbl_brands.Add(entity);
 
                     // 3. TO DO: Add logging / historical data
-
+                    var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                    LogUserActivity("BrandManagement", "Create Brand", $"Brand {entity.name} has been created", apkDateTime: DateTime.Now);
                     // 4. Save changes
                     _context.SaveChanges();
 
@@ -258,7 +259,8 @@ namespace FMB_CIS.Controllers
                     _context.Update(entity);
 
                     // 3. TO DO: Add logging / historical data
-
+                    var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                    LogUserActivity("BrandManagement", "Update Brand", $"Brand {entity.name} has been updated", apkDateTime: DateTime.Now);
                     // 4. Save changes
                     _context.SaveChanges();
 
@@ -306,7 +308,8 @@ namespace FMB_CIS.Controllers
                     _context.Update(entity);
 
                     // 3. TO DO: Add logging / historical data
-
+                    var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                    LogUserActivity("BrandManagement", "Delete Brand", $"Brand {entity.name} has been deleted", apkDateTime: DateTime.Now);
                     // 4. Save changes
                     _context.SaveChanges();
 

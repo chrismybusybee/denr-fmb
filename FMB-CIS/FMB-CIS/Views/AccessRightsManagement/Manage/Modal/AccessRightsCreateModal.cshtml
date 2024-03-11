@@ -62,12 +62,19 @@
             // closeModal();
             $('#accessRightsListPartialContainer').load('/AccessRightsManagement/AccessRightsListPartialView');
             closeModal();
+
+            Swal.fire({
+                title: "Success!",
+                icon: "success",
+                confirmButtonText: "Ok",
+                confirmButtonColor: '#14984a'
+            });
         });
     });
 
     function closeModal() {
-        $("#createOfficeTypeModal").modal("hide");
-        let elem = document.querySelector('#createOfficeTypeModal');
+        $("#createAccessRightsModal").modal("hide");
+        let elem = document.querySelector('#createAccessRightsModal');
         elem.parentNode.removeChild(elem);
     }
 </script>               

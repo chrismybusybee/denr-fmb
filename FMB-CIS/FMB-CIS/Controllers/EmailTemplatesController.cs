@@ -105,6 +105,10 @@ namespace FMB_CIS.Controllers
                 emailTemplate.date_created = DateTime.Now;
                 emailTemplate.date_modified = DateTime.Now;
                 _context.Add(emailTemplate);
+
+                var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                LogUserActivity("CreateEmailTemplate", "CreateEmailTemplate", $"{emailTemplate.template_name} Email Template has been created", apkDateTime: DateTime.Now);
+
                 _context.SaveChanges();
             }
             else if (typeOfAction == "edit")
@@ -122,6 +126,9 @@ namespace FMB_CIS.Controllers
                 emailTemplateDB.date_modified = DateTime.Now;
                 _context.Update(emailTemplateDB);
                 _context.SaveChanges();
+
+                var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                LogUserActivity("UpdateEmailTemplate", "UpdateEmailTemplate", $"{emailTemplateDB.template_name} Email Template has been updated", apkDateTime: DateTime.Now);
             }
             return RedirectToAction("Index", "EmailTemplates");
         }
