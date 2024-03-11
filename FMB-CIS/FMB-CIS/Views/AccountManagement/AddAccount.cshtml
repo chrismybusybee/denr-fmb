@@ -51,6 +51,7 @@
                                                     @if(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Super Admin") == true)
                                                     {
                                                         <option value="13">DENR CIS Administrator</option>
+                                                        <option value="14">DENR CIS Super Admin</option>
                                                     }
                                                     @* <option value="14">DENR CIS Super Admin</option> *@
                                                     @*<option value="15">DENR Chief</option>
@@ -136,7 +137,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label asp-for="tbl_User.email" class="control-label small text-secondary mb-1">Email (Please use official email address)</label>
-                                                <input asp-for="tbl_User.email" class="form-control" placeholder="name@address.com" required="required" id="emailInput" onchange="checkExistingEmail()" />
+                                                <input asp-for="tbl_User.email" class="form-control" placeholder="name@address.com" required="required" id="emailInput" onchange="checkExistingEmail()" autocomplete="new-email" />
                                                 <span asp-validation-for="tbl_User.email" class="text-danger"></span>
                                                 <span id="emailValidation" class="text-danger"></span>
                                             </div>
@@ -144,14 +145,14 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="control-label small">Password</label>
-                                                <input asp-for="tbl_User.password" class="form-control" type="password" id="password" required="required" />
+                                                <input asp-for="tbl_User.password" class="form-control" type="password" id="password" required="required" autocomplete="new-password" />
                                                 <span class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="control-label small">Confirm Password</label>
-                                                <input class="form-control" type="password" id="confirmPassword" required="required" onkeyup="checkPasswordMatch()" />
+                                                <input class="form-control" type="password" id="confirmPassword" required="required" onkeyup="checkPasswordMatch()" autocomplete="new-password" />
                                                 <span class="text-danger" id="passwordValidation"></span>
                                             </div>
                                         </div>                                        

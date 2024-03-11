@@ -480,6 +480,7 @@ namespace FMB_CIS.Controllers
                 var body = "We would like to inform you that an admin created an account using your email for FMB-CIS.\nPlease login with your temporary password: " + decrPw + "\nPleace replace your password by visiting " + host + "ProfileManagement after you login. Thank You!";
                 EmailSender.SendEmailAsync(model.tbl_User.email, subject, body);
 
+                LogUserActivity("AccountManagement", "Add account", $"New Account Created: {model.tbl_User.email}", apkDateTime: DateTime.Now);
                 //return View(model);
                 return RedirectToAction("Index", "AccountManagement");
             }
@@ -613,6 +614,8 @@ namespace FMB_CIS.Controllers
             var subject = "User Registration Status";
             var body = "Greetings! \n We would like to inform you have successfully edited some information on your User Account.";
             EmailSender.SendEmailAsync(usrDB.email, subject, body);
+
+            LogUserActivity("AccountManagement", "Edit account", $"Account Edited", apkDateTime: DateTime.Now);
             return RedirectToAction("Index", "AccountManagement");
         }
 
@@ -657,6 +660,7 @@ namespace FMB_CIS.Controllers
             var body = "Greetings! \n We would like to inform your request to change account information has been received.";
             EmailSender.SendEmailAsync(model.tbl_User.email, subject, body);
 
+            LogUserActivity("AccountManagement", "Edit Account Request", $"Account Edit Request Created", apkDateTime: DateTime.Now);
             //return View(model);
             return RedirectToAction("RequestToChangeAccountInfoSuccess", "AccountManagement", new { id = newChangeInfoRequest.id });
         }
@@ -677,6 +681,7 @@ namespace FMB_CIS.Controllers
                 _context.Update(usrDB);
                 _context.SaveChanges();
                 model.isSuccess = true;
+                LogUserActivity("AccountManagement", "Change Password", $"Password Changed", apkDateTime: DateTime.Now);
             }
             else
             {
@@ -1051,7 +1056,8 @@ namespace FMB_CIS.Controllers
             string pathWithFilename = path + "//" + fileName;
             //Read the File data into Byte Array.
             byte[] bytes = System.IO.File.ReadAllBytes(pathWithFilename);
-
+            //Log Download Initiated
+            LogUserActivity("Download", "Download File", $"File download initiated. {fileName}", apkDateTime: DateTime.Now);
             //Send the File to Download.
             return File(bytes, "application/octet-stream", fileName);
         }
@@ -1091,6 +1097,7 @@ namespace FMB_CIS.Controllers
                 var subject = "Request to Change Account Information Status";
                 var body = "Greetings! \n We would like to inform your request to change account information has been approved.";
                 EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
+                LogUserActivity("AccountManagement", "Edit Account Request Approved", $"Account Edit Request for {model.acctApprovalViewModels.email} has been approved", apkDateTime: DateTime.Now);
                 return RedirectToAction("RequestToChangeAcctInfoList", "AccountManagement");
 
             }
@@ -1104,6 +1111,7 @@ namespace FMB_CIS.Controllers
                 var subject = "Request to Change Account Information Status";
                 var body = "Greetings! \n We would like to inform your request to change account information has been declined.";
                 EmailSender.SendEmailAsync(model.acctApprovalViewModels.email, subject, body);
+                LogUserActivity("AccountManagement", "Edit Account Request Declined", $"Account Edit Request for {model.acctApprovalViewModels.email} has been declined", apkDateTime: DateTime.Now);
                 return RedirectToAction("RequestToChangeAcctInfoApproval", "AccountManagement", new { id = model.tbl_User_Change_Info_Request.id });
                 //return RedirectToAction("RequestToChangeAcctInfoList","AccountManagement");
             }
@@ -1252,6 +1260,7 @@ namespace FMB_CIS.Controllers
                 userInfo.date_modified = DateTime.Now;
                 _context.SaveChanges();
                 emailTemplateID = 45; //id = 45 - Account Enabled
+                LogUserActivity("AccountManagement", "Account Enabled", $"Account Enabled for {userInfo.email}", apkDateTime: DateTime.Now);
             }
             else //if (buttonClicked == "Disable")
             {
@@ -1260,6 +1269,7 @@ namespace FMB_CIS.Controllers
                 userInfo.date_modified = DateTime.Now;
                 _context.SaveChanges();
                 emailTemplateID = 44; //id = 44 - Account Disabled
+                LogUserActivity("AccountManagement", "Account Disabled", $"Account Disabled for {userInfo.email}", apkDateTime: DateTime.Now);
             }
 
             try
@@ -1270,7 +1280,8 @@ namespace FMB_CIS.Controllers
                 var BODY = emailTemplate.email_content.Replace("{FirstName}", userInfo.first_name);
                 var body = BODY.Replace(Environment.NewLine, "<br/>");
 
-                EmailSender.SendEmailAsync(((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value, subject, body);
+                //EmailSender.SendEmailAsync(((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value, subject, body);
+                EmailSender.SendEmailAsync(userInfo.email, subject, body);
             }
             catch
             {
@@ -1297,7 +1308,7 @@ namespace FMB_CIS.Controllers
             _context.SaveChanges();
             //return RedirectToAction("AccountsApproval?uid="+uid, "AccountManagement");
             //Url.Action("A","B",new{a="x"})
-
+            LogUserActivity("AccountManagement", "New Comment", $"Added new comment", apkDateTime: DateTime.Now);
             if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw") == true)
             {
                 return RedirectToAction("EditAccount", "AccountManagement");
