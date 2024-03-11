@@ -102,7 +102,7 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
 
-                LogUserActivity("AccessRightsListPartialView", "AccessRightsListPartialView", "partial view access", apkDateTime: DateTime.Now);
+                //LogUserActivity("AccessRightsListPartialView", "AccessRightsListPartialView", "partial view access", apkDateTime: DateTime.Now);
                 return PartialView("~/Views/AccessRightsManagement/Manage/Partial/AccessRightsListPartial.cshtml", model);
             }
             else
@@ -215,7 +215,8 @@ namespace FMB_CIS.Controllers
                     _context.SaveChanges();
 
                     //LogUserActivity("AccessRightsCreate", "AccessRightsCreate", "Access Rights Created by user: " + uid);
-
+                    var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                    LogUserActivity("AccessRightsManagement", "AccessRightsCreate", $"{entity.name} Access Rights created by user: {userEmail}", apkDateTime: DateTime.Now);
                     // 5. Return result
                     return StatusCode(StatusCodes.Status201Created, ModelState);
                 }
@@ -265,7 +266,8 @@ namespace FMB_CIS.Controllers
                     _context.Update(entity);
 
                     // 3. TO DO: Add logging / historical data
-
+                    var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                    LogUserActivity("AccessRightsManagement", "AccessRightsUpdate", $"{entity.name} Access Rights updated by user: {userEmail}", apkDateTime: DateTime.Now);
                     // 4. Save changes
                     _context.SaveChanges();
 
@@ -314,6 +316,9 @@ namespace FMB_CIS.Controllers
 
                     // 3. TO DO: Add logging / historical data
 
+                    var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                    LogUserActivity("AccessRightsManagement", "AccessRightsDelete", $"{entity.name} Access Rights deleted by user: {userEmail}", apkDateTime: DateTime.Now);
+                    
                     // 4. Save changes
                     _context.SaveChanges();
 
@@ -466,7 +471,8 @@ namespace FMB_CIS.Controllers
                     _context.tbl_user_types.Add(entity);
 
                     // 3. TO DO: Add logging / historical data
-
+                    var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                    LogUserActivity("AccessRightsManagement", "UserTypeCreate", $"{entity.name} User Type is created" , apkDateTime: DateTime.Now);
                     // 4. Save changes
                     _context.SaveChanges();
 
@@ -514,7 +520,8 @@ namespace FMB_CIS.Controllers
                     _context.Update(entity);
 
                     // 3. TO DO: Add logging / historical data
-
+                    var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                    LogUserActivity("AccessRightsManagement", "UserTypeUpdate", $"{entity.name} User Type updated", apkDateTime: DateTime.Now);
                     // 4. Save changes
                     _context.SaveChanges();
 
@@ -562,7 +569,8 @@ namespace FMB_CIS.Controllers
                     _context.Update(entity);
 
                     // 3. TO DO: Add logging / historical data
-
+                    var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                    LogUserActivity("AccessRightsManagement", "UserTypeDelete", $"{entity.name} User Type deleted", apkDateTime: DateTime.Now);
                     // 4. Save changes
                     _context.SaveChanges();
 
@@ -671,6 +679,11 @@ namespace FMB_CIS.Controllers
                         userTypeAccessRightsEntity.date_modified = DateTime.Now;
 
                         _context.tbl_user_type_access_right.Add(userTypeAccessRightsEntity);
+
+                        var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                        var accessRight = _context.tbl_access_right.Where(x => x.id == userTypeAccessRightsEntity.access_right_id).FirstOrDefault();
+                        var userType = _context.tbl_user_types.Where(x => x.id == userTypeAccessRightsEntity.user_type_id).FirstOrDefault();
+                        LogUserActivity("AccessRightsManagement", "UserTypeAccessRightsToggle", $"{accessRight?.name} for user {userType?.name} has been enabled", apkDateTime: DateTime.Now);
                     }
                     else
                     {
@@ -678,6 +691,21 @@ namespace FMB_CIS.Controllers
                         entity.modified_by = uid;
                         entity.date_modified = DateTime.Now;
                         _context.Update(entity);
+
+                        var accessRightAction = string.Empty;
+                        if (entity.is_active == true)
+                        {
+                            accessRightAction = "enabled";
+                        }
+                        else
+                        {
+                            accessRightAction = "disabled";
+                        }
+
+                        var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                        var accessRight = _context.tbl_access_right.Where(x => x.id == entity.access_right_id).FirstOrDefault();
+                        var userType = _context.tbl_user_types.Where(x => x.id == entity.user_type_id).FirstOrDefault();
+                        LogUserActivity("AccessRightsManagement", "UserTypeAccessRightsToggle", $"{accessRight?.name} for user {userType?.name} has been {accessRightAction}", apkDateTime: DateTime.Now);
                     }
                     _context.SaveChanges();
 
@@ -1016,6 +1044,10 @@ namespace FMB_CIS.Controllers
                         UserTypeUserEntity.date_modified = DateTime.Now;
 
                         _context.tbl_user_type_user.Add(UserTypeUserEntity);
+
+                        var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                        var userTypes = _context.tbl_user_types.Where(x => x.id == UserTypeUserEntity.user_type_id).FirstOrDefault();
+                        LogUserActivity("AccessRightsManagement", "UserTypeUserToggle", $"{userTypes?.name} has been created", apkDateTime: DateTime.Now);
                     }
                     else
                     {
@@ -1023,6 +1055,21 @@ namespace FMB_CIS.Controllers
                         entity.modified_by = uid;
                         entity.date_modified = DateTime.Now;
                         _context.Update(entity);
+
+                        var userAccessAction = string.Empty;
+                        if(entity.is_active == true)
+                        {
+                            userAccessAction = "enabled";
+                        }
+                        else
+                        {
+                            userAccessAction = "disabled";
+                        }
+
+                        var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                        var userTypes = _context.tbl_user_types.Where(x => x.id == entity.user_type_id).FirstOrDefault();
+                        var user = _context.tbl_user.Where(x => x.id == entity.user_id).FirstOrDefault();
+                        LogUserActivity("AccessRightsManagement", "UserTypeUserToggle", $"{userTypes?.name} has been {userAccessAction} to user {user?.email}", apkDateTime: DateTime.Now);
                     }
                     _context.SaveChanges();
 
@@ -1117,6 +1164,11 @@ namespace FMB_CIS.Controllers
                         userTypeUserEntity.date_modified = DateTime.Now;
 
                         _context.tbl_user_type_user.Add(userTypeUserEntity);
+
+                        var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                        var userTypes = _context.tbl_user_types.Where(x => x.id == userTypeUserEntity.user_type_id).FirstOrDefault();
+                        LogUserActivity("AccessRightsManagement", "UserTypeUsersToggle", $"{userTypes?.name} User Type User has been enabled", apkDateTime: DateTime.Now);
+
                     }
                     else
                     {
@@ -1124,6 +1176,21 @@ namespace FMB_CIS.Controllers
                         entity.modified_by = uid;
                         entity.date_modified = DateTime.Now;
                         _context.Update(entity);
+
+                        var userAccessAction = string.Empty;
+                        if (entity.is_active == true)
+                        {
+                            userAccessAction = "enabled";
+                        }
+                        else
+                        {
+                            userAccessAction = "disabled";
+                        }
+
+                        var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
+                        var userTypes = _context.tbl_user_types.Where(x => x.id == entity.user_type_id).FirstOrDefault();
+                        var user = _context.tbl_user.Where(x => x.id == entity.user_id).FirstOrDefault();
+                        LogUserActivity("AccessRightsManagement", "UserTypeUsersToggle", $"{userTypes?.name} has been {userAccessAction} to user {user?.email}", apkDateTime: DateTime.Now);
                     }
                     _context.SaveChanges();
 

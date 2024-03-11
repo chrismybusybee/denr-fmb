@@ -1,4 +1,4 @@
-﻿@using System.Security.Claims;
+﻿d@using System.Security.Claims;
 @using System.Globalization;
 @model FMB_CIS.Models.Brand
 @{
@@ -35,7 +35,16 @@
             data: parameters,
             success: function (data) {
                 // NOTE: TO DO better way of calling callback function from parent
-                $('#brandPartialContainer').load('/BrandManagement/BrandListPartialView');
+                closeModal();
+                Swal.fire({
+                    title: "Success!",
+                    icon: "success",
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: '#14984a'
+                });
+
+                $('#brandListPartialContainer').load('/BrandManagement/BrandListPartialView');
+
             }
         });
     });

@@ -82,6 +82,13 @@
                 // NOTE: TO DO better way of calling callback function from parent
                 $('#accessRightsListPartialContainer').load('/AccessRightsManagement/AccessRightsListPartialView');
                 closeModal();
+
+                Swal.fire({
+                    title: "Success!",
+                    icon: "success",
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: '#14984a'
+                });
             }
         });
     });

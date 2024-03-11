@@ -37,8 +37,17 @@
         };
         $.post("/OfficeManagement/OfficeTypeCreate", parameters, function (data) {
             // NOTE: TO DO better way of calling callback function from parent
-            $('#officeTypeListPartialContainer').load('/OfficeManagement/OfficeTypeListPartialView');
+           
             closeModal();
+
+            Swal.fire({
+                title: "Success!",
+                icon: "success",
+                confirmButtonText: "Ok",
+                confirmButtonColor: '#14984a'
+            });
+
+            $('#officeTypeListPartialContainer').load('/OfficeManagement/OfficeTypeListPartialView');
         });
     });
 
