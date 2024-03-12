@@ -55,6 +55,37 @@ namespace FMB_CIS.Controllers
             {
             }
         }
+        public void NotifyUser(string notifTitle, string notifContent, int userId = 0)
+        {
+            try
+            {
+
+                int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+                //Inserting record to UserActivityLog database
+                tbl_notifications notifs = new tbl_notifications()
+                {
+                    source_user_id = null,
+                    tbl_notification_type_id = 1,
+                    notified_user_id = uid,
+                    notified_user_type = null,//userTypeID;
+                    notification_title = notifTitle,
+                    notification_content = notifContent,
+                    date_notified = DateTime.Now,
+                    is_active = true,
+                    created_by = uid,
+                    modified_by = uid,
+                    date_created = DateTime.Now,
+                    date_modified = DateTime.Now,
+                    is_about_permit = false, //Notifications about permit are not created here
+                };
+                _context.Add(notifs);
+                _context.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+            }
+        }
         public ProfileManagementController(IConfiguration configuration, LocalContext context, IEmailSender emailSender, IWebHostEnvironment _environment)
         {
             this._configuration = configuration;
@@ -160,12 +191,15 @@ namespace FMB_CIS.Controllers
                     {
                         Console.WriteLine("An error occured on sending Email");
                     }
-
+                    LogUserActivity("ProfileManagement", "Change Password", $"Password changed success.", apkDateTime: DateTime.Now);
+                    NotifyUser("Password Changed", $"You have successfully changed your password at {DateTime.Now}");
                     return Json(new { success = true });
 
                 }
                 else
                 {
+                    LogUserActivity("ProfileManagement", "Change Password", $"Attempt failed. Invalid old password.", apkDateTime: DateTime.Now);
+                    NotifyUser("Password Change Failed", $"An attempt to change your password happened at {DateTime.Now}");
                     return Json(new { success = false, error = "Invalid old password." });
                 }
             }
@@ -221,6 +255,7 @@ namespace FMB_CIS.Controllers
                     profilePicsDB.date_modified = DateTime.Now;
                     _context.tbl_profile_pictures.Add(profilePicsDB);
                     _context.SaveChanges();
+                    LogUserActivity("ProfileManagement", "Upload Profile Photo", $"New Profile Photo created and uploaded on {webPath}/{fileName}", apkDateTime: DateTime.Now);
                 }
                 // if profile picture exist, remove the previous picture and edit the current row on database
                 else
@@ -245,6 +280,7 @@ namespace FMB_CIS.Controllers
                     profilePicsDB.date_created = DateTime.Now;
                     profilePicsDB.date_modified = DateTime.Now;
                     _context.SaveChanges();
+                    LogUserActivity("ProfileManagement", "Upload Profile Photo", $"New Profile Photo uploaded on {webPath}/{fileName} and old profile photo deleted.", apkDateTime: DateTime.Now);
                 }
                 
                 var webPathWithFilename = webPath + "/" + fileName;
