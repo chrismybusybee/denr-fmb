@@ -107,7 +107,7 @@ namespace FMB_CIS.Controllers
                 _context.Add(emailTemplate);
 
                 var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
-                LogUserActivity("CreateEmailTemplate", "CreateEmailTemplate", $"{emailTemplate.template_name} Email Template has been created", apkDateTime: DateTime.Now);
+                LogUserActivity("CreateEmailTemplate", "Create Email Template", $"{emailTemplate.template_name} Email Template has been created", apkDateTime: DateTime.Now);
 
                 _context.SaveChanges();
             }
@@ -128,7 +128,7 @@ namespace FMB_CIS.Controllers
                 _context.SaveChanges();
 
                 var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
-                LogUserActivity("UpdateEmailTemplate", "UpdateEmailTemplate", $"{emailTemplateDB.template_name} Email Template has been updated", apkDateTime: DateTime.Now);
+                LogUserActivity("UpdateEmailTemplate", "Update Email Template", $"{emailTemplateDB.template_name} Email Template has been updated", apkDateTime: DateTime.Now);
             }
             return RedirectToAction("Index", "EmailTemplates");
         }
