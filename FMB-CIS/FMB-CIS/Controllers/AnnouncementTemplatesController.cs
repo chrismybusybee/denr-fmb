@@ -130,7 +130,7 @@ namespace FMB_CIS.Controllers
                 _context.SaveChanges();
 
                 var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
-                LogUserActivity("CreateAnnouncementTemplate", "CreateAnnouncementTemplate", $"{announcement.title} Announcement Template created", apkDateTime: DateTime.Now);
+                LogUserActivity("CreateAnnouncementTemplate", "Create Announcement Template", $"{announcement.title} Announcement Template created", apkDateTime: DateTime.Now);
 
             }
             else if (typeOfAction == "edit")
@@ -153,7 +153,7 @@ namespace FMB_CIS.Controllers
                 _context.SaveChanges();
 
                 var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
-                LogUserActivity("UpdateAnnouncementTemplate", "UpdateAnnouncementTemplate", $"{announcementDB.title} Announcement Template updated", apkDateTime: DateTime.Now);
+                LogUserActivity("UpdateAnnouncementTemplate", "Update Announcement Template", $"{announcementDB.title} Announcement Template updated", apkDateTime: DateTime.Now);
 
             }
             return RedirectToAction("Index", "AnnouncementTemplates");
