@@ -21,7 +21,8 @@
                 </div>
             </div>
         </div>
-        <div class="px-2"> <!--class="c-content"-->
+        <div class="px-2" style="overflow: auto;">
+            <!--class="c-content"-->
             <div id="card">
                 <table id="activityLogsTable" class="table table-striped dataTable">
                     <thead>
@@ -57,7 +58,7 @@
                                 <td class="text-nowrap">
                                     @Html.DisplayFor(modelItem => item.Entity)
                                 </td>
-                                <td class="text-nowrap">
+                                <td>
                                     @Html.DisplayFor(modelItem => item.UserAction)
                                 </td>
 
