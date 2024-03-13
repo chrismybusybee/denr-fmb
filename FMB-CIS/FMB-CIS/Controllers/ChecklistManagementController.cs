@@ -185,6 +185,8 @@ namespace FMB_CIS.Controllers
             }
             _context.SaveChanges();
 
+            var permitName = _context.tbl_permit_types.Where(pt => pt.id == tblchcklstFromDB.permit_type_id).Select(pt => pt.name).FirstOrDefault();
+            LogUserActivity("ChecklistManagement", $"Requirement Deleted", $"\"{tblchcklstFromDB.name}\" requirement for {permitName} has been deleted", apkDateTime: DateTime.Now);
             return Json(true);
         }
         [HttpPost, ActionName("EnableDisableDocReq")]
@@ -197,10 +199,13 @@ namespace FMB_CIS.Controllers
             tblchcklstFromDB.date_modified = DateTime.Now;
             tblchcklstFromDB.modifiedBy = uid;
             _context.SaveChanges();
+
+            var permitName = _context.tbl_permit_types.Where(pt=>pt.id == tblchcklstFromDB.permit_type_id).Select(pt=>pt.name).FirstOrDefault();
+            LogUserActivity("ChecklistManagement", $"Requirement {(enableOrDisable == true? "Enabled": "Disabled")}", $"\"{tblchcklstFromDB.name}\" requirement for {permitName} has been set to {(enableOrDisable == true ? "Enabled" : "Disabled")}", apkDateTime: DateTime.Now);
             return Json(true);
         }
 
-
+        //INACTIVE. Currently using the "EnableDisableDocReq"
         [HttpPost, ActionName("EnableDocReq")]
         public JsonResult EnableDocReq(int tbl_document_checklist_id)
         {
@@ -211,6 +216,7 @@ namespace FMB_CIS.Controllers
             return Json(true);
         }
 
+        //INACTIVE. Currently using the "EnableDisableDocReq"
         [HttpPost, ActionName("DisableDocReq")]
         public JsonResult DisableDocReq(int tbl_document_checklist_id)
         {
@@ -220,6 +226,7 @@ namespace FMB_CIS.Controllers
             _context.SaveChanges();
             return Json(true);
         }
+
 
         [HttpPost, ActionName("EditChecklistInfo")]
         public IActionResult EditChecklistInfo(ChecklistManagementViewModel model)
@@ -233,6 +240,8 @@ namespace FMB_CIS.Controllers
             tblchcklstFromDB.modifiedBy = uid;
             tblchcklstFromDB.date_modified = DateTime.Now;
             _context.SaveChanges();
+            var permitName = _context.tbl_permit_types.Where(pt => pt.id == tblchcklstFromDB.permit_type_id).Select(pt => pt.name).FirstOrDefault();
+            LogUserActivity("ChecklistManagement", $"Requirement Updated", $"\"{tblchcklstFromDB.name}\" requirement for {permitName} has been updated.", apkDateTime: DateTime.Now);
             return RedirectToAction("Index", "ChecklistManagement");
         }
 
@@ -250,6 +259,8 @@ namespace FMB_CIS.Controllers
             _context.tbl_document_checklist.Add(model.tbl_document_Checklist);
             _context.SaveChanges();
 
+            var permitName = _context.tbl_permit_types.Where(pt => pt.id == model.tbl_document_Checklist.permit_type_id).Select(pt => pt.name).FirstOrDefault();
+            LogUserActivity("ChecklistManagement", $"Requirement Created", $"\"{model.tbl_document_Checklist.name}\" requirement for {permitName} has been created.", apkDateTime: DateTime.Now);
             return RedirectToAction("Index", "ChecklistManagement");
         }
 
