@@ -72,28 +72,30 @@ namespace FMB_CIS.Controllers
         /// Workflow List
         /// </summary>
         /// <returns></returns>
+        [RequiresAccess(allowedAccessRights = "allow_page_workflow_management")]
         public IActionResult WorkflowList()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
                 return View();
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_workflow_management")]
         public IActionResult WorkflowListPartialView()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 WorkflowListViewModel model = new WorkflowListViewModel();
                 //Get the list of users
                 var entities = _context.tbl_permit_workflow.Where(e => e.is_active == true).ToList();
@@ -103,18 +105,19 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/WorkflowManagement/Manage/Partial/WorkflowListPartial.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_workflow_management")]
         public IActionResult WorkflowCreateModal()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 AccessRightsListViewModel model = new AccessRightsListViewModel();
                 //Get the list of users
                 var entities = _context.tbl_access_right.ToList();
@@ -124,11 +127,11 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/WorkflowManagement/Manage/Modal/WorkflowCreateModal.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
         public IActionResult WorkflowUpdateModal(int id)
         {
@@ -141,12 +144,13 @@ namespace FMB_CIS.Controllers
 
             return PartialView("~/Views/WorkflowManagement/Manage/Modal/WorkflowUpdateModal.cshtml", model);
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_workflow_management")]
         public IActionResult WorkflowDeleteModal(int id)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 Workflow model = new Workflow();
                 //Get the list of users
                 var entity = _context.tbl_permit_workflow.FirstOrDefault(o => o.id == id);
@@ -156,20 +160,21 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/WorkflowManagement/Manage/Modal/WorkflowDeleteModal.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_workflow_management")]
         [HttpPost]
         public IActionResult WorkflowCreate(WorkflowCreateViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 // Uses fluent validation
                 if (!ModelState.IsValid && false)
                 {
@@ -181,7 +186,7 @@ namespace FMB_CIS.Controllers
                     // Note: TO DO Soon refactor code, let's move the Data Access to a new layer
 
                     // Action: 1 to 5
-
+                    string logActionName = "Created";
                     // Remove if existing
                     if (model.id != 0)
                     {
@@ -194,6 +199,7 @@ namespace FMB_CIS.Controllers
 
                         var removeWorkflowNextStepEntity = _context.tbl_permit_workflow_next_step.Where(m => m.workflow_code == workflowCode);
                         _context.tbl_permit_workflow_next_step.RemoveRange(removeWorkflowNextStepEntity);
+                        logActionName = "Updated";
                     }
 
                     // 1. create entity
@@ -261,21 +267,22 @@ namespace FMB_CIS.Controllers
                         });
                     });
 
-                    // 3. TO DO: Add logging / historical data
-
-                    // 4. Save changes
+                    // 3. Save changes
 
                     // Remove previous
                     _context.SaveChanges();
 
+                    // 4. Add logging / historical data
+                    LogUserActivity("WorkflowManagement", $"Workflow {logActionName}", $"{model.name} workflow {logActionName.ToLower()}", apkDateTime: DateTime.Now);
+
                     // 5. Return result
                     return StatusCode(StatusCodes.Status201Created, ModelState);
                 }
-            }
-            else
-            {
-                return RedirectToAction("Index", "AccountManagement");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "AccountManagement");
+            //}
         }
 
         /// <summary>
@@ -283,13 +290,14 @@ namespace FMB_CIS.Controllers
         /// UserTypeUser
         /// </summary>
         /// <returns></returns>
+        [RequiresAccess(allowedAccessRights = "allow_page_workflow_management")]
         [HttpGet("WorkflowManagement/GetWorkflow/{workflowId:int}")]
         public Workflow GetWorkflow(int workflowId)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 Workflow model = new Workflow();
                 //Get the list of users
                 var workflow = _context.tbl_permit_workflow.FirstOrDefault(e => e.id == workflowId);
@@ -307,11 +315,11 @@ namespace FMB_CIS.Controllers
                     workflowStep.nextSteps = nextstepEntity.Adapt<List<WorkflowNextStep>>();
                 }
                 return model;
-            }
-            else
-            {
-                return null;
-            }
+            //}
+            //else
+            //{
+            //    return null;
+            //}
         }
 
         ///// <summary>
@@ -403,14 +411,15 @@ namespace FMB_CIS.Controllers
                 return RedirectToAction("Index", "AccountManagement");
             }
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_workflow_management")]
         [HttpDelete("WorkflowManagement/WorkflowDelete/{id:int}")]
         public IActionResult WorkflowDelete(OfficeDeleteViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 // Uses fluent validation
                 if (!ModelState.IsValid)
                 {
@@ -423,10 +432,12 @@ namespace FMB_CIS.Controllers
 
                     // Action: 1 to 5
                     // 1. get, update entity
+                    string workflowName = "";
                     if (model.id != 0)
                     {
                         var removeEntity = _context.tbl_permit_workflow.Where(m => m.id == model.id).SingleOrDefault();
                         string workflowCode = removeEntity.workflow_code;
+                        workflowName = removeEntity.name;
                         _context.tbl_permit_workflow.Remove(removeEntity);
 
                         var removeWorkflowStepEntity = _context.tbl_permit_workflow_step.Where(m => m.workflow_code == workflowCode);
@@ -436,19 +447,20 @@ namespace FMB_CIS.Controllers
                         _context.tbl_permit_workflow_next_step.RemoveRange(removeWorkflowNextStepEntity);
                     }
 
-                    // 3. TO DO: Add logging / historical data
-
-                    // 4. Save changes
+                    // 3. Save changes
                     _context.SaveChanges();
+
+                    // 4. Add logging / historical data
+                    LogUserActivity("WorkflowManagement", $"Workflow Deleted", $"{workflowName} workflow deleted", apkDateTime: DateTime.Now);
 
                     // 5. Return result
                     return StatusCode(StatusCodes.Status201Created, ModelState);
                 }
-            }
-            else
-            {
-                return RedirectToAction("Index", "AccountManagement");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "AccountManagement");
+            //}
         }
     }
 }

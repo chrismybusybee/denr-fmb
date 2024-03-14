@@ -535,6 +535,12 @@
                 // NOTE: TO DO if success
                 closeModal();
                 $('#workflowListPartialContainer').load('/WorkflowManagement/WorkflowListPartialView');
+                Swal.fire({
+                    title: "Success!",
+                    icon: "success",
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: '#14984a'
+                });
             });
         }
 

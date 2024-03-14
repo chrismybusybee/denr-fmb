@@ -934,19 +934,20 @@ namespace FMB_CIS.Controllers
         /// UserTypeUser
         /// </summary>
         /// <returns></returns>
+        [Authorize]
         public IEnumerable<UserType> UserTypes()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 var userTypes = _context.tbl_user_types.Where(e => e.is_active == true).ToList();
                 return userTypes.Adapt<List<UserType>>();
-            }
-            else
-            {
-                return null;
-            }
+            //}
+            //else
+            //{
+            //    return null;
+            //}
         }
 
         /// <summary>

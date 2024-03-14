@@ -401,8 +401,8 @@
             var nextStepIds = [];
             // get active step, get next step ids
             self.steps().forEach(function (step) {
-                if (step.isEdit) {
-                    step.nextSteps.forEach(function (nextStep) {
+                if (step.isEdit()) {
+                    step.nextSteps().forEach(function (nextStep) {
                         nextStepIds.push(nextStep.stepId);
                     });
                 }
@@ -444,7 +444,7 @@
             var steps = [];
             self.steps().forEach(function (step) {
                 var nextSteps = [];
-                step.nextSteps.forEach(function (nextStep) {
+                step.nextSteps().forEach(function (nextStep) {
                     nextSteps.push({
                         id: nextStep.id(),
                         user_type_Id: nextStep.userTypeId(),
@@ -483,6 +483,12 @@
                 // NOTE: TO DO if success
                 closeModal();
                 $('#workflowListPartialContainer').load('/WorkflowManagement/WorkflowListPartialView');
+                Swal.fire({
+                    title: "Success!",
+                    icon: "success",
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: '#14984a'
+                });
             });
         }
 
