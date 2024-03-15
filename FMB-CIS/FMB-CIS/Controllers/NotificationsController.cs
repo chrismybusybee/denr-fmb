@@ -406,6 +406,7 @@ namespace FMB_CIS.Controllers
             tblNotifFromDB.date_modified = DateTime.Now;
             tblNotifFromDB.modified_by = uid;
             _context.SaveChanges();
+            LogUserActivity("ManageNotifications", $"Notification {(enableOrDisable == true? "Enabled" : "Disabled")}", $"\"{tblNotifFromDB.notification_title}\" notification has been {(enableOrDisable == true ? "enabled" : "disabled")}", apkDateTime: DateTime.Now);
             return Json(true);
         }
 
@@ -452,7 +453,7 @@ namespace FMB_CIS.Controllers
                 createNotif.is_about_permit = false; //Notifications about permit are not created here
                 _context.tbl_notifications.Add(createNotif);
                 _context.SaveChanges();
-
+                LogUserActivity("ManageNotifications", "Notification Created", $"\"{createNotif.notification_title}\" notification was created", apkDateTime: DateTime.Now);
                 return Json(new { success = true });
             }
             catch (Exception ex)
@@ -477,7 +478,7 @@ namespace FMB_CIS.Controllers
                 notifFromDB.modified_by = loggedUserID;
                 notifFromDB.date_modified = DateTime.Now;
                 _context.SaveChanges();
-
+                LogUserActivity("ManageNotifications", "Notification Updated", $"\"{notifFromDB.notification_title}\" notification has been updated", apkDateTime: DateTime.Now);
                 return Json(new { success = true });
             }
             catch (Exception ex)
@@ -506,7 +507,7 @@ namespace FMB_CIS.Controllers
                         content = tblNotifFromDB.notification_content,
                         // Add other properties as needed
                     };
-
+                    LogUserActivity("ManageNotifications", "Notification Deleted", $"\"{tblNotifFromDB.notification_title}\" notification has been deleted", apkDateTime: DateTime.Now);
                     return Json(new { success = true, deletedNotification = deletedNotificationInfo });
                 }
                 else
