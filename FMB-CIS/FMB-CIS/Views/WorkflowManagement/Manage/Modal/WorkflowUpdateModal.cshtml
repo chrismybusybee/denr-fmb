@@ -670,7 +670,11 @@
                     regions = regionsData;
                     console.log("regionsData");
                     console.log(regionsData);
-                    ko.applyBindings(new WorkflowModel(workflow, userTypes, permitTypes, regions, statusCodes));
+
+                    ko.cleanNode($("#updateWorkflowModal")[0]);
+                    ko.applyBindings(new WorkflowModel(workflow, userTypes, permitTypes, regions, statusCodes), $("#updateWorkflowModal")[0]);
+
+                    
                     //cities
                 //return $.post('/OfficeManagement/GetDivisionByUserType', { userTypeId: 8 });
             }

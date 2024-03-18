@@ -555,7 +555,8 @@
             function (regionsData) {
                 regions = regionsData;
                 //return $.post('/OfficeManagement/GetDivisionByUserType', { userTypeId: 8 });
-                ko.applyBindings(new WorkflowModel(userTypes, permitTypes, regions, statusCodes));//cities,
+                ko.cleanNode($("#createWorkflowModal")[0]);
+                ko.applyBindings(new WorkflowModel(userTypes, permitTypes, regions, statusCodes), $("#createWorkflowModal")[0]);//cities,
             }
         )
         //.then(
