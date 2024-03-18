@@ -33,5 +33,6 @@
         public int? currentStepCount { get; set; }
 
         public int? currentMaxCount { get; set;}
+        public int? renewCount { get; set; }
     }
 }
