@@ -69,30 +69,32 @@ namespace FMB_CIS.Controllers
         /// AccessRights
         /// </summary>
         /// <returns></returns>
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_access_rights")]
         public IActionResult AccessRightsList()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
                 LogUserActivity("AccessRightsList", "Access Rights List", "getting access rights list", apkDateTime : DateTime.Now);
 
                 return View();
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_access_rights")]
         public IActionResult AccessRightsListPartialView()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 AccessRightsListViewModel model = new AccessRightsListViewModel();
                 //Get the list of users
                 var entities = _context.tbl_access_right.Where(e => e.is_active == true).ToList();
@@ -104,18 +106,19 @@ namespace FMB_CIS.Controllers
 
                 //LogUserActivity("AccessRightsListPartialView", "AccessRightsListPartialView", "partial view access", apkDateTime: DateTime.Now);
                 return PartialView("~/Views/AccessRightsManagement/Manage/Partial/AccessRightsListPartial.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_access_rights")]
         public IActionResult AccessRightsCreateModal()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 AccessRightsListViewModel model = new AccessRightsListViewModel();
                 //Get the list of users
                 var entities = _context.tbl_access_right.ToList();
@@ -125,18 +128,19 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/AccessRightsManagement/Manage/Modal/AccessRightsCreateModal.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_access_rights")]
         public IActionResult AccessRightsUpdateModal(int id)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 AccessRights model = new AccessRights();
                 //Get the list of users
                 var entity = _context.tbl_access_right.FirstOrDefault(o => o.id == id);
@@ -146,18 +150,19 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/AccessRightsManagement/Manage/Modal/AccessRightsUpdateModal.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_access_rights")]
         public IActionResult AccessRightsDeleteModal(int id)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 AccessRights model = new AccessRights();
                 //Get the list of users
                 var entity = _context.tbl_access_right.FirstOrDefault(o => o.id == id);
@@ -167,20 +172,21 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/AccessRightsManagement/Manage/Modal/AccessRightsDeleteModal.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_access_rights")]
         [HttpPost]
         public IActionResult AccessRightsCreate(AccessRightsCreateViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 // Uses fluent validation
                 if (!ModelState.IsValid)
                 {
@@ -220,20 +226,21 @@ namespace FMB_CIS.Controllers
                     // 5. Return result
                     return StatusCode(StatusCodes.Status201Created, ModelState);
                 }
-            }
-            else
-            {
-                return RedirectToAction("Index", "AccountManagement");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "AccountManagement");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_access_rights")]
         [HttpPut("AccessRightsManagement/AccessRightsUpdate/{id:int}")]
         public IActionResult AccessRightsUpdate(AccessRightsUpdateViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 // Uses fluent validation
                 if (!ModelState.IsValid)
                 {
@@ -274,20 +281,21 @@ namespace FMB_CIS.Controllers
                     // 5. Return result
                     return StatusCode(StatusCodes.Status201Created, ModelState);
                 }
-            }
-            else
-            {
-                return RedirectToAction("Index", "AccountManagement");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "AccountManagement");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_access_rights")]
         [HttpDelete("AccessRightsManagement/AccessRightsDelete/{id:int}")]
         public IActionResult AccessRightsDelete(OfficeDeleteViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 // Uses fluent validation
                 if (!ModelState.IsValid)
                 {
@@ -325,11 +333,11 @@ namespace FMB_CIS.Controllers
                     // 5. Return result
                     return StatusCode(StatusCodes.Status201Created, ModelState);
                 }
-            }
-            else
-            {
-                return RedirectToAction("Index", "AccountManagement");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "AccountManagement");
+            //}
         }
 
 
@@ -337,28 +345,30 @@ namespace FMB_CIS.Controllers
         /// UserType
         /// </summary>
         /// <returns></returns>
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_user_types")]
         public IActionResult UserTypeList()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
                 return View();
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_user_types")]
         public IActionResult UserTypeListPartialView()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 UserTypeListViewModel model = new UserTypeListViewModel();
                 //Get the list of users
                 var entities = _context.tbl_user_types.Where(e => e.is_active == true).ToList();
@@ -368,18 +378,19 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/AccessRightsManagement/Manage/Partial/UserTypeListPartial.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_user_types")]
         public IActionResult UserTypeCreateModal()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 UserTypeListViewModel model = new UserTypeListViewModel();
                 //Get the list of users
                 var entities = _context.tbl_user_types.ToList();
@@ -389,18 +400,19 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/AccessRightsManagement/Manage/Modal/UserTypeCreateModal.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_user_types")]
         public IActionResult UserTypeUpdateModal(int id)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 UserType model = new UserType();
                 //Get the list of users
                 var entity = _context.tbl_user_types.FirstOrDefault(o => o.id == id);
@@ -410,18 +422,19 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/AccessRightsManagement/Manage/Modal/UserTypeUpdateModal.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_user_types")]
         public IActionResult UserTypeDeleteModal(int id)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 UserType model = new UserType();
                 //Get the list of users
                 var entity = _context.tbl_user_types.FirstOrDefault(o => o.id == id);
@@ -431,20 +444,21 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/AccessRightsManagement/Manage/Modal/UserTypeDeleteModal.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_user_types")]
         [HttpPost]
         public IActionResult UserTypeCreate(UserTypeCreateViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 // Uses fluent validation
                 if (!ModelState.IsValid)
                 {
@@ -479,20 +493,21 @@ namespace FMB_CIS.Controllers
                     // 5. Return result
                     return StatusCode(StatusCodes.Status201Created, ModelState);
                 }
-            }
-            else
-            {
-                return RedirectToAction("Index", "AccountManagement");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "AccountManagement");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_user_types")]
         [HttpPut("AccessRightsManagement/UserTypeUpdate/{id:int}")]
         public IActionResult UserTypeUpdate(UserTypeUpdateViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 // Uses fluent validation
                 if (!ModelState.IsValid)
                 {
@@ -528,20 +543,21 @@ namespace FMB_CIS.Controllers
                     // 5. Return result
                     return StatusCode(StatusCodes.Status201Created, ModelState);
                 }
-            }
-            else
-            {
-                return RedirectToAction("Index", "AccountManagement");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "AccountManagement");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_user_types")]
         [HttpDelete("AccessRightsManagement/UserTypeDelete/{id:int}")]
         public IActionResult UserTypeDelete(OfficeDeleteViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 // Uses fluent validation
                 if (!ModelState.IsValid)
                 {
@@ -577,11 +593,11 @@ namespace FMB_CIS.Controllers
                     // 5. Return result
                     return StatusCode(StatusCodes.Status201Created, ModelState);
                 }
-            }
-            else
-            {
-                return RedirectToAction("Index", "AccountManagement");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "AccountManagement");
+            //}
         }
 
         /// <summary>
@@ -592,39 +608,40 @@ namespace FMB_CIS.Controllers
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 var userTypeAccessRights = _context.tbl_user_type_access_right.Where(e => e.is_active == true).ToList();
                 return userTypeAccessRights.Adapt<List<UserTypeAccessRights>>();
-            }
-            else
-            {
-                return null;
-            }
+            //}
+            //else
+            //{
+            //    return null;
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_assign_access_rights")]
         public IActionResult UserTypeAccessRightsList()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
                 return View();
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
-
+        [RequiresAccess(allowedAccessRights = "allow_page_assign_access_rights")]
         public IActionResult UserTypeAccessRightsListPartialView()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 UserTypeAccessRightsListViewModel model = new UserTypeAccessRightsListViewModel();
                 //Get the list of user types
                 var userTypes = _context.tbl_user_types.Where(e => e.is_active == true).ToList();
@@ -640,21 +657,21 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/AccessRightsManagement/Manage/Partial/UserTypeAccessRightsListPartial.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
-
+        [RequiresAccess(allowedAccessRights = "allow_page_assign_access_rights")]
         [HttpPost]
         public IActionResult UserTypeAccessRightsToggle(UserTypeAccessRightsToggleViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 // Uses fluent validation
                 if (!ModelState.IsValid)
                 {
@@ -713,11 +730,11 @@ namespace FMB_CIS.Controllers
 
                     return StatusCode(StatusCodes.Status201Created, ModelState);
                 }
-            }
-            else
-            {
-                return RedirectToAction("Index", "AccountManagement");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "AccountManagement");
+            //}
         }
 
         //public IActionResult AccessRightsTypeCreateModal()
@@ -954,43 +971,45 @@ namespace FMB_CIS.Controllers
         /// UserTypeUser
         /// </summary>
         /// <returns></returns>
+        [RequiresAccess(allowedAccessRights = "allow_page_assign_user_types")]
         public IEnumerable<UserTypeUser> UserTypeUsers()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 var userTypeUsers = _context.tbl_user_type_user.Where(e => e.is_active == true).ToList();
                 return userTypeUsers.Adapt<List<UserTypeUser>>();
-            }
-            else
-            {
-                return null;
-            }
+            //}
+            //else
+            //{
+            //    return null;
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_assign_user_types")]
         public IActionResult UserTypeUserList()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
                 return View();
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
-
+        [RequiresAccess(allowedAccessRights = "allow_page_assign_user_types")]
         public IActionResult UserTypeUserListPartialView()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 UserTypeUserListViewModel model = new UserTypeUserListViewModel();
                 //Get the list of user types
                 var userTypes = _context.tbl_user_types.Where(e => e.is_active == true).ToList();
@@ -1006,21 +1025,22 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/AccessRightsManagement/Manage/Partial/UserTypeUserListPartial.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
 
+        [RequiresAccess(allowedAccessRights = "allow_page_assign_user_types")]
         [HttpPost]
         public IActionResult UserTypeUserToggle(UserTypeUserToggleViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 // Uses fluent validation
                 if (!ModelState.IsValid)
                 {
@@ -1048,7 +1068,8 @@ namespace FMB_CIS.Controllers
 
                         var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
                         var userTypes = _context.tbl_user_types.Where(x => x.id == UserTypeUserEntity.user_type_id).FirstOrDefault();
-                        LogUserActivity("AccessRightsManagement", "User Type User Toggle", $"{userTypes?.name} has been created", apkDateTime: DateTime.Now);
+                    var user = _context.tbl_user.Where(x => x.id == entity.user_id).FirstOrDefault();
+                    LogUserActivity("AccessRightsManagement", "User Type User Toggle", $"{userTypes?.name} has been enabled to user {user?.email}", apkDateTime: DateTime.Now);
                     }
                     else
                     {
@@ -1078,31 +1099,31 @@ namespace FMB_CIS.Controllers
 
                     return StatusCode(StatusCodes.Status201Created, ModelState);
                 }
-            }
-            else
-            {
-                return RedirectToAction("Index", "AccountManagement");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "AccountManagement");
+            //}
         }
 
 
 
-
+        [Authorize]
         public IActionResult UserTypeUsersList()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int userRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (userRoleID == 14) // Super Admin
-            {
+            //if (userRoleID == 14) // Super Admin
+            //{
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
                 return View();
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
 
         public IActionResult UserTypeUsersListPartialView()

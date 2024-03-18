@@ -864,7 +864,7 @@
                                         }
                                         @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_assign_user_types"))
                                         {
-                                            <li id="userTypeListMenuItem">
+                                            <li id="assignUserTypeMenuItem">
                                                 <a href="@Url.Action("UserTypeUserList", "AccessRightsManagement")" class="d-flex gap-2 text-decoration-none fs-6">
                                                     <div>
                                                         <img src="~/assets/images/menu-icons/line.png" />
@@ -1331,6 +1331,7 @@
             "/AccessRightsManagement/UserTypeList": "userTypeListMenuItem",
             "/AccessRightsManagement/AccessRightsList": "accessRightsListMenuItem",
             "/AccessRightsManagement/UserTypeAccessRightsList": "assignAccessRightsListMenuItem",
+            "/AccessRightsManagement/UserTypeUserList": "assignUserTypeMenuItem",
             "/WorkflowManagement/WorkflowList": "workflowListMenuItem",
             "/Monitoring": "monitoringMenuItem",
             "/CreationOfNewDenrOffice": "creationOfNewDenrOfficeMenuItem",
