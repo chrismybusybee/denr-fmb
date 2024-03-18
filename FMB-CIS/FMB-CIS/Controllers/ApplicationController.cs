@@ -1455,7 +1455,7 @@ namespace FMB_CIS.Controllers
                 renewApplication.status = 1;
                 renewApplication.renew_from = oldApplicationID;
                 renewApplication.ReferenceNo = null;
-
+                renewApplication.original_renew_from = renewApplication.original_renew_from == null ? oldApplicationID : renewApplication.original_renew_from;
                 _context.tbl_application.Add(renewApplication);
                 _context.SaveChanges();
 

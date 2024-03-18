@@ -40,8 +40,7 @@ namespace FMB_CIS.Models
         public bool? coordinatedWithEnforcementDivision { get; set; }
         public DateTime? initial_date_of_inspection { get; set; }
         public int? renew_from { get; set; }
-
         public string? ReferenceNo { get; set; }
-
+        public int? original_renew_from { get; set; }
     }
 }
