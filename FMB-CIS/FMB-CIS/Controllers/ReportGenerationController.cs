@@ -921,8 +921,9 @@ namespace FMB_CIS.Controllers
                                               //where a.tbl_user_id == userID
                                           where a.tbl_application_type_id == 1
                                           select a;
-
+       
                     var applicationtypelist = _context.tbl_application_type;
+
                     // your code to retrieve data
                     var applicationMod = (from a in applicationlist
                                           join usr in _context.tbl_user on a.tbl_user_id equals usr.id
@@ -955,6 +956,7 @@ namespace FMB_CIS.Controllers
                                               isRead = false,
                                               currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
                                               currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic                              
+                                              renewCount = _context.tbl_application.Where(x => x.original_renew_from == a.id).Count()
                                           }).ToList();
 
 
@@ -1015,6 +1017,7 @@ namespace FMB_CIS.Controllers
                                               isRead = false,
                                               currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
                                               currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic                              
+                                              renewCount = _context.tbl_application.Where(x => x.original_renew_from == a.id).Count()
                                           }).ToList();
 
 
