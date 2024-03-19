@@ -1026,5 +1026,110 @@ namespace FMB_CIS.Controllers
                 "CertificateOfRegistration_Pending_Applications.csv");
         }
 
+
+        //public CsvResult GenerateReportSummary()
+        public CsvResult GenerateReportSummary(string TotalImport, string TotalSell, string TotalPurchase, string TotalCoR, string TotalCoRRenewed, string TotalLease, string TotalReSell, string TotalRent, string TotalLend)
+        {
+            bool isTotalImportChecked = !string.IsNullOrEmpty(TotalImport) && TotalImport == "on";
+            bool isTotalSellChecked = !string.IsNullOrEmpty(TotalSell) && TotalSell == "on";
+            bool isTotalPurchaseChecked = !string.IsNullOrEmpty(TotalPurchase) && TotalPurchase == "on";
+            bool isTotalCoRChecked = !string.IsNullOrEmpty(TotalCoR) && TotalCoR == "on";
+            bool isTotalCoRRenewedChecked = !string.IsNullOrEmpty(TotalCoRRenewed) && TotalCoRRenewed == "on";
+            bool isTotalLeaseChecked = !string.IsNullOrEmpty(TotalLease) && TotalLease == "on";
+            bool isTotalReSellChecked = !string.IsNullOrEmpty(TotalReSell) && TotalReSell == "on";
+            bool isTotalRentChecked = !string.IsNullOrEmpty(TotalRent) && TotalRent == "on";
+            bool isTotalLendChecked = !string.IsNullOrEmpty(TotalLend) && TotalLend == "on";
+
+            return new CsvResult(
+                async csv =>
+                {
+                    int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+                    var userRegion = _context.tbl_user.Where(u => u.id == loggedUserID).Select(u => u.tbl_region_id).FirstOrDefault();
+
+                    
+
+                    var pendingStatus = new List<string>
+                    {
+                       "For Evaluation", "For Permit Approval", "For Physical Inspection", "For Payment"
+                    };
+
+                    var applicationtypelist = _context.tbl_application_type;
+                    // your code to retrieve data
+                    //var applicationMod = (from pT in _context.tbl_permit_type
+                    //                      join a in _context.tbl_application on pT.id equals a.tbl_permit_type_id into gj
+                    //                      join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }
+                    //                      from a in gj.DefaultIfEmpty()
+                    //                      where (isTotalImportChecked && pT.id == 1) ||
+                    //                            (isTotalSellChecked && pT.id == 3) ||
+                    //                            (isTotalPurchaseChecked && pT.id == 2) ||
+                    //                            (isTotalCoRChecked && pT.id == 13) ||
+                    //                            (isTotalLeaseChecked && pT.id == 5) ||
+                    //                            (isTotalReSellChecked && pT.id == 14) ||
+                    //                            (isTotalRentChecked && pT.id == 6) ||
+                    //                            (isTotalLendChecked && pT.id == 7)
+                    //                      group a by pT.name into g
+                    //                      orderby g.Count() descending
+                    //                      select new ReportCountsModel
+                    //                      {
+                    //                          PermitType = "Total " + g.Key,
+                    //                          Counts = g.Count(),
+                    //                      }).ToList();
+
+                    //var applicationMod = (from pT in _context.tbl_permit_type
+                    //                      join a in _context.tbl_application on pT.id equals a.tbl_permit_type_id into gj
+                    //                      from a in gj.DefaultIfEmpty()
+                    //                      join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code } into wfsGroup
+                    //                      from wfs in wfsGroup.DefaultIfEmpty()
+                    //                      where (isTotalImportChecked && pT.id == 1) ||
+                    //                            (isTotalSellChecked && pT.id == 3) ||
+                    //                            (isTotalPurchaseChecked && pT.id == 2) ||
+                    //                            (isTotalCoRChecked && pT.id == 13) ||
+                    //                            (isTotalLeaseChecked && pT.id == 5) ||
+                    //                            (isTotalReSellChecked && pT.id == 14) ||
+                    //                            (isTotalRentChecked && pT.id == 6) ||
+                    //                            (isTotalLendChecked && pT.id == 7)
+                    //                      group wfs by new { pT.name, a } into g
+                    //                      orderby g.Count() descending
+                    //                      select new ReportCountsModel
+                    //                      {
+                    //                          PermitType = "Total " + g.Key.name,
+                    //                          Counts = g.Count(),
+                    //                          Pending = g.Count(x => x != null && pendingStatus.Contains(x.name)),
+                    //                          Completed = g.Count(x => x != null && !pendingStatus.Contains(x.name))
+                    //                      }).ToList();
+
+                    var applicationMod = (from pT in _context.tbl_permit_type
+                                          join a in _context.tbl_application on pT.id equals a.tbl_permit_type_id into gj
+                                          //join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }
+                                          from a in gj.DefaultIfEmpty()
+                                          where (isTotalImportChecked && pT.id == 1) ||
+                                                (isTotalSellChecked && pT.id == 3) ||
+                                                (isTotalPurchaseChecked && pT.id == 2) ||
+                                                (isTotalCoRChecked && pT.id == 13) ||
+                                                (isTotalLeaseChecked && pT.id == 5) ||
+                                                (isTotalReSellChecked && pT.id == 14) ||
+                                                (isTotalRentChecked && pT.id == 6) ||
+                                                (isTotalLendChecked && pT.id == 7)
+                                          group a by pT.name into g
+                                          orderby g.Count() descending
+                                          select new ReportCountsModel
+                                          {
+                                              PermitType = "Total " + g.Key,
+                                              Counts = g.Count(),
+                                          }).ToList();
+
+                    // Add a separate row for "Total Certificates of Registration (Renewed)" if applicable
+                    if (isTotalCoRRenewedChecked)
+                    {
+                        var renewedCount = _context.tbl_application.Count(a => a.tbl_permit_type_id == 13 && a.renew_from != null);
+                        applicationMod.Add(new ReportCountsModel { PermitType = "Total Certificates of Registration (Renewed)", Counts = renewedCount });
+                    }
+
+                    await csv.WriteRecordsAsync<ReportCountsModel>(applicationMod);
+                },
+                "ReportSummary.csv");
+        }
+
+
     }
 }
