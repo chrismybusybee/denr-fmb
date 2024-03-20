@@ -1075,11 +1075,10 @@ namespace FMB_CIS.Controllers
                     //                          Counts = g.Count(),
                     //                      }).ToList();
 
+
                     //var applicationMod = (from pT in _context.tbl_permit_type
                     //                      join a in _context.tbl_application on pT.id equals a.tbl_permit_type_id into gj
                     //                      from a in gj.DefaultIfEmpty()
-                    //                      join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code } into wfsGroup
-                    //                      from wfs in wfsGroup.DefaultIfEmpty()
                     //                      where (isTotalImportChecked && pT.id == 1) ||
                     //                            (isTotalSellChecked && pT.id == 3) ||
                     //                            (isTotalPurchaseChecked && pT.id == 2) ||
@@ -1088,19 +1087,16 @@ namespace FMB_CIS.Controllers
                     //                            (isTotalReSellChecked && pT.id == 14) ||
                     //                            (isTotalRentChecked && pT.id == 6) ||
                     //                            (isTotalLendChecked && pT.id == 7)
-                    //                      group wfs by new { pT.name, a } into g
+                    //                      group a by pT.name into g
                     //                      orderby g.Count() descending
                     //                      select new ReportCountsModel
                     //                      {
-                    //                          PermitType = "Total " + g.Key.name,
+                    //                          PermitType = "Total " + g.Key,
                     //                          Counts = g.Count(),
-                    //                          Pending = g.Count(x => x != null && pendingStatus.Contains(x.name)),
-                    //                          Completed = g.Count(x => x != null && !pendingStatus.Contains(x.name))
                     //                      }).ToList();
 
                     var applicationMod = (from pT in _context.tbl_permit_type
                                           join a in _context.tbl_application on pT.id equals a.tbl_permit_type_id into gj
-                                          //join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }
                                           from a in gj.DefaultIfEmpty()
                                           where (isTotalImportChecked && pT.id == 1) ||
                                                 (isTotalSellChecked && pT.id == 3) ||
@@ -1110,19 +1106,32 @@ namespace FMB_CIS.Controllers
                                                 (isTotalReSellChecked && pT.id == 14) ||
                                                 (isTotalRentChecked && pT.id == 6) ||
                                                 (isTotalLendChecked && pT.id == 7)
-                                          group a by pT.name into g
+                                          join s in _context.tbl_permit_workflow_step on a.status.ToString() equals s.workflow_code into sj
+                                          from s in sj.DefaultIfEmpty()
+                                          group new { a, s } by pT.name into g
                                           orderby g.Count() descending
                                           select new ReportCountsModel
                                           {
                                               PermitType = "Total " + g.Key,
                                               Counts = g.Count(),
+                                              Pending = g.Count(x => x.a.status != 11),
+                                              Completed = g.Count(x => x.a.status == 11)
                                           }).ToList();
+
+
+
 
                     // Add a separate row for "Total Certificates of Registration (Renewed)" if applicable
                     if (isTotalCoRRenewedChecked)
                     {
-                        var renewedCount = _context.tbl_application.Count(a => a.tbl_permit_type_id == 13 && a.renew_from != null);
-                        applicationMod.Add(new ReportCountsModel { PermitType = "Total Certificates of Registration (Renewed)", Counts = renewedCount });
+                        var renewed = _context.tbl_application.Where(a => a.tbl_permit_type_id == 13 && a.renew_from != null);
+                        applicationMod.Add(new ReportCountsModel 
+                        { 
+                            PermitType = "Total Certificates of Registration (Renewed)",
+                            Counts = renewed.Count(),
+                            Pending = renewed.Count(x => x.status != 11),
+                            Completed = renewed.Count(x => x.status == 11)
+                        });
                     }
 
                     await csv.WriteRecordsAsync<ReportCountsModel>(applicationMod);
