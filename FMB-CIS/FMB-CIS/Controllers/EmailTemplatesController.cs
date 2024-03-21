@@ -1,11 +1,13 @@
 ﻿using FMB_CIS.Data;
 using FMB_CIS.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace FMB_CIS.Controllers
 {
+    [Authorize]
     public class EmailTemplatesController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -57,14 +59,15 @@ namespace FMB_CIS.Controllers
             EmailSender = emailSender;
 
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_email_management")]
         public IActionResult Index() //List of email templates
         {
-            if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw") == true)
-            {
-                return RedirectToAction("EditAccount", "AccountManagement");
-            }
-            else
-            {
+            //if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw") == true)
+            //{
+            //    return RedirectToAction("EditAccount", "AccountManagement");
+            //}
+            //else
+            //{
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
@@ -76,7 +79,7 @@ namespace FMB_CIS.Controllers
 
                 
                 return View(model);
-            }
+            //}
             //return View();
         }
 

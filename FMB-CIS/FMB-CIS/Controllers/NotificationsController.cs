@@ -12,6 +12,7 @@ using System.Security.Claims;
 
 namespace FMB_CIS.Controllers
 {
+    [Authorize]
     public class NotificationsController : Controller
     {
         private readonly LocalContext _context;

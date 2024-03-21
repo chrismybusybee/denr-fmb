@@ -1,11 +1,13 @@
 ﻿using FMB_CIS.Data;
 using FMB_CIS.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace FMB_CIS.Controllers
 {
+    [Authorize]
     public class AnnouncementTemplatesController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -58,13 +60,14 @@ namespace FMB_CIS.Controllers
             }
         }
 
+        [RequiresAccess(allowedAccessRights = "allow_page_announcement_management")]
         public IActionResult Index()
         {
             string roleOfLoggedUser = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
             int usrTypeID = _context.tbl_user_types.Where(utype => utype.name == roleOfLoggedUser).Select(utype => utype.id).FirstOrDefault();
             
-            if (usrTypeID == 13 || usrTypeID == 14)
-            {
+            //if (usrTypeID == 13 || usrTypeID == 14)
+            //{
                 //ONLY THE FOLLOWING ROLES CAN CHANGE TEMPLATES
                 //13 - DENR CIS Administrator,
                 //14 - DENR CIS Super Admin,
@@ -98,11 +101,11 @@ namespace FMB_CIS.Controllers
 
                 return View(model);
                 
-            }
-            else
-            {
-                return RedirectToAction("EditAccount", "AccountManagement");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("EditAccount", "AccountManagement");
+            //}
             //return View();
         }
 

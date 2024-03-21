@@ -1,6 +1,7 @@
 ﻿using FMB_CIS.Data;
 using FMB_CIS.Models;
 using FMB_CIS.Models.ManageProfile;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,6 +11,7 @@ using System.Security.Claims;
 
 namespace FMB_CIS.Controllers
 {
+    [Authorize]
     public class ProfileManagementController : Controller
     {
         private readonly LocalContext _context;
