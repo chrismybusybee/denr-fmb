@@ -318,7 +318,7 @@ namespace FMB_CIS.Controllers
 
 
                     //if(userRole.Contains("Owner") == true || userRole.Contains("Seller") == true || userRole.Contains("Importer") == true)
-                    if (AccessRightsUtilities.IsAccessRights(((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value, "allow_table_chainsaws_for_sale"))
+                    if (AccessRightsUtilities.IsAccessRights(((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value, "allow_table_owned_chainsaws"))
                     {
 
                         //OWNED CHAINSAWS
@@ -337,7 +337,7 @@ namespace FMB_CIS.Controllers
                     
                         var applicationtypelist = _context.tbl_application_type;
 
-                        var applicationMod = from a in applicationlist
+                        var applicationMod = (from a in applicationlist
                                              join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                              join pT in _context.tbl_permit_type on a.tbl_application_type_id equals pT.id
                                              join pS in _context.tbl_permit_status on a.status equals pS.id
@@ -348,49 +348,49 @@ namespace FMB_CIS.Controllers
                                                  permit_type = pT.name, 
                                                  permit_status = pS.status,
                                                  application = a
-                                             };
+                                             }).ToList();
                         
                         mymodel.applicationModels = applicationMod;
 
                     }
                     
-                    /*else*/ if(userRole.Contains("CENRO") == true)
-                    {
-                        var applicationlist = _context.tbl_application;
-                        var applicationtypelist = _context.tbl_application_type;
+                    ///*else*/ if(userRole.Contains("CENRO") == true)
+                    //{
+                    //    var applicationlist = _context.tbl_application;
+                    //    var applicationtypelist = _context.tbl_application_type;
 
-                    var applicationMod = from a in applicationlist
-                                         join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
-                                         join pT in _context.tbl_permit_type on a.tbl_application_type_id equals pT.id
-                                         join pS in _context.tbl_permit_status on a.status equals pS.id
-                                         where a.tbl_user_id == userID
-                                         select new ApplicationModel{id = a.id, application_type = appt.name, permit_type = pT.name, permit_status = pS.status};
-                    //mymodel.tbl_Chainsaws = ChainsawOwnedList;
-                    mymodel.applicationModels = applicationMod;
+                    //var applicationMod = from a in applicationlist
+                    //                     join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
+                    //                     join pT in _context.tbl_permit_type on a.tbl_application_type_id equals pT.id
+                    //                     join pS in _context.tbl_permit_status on a.status equals pS.id
+                    //                     where a.tbl_user_id == userID
+                    //                     select new ApplicationModel{id = a.id, application_type = appt.name, permit_type = pT.name, permit_status = pS.status};
+                    ////mymodel.tbl_Chainsaws = ChainsawOwnedList;
+                    //mymodel.applicationModels = applicationMod;
 
-                       // return View(mymodel);
-                    }
-                    /*else*/ if(userRole.Contains("CENRO") == true)
-                    {
-                        var applicationlist = _context.tbl_application;
-                        var applicationtypelist = _context.tbl_application_type;
+                    //   // return View(mymodel);
+                    //}
+                    ///*else*/ if(userRole.Contains("CENRO") == true)
+                    //{
+                    //    var applicationlist = _context.tbl_application;
+                    //    var applicationtypelist = _context.tbl_application_type;
 
-                        var applicationMod = from a in applicationlist
-                                             join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
-                                             join pT in _context.tbl_permit_type on a.tbl_application_type_id equals pT.id
-                                             join pS in _context.tbl_permit_status on a.status equals pS.id
-                                             select new ApplicationModel { 
-                                                 id = a.id, 
-                                                 application_type = appt.name, 
-                                                 permit_type = pT.name, 
-                                                 permit_status = pS.status, 
-                                                 FullName = a.supplier_fname + " " + a.supplier_mname + " " + a.supplier_lname + " " + a.supplier_suffix,
-                                                 Email = a.supplier_email
-                                             };
-                        mymodel.applicationModels = applicationMod;
+                    //    var applicationMod = from a in applicationlist
+                    //                         join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
+                    //                         join pT in _context.tbl_permit_type on a.tbl_application_type_id equals pT.id
+                    //                         join pS in _context.tbl_permit_status on a.status equals pS.id
+                    //                         select new ApplicationModel { 
+                    //                             id = a.id, 
+                    //                             application_type = appt.name, 
+                    //                             permit_type = pT.name, 
+                    //                             permit_status = pS.status, 
+                    //                             FullName = a.supplier_fname + " " + a.supplier_mname + " " + a.supplier_lname + " " + a.supplier_suffix,
+                    //                             Email = a.supplier_email
+                    //                         };
+                    //    mymodel.applicationModels = applicationMod;
 
-                        //return View(mymodel);
-                    }
+                    //    //return View(mymodel);
+                    //}
                     //Chainsaws for Sale
                     if (AccessRightsUtilities.IsAccessRights(((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value, "allow_table_chainsaws_for_sale"))
                     {
@@ -409,7 +409,7 @@ namespace FMB_CIS.Controllers
                         mymodel.ChainsawsForSale = csawsForSale;
                     }
                     //Imported Chainsaws
-                    if (AccessRightsUtilities.IsAccessRights(((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value, "allow_table_chainsaws_for_sale"))
+                    if (AccessRightsUtilities.IsAccessRights(((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value, "allow_table_imported_chainsaws"))
                     {
                         var importedCsaws = (from ag in _context.tbl_application_group
                                             join b in _context.tbl_brands on ag.brand_id equals b.id into brandGroup
