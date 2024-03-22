@@ -531,7 +531,8 @@
         
 
 <!-- User History -->
-    @if (ViewBag.UserType.Contains("Owner") == true || ViewBag.UserType.Contains("Seller") == true || ViewBag.UserType.Contains("Importer") == true)
+    @* @if (ViewBag.UserType.Contains("Owner") == true || ViewBag.UserType.Contains("Seller") == true || ViewBag.UserType.Contains("Importer") == true) *@
+    @if (AccessRightsUtilities.IsAccessRights(((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value, "allow_table_history"))
     {
         <div id="card">
             @Html.Partial("~/Views/Dashboard/UserHistory.cshtml")
@@ -539,20 +540,20 @@
     }
 
 <!-- Owned Chainsaws -->
-@if (ViewBag.UserType.Contains("Owner") == true)
-{
-        
+@* if (ViewBag.UserType.Contains("Owner") == true) *@
+@if (AccessRightsUtilities.IsAccessRights(((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value, "allow_table_owned_chainsaws"))
+{        
     <div id="card">
         @Html.Partial("~/Views/Owner/OwnedChainsaws.cshtml")
     </div>
 }
-@if (ViewBag.UserType.Contains("Seller") == true)
+@if (AccessRightsUtilities.IsAccessRights(((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value, "allow_table_chainsaws_for_sale"))
 {
     <div id="card">
         @Html.Partial("~/Views/Seller/Index.cshtml")
     </div>
 }
-@if (ViewBag.UserType.Contains("Importer") == true)
+@if (AccessRightsUtilities.IsAccessRights(((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value, "allow_table_imported_chainsaws"))
 {
     <div id="card">
         @Html.Partial("~/Views/Importer/ImportedChainsaws.cshtml")

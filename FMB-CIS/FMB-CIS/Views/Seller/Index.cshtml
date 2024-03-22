@@ -28,25 +28,24 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (tbl_chainsaw item in Model.tbl_Chainsaws)
+                @foreach (var item in Model.ChainsawsForSale)
                 {
-                    if (item.status == "Seller")
-                    {
+                   
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Engine)
+                                @Html.DisplayFor(modelItem => item.engine_serialNo)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Brand)
+                                @Html.DisplayFor(modelItem => item.brand)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Model)
+                                @Html.DisplayFor(modelItem => item.model)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Power)
+                                @Html.DisplayFor(modelItem => item.power_source)
                             </td>
                         </tr>
-                    }
+                    
                 }
             </tbody>
         </table>
