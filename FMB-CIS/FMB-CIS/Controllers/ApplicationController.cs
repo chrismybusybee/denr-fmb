@@ -21,6 +21,7 @@ using System.Security.Cryptography.Xml;
 
 namespace FMB_CIS.Controllers
 {
+    [Authorize]
     public class ApplicationController : Controller
     {
         private readonly LocalContext _context;

@@ -222,6 +222,7 @@ namespace FMB_CIS.Controllers
 
         //    return View();
         //}
+        [Authorize]
         public ActionResult Signout()
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
