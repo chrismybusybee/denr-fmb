@@ -178,7 +178,8 @@ namespace FMB_CIS.Controllers
 
                     var pendingStatus = new List<string>
                 {
-                   "For Evaluation", "For Permit Approval", "For Physical Inspection", "For Payment"
+                   //"For Evaluation", "For Permit Approval", "For Physical Inspection", "For Payment"
+                    "Evaluation of Application Ongoing", "For approval of DENR", "Proceed to your DENR Office", "Upload Receipt"
                 };
 
                     var applicationtypelist = _context.tbl_application_type;
@@ -293,7 +294,8 @@ namespace FMB_CIS.Controllers
 
                     var pendingStatus = new List<string>
                 {
-                   "For Evaluation", "For Permit Approval", "For Physical Inspection", "For Payment"
+                   //"For Evaluation", "For Permit Approval", "For Physical Inspection", "For Payment"
+                   "Evaluation of Application Ongoing", "For approval of DENR", "Proceed to your DENR Office", "Upload Receipt"
                 };
 
                     var applicationtypelist = _context.tbl_application_type;
@@ -408,7 +410,8 @@ namespace FMB_CIS.Controllers
 
                     var pendingStatus = new List<string>
                 {
-                   "For Evaluation", "For Permit Approval", "For Physical Inspection", "For Payment"
+                   //"For Evaluation", "For Permit Approval", "For Physical Inspection", "For Payment"
+                   "Evaluation of Application Ongoing", "For approval of DENR", "Proceed to your DENR Office", "Upload Receipt"
                 };
 
                     var applicationtypelist = _context.tbl_application_type;
@@ -523,7 +526,8 @@ namespace FMB_CIS.Controllers
 
                     var pendingStatus = new List<string>
                 {
-                   "For Evaluation", "For Permit Approval", "For Physical Inspection", "For Payment"
+                   //"For Evaluation", "For Permit Approval", "For Physical Inspection", "For Payment"
+                   "Evaluation of Application Ongoing", "For approval of DENR", "Proceed to your DENR Office", "Upload Receipt"
                 };
 
                     var applicationtypelist = _context.tbl_application_type;
@@ -636,7 +640,8 @@ namespace FMB_CIS.Controllers
 
                     var pendingStatus = new List<string>
                 {
-                   "For Evaluation", "For Permit Approval", "For Physical Inspection", "For Payment"
+                   //"For Evaluation", "For Permit Approval", "For Physical Inspection", "For Payment"
+                   "Evaluation of Application Ongoing", "For approval of DENR", "Proceed to your DENR Office", "Upload Receipt"
                 };
 
                     var applicationtypelist = _context.tbl_application_type;
@@ -750,7 +755,8 @@ namespace FMB_CIS.Controllers
 
                     var pendingStatus = new List<string>
                 {
-                   "For Evaluation", "For Permit Approval", "For Physical Inspection", "For Payment"
+                   //"For Evaluation", "For Permit Approval", "For Physical Inspection", "For Payment"
+                   "Evaluation of Application Ongoing", "For approval of DENR", "Proceed to your DENR Office", "Upload Receipt"
                 };
 
                     var applicationtypelist = _context.tbl_application_type;
@@ -864,7 +870,8 @@ namespace FMB_CIS.Controllers
 
                     var pendingStatus = new List<string>
                 {
-                   "For Evaluation", "For Permit Approval", "For Physical Inspection", "For Payment"
+                   //"For Evaluation", "For Permit Approval", "For Physical Inspection", "For Payment"
+                   "Evaluation of Application Ongoing", "For approval of DENR", "Proceed to your DENR Office", "Upload Receipt"
                 };
 
                     var applicationtypelist = _context.tbl_application_type;
@@ -981,7 +988,8 @@ namespace FMB_CIS.Controllers
 
                     var pendingStatus = new List<string>
                 {
-                   "For Evaluation", "For Permit Approval", "For Physical Inspection", "For Payment"
+                   //"For Evaluation", "For Permit Approval", "For Physical Inspection", "For Payment"
+                   "Evaluation of Application Ongoing", "For approval of DENR", "Proceed to your DENR Office", "Upload Receipt"
                 };
 
                     var applicationtypelist = _context.tbl_application_type;
@@ -1050,7 +1058,8 @@ namespace FMB_CIS.Controllers
 
                     var pendingStatus = new List<string>
                     {
-                       "For Evaluation", "For Permit Approval", "For Physical Inspection", "For Payment"
+                       //"For Evaluation", "For Permit Approval", "For Physical Inspection", "For Payment"
+                       "Evaluation of Application Ongoing", "For approval of DENR", "Proceed to your DENR Office", "Upload Receipt"
                     };
 
                     var applicationtypelist = _context.tbl_application_type;
