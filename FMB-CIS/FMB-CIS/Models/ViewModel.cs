@@ -66,6 +66,7 @@ public DashboardView? dashboardView { get; set; }
         public IEnumerable<tbl_document_checklist>? tbl_Document_Checklist { get; set; }
         public List<FileChecklistViewModel>? fileChecklistViewModel { get; set; }
         public tbl_application_payment? tbl_Application_Payment { get; set; }
-
+        public IEnumerable<tbl_application_group>? ChainsawsForSale { get; set; } //dashboard chainsaws for sale table
+        public IEnumerable<tbl_application_group>? ImportedChainsaws { get; set; } //dashboard chainsaws for sale table
     }
 }

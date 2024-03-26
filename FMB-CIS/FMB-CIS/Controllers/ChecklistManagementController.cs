@@ -28,6 +28,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace FMB_CIS.Controllers
 {
+    [Authorize]
     public class ChecklistManagementController : Controller
     {
         private readonly LocalContext _context;
@@ -77,6 +78,8 @@ namespace FMB_CIS.Controllers
             this._configuration = configuration;
             _context = context;
         }
+
+        [RequiresAccess(allowedAccessRights = "allow_page_checklist_management")]
         public IActionResult Index()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
@@ -84,8 +87,8 @@ namespace FMB_CIS.Controllers
 
             ChecklistManagementViewModel model = new ChecklistManagementViewModel();
 
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
@@ -107,13 +110,14 @@ namespace FMB_CIS.Controllers
                 var permitTypesData = _context.tbl_permit_type.Where(p => p.is_active == true).ToList();
                 model.tbl_Permit_Types = permitTypesData;
                 return View(model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
 
+        [RequiresAccess(allowedAccessRights = "allow_page_checklist_management")]
         public IActionResult ChecklistOfDocumentsPartialView()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
@@ -121,8 +125,8 @@ namespace FMB_CIS.Controllers
 
             ChecklistManagementViewModel model = new ChecklistManagementViewModel();
 
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
@@ -145,11 +149,11 @@ namespace FMB_CIS.Controllers
                 var permitTypesData = _context.tbl_permit_type.Where(p => p.is_active == true).ToList();
                 model.tbl_Permit_Types = permitTypesData;
                 return PartialView("~/Views/ChecklistManagement/Partial/ChecklistPartial.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
 
         [HttpGet, ActionName("GetChecklistData")]

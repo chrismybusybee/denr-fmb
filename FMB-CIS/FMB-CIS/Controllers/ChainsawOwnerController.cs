@@ -749,19 +749,20 @@ namespace FMB_CIS.Controllers
                 //Application Grouping
                 //var applicationGroups = _context.tbl_application_group.Where(g => g.tbl_application_id == applicID).ToList();
                 var applicationGroups = (from ag in _context.tbl_application_group
-                                         join b in _context.tbl_brands on ag.brand_id equals b.id
+                                         join b in _context.tbl_brands on ag.brand_id equals b.id into brandGroup
+                                         from BrandTBL in brandGroup.DefaultIfEmpty()
                                          where ag.tbl_application_id == applicID
                                          select new tbl_application_group
                                          {
                                              id = ag.id,
                                              tbl_application_id = ag.tbl_application_id,
                                              supplier_name = ag.supplier_name,
-                                             supplier_address = ag.supplier_name,
+                                             supplier_address = ag.supplier_address,
                                              expected_time_arrival = ag.expected_time_arrival,
                                              power_source = ag.power_source,
                                              unit_of_measure = ag.unit_of_measure,
                                              brand_id = ag.brand_id,
-                                             brand = b.name,
+                                             brand = BrandTBL.name,
                                              model = ag.model,
                                              engine_serialNo = ag.engine_serialNo,
                                              quantity = ag.quantity,
@@ -776,15 +777,16 @@ namespace FMB_CIS.Controllers
                 //var applicationChainsaws = _context.tbl_chainsaw.Where(g => g.tbl_application_id == applicID).ToList();
 
                 var applicationChainsaws = (from cs in _context.tbl_chainsaw
-                                            join b in _context.tbl_brands on cs.brand_id equals b.id
+                                            join b in _context.tbl_brands on cs.brand_id equals b.id into brandGroup
+                                            from brandTBL in brandGroup.DefaultIfEmpty()
                                             where cs.tbl_application_id == applicID
                                             select new tbl_chainsaw
                                             {
                                                 Id = cs.Id,
                                                 user_id = cs.user_id,
                                                 tbl_application_id = cs.tbl_application_id,
-                                                brand_id = b.id,
-                                                Brand = b.name,
+                                                brand_id = brandTBL.id,
+                                                Brand = brandTBL.name,
                                                 Model = cs.Model,
                                                 Engine = cs.Engine,
                                                 Power = cs.Power,
@@ -793,7 +795,7 @@ namespace FMB_CIS.Controllers
                                                 watt = cs.watt,
                                                 hp = cs.hp,
                                                 watt_dec = cs.watt_dec,
-                                                hp_dec = cs.hp,
+                                                hp_dec = cs.hp_dec,
                                                 gb = cs.gb,
                                                 supplier = cs.supplier,
                                                 date_purchase = cs.date_purchase,
@@ -806,8 +808,7 @@ namespace FMB_CIS.Controllers
                                                 chainsaw_date_of_registration = cs.chainsaw_date_of_registration,
                                                 chainsaw_date_of_expiration = cs.chainsaw_date_of_expiration,
                                                 specification = cs.specification,
-                                                purpose = cs.purpose
-
+                                                purpose = cs.purpose,
                                             }).ToList();
 
                 mymodel.tbl_Chainsaws = applicationChainsaws;

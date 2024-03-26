@@ -317,13 +317,18 @@ namespace FMB_CIS.Controllers
 
 
 
-                    if(userRole.Contains("Owner") == true || userRole.Contains("Seller") == true || userRole.Contains("Importer") == true)
+                    //if(userRole.Contains("Owner") == true || userRole.Contains("Seller") == true || userRole.Contains("Importer") == true)
+                    if (AccessRightsUtilities.IsAccessRights(((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value, "allow_table_owned_chainsaws"))
                     {
 
-                    //OWNED CHAINSAWS
-                    var ChainsawList = _context.tbl_chainsaw.ToList();
-                    var ChainsawOwnedList = ChainsawList.Where(m => m.user_id == userID /*&& m.status == "Seller"*/).ToList();
+                        //OWNED CHAINSAWS
+                        var ChainsawList = _context.tbl_chainsaw.ToList();
+                        var ChainsawOwnedList = ChainsawList.Where(m => m.user_id == userID /*&& m.status == "Seller"*/).ToList();
+                        mymodel.tbl_Chainsaws = ChainsawOwnedList;
+                    }
 
+                    if (AccessRightsUtilities.IsAccessRights(((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value, "allow_table_history"))
+                    {
                         //HISTORY
                         var applicationlist = from a in _context.tbl_application
                                               where a.tbl_user_id == userID
@@ -332,7 +337,7 @@ namespace FMB_CIS.Controllers
                     
                         var applicationtypelist = _context.tbl_application_type;
 
-                        var applicationMod = from a in applicationlist
+                        var applicationMod = (from a in applicationlist
                                              join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                              join pT in _context.tbl_permit_type on a.tbl_application_type_id equals pT.id
                                              join pS in _context.tbl_permit_status on a.status equals pS.id
@@ -343,50 +348,84 @@ namespace FMB_CIS.Controllers
                                                  permit_type = pT.name, 
                                                  permit_status = pS.status,
                                                  application = a
-                                             };
-                        mymodel.tbl_Chainsaws = ChainsawOwnedList;
+                                             }).ToList();
+                        
                         mymodel.applicationModels = applicationMod;
 
-
-                        return View(mymodel);
                     }
-                    else if(userRole.Contains("CENRO") == true)
+                    
+                    ///*else*/ if(userRole.Contains("CENRO") == true)
+                    //{
+                    //    var applicationlist = _context.tbl_application;
+                    //    var applicationtypelist = _context.tbl_application_type;
+
+                    //var applicationMod = from a in applicationlist
+                    //                     join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
+                    //                     join pT in _context.tbl_permit_type on a.tbl_application_type_id equals pT.id
+                    //                     join pS in _context.tbl_permit_status on a.status equals pS.id
+                    //                     where a.tbl_user_id == userID
+                    //                     select new ApplicationModel{id = a.id, application_type = appt.name, permit_type = pT.name, permit_status = pS.status};
+                    ////mymodel.tbl_Chainsaws = ChainsawOwnedList;
+                    //mymodel.applicationModels = applicationMod;
+
+                    //   // return View(mymodel);
+                    //}
+                    ///*else*/ if(userRole.Contains("CENRO") == true)
+                    //{
+                    //    var applicationlist = _context.tbl_application;
+                    //    var applicationtypelist = _context.tbl_application_type;
+
+                    //    var applicationMod = from a in applicationlist
+                    //                         join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
+                    //                         join pT in _context.tbl_permit_type on a.tbl_application_type_id equals pT.id
+                    //                         join pS in _context.tbl_permit_status on a.status equals pS.id
+                    //                         select new ApplicationModel { 
+                    //                             id = a.id, 
+                    //                             application_type = appt.name, 
+                    //                             permit_type = pT.name, 
+                    //                             permit_status = pS.status, 
+                    //                             FullName = a.supplier_fname + " " + a.supplier_mname + " " + a.supplier_lname + " " + a.supplier_suffix,
+                    //                             Email = a.supplier_email
+                    //                         };
+                    //    mymodel.applicationModels = applicationMod;
+
+                    //    //return View(mymodel);
+                    //}
+                    //Chainsaws for Sale
+                    if (AccessRightsUtilities.IsAccessRights(((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value, "allow_table_chainsaws_for_sale"))
                     {
-                        var applicationlist = _context.tbl_application;
-                        var applicationtypelist = _context.tbl_application_type;
-
-                    var applicationMod = from a in applicationlist
-                                         join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
-                                         join pT in _context.tbl_permit_type on a.tbl_application_type_id equals pT.id
-                                         join pS in _context.tbl_permit_status on a.status equals pS.id
-                                         where a.tbl_user_id == userID
-                                         select new ApplicationModel{id = a.id, application_type = appt.name, permit_type = pT.name, permit_status = pS.status};
-                    //mymodel.tbl_Chainsaws = ChainsawOwnedList;
-                    mymodel.applicationModels = applicationMod;
-
-                        return View(mymodel);
+                        var csawsForSale = (from ag in _context.tbl_application_group
+                                                join b in _context.tbl_brands on ag.brand_id equals b.id into brandGroup
+                                                from brandTBL in brandGroup.DefaultIfEmpty()
+                                                join a in _context.tbl_application on ag.tbl_application_id equals a.id
+                                                where a.tbl_user_id == loggedUserID && a.tbl_permit_type_id == 3
+                                                select new tbl_application_group
+                                                {
+                                                    engine_serialNo = ag.engine_serialNo,
+                                                    brand = brandTBL.name,
+                                                    model = ag.model,
+                                                    power_source = ag.power_source
+                                                }).ToList();
+                        mymodel.ChainsawsForSale = csawsForSale;
                     }
-                    else if(userRole.Contains("CENRO") == true)
+                    //Imported Chainsaws
+                    if (AccessRightsUtilities.IsAccessRights(((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value, "allow_table_imported_chainsaws"))
                     {
-                        var applicationlist = _context.tbl_application;
-                        var applicationtypelist = _context.tbl_application_type;
-
-                        var applicationMod = from a in applicationlist
-                                             join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
-                                             join pT in _context.tbl_permit_type on a.tbl_application_type_id equals pT.id
-                                             join pS in _context.tbl_permit_status on a.status equals pS.id
-                                             select new ApplicationModel { 
-                                                 id = a.id, 
-                                                 application_type = appt.name, 
-                                                 permit_type = pT.name, 
-                                                 permit_status = pS.status, 
-                                                 FullName = a.supplier_fname + " " + a.supplier_mname + " " + a.supplier_lname + " " + a.supplier_suffix,
-                                                 Email = a.supplier_email
-                                             };
-                        mymodel.applicationModels = applicationMod;
-
-                        return View(mymodel);
-                    }                
+                        var importedCsaws = (from ag in _context.tbl_application_group
+                                            join b in _context.tbl_brands on ag.brand_id equals b.id into brandGroup
+                                            from brandTBL in brandGroup.DefaultIfEmpty()
+                                            join a in _context.tbl_application on ag.tbl_application_id equals a.id
+                                            where a.tbl_user_id == loggedUserID && a.tbl_permit_type_id == 1
+                                            select new tbl_application_group
+                                            {
+                                                engine_serialNo = ag.engine_serialNo,
+                                                brand = brandTBL.name,
+                                                model = ag.model,
+                                                power_source = ag.power_source
+                                            }).ToList();
+                        mymodel.ImportedChainsaws = importedCsaws;
+                    }
+                    return View(mymodel);
                 }
             }
             return View(mymodel);

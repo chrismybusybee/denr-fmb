@@ -11,6 +11,22 @@
 <script src="~/js/jquery/jquery-3.7.1/jquery-3.7.1.js"></script>
 <script src="~/js/DataTable/dataTables.min.js"></script>
 
+<style>
+    .progress {
+        height: 5px;
+    }
+
+    .progress-text {
+        display: flex;
+    }
+
+    .progress-status {
+        flex: 1;
+    }
+
+    .progress-count {
+    }
+</style>
 
 <div id="card-container">
     <div id="card">
@@ -105,7 +121,7 @@
                             @Html.DisplayFor(modelItem => item.qty)
                         </td>
                         <td>
-                            <div class="progress-text">
+                            <div class="progress-text @(item.currentPercentage == 100 ? "progress-text-complete" : "")">
                                 <span class="progress-status">
                                     @Html.DisplayFor(modelItem => item.permit_statuses)
                                 </span>
@@ -115,7 +131,7 @@
                                 </span>
                             </div>
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: @Html.DisplayFor(modelItem => item.currentPercentage)%" aria-valuenow="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemin="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemax="@Html.DisplayFor(modelItem => item.currentMaxCount)"></div>
+                                <div class="progress-bar @(item.currentPercentage == 100 ? "complete-progress-bar" : "")" role="progressbar" style="width: @Html.DisplayFor(modelItem => item.currentPercentage)%" aria-valuenow="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemin="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemax="@Html.DisplayFor(modelItem => item.currentMaxCount)"></div>
                             </div>
                         </td>
                         <td>
