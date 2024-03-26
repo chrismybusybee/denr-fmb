@@ -1068,8 +1068,8 @@ namespace FMB_CIS.Controllers
 
                         var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
                         var userTypes = _context.tbl_user_types.Where(x => x.id == UserTypeUserEntity.user_type_id).FirstOrDefault();
-                    var user = _context.tbl_user.Where(x => x.id == entity.user_id).FirstOrDefault();
-                    LogUserActivity("AccessRightsManagement", "User Type User Toggle", $"{userTypes?.name} has been enabled to user {user?.email}", apkDateTime: DateTime.Now);
+                        //var user = _context.tbl_user.Where(x => x.id == entity.user_id).FirstOrDefault();
+                        LogUserActivity("AccessRightsManagement", "User Type User Toggle", $"{userTypes?.name} has been enabled to user {userEmail}", apkDateTime: DateTime.Now);
                     }
                     else
                     {
