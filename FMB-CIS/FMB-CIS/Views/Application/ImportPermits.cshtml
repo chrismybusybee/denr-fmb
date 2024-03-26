@@ -46,12 +46,13 @@
                     </th>
                     <th>
                         Quantity
-                    </th>                   
+                    </th>
                     <th>
                         Permit Status
                     </th>
                     <th>
-                        Proof of Payment
+                        @* Proof of Payment *@
+                        Remarks
                     </th>
                     <th>
                         Action
@@ -73,17 +74,17 @@
                                 @Html.DisplayFor(modelItem => item.ReferenceNo)
                             </td>
                             @* <td>
-                                @Html.DisplayFor(modelItem => item.full_name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.email)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.contact)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.address)
-                            </td> *@
+                    @Html.DisplayFor(modelItem => item.full_name)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.email)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.contact)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.address)
+                    </td> *@
                             <td>
                                 @Html.DisplayFor(modelItem => item.applicationDate)
                             </td>
@@ -105,26 +106,52 @@
                                 </div>
                             </td>
                             <td>
-                                @if (item.permit_status_id == 6 || item.permit_status_id == 8 || item.permit_status_id == 10)
+                                @*                                 @if (item.permit_status_id == 6 || item.permit_status_id == 8 || item.permit_status_id == 10)
+                        {
+                        <div class="d-flex justify-content-center">
+                        <a href="#" id="uploadPOP" class="bg-green text-white pt-0 pb-1 px-2 rounded text-decoration-none" data-application-id="@item.id" onclick="uploadPaymentClicked(this)">
+                        <i data-feather="upload" class="data-feather-20"></i> Upload
+                        </a>
+                        </div>
+                        }
+                        else if (item.permit_status_id == 7 || item.permit_status_id == 9)
+                        {
+                        <div class="d-flex justify-content-center">Payment Verification In Progress</div>
+                        }
+                        else if (item.permit_status_id == 11)
+                        {
+                        <div class="d-flex justify-content-center">Payment Approved</div>
+                        }
+                        else
+                        {
+                        <div class="d-flex justify-content-center">Not Yet Approved for Payment</div>
+                        } *@
+
+                                @if (item.permit_statuses == "For Evaluation")
                                 {
-                                    <div class="d-flex justify-content-center">
-                                        <a href="#" id="uploadPOP" class="bg-green text-white pt-0 pb-1 px-2 rounded text-decoration-none" data-application-id="@item.id" onclick="uploadPaymentClicked(this)">
-                                            <i data-feather="upload" class="data-feather-20"></i> Upload
-                                        </a>
-                                    </div>
+                                    <div class="d-flex justify-content-center">Evaluation of Application Ongoing</div>
                                 }
-                                else if (item.permit_status_id == 7 || item.permit_status_id == 9)
+                                else if (item.permit_statuses == "For Physical Inspection")
                                 {
-                                    <div class="d-flex justify-content-center">Payment Verification In Progress</div>
+                                    <div class="d-flex justify-content-center">Proceed to your DENR Office</div>
                                 }
-                                else if (item.permit_status_id == 11)
+                                else if (item.permit_statuses == "For Payment")
                                 {
-                                    <div class="d-flex justify-content-center">Payment Approved</div>
+                                    <div class="d-flex justify-content-center">Upload Receipt</div>
+                                }
+                                else if (item.permit_statuses == "For Permit Approval")
+                                {
+                                    <div class="d-flex justify-content-center">For approval of DENR</div>
+                                }
+                                else if (item.permit_statuses == "For Permit Issuance")
+                                {
+                                    <div class="d-flex justify-content-center">For claiming at your DENR Office</div>
                                 }
                                 else
                                 {
-                                    <div class="d-flex justify-content-center">Not Yet Approved for Payment</div>
+                                    <div class="d-flex justify-content-center">Proceed to your DENR Office</div>
                                 }
+
                             </td>
                             <td>
                                 @* <a href="ChainsawImporterApproval?uid=@item.tbl_user_id&appid=@item.id">Take Action</a> *@

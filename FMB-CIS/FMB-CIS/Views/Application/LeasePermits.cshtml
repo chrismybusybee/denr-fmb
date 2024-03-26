@@ -90,7 +90,7 @@
                             </div>
                         </td>
                         <td>
-                            @if (item.permit_status_id == 6 || item.permit_status_id == 8 || item.permit_status_id == 10)
+   @*                          @if (item.permit_status_id == 6 || item.permit_status_id == 8 || item.permit_status_id == 10)
                             {
                                 <div class="d-flex">
                                     <a href="#" id="uploadPOP" class="bg-green text-white pt-0 pb-1 px-2 rounded text-decoration-none" data-application-id="@item.id" onclick="uploadPaymentClicked(this)">
@@ -109,6 +109,31 @@
                             else
                             {
                                 <div class="d-flex">Not Yet Approved for Payment</div>
+                            } *@
+
+                            @if (item.permit_statuses == "For Evaluation")
+                            {
+                                <div class="d-flex justify-content-center">Evaluation of Application Ongoing</div>
+                            }
+                            else if (item.permit_statuses == "For Physical Inspection")
+                            {
+                                <div class="d-flex justify-content-center">Proceed to your DENR Office</div>
+                            }
+                            else if (item.permit_statuses == "For Payment")
+                            {
+                                <div class="d-flex justify-content-center">Upload Receipt</div>
+                            }
+                            else if (item.permit_statuses == "For Permit Approval")
+                            {
+                                <div class="d-flex justify-content-center">For approval of DENR</div>
+                            }
+                            else if (item.permit_statuses == "For Permit Issuance")
+                            {
+                                <div class="d-flex justify-content-center">For claiming at your DENR Office</div>
+                            }
+                            else
+                            {
+                                <div class="d-flex justify-content-center">Proceed to your DENR Office</div>
                             }
                         </td>
                         <td>
