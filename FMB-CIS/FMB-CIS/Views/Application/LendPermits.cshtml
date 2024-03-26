@@ -51,7 +51,8 @@
                         Permit Status
                     </th>
                     <th>
-                        Proof of Payment
+                        @* Proof of Payment *@
+                        Remarks
                     </th>
                     <th>
                         Action
@@ -120,7 +121,11 @@
                             }
                             else if (item.permit_statuses == "For Payment")
                             {
-                                <div class="d-flex justify-content-center">Upload Receipt</div>
+                                <div class="d-flex">
+                                    <a href="#" id="uploadPOP" class="bg-green text-white pt-0 pb-1 px-2 rounded text-decoration-none" data-application-id="@item.id" onclick="uploadPaymentClicked(this)">
+                                        <i data-feather="upload" class="data-feather-20"></i> Upload
+                                    </a>
+                                </div>
                             }
                             else if (item.permit_statuses == "For Permit Approval")
                             {
