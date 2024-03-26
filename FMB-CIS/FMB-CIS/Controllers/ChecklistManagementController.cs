@@ -24,6 +24,10 @@ using Microsoft.Ajax.Utilities;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Humanizer.Localisation;
+using NuGet.Configuration;
+using System.Drawing.Drawing2D;
+using System.Security.Cryptography.Xml;
 
 
 namespace FMB_CIS.Controllers
@@ -268,6 +272,21 @@ namespace FMB_CIS.Controllers
             return RedirectToAction("Index", "ChecklistManagement");
         }
 
+        [HttpGet]
+        public JsonResult GetRequirementsList(int tbl_permit_type_id)
+        {
+            var RequirementsList = _context.tbl_document_checklist.Where(r=>r.permit_type_id == tbl_permit_type_id && r.is_active == true).Select(r=>r.name).ToList();
+            //1   Permit to Import
+            //2   Permit to Purchase
+            //3   Permit to Sell
+            //4   Transfer of Ownership
+            //5   Authority to Lease
+            //6   Authority to Rent
+            //7   Authority to Lend
+            //13  Certificate of Registration
+            //14  Permit to Re - sell / Transfer Ownership
+            return Json(RequirementsList);
+        }
 
     }
 }

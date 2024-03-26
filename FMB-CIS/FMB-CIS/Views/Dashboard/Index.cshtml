@@ -130,7 +130,7 @@
                 <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">@Model.dashboardView.ImporterApprovedCount</span></a>
                 <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">@Model.dashboardView.ImporterDeclinedCount</span></a>
                 <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Submitted Applications</h3><span class="c-dashboard-item-count">@Model.dashboardView.ImporterTotalCount</span></a>
-                <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Checklist for required documents.</p></div>
+                <a class="c-dashboard-item-row" onclick="ImporterChecklistModal()"><p class="c-dashboard-item-info">Checklist for required documents.</p></a>
             </div>
 
         </div>
@@ -147,8 +147,8 @@
         <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">@Model.dashboardView.SellerApprovedCount</span></a>
         <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">@Model.dashboardView.SellerDeclinedCount</span></a>
         <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Submitted Applications</h3><span class="c-dashboard-item-count">@Model.dashboardView.SellerTotalCount</span></a>
-        <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Checklist for required documents.</p></div>
-                </div>
+        <a class="c-dashboard-item-row" onclick="SellerChecklistModal()"><p class="c-dashboard-item-info">Checklist for required documents.</p></a>
+        </div>
 
     </div>
     }
@@ -165,8 +165,8 @@
         <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">@Model.dashboardView.OwnerApprovedCount</span></a>
         <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">@Model.dashboardView.OwnerDeclinedCount</span></a>
         <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Submitted Applications</h3><span class="c-dashboard-item-count">@Model.dashboardView.OwnerTotalCount</span></a>
-        <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Checklist for required documents.</p></div>
-                </div>
+        <a class="c-dashboard-item-row" onclick="OwnerChecklistModal()"><p class="c-dashboard-item-info">Checklist for required documents.</p></a>
+        </div>
 
     </div>
     }
@@ -588,4 +588,197 @@
             pageLength: 3,
         });
     });
+
+    function ImporterChecklistModal() {
+        $.get("/ChecklistManagement/GetRequirementsList?tbl_permit_type_id=1", function (data) {
+            console.log(data);
+            var listHTMLStart = "<li class=\"list-group-item text-secondary border-0 d-flex align-items-center p-0\">";
+            var listHTMLEnd = "</li>"
+            var innerHTML = "";
+            for (let i = 0; i < data.length; i++) {
+                innerHTML += listHTMLStart + (i+1) + ". " + data[i] + listHTMLEnd;
+            }
+            Swal.fire({
+                html: `
+           <div class="m-2">
+
+            <p class="mb-0"><span class="h2 me-2">Permit to Import</span></p>
+            <p class="text-muted pb-2">Requirements</p>
+
+            <ul class="list-group">              
+              ${innerHTML}
+
+            </ul>
+
+          </div>
+                `,
+                confirmButtonText: "OK",
+                confirmButtonColor: '#14984a'
+            });
+        });
+    }
+
+    function SellerChecklistModal() {
+        var listHTMLStart = "<li class=\"list-group-item text-secondary border-0 d-flex align-items-center p-0\">";
+        var listHTMLEnd = "</li>";
+
+        // Array to store promises
+        var promises = [
+            $.get("/ChecklistManagement/GetRequirementsList?tbl_permit_type_id=2"),
+            $.get("/ChecklistManagement/GetRequirementsList?tbl_permit_type_id=3")
+        ];
+
+        Promise.all(promises)
+            .then(function (results) {
+                var purchaseData = results[0];
+                var sellData = results[1];
+
+                var innerHTMLPurchase = "";
+                var innerHTMLSell = "";
+
+                for (let i = 0; i < purchaseData.length; i++) {
+                    innerHTMLPurchase += listHTMLStart + (i + 1) + ". " + purchaseData[i] + listHTMLEnd;
+                }
+
+                for (let i = 0; i < sellData.length; i++) {
+                    innerHTMLSell += listHTMLStart + (i + 1) + ". " + sellData[i] + listHTMLEnd;
+                }
+
+                Swal.fire({
+                    html: `                        
+                            <div class="m-2">
+                                <p class="mb-0"><span class="h2 me-2">Permit to Sell</span></p>
+                                <p class="text-muted">Requirements</p>
+                                <ul class="list-group">
+                                    ${innerHTMLSell}
+                                </ul>
+                            </div>
+                                <hr/>
+                            <div class="m-2 pt-2">
+                                <p class="mb-0"><span class="h2 me-2">Permit to Purchase</span></p>
+                                <p class="text-muted">Requirements</p>
+                                <ul class="list-group">
+                                    ${innerHTMLPurchase}
+                                </ul>
+                            </div>
+                    `,
+                    confirmButtonText: "OK",
+                    confirmButtonColor: '#14984a',
+                    width: '700px'
+                });
+            })
+            .catch(function (error) {
+                // Handle errors
+                console.error("Error fetching data:", error);
+            });
+    }
+
+    function OwnerChecklistModal() {
+        var listHTMLStart = "<li class=\"list-group-item text-secondary border-0 d-flex align-items-center p-0\">";
+        var listHTMLEnd = "</li>";
+
+        // Array to store promises
+        var promises = [
+            $.get("/ChecklistManagement/GetRequirementsList?tbl_permit_type_id=5"),
+            $.get("/ChecklistManagement/GetRequirementsList?tbl_permit_type_id=6"),
+            $.get("/ChecklistManagement/GetRequirementsList?tbl_permit_type_id=7"),
+            $.get("/ChecklistManagement/GetRequirementsList?tbl_permit_type_id=13"),
+            $.get("/ChecklistManagement/GetRequirementsList?tbl_permit_type_id=14")
+        ];
+
+        Promise.all(promises)
+            .then(function (results) {
+                var leaseData = results[0];
+                var rentData = results[1];
+                var lendData = results[2];
+                var CoRData = results[3];
+                var resellData = results[4];
+
+                var innerHTMLLease = "";
+                var innerHTMLRent = "";
+                var innerHTMLLend = "";
+                var innerHTMLCoR= "";
+                var innerHTMLResell = "";
+
+                for (let i = 0; i < leaseData.length; i++) {
+                    innerHTMLLease += listHTMLStart + (i + 1) + ". " + leaseData[i] + listHTMLEnd;
+                }
+
+                for (let i = 0; i < rentData.length; i++) {
+                    innerHTMLRent += listHTMLStart + (i + 1) + ". " + rentData[i] + listHTMLEnd;
+                }
+
+                for (let i = 0; i < lendData.length; i++) {
+                    innerHTMLLend += listHTMLStart + (i + 1) + ". " + lendData[i] + listHTMLEnd;
+                }
+
+                for (let i = 0; i < CoRData.length; i++) {
+                    innerHTMLCoR += listHTMLStart + (i + 1) + ". " + CoRData[i] + listHTMLEnd;
+                }
+
+                for (let i = 0; i < resellData.length; i++) {
+                    innerHTMLResell += listHTMLStart + (i + 1) + ". " + resellData[i] + listHTMLEnd;
+                }
+
+                Swal.fire({
+                    html: `
+        <div>
+
+            <div class="m-2 pt-2">
+                <p class="mb-0"><span class="h2 me-2">Authority to Lease</span></p>
+                <p class="text-muted">Requirements</p>
+                <ul class="list-group">
+                    ${innerHTMLLease}
+                </ul>
+            </div>
+                <hr/>
+            <div class="m-2 pt-2">
+                <p class="mb-0"><span class="h2 me-2">Authority to Rent</span></p>
+                <p class="text-muted">Requirements</p>
+                <ul class="list-group">
+                    ${innerHTMLRent}
+                </ul>
+            </div>
+
+                <hr/>
+            <div class="m-2 pt-2">
+                <p class="mb-0"><span class="h2 me-2">Authority to Lend</span></p>
+                <p class="text-muted">Requirements</p>
+                <ul class="list-group">
+                    ${innerHTMLLend}
+                </ul>
+            </div>
+                <hr/>
+            <div class="m-2 pt-2">
+                <p class="mb-0"><span class="h2 me-2">Permit to Re-sell/Transfer Ownership</span></p>
+                <p class="text-muted">Requirements</p>
+                <ul class="list-group">
+                    ${innerHTMLResell}
+                </ul>
+            </div>
+
+            <hr/>
+            <div class="m-2 pt-4">
+                <p class="mb-0"><span class="h2 me-2">Certificate of Registration</span></p>
+                <p class="text-muted">Requirements</p>
+                <ul class="list-group">
+                    ${innerHTMLCoR}
+                </ul>
+            </div>
+
+        </div>
+
+
+                                `,
+                    confirmButtonText: "OK",
+                    confirmButtonColor: '#14984a',
+                    width: '700px'
+                });
+            })
+            .catch(function (error) {
+                // Handle errors
+                console.error("Error fetching data:", error);
+            });
+    }
+
 </script>
