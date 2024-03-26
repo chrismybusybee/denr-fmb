@@ -73,7 +73,7 @@
 
             <div class="row m-0 mb-4">
                 <div class="col-md-12" style="padding-top: 40px;">
-                    <button id="showAddRowButton" type="button" class="btn btn-primary w-125" style="float:right;">Add Supplier</button>
+                    <button id="showAddRowButton" type="button" class="btn btn-primary w-125" style="float:right;">Add Supplier<span class="s-required">*</span></button>
                 </div>
             </div>
             <input type="text" asp-for="Dataxxx" multiple hidden />
@@ -103,7 +103,7 @@
 
                     @* <input id="testDragAndDrop" name="testDragAndDrop" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload..."> *@
                     <div class="gap-4 mb-5">
-                        <h2 class="text-secondary fw-bold m-0">Attach Required Documents</h2>
+                        <h2 class="text-secondary fw-bold m-0">Attach Required Documents<span class="s-required">*</span></h2>
                         <div class="alert alert-warning mt-3 mb-3" role="alert">
                             <ul style="margin-bottom: 0px;">
                                 <li>When uploading multiple files, drag all files at once on the field.</li>
@@ -117,7 +117,7 @@
             </div>
             <hr />
             <div class="row d-flex justify-content-center m-0">
-                <h5 class="text-secondary">Please match your uploaded file based on the checklist of requirements.</h5>
+                <h5 class="text-secondary">Please match your uploaded file based on the checklist of requirements.<span class="s-required">*</span></h5>
                 <table class="table dataTable" id="tblApplicantFiles">
                     <thead>
                         <tr>
@@ -138,7 +138,7 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.name)
+                                    @Html.DisplayFor(modelItem => item.name)<span class="s-required">*</span>
                                     @* <a href="#" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DocHistory(this)">@item.filename</a> *@
                                 </td>
                                 <input type="hidden" asp-for="fileChecklistViewModel[i].tbl_document_checklist_id" value="@item.id" />
@@ -595,20 +595,20 @@
         <div class="g-3">
             <div class="form-floating mb-3">
                 <input type="text" class="form-control rounded-3" id="supplierName" placeholder="" />
-                <label class="form-label">Supplier Name</label>
+                <label class="form-label">Supplier Name<span class="s-required">*</span></label>
             </div>
         </div>
         <div class="g-3">
             <div class="form-floating mb-3">
                 <input type="text" class="form-control rounded-3" id="supplierAddress" placeholder="" />
-                <label class="form-label">Supplier Address</label>
+                <label class="form-label">Supplier Address<span class="s-required">*</span></label>
             </div>
         </div>
         <div class="row">
         <div class="col-md-6 mb-3">
             <div class="form-floating">
                 <input class="form-control rounded-3" type="date" id="xxx" placeholder="Expected Time Of Arrival" />
-                <label class="form-label">Expected Time Of Arrival</label>
+                <label class="form-label">Expected Time Of Arrival<span class="s-required">*</span></label>
             </div>
         </div>
         <div class="col-md-6 mb-3">
@@ -618,7 +618,7 @@
                     <option value="Gas">Gas</option>
                     <option value="Battery">Battery</option>
                 </select>
-                <label class="form-label">Power Source</label>
+                <label class="form-label">Power Source<span class="s-required">*</span></label>
             </div>
         </div>
 
@@ -635,25 +635,25 @@
                     }
                     </select>
 
-                <label class="form-label">Brand</label>
+                <label class="form-label">Brand<span class="s-required">*</span></label>
             </div>
         </div>
-        <div class="col-md-3 mb-3">
+        <div class="col-md-2 mb-3">
             <div class="form-floating">
                 <input type="text" class="form-control rounded-3" id="model" placeholder="" />
-                <label class="form-label">Model</label>
+                <label class="form-label">Model<span class="s-required">*</span></label>
             </div>
         </div>
-        <div class="col-md-3 mb-3">
+        <div class="col-md-4 mb-3">
             <div class="form-floating">
                 <input type="text" class="form-control rounded-3" id="engineSerialNo" placeholder="" />
-                <label class="form-label">Engine Serial No.</label>
+                <label class="form-label">Engine Serial No.<span class="s-required">*</span></label>
             </div>
         </div>
         <div class="col-md-2 mb-3">
             <div class="form-floating mb-3">
                 <input type="number" class="form-control rounded-3" id="quantity" placeholder="" />
-                <label class="form-label">Quantity</label>
+                <label class="form-label">Quantity<span class="s-required">*</span></label>
             </div>
         </div>
         </div>

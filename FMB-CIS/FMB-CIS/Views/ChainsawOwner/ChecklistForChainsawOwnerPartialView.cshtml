@@ -6,7 +6,7 @@
 }
 
 <div class="row d-flex justify-content-center m-0">
-    <h5 class="text-secondary">Please match your uploaded file based on the checklist of requirements.</h5>
+    <h5 class="text-secondary">Please match your uploaded file based on the checklist of requirements.<span class="s-required">*</span></h5>
     <table class="table dataTable" id="tblApplicantFiles" style="width:100%">
         <thead>
             <tr>
@@ -27,7 +27,7 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.name)
+                        @Html.DisplayFor(modelItem => item.name)<span class="s-required">*</span>
                         @* <a href="#" data-fileID="@item.tbl_files_id" data-fileName="@item.filename" onclick="DocHistory(this)">@item.filename</a> *@
                     </td>
                     <input type="hidden" asp-for="fileChecklistViewModel[i].tbl_document_checklist_id" value="@item.id" />
