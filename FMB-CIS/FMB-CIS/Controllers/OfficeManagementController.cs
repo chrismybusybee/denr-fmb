@@ -90,29 +90,31 @@ namespace FMB_CIS.Controllers
         //    }
         //}
 
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_offices")]
         public IActionResult OfficeList()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
                 return View();
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
 
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_offices")]
         public IActionResult OfficeListPartialView()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 OfficeListViewModel model = new OfficeListViewModel();
                 //Get the list of users
                 var entities = _context.tbl_division.Where(e => e.is_active == true).ToList();
@@ -123,20 +125,20 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/OfficeManagement/Office/Partial/OfficeListPartial.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
 
-
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_offices")]
         public IActionResult OfficeCreateModal()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 OfficeCreateViewModel model = new OfficeCreateViewModel();
 
                 var _officeTypes = _context.tbl_office_type.Where(o => o.is_active == true).ToList();
@@ -168,18 +170,19 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/OfficeManagement/Office/Modal/OfficeCreateModal.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_offices")]
         public IActionResult OfficeUpdateModal(int id)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 Office model = new Office();
                 //Get the list of users
                 var entity = _context.tbl_division.FirstOrDefault(o => o.id == id);
@@ -213,18 +216,19 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/OfficeManagement/Office/Modal/OfficeUpdateModal.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_offices")]
         public IActionResult OfficeDeleteModal(int id)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 Office model = new Office();
                 //Get the list of users
                 var office = _context.tbl_division.FirstOrDefault(o => o.id == id);
@@ -234,21 +238,21 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/OfficeManagement/Office/Modal/OfficeDeleteModal.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
-
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_offices")]
         [HttpPost]
         public IActionResult OfficeCreate(OfficeCreateViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 // Uses fluent validation
                 if (!ModelState.IsValid)
                 {
@@ -286,20 +290,21 @@ namespace FMB_CIS.Controllers
                     // 5. Return result
                     return StatusCode(StatusCodes.Status201Created, ModelState);
                 }
-            }
-            else
-            {
-                return RedirectToAction("Index", "AccountManagement");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "AccountManagement");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_offices")]
         [HttpPut("OfficeManagement/OfficeUpdate/{id:int}")]
         public IActionResult OfficeUpdate(OfficeUpdateViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 // Uses fluent validation
                 if (!ModelState.IsValid)
                 {
@@ -339,20 +344,22 @@ namespace FMB_CIS.Controllers
                     // 5. Return result
                     return StatusCode(StatusCodes.Status201Created, ModelState);
                 }
-            }
-            else
-            {
-                return RedirectToAction("Index", "AccountManagement");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "AccountManagement");
+            //}
         }
+
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_offices")]
         [HttpDelete("OfficeManagement/OfficeDelete/{id:int}")]
         public IActionResult OfficeDelete(OfficeDeleteViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 // Uses fluent validation
                 if (!ModelState.IsValid)
                 {
@@ -388,40 +395,41 @@ namespace FMB_CIS.Controllers
                     // 5. Return result
                     return StatusCode(StatusCodes.Status201Created, ModelState);
                 }
-            }
-            else
-            {
-                return RedirectToAction("Index", "AccountManagement");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "AccountManagement");
+            //}
         }
 
         /// <summary>
         /// Office Types
         /// </summary>
         /// <returns></returns>
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_office_types")]
         public IActionResult OfficeTypeList()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
                 return View();
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
-
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_office_types")]
         public IActionResult OfficeTypeListPartialView()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 OfficeTypeListViewModel model = new OfficeTypeListViewModel();
                 //Get the list of users
                 var entities = _context.tbl_office_type.Where(e => e.is_active == true).ToList();
@@ -431,20 +439,20 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/OfficeManagement/OfficeType/Partial/OfficeTypeListPartial.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
 
-
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_office_types")]
         public IActionResult OfficeTypeCreateModal()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 OfficeTypeListViewModel model = new OfficeTypeListViewModel();
                 //Get the list of users
                 //var entities = _context.tbl_office_type.ToList();
@@ -454,18 +462,19 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/OfficeManagement/OfficeType/Modal/OfficeTypeCreateModal.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_office_types")]
         public IActionResult OfficeTypeUpdateModal(int id)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 OfficeType model = new OfficeType();
                 //Get the list of users
                 var entity = _context.tbl_office_type.FirstOrDefault(o => o.id == id);
@@ -475,18 +484,19 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/OfficeManagement/OfficeType/Modal/OfficeTypeUpdateModal.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_office_types")]
         public IActionResult OfficeTypeDeleteModal(int id)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 OfficeType model = new OfficeType();
                 //Get the list of users
                 var officeType = _context.tbl_office_type.FirstOrDefault(o => o.id == id);
@@ -496,21 +506,22 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/OfficeManagement/OfficeType/Modal/OfficeTypeDeleteModal.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
 
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_office_types")]
         [HttpPost]
         public IActionResult OfficeTypeCreate(OfficeTypeCreateViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 // Uses fluent validation
                 if (!ModelState.IsValid)
                 {
@@ -544,20 +555,21 @@ namespace FMB_CIS.Controllers
                     // 5. Return result
                     return StatusCode(StatusCodes.Status201Created, ModelState);
                 }
-            }
-            else
-            {
-                return RedirectToAction("Index", "AccountManagement");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "AccountManagement");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_office_types")]
         [HttpPut("OfficeManagement/OfficeTypeUpdate/{id:int}")]
         public IActionResult OfficeTypeUpdate(OfficeTypeUpdateViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 // Uses fluent validation
                 if (!ModelState.IsValid)
                 {
@@ -594,20 +606,21 @@ namespace FMB_CIS.Controllers
                     // 5. Return result
                     return StatusCode(StatusCodes.Status201Created, ModelState);
                 }
-            }
-            else
-            {
-                return RedirectToAction("Index", "AccountManagement");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "AccountManagement");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_office_types")]
         [HttpDelete("OfficeManagement/OfficeTypeDelete/{id:int}")]
         public IActionResult OfficeTypeDelete(OfficeTypeDeleteViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 // Uses fluent validation
                 if (!ModelState.IsValid)
                 {
@@ -643,11 +656,11 @@ namespace FMB_CIS.Controllers
                     // 5. Return result
                     return StatusCode(StatusCodes.Status201Created, ModelState);
                 }
-            }
-            else
-            {
-                return RedirectToAction("Index", "AccountManagement");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "AccountManagement");
+            //}
         }
 
         [HttpPost, ActionName("GetDivisionByUserType")]

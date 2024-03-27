@@ -1,12 +1,14 @@
 ﻿using FMB_CIS.Data;
 using FMB_CIS.Models;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace FMB_CIS.Controllers
 {
+    [Authorize]
     public class ActivityLogsController : Controller
     {
         private readonly LocalContext _context;
@@ -23,8 +25,8 @@ namespace FMB_CIS.Controllers
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 ActivityLogsViewModel model = new ActivityLogsViewModel();
                 //Get the list of activity logs
 
@@ -47,11 +49,11 @@ namespace FMB_CIS.Controllers
                 model.activityLogs = activityLogsList.ToList();
 
                 return View(model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
     }
 }
