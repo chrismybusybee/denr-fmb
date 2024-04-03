@@ -328,6 +328,7 @@ namespace FMB_CIS.Controllers
             //    //return RedirectToAction("Index", "Dashboard");
             //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_approve_reject_applications")]
         [HttpGet]
         //[Url("?email={email}&code={code}")]
         public IActionResult ChainsawOwnerApproval(string uid, string appid)
@@ -339,10 +340,10 @@ namespace FMB_CIS.Controllers
             string Role = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
             int RoleID = _context.tbl_user_types.Where(ut => ut.name == Role).Select(ut => ut.id).FirstOrDefault();
 
-            if (Role != "DENR CENRO" && Role != "DENR Implementing PENRO" && Role != "DENR Inspector" && Role != "DENR Regional Executive Director (RED)")
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //if (Role != "DENR CENRO" && Role != "DENR Implementing PENRO" && Role != "DENR Inspector" && Role != "DENR Regional Executive Director (RED)")
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
 
             //CODE FOR FILE DOWNLOAD
             int applicID = Convert.ToInt32(appid);
@@ -1391,14 +1392,15 @@ namespace FMB_CIS.Controllers
 
         }
 
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_approve_reject_applications")]
         public IActionResult ChainsawOwnerApplicantsList()
         {
-            if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw") == true)
-            {
-                return RedirectToAction("Index", "ChainsawOwner");
-            }
-            else
-            {
+            //if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Chainsaw") == true)
+            //{
+            //    return RedirectToAction("Index", "ChainsawOwner");
+            //}
+            //else
+            //{
                 int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
                 var userRegion = _context.tbl_user.Where(u => u.id == loggedUserID).Select(u => u.tbl_region_id).FirstOrDefault();
 
@@ -1479,7 +1481,7 @@ namespace FMB_CIS.Controllers
 
                 return View(mymodel);
                 //return RedirectToAction("Index", "Home");
-            }
+            //}
         }
 
         [HttpPost]
