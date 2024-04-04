@@ -72,29 +72,31 @@ namespace FMB_CIS.Controllers
         /// Brands
         /// </summary>
         /// <returns></returns>
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_brands")]
         public IActionResult BrandList()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
                 ViewData["BaseUrl"] = host;
 
                 return View();
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
 
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_brands")]
         public IActionResult BrandListPartialView()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 BrandListViewModel model = new BrandListViewModel();
                 //Get the list of users
                 var entities = _context.tbl_brands.Where(e => e.is_active == true).ToList();
@@ -104,20 +106,20 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/BrandManagement/Brand/Partial/BrandListPartial.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
 
-
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_brands")]
         public IActionResult BrandCreateModal()
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 BrandListViewModel model = new BrandListViewModel();
                 //Get the list of users
                 //var entities = _context.tbl_office_type.ToList();
@@ -127,18 +129,19 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/BrandManagement/Brand/Modal/BrandCreateModal.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_brands")]
         public IActionResult BrandUpdateModal(int id)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 Brand model = new Brand();
                 //Get the list of users
                 var entity = _context.tbl_brands.FirstOrDefault(o => o.id == id);
@@ -148,18 +151,19 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/BrandManagement/Brand/Modal/BrandUpdateModal.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_brands")]
         public IActionResult BrandDeleteModal(int id)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 Brand model = new Brand();
                 //Get the list of users
                 var brand = _context.tbl_brands.FirstOrDefault(o => o.id == id);
@@ -169,21 +173,22 @@ namespace FMB_CIS.Controllers
                 ViewData["BaseUrl"] = host;
 
                 return PartialView("~/Views/BrandManagement/Brand/Modal/BrandDeleteModal.cshtml", model);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Dashboard");
+            //}
         }
 
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_brands")]
         [HttpPost]
         public IActionResult BrandCreate(BrandCreateViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 // Uses fluent validation
                 if (!ModelState.IsValid)
                 {
@@ -217,11 +222,11 @@ namespace FMB_CIS.Controllers
                     // 5. Return result
                     return StatusCode(StatusCodes.Status201Created, ModelState);
                 }
-            }
-            else
-            {
-                return RedirectToAction("Index", "AccountManagement");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "AccountManagement");
+            //}
         }
         [HttpPut("BrandManagement/BrandUpdate/{id:int}")]
         public IActionResult BrandUpdate(BrandUpdateViewModel model)
@@ -229,8 +234,8 @@ namespace FMB_CIS.Controllers
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 // Uses fluent validation
                 if (!ModelState.IsValid)
                 {
@@ -267,20 +272,21 @@ namespace FMB_CIS.Controllers
                     // 5. Return result
                     return StatusCode(StatusCodes.Status201Created, ModelState);
                 }
-            }
-            else
-            {
-                return RedirectToAction("Index", "AccountManagement");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "AccountManagement");
+            //}
         }
+        [RequiresAccess(allowedAccessRights = "allow_page_manage_brands")]
         [HttpDelete("BrandManagement/BrandDelete/{id:int}")]
         public IActionResult BrandDelete(BrandDeleteViewModel model)
         {
             int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
             int usrRoleID = _context.tbl_user.Where(u => u.id == uid).Select(u => u.tbl_user_types_id).SingleOrDefault();
             // Note: TO DO Soon move Authorization to middleware / Annotations / User Access instead of Roles
-            if (usrRoleID == 14) // Super Admin
-            {
+            //if (usrRoleID == 14) // Super Admin
+            //{
                 // Uses fluent validation
                 if (!ModelState.IsValid)
                 {
@@ -316,11 +322,11 @@ namespace FMB_CIS.Controllers
                     // 5. Return result
                     return StatusCode(StatusCodes.Status201Created, ModelState);
                 }
-            }
-            else
-            {
-                return RedirectToAction("Index", "AccountManagement");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "AccountManagement");
+            //}
         }
     }
 }
