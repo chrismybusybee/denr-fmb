@@ -550,7 +550,8 @@ namespace FMB_CIS.Controllers
                                      ReferenceNo = a.ReferenceNo,
                                      currentStepCount = current_step_count,
                                      currentMaxCount = current_max_count,
-                                     currentPercentage = (current_step_count * 100 / current_max_count)
+                                     currentPercentage = (current_step_count * 100 / current_max_count), 
+                                     date_of_expiration = a.date_of_expiration,
                                  }).ToList();
             //foreach (ApplicantListViewModel mod in applicationMod)
             //{

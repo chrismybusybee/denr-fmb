@@ -169,7 +169,15 @@
                                             <span class="fw-bold">
                                                 <div class="progress-text">
                                                     <span class="progress-status">
-                                                        @Html.DisplayFor(model => model.applicantViewModels.permit_statuses)
+                                                        @if (DateTime.Now >= Model.applicantViewModels.date_of_expiration)
+                                                        {
+                                                            <span class="text-danger">Expired</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.DisplayFor(model => model.applicantViewModels.permit_statuses)
+                                                        }
+                                                        
                                                     </span>
                                                     <br>
                                                     <span class="progress-count">
