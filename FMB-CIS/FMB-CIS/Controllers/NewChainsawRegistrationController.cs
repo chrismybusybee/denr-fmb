@@ -23,6 +23,7 @@ using Services.Utilities;
 
 namespace FMB_CIS.Controllers
 {
+    [Authorize]
     public class NewChainsawRegistrationController : Controller
     {
         private readonly LocalContext _context;

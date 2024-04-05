@@ -1,12 +1,14 @@
 ﻿using FMB_CIS.Data;
 using FMB_CIS.Models;
 using FMB_CIS.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Security.Claims;
 
 namespace FMB_CIS.Controllers
 {
+    [Authorize]
     public class ReportGenerationController : Controller
     {
 
@@ -62,6 +64,7 @@ namespace FMB_CIS.Controllers
             return View();
         }
 
+        [RequiresAccess(allowedAccessRights = "allow_page_report_generation")]
         public IActionResult DynamicReportGeneration()
         {
 
@@ -108,7 +111,7 @@ namespace FMB_CIS.Controllers
         }
 
 
-
+        [RequiresAccess(allowedAccessRights = "allow_page_report_generation")]
         public CsvResult GetCompletedImportPermit()
         {
             return new CsvResult(
@@ -162,7 +165,7 @@ namespace FMB_CIS.Controllers
                 "ImportPermit_Completed_Applications.csv");
         }
 
-
+        [RequiresAccess(allowedAccessRights = "allow_page_report_generation")]
         public CsvResult GetPendingImportPermit()
         {
             return new CsvResult(
@@ -224,7 +227,7 @@ namespace FMB_CIS.Controllers
 
 
 
-
+        [RequiresAccess(allowedAccessRights = "allow_page_report_generation")]
         public CsvResult GetCompletedPermitToSell()
         {
             return new CsvResult(
@@ -279,6 +282,7 @@ namespace FMB_CIS.Controllers
                 "PermitToSell_Completed_Applications.csv");
         }
 
+        [RequiresAccess(allowedAccessRights = "allow_page_report_generation")]
         public CsvResult GetPendingPermitToSell()
         {
             return new CsvResult(
@@ -340,7 +344,7 @@ namespace FMB_CIS.Controllers
         }
 
 
-
+        [RequiresAccess(allowedAccessRights = "allow_page_report_generation")]
         public CsvResult GetCompletedPermitToPurchase()
         {
             return new CsvResult(
@@ -395,6 +399,7 @@ namespace FMB_CIS.Controllers
                 "PermitToPurchase_Completed_Applications.csv");
         }
 
+        [RequiresAccess(allowedAccessRights = "allow_page_report_generation")]
         public CsvResult GetPendingPermitToPurchase()
         {
             return new CsvResult(
@@ -455,7 +460,7 @@ namespace FMB_CIS.Controllers
                 "PermitToPurchase_Pending_Applications.csv");
         }
 
-
+        [RequiresAccess(allowedAccessRights = "allow_page_report_generation")]
         public CsvResult GetCompletedPermitToLease()
         {
             return new CsvResult(
@@ -510,7 +515,7 @@ namespace FMB_CIS.Controllers
                 "PermitToLease_Completed_Applications.csv");
         }
 
-
+        [RequiresAccess(allowedAccessRights = "allow_page_report_generation")]
         public CsvResult GetPendingPermitToLease()
         {
             return new CsvResult(
@@ -571,6 +576,7 @@ namespace FMB_CIS.Controllers
                 "PermitToLease_Pending_Applications.csv");
         }
 
+        [RequiresAccess(allowedAccessRights = "allow_page_report_generation")]
         public CsvResult GetCompletedPermitToRent()
         {
             return new CsvResult(
@@ -625,6 +631,7 @@ namespace FMB_CIS.Controllers
                 "PermitToRent_Completed_Applications.csv");
         }
 
+        [RequiresAccess(allowedAccessRights = "allow_page_report_generation")]
         public CsvResult GetPendingPermitToRent()
         {
             return new CsvResult(
@@ -685,7 +692,7 @@ namespace FMB_CIS.Controllers
                 "PermitToRent_Pending_Applications.csv");
         }
 
-
+        [RequiresAccess(allowedAccessRights = "allow_page_report_generation")]
         public CsvResult GetCompletedPermitToLend()
         {
             return new CsvResult(
@@ -740,6 +747,7 @@ namespace FMB_CIS.Controllers
                 "PermitToLend_Completed_Applications.csv");
         }
 
+        [RequiresAccess(allowedAccessRights = "allow_page_report_generation")]
         public CsvResult GetPendingPermitToLend()
         {
             return new CsvResult(
@@ -800,6 +808,7 @@ namespace FMB_CIS.Controllers
                 "PermitToLend_Pending_Applications.csv");
         }
 
+        [RequiresAccess(allowedAccessRights = "allow_page_report_generation")]
         public CsvResult GetCompletedPermitToResellAndTransferOfOwnership()
         {
             return new CsvResult(
@@ -854,7 +863,7 @@ namespace FMB_CIS.Controllers
                 "PermitToResellAndTransferOfOwnership_Completed_Applications.csv");
         }
 
-
+        [RequiresAccess(allowedAccessRights = "allow_page_report_generation")]
         public CsvResult GetPendingPermitToResellAndTransferOfOwnership()
         {
             return new CsvResult(
@@ -915,7 +924,7 @@ namespace FMB_CIS.Controllers
                 "PermitToResellAndTransferOfOwnership_Pending_Applications.csv");
         }
 
-
+        [RequiresAccess(allowedAccessRights = "allow_page_report_generation")]
         public CsvResult GetCompletedCertificateOfRegistration()
         {
             return new CsvResult(
@@ -972,7 +981,7 @@ namespace FMB_CIS.Controllers
                 "CertificateOfRegistration_Completed_Applications.csv");
         }
 
-
+        [RequiresAccess(allowedAccessRights = "allow_page_report_generation")]
         public CsvResult GetPendingCertificateOfRegistration()
         {
             return new CsvResult(
@@ -1036,6 +1045,7 @@ namespace FMB_CIS.Controllers
 
 
         //public CsvResult GenerateReportSummary()
+        [RequiresAccess(allowedAccessRights = "allow_page_report_generation")]
         public CsvResult GenerateReportSummary(string TotalImport, string TotalSell, string TotalPurchase, string TotalCoR, string TotalCoRRenewed, string TotalLease, string TotalReSell, string TotalRent, string TotalLend)
         {
             bool isTotalImportChecked = !string.IsNullOrEmpty(TotalImport) && TotalImport == "on";
