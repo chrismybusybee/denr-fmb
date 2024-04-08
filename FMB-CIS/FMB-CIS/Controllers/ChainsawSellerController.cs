@@ -1406,7 +1406,8 @@ namespace FMB_CIS.Controllers
                                          currentStepCount = current_step_count,
                                          currentMaxCount = current_max_count,
                                          isRead = _context.tbl_application_read.Any(r => r.tbl_application_id == a.id && r.tbl_user_id == loggedUserID && r.is_read),
-                                         currentPercentage = (current_step_count * 100 / current_max_count)
+                                         currentPercentage = (current_step_count * 100 / current_max_count),
+                                         date_of_expiration = a.date_of_expiration
                                      }).ToList();
 
                 //bool isReadExist;

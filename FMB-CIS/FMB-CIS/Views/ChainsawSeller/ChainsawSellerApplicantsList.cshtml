@@ -48,7 +48,7 @@
                 <tbody>
                     @foreach (ApplicantListViewModel item in Model.applicantListViewModels)
                     {
-                        <tr>
+                        <tr class="@(DateTime.Now >= item.date_of_expiration ? "text-danger" : "")">
                             @if (item.isRead == true)
                             {
                                 <td class="hidden-column">
@@ -66,18 +66,30 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.qty)
                                 </td>
-                                <td style="font-weight:bold;">
-                                    <div class="progress-text @(item.currentPercentage == 100 ? "progress-text-complete" : "")">
-                                        <span class="progress-status">
-                                            @Html.DisplayFor(modelItem => item.permit_statuses)
-                                        </span>
-                                        <span class="progress-count">
-                                            @Html.DisplayFor(modelItem => item.currentStepCount) /
-                                            @Html.DisplayFor(modelItem => item.currentMaxCount)
-                                        </span>
+                                <td>
+                                    <div class="progress-text @(item.currentPercentage == 100 ? (DateTime.Now >= item.date_of_expiration ? "" : "progress-text-complete") : "")">
+                                        @if (DateTime.Now >= item.date_of_expiration)
+                                        {
+                                            <span class="progress-status">
+                                                Expired
+                                            </span>
+                                            <span class="progress-count">
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="progress-status">
+                                                @Html.DisplayFor(modelItem => item.permit_statuses)
+                                            </span>
+                                            <span class="progress-count">
+                                                @Html.DisplayFor(modelItem => item.currentStepCount) /
+                                                @Html.DisplayFor(modelItem => item.currentMaxCount)
+                                            </span>
+                                        }                                        
                                     </div>
                                     <div class="progress">
-                                        <div class="progress-bar @(item.currentPercentage == 100 ? "complete-progress-bar" : "")" role="progressbar" style="width: @Html.DisplayFor(modelItem => item.currentPercentage)%" aria-valuenow="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemin="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemax="@Html.DisplayFor(modelItem => item.currentMaxCount)"></div>
+                                        @* <div class="progress-bar @(item.currentPercentage == 100 ? "complete-progress-bar" : "")" role="progressbar" style="width: @Html.DisplayFor(modelItem => item.currentPercentage)%" aria-valuenow="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemin="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemax="@Html.DisplayFor(modelItem => item.currentMaxCount)"></div> *@
+                                        <div class="progress-bar @(item.currentPercentage == 100 ? (DateTime.Now >= item.date_of_expiration ? "bg-danger" : "complete-progress-bar") : "")" role="progressbar" style="width: @Html.DisplayFor(modelItem => item.currentPercentage)%" aria-valuenow="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemin="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemax="@Html.DisplayFor(modelItem => item.currentMaxCount)"></div>
                                     </div>
                                 </td>
                                 <td>
@@ -102,17 +114,29 @@
                                     @Html.DisplayFor(modelItem => item.qty)
                                 </td>
                                 <td style="font-weight:bold;">
-                                    <div class="progress-text @(item.currentPercentage == 100 ? "progress-text-complete" : "")">
-                                        <span class="progress-status">
-                                            @Html.DisplayFor(modelItem => item.permit_statuses)
-                                        </span>
-                                        <span class="progress-count">
-                                            @Html.DisplayFor(modelItem => item.currentStepCount) /
-                                            @Html.DisplayFor(modelItem => item.currentMaxCount)
-                                        </span>
+                                    <div class="progress-text @(item.currentPercentage == 100 ? (DateTime.Now >= item.date_of_expiration ? "" : "progress-text-complete") : "")">
+                                        @if (DateTime.Now >= item.date_of_expiration)
+                                        {
+                                            <span class="progress-status">
+                                                Expired
+                                            </span>
+                                            <span class="progress-count">
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="progress-status">
+                                                @Html.DisplayFor(modelItem => item.permit_statuses)
+                                            </span>
+                                            <span class="progress-count">
+                                                @Html.DisplayFor(modelItem => item.currentStepCount) /
+                                                @Html.DisplayFor(modelItem => item.currentMaxCount)
+                                            </span>
+                                        }
                                     </div>
                                     <div class="progress">
-                                        <div class="progress-bar @(item.currentPercentage == 100 ? "complete-progress-bar" : "")" role="progressbar" style="width: @Html.DisplayFor(modelItem => item.currentPercentage)%" aria-valuenow="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemin="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemax="@Html.DisplayFor(modelItem => item.currentMaxCount)"></div>
+                                        @* <div class="progress-bar @(item.currentPercentage == 100 ? "complete-progress-bar" : "")" role="progressbar" style="width: @Html.DisplayFor(modelItem => item.currentPercentage)%" aria-valuenow="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemin="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemax="@Html.DisplayFor(modelItem => item.currentMaxCount)"></div> *@
+                                        <div class="progress-bar @(item.currentPercentage == 100 ? (DateTime.Now >= item.date_of_expiration ? "bg-danger" : "complete-progress-bar") : "")" role="progressbar" style="width: @Html.DisplayFor(modelItem => item.currentPercentage)%" aria-valuenow="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemin="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemax="@Html.DisplayFor(modelItem => item.currentMaxCount)"></div>
                                     </div>
                                 </td>
                                 <td style="font-weight:bold;">
