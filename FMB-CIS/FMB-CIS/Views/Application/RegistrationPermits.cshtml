@@ -62,6 +62,46 @@
             <tbody>
                 @foreach (ApplicantListViewModel item in Model.applicantListViewModels)
                 {
+                    @if (DateTime.Now >= item.date_of_expiration)
+                    {
+                        <tr class="text-danger">
+                            <td class="hidden-column">
+                                @Html.DisplayFor(modelItem => item.id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ReferenceNo)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.applicationDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.qty)
+                            </td>
+                            <td>
+                                <div class="progress-text text-danger">
+                                    <span class="progress-status">
+                                        Expired
+                                    </span>
+                                    <span class="progress-count">
+                                        @* @Html.DisplayFor(modelItem => item.currentStepCount) /
+                                @Html.DisplayFor(modelItem => item.currentMaxCount) *@
+                                    </span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-danger" role="progressbar" style="width: @Html.DisplayFor(modelItem => item.currentPercentage)%" aria-valuenow="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemin="@Html.DisplayFor(modelItem => item.currentStepCount)" aria-valuemax="@Html.DisplayFor(modelItem => item.currentMaxCount)"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-center">Permit Expired</div>
+                            </td>
+                            <td>
+                                <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">View</a>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
                     <tr>
                         <td class="hidden-column">
                             @Html.DisplayFor(modelItem => item.id)
@@ -144,6 +184,7 @@
                             <a href="../Application/EditApplication?uid=@item.tbl_user_id&appid=@item.id">View</a>
                         </td>
                     </tr>
+                    }
                 }
             </tbody>
         </table>
