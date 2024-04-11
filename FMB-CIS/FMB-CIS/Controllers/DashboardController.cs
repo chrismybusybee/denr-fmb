@@ -17,6 +17,7 @@ using FMB_CIS.Data;
 using FMB_CIS.Models;
 using System.Security.Cryptography;
 using Services.Utilities;
+using System.Globalization;
 
 
 namespace FMB_CIS.Controllers
@@ -425,6 +426,27 @@ namespace FMB_CIS.Controllers
                                             }).ToList();
                         mymodel.ImportedChainsaws = importedCsaws;
                     }
+
+                    ViewBag.Months = new SelectList(Enumerable.Range(1, 12).Select(x =>
+                       new SelectListItem()
+                       {
+                           Text = CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedMonthNames[x - 1] + " (" + x + ")",
+                           Value = x.ToString()
+                       }), "Value", "Text");
+
+
+
+                    ViewBag.Years = new SelectList(Enumerable.Range(DateTime.Today.Year, 20).Select(x =>
+
+                       new SelectListItem()
+                       {
+                           Text = x.ToString(),
+                           Value = x.ToString()
+                       }), "Value", "Text");
+
+                    ViewBag.SelectedMonth = 3;
+
+
                     return View(mymodel);
                 }
             }
@@ -443,6 +465,18 @@ namespace FMB_CIS.Controllers
             return View();
         }
 
+        public List<object> GetChartsData()
+        {
+            List<object> data = new List<object>();
+            List<string> labels = _context.tbl_chainsaw.Select(x => x.chainsaw_date_of_expiration.ToString()).ToList();
+
+            data.Add(labels);
+
+            List<string> applicationId = _context.tbl_chainsaw.Select(x => x.tbl_application_id.ToString()).ToList();   
+            data.Add(applicationId);
+
+            return data;
+        }
 
     }
 }

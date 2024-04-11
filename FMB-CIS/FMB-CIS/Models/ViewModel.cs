@@ -1,4 +1,6 @@
-﻿namespace FMB_CIS.Models
+﻿using Services.Utilities;
+
+namespace FMB_CIS.Models
 {
     public class ViewModel
     {
@@ -67,6 +69,6 @@ public DashboardView? dashboardView { get; set; }
         public List<FileChecklistViewModel>? fileChecklistViewModel { get; set; }
         public tbl_application_payment? tbl_Application_Payment { get; set; }
         public IEnumerable<tbl_application_group>? ChainsawsForSale { get; set; } //dashboard chainsaws for sale table
-        public IEnumerable<tbl_application_group>? ImportedChainsaws { get; set; } //dashboard chainsaws for sale table
+        public IEnumerable<tbl_application_group>? ImportedChainsaws { get; set; } //dashboard chainsaws for sale table  
     }
 }

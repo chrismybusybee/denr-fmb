@@ -1,4 +1,3 @@
-
 @using System.Security.Claims;
 @using Services.Utilities;
 @model FMB_CIS.Models.ViewModel
@@ -9,111 +8,154 @@
     ViewBag.UserType = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
 }
 
-<div class="c-dashboard-container">
-                                         @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_users")) {
-                                
-    <div class="c-dashboard-item">
-        <div class="c-dashboard-item-icon">
-        <img src="~/assets/images/menu-icons/account-management.png" /></div>
-        <div class="c-dashboard-item-row-container">
-        <div class="c-dashboard-item-row">
-        <h3 class="c-dashboard-item-title-main">Users </h3></div>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Active</h3><span class="c-dashboard-item-count">@Model.dashboardView.UserActiveCount</span></a>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Change Requests</h3><span class="c-dashboard-item-count">@Model.dashboardView.UserChangeRequestCount</span></a>
-        <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Users active number and how to use the system properly.</p></div>
+<div>
+    <div>
+        <div>
+            <div>
+                <h3 class="c-dashboard-item-title-main">Charts </h3>
+            </div>
+           
+                <span>
+                    <p>
+
+                        <div class="col-4">
+                            <label><b>Chart-Type</b></label>
+                        </div>
+
+                        <div class="col-2">
+                            <select id="ChartType" class="form-control" style="width:150px">
+                                <option>bar</option>
+                                <option>line</option>
+                                <option>pie</option>
+                                <option>doughnut</option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <input id="showGraph" value="Show Graph" type="button" />
+                        </div>
+                    </p>
+
+                    <div id="ChartView">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </span>
+           
         </div>
     </div>
-    }
-                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_office_management"))
-                                        {
-    <div class="c-dashboard-item">
-        <div class="c-dashboard-item-icon">
-        <img src="~/assets/images/menu-icons/creation-of-new-denr-office.png" /></div>
-        <div class="c-dashboard-item-row-container">
-        <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Office</h3></div>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Office types</h3><span class="c-dashboard-item-count">@Model.dashboardView.OfficeTypesCount</span></a>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Offices</h3><span class="c-dashboard-item-count">@Model.dashboardView.OfficesCount</span></a>
-        <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Used to represent different types of office functions.</p></div>
+</div>
+
+<div class="c-dashboard-container">
+    @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_users"))
+    {
+        <div class="c-dashboard-item">
+            <div class="c-dashboard-item-icon">
+                <img src="~/assets/images/menu-icons/account-management.png" />
+            </div>
+            <div class="c-dashboard-item-row-container">
+                <div class="c-dashboard-item-row">
+                    <h3 class="c-dashboard-item-title-main">Users </h3>
                 </div>
-
-    </div>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Active</h3><span class="c-dashboard-item-count">@Model.dashboardView.UserActiveCount</span></a>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Change Requests</h3><span class="c-dashboard-item-count">@Model.dashboardView.UserChangeRequestCount</span></a>
+                <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Users active number and how to use the system properly.</p></div>
+            </div>
+        </div>
     }
-                                @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_access_rights_management"))
-                                {
-    <div class="c-dashboard-item">
-        <div class="c-dashboard-item-icon">
-        <img src="~/assets/images/menu-icons/account-management.png" /></div>
-        <div class="c-dashboard-item-row-container">
-        <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Access</h3></div>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">User Types</h3><span class="c-dashboard-item-count">@Model.dashboardView.UserTypesCount</span></a>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Access Rights</h3><span class="c-dashboard-item-count">@Model.dashboardView.AccessRightsCount</span></a>
-        <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Assign user types and access rights to users.</p></div>
-                </div>
+    @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_office_management"))
+    {
+        <div class="c-dashboard-item">
+            <div class="c-dashboard-item-icon">
+                <img src="~/assets/images/menu-icons/creation-of-new-denr-office.png" />
+            </div>
+            <div class="c-dashboard-item-row-container">
+                <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Office</h3></div>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Office types</h3><span class="c-dashboard-item-count">@Model.dashboardView.OfficeTypesCount</span></a>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Offices</h3><span class="c-dashboard-item-count">@Model.dashboardView.OfficesCount</span></a>
+                <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Used to represent different types of office functions.</p></div>
+            </div>
 
-    </div>
+        </div>
     }
-                                @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_workflow_management"))
-                                {
-    <div class="c-dashboard-item">
-        <div class="c-dashboard-item-icon">
-        <img src="~/assets/images/menu-icons/account-management.png" /></div>
-        <div class="c-dashboard-item-row-container">
-        <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Workflows</h3></div>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Total</h3><span class="c-dashboard-item-count">@Model.dashboardView.WorkflowsCount</span></a>
-        <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Workflow settings of different permit types.</p></div>
-                </div>
+    @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_access_rights_management"))
+    {
+        <div class="c-dashboard-item">
+            <div class="c-dashboard-item-icon">
+                <img src="~/assets/images/menu-icons/account-management.png" />
+            </div>
+            <div class="c-dashboard-item-row-container">
+                <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Access</h3></div>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">User Types</h3><span class="c-dashboard-item-count">@Model.dashboardView.UserTypesCount</span></a>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Access Rights</h3><span class="c-dashboard-item-count">@Model.dashboardView.AccessRightsCount</span></a>
+                <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Assign user types and access rights to users.</p></div>
+            </div>
 
-    </div>
+        </div>
     }
-                                @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_announcement_management") || AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_email_management"))
-                                {
-    <div class="c-dashboard-item">
-        <div class="c-dashboard-item-icon">
-        <img src="~/assets/images/menu-icons/announcement-templates.png" /></div>
-        <div class="c-dashboard-item-row-container">
-        <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Notes</h3></div>
-                                @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_announcement_management"))
-                                {
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Announcements</h3><span class="c-dashboard-item-count">@Model.dashboardView.AnnouncementsCount</span></a>
-                                }
-                                        @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_email_management"))
-                                        {
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Emails</h3><span class="c-dashboard-item-count">@Model.dashboardView.EmailsCount</span></a>
-        }
-        <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Sitewide notifications and email templates.</p></div>
-                </div>
+    @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_workflow_management"))
+    {
+        <div class="c-dashboard-item">
+            <div class="c-dashboard-item-icon">
+                <img src="~/assets/images/menu-icons/account-management.png" />
+            </div>
+            <div class="c-dashboard-item-row-container">
+                <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Workflows</h3></div>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Total</h3><span class="c-dashboard-item-count">@Model.dashboardView.WorkflowsCount</span></a>
+                <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Workflow settings of different permit types.</p></div>
+            </div>
 
-    </div>
-                                }
-                                @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_checklist_management"))
-                                {
-    <div class="c-dashboard-item">
-        <div class="c-dashboard-item-icon">
-        <img src="~/assets/images/menu-icons/checklist-management.png" /></div>
-        <div class="c-dashboard-item-row-container">
-        <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Checklist</h3></div>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Total</h3><span class="c-dashboard-item-count">@Model.dashboardView.ChecklistsCount</span></a>
-        <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Checklist for required documents.</p></div>
-                </div>
+        </div>
+    }
+    @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_announcement_management") || AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_email_management"))
+    {
+        <div class="c-dashboard-item">
+            <div class="c-dashboard-item-icon">
+                <img src="~/assets/images/menu-icons/announcement-templates.png" />
+            </div>
+            <div class="c-dashboard-item-row-container">
+                <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Notes</h3></div>
+                @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_announcement_management"))
+                {
+                    <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Announcements</h3><span class="c-dashboard-item-count">@Model.dashboardView.AnnouncementsCount</span></a>
+                }
+                @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_email_management"))
+                {
+                    <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Emails</h3><span class="c-dashboard-item-count">@Model.dashboardView.EmailsCount</span></a>
+                }
+                <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Sitewide notifications and email templates.</p></div>
+            </div>
 
-    </div>
+        </div>
+    }
+    @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_checklist_management"))
+    {
+        <div class="c-dashboard-item">
+            <div class="c-dashboard-item-icon">
+                <img src="~/assets/images/menu-icons/checklist-management.png" />
+            </div>
+            <div class="c-dashboard-item-row-container">
+                <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Checklist</h3></div>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Total</h3><span class="c-dashboard-item-count">@Model.dashboardView.ChecklistsCount</span></a>
+                <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Checklist for required documents.</p></div>
+            </div>
+
+        </div>
     }
 
 
-@* 
+    @*
     @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_own_applications"))// || usrRoleList.Contains("Chainsaw Importer")
     {
     <div class="c-dashboard-item">
-        <div class="c-dashboard-item-icon">
-        <img src="~/assets/images/menu-icons/checklist-management.png" /></div>
-        <div class="c-dashboard-item-row-container">
-        <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Renewal</h3></div>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Pending</h3><span class="c-dashboard-item-count">100</span></a>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">100</span></a>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">100</span></a>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Total</h3><span class="c-dashboard-item-count">300</span></a>
-        <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Checklist for required documents.</p></div>
-                </div>
+    <div class="c-dashboard-item-icon">
+    <img src="~/assets/images/menu-icons/checklist-management.png" /></div>
+    <div class="c-dashboard-item-row-container">
+    <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Renewal</h3></div>
+    <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Pending</h3><span class="c-dashboard-item-count">100</span></a>
+    <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">100</span></a>
+    <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">100</span></a>
+    <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Total</h3><span class="c-dashboard-item-count">300</span></a>
+    <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Checklist for required documents.</p></div>
+    </div>
 
     </div>
     } *@
@@ -138,39 +180,41 @@
 
     @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_sell_applications"))// || usrRoleList.Contains("Chainsaw Importer")
     {
-    <div class="c-dashboard-item">
-        <div class="c-dashboard-item-icon">
-        <img src="~/assets/images/menu-icons/checklist-management.png" /></div>
-        <div class="c-dashboard-item-row-container">
-        <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Seller</h3></div>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Pending</h3><span class="c-dashboard-item-count">@Model.dashboardView.SellerPendingCount</span></a>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">@Model.dashboardView.SellerApprovedCount</span></a>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">@Model.dashboardView.SellerDeclinedCount</span></a>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Submitted Applications</h3><span class="c-dashboard-item-count">@Model.dashboardView.SellerTotalCount</span></a>
-        <a class="c-dashboard-item-row" onclick="SellerChecklistModal()"><p class="c-dashboard-item-info">Checklist for required documents.</p></a>
-        </div>
+        <div class="c-dashboard-item">
+            <div class="c-dashboard-item-icon">
+                <img src="~/assets/images/menu-icons/checklist-management.png" />
+            </div>
+            <div class="c-dashboard-item-row-container">
+                <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Seller</h3></div>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Pending</h3><span class="c-dashboard-item-count">@Model.dashboardView.SellerPendingCount</span></a>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">@Model.dashboardView.SellerApprovedCount</span></a>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">@Model.dashboardView.SellerDeclinedCount</span></a>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Submitted Applications</h3><span class="c-dashboard-item-count">@Model.dashboardView.SellerTotalCount</span></a>
+                <a class="c-dashboard-item-row" onclick="SellerChecklistModal()"><p class="c-dashboard-item-info">Checklist for required documents.</p></a>
+            </div>
 
-    </div>
+        </div>
     }
 
 
     @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_create_own_applications"))// || usrRoleList.Contains("Chainsaw Importer")
     {
-    <div class="c-dashboard-item">
-        <div class="c-dashboard-item-icon">
-        <img src="~/assets/images/menu-icons/checklist-management.png" /></div>
-        <div class="c-dashboard-item-row-container">
-        <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Owner</h3></div>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Pending</h3><span class="c-dashboard-item-count">@Model.dashboardView.OwnerPendingCount</span></a>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">@Model.dashboardView.OwnerApprovedCount</span></a>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">@Model.dashboardView.OwnerDeclinedCount</span></a>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Submitted Applications</h3><span class="c-dashboard-item-count">@Model.dashboardView.OwnerTotalCount</span></a>
-        <a class="c-dashboard-item-row" onclick="OwnerChecklistModal()"><p class="c-dashboard-item-info">Checklist for required documents.</p></a>
-        </div>
+        <div class="c-dashboard-item">
+            <div class="c-dashboard-item-icon">
+                <img src="~/assets/images/menu-icons/checklist-management.png" />
+            </div>
+            <div class="c-dashboard-item-row-container">
+                <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Owner</h3></div>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Pending</h3><span class="c-dashboard-item-count">@Model.dashboardView.OwnerPendingCount</span></a>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">@Model.dashboardView.OwnerApprovedCount</span></a>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">@Model.dashboardView.OwnerDeclinedCount</span></a>
+                <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Submitted Applications</h3><span class="c-dashboard-item-count">@Model.dashboardView.OwnerTotalCount</span></a>
+                <a class="c-dashboard-item-row" onclick="OwnerChecklistModal()"><p class="c-dashboard-item-info">Checklist for required documents.</p></a>
+            </div>
 
-    </div>
+        </div>
     }
-      
+
 
 
     @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_approve_reject_applications"))
@@ -221,21 +265,21 @@
                 <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Checklist for required documents.</p></div>
             </div>
 
-        </div>        
+        </div>
     }
 
-@* 
+    @*
     <div class="c-dashboard-item">
-        <div class="c-dashboard-item-icon">
-        <img src="~/assets/images/menu-icons/checklist-management.png" /></div>
-        <div class="c-dashboard-item-row-container">
-        <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Renewal</h3></div>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Pending</h3><span class="c-dashboard-item-count">100</span></a>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">100</span></a>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">100</span></a>
-        <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Total</h3><span class="c-dashboard-item-count">300</span></a>
-        <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Checklist for required documents.</p></div>
-                </div>
+    <div class="c-dashboard-item-icon">
+    <img src="~/assets/images/menu-icons/checklist-management.png" /></div>
+    <div class="c-dashboard-item-row-container">
+    <div class="c-dashboard-item-row"><h3 class="c-dashboard-item-title-main">Renewal</h3></div>
+    <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Pending</h3><span class="c-dashboard-item-count">100</span></a>
+    <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Approved</h3><span class="c-dashboard-item-count">100</span></a>
+    <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Declined</h3><span class="c-dashboard-item-count">100</span></a>
+    <a class="c-dashboard-item-row"><h3 class="c-dashboard-item-title">Total</h3><span class="c-dashboard-item-count">300</span></a>
+    <div class="c-dashboard-item-row"><p class="c-dashboard-item-info">Checklist for required documents.</p></div>
+    </div>
 
     </div> *@
 </div>
@@ -243,214 +287,214 @@
 
 
 @*Cards region*@
-<div id="card-container" class="border-0 bg-none" >
+<div id="card-container" class="border-0 bg-none">
     <div class="row m-0" style="display: none;">
         @* IMPORTER COLUMN *@
         @if (ViewBag.UserType.Contains("Importer") == true)
         {
             <div class="col-md-3">
                 <div class="bg-green rounded px-4 py-2">
-                <div class="row mb-5">
-                    <div class="col-md-6">
-                        <h4 class="text-light-green">
-                            IMPORTER
-                        </h4>
-                    </div>
-                    <div class="col-md-6 d-flex justify-content-end">
-                        <img src="~/assets/images/dashboard-icons/dashboard-icon-importer.png" height="65" />
-                    </div>
-                </div>
-                <div class="row mb-5">
-                    <div class="col-md-4 pe-0">
-                        <div class="d-flex flex-column gap-1">
-                            <span class="text-white fw-bold fs-3">
-                                5
-                            </span>
-                            <span class="text-white fw-light">
-                                Pending
-                            </span>
+                    <div class="row mb-5">
+                        <div class="col-md-6">
+                            <h4 class="text-light-green">
+                                IMPORTER
+                            </h4>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-end">
+                            <img src="~/assets/images/dashboard-icons/dashboard-icon-importer.png" height="65" />
                         </div>
                     </div>
-                    <div class="col-md-4 px-0">
-                        <div class="d-flex flex-column gap-1">
-                            <span class="text-white fw-bold fs-3">
-                                4
-                            </span>
-                            <span class="text-white fw-light">
-                                Approved
-                            </span>
+                    <div class="row mb-5">
+                        <div class="col-md-4 pe-0">
+                            <div class="d-flex flex-column gap-1">
+                                <span class="text-white fw-bold fs-3">
+                                    5
+                                </span>
+                                <span class="text-white fw-light">
+                                    Pending
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 px-0">
+                            <div class="d-flex flex-column gap-1">
+                                <span class="text-white fw-bold fs-3">
+                                    4
+                                </span>
+                                <span class="text-white fw-light">
+                                    Approved
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 px-0">
+                            <div class="d-flex flex-column gap-1">
+                                <span class="text-white fw-bold fs-3">
+                                    3
+                                </span>
+                                <span class="text-white fw-light">
+                                    Declined
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-4 px-0">
-                        <div class="d-flex flex-column gap-1">
-                            <span class="text-white fw-bold fs-3">
-                                3
-                            </span>
-                            <span class="text-white fw-light">
-                                Declined
-                            </span>
+                    <div class="row d-flex justify-content-between mb-2">
+                        <div class="col-md-6">
+                            <h4 class="text-white fw-light">
+                                Submitted Application
+                            </h4>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-center align-items-center">
+                            <h1 class="text-white">
+                                12
+                            </h1>
                         </div>
                     </div>
-                </div>
-                <div class="row d-flex justify-content-between mb-2">
-                    <div class="col-md-6">
-                        <h4 class="text-white fw-light">
-                            Submitted Application
-                        </h4>
-                    </div>
-                    <div class="col-md-6 d-flex justify-content-center align-items-center">
-                        <h1 class="text-white">
-                            12
-                        </h1>
-                    </div>
-                </div>
-                <div class="row mb-2">
-                    <div class="col-md-12 d-flex justify-content-end">
-                        <span class="text-light-green cursor-pointer">
-                            View more
-                        </span>
+                    <div class="row mb-2">
+                        <div class="col-md-12 d-flex justify-content-end">
+                            <span class="text-light-green cursor-pointer">
+                                View more
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         }
         @* SELLER COLUMN *@
         @if (ViewBag.UserType.Contains("Seller") == true)
-        {            
+        {
             <div class="col-md-3">
                 <div class="bg-green rounded px-4 py-2">
-                <div class="row mb-5">
-                    <div class="col-md-6">
-                        <h4 class="text-light-green">
-                            SELLER
-                        </h4>
-                    </div>
-                    <div class="col-md-6 d-flex justify-content-end">
-                        <img src="~/assets/images/dashboard-icons/dashboard-icon-seller.png" height="65" />
-                    </div>
-                </div>
-                <div class="row mb-5">
-                    <div class="col-md-4 pe-0">
-                        <div class="d-flex flex-column gap-1">
-                            <span class="text-white fw-bold fs-3">
-                                11
-                            </span>
-                            <span class="text-white fw-light">
-                                Pending
-                            </span>
+                    <div class="row mb-5">
+                        <div class="col-md-6">
+                            <h4 class="text-light-green">
+                                SELLER
+                            </h4>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-end">
+                            <img src="~/assets/images/dashboard-icons/dashboard-icon-seller.png" height="65" />
                         </div>
                     </div>
-                    <div class="col-md-4 px-0">
-                        <div class="d-flex flex-column gap-1">
-                            <span class="text-white fw-bold fs-3">
-                                9
-                            </span>
-                            <span class="text-white fw-light">
-                                Approved
-                            </span>
+                    <div class="row mb-5">
+                        <div class="col-md-4 pe-0">
+                            <div class="d-flex flex-column gap-1">
+                                <span class="text-white fw-bold fs-3">
+                                    11
+                                </span>
+                                <span class="text-white fw-light">
+                                    Pending
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 px-0">
+                            <div class="d-flex flex-column gap-1">
+                                <span class="text-white fw-bold fs-3">
+                                    9
+                                </span>
+                                <span class="text-white fw-light">
+                                    Approved
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 px-0">
+                            <div class="d-flex flex-column gap-1">
+                                <span class="text-white fw-bold fs-3">
+                                    2
+                                </span>
+                                <span class="text-white fw-light">
+                                    Declined
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-4 px-0">
-                        <div class="d-flex flex-column gap-1">
-                            <span class="text-white fw-bold fs-3">
-                                2
-                            </span>
-                            <span class="text-white fw-light">
-                                Declined
-                            </span>
+                    <div class="row d-flex justify-content-between mb-2">
+                        <div class="col-md-6">
+                            <h4 class="text-white fw-light">
+                                Submitted Application
+                            </h4>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-center align-items-center">
+                            <h1 class="text-white">
+                                22
+                            </h1>
                         </div>
                     </div>
-                </div>
-                <div class="row d-flex justify-content-between mb-2">
-                    <div class="col-md-6">
-                        <h4 class="text-white fw-light">
-                            Submitted Application
-                        </h4>
-                    </div>
-                    <div class="col-md-6 d-flex justify-content-center align-items-center">
-                        <h1 class="text-white">
-                            22
-                        </h1>
-                    </div>
-                </div>
-                <div class="row mb-2">
-                    <div class="col-md-12 d-flex justify-content-end">
-                        <span class="text-light-green cursor-pointer">
-                            View more
-                        </span>
+                    <div class="row mb-2">
+                        <div class="col-md-12 d-flex justify-content-end">
+                            <span class="text-light-green cursor-pointer">
+                                View more
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         }
         @* OWNER COLUMN *@
         @if (ViewBag.UserType.Contains("Owner") == true)
         {
             <div class="col-md-3">
                 <div class="bg-green rounded px-4 py-2">
-                <div class="row mb-5">
-                    <div class="col-md-6">
-                        <h4 class="text-light-green">
-                            OWNER
-                        </h4>
-                    </div>
-                    <div class="col-md-6 d-flex justify-content-end">
-                        <img src="~/assets/images/dashboard-icons/dashboard-icon-owner.png" height="65" />
-                    </div>
-                </div>
-                <div class="row mb-5">
-                    <div class="col-md-4 pe-0">
-                        <div class="d-flex flex-column gap-1">
-                            <span class="text-white fw-bold fs-3">
-                                15
-                            </span>
-                            <span class="text-white fw-light">
-                                Pending
-                            </span>
+                    <div class="row mb-5">
+                        <div class="col-md-6">
+                            <h4 class="text-light-green">
+                                OWNER
+                            </h4>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-end">
+                            <img src="~/assets/images/dashboard-icons/dashboard-icon-owner.png" height="65" />
                         </div>
                     </div>
-                    <div class="col-md-4 px-0">
-                        <div class="d-flex flex-column gap-1">
-                            <span class="text-white fw-bold fs-3">
-                                18
-                            </span>
-                            <span class="text-white fw-light">
-                                Approved
-                            </span>
+                    <div class="row mb-5">
+                        <div class="col-md-4 pe-0">
+                            <div class="d-flex flex-column gap-1">
+                                <span class="text-white fw-bold fs-3">
+                                    15
+                                </span>
+                                <span class="text-white fw-light">
+                                    Pending
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 px-0">
+                            <div class="d-flex flex-column gap-1">
+                                <span class="text-white fw-bold fs-3">
+                                    18
+                                </span>
+                                <span class="text-white fw-light">
+                                    Approved
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 px-0">
+                            <div class="d-flex flex-column gap-1">
+                                <span class="text-white fw-bold fs-3">
+                                    4
+                                </span>
+                                <span class="text-white fw-light">
+                                    Declined
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-4 px-0">
-                        <div class="d-flex flex-column gap-1">
-                            <span class="text-white fw-bold fs-3">
-                                4
-                            </span>
-                            <span class="text-white fw-light">
-                                Declined
-                            </span>
+                    <div class="row d-flex justify-content-between mb-2">
+                        <div class="col-md-6">
+                            <h4 class="text-white fw-light">
+                                Submitted Application
+                            </h4>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-center align-items-center">
+                            <h1 class="text-white">
+                                37
+                            </h1>
                         </div>
                     </div>
-                </div>
-                <div class="row d-flex justify-content-between mb-2">
-                    <div class="col-md-6">
-                        <h4 class="text-white fw-light">
-                            Submitted Application
-                        </h4>
-                    </div>
-                    <div class="col-md-6 d-flex justify-content-center align-items-center">
-                        <h1 class="text-white">
-                           37
-                        </h1>
-                    </div>
-                </div>
-                <div class="row mb-2">
-                    <div class="col-md-12 d-flex justify-content-end">
-                        <span class="text-light-green cursor-pointer">
-                            View more
-                        </span>
+                    <div class="row mb-2">
+                        <div class="col-md-12 d-flex justify-content-end">
+                            <span class="text-light-green cursor-pointer">
+                                View more
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         }
         @* RENEWAL COLUMN *@
         <div class="col-md-3">
@@ -523,14 +567,14 @@
     @*
     @if (ViewBag.UserType.Contains("CENRO") == true)
     {
-        <div id="card">
-           @Html.Partial("~/Views/Cenro/CenroApplicationList.cshtml")
-        </div>
+    <div id="card">
+    @Html.Partial("~/Views/Cenro/CenroApplicationList.cshtml")
+    </div>
     }
     *@
-        
 
-<!-- User History -->
+
+    <!-- User History -->
     @* @if (ViewBag.UserType.Contains("Owner") == true || ViewBag.UserType.Contains("Seller") == true || ViewBag.UserType.Contains("Importer") == true) *@
     @if (AccessRightsUtilities.IsAccessRights(((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value, "allow_table_history"))
     {
@@ -539,56 +583,57 @@
         </div>
     }
 
-<!-- Owned Chainsaws -->
-@* if (ViewBag.UserType.Contains("Owner") == true) *@
-@if (AccessRightsUtilities.IsAccessRights(((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value, "allow_table_owned_chainsaws"))
-{        
+    <!-- Owned Chainsaws -->
+    @* if (ViewBag.UserType.Contains("Owner") == true) *@
+    @if (AccessRightsUtilities.IsAccessRights(((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value, "allow_table_owned_chainsaws"))
+    {
+        <div id="card">
+            @Html.Partial("~/Views/Owner/OwnedChainsaws.cshtml")
+        </div>
+    }
+    @if (AccessRightsUtilities.IsAccessRights(((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value, "allow_table_chainsaws_for_sale"))
+    {
+        <div id="card">
+            @Html.Partial("~/Views/Seller/Index.cshtml")
+        </div>
+    }
+    @if (AccessRightsUtilities.IsAccessRights(((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value, "allow_table_imported_chainsaws"))
+    {
+        <div id="card">
+            @Html.Partial("~/Views/Importer/ImportedChainsaws.cshtml")
+        </div>
+    }
+    <!-- User Services -->
+    @* @if (ViewBag.UserType.Contains("Owner") == true)
+    {
     <div id="card">
-        @Html.Partial("~/Views/Owner/OwnedChainsaws.cshtml")
+    @Html.Partial("~/Views/Owner/OwnerServices.cshtml")
     </div>
-}
-@if (AccessRightsUtilities.IsAccessRights(((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value, "allow_table_chainsaws_for_sale"))
-{
+    }
+    @if (ViewBag.UserType.Contains("Seller") == true)
+    {
     <div id="card">
-        @Html.Partial("~/Views/Seller/Index.cshtml")
+    @Html.Partial("~/Views/Seller/SellerServices.cshtml")
     </div>
-}
-@if (AccessRightsUtilities.IsAccessRights(((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value, "allow_table_imported_chainsaws"))
-{
+    }
+    @if (ViewBag.UserType.Contains("Importer") == true)
+    {
     <div id="card">
-        @Html.Partial("~/Views/Importer/ImportedChainsaws.cshtml")
+    @Html.Partial("~/Views/Importer/ImporterServices.cshtml")
     </div>
-}
-<!-- User Services -->
-@* @if (ViewBag.UserType.Contains("Owner") == true)
-{
-    <div id="card">
-        @Html.Partial("~/Views/Owner/OwnerServices.cshtml")
-    </div>
-}
-@if (ViewBag.UserType.Contains("Seller") == true)
-{
-    <div id="card">
-        @Html.Partial("~/Views/Seller/SellerServices.cshtml")
-    </div>
-}
-@if (ViewBag.UserType.Contains("Importer") == true)
-{
-    <div id="card">
-        @Html.Partial("~/Views/Importer/ImporterServices.cshtml")
-    </div>
-} *@
+    } *@
 </div>
 
-
+<script src="/js/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="text/javascript">
-    var js = jQuery.noConflict(true);
+    /* var js = jQuery.noConflict(true); 
     js(document).ready(function () {
         js('#ChainsawRecordTable').DataTable({
             pageLength: 3,
         });
     });
-
+    */
     function ImporterChecklistModal() {
         $.get("/ChecklistManagement/GetRequirementsList?tbl_permit_type_id=1", function (data) {
             console.log(data);
@@ -596,22 +641,22 @@
             var listHTMLEnd = "</li>"
             var innerHTML = "";
             for (let i = 0; i < data.length; i++) {
-                innerHTML += listHTMLStart + (i+1) + ". " + data[i] + listHTMLEnd;
+                innerHTML += listHTMLStart + (i + 1) + ". " + data[i] + listHTMLEnd;
             }
             Swal.fire({
                 html: `
-           <div class="m-2">
+                           <div class="m-2">
 
-            <p class="mb-0"><span class="h2 me-2">Permit to Import</span></p>
-            <p class="text-muted pb-2">Requirements</p>
+                            <p class="mb-0"><span class="h2 me-2">Permit to Import</span></p>
+                            <p class="text-muted pb-2">Requirements</p>
 
-            <ul class="list-group">              
-              ${innerHTML}
+                            <ul class="list-group">
+                              ${innerHTML}
 
-            </ul>
+                            </ul>
 
-          </div>
-                `,
+                          </div>
+                                `,
                 confirmButtonText: "OK",
                 confirmButtonColor: '#14984a'
             });
@@ -645,23 +690,23 @@
                 }
 
                 Swal.fire({
-                    html: `                        
-                            <div class="m-2">
-                                <p class="mb-0"><span class="h2 me-2">Permit to Sell</span></p>
-                                <p class="text-muted">Requirements</p>
-                                <ul class="list-group">
-                                    ${innerHTMLSell}
-                                </ul>
-                            </div>
-                                <hr/>
-                            <div class="m-2 pt-2">
-                                <p class="mb-0"><span class="h2 me-2">Permit to Purchase</span></p>
-                                <p class="text-muted">Requirements</p>
-                                <ul class="list-group">
-                                    ${innerHTMLPurchase}
-                                </ul>
-                            </div>
-                    `,
+                    html: `
+                                            <div class="m-2">
+                                                <p class="mb-0"><span class="h2 me-2">Permit to Sell</span></p>
+                                                <p class="text-muted">Requirements</p>
+                                                <ul class="list-group">
+                                                    ${innerHTMLSell}
+                                                </ul>
+                                            </div>
+                                                <hr/>
+                                            <div class="m-2 pt-2">
+                                                <p class="mb-0"><span class="h2 me-2">Permit to Purchase</span></p>
+                                                <p class="text-muted">Requirements</p>
+                                                <ul class="list-group">
+                                                    ${innerHTMLPurchase}
+                                                </ul>
+                                            </div>
+                                    `,
                     confirmButtonText: "OK",
                     confirmButtonColor: '#14984a',
                     width: '700px'
@@ -697,7 +742,7 @@
                 var innerHTMLLease = "";
                 var innerHTMLRent = "";
                 var innerHTMLLend = "";
-                var innerHTMLCoR= "";
+                var innerHTMLCoR = "";
                 var innerHTMLResell = "";
 
                 for (let i = 0; i < leaseData.length; i++) {
@@ -722,54 +767,54 @@
 
                 Swal.fire({
                     html: `
-        <div>
+                        <div>
 
-            <div class="m-2 pt-2">
-                <p class="mb-0"><span class="h2 me-2">Authority to Lease</span></p>
-                <p class="text-muted">Requirements</p>
-                <ul class="list-group">
-                    ${innerHTMLLease}
-                </ul>
-            </div>
-                <hr/>
-            <div class="m-2 pt-2">
-                <p class="mb-0"><span class="h2 me-2">Authority to Rent</span></p>
-                <p class="text-muted">Requirements</p>
-                <ul class="list-group">
-                    ${innerHTMLRent}
-                </ul>
-            </div>
+                            <div class="m-2 pt-2">
+                                <p class="mb-0"><span class="h2 me-2">Authority to Lease</span></p>
+                                <p class="text-muted">Requirements</p>
+                                <ul class="list-group">
+                                    ${innerHTMLLease}
+                                </ul>
+                            </div>
+                                <hr/>
+                            <div class="m-2 pt-2">
+                                <p class="mb-0"><span class="h2 me-2">Authority to Rent</span></p>
+                                <p class="text-muted">Requirements</p>
+                                <ul class="list-group">
+                                    ${innerHTMLRent}
+                                </ul>
+                            </div>
 
-                <hr/>
-            <div class="m-2 pt-2">
-                <p class="mb-0"><span class="h2 me-2">Authority to Lend</span></p>
-                <p class="text-muted">Requirements</p>
-                <ul class="list-group">
-                    ${innerHTMLLend}
-                </ul>
-            </div>
-                <hr/>
-            <div class="m-2 pt-2">
-                <p class="mb-0"><span class="h2 me-2">Permit to Re-sell/Transfer Ownership</span></p>
-                <p class="text-muted">Requirements</p>
-                <ul class="list-group">
-                    ${innerHTMLResell}
-                </ul>
-            </div>
+                                <hr/>
+                            <div class="m-2 pt-2">
+                                <p class="mb-0"><span class="h2 me-2">Authority to Lend</span></p>
+                                <p class="text-muted">Requirements</p>
+                                <ul class="list-group">
+                                    ${innerHTMLLend}
+                                </ul>
+                            </div>
+                                <hr/>
+                            <div class="m-2 pt-2">
+                                <p class="mb-0"><span class="h2 me-2">Permit to Re-sell/Transfer Ownership</span></p>
+                                <p class="text-muted">Requirements</p>
+                                <ul class="list-group">
+                                    ${innerHTMLResell}
+                                </ul>
+                            </div>
 
-            <hr/>
-            <div class="m-2 pt-4">
-                <p class="mb-0"><span class="h2 me-2">Certificate of Registration</span></p>
-                <p class="text-muted">Requirements</p>
-                <ul class="list-group">
-                    ${innerHTMLCoR}
-                </ul>
-            </div>
+                            <hr/>
+                            <div class="m-2 pt-4">
+                                <p class="mb-0"><span class="h2 me-2">Certificate of Registration</span></p>
+                                <p class="text-muted">Requirements</p>
+                                <ul class="list-group">
+                                    ${innerHTMLCoR}
+                                </ul>
+                            </div>
 
-        </div>
+                        </div>
 
 
-                                `,
+                                                `,
                     confirmButtonText: "OK",
                     confirmButtonColor: '#14984a',
                     width: '700px'
@@ -781,4 +826,50 @@
             });
     }
 
+
+    $(function () {
+
+        $("#showGraph").click(function () {
+
+            var chartType = $("#ChartType").val();
+            var chartView = document.getElementById('ChartView');
+
+            chartView.innerHTML = ''
+            $('#ChartView').append('<canvas id="myChart" style="max-width:750px;max-height:400px"></canvas>')
+
+            $.ajax({
+                type: "POST",
+                url: "/Dashboard/GetChartsData",
+                data: "",
+                contextType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessResult,
+                error: OnError
+            });
+
+            function OnSuccessResult(data) {
+                var _data = data;
+                var _chartLabels = _data[0];
+                var _chartData = _data[1];
+
+                var barColor = ["green", "blue"];
+
+                new Chart("myChart", {
+                    type: chartType,
+                    data: {
+                        labels: _chartLabels,
+                        datasets: [{
+                            backgroundColor: barColor,
+                            data: _chartData
+                        }]
+                    }
+                })
+            }
+
+            function OnError(data) {
+
+            }
+        })
+    });
 </script>
+

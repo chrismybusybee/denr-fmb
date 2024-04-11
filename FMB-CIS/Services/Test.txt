@@ -1,0 +1,3 @@
+Email: abcdef@gmail.com
+UniqueId: c415f423-8688-4bba-b665-717656443df7
+https://localhost:7270/Account/ResetPassword?email=abcdef@gmail.com&tokencode=c415f423-8688-4bba-b665-717656443df7
