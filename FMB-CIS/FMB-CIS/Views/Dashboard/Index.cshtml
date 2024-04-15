@@ -626,6 +626,7 @@
 
 <script src="/js/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 <script type="text/javascript">
     /* var js = jQuery.noConflict(true); 
     js(document).ready(function () {
@@ -847,24 +848,66 @@
                 error: OnError
             });
 
+            
+            /**/
             function OnSuccessResult(data) {
                 var _data = data;
-                var _chartLabels = _data[0];
-                var _chartData = _data[1];
+                //var _chartLabels = _data[0];
+                var newData = data[0];
+                var renewData = data[1];
+                var expiredData = data[2];
 
-                var barColor = ["green", "blue"];
 
-                new Chart("myChart", {
+                //var barColor = ["green", "yellow", "red"];
+
+                var myChart = new Chart("myChart", {
                     type: chartType,
                     data: {
-                        labels: _chartLabels,
+                        //labels: _chartLabels,
                         datasets: [{
-                            backgroundColor: barColor,
-                            data: _chartData
-                        }]
+                            label: 'New Registered',
+                            backgroundColor: "green",
+                            data: newData,//[21, 19, 24, 20, 15, 17, 22],
+                            stack: 'Stack 0',
+                        }, {
+                            label: 'Renewed',
+                            backgroundColor: "yellow",
+                            data: renewData,//[14, 12, 10, 16, 9, 7, 11],
+                            stack: 'Stack 0',
+                        }, {
+                            label: 'Expired',
+                            backgroundColor: "red",
+                            data: expiredData,//[2, 1, 3, 4, 1, 5, 4],
+                            stack: 'Stack 0' // For multiple stacking
+                        }],
+                    },
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Chart.js Bar Chart - Stacked'
+                            },
+                        },
+                        interaction: {
+                            intersect: false,
+                        },
+                        scales: {
+                            x: {
+                                stacked: true,
+                                type: 'time',
+                                time: {
+                                    unit:'day'
+                                }
+                            },
+                            y: {
+                                stacked: true
+                            }
+                        },
+                        responsive: true
                     }
-                })
+                });
             }
+            /**/
 
             function OnError(data) {
 
