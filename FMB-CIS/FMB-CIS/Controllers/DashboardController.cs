@@ -628,6 +628,7 @@ namespace FMB_CIS.Controllers
             //var renewedChainsaws = result.Where(r => r.Category == "Renewal" || r.Category == "Renewed-But-Soon-To-Expire").ToList();
             //var expired = result.Where(r => r.Category == "Expired").ToList();
 
+            //{ 
             var groupedNewlyRegisteredDateCounts = result
             .Where(r => r.Category == "New")
             .GroupBy(entry => entry.DateRegistered.Value.Date) // Group by date (ignoring time)
@@ -657,10 +658,97 @@ namespace FMB_CIS.Controllers
                 y = group.Count() //Count
             })
             .ToList();
+            //}
 
-            data.Add(groupedNewlyRegisteredDateCounts);
-            data.Add(groupedRenewedChainsawsDateCounts);
-            data.Add(groupedExpiredDateCounts);
+            //{ 
+            var groupedNewlyRegisteredMonthCounts = result
+            .Where(r => r.Category == "New" && r.DateRegistered.HasValue) // Filter by category and non-null DateRegistered
+            .GroupBy(entry => new DateTime(entry.DateRegistered.Value.Year, entry.DateRegistered.Value.Month, 1)) // Group by month (ignoring day and time)
+            .Select(group => new
+            {
+                x = Convert.ToDateTime(group.Key.ToString("MMMM 01 yyyy")), // Format month as "Month Year" (e.g., "April 2024")
+                y = group.Count() // Count of registrations in this month
+            })
+            .ToList();
+
+
+            var groupedRenewedChainsawsMonthCounts = result
+            .Where(r => r.Category == "Renewal" || r.Category == "Renewed-But-Soon-To-Expire")
+            .Where(r => r.DateRegistered.HasValue) // Filter out entries with null DateRegistered
+            .GroupBy(entry => new DateTime(entry.DateRegistered.Value.Year, entry.DateRegistered.Value.Month, 1)) // Group by month (ignoring day and time)
+            .Select(group => new
+            {
+                x = Convert.ToDateTime(group.Key.ToString("MMMM 01 yyyy")), // Format month as "Month Year" (e.g., "April 2024")
+                y = group.Count() // Count of renewals in this month
+            })
+            .ToList();
+
+
+            var groupedExpiredMonthCounts = result
+            .Where(r => r.Category == "Expired")
+            .Where(r => r.DateRegistered.HasValue) // Filter out entries with null DateRegistered
+            .GroupBy(entry => new DateTime(entry.DateRegistered.Value.Year, entry.DateRegistered.Value.Month, 1)) // Group by month (ignoring day and time)
+            .Select(group => new
+            {
+                x = Convert.ToDateTime(group.Key.ToString("MMMM 01 yyyy")), // Format month as "Month Year" (e.g., "April 2024")
+                y = group.Count() // Count of expired registrations in this month
+            })
+            .ToList();
+
+            //}
+
+            //{ 
+            var groupedNewlyRegisteredYearCounts = result
+            .Where(r => r.Category == "New")
+            .GroupBy(entry => entry.DateRegistered.Value.Year) // Group by date (ignoring time)
+            .Select(group => new
+            {
+                x = Convert.ToDateTime($"January 01 {group.Key}"), //Date
+                y = group.Count() //Count
+            })
+            .ToList();
+
+            var groupedRenewedChainsawsYearCounts = result
+            .Where(r => r.Category == "Renewal" || r.Category == "Renewed-But-Soon-To-Expire")
+            .GroupBy(entry => entry.DateRegistered.Value.Year) // Group by date (ignoring time)
+            .Select(group => new
+            {
+                x = Convert.ToDateTime($"January 01 {group.Key}"), //Date
+                y = group.Count() //Count
+            })
+            .ToList();
+
+            var groupedExpiredYearCounts = result
+            .Where(r => r.Category == "Expired")
+            .GroupBy(entry => entry.DateExpired.Value.Year) // Group by date (ignoring time)
+            .Select(group => new
+            {
+                x = Convert.ToDateTime($"January 01 {group.Key}"), //Date
+                y = group.Count() //Count
+            })
+            .ToList();
+            //}
+
+            string selectedTimeCategory = "month";
+
+            if(selectedTimeCategory == "day")
+            {
+                data.Add(groupedNewlyRegisteredDateCounts);
+                data.Add(groupedRenewedChainsawsDateCounts);
+                data.Add(groupedExpiredDateCounts);
+            }
+            else if (selectedTimeCategory == "month")
+            {
+                data.Add(groupedNewlyRegisteredMonthCounts);
+                data.Add(groupedRenewedChainsawsMonthCounts);
+                data.Add(groupedExpiredMonthCounts);
+            }
+            else// if (selectedTimeCategory == "year")
+            {
+                data.Add(groupedNewlyRegisteredYearCounts);
+                data.Add(groupedRenewedChainsawsYearCounts);
+                data.Add(groupedExpiredYearCounts);
+            }
             return data;
         }
 
