@@ -563,7 +563,8 @@ namespace FMB_CIS.Controllers
         }
         */
 
-        public List<object> GetChartsData()
+        [HttpPost]
+        public List<object> GetChartsData(string DateType)
         {
             List<object> data = new List<object>();
             //List<string> labels = _context.tbl_chainsaw.Select(x => x.chainsaw_date_of_expiration.ToString()).ToList();
@@ -729,15 +730,15 @@ namespace FMB_CIS.Controllers
             .ToList();
             //}
 
-            string selectedTimeCategory = "month";
+            //string selectedTimeCategory = "month";
 
-            if(selectedTimeCategory == "day")
+            if(DateType == "day")
             {
                 data.Add(groupedNewlyRegisteredDateCounts);
                 data.Add(groupedRenewedChainsawsDateCounts);
                 data.Add(groupedExpiredDateCounts);
             }
-            else if (selectedTimeCategory == "month")
+            else if (DateType == "month")
             {
                 data.Add(groupedNewlyRegisteredMonthCounts);
                 data.Add(groupedRenewedChainsawsMonthCounts);

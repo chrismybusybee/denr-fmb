@@ -14,31 +14,64 @@
             <div>
                 <h3 class="c-dashboard-item-title-main">Charts </h3>
             </div>
-           
-                <span>
-                    <p>
 
-                        <div class="col-4">
-                            <label><b>Chart-Type</b></label>
+            <span>
+                <p>
+                    <div class="row">
+                        <div class="col-2 form-group mb-3">
+                            <label class="fw-bolder p-2" for="Years">
+                                <span><strong>Chart-Type<span style="color:red">*</span></strong></span>
+                            </label>
+                            @Html.DropDownList("ChartType", new List<SelectListItem>
+                            {
+                            new SelectListItem { Text = "Bar", Value = "bar", Selected=true},
+                            new SelectListItem { Text = "Line", Value = "line"},
+                            new SelectListItem { Text = "Pie", Value = "pie"},
+                            new SelectListItem { Text = "Doughnut", Value = "doughnut"},
+                            }, new { @class = "form-select" })
                         </div>
 
-                        <div class="col-2">
-                            <select id="ChartType" class="form-control" style="width:150px">
+                        @* <div class="col-2">
+                            <select id="ChartType" class="form-select" style="width:150px">
                                 <option>bar</option>
                                 <option>line</option>
                                 <option>pie</option>
                                 <option>doughnut</option>
                             </select>
-                        </div>
-                        <div class="col-4">
-                            <input id="showGraph" value="Show Graph" type="button" />
-                        </div>
-                    </p>
+                        </div> *@
 
-                    <div id="ChartView">
-                        <canvas id="myChart"></canvas>
+                        <div class="col-2 form-group mb-3">
+                            <label class="fw-bolder p-2" for="Years">
+                                <span><strong>Date Type<span style="color:red">*</span></strong></span>
+                            </label>
+                            @Html.DropDownList("DateType", new List<SelectListItem>
+                            {
+                            new SelectListItem { Text = "Per Day", Value = "day"},
+                            new SelectListItem { Text = "Per Month", Value = "month"},
+                            new SelectListItem { Text = "Per Year", Value = "year"},
+                            }, new { @class = "form-select" })
+                        </div>
                     </div>
-                </span>
+                    <div class="col-4">
+                        <input id="showGraph" value="Show Graph" type="button" />
+                    </div>
+                </p>
+
+                <div id="ChartView">
+                    <canvas id="myChart"></canvas>
+                </div>
+                <div class="row"id="dateInputs">
+                    <div class="col-3">
+                        <label for="startDate">Start Date</label>
+                        <input onchange="filterData()" type="date" id="startDate" class="form-control" />
+                    </div>
+                    <div class="col-3">
+                        <label for="endDate">End Date</label>
+                        <input onchange="filterData()" type="date" id="endDate" class="form-control" />
+                    </div>
+
+                </div>
+            </span>
            
         </div>
     </div>
@@ -834,15 +867,26 @@
 
             var chartType = $("#ChartType").val();
             var chartView = document.getElementById('ChartView');
+            var dateTypeValue = $("#DateType").val();
 
             chartView.innerHTML = ''
             $('#ChartView').append('<canvas id="myChart" style="max-width:750px;max-height:400px"></canvas>')
 
-            $.ajax({
+            /* $.ajax({
                 type: "POST",
                 url: "/Dashboard/GetChartsData",
                 data: "",
                 contextType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessResult,
+                error: OnError
+            }); */
+
+            $.ajax({
+                type: "POST",
+                url: "/Dashboard/GetChartsData",
+                data: { DateType: dateTypeValue },
+                //contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: OnSuccessResult,
                 error: OnError
@@ -893,7 +937,7 @@
                                 stacked: true,
                                 type: 'time',
                                 time: {
-                                    unit:'month'
+                                    unit: dateTypeValue
                                 }
                             },
                             y: {
@@ -910,6 +954,13 @@
 
             }
         })
+
     });
+
+    function filterData() { 
+        //const dates2 = [...dates];
+        console.log("filterData()");
+    }
+
 </script>
 
