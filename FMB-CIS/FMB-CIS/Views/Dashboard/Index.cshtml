@@ -60,17 +60,22 @@
                 <div id="ChartView">
                     <canvas id="myChart"></canvas>
                 </div>
-                <div class="row"id="dateInputs">
-                    <div class="col-3">
-                        <label for="startDate">Start Date</label>
-                        <input onchange="filterData()" type="date" id="startDate" class="form-control" />
+                <form id="ChartFilterForm">
+                    <div class="row" id="dateFilters" style="display: none;">
+                        <div class="col-3">
+                            <label for="startDate">Start Date</label>
+                            <input type="date" id="startDate" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" required/>
+                        </div>
+                        <div class="col-3">
+                            <label for="endDate">End Date</label>
+                            <input type="date" id="endDate" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" required/>
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-primary" id="FilterChartBtn">Filter</button>
+                            <button type="button" class="btn btn-primary" id="ResetChartBtn">Reset</button>
+                        </div>
                     </div>
-                    <div class="col-3">
-                        <label for="endDate">End Date</label>
-                        <input onchange="filterData()" type="date" id="endDate" class="form-control" />
-                    </div>
-
-                </div>
+                </form>
             </span>
            
         </div>
@@ -865,42 +870,100 @@
 
         $("#showGraph").click(function () {
 
-            var chartType = $("#ChartType").val();
+            var typeofChart = $("#ChartType").val();
             var chartView = document.getElementById('ChartView');
-            var dateTypeValue = $("#DateType").val();
-
+            var dateTypeSelectValue = $("#DateType").val();
+            $('#dateFilters').show();
             chartView.innerHTML = ''
             $('#ChartView').append('<canvas id="myChart" style="max-width:750px;max-height:400px"></canvas>')
 
-            /* $.ajax({
-                type: "POST",
-                url: "/Dashboard/GetChartsData",
-                data: "",
-                contextType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: OnSuccessResult,
-                error: OnError
-            }); */
+            DisplayGraphs(typeofChart, dateTypeSelectValue, null, null);
 
+        });
+
+        /*
+        $("#DateType").change(function () {
+            var dateType = this.value;
+
+           
+            if (dateType == "day") {
+                console.log("dateType is day");
+                $('#startDate').get(0).type = 'date';
+                $('#endDate').get(0).type = 'date';
+            }
+            if (dateType == "month") {
+                console.log("dateType is month");
+                $('#startDate').get(0).type = 'month';
+                $('#endDate').get(0).type = 'month';
+            }
+            if (dateType == "year") {
+                console.log("dateType is year");
+                $('#startDate').get(0).type = 'date';
+                $('#endDate').get(0).type = 'date';
+            }
+        });
+        */
+
+
+        $("#FilterChartBtn").click(function () {
+            if ($("#ChartFilterForm")[0].checkValidity()) {
+                var typeofChart = $("#ChartType").val();
+                var chartView = document.getElementById('ChartView');
+                var dateTypeSelectValue = $("#DateType").val();
+                $('#dateFilters').show();
+                chartView.innerHTML = ''
+                $('#ChartView').append('<canvas id="myChart" style="max-width:750px;max-height:400px"></canvas>')
+
+                startDate = $("#startDate").val();
+                endDate = $("#endDate").val();
+                DisplayGraphs(typeofChart, dateTypeSelectValue, startDate, endDate);
+            }
+            else {
+                $("#ChartFilterForm")[0].reportValidity();
+            }
+        });
+
+        $("#ResetChartBtn").click(function () {
+            var typeofChart = $("#ChartType").val();
+            var chartView = document.getElementById('ChartView');
+            var dateTypeSelectValue = $("#DateType").val();
+            $('#dateFilters').show();
+            chartView.innerHTML = ''
+            $('#ChartView').append('<canvas id="myChart" style="max-width:750px;max-height:400px"></canvas>')
+
+            $("#startDate").val('');
+            $("#endDate").val('');
+
+            DisplayGraphs(typeofChart, dateTypeSelectValue, null, null);
+        });
+
+        function DisplayGraphs(chartType, dateTypeValue, dateStart, dateEnd)
+        {
             $.ajax({
                 type: "POST",
                 url: "/Dashboard/GetChartsData",
-                data: { DateType: dateTypeValue },
+                data: { 
+                    DateType: dateTypeValue,
+                    startDate: dateStart,
+                    endDate: dateEnd
+                },
                 //contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: OnSuccessResult,
                 error: OnError
             });
 
-            
-            /**/
+
             function OnSuccessResult(data) {
                 var _data = data;
                 //var _chartLabels = _data[0];
                 var newData = data[0];
                 var renewData = data[1];
                 var expiredData = data[2];
-                                                
+
+                var UpperCaseDateType = dateTypeValue.toLowerCase().replace(/\b[a-z]/g, function (letter) {
+                    return letter.toUpperCase();
+                });
                 var myChart = new Chart("myChart", {
                     type: chartType,
                     data: {
@@ -926,7 +989,7 @@
                         plugins: {
                             title: {
                                 display: true,
-                                text: 'Chart.js Bar Chart - Stacked'
+                                text: 'Total Chainsaws Registered per ' + UpperCaseDateType
                             },
                         },
                         interaction: {
@@ -948,19 +1011,15 @@
                     }
                 });
             }
-            /**/
 
             function OnError(data) {
 
             }
-        })
+        }
+
 
     });
 
-    function filterData() { 
-        //const dates2 = [...dates];
-        console.log("filterData()");
-    }
 
 </script>
 
