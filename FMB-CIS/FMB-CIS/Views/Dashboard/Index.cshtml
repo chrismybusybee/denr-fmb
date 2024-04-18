@@ -19,7 +19,7 @@
                 <p>
                     <div class="row">
                         <div class="col-2 form-group mb-3">
-                            <label class="fw-bolder p-2" for="Years">
+                            <label class="fw-bolder p-2" for="ChartType">
                                 <span><strong>Chart-Type<span style="color:red">*</span></strong></span>
                             </label>
                             @Html.DropDownList("ChartType", new List<SelectListItem>
@@ -41,7 +41,7 @@
                         </div> *@
 
                         <div class="col-2 form-group mb-3">
-                            <label class="fw-bolder p-2" for="Years">
+                            <label class="fw-bolder p-2" for="DateType">
                                 <span><strong>Date Type<span style="color:red">*</span></strong></span>
                             </label>
                             @Html.DropDownList("DateType", new List<SelectListItem>
@@ -51,31 +51,53 @@
                             new SelectListItem { Text = "Per Year", Value = "year"},
                             }, new { @class = "form-select" })
                         </div>
+                        
                     </div>
                     <div class="col-4">
                         <input id="showGraph" value="Show Graph" type="button" />
                     </div>
                 </p>
 
-                <div id="ChartView">
-                    <canvas id="myChart"></canvas>
-                </div>
-                <form id="ChartFilterForm">
+                <form id="ChartDatesFilterForm">
                     <div class="row" id="dateFilters" style="display: none;">
                         <div class="col-3">
                             <label for="startDate">Start Date</label>
-                            <input type="date" id="startDate" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" required/>
+                            <input type="date" id="startDate" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" required />
                         </div>
                         <div class="col-3">
                             <label for="endDate">End Date</label>
-                            <input type="date" id="endDate" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" required/>
+                            <input type="date" id="endDate" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" required />
                         </div>
-                        <div class="col-2">
-                            <button type="button" class="btn btn-primary" id="FilterChartBtn">Filter</button>
-                            <button type="button" class="btn btn-primary" id="ResetChartBtn">Reset</button>
+                        <div class="col-3 justify-content-center align-self-center">
+                            <button type="button" class="btn btn-primary" id="FilterChartDateBtn">Filter Dates</button>
+                            <button type="button" class="btn btn-primary" id="ResetChartDateBtn">Reset Dates</button>
                         </div>
                     </div>
                 </form>
+                <form id="ChartOfficeFilterForm">
+                    <div class="row" id="DivisionFilters" style="display: none;">
+                        <div class="col-5">
+                            <label class="fw-bolder p-2" for="OfficeDivisionList">
+                                Choose DENR Office
+                            </label>
+                            @Html.DropDownList("OfficeDivision",
+                            new SelectList(Model.tbl_Division_List, "id", "office_name"),
+                            "-- Select Office --", // Placeholder text
+                            htmlAttributes: new
+                            { @class = "form-select", @required = "required"})
+                        </div>
+
+                        <div class="col-4 justify-content-center align-self-center">
+                            @* <button type="button" class="btn btn-primary" id="FilterChartOfficeBtn">Filter Office</button> *@
+                            <button type="button" class="btn btn-primary" id="ResetChartOfficeBtn">Reset Office</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div id="ChartView">
+                    <canvas id="myChart"></canvas>
+                </div>
+                
             </span>
            
         </div>
@@ -874,56 +896,36 @@
             var chartView = document.getElementById('ChartView');
             var dateTypeSelectValue = $("#DateType").val();
             $('#dateFilters').show();
+            $('#DivisionFilters').show();
             chartView.innerHTML = ''
             $('#ChartView').append('<canvas id="myChart" style="max-width:750px;max-height:400px"></canvas>')
 
-            DisplayGraphs(typeofChart, dateTypeSelectValue, null, null);
+            DisplayGraphs(typeofChart, dateTypeSelectValue, null, null, null);
 
         });
 
-        /*
-        $("#DateType").change(function () {
-            var dateType = this.value;
-
-           
-            if (dateType == "day") {
-                console.log("dateType is day");
-                $('#startDate').get(0).type = 'date';
-                $('#endDate').get(0).type = 'date';
-            }
-            if (dateType == "month") {
-                console.log("dateType is month");
-                $('#startDate').get(0).type = 'month';
-                $('#endDate').get(0).type = 'month';
-            }
-            if (dateType == "year") {
-                console.log("dateType is year");
-                $('#startDate').get(0).type = 'date';
-                $('#endDate').get(0).type = 'date';
-            }
-        });
-        */
-
-
-        $("#FilterChartBtn").click(function () {
-            if ($("#ChartFilterForm")[0].checkValidity()) {
+        
+        $("#FilterChartDateBtn").click(function () {
+            if ($("#ChartDatesFilterForm")[0].checkValidity()) {
                 var typeofChart = $("#ChartType").val();
                 var chartView = document.getElementById('ChartView');
                 var dateTypeSelectValue = $("#DateType").val();
+                //var officeDivisionValue = $("#OfficeDivision").val();
                 $('#dateFilters').show();
+                $('#DivisionFilters').show();
                 chartView.innerHTML = ''
                 $('#ChartView').append('<canvas id="myChart" style="max-width:750px;max-height:400px"></canvas>')
 
                 startDate = $("#startDate").val();
                 endDate = $("#endDate").val();
-                DisplayGraphs(typeofChart, dateTypeSelectValue, startDate, endDate);
+                DisplayGraphs(typeofChart, dateTypeSelectValue, startDate, endDate, null);
             }
             else {
-                $("#ChartFilterForm")[0].reportValidity();
+                $("#ChartDatesFilterForm")[0].reportValidity();
             }
         });
 
-        $("#ResetChartBtn").click(function () {
+        $("#ResetChartDateBtn").click(function () {
             var typeofChart = $("#ChartType").val();
             var chartView = document.getElementById('ChartView');
             var dateTypeSelectValue = $("#DateType").val();
@@ -934,10 +936,63 @@
             $("#startDate").val('');
             $("#endDate").val('');
 
-            DisplayGraphs(typeofChart, dateTypeSelectValue, null, null);
+            DisplayGraphs(typeofChart, dateTypeSelectValue, null, null, null);
         });
 
-        function DisplayGraphs(chartType, dateTypeValue, dateStart, dateEnd)
+        /*
+        $("#FilterChartOfficeBtn").click(function () {
+            if ($("#ChartOfficeFilterForm")[0].checkValidity()) {
+                var typeofChart = $("#ChartType").val();
+                var chartView = document.getElementById('ChartView');
+                var dateTypeSelectValue = $("#DateType").val();
+                var officeDivisionValue = $("#OfficeDivision").val();
+                $('#dateFilters').show();
+                $('#DivisionFilters').show();
+                chartView.innerHTML = ''
+                $('#ChartView').append('<canvas id="myChart" style="max-width:750px;max-height:400px"></canvas>')
+
+                startDate = $("#startDate").val();
+                endDate = $("#endDate").val();
+                DisplayGraphs(typeofChart, dateTypeSelectValue, startDate, endDate, officeDivisionValue);
+            }
+            else {
+                $("#ChartOfficeFilterForm")[0].reportValidity();
+            }
+        });*/
+
+        $("#OfficeDivision").change(function () {
+                var typeofChart = $("#ChartType").val();
+                var chartView = document.getElementById('ChartView');
+                var dateTypeSelectValue = $("#DateType").val();
+                var officeDivisionValue = $("#OfficeDivision").val();
+                $('#dateFilters').show();
+                $('#DivisionFilters').show();
+                chartView.innerHTML = ''
+                $('#ChartView').append('<canvas id="myChart" style="max-width:750px;max-height:400px"></canvas>')
+
+                startDate = $("#startDate").val();
+                endDate = $("#endDate").val();
+                DisplayGraphs(typeofChart, dateTypeSelectValue, startDate, endDate, officeDivisionValue);
+            
+        });
+
+        $("#ResetChartOfficeBtn").click(function () {
+            var typeofChart = $("#ChartType").val();
+            var chartView = document.getElementById('ChartView');
+            var dateTypeSelectValue = $("#DateType").val();
+            $('#dateFilters').show();
+            chartView.innerHTML = ''
+            $('#ChartView').append('<canvas id="myChart" style="max-width:750px;max-height:400px"></canvas>')
+
+            $("#OfficeDivision").val('');
+
+            startDate = $("#startDate").val();
+            endDate = $("#endDate").val();
+
+            DisplayGraphs(typeofChart, dateTypeSelectValue, startDate, endDate, null);
+        });
+
+        function DisplayGraphs(chartType, dateTypeValue, dateStart, dateEnd, officeDivisionID)
         {
             $.ajax({
                 type: "POST",
@@ -945,7 +1000,8 @@
                 data: { 
                     DateType: dateTypeValue,
                     startDate: dateStart,
-                    endDate: dateEnd
+                    endDate: dateEnd,
+                    divisionID: officeDivisionID
                 },
                 //contentType: "application/json; charset=utf-8",
                 dataType: "json",
