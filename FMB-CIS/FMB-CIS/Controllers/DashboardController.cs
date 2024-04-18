@@ -425,6 +425,11 @@ namespace FMB_CIS.Controllers
                                             }).ToList();
                         mymodel.ImportedChainsaws = importedCsaws;
                     }
+
+                    //Add Chart Access Rights Here
+                    var divisionOfficeList = _context.tbl_division.ToList();
+                    mymodel.tbl_Division_List = divisionOfficeList;
+
                     return View(mymodel);
                 }
             }
@@ -443,6 +448,238 @@ namespace FMB_CIS.Controllers
             return View();
         }
 
+        [HttpPost]
+        public List<object> GetChartsData(string DateType, DateTime? startDate, DateTime? endDate, int? divisionID)
+        {
+            List<object> data = new List<object>();
+
+            //Set endDate to end of the day (11:59pm)
+            if (endDate.HasValue)
+            {
+                // Set the time component of endDate to end of the day (23:59:59)
+                endDate = endDate.Value.Date.AddDays(1).AddTicks(-1);
+            }
+
+            //var uniqueSerialNumbersCount = _context.tbl_chainsaw
+            //    .Select(c => c.chainsaw_serial_number)  // Select only the serial numbers
+            //    .Distinct()                             // Get distinct serial numbers
+            //    .Count();
+
+            // Current date and time
+            DateTime currentTime = DateTime.Now;// Convert.ToDateTime("2027-04-12 09:39:34.530");
+
+            // LINQ query to categorize chainsaw serial numbers into New, Renew, and Expired categories
+            var result = from chainsaw in _context.tbl_chainsaw
+                         join application in _context.tbl_application on chainsaw.tbl_application_id equals application.id
+                         join user in _context.tbl_user on application.tbl_user_id equals user.id //for location filters
+                         let isRenew = application.renew_from != null && application.date_of_expiration >= currentTime
+                         let isNew = application.date_of_expiration >= currentTime && !_context.tbl_application.Any(a => a.renew_from == application.id && a.date_of_expiration > currentTime)
+                         let isExpired = application.date_of_expiration < currentTime && !_context.tbl_application.Any(a => a.renew_from == application.id && a.date_of_expiration > currentTime)
+                         let isPendingRenew = application.renew_from != null && application.date_of_registration == null
+                         let isPendingNew = application.date_of_registration == null && !_context.tbl_application.Any(a => a.renew_from == application.id)
+                         let isExpiredButRenewed = application.date_of_expiration < currentTime && _context.tbl_application.Any(a => a.renew_from == application.id)
+                         let isRenewedButSoonToExpire = application.date_of_expiration > currentTime && _context.tbl_application.Any(a => a.renew_from == application.id && a.date_of_registration != null)
+                         select new
+                         {
+                             ChainsawSerialNumber = chainsaw.chainsaw_serial_number,
+                             TblApplicationId = chainsaw.tbl_application_id,
+                             Category = isRenew ? "Renewal" : (isNew ? "New" : (isExpired ? "Expired" : (isPendingRenew ? "Renewal-Pending" : (isPendingNew ? "New-Pending" : (isExpiredButRenewed ? "Expired-But-Renewed" : (isRenewedButSoonToExpire ? "Renewed-But-Soon-To-Expire" : "Unknown")))))),
+                             DateRegistered = application.date_of_registration,
+                             DateExpired = application.date_of_expiration,
+                             regionID = user.tbl_region_id,
+                             provinceID = user.tbl_province_id,
+                             cityID = user.tbl_city_id
+                             //PlotDate = isRenew ? application.date_of_registration : (isNew ? application.date_of_registration : (isExpired ? application.date_of_expiration : (isPendingRenew ? null : (isPendingNew ? null : (isExpiredButRenewed ? null : (isRenewedButSoonToExpire ? application.date_of_registration : null))))))
+                         };
+
+            //Filter by Start Date and End Date
+            if (startDate != null && endDate != null)
+            {
+                result = result.Where(r => (r.Category != "Expired" ? (r.DateRegistered >= startDate && r.DateRegistered <= endDate) : (r.DateExpired >= startDate && r.DateExpired <= endDate)));
+            }
+
+            //Filter by Office
+            if (divisionID != null)
+            {
+                var divisionOffice = _context.tbl_division.Where(d => d.id == divisionID).FirstOrDefault();
+                if (divisionOffice.city_id != 0 && divisionOffice.city_id != null)
+                {
+                    result = result.Where(r => r.cityID == divisionOffice.city_id);
+                }
+                else
+                {
+                    if (divisionOffice.province_id != 0 && divisionOffice.province_id != null)
+                    {
+                        result = result.Where(r => r.provinceID == divisionOffice.province_id);
+                    }
+                    else // (divisionOffice.region_id != 0 && divisionOffice.region_id != null) 
+                    {
+                        result = result.Where(r => r.regionID == divisionOffice.region_id);
+                    }
+                }
+            }
+            /*
+            // Grouping the results by category and creating a dictionary to store chainsaw data for each category
+            var groupedResults = result.GroupBy(r => r.Category)
+                                       .ToDictionary(
+                                           g => g.Key,
+                                           g => g.Select(r => new
+                                           {
+                                               ChainsawSerialNumber = r.ChainsawSerialNumber,
+                                               TblApplicationId = r.TblApplicationId,
+                                               DateRegistered = r.DateRegistered,
+                                               DateExpired = r.DateExpired
+                                           }).OrderBy(r => r.TblApplicationId).ToList()
+                                       );
+
+            // Output chainsaw serial numbers categorized by each category
+            foreach (var category in groupedResults.Keys)
+            {
+                Console.WriteLine($"{category} Category:");
+                foreach (var serialNumber in groupedResults[category])
+                {
+                    Console.WriteLine($"- {serialNumber}");
+                }
+                Console.WriteLine();
+            }
+            */
+                    
+
+
+
+            //Filter Counts
+            //if (startDate != null && endDate != null)
+            //{
+            //    groupedNewlyRegisteredDateCounts = groupedNewlyRegisteredDateCounts.Where(g => g.x >= startDate && g.x <= endDate).ToList();
+            //    groupedRenewedChainsawsDateCounts = groupedRenewedChainsawsDateCounts.Where(g => g.x >= startDate && g.x <= endDate).ToList();
+            //    groupedExpiredDateCounts = groupedExpiredDateCounts.Where(g => g.x >= startDate && g.x <= endDate).ToList();
+
+            //    groupedNewlyRegisteredMonthCounts = groupedNewlyRegisteredMonthCounts.Where(g => g.x >= startDate && g.x <= endDate).ToList();
+            //    groupedRenewedChainsawsMonthCounts = groupedRenewedChainsawsMonthCounts.Where(g => g.x >= startDate && g.x <= endDate).ToList();
+            //    groupedExpiredMonthCounts = groupedExpiredMonthCounts.Where(g => g.x >= startDate && g.x <= endDate).ToList();
+
+            //    groupedNewlyRegisteredYearCounts = groupedNewlyRegisteredYearCounts.Where(g => g.x >= startDate && g.x <= endDate).ToList();
+            //    groupedRenewedChainsawsYearCounts = groupedRenewedChainsawsYearCounts.Where(g => g.x >= startDate && g.x <= endDate).ToList();
+            //    groupedExpiredYearCounts = groupedExpiredYearCounts.Where(g => g.x >= startDate && g.x <= endDate).ToList();
+            //}
+
+            if (DateType == "day")
+            {
+                //Day Counts
+                var groupedNewlyRegisteredDateCounts = result
+                .Where(r => r.Category == "New")
+                .GroupBy(entry => entry.DateRegistered.Value.Date) // Group by date (ignoring time)
+                .Select(group => new
+                {
+                    x = group.Key, //Date
+                    y = group.Count() //Count
+                })
+                .ToList();
+
+                var groupedRenewedChainsawsDateCounts = result
+                .Where(r => r.Category == "Renewal" || r.Category == "Renewed-But-Soon-To-Expire")
+                .GroupBy(entry => entry.DateRegistered.Value.Date) // Group by date (ignoring time)
+                .Select(group => new
+                {
+                    x = group.Key, //Date
+                    y = group.Count() //Count
+                })
+                .ToList();
+
+                var groupedExpiredDateCounts = result
+                .Where(r => r.Category == "Expired")
+                .GroupBy(entry => entry.DateExpired.Value.Date) // Group by date (ignoring time)
+                .Select(group => new
+                {
+                    x = group.Key, //Date
+                    y = group.Count() //Count
+                })
+                .ToList();
+
+                data.Add(groupedNewlyRegisteredDateCounts);
+                data.Add(groupedRenewedChainsawsDateCounts);
+                data.Add(groupedExpiredDateCounts);
+            }
+            else if (DateType == "month")
+            {
+                //Month Counts
+                var groupedNewlyRegisteredMonthCounts = result
+                .Where(r => r.Category == "New" && r.DateRegistered.HasValue) // Filter by category and non-null DateRegistered
+                .GroupBy(entry => new DateTime(entry.DateRegistered.Value.Year, entry.DateRegistered.Value.Month, 1)) // Group by month (ignoring day and time)
+                .Select(group => new
+                {
+                    x = Convert.ToDateTime(group.Key.ToString("MMMM 01 yyyy")), // Format month as "Month Year" (e.g., "April 2024")
+                    y = group.Count() // Count of registrations in this month
+                })
+                .ToList();
+
+
+                var groupedRenewedChainsawsMonthCounts = result
+                .Where(r => r.Category == "Renewal" || r.Category == "Renewed-But-Soon-To-Expire")
+                .Where(r => r.DateRegistered.HasValue) // Filter out entries with null DateRegistered
+                .GroupBy(entry => new DateTime(entry.DateRegistered.Value.Year, entry.DateRegistered.Value.Month, 1)) // Group by month (ignoring day and time)
+                .Select(group => new
+                {
+                    x = Convert.ToDateTime(group.Key.ToString("MMMM 01 yyyy")), // Format month as "Month Year" (e.g., "April 2024")
+                    y = group.Count() // Count of renewals in this month
+                })
+                .ToList();
+
+
+                var groupedExpiredMonthCounts = result
+                .Where(r => r.Category == "Expired")
+                .Where(r => r.DateRegistered.HasValue) // Filter out entries with null DateRegistered
+                .GroupBy(entry => new DateTime(entry.DateExpired.Value.Year, entry.DateExpired.Value.Month, 1)) // Group by month (ignoring day and time)
+                .Select(group => new
+                {
+                    x = Convert.ToDateTime(group.Key.ToString("MMMM 01 yyyy")), // Format month as "Month Year" (e.g., "April 2024")
+                    y = group.Count() // Count of expired registrations in this month
+                })
+                .ToList();
+
+                data.Add(groupedNewlyRegisteredMonthCounts);
+                data.Add(groupedRenewedChainsawsMonthCounts);
+                data.Add(groupedExpiredMonthCounts);
+            }
+            else// if (selectedTimeCategory == "year")
+            {
+                //Year Counts
+                var groupedNewlyRegisteredYearCounts = result
+                .Where(r => r.Category == "New")
+                .GroupBy(entry => entry.DateRegistered.Value.Year) // Group by date (ignoring time)
+                .Select(group => new
+                {
+                    x = Convert.ToDateTime($"January 01 {group.Key}"), //Date
+                    y = group.Count() //Count
+                })
+                .ToList();
+
+                var groupedRenewedChainsawsYearCounts = result
+                .Where(r => r.Category == "Renewal" || r.Category == "Renewed-But-Soon-To-Expire")
+                .GroupBy(entry => entry.DateRegistered.Value.Year) // Group by date (ignoring time)
+                .Select(group => new
+                {
+                    x = Convert.ToDateTime($"January 01 {group.Key}"), //Date
+                    y = group.Count() //Count
+                })
+                .ToList();
+
+                var groupedExpiredYearCounts = result
+                .Where(r => r.Category == "Expired")
+                .GroupBy(entry => entry.DateExpired.Value.Year) // Group by date (ignoring time)
+                .Select(group => new
+                {
+                    x = Convert.ToDateTime($"January 01 {group.Key}"), //Date
+                    y = group.Count() //Count
+                })
+                .ToList();
+
+                data.Add(groupedNewlyRegisteredYearCounts);
+                data.Add(groupedRenewedChainsawsYearCounts);
+                data.Add(groupedExpiredYearCounts);
+            }
+            return data;
+        }
 
     }
 }
