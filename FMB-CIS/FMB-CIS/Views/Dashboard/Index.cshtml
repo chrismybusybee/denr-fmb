@@ -8,97 +8,97 @@
     ViewBag.UserType = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
 }
 
-<div>
-    <div>
+<div class="card">
+    <div class="card-body">
         <div>
             <div>
-                <h3 class="c-dashboard-item-title-main">Charts </h3>
+                <h3 class="card-title">Charts </h3>
             </div>
 
-            <span>
-                <p>
-                    <div class="row">
-                        <div class="col-2 form-group mb-3">
-                            <label class="fw-bolder p-2" for="ChartType">
-                                <span><strong>Chart-Type<span style="color:red">*</span></strong></span>
-                            </label>
-                            @Html.DropDownList("ChartType", new List<SelectListItem>
-                            {
-                            new SelectListItem { Text = "Bar", Value = "bar", Selected=true},
-                            new SelectListItem { Text = "Line", Value = "line"},
-                            new SelectListItem { Text = "Pie", Value = "pie"},
-                            new SelectListItem { Text = "Doughnut", Value = "doughnut"},
-                            }, new { @class = "form-select" })
-                        </div>
 
-                        @* <div class="col-2">
-                        <select id="ChartType" class="form-select" style="width:150px">
-                        <option>bar</option>
-                        <option>line</option>
-                        <option>pie</option>
-                        <option>doughnut</option>
-                        </select>
-                        </div> *@
-
-                        <div class="col-2 form-group mb-3">
-                            <label class="fw-bolder p-2" for="DateType">
-                                <span><strong>Date Type<span style="color:red">*</span></strong></span>
-                            </label>
-                            @Html.DropDownList("DateType", new List<SelectListItem>
-                            {
-                            new SelectListItem { Text = "Per Day", Value = "day"},
-                            new SelectListItem { Text = "Per Month", Value = "month"},
-                            new SelectListItem { Text = "Per Year", Value = "year"},
-                            }, new { @class = "form-select" })
-                        </div>
-
-                    </div>
-                    <div class="col-4">
-                        <input id="showGraph" value="Show Graph" type="button" />
-                    </div>
-                </p>
-
-                <form id="ChartDatesFilterForm">
-                    <div class="row" id="dateFilters" style="display: none;">
-                        <div class="col-3">
-                            <label for="startDate">Start Date</label>
-                            <input type="date" id="startDate" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" required />
-                        </div>
-                        <div class="col-3">
-                            <label for="endDate">End Date</label>
-                            <input type="date" id="endDate" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" required />
-                        </div>
-                        <div class="col-3 justify-content-center align-self-center">
-                            <button type="button" class="btn btn-primary" id="FilterChartDateBtn">Filter Dates</button>
-                            <button type="button" class="btn btn-primary" id="ResetChartDateBtn">Reset Dates</button>
-                        </div>
-                    </div>
-                </form>
-                <form id="ChartOfficeFilterForm">
-                    <div class="row" id="DivisionFilters" style="display: none;">
-                        <div class="col-5">
-                            <label class="fw-bolder p-2" for="OfficeDivisionList">
-                                Choose DENR Office
-                            </label>
-                            @Html.DropDownList("OfficeDivision",
-                            new SelectList(Model.tbl_Division_List, "id", "office_name"),
-                            "-- Select Office --", // Placeholder text
-                            htmlAttributes: new
-                            { @class = "form-select", @required = "required"})
-                        </div>
-
-                        <div class="col-4 justify-content-center align-self-center">
-                            @* <button type="button" class="btn btn-primary" id="FilterChartOfficeBtn">Filter Office</button> *@
-                            <button type="button" class="btn btn-primary" id="ResetChartOfficeBtn">Reset Office</button>
-                        </div>
-                    </div>
-                </form>
-
-                <div id="ChartView">
-                    <canvas id="myChart"></canvas>
+            <div class="row">
+                <div class="form-group col-md-3 align-self-end">
+                    <label class="fw-bolder p-2" for="ChartType">
+                        <span><strong>Chart-Type<span style="color:red">*</span></strong></span>
+                    </label>
+                    @Html.DropDownList("ChartType", new List<SelectListItem>
+                    {
+                    new SelectListItem { Text = "Bar", Value = "bar", Selected=true},
+                    new SelectListItem { Text = "Line", Value = "line"},
+                    new SelectListItem { Text = "Pie", Value = "pie"},
+                    new SelectListItem { Text = "Doughnut", Value = "doughnut"},
+                    }, new { @class = "form-select" })
                 </div>
 
-            </span>
+                <div class="form-group col-md-3 align-self-end">
+                    <label class="fw-bolder p-2" for="DateType">
+                        <span><strong>Date Type<span style="color:red">*</span></strong></span>
+                    </label>
+                    @Html.DropDownList("DateType", new List<SelectListItem>
+                    {
+                    new SelectListItem { Text = "Per Day", Value = "day"},
+                    new SelectListItem { Text = "Per Month", Value = "month"},
+                    new SelectListItem { Text = "Per Year", Value = "year"},
+                    }, new { @class = "form-select" })
+                </div>
+                <div class="form-group col-md-3 align-self-end">
+                    <input id="showGraph" type="button" class="btn btn-primary" value="Show Graph" />
+                </div>
+            </div>
+
+            <div class="mt-2">
+                <form id="ChartDatesFilterForm">
+                    <div class="form-group">
+                        <div class="row" id="dateFilters">
+                            <div class="col-md-3 align-self-end">
+                                <label class="fw-bolder" for="startDate">Start Date</label>
+                                <input type="date" id="startDate" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" required />
+                            </div>
+                            <div class="col-md-3 align-self-end">
+                                <label class="fw-bolder" for="endDate">End Date</label>
+                                <input type="date" id="endDate" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" required />
+                            </div>
+                            <div class="col-md-3 align-self-end">
+                                <button type="button" class="btn btn-primary" id="FilterChartDateBtn">Filter Dates</button>
+                                <button type="button" class="btn btn-primary" id="ResetChartDateBtn">Reset Dates</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="mt-2">
+                <form id="ChartOfficeFilterForm">
+                    <div class="form-group">
+                        <div id="DivisionFilters">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="fw-bolder" for="OfficeDivisionList">
+                                        Choose DENR Office
+                                    </label>
+                                    @Html.DropDownList("OfficeDivision",
+                                             new SelectList(Model.tbl_Division_List, "id", "office_name"),
+                                             "-- Select Office --", // Placeholder text
+                                             htmlAttributes: new
+                                             {
+                                                 @class = "form-select",
+                                                 @required = "required",
+                                             })
+                                </div>
+
+                                <div class="form-group col-md-2 align-self-end">
+                                    @* <button type="button" class="btn btn-primary" id="FilterChartOfficeBtn">Filter Office</button> *@
+                                    <button type="button" class="btn btn-primary" id="ResetChartOfficeBtn">Reset Office</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div id="ChartView">
+                <canvas id="myChart"></canvas>
+            </div>
+
 
         </div>
     </div>
@@ -627,9 +627,9 @@
     @*
     @if (ViewBag.UserType.Contains("CENRO") == true)
     {
-        <div id="card">
-            @Html.Partial("~/Views/Cenro/CenroApplicationList.cshtml")
-        </div>
+    <div id="card">
+    @Html.Partial("~/Views/Cenro/CenroApplicationList.cshtml")
+    </div>
     }
     *@
 
@@ -666,21 +666,21 @@
     <!-- User Services -->
     @* @if (ViewBag.UserType.Contains("Owner") == true)
     {
-        <div id="card">
-            @Html.Partial("~/Views/Owner/OwnerServices.cshtml")
-        </div>
+    <div id="card">
+    @Html.Partial("~/Views/Owner/OwnerServices.cshtml")
+    </div>
     }
     @if (ViewBag.UserType.Contains("Seller") == true)
     {
-        <div id="card">
-            @Html.Partial("~/Views/Seller/SellerServices.cshtml")
-        </div>
+    <div id="card">
+    @Html.Partial("~/Views/Seller/SellerServices.cshtml")
+    </div>
     }
     @if (ViewBag.UserType.Contains("Importer") == true)
     {
-        <div id="card">
-            @Html.Partial("~/Views/Importer/ImporterServices.cshtml")
-        </div>
+    <div id="card">
+    @Html.Partial("~/Views/Importer/ImporterServices.cshtml")
+    </div>
     } *@
 </div>
 
@@ -706,18 +706,18 @@
             }
             Swal.fire({
                 html: `
-                               <div class="m-2">
+                                                                                   <div class="m-2">
 
-                                <p class="mb-0"><span class="h2 me-2">Permit to Import</span></p>
-                                <p class="text-muted pb-2">Requirements</p>
+                                                                                    <p class="mb-0"><span class="h2 me-2">Permit to Import</span></p>
+                                                                                    <p class="text-muted pb-2">Requirements</p>
 
-                                <ul class="list-group">
-                                  ${innerHTML}
+                                                                                    <ul class="list-group">
+                                                                                      ${innerHTML}
 
-                                </ul>
+                                                                                    </ul>
 
-                              </div>
-                                    `,
+                                                                                  </div>
+                                                                                        `,
                 confirmButtonText: "OK",
                 confirmButtonColor: '#14984a'
             });
@@ -752,22 +752,22 @@
 
                 Swal.fire({
                     html: `
-                                                <div class="m-2">
-                                                    <p class="mb-0"><span class="h2 me-2">Permit to Sell</span></p>
-                                                    <p class="text-muted">Requirements</p>
-                                                    <ul class="list-group">
-                                                        ${innerHTMLSell}
-                                                    </ul>
-                                                </div>
-                                                    <hr/>
-                                                <div class="m-2 pt-2">
-                                                    <p class="mb-0"><span class="h2 me-2">Permit to Purchase</span></p>
-                                                    <p class="text-muted">Requirements</p>
-                                                    <ul class="list-group">
-                                                        ${innerHTMLPurchase}
-                                                    </ul>
-                                                </div>
-                                        `,
+                                                                                                    <div class="m-2">
+                                                                                                        <p class="mb-0"><span class="h2 me-2">Permit to Sell</span></p>
+                                                                                                        <p class="text-muted">Requirements</p>
+                                                                                                        <ul class="list-group">
+                                                                                                            ${innerHTMLSell}
+                                                                                                        </ul>
+                                                                                                    </div>
+                                                                                                        <hr/>
+                                                                                                    <div class="m-2 pt-2">
+                                                                                                        <p class="mb-0"><span class="h2 me-2">Permit to Purchase</span></p>
+                                                                                                        <p class="text-muted">Requirements</p>
+                                                                                                        <ul class="list-group">
+                                                                                                            ${innerHTMLPurchase}
+                                                                                                        </ul>
+                                                                                                    </div>
+                                                                                            `,
                     confirmButtonText: "OK",
                     confirmButtonColor: '#14984a',
                     width: '700px'
@@ -828,54 +828,54 @@
 
                 Swal.fire({
                     html: `
-                            <div>
+                                                                                <div>
 
-                                <div class="m-2 pt-2">
-                                    <p class="mb-0"><span class="h2 me-2">Authority to Lease</span></p>
-                                    <p class="text-muted">Requirements</p>
-                                    <ul class="list-group">
-                                        ${innerHTMLLease}
-                                    </ul>
-                                </div>
-                                    <hr/>
-                                <div class="m-2 pt-2">
-                                    <p class="mb-0"><span class="h2 me-2">Authority to Rent</span></p>
-                                    <p class="text-muted">Requirements</p>
-                                    <ul class="list-group">
-                                        ${innerHTMLRent}
-                                    </ul>
-                                </div>
+                                                                                    <div class="m-2 pt-2">
+                                                                                        <p class="mb-0"><span class="h2 me-2">Authority to Lease</span></p>
+                                                                                        <p class="text-muted">Requirements</p>
+                                                                                        <ul class="list-group">
+                                                                                            ${innerHTMLLease}
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                        <hr/>
+                                                                                    <div class="m-2 pt-2">
+                                                                                        <p class="mb-0"><span class="h2 me-2">Authority to Rent</span></p>
+                                                                                        <p class="text-muted">Requirements</p>
+                                                                                        <ul class="list-group">
+                                                                                            ${innerHTMLRent}
+                                                                                        </ul>
+                                                                                    </div>
 
-                                    <hr/>
-                                <div class="m-2 pt-2">
-                                    <p class="mb-0"><span class="h2 me-2">Authority to Lend</span></p>
-                                    <p class="text-muted">Requirements</p>
-                                    <ul class="list-group">
-                                        ${innerHTMLLend}
-                                    </ul>
-                                </div>
-                                    <hr/>
-                                <div class="m-2 pt-2">
-                                    <p class="mb-0"><span class="h2 me-2">Permit to Re-sell/Transfer Ownership</span></p>
-                                    <p class="text-muted">Requirements</p>
-                                    <ul class="list-group">
-                                        ${innerHTMLResell}
-                                    </ul>
-                                </div>
+                                                                                        <hr/>
+                                                                                    <div class="m-2 pt-2">
+                                                                                        <p class="mb-0"><span class="h2 me-2">Authority to Lend</span></p>
+                                                                                        <p class="text-muted">Requirements</p>
+                                                                                        <ul class="list-group">
+                                                                                            ${innerHTMLLend}
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                        <hr/>
+                                                                                    <div class="m-2 pt-2">
+                                                                                        <p class="mb-0"><span class="h2 me-2">Permit to Re-sell/Transfer Ownership</span></p>
+                                                                                        <p class="text-muted">Requirements</p>
+                                                                                        <ul class="list-group">
+                                                                                            ${innerHTMLResell}
+                                                                                        </ul>
+                                                                                    </div>
 
-                                <hr/>
-                                <div class="m-2 pt-4">
-                                    <p class="mb-0"><span class="h2 me-2">Certificate of Registration</span></p>
-                                    <p class="text-muted">Requirements</p>
-                                    <ul class="list-group">
-                                        ${innerHTMLCoR}
-                                    </ul>
-                                </div>
+                                                                                    <hr/>
+                                                                                    <div class="m-2 pt-4">
+                                                                                        <p class="mb-0"><span class="h2 me-2">Certificate of Registration</span></p>
+                                                                                        <p class="text-muted">Requirements</p>
+                                                                                        <ul class="list-group">
+                                                                                            ${innerHTMLCoR}
+                                                                                        </ul>
+                                                                                    </div>
 
-                            </div>
+                                                                                </div>
 
 
-                                                    `,
+                                                                                                        `,
                     confirmButtonText: "OK",
                     confirmButtonColor: '#14984a',
                     width: '700px'
