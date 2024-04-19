@@ -269,8 +269,8 @@
                     {
                     new SelectListItem { Text = "Bar", Value = "bar", Selected=true},
                     new SelectListItem { Text = "Line", Value = "line"},
-                    // new SelectListItem { Text = "Pie", Value = "pie"},
-                    // new SelectListItem { Text = "Doughnut", Value = "doughnut"},
+                    new SelectListItem { Text = "Pie", Value = "pie"},
+                    new SelectListItem { Text = "Doughnut", Value = "doughnut"},
                     }, new { @class = "form-select" })
                     </div>
 
@@ -332,7 +332,7 @@
                                     <div class="form-group col-md-3 align-self-end">
                                         @* <button type="button" class="btn btn-primary" id="FilterChartOfficeBtn">Filter Office</button> *@
                                         <button type="button" class="btn btn-primary" id="ResetChartOfficeBtn">Reset Office Filter</button>
-                                        <button type="button" class="btn btn-primary" id="DownloadChart" onclick="downloadPDF()">Download PDF</button>
+                                        <button type="button" class="btn btn-primary m-lg-1" id="DownloadChart" onclick="downloadPDF()">Download PDF</button>
                                     </div>
                                 </div>
                             </div>
@@ -712,18 +712,18 @@
             }
             Swal.fire({
                 html: `
-                                                                                       <div class="m-2">
+                        <div class="m-2">
 
-                                                                                        <p class="mb-0"><span class="h2 me-2">Permit to Import</span></p>
-                                                                                        <p class="text-muted pb-2">Requirements</p>
+                            <p class="mb-0"><span class="h2 me-2">Permit to Import</span></p>
+                            <p class="text-muted pb-2">Requirements</p>
 
-                                                                                        <ul class="list-group">
-                                                                                          ${innerHTML}
+                            <ul class="list-group">
+                                ${innerHTML}
 
-                                                                                        </ul>
+                            </ul>
 
-                                                                                      </div>
-                                                                                            `,
+                        </div>
+                            `,
                 confirmButtonText: "OK",
                 confirmButtonColor: '#14984a'
             });
@@ -758,22 +758,22 @@
 
                 Swal.fire({
                     html: `
-                                                                                                        <div class="m-2">
-                                                                                                            <p class="mb-0"><span class="h2 me-2">Permit to Sell</span></p>
-                                                                                                            <p class="text-muted">Requirements</p>
-                                                                                                            <ul class="list-group">
-                                                                                                                ${innerHTMLSell}
-                                                                                                            </ul>
-                                                                                                        </div>
-                                                                                                            <hr/>
-                                                                                                        <div class="m-2 pt-2">
-                                                                                                            <p class="mb-0"><span class="h2 me-2">Permit to Purchase</span></p>
-                                                                                                            <p class="text-muted">Requirements</p>
-                                                                                                            <ul class="list-group">
-                                                                                                                ${innerHTMLPurchase}
-                                                                                                            </ul>
-                                                                                                        </div>
-                                                                                                `,
+                            <div class="m-2">
+                                <p class="mb-0"><span class="h2 me-2">Permit to Sell</span></p>
+                                <p class="text-muted">Requirements</p>
+                                <ul class="list-group">
+                                    ${innerHTMLSell}
+                                </ul>
+                            </div>
+                                <hr/>
+                            <div class="m-2 pt-2">
+                                <p class="mb-0"><span class="h2 me-2">Permit to Purchase</span></p>
+                                <p class="text-muted">Requirements</p>
+                                <ul class="list-group">
+                                    ${innerHTMLPurchase}
+                                </ul>
+                            </div>
+                    `,
                     confirmButtonText: "OK",
                     confirmButtonColor: '#14984a',
                     width: '700px'
@@ -834,54 +834,52 @@
 
                 Swal.fire({
                     html: `
-                                                                                    <div>
+                            <div>
 
-                                                                                        <div class="m-2 pt-2">
-                                                                                            <p class="mb-0"><span class="h2 me-2">Authority to Lease</span></p>
-                                                                                            <p class="text-muted">Requirements</p>
-                                                                                            <ul class="list-group">
-                                                                                                ${innerHTMLLease}
-                                                                                            </ul>
-                                                                                        </div>
-                                                                                            <hr/>
-                                                                                        <div class="m-2 pt-2">
-                                                                                            <p class="mb-0"><span class="h2 me-2">Authority to Rent</span></p>
-                                                                                            <p class="text-muted">Requirements</p>
-                                                                                            <ul class="list-group">
-                                                                                                ${innerHTMLRent}
-                                                                                            </ul>
-                                                                                        </div>
+                                <div class="m-2 pt-2">
+                                    <p class="mb-0"><span class="h2 me-2">Authority to Lease</span></p>
+                                    <p class="text-muted">Requirements</p>
+                                    <ul class="list-group">
+                                        ${innerHTMLLease}
+                                    </ul>
+                                </div>
+                                    <hr/>
+                                <div class="m-2 pt-2">
+                                    <p class="mb-0"><span class="h2 me-2">Authority to Rent</span></p>
+                                    <p class="text-muted">Requirements</p>
+                                    <ul class="list-group">
+                                        ${innerHTMLRent}
+                                    </ul>
+                                </div>
 
-                                                                                            <hr/>
-                                                                                        <div class="m-2 pt-2">
-                                                                                            <p class="mb-0"><span class="h2 me-2">Authority to Lend</span></p>
-                                                                                            <p class="text-muted">Requirements</p>
-                                                                                            <ul class="list-group">
-                                                                                                ${innerHTMLLend}
-                                                                                            </ul>
-                                                                                        </div>
-                                                                                            <hr/>
-                                                                                        <div class="m-2 pt-2">
-                                                                                            <p class="mb-0"><span class="h2 me-2">Permit to Re-sell/Transfer Ownership</span></p>
-                                                                                            <p class="text-muted">Requirements</p>
-                                                                                            <ul class="list-group">
-                                                                                                ${innerHTMLResell}
-                                                                                            </ul>
-                                                                                        </div>
+                                    <hr/>
+                                <div class="m-2 pt-2">
+                                    <p class="mb-0"><span class="h2 me-2">Authority to Lend</span></p>
+                                    <p class="text-muted">Requirements</p>
+                                    <ul class="list-group">
+                                        ${innerHTMLLend}
+                                    </ul>
+                                </div>
+                                    <hr/>
+                                <div class="m-2 pt-2">
+                                    <p class="mb-0"><span class="h2 me-2">Permit to Re-sell/Transfer Ownership</span></p>
+                                    <p class="text-muted">Requirements</p>
+                                    <ul class="list-group">
+                                        ${innerHTMLResell}
+                                    </ul>
+                                </div>
 
-                                                                                        <hr/>
-                                                                                        <div class="m-2 pt-4">
-                                                                                            <p class="mb-0"><span class="h2 me-2">Certificate of Registration</span></p>
-                                                                                            <p class="text-muted">Requirements</p>
-                                                                                            <ul class="list-group">
-                                                                                                ${innerHTMLCoR}
-                                                                                            </ul>
-                                                                                        </div>
+                                <hr/>
+                                <div class="m-2 pt-4">
+                                    <p class="mb-0"><span class="h2 me-2">Certificate of Registration</span></p>
+                                    <p class="text-muted">Requirements</p>
+                                    <ul class="list-group">
+                                        ${innerHTMLCoR}
+                                    </ul>
+                                </div>
 
-                                                                                    </div>
-
-
-                                                                                                            `,
+                            </div>
+                                    `,
                     confirmButtonText: "OK",
                     confirmButtonColor: '#14984a',
                     width: '700px'
@@ -1049,80 +1047,123 @@
                     return letter.toUpperCase();
                 });
 
-
-
                 const bgColor = {
                     id: 'customCanvasBackgroundColor',
-                    beforeDraw: (chart, args, options) => {
-                        const { ctx } = chart;
+                    beforeDraw: (chart, steps, options) => {
+                        const { ctx, width, height } = chart;
                         ctx.save();
                         ctx.globalCompositeOperation = 'destination-over';
-                        ctx.fillStyle = 'white';
-                        ctx.fillRect(0, 0, chart.width, chart.height);
+                        ctx.fillStyle = options.backgroundColor;
+                        ctx.fillRect(0, 0, width, height);
                         ctx.restore();
                     }
                 };
-
-                var myChart = new Chart("myChart", {
-                    plugins: [bgColor],
-                    type: chartType,
-                    data: {
-                        //labels: _chartLabels,
-                        datasets: [{
-                            label: 'New Registered',
-                            backgroundColor: "green",
-                            data: newData,
-                            stack: 'Stack 0',
-                        }, {
-                            label: 'Renewed',
-                            backgroundColor: "yellow",
-                            data: renewData,
-                            stack: 'Stack 0',
-                        }, {
-                            label: 'Expired',
-                            backgroundColor: "red",
-                            data: expiredData,
-                            stack: 'Stack 0' // For multiple stacking
-                        }],
-                    },
-                    options: {
-                        plugins: 
-                        {
-                            customCanvasBackgroundColor: {
-                                color: 'lightGreen',
-                            },
-                            title: {
-                                display: true,
-                                text: 'Total Chainsaws Registered Per ' + UpperCaseDateType + ((officeID != '') ? (' - ' + officeName) : '')
-                            },
-                            
+                console.log(chartType)
+                if (
+                    chartType == 'bar' || chartType == 'line'
+                    @* || chartType == 'pie' || chartType == 'doughnut' *@
+                    ) 
+                
+                {
+                    var myChart = new Chart("myChart", {
+                        plugins: [bgColor],
+                        type: chartType,
+                        data: {
+                            //labels: _chartLabels,
+                            datasets: [{
+                                label: 'New Registered',
+                                backgroundColor: "green",
+                                data: newData,
+                                stack: 'Stack 0',
+                            }, {
+                                label: 'Renewed',
+                                backgroundColor: "yellow",
+                                data: renewData,
+                                stack: 'Stack 0',
+                            }, {
+                                label: 'Expired',
+                                backgroundColor: "red",
+                                data: expiredData,
+                                stack: 'Stack 0' // For multiple stacking
+                            }],
                         },
-                        interaction: {
-                            intersect: false,
-                        },
-                        scales: {
-                            x: {
-                                stacked: true,
-                                type: 'time',
-                                time: {
-                                    unit: dateTypeValue
+                        options: {
+                            plugins:
+                            {
+                                customCanvasBackgroundColor: {
+                                    backgroundColor: 'white',
                                 },
-                                min: (dateTypeValue == "day") ? dateStart : '',
-                                max: (dateTypeValue == "day") ? dateEnd : ''
+                                title: {
+                                    display: true,
+                                    text: 'Total Chainsaws Registered Per ' + UpperCaseDateType + ((officeID != '') ? (' - ' + officeName) : '')
+                                },
+
                             },
-                            y: {
-                                stacked: true,
-                                ticks: {
-                                    precision: 0
+                            interaction: {
+                                intersect: false,
+                            },
+                            scales: {
+                                x: {
+                                    stacked: true,
+                                    type: 'time',
+                                    time: {
+                                        unit: dateTypeValue
+                                    },
+                                    min: (dateTypeValue == "day") ? dateStart : '',
+                                    max: (dateTypeValue == "day") ? dateEnd : ''
+                                },
+                                y: {
+                                    stacked: true,
+                                    ticks: {
+                                        precision: 0
+                                    }
+                                }
+                            },
+                            responsive: true,
+
+                        }
+
+                    });
+                } else {
+
+                    const ctx = document.getElementById('myChart');
+
+                    new Chart(ctx, {
+                        type: chartType,
+                        data: {
+                            datasets: [{
+                                label: 'New Registered',
+                                backgroundColor: "green",
+                                data: newData,
+                                stack: 'Stack 0',
+                            }, {
+                                label: 'Renewed',
+                                backgroundColor: "yellow",
+                                data: renewData,
+                                stack: 'Stack 0',
+                            }, {
+                                label: 'Expired',
+                                backgroundColor: "red",
+                                data: expiredData,
+                                stack: 'Stack 0' // For multiple stacking
+                            }],
+           @*                  datasets: [{
+                                label: '# of Votes',
+                                data: [12, 19, 3, 5, 2, 3],
+                                borderWidth: 1
+                            }] *@
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
                                 }
                             }
-                        },
-                        responsive: true,
-                        
-                    }
-                        
-                });
-            }
+                        }
+                    });
+                }
+
+            } //OnsuccessResult
 
             function OnError(data) {
 
@@ -1138,12 +1179,12 @@
 
         // create image
         const canvasImage = canvas.toDataURL('image/jpeg', 1.0);
-    @*         console.log(canvasImage); *@
-            // image must go to PDF
+       // image must go to PDF
 
-            let pdf = new jsPDF('landscape');
+        let pdf = new jsPDF('landscape');
         pdf.setFontSize(20);
         pdf.addImage(canvasImage, 'JPEG', 15, 15, 280, 150);
+        pdf.text(15, 15, "Chainsaw Information System");
         pdf.save('chainsawChart.pdf');
     }
 
