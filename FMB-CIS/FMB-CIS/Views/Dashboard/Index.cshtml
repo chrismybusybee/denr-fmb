@@ -8,101 +8,6 @@
     ViewBag.UserType = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
 }
 
-<div class="card">
-    <div class="card-body">
-        <div>
-            <div>
-                <h3 class="card-title">Charts </h3>
-            </div>
-
-
-            <div class="row">
-                <div class="form-group col-md-3 align-self-end">
-                    <label class="fw-bolder p-2" for="ChartType">
-                        <span><strong>Chart-Type<span style="color:red">*</span></strong></span>
-                    </label>
-                    @Html.DropDownList("ChartType", new List<SelectListItem>
-                    {
-                    new SelectListItem { Text = "Bar", Value = "bar", Selected=true},
-                    new SelectListItem { Text = "Line", Value = "line"},
-                    new SelectListItem { Text = "Pie", Value = "pie"},
-                    new SelectListItem { Text = "Doughnut", Value = "doughnut"},
-                    }, new { @class = "form-select" })
-                </div>
-
-                <div class="form-group col-md-3 align-self-end">
-                    <label class="fw-bolder p-2" for="DateType">
-                        <span><strong>Date Type<span style="color:red">*</span></strong></span>
-                    </label>
-                    @Html.DropDownList("DateType", new List<SelectListItem>
-                    {
-                    new SelectListItem { Text = "Per Day", Value = "day"},
-                    new SelectListItem { Text = "Per Month", Value = "month"},
-                    new SelectListItem { Text = "Per Year", Value = "year"},
-                    }, new { @class = "form-select" })
-                </div>
-                <div class="form-group col-md-3 align-self-end">
-                    <input id="showGraph" type="button" class="btn btn-primary" value="Show Graph" />
-                </div>
-            </div>
-
-            <div class="mt-2">
-                <form id="ChartDatesFilterForm">
-                    <div class="form-group">
-                        <div class="row" id="dateFilters">
-                            <div class="col-md-3 align-self-end">
-                                <label class="fw-bolder" for="startDate">Start Date</label>
-                                <input type="date" id="startDate" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" required />
-                            </div>
-                            <div class="col-md-3 align-self-end">
-                                <label class="fw-bolder" for="endDate">End Date</label>
-                                <input type="date" id="endDate" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" required />
-                            </div>
-                            <div class="col-md-3 align-self-end">
-                                <button type="button" class="btn btn-primary" id="FilterChartDateBtn">Filter Dates</button>
-                                <button type="button" class="btn btn-primary" id="ResetChartDateBtn">Reset Dates</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="mt-2">
-                <form id="ChartOfficeFilterForm">
-                    <div class="form-group">
-                        <div id="DivisionFilters">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label class="fw-bolder" for="OfficeDivisionList">
-                                        Choose DENR Office
-                                    </label>
-                                    @Html.DropDownList("OfficeDivision",
-                                             new SelectList(Model.tbl_Division_List, "id", "office_name"),
-                                             "-- Select Office --", // Placeholder text
-                                             htmlAttributes: new
-                                             {
-                                                 @class = "form-select",
-                                                 @required = "required",
-                                             })
-                                </div>
-
-                                <div class="form-group col-md-2 align-self-end">
-                                    @* <button type="button" class="btn btn-primary" id="FilterChartOfficeBtn">Filter Office</button> *@
-                                    <button type="button" class="btn btn-primary" id="ResetChartOfficeBtn">Reset Office</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-            <div id="ChartView">
-                <canvas id="myChart"></canvas>
-            </div>
-
-
-        </div>
-    </div>
-</div>
 
 <div class="c-dashboard-container">
     @if (AccessRightsUtilities.IsAccessRights(ViewBag.AccessRights, "allow_page_manage_users"))
@@ -344,7 +249,106 @@
     </div> *@
 </div>
 
+<!--CHARTS-->
+@if (AccessRightsUtilities.IsAccessRights(((ClaimsIdentity)User.Identity).FindFirst("accessRights").Value, "allow_dashboard_report_graphs"))
+{
+    <div class="p-4">
+        <div class="card">
+            <div class="card-body">
+                <div>
+                    <h3 class="card-title">Charts</h3>
+                </div>
 
+
+                <div class="row">
+                    <div class="form-group col-md-3 align-self-end">
+                        <label class="fw-bold p-2" for="ChartType">
+                            Chart-Type<span style="color:red">*</span>
+                        </label>
+                        @Html.DropDownList("ChartType", new List<SelectListItem>
+                    {
+                    new SelectListItem { Text = "Bar", Value = "bar", Selected=true},
+                    new SelectListItem { Text = "Line", Value = "line"},
+                    // new SelectListItem { Text = "Pie", Value = "pie"},
+                    // new SelectListItem { Text = "Doughnut", Value = "doughnut"},
+                    }, new { @class = "form-select" })
+                    </div>
+
+                    <div class="form-group col-md-3 align-self-end">
+                        <label class="fw-bolder p-2" for="DateType">
+                            Date Type<span style="color:red">*</span>
+                        </label>
+                        @Html.DropDownList("DateType", new List<SelectListItem>
+                    {
+                    new SelectListItem { Text = "Per Day", Value = "day"},
+                    new SelectListItem { Text = "Per Month", Value = "month"},
+                    new SelectListItem { Text = "Per Year", Value = "year"},
+                    }, new { @class = "form-select" })
+                    </div>
+                    <div class="form-group col-md-3 align-self-end">
+                        <input id="showGraph" type="button" class="btn btn-primary" value="Show Graph" />
+                    </div>
+                </div>
+
+                <div class="mt-2">
+                    <form id="ChartDatesFilterForm">
+                        <div class="form-group">
+                            <div class="row" id="dateFilters">
+                                <div class="col-md-3 align-self-end">
+                                    <label class="fw-bolder" for="startDate">Start Date</label>
+                                    <input type="date" id="startDate" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" required />
+                                </div>
+                                <div class="col-md-3 align-self-end">
+                                    <label class="fw-bolder" for="endDate">End Date</label>
+                                    <input type="date" id="endDate" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" required />
+                                </div>
+                                <div class="col-md-6 align-self-end">
+                                    <button type="button" class="btn btn-primary m-1" id="FilterChartDateBtn">Apply Date Filter</button>
+                                    <button type="button" class="btn btn-primary m-1" id="ResetChartDateBtn">Reset Date Filter</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="mt-2">
+                    <form id="ChartOfficeFilterForm">
+                        <div class="form-group">
+                            <div id="DivisionFilters">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="fw-bolder" for="OfficeDivisionList">
+                                            Choose DENR Office
+                                        </label>
+                                        @Html.DropDownList("OfficeDivision",
+                                    new SelectList(Model.tbl_Division_List, "id", "office_name"),
+                                    "-- Select Office --", // Placeholder text
+                                    htmlAttributes: new
+                                    {
+                                    @class = "form-select",
+                                    @required = "required",
+                                    })
+                                    </div>
+
+                                    <div class="form-group col-md-3 align-self-end">
+                                        @* <button type="button" class="btn btn-primary" id="FilterChartOfficeBtn">Filter Office</button> *@
+                                        <button type="button" class="btn btn-primary" id="ResetChartOfficeBtn">Reset Office Filter</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="ChartView">
+                    <canvas id="myChart"></canvas>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+}
+<!--CHARTS END-->
 
 @*Cards region*@
 <div id="card-container" class="border-0 bg-none">
@@ -887,8 +891,22 @@
             });
     }
 
+    //Automatically load the graph if it is existing
+    jQuery(window).on("load", function () {        
+        // Check if element with ID 'showGraph' exists
+        if ($("#showGraph").length > 0) {
+            //console.log("Page loaded");
+            setTimeout(function () {
+                $("#showGraph").click();
+                //console.log("Click event passed");
+            }, 1)
+        }
+            
+    });
+
 
     $(function () {
+
 
         $("#showGraph").click(function () {
 
@@ -897,8 +915,8 @@
             var dateTypeSelectValue = $("#DateType").val();
             $('#dateFilters').show();
             $('#DivisionFilters').show();
-            chartView.innerHTML = ''
-            $('#ChartView').append('<canvas id="myChart" style="max-width:750px;max-height:400px"></canvas>')
+            chartView.innerHTML = '';
+            ResetChartDisplay();
 
             DisplayGraphs(typeofChart, dateTypeSelectValue, null, null, null);
 
@@ -913,8 +931,8 @@
                 //var officeDivisionValue = $("#OfficeDivision").val();
                 $('#dateFilters').show();
                 $('#DivisionFilters').show();
-                chartView.innerHTML = ''
-                $('#ChartView').append('<canvas id="myChart" style="max-width:750px;max-height:400px"></canvas>')
+                chartView.innerHTML = '';
+                ResetChartDisplay();
 
                 startDate = $("#startDate").val();
                 endDate = $("#endDate").val();
@@ -930,8 +948,8 @@
             var chartView = document.getElementById('ChartView');
             var dateTypeSelectValue = $("#DateType").val();
             $('#dateFilters').show();
-            chartView.innerHTML = ''
-            $('#ChartView').append('<canvas id="myChart" style="max-width:750px;max-height:400px"></canvas>')
+            chartView.innerHTML = '';
+            ResetChartDisplay();
 
             $("#startDate").val('');
             $("#endDate").val('');
@@ -948,8 +966,8 @@
                 var officeDivisionValue = $("#OfficeDivision").val();
                 $('#dateFilters').show();
                 $('#DivisionFilters').show();
-                chartView.innerHTML = ''
-                $('#ChartView').append('<canvas id="myChart" style="max-width:750px;max-height:400px"></canvas>')
+                chartView.innerHTML = '';
+                ResetChartDisplay();
 
                 startDate = $("#startDate").val();
                 endDate = $("#endDate").val();
@@ -967,8 +985,8 @@
             var officeDivisionValue = $("#OfficeDivision").val();
             $('#dateFilters').show();
             $('#DivisionFilters').show();
-            chartView.innerHTML = ''
-            $('#ChartView').append('<canvas id="myChart" style="max-width:750px;max-height:400px"></canvas>')
+            chartView.innerHTML = '';
+            ResetChartDisplay();
 
             startDate = $("#startDate").val();
             endDate = $("#endDate").val();
@@ -981,8 +999,8 @@
             var chartView = document.getElementById('ChartView');
             var dateTypeSelectValue = $("#DateType").val();
             $('#dateFilters').show();
-            chartView.innerHTML = ''
-            $('#ChartView').append('<canvas id="myChart" style="max-width:750px;max-height:400px"></canvas>')
+            chartView.innerHTML = '';
+            ResetChartDisplay();
 
             $("#OfficeDivision").val('');
 
@@ -991,6 +1009,11 @@
 
             DisplayGraphs(typeofChart, dateTypeSelectValue, startDate, endDate, null);
         });
+
+        function ResetChartDisplay() { 
+            //$('#ChartView').append('<canvas id="myChart" style="max-width:750px;max-height:400px"></canvas>')
+            $('#ChartView').append('<canvas id="myChart" style="max-width:60vw;max-height:60vh"></canvas>')
+        }
 
         function DisplayGraphs(chartType, dateTypeValue, dateStart, dateEnd, officeDivisionID) {
             $.ajax({
@@ -1015,7 +1038,8 @@
                 var newData = data[0];
                 var renewData = data[1];
                 var expiredData = data[2];
-
+                var officeID = $("#OfficeDivision").val();
+                var officeName = $("#OfficeDivision option:selected").text();
                 var UpperCaseDateType = dateTypeValue.toLowerCase().replace(/\b[a-z]/g, function (letter) {
                     return letter.toUpperCase();
                 });
@@ -1044,7 +1068,7 @@
                         plugins: {
                             title: {
                                 display: true,
-                                text: 'Total Chainsaws Registered per ' + UpperCaseDateType
+                                text: 'Total Chainsaws Registered Per ' + UpperCaseDateType + ((officeID != '') ? (' - ' + officeName) : '')
                             },
                         },
                         interaction: {
@@ -1056,10 +1080,15 @@
                                 type: 'time',
                                 time: {
                                     unit: dateTypeValue
-                                }
+                                },
+                                min: (dateTypeValue == "day") ? dateStart : '',
+                                max: (dateTypeValue == "day") ? dateEnd : ''
                             },
                             y: {
-                                stacked: true
+                                stacked: true,
+                                ticks: {
+                                    precision: 0
+                                }
                             }
                         },
                         responsive: true

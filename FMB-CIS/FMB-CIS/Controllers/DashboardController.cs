@@ -637,9 +637,9 @@ namespace FMB_CIS.Controllers
                 })
                 .ToList();
 
-                data.Add(groupedNewlyRegisteredMonthCounts);
-                data.Add(groupedRenewedChainsawsMonthCounts);
-                data.Add(groupedExpiredMonthCounts);
+                data.Add(groupedNewlyRegisteredMonthCounts.OrderBy(g => g.x).ToList());
+                data.Add(groupedRenewedChainsawsMonthCounts.OrderBy(g => g.x).ToList());
+                data.Add(groupedExpiredMonthCounts.OrderBy(g => g.x).ToList());
             }
             else// if (selectedTimeCategory == "year")
             {
