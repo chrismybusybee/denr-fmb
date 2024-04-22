@@ -916,6 +916,9 @@
             var dateTypeSelectValue = $("#DateType").val();
             $('#dateFilters').show();
             $('#DivisionFilters').show();
+            $("#startDate").val('');
+            $("#endDate").val('');
+            $("#OfficeDivision").val('');
             chartView.innerHTML = '';
             ResetChartDisplay();
 
@@ -1052,9 +1055,9 @@
                     return letter.toUpperCase();
                 });
 
-                var newDataCount = newData.map(i => i.y).reduce((a, b) => a + b);
-                var renewDataCount = renewData.map(i => i.y).reduce((a, b) => a + b);
-                var expiredDataCount = expiredData.map(i => i.y).reduce((a, b) => a + b);
+                var newDataCount = newData.length > 0 ? newData.map(i => i.y).reduce((a, b) => a + b) : 0;
+                var renewDataCount = renewData.length > 0 ? renewData.map(i => i.y).reduce((a, b) => a + b) : 0;
+                var expiredDataCount = expiredData.length > 0 ? expiredData.map(i => i.y).reduce((a, b) => a + b) : 0;
 
                 console.log(newDataCount, renewDataCount, expiredDataCount)
                 const bgColor = {
