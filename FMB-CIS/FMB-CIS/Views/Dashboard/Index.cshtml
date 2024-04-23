@@ -266,15 +266,15 @@
                             Chart-Type<span style="color:red">*</span>
                         </label>
                         @Html.DropDownList("ChartType", new List<SelectListItem>
-                    {
-                    new SelectListItem { Text = "Bar", Value = "bar", Selected=true},
-                    new SelectListItem { Text = "Line", Value = "line"},
-                    new SelectListItem { Text = "Pie", Value = "pie"},
-                    new SelectListItem { Text = "Doughnut", Value = "doughnut"},
-                    }, new { @class = "form-select" })
+                        {
+                        new SelectListItem { Text = "Bar", Value = "bar", Selected=true},
+                        new SelectListItem { Text = "Line", Value = "line"},
+                        new SelectListItem { Text = "Pie", Value = "pie"},
+                        new SelectListItem { Text = "Doughnut", Value = "doughnut"},
+                        }, new { @class = "form-select" })
                     </div>
 
-                    <div class="form-group col-md-3 align-self-end">
+                    <div class="form-group col-md-3 align-self-end" id="DateTypeFilterDiv">
                         <label class="fw-bolder p-2" for="DateType">
                             Date Type<span style="color:red">*</span>
                         </label>
@@ -286,7 +286,8 @@
                     }, new { @class = "form-select" })
                     </div>
                     <div class="form-group col-md-5 align-self-end">
-                        <input id="showGraph" type="button" class="btn btn-primary" value="Show Graph" />
+                        <input id="showGraph" type="button" class="btn btn-primary m-1" value="Show Graph" />
+                        <button type="button" class="btn btn-primary m-1" id="DownloadChart" onclick="downloadPDF()">Download PDF</button>
                     </div>
                 </div>
 
@@ -310,7 +311,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="mt-2">
+                <div class="my-2">
                     <form id="ChartOfficeFilterForm">
                         <div class="form-group">
                             <div id="DivisionFilters">
@@ -330,9 +331,8 @@
                                     </div>
 
                                     <div class="form-group col-md-6 align-self-end">
-                                        @* <button type="button" class="btn btn-primary" id="FilterChartOfficeBtn">Filter Office</button> *@
+                                        <button type="button" class="btn btn-primary m-1" id="FilterChartOfficeBtn">Apply Office Filter</button>
                                         <button type="button" class="btn btn-primary m-1" id="ResetChartOfficeBtn">Reset Office Filter</button>
-                                        <button type="button" class="btn btn-primary m-1" id="DownloadChart" onclick="downloadPDF()">Download PDF</button>
                                     </div>
                                 </div>
                             </div>
@@ -921,6 +921,7 @@
             $("#OfficeDivision").val('');
             chartView.innerHTML = '';
             ResetChartDisplay();
+            $('#showGraph').val('Reset All Filters');
 
             DisplayGraphs(typeofChart, dateTypeSelectValue, null, null, null);
 
@@ -961,7 +962,18 @@
             DisplayGraphs(typeofChart, dateTypeSelectValue, null, null, null);
         });
 
-        /*
+        $("#ChartType").change(function () {
+            var cType = $("#ChartType").val();
+            if (cType == "pie" || cType == "doughnut") {
+                $("#DateTypeFilterDiv").hide();
+                $("#DateType").val('day')
+            }
+            else {
+                $("#DateTypeFilterDiv").show();
+            }
+        });
+
+        
         $("#FilterChartOfficeBtn").click(function () {
             if ($("#ChartOfficeFilterForm")[0].checkValidity()) {
                 var typeofChart = $("#ChartType").val();
@@ -980,8 +992,9 @@
             else {
                 $("#ChartOfficeFilterForm")[0].reportValidity();
             }
-        });*/
+        });
 
+        /*
         $("#OfficeDivision").change(function () {
             var typeofChart = $("#ChartType").val();
             var chartView = document.getElementById('ChartView');
@@ -996,7 +1009,7 @@
             endDate = $("#endDate").val();
             DisplayGraphs(typeofChart, dateTypeSelectValue, startDate, endDate, officeDivisionValue);
 
-        });
+        });*/
 
         $("#ResetChartOfficeBtn").click(function () {
             var typeofChart = $("#ChartType").val();
@@ -1103,7 +1116,7 @@
                                 },
                                 title: {
                                     display: true,
-                                    text: 'Total Chainsaws Registered Per ' + UpperCaseDateType + ((officeID != '') ? (' - ' + officeName) : '')
+                                    text: 'Total Chainsaws Registered Per ' + UpperCaseDateType + ((officeID != '') ? (' - ' + officeName) : '') + ((dateStart != '' && dateStart != null) ? (' \(' + dateStart + ' to ' + dateEnd + '\)') : '')
                                 },
 
                             },
@@ -1136,7 +1149,7 @@
                         type: chartType,
                         data:
                         {
-                            labels: ["New", "Renew", "Expired"],
+                            labels: ["New Registered", "Renewed", "Expired"],
                             datasets: [{
                                 backgroundColor: ["green", "yellow", "red"],
                                 data: [newDataCount, renewDataCount, expiredDataCount]
@@ -1151,7 +1164,7 @@
                                 },
                                 title: {
                                     display: true,
-                                    text: 'Total Chainsaws Registered Per ' + UpperCaseDateType + ((officeID != '') ? (' - ' + officeName) : '')
+                                    text: 'Total Chainsaws Registered' + ((officeID != '') ? (' - ' + officeName) : '') + ((dateStart != '' && dateStart != null) ? (' \(' + dateStart + ' to ' + dateEnd + '\)') : '')
                                 },
 
                             },
@@ -1164,9 +1177,7 @@
                                     type: 'time',
                                     time: {
                                         unit: dateTypeValue
-                                    },
-                                    min: (dateTypeValue == "day") ? dateStart : '',
-                                    max: (dateTypeValue == "day") ? dateEnd : ''
+                                    }
                                 },
                                 y: {
                                     stacked: true,
