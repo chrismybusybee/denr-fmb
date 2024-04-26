@@ -709,7 +709,7 @@ namespace FMB_CIS.Controllers
                                       //join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
                                       join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                       join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
-                                     join pS in _context.tbl_permit_status on a.status equals pS.id
+                                     //join pS in _context.tbl_permit_status on a.status equals pS.id
                                     //  join pSS in _context.tbl_permit_statuses on a.status equals pSS.id
                                     //  join wf in _context.tbl_permit_workflow on pT.id.ToString() equals wf.permit_type_code
                                      join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }                                       
@@ -735,7 +735,7 @@ namespace FMB_CIS.Controllers
                                           address = usr.street_address,
                                           application_type = appt.name,
                                           permit_type = pT.name,
-                                          permit_status = pS.status,
+                                          permit_status = wfs.name,//pS.status,
                                           permit_statuses = wfs.name,
                                           status = Convert.ToInt32(a.status),
                                           //user_type = usrtyps.name,
@@ -1380,7 +1380,7 @@ namespace FMB_CIS.Controllers
                                      join usr in _context.tbl_user on a.tbl_user_id equals usr.id
                                      join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
                                      join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
-                                     join pS in _context.tbl_permit_status on a.status equals pS.id
+                                     //join pS in _context.tbl_permit_status on a.status equals pS.id
                                     //  join pSS in _context.tbl_permit_statuses on a.status equals pSS.id
                                     //  join wf in _context.tbl_permit_workflow on pT.id.ToString() equals wf.permit_type_code
                                      join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code } 
