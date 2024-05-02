@@ -72,7 +72,7 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-end gap-2">
-                    @if (Model.applicantViewModels.permit_status.Contains("Approved") == false && Model.applicantViewModels.permit_status.Contains("Payment") == false && Model.applicantViewModels.renew_from == null)
+                    @if ((Model.applicantViewModels.permit_status.Contains("APPLICATION SUBMISSION") == true || Model.applicantViewModels.permit_status.Contains("Payment") == true || Model.applicantViewModels.permit_status.Contains("Reject") == true || Model.applicantViewModels.permit_status.Contains("Rejected") == true) && Model.applicantViewModels.renew_from == null)
                     {
                         @* <input id="saveBtn" class="btn btn-primary w-105" name="SubmitButton" type="submit" value="Save" /> *@
                         <button id="btnSave" class="btn btn-primary w-105" type="button">Submit</button>
@@ -1205,7 +1205,8 @@
                 </div>
             } *@
 
-            @if (Model.applicantViewModels.permit_status == "For Inspector Approval" || Model.applicantViewModels.permit_status == "Rejected (Inspector)" || Model.applicantViewModels.permit_status == "Rejected (CENRO)") @* (@Model.applicantViewModels.permit_status != "Approved") *@
+            @* @if (Model.applicantViewModels.permit_status == "For Inspector Approval" || Model.applicantViewModels.permit_status == "Rejected (Inspector)" || Model.applicantViewModels.permit_status == "Rejected (CENRO)") @* (@Model.applicantViewModels.permit_status != "Approved") *@
+            @if (((Model.applicantViewModels.permit_status.Contains("APPLICATION SUBMISSION") == true || Model.applicantViewModels.permit_status.Contains("Payment") == true || Model.applicantViewModels.permit_status.Contains("Reject") == true || Model.applicantViewModels.permit_status.Contains("Rejected") == true) && Model.applicantViewModels.renew_from == null) || (Model.applicantViewModels.permit_status_id == 1 && Model.applicantViewModels.renew_from != null))
             {
                 <hr />
                 <div class="row d-flex justify-content-center m-0">
@@ -1523,7 +1524,8 @@
                     </div>
                 </div>
             }
-            @if (Model.applicantViewModels.permit_status == "For Inspector Approval" || Model.applicantViewModels.permit_status == "Rejected (Inspector)" || Model.applicantViewModels.permit_status == "Rejected (CENRO)") @* (@Model.applicantViewModels.permit_status != "Approved") *@
+            @* @if (Model.applicantViewModels.permit_status == "For Inspector Approval" || Model.applicantViewModels.permit_status == "Rejected (Inspector)" || Model.applicantViewModels.permit_status == "Rejected (CENRO)") @* (@Model.applicantViewModels.permit_status != "Approved") *@
+            @* @if (((Model.applicantViewModels.permit_status.Contains("APPLICATION SUBMISSION") == true || Model.applicantViewModels.permit_status.Contains("Payment") == true || Model.applicantViewModels.permit_status.Contains("Reject") == true || Model.applicantViewModels.permit_status.Contains("Rejected") == true) && Model.applicantViewModels.renew_from == null) || (Model.applicantViewModels.permit_status_id == 1 && Model.applicantViewModels.renew_from != null))
             {
                 <hr/>
                 <div class="row d-flex justify-content-center m-0">
@@ -1549,7 +1551,7 @@
                         </div>
                     </div>
                 </div>
-            } 
+            }  *@
         
         <hr />
         <form id="commentSection" asp-action="CommentSection">
