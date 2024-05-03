@@ -274,7 +274,7 @@
             // formFiles.items.clearData();
             //formFiles.value = null;
             const removeFileButton = document.querySelector('.fileinput-remove-button');
-            $("input").val("");
+            $("input").not("#actionName").val("");
             removeFileButton.click();
             $("#uploadPOPModal").modal("hide");
         });
@@ -416,7 +416,7 @@
         if (event.target === document.getElementById('uploadPOPModal')) {
             const removeFileButton = document.querySelector('.fileinput-remove-button');
             removeFileButton.click();
-            $("input").val("");
+            $("input").not("#actionName").val("");
             //$("#uploadPOPModal").modal("show");
             //hideModal();
         }
