@@ -474,7 +474,7 @@ namespace FMB_CIS.Controllers
                          join user in _context.tbl_user on application.tbl_user_id equals user.id //for location filters
                          let isRenew = application.renew_from != null && application.date_of_expiration >= currentTime
                          let isNew = application.date_of_expiration >= currentTime && !_context.tbl_application.Any(a => a.renew_from == application.id && a.date_of_expiration > currentTime)
-                         let isExpired = application.date_of_expiration < currentTime && !_context.tbl_application.Any(a => a.renew_from == application.id && a.date_of_expiration > currentTime)
+                         let isExpired = application.date_of_expiration < currentTime && !_context.tbl_application.Any(a => a.renew_from == application.id && a.date_of_expiration != null)
                          let isPendingRenew = application.renew_from != null && application.date_of_registration == null
                          let isPendingNew = application.date_of_registration == null && !_context.tbl_application.Any(a => a.renew_from == application.id)
                          let isExpiredButRenewed = application.date_of_expiration < currentTime && _context.tbl_application.Any(a => a.renew_from == application.id)
