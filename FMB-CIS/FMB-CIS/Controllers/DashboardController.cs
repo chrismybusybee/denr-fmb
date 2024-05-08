@@ -322,7 +322,42 @@ namespace FMB_CIS.Controllers
                     {
 
                         //OWNED CHAINSAWS
-                        var ChainsawList = _context.tbl_chainsaw.ToList();
+                        //var ChainsawList = _context.tbl_chainsaw.ToList();
+
+                        var ChainsawList = (from cs in _context.tbl_chainsaw
+                                                    join b in _context.tbl_brands on cs.brand_id equals b.id into brandGroup
+                                                    from brandTBL in brandGroup.DefaultIfEmpty()
+                                                    select new tbl_chainsaw
+                                                    {
+                                                        Id = cs.Id,
+                                                        user_id = cs.user_id,
+                                                        tbl_application_id = cs.tbl_application_id,
+                                                        brand_id = brandTBL.id,
+                                                        Brand = brandTBL.name,
+                                                        Model = cs.Model,
+                                                        Engine = cs.Engine,
+                                                        Power = cs.Power,
+                                                        remarks = cs.remarks,
+                                                        status = cs.status,
+                                                        watt = cs.watt,
+                                                        hp = cs.hp,
+                                                        watt_dec = cs.watt_dec,
+                                                        hp_dec = cs.hp_dec,
+                                                        gb = cs.gb,
+                                                        supplier = cs.supplier,
+                                                        date_purchase = cs.date_purchase,
+                                                        is_active = cs.is_active,
+                                                        date_created = cs.date_created,
+                                                        date_modified = cs.date_modified,
+                                                        created_by = cs.created_by,
+                                                        modified_by = cs.modified_by,
+                                                        chainsaw_serial_number = cs.chainsaw_serial_number,
+                                                        chainsaw_date_of_registration = cs.chainsaw_date_of_registration,
+                                                        chainsaw_date_of_expiration = cs.chainsaw_date_of_expiration,
+                                                        specification = cs.specification,
+                                                        purpose = cs.purpose,
+                                                    }).ToList();
+
                         var ChainsawOwnedList = ChainsawList.Where(m => m.user_id == userID /*&& m.status == "Seller"*/).ToList();
                         mymodel.tbl_Chainsaws = ChainsawOwnedList;
                     }
