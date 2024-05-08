@@ -577,7 +577,7 @@ namespace FMB_CIS.Controllers
                 .ToList();
 
                 var groupedRenewedChainsawsDateCounts = result
-                .Where(r => r.Category == "Renewal" || r.Category == "Renewed-But-Soon-To-Expire")
+                .Where(r => r.Category == "Renewal")
                 .GroupBy(entry => entry.DateRegistered.Value.Date) // Group by date (ignoring time)
                 .Select(group => new
                 {
@@ -615,7 +615,7 @@ namespace FMB_CIS.Controllers
 
 
                 var groupedRenewedChainsawsMonthCounts = result
-                .Where(r => r.Category == "Renewal" || r.Category == "Renewed-But-Soon-To-Expire")
+                .Where(r => r.Category == "Renewal")
                 .Where(r => r.DateRegistered.HasValue) // Filter out entries with null DateRegistered
                 .GroupBy(entry => new DateTime(entry.DateRegistered.Value.Year, entry.DateRegistered.Value.Month, 1)) // Group by month (ignoring day and time)
                 .Select(group => new
@@ -655,7 +655,7 @@ namespace FMB_CIS.Controllers
                 .ToList();
 
                 var groupedRenewedChainsawsYearCounts = result
-                .Where(r => r.Category == "Renewal" || r.Category == "Renewed-But-Soon-To-Expire")
+                .Where(r => r.Category == "Renewal")
                 .GroupBy(entry => entry.DateRegistered.Value.Year) // Group by date (ignoring time)
                 .Select(group => new
                 {

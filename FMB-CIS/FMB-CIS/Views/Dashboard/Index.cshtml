@@ -1238,7 +1238,7 @@
                                     max: (dateTypeValue == "day") ? dateEnd : ''
                                 },
                                 y: {
-                                    stacked: true,
+                                    stacked: (chartType == "line") ? false : true,
                                     ticks: {
                                         precision: 0
                                     }
