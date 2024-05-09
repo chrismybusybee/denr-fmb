@@ -256,49 +256,11 @@
         <div class="card">
             <div class="card-body">
                 <div>
-                    <h3 class="card-title text-center">Charts</h3>
+                    <h3 class="card-title text-center">Registered Chainsaws</h3>
                 </div>
 
                 <div class="container">
                     <div class="row d-flex align-items-stretch">
-                        <div class="col-md-4 my-2">
-                            <div class="card h-100">
-                                <div class="card-body">
-                                    <h5 class="card-title text-center">Chart Type</h5>
-
-                                    <div id="ChartTypeDropdownGroup" class="my-1">
-                                        <label class="fw-bold" for="ChartType">
-                                            Chart Type<span style="color:red">*</span>
-                                        </label>
-                                        @Html.DropDownList("ChartType", new List<SelectListItem>
-                                    {
-                                    new SelectListItem { Text = "Bar", Value = "bar", Selected=true},
-                                    new SelectListItem { Text = "Line", Value = "line"},
-                                    new SelectListItem { Text = "Pie", Value = "pie"},
-                                    new SelectListItem { Text = "Doughnut", Value = "doughnut"},
-                                    }, new { @class = "form-select" })
-                                    </div>
-
-                                    <div id="DateTypeFilterDiv" class="my-1">
-                                        <label class="fw-bolder p-2">
-                                            Date Type<span style="color:red">*</span>
-                                        </label>
-                                        @Html.DropDownList("DateType", new List<SelectListItem>
-                                        {
-                                        new SelectListItem { Text = "Per Day", Value = "day"},
-                                        new SelectListItem { Text = "Per Month", Value = "month"},
-                                        new SelectListItem { Text = "Per Year", Value = "year"},
-                                        }, new { @class = "form-select" })
-                                    </div>
-
-                                    <div id="ChartTypeButtonGroup" class="text-center mt-4">
-                                        <input id="showGraph" type="button" class="btn btn-primary m-1" value="Show Graph" />
-                                        <button type="button" class="btn btn-primary m-1" id="DownloadChart" onclick="downloadPDF()">Download PDF</button>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
                         <div class="col-md-4 my-2">
                             <div class="card h-100">
                                 <div class="card-body">
@@ -347,6 +309,44 @@
                                             <button type="button" class="btn btn-primary m-1" id="ResetChartOfficeBtn">Reset Office Filter</button>
                                         </div>
                                     </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 my-2">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title text-center">Chart Type</h5>
+
+                                    <div id="ChartTypeDropdownGroup" class="my-1">
+                                        <label class="fw-bold" for="ChartType">
+                                            Chart Type<span style="color:red">*</span>
+                                        </label>
+                                        @Html.DropDownList("ChartType", new List<SelectListItem>
+                                    {
+                                    new SelectListItem { Text = "Bar", Value = "bar", Selected=true},
+                                    new SelectListItem { Text = "Line", Value = "line"},
+                                    new SelectListItem { Text = "Pie", Value = "pie"},
+                                    new SelectListItem { Text = "Doughnut", Value = "doughnut"},
+                                    }, new { @class = "form-select" })
+                                    </div>
+
+                                    <div id="DateTypeFilterDiv" class="my-1">
+                                        <label class="fw-bolder p-2">
+                                            Date Type<span style="color:red">*</span>
+                                        </label>
+                                        @Html.DropDownList("DateType", new List<SelectListItem>
+                                    {
+                                    new SelectListItem { Text = "Per Day", Value = "day"},
+                                    new SelectListItem { Text = "Per Month", Value = "month"},
+                                    new SelectListItem { Text = "Per Year", Value = "year"},
+                                    }, new { @class = "form-select" })
+                                    </div>
+
+                                    <div id="ChartTypeButtonGroup" class="text-center mt-4">
+                                        <input id="showGraph" type="button" class="btn btn-primary m-1" value="Show Graph" />
+                                        <button type="button" class="btn btn-primary m-1" id="DownloadChart" onclick="downloadPDF()">Download PDF</button>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -1220,7 +1220,7 @@
                                 },
                                 title: {
                                     display: true,
-                                    text: 'Total Chainsaws Registered Per ' + UpperCaseDateType + ((officeID != '') ? (' - ' + officeName) : '') + ((dateStart != '' && dateStart != null) ? (' \(' + dateStart + ' to ' + dateEnd + '\)') : '')
+                                    text: 'Legend'//'Total Chainsaws Registered Per ' + UpperCaseDateType + ((officeID != '') ? (' - ' + officeName) : '') + ((dateStart != '' && dateStart != null) ? (' \(' + dateStart + ' to ' + dateEnd + '\)') : '')
                                 },
 
                             },
@@ -1268,7 +1268,7 @@
                                 },
                                 title: {
                                     display: true,
-                                    text: 'Total Chainsaws Registered' + ((officeID != '') ? (' - ' + officeName) : '') + ((dateStart != '' && dateStart != null) ? (' \(' + dateStart + ' to ' + dateEnd + '\)') : '')
+                                    text: 'Legend'//'Total Chainsaws Registered' + ((officeID != '') ? (' - ' + officeName) : '') + ((dateStart != '' && dateStart != null) ? (' \(' + dateStart + ' to ' + dateEnd + '\)') : '')
                                 },
 
                             },
