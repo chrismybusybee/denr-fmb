@@ -1282,7 +1282,7 @@
                                     display: true,
                                     align: 'bottom',
                                     font: {
-                                        size: 16,
+                                        size: 18,
                                     },
                                     formatter: ((context, args) => {
                                         const index = args.dataIndex;
@@ -1291,28 +1291,6 @@
                                         const labelText = label.concat(" ", countValues);
                                         return labelText;
                                     }),
-
-                                    name: {
-                                        color: (ctx) => ctx.dataset.backgroundColor,
-                                        font: {
-                                            size: 16,
-                                        },
-                                        backgroundColor: '#404040',
-                                        borderRadius: 4,
-                                        offset: 0,
-                                        padding: 2,
-                                        formatter: (val, ctx) => `#${ctx.dataIndex + 1}`,
-                                        align: 'top',
-                                    },
-                                    value: {
-                                        color: '#404040',
-                                        backgroundColor: '#fff',
-                                        borderColor: '#fff',
-                                        borderWidth: 2,
-                                        borderRadius: 4,
-                                        padding: 0,
-                                        align: 'bottom',
-                                    },
 
                                 },
                                 customCanvasBackgroundColor: {
