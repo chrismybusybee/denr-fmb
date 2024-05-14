@@ -578,7 +578,7 @@ namespace FMB_CIS.Controllers
                 Console.WriteLine();
             }
             */
-                    
+
 
 
 
@@ -597,6 +597,19 @@ namespace FMB_CIS.Controllers
             //    groupedRenewedChainsawsYearCounts = groupedRenewedChainsawsYearCounts.Where(g => g.x >= startDate && g.x <= endDate).ToList();
             //    groupedExpiredYearCounts = groupedExpiredYearCounts.Where(g => g.x >= startDate && g.x <= endDate).ToList();
             //}
+
+            // Get minimum and maximum date on plot
+            var resultNewAndRenewDates = result.Where(r => r.Category == "New" || r.Category == "Renewal").Select(r => r.DateRegistered).ToList();
+            var resultExpiredDates = result.Where(r => r.Category == "Expired").Select(r => r.DateExpired).ToList();
+            var allResultDates = resultNewAndRenewDates.Concat(resultExpiredDates).ToList();
+            var minimumDate = allResultDates.Min().Value.ToString("MMMM dd, yyyy");
+            var maximumDate = allResultDates.Max().Value.ToString("MMMM dd, yyyy");
+
+            if (startDate != null  && endDate != null)
+            {
+                minimumDate = startDate.Value.ToString("MMMM dd, yyyy");
+                maximumDate = endDate.Value.ToString("MMMM dd, yyyy");
+            }
 
             if (DateType == "day")
             {
@@ -631,9 +644,16 @@ namespace FMB_CIS.Controllers
                 })
                 .ToList();
 
+                //// overall counts
+                //var totalNewlyRegisteredCounts = result.Count(c => c.Category == "New");
+                //var totalRenewedChainsawsCounts = result.Count(c => c.Category == "Renewal");
+                //var totalExpiredDateCounts = result.Count(c => c.Category == "Expired");
+
                 data.Add(groupedNewlyRegisteredDateCounts);
                 data.Add(groupedRenewedChainsawsDateCounts);
                 data.Add(groupedExpiredDateCounts);
+                data.Add(minimumDate);
+                data.Add(maximumDate);
             }
             else if (DateType == "month")
             {
@@ -675,6 +695,8 @@ namespace FMB_CIS.Controllers
                 data.Add(groupedNewlyRegisteredMonthCounts.OrderBy(g => g.x).ToList());
                 data.Add(groupedRenewedChainsawsMonthCounts.OrderBy(g => g.x).ToList());
                 data.Add(groupedExpiredMonthCounts.OrderBy(g => g.x).ToList());
+                data.Add(minimumDate);
+                data.Add(maximumDate);
             }
             else// if (selectedTimeCategory == "year")
             {
@@ -712,6 +734,8 @@ namespace FMB_CIS.Controllers
                 data.Add(groupedNewlyRegisteredYearCounts);
                 data.Add(groupedRenewedChainsawsYearCounts);
                 data.Add(groupedExpiredYearCounts);
+                data.Add(minimumDate);
+                data.Add(maximumDate);
             }
             return data;
         }

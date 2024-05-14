@@ -1001,6 +1001,11 @@
 
     });
 
+    var newCount = '';
+    var renewCount = '';
+    var expiredCount = '';
+    var minimumPlotDate = '';
+    var maximumPlotDate = '';
 
     $(function () {
 
@@ -1179,6 +1184,13 @@
                 var renewDataCount = renewData.length > 0 ? renewData.map(i => i.y).reduce((a, b) => a + b) : 0;
                 var expiredDataCount = expiredData.length > 0 ? expiredData.map(i => i.y).reduce((a, b) => a + b) : 0;
 
+                minimumPlotDate = String(data[3]);
+                maximumPlotDate = String(data[4]);
+                                
+                newCount = String(newDataCount);
+                renewCount = String(renewDataCount);
+                expiredCount = String(expiredDataCount);
+
                 console.log(newDataCount, renewDataCount, expiredDataCount)
                 const bgColor = {
                     id: 'customCanvasBackgroundColor',
@@ -1224,6 +1236,12 @@
                                 title: {
                                     display: true,
                                     text: 'Legend'//'Total Chainsaws Registered Per ' + UpperCaseDateType + ((officeID != '') ? (' - ' + officeName) : '') + ((dateStart != '' && dateStart != null) ? (' \(' + dateStart + ' to ' + dateEnd + '\)') : '')
+                                },
+                                subtitle: {
+                                    display: true,
+                                    text: ((dateStart != '' && dateStart != null) ? ('Displaying results from ' + dateStart + ' to ' + dateEnd) : ''),
+                                    align: 'start',
+                                    position: 'top'
                                 },
 
                             },
@@ -1300,6 +1318,12 @@
                                     display: true,
                                     text: 'Legend'//'Total Chainsaws Registered' + ((officeID != '') ? (' - ' + officeName) : '') + ((dateStart != '' && dateStart != null) ? (' \(' + dateStart + ' to ' + dateEnd + '\)') : '')
                                 },
+                                subtitle: {
+                                    display: true,
+                                    text: ((dateStart != '' && dateStart != null) ? ('Displaying results from ' + dateStart + ' to ' + dateEnd) : ''),
+                                    align: 'start',
+                                    position: 'top'
+                                },
 
                             },
                             interaction: {
@@ -1338,6 +1362,52 @@
 
 
     });
+
+    function downloadPDF() {
+        const canvas = document.getElementById('myChart');
+
+
+        var officeID = $("#OfficeDivision").val();
+        var officeName = $("#OfficeDivision option:selected").text();
+
+        //var newCount = $("#totalNewCount").val();
+        //var renewCount = $("#totalRenewCount").val();
+        //var expiredCount = $("#totalExpiredCount").val();
+
+        const tableCount = [
+            ['Total Number of Chainsaws', ''],
+            ['New Registered', newCount ],
+            ['Renewed', renewCount],
+            ['Expired', expiredCount]
+        ]; //test data
+
+        // create image
+        const canvasImage = canvas.toDataURL('image/jpeg', 1.0);
+        // image must go to PDF
+
+        let pdf = new jsPDF('landscape');
+        pdf.setFontSize(14);
+        pdf.addImage(canvasImage, 'JPEG', 15, 15, 270, 140);
+        pdf.text(15, 15, "Chainsaw Information System" + ((officeID != '') ? (' - ' + officeName) : ''));
+
+        var datesCoveredText = "Dates Covered: " + minimumPlotDate + " to " + maximumPlotDate;
+        pdf.text(140, 165, datesCoveredText);
+
+        let y = 165;
+
+        tableCount.forEach(row => {
+            let x = 15;
+            row.forEach(cell => {
+                pdf.text(x, y, cell);
+                x += 50;
+            });
+            y += 8;
+        });
+
+        pdf.save('chainsawChart.pdf');
+    }
+
+    /*
     function downloadPDF() {
         const canvas = document.getElementById('myChart');
 
@@ -1350,6 +1420,6 @@
         pdf.addImage(canvasImage, 'JPEG', 15, 15, 280, 150);
         pdf.text(15, 15, "Chainsaw Information System");
         pdf.save('chainsawChart.pdf');
-    }
+    }*/
 
 </script>
