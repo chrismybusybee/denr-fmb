@@ -602,8 +602,8 @@ namespace FMB_CIS.Controllers
             var resultNewAndRenewDates = result.Where(r => r.Category == "New" || r.Category == "Renewal").Select(r => r.DateRegistered).ToList();
             var resultExpiredDates = result.Where(r => r.Category == "Expired").Select(r => r.DateExpired).ToList();
             var allResultDates = resultNewAndRenewDates.Concat(resultExpiredDates).ToList();
-            var minimumDate = allResultDates.Min().Value.ToString("MMMM dd, yyyy");
-            var maximumDate = allResultDates.Max().Value.ToString("MMMM dd, yyyy");
+            var minimumDate = allResultDates.Count() != 0 ? allResultDates.Min().Value.ToString("MMMM dd, yyyy") : null;
+            var maximumDate = allResultDates.Count() != 0 ? allResultDates.Max().Value.ToString("MMMM dd, yyyy") : null;
 
             if (startDate != null  && endDate != null)
             {
