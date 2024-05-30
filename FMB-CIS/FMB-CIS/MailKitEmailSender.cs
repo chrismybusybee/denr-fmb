@@ -75,30 +75,39 @@ public class MailKitEmailSender : IEmailSender
         catch (Exception ex)
         {
             // Code to handle the exception
-            Console.WriteLine($"An error occurred while sending the email: {ex.Message}");
+            Console.WriteLine($"An error occurred while sending the email 1: {ex.Message}");
             // You can log the exception, show a user-friendly message, or take appropriate actions
-        }
-        finally
-        {
-            // create message
-            var email = new MimeMessage();
-            email.Sender = MailboxAddress.Parse(_credentials2.Sender_EMail);
-            if (!string.IsNullOrEmpty(_credentials2.Sender_Name))
-                email.Sender.Name = _credentials2.Sender_Name;
-            email.From.Add(email.Sender);
-            email.To.Add(MailboxAddress.Parse(to));
-            email.Subject = subject;
-            email.Body = new TextPart(TextFormat.Html) { Text = message };
 
-            // send email
-            using (var smtp = new SmtpClient())
+            try
             {
-                smtp.Connect(_credentials2.Host_Address, _credentials2.Host_Port, Options.Host_SecureSocketOptions);
-                smtp.Authenticate(_credentials2.Host_Username, _credentials2.Host_Password);
-                smtp.Send(email);
-                smtp.Disconnect(true);
+                // create message
+                var email = new MimeMessage();
+                email.Sender = MailboxAddress.Parse(_credentials2.Sender_EMail);
+                if (!string.IsNullOrEmpty(_credentials2.Sender_Name))
+                    email.Sender.Name = _credentials2.Sender_Name;
+                email.From.Add(email.Sender);
+                email.To.Add(MailboxAddress.Parse(to));
+                email.Subject = subject;
+                email.Body = new TextPart(TextFormat.Html) { Text = message };
+
+                // send email
+                using (var smtp = new SmtpClient())
+                {
+                    smtp.Connect(_credentials2.Host_Address, _credentials2.Host_Port, Options.Host_SecureSocketOptions);
+                    smtp.Authenticate(_credentials2.Host_Username, _credentials2.Host_Password);
+                    smtp.Send(email);
+                    smtp.Disconnect(true);
+                }
+            }
+            catch
+            {
+                Console.WriteLine($"An error occurred while sending the email 2: {ex.Message}");
             }
         }
+        //finally
+        //{
+            
+        //}
 
         return Task.FromResult(true);
     }
