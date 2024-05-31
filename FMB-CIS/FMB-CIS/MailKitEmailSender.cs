@@ -75,7 +75,7 @@ public class MailKitEmailSender : IEmailSender
         catch (Exception ex)
         {
             // Code to handle the exception
-            Console.WriteLine($"An error occurred while sending the email 1: {ex.Message}");
+            Console.WriteLine($"An error occurred while sending the email 1:\n {ex.Message}");
             // You can log the exception, show a user-friendly message, or take appropriate actions
 
             try
@@ -101,7 +101,7 @@ public class MailKitEmailSender : IEmailSender
             }
             catch
             {
-                Console.WriteLine($"An error occurred while sending the email 2: {ex.Message}");
+                Console.WriteLine($"An error occurred while sending the email 2:\n {ex.Message}");
             }
         }
         //finally
