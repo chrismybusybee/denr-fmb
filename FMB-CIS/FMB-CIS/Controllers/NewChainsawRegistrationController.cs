@@ -20,6 +20,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Web.Helpers;
 using Microsoft.Extensions.Hosting;
 using Services.Utilities;
+using FMB_CIS.Services;
+using FMB_CIS.Utilities;
+using FMB_CIS.Interface;
 
 namespace FMB_CIS.Controllers
 {
@@ -30,6 +33,8 @@ namespace FMB_CIS.Controllers
         private readonly IConfiguration _configuration;
         private IEmailSender EmailSender { get; set; }
         private IWebHostEnvironment EnvironmentHosting;
+        private readonly INotificationAbstract _notificationService;
+        private readonly IWorkflowAbstract _workflowService;
 
         public void LogUserActivity(string entity, string userAction, string remarks, int userId = 0, string source = "Web", DateTime? apkDateTime = null)
         {
@@ -69,12 +74,19 @@ namespace FMB_CIS.Controllers
             {
             }
         }
-        public NewChainsawRegistrationController(IConfiguration configuration, LocalContext context, IEmailSender emailSender, IWebHostEnvironment _environment)
+        public NewChainsawRegistrationController(IConfiguration configuration, 
+                                                LocalContext context, 
+                                                IEmailSender emailSender, 
+                                                IWebHostEnvironment _environment,
+                                                INotificationAbstract notificationService,
+                                                IWorkflowAbstract workflowService)
         {
             this._configuration = configuration;
             _context = context;
             EmailSender = emailSender;
             EnvironmentHosting = _environment;
+            _notificationService = notificationService;
+            _workflowService = workflowService;
         }
         [RequiresAccess(allowedAccessRights = "allow_page_create_chainsaw_registration,allow_page_create_other_permits")]
         public IActionResult Index()
@@ -317,6 +329,18 @@ namespace FMB_CIS.Controllers
                 var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
                 string permitName = _context.tbl_permit_type.Where(p => p.id == model.tbl_Application.tbl_permit_type_id).Select(p => p.name).FirstOrDefault();
                 LogUserActivity("ChainsawRegistration", "Submitted Application", $"{permitName} Application Submitted by {userEmail}. {referenceNo}", apkDateTime: DateTime.Now);
+
+                var approvers = _workflowService.GetNextStepApprover(model.tbl_Application.tbl_permit_type_id.Value, model.tbl_Application.status.Value);
+
+                foreach (var approver in approvers.Result)
+                {
+
+                    var notificationModel = ModelCreation.PermitNotificationForApproverModel(permitName + " for approval",
+                                                                                            "Please see the reference no: " + application.ReferenceNo,
+                                                                                            approver,
+                                                                                            userID);
+                    var result = _notificationService.InsertRecord(notificationModel, userID);
+                }
 
                 return RedirectToAction("RegistrationPermits", "Application");
             }

@@ -22,6 +22,9 @@ using Mapster;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNet.Identity;
 using Services.Utilities;
+using FMB_CIS.Services;
+using FMB_CIS.Utilities;
+using FMB_CIS.Interface;
 
 namespace FMB_CIS.Controllers
 {
@@ -37,7 +40,8 @@ namespace FMB_CIS.Controllers
         private readonly IConfiguration _configuration;
         private IEmailSender EmailSender { get; set; }
         private IWebHostEnvironment WebHostEnvironment;
-
+        private readonly INotificationAbstract _notificationService;
+        private readonly IWorkflowAbstract _workflowService;
 
         public void LogUserActivity(string entity, string userAction, string remarks, int userId = 0, string source = "Web", DateTime? apkDateTime = null)
         {
@@ -78,12 +82,19 @@ namespace FMB_CIS.Controllers
             }
         }
 
-        public ChainsawSellerController(IConfiguration configuration, LocalContext context, IEmailSender emailSender, IWebHostEnvironment _environment)
+        public ChainsawSellerController(IConfiguration configuration, 
+                                        LocalContext context, 
+                                        IEmailSender emailSender, 
+                                        IWebHostEnvironment _environment,
+                                        INotificationAbstract notificationService,
+                                        IWorkflowAbstract workflowService)
         {
             this._configuration = configuration;
             _context = context;
             EmailSender = emailSender;
             this.WebHostEnvironment = _environment;
+            _notificationService = notificationService;
+            _workflowService = workflowService;
         }
 
         // Chainsaw Permit to Sell
@@ -292,6 +303,20 @@ namespace FMB_CIS.Controllers
                 var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
                 string permitName = _context.tbl_permit_type.Where(p => p.id == model.tbl_Application.tbl_permit_type_id).Select(p => p.name).FirstOrDefault();
                 LogUserActivity("Seller", "Submitted Application", $"{permitName} Application Submitted by {userEmail}. {referenceNo}", apkDateTime: DateTime.Now);
+
+                var permitTypeId = application.tbl_permit_type_id.Value;
+                var permitTypeName = _context.tbl_permit_type.Where(x => x.id == permitTypeId).Select(x => x.name).FirstOrDefault();
+                var approvers = _workflowService.GetNextStepApprover(1, 1);
+
+                foreach (var approver in approvers.Result)
+                {
+
+                    var notificationModel = ModelCreation.PermitNotificationForApproverModel(permitTypeName + " for approval",
+                                                                                            "Please see the reference no: " + referenceNo,
+                                                                                            approver,
+                                                                                            userID);
+                    _notificationService.Insert(notificationModel, userID);
+                }
 
                 return RedirectToAction("SellPermits", "Application");
             }
@@ -510,6 +535,18 @@ namespace FMB_CIS.Controllers
                 var userEmail = ((ClaimsIdentity)User.Identity).FindFirst("EmailAdd").Value;
                 string permitName = _context.tbl_permit_type.Where(p => p.id == model.tbl_Application.tbl_permit_type_id).Select(p => p.name).FirstOrDefault();
                 LogUserActivity("Seller", "Submitted Application", $"{permitName} Application Submitted by {userEmail}. {referenceNo}", apkDateTime: DateTime.Now);
+
+                var approvers = _workflowService.GetNextStepApprover(model.tbl_Application.tbl_permit_type_id.Value, model.tbl_Application.status.Value);
+
+                foreach (var approver in approvers.Result)
+                {
+
+                    var notificationModel = ModelCreation.PermitNotificationForApproverModel(permitName + " for approval",
+                                                                                            "Please see the reference no: " + application.ReferenceNo,
+                                                                                            approver,
+                                                                                            userID);
+                    var result = _notificationService.InsertRecord(notificationModel, userID);
+                }
 
                 return RedirectToAction("PurchasePermits", "Application");
             }
@@ -1286,6 +1323,26 @@ namespace FMB_CIS.Controllers
                         var statsName = _context.tbl_permit_workflow_step.Where(pwfs => pwfs.permit_type_code == permitTypeID.ToString() && pwfs.workflow_step_code == stats.ToString()).Select(pwfs => pwfs.name).FirstOrDefault();
                         var referenceNo = viewMod.applicantViewModels.ReferenceNo;
                         LogUserActivity("SellerApproval", "Application Status Moved", $"{referenceNo} status moved to {statsName}.", apkDateTime: DateTime.Now);
+
+                        var approvers = _workflowService.GetNextStepApprover(permitTypeID, stats);
+                        var permitTypeName = _context.tbl_permit_type.Where(x => x.id == permitTypeID).Select(x => x.name).FirstOrDefault();
+
+                        foreach (var approver in approvers.Result)
+                        {
+
+                            var notificationModel = ModelCreation.PermitNotificationForApproverModel(permitTypeName + " for approval",
+                                                                                                    "Please see the reference no: " + referenceNo,
+                                                                                                    approver,
+                                                                                                    loggedUserID);
+                            _notificationService.Insert(notificationModel, loggedUserID);
+                        }
+
+                        var applicantNotificationModel = ModelCreation.PermitNotificationForApplicantModel(
+                                                                                    "The status of your application is: " + statsName,
+                                                                                    "Please see the reference no: " + referenceNo,
+                                                                                    usid,
+                                                                                    loggedUserID);
+                        _notificationService.Insert(applicantNotificationModel, loggedUserID);
                     }
                     //Email
                     if (emailTemplateID != 0) //If emailTemplateID is 0, no email should be sent.
