@@ -1,4 +1,5 @@
 ﻿using FMB_CIS.Data;
+using FMB_CIS.Interface;
 using FMB_CIS.Models;
 using FMB_CIS.Models.ManageProfile;
 using Microsoft.AspNetCore.Authorization;
@@ -18,6 +19,7 @@ namespace FMB_CIS.Controllers
         private readonly IConfiguration _configuration;
         private IEmailSender EmailSender { get; set; }
         private IWebHostEnvironment EnvironmentWebHost;
+        private readonly IAbstractEntry<tbl_notifications> _notificationService;
 
         public void LogUserActivity(string entity, string userAction, string remarks, int userId = 0, string source = "Web", DateTime? apkDateTime = null)
         {
@@ -57,14 +59,27 @@ namespace FMB_CIS.Controllers
             {
             }
         }
-        public void NotifyUser(string notifTitle, string notifContent, int userId = 0)
+        public ProfileManagementController(IConfiguration configuration, 
+                                           LocalContext context, 
+                                           IEmailSender emailSender, 
+                                           IWebHostEnvironment _environment,
+                                           IAbstractEntry<tbl_notifications> notificationService)
+        {
+            this._configuration = configuration;
+            _context = context;
+            EmailSender = emailSender;
+            EnvironmentWebHost = _environment;
+            _notificationService = notificationService;
+        }
+        public async void NotifyUser(string notifTitle, string notifContent, int userId = 0)
         {
             try
             {
 
                 int uid = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+
                 //Inserting record to UserActivityLog database
-                tbl_notifications notifs = new tbl_notifications()
+                tbl_notifications model = new tbl_notifications()
                 {
                     source_user_id = null,
                     tbl_notification_type_id = 1,
@@ -80,21 +95,17 @@ namespace FMB_CIS.Controllers
                     date_modified = DateTime.Now,
                     is_about_permit = false, //Notifications about permit are not created here
                 };
-                _context.Add(notifs);
-                _context.SaveChanges();
+                //_context.Add(notifs);
+                //_context.SaveChanges();
+
+                await _notificationService.InsertRecord(model, uid);
 
             }
             catch (Exception ex)
             {
             }
         }
-        public ProfileManagementController(IConfiguration configuration, LocalContext context, IEmailSender emailSender, IWebHostEnvironment _environment)
-        {
-            this._configuration = configuration;
-            _context = context;
-            EmailSender = emailSender;
-            EnvironmentWebHost = _environment;
-        }
+
         [RequiresAccess(allowedAccessRights = "allow_page_manage_profile")]
         public IActionResult Index()
         {

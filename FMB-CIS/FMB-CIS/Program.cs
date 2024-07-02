@@ -10,6 +10,8 @@ using FMB_CIS;
 using reCAPTCHA.AspNetCore;
 using FluentValidation.AspNetCore;
 using System.Reflection;
+using FMB_CIS.Interface;
+using FMB_CIS.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +53,12 @@ builder.Services.Configure<GoogleCaptchaConfig>(builder.Configuration.GetSection
 builder.Services.Configure<SMTPCredentials>(builder.Configuration.GetSection("SMTPCredentials")); //Added 2024-Feb-28
 builder.Services.Configure<SMTPCredentialsSecondary>(builder.Configuration.GetSection("SMTPCredentialsSecondary")); //Added 2024-Feb-28
 builder.Services.AddTransient(typeof(GoogleCaptchaService));
+
+// Services
+builder.Services.AddScoped<INotificationAbstract, NotificationService>();
+builder.Services.AddScoped<IWorkflowAbstract, WorkflowService>();
+builder.Services.AddScoped<IAbstractEntry<tbl_permit_workflow_step>, WorkflowStepService>();
+builder.Services.AddScoped<IAbstractEntry<tbl_permit_workflow_next_step>, WorkflowNextStepService>();
 
 builder.Services.AddSession(options =>
 {
