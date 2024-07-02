@@ -1347,6 +1347,7 @@ namespace FMB_CIS.Controllers
         {
             int applicationID = Convert.ToInt32(model.tbl_Application.id);
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int loggedUserRegionId = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("regionID").Value);
             //var action = ViewContext.RouteData.Values["action"].ToString();
             //var action = ViewBag.ActionName;
 
@@ -1438,7 +1439,8 @@ namespace FMB_CIS.Controllers
                     var notificationModel = ModelCreation.PermitNotificationForApproverModel(permitTypeName + " for approval",
                                                                                             "Please see the reference no: " + referenceNo,
                                                                                             approver,
-                                                                                            loggedUserID);
+                                                                                            loggedUserID,
+                                                                                            loggedUserRegionId);
                     _notificationService.Insert(notificationModel, loggedUserID);
                 }
 
@@ -1479,6 +1481,7 @@ namespace FMB_CIS.Controllers
         public JsonResult RenewApplication(int oldApplicationID)
         {
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int loggedUserRegionId = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("regionID").Value);
 
             var oldApplication = _context.tbl_application.Where(a => a.id == oldApplicationID).FirstOrDefault();
             var renewApplication = new tbl_application();
@@ -1638,7 +1641,8 @@ namespace FMB_CIS.Controllers
                     var notificationModel = ModelCreation.PermitNotificationForApproverModel(permitTypeName + " for approval",
                                                                                             "Please see the reference no: " + referenceNo,
                                                                                             approver,
-                                                                                            loggedUserID);
+                                                                                            loggedUserID,
+                                                                                            loggedUserRegionId);
                     _notificationService.Insert(notificationModel, loggedUserID);
                 }
 

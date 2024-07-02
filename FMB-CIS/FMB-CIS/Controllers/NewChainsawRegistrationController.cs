@@ -152,6 +152,7 @@ namespace FMB_CIS.Controllers
             {
 
                 int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+                int loggedUserRegionId = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("regionID").Value);
                 var usrDB = _context.tbl_user.Where(u => u.id == userID).FirstOrDefault();
                 //DAL dal = new DAL();
 
@@ -338,7 +339,8 @@ namespace FMB_CIS.Controllers
                     var notificationModel = ModelCreation.PermitNotificationForApproverModel(permitName + " for approval",
                                                                                             "Please see the reference no: " + application.ReferenceNo,
                                                                                             approver,
-                                                                                            userID);
+                                                                                            userID,
+                                                                                            loggedUserRegionId);
                     var result = _notificationService.InsertRecord(notificationModel, userID);
                 }
 

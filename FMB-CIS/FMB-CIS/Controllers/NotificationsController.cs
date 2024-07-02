@@ -72,7 +72,8 @@ namespace FMB_CIS.Controllers
         public IActionResult Index()
         {
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-
+            int loggedUserRegionId = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("regionID").Value);
+            //int loggedUserRegionId = _context.tbl_user.Where(u=>u.id == loggedUserID).Select(u=>u.tbl_region_id).FirstOrDefault();
             DateTime currentDateAndTimeNow = DateTime.Now;
 
             var myUserTypes = _context.tbl_user_type_user
@@ -86,9 +87,10 @@ namespace FMB_CIS.Controllers
             //    .OrderByDescending(n => n.date_notified)
             //    .ToList();
             var combinedNotifs = _context.tbl_notifications
-                .Where(n => (n.notified_user_id == loggedUserID && n.is_active && currentDateAndTimeNow >= n.date_notified)
-                || (myUserTypes.Contains((int)n.notified_user_type) && n.is_active && currentDateAndTimeNow >= n.date_notified)
-                || (n.tbl_notification_type_id == 3 && n.is_active && currentDateAndTimeNow >= n.date_notified))
+                .Where(n => (n.notified_user_id == loggedUserID && n.is_active && currentDateAndTimeNow >= n.date_notified && n.is_region_exclusive != true)
+                || (myUserTypes.Contains((int)n.notified_user_type) && n.is_active && currentDateAndTimeNow >= n.date_notified && n.is_region_exclusive != true)
+                || (myUserTypes.Contains((int)n.notified_user_type) && n.is_region_exclusive == true && n.region_id_filter == loggedUserRegionId && n.is_active && currentDateAndTimeNow >= n.date_notified)
+                || (n.tbl_notification_type_id == 3 && n.is_active && currentDateAndTimeNow >= n.date_notified && n.is_region_exclusive != true))
                 .OrderByDescending(n => n.date_notified)
                 .GroupJoin(
                 _context.tbl_notification_read
@@ -162,6 +164,8 @@ namespace FMB_CIS.Controllers
             //    .ToList();
 
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int loggedUserRegionId = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("regionID").Value);
+
             DateTime currentDateAndTimeNow = DateTime.Now;
 
             var myUserTypes = _context.tbl_user_type_user
@@ -181,9 +185,10 @@ namespace FMB_CIS.Controllers
             //    .ToList();
 
             var combinedNotifs = _context.tbl_notifications
-                .Where(n => (n.notified_user_id == loggedUserID && n.is_active && currentDateAndTimeNow >= n.date_notified)
-                || (myUserTypes.Contains((int)n.notified_user_type) && n.is_active && currentDateAndTimeNow >= n.date_notified)
-                || (n.tbl_notification_type_id == 3 && n.is_active && currentDateAndTimeNow >= n.date_notified))
+                .Where(n => (n.notified_user_id == loggedUserID && n.is_active && currentDateAndTimeNow >= n.date_notified && n.is_region_exclusive != true)
+                || (myUserTypes.Contains((int)n.notified_user_type) && n.is_active && currentDateAndTimeNow >= n.date_notified && n.is_region_exclusive != true)
+                || (myUserTypes.Contains((int)n.notified_user_type) && n.is_region_exclusive == true && n.region_id_filter == loggedUserRegionId && n.is_active && currentDateAndTimeNow >= n.date_notified)
+                || (n.tbl_notification_type_id == 3 && n.is_active && currentDateAndTimeNow >= n.date_notified && n.is_region_exclusive != true))
                 .OrderByDescending(n => n.date_notified)
                 .GroupJoin(
                 _context.tbl_notification_read
@@ -278,6 +283,7 @@ namespace FMB_CIS.Controllers
             try
             {
                 int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+                int loggedUserRegionId = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("regionID").Value);
                 DateTime currentDateAndTimeNow = DateTime.Now;
 
                 var myUserTypes = _context.tbl_user_type_user
@@ -286,9 +292,10 @@ namespace FMB_CIS.Controllers
                     .ToList();
 
                 var countUnreadNotifs = _context.tbl_notifications
-                .Where(n => (n.notified_user_id == loggedUserID && n.is_active && currentDateAndTimeNow >= n.date_notified)
-                || (myUserTypes.Contains((int)n.notified_user_type) && n.is_active && currentDateAndTimeNow >= n.date_notified)
-                || (n.tbl_notification_type_id == 3 && n.is_active && currentDateAndTimeNow >= n.date_notified))
+                .Where(n => (n.notified_user_id == loggedUserID && n.is_active && currentDateAndTimeNow >= n.date_notified && n.is_region_exclusive != true)
+                || (myUserTypes.Contains((int)n.notified_user_type) && n.is_active && currentDateAndTimeNow >= n.date_notified && n.is_region_exclusive != true)
+                || (myUserTypes.Contains((int)n.notified_user_type) && n.is_region_exclusive == true && n.region_id_filter == loggedUserRegionId && n.is_active && currentDateAndTimeNow >= n.date_notified)
+                || (n.tbl_notification_type_id == 3 && n.is_active && currentDateAndTimeNow >= n.date_notified && n.is_region_exclusive != true))
                 .OrderByDescending(n => n.date_notified)
                 .GroupJoin(
                 _context.tbl_notification_read

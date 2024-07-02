@@ -16,5 +16,7 @@
         public DateTime? date_created { get; set; }
         public DateTime? date_modified { get; set; }
         public bool? is_about_permit { get; set; }
+        public bool? is_region_exclusive { get; set; }
+        public int? region_id_filter { get; set; }
     }
 }

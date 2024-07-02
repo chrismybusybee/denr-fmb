@@ -183,6 +183,7 @@ namespace FMB_CIS.Controllers
             if (ModelState.IsValid)
             {
                 int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+                int loggedUserRegionId = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("regionID").Value);
                 var usrDB = _context.tbl_user.Where(u => u.id == userID).FirstOrDefault();
                 //Get email and subject from templates in DB
                 var emailTemplates = _context.tbl_email_template.ToList();
@@ -339,7 +340,8 @@ namespace FMB_CIS.Controllers
                     var notificationModel = ModelCreation.PermitNotificationForApproverModel(permitName + " for approval",
                                                                                             "Please see the reference no: " + application.ReferenceNo,
                                                                                             approver,
-                                                                                            userID);
+                                                                                            userID,
+                                                                                            loggedUserRegionId);
                     var result = _notificationService.InsertRecord(notificationModel, userID);
                 }
 
@@ -868,6 +870,7 @@ namespace FMB_CIS.Controllers
         public IActionResult ChainsawOwnerApproval(ViewModel viewMod)
         {
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int loggedUserRegionId = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("regionID").Value);
             string Role = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
             int RoleID = _context.tbl_user_types.Where(ut => ut.name == Role).Select(ut => ut.id).FirstOrDefault();
 
@@ -1362,7 +1365,8 @@ namespace FMB_CIS.Controllers
                             var notificationModel = ModelCreation.PermitNotificationForApproverModel(permitTypeName + " for approval",
                                                                                                     "Please see the reference no: " + referenceNo,
                                                                                                     approver,
-                                                                                                    loggedUserID);
+                                                                                                    loggedUserID,
+                                                                                                    loggedUserRegionId);
                             _notificationService.Insert(notificationModel, loggedUserID);
                         }
 

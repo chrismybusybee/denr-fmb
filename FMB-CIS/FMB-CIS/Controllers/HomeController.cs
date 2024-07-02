@@ -157,7 +157,7 @@ namespace FMB_CIS.Controllers
                         string userRoleIds = _context.tbl_user.Where(u => u.id == userID).Select(u => u.tbl_user_types_id).SingleOrDefault().ToString();
                         List<int> rolesID = _context.tbl_user_type_user.Where(u => u.user_id == userID && u.is_active == true).Select(s=>s.user_type_id).ToList(); //Added 15 Dec 2023
                         List<string>roles = _context.tbl_user_types.Where(t=>rolesID.Contains(t.id)).Select(s=>s.name).ToList(); //Added 15 Dec 2023
-                        
+                        int userRegionId = usrDB.tbl_region_id;
                         var claims = new List<Claim>
                         {
                             new Claim(ClaimTypes.Name, credentials.email),
@@ -168,7 +168,8 @@ namespace FMB_CIS.Controllers
                             new Claim("userRole", dal.selectUserRoleFromEmail(credentials.email, _configuration.GetConnectionString("ConnStrng"))),
                             new Claim("accessRights", accessRights != null ? string.Join(",", accessRights) : ""),
                             new Claim("userRoleIds", userRoleIds != null ? string.Join(",", userRoleIds) : ""),
-                            new Claim("userRoleList",roles.Count > 0  ? string.Join(",", roles) : "") //Added 15 Dec 2023
+                            new Claim("userRoleList",roles.Count > 0  ? string.Join(",", roles) : ""), //Added 15 Dec 2023
+                            new Claim("regionID", userRegionId.ToString()) //Added 02 July 2024
                             //new Claim(ClaimTypes.Role, "Administrator"),
                         };
 

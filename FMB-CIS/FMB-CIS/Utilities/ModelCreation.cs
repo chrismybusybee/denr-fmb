@@ -4,7 +4,7 @@ namespace FMB_CIS.Utilities
 {
     public static class ModelCreation
     {
-        public static tbl_notifications PermitNotificationForApproverModel(string notifTitle, string notifContent, int approverUserTypeId, int loggedInUserId)
+        public static tbl_notifications PermitNotificationForApproverModel(string notifTitle, string notifContent, int approverUserTypeId, int loggedInUserId, int loggedInUserRegionId)
         {
             tbl_notifications model = new tbl_notifications()
             {
@@ -21,6 +21,8 @@ namespace FMB_CIS.Utilities
                 date_created = DateTime.Now,
                 date_modified = DateTime.Now,
                 is_about_permit = false,
+                is_region_exclusive = true,
+                region_id_filter = loggedInUserRegionId
             };
 
             return model;
