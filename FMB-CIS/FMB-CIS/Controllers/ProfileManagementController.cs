@@ -19,7 +19,7 @@ namespace FMB_CIS.Controllers
         private readonly IConfiguration _configuration;
         private IEmailSender EmailSender { get; set; }
         private IWebHostEnvironment EnvironmentWebHost;
-        private readonly IAbstractEntry<tbl_notifications> _notificationService;
+        private readonly INotificationAbstract _notificationService;
 
         public void LogUserActivity(string entity, string userAction, string remarks, int userId = 0, string source = "Web", DateTime? apkDateTime = null)
         {
@@ -63,7 +63,7 @@ namespace FMB_CIS.Controllers
                                            LocalContext context, 
                                            IEmailSender emailSender, 
                                            IWebHostEnvironment _environment,
-                                           IAbstractEntry<tbl_notifications> notificationService)
+                                           INotificationAbstract notificationService)
         {
             this._configuration = configuration;
             _context = context;
