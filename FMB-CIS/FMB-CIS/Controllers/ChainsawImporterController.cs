@@ -1,5 +1,5 @@
 
-﻿using System;
+using System;
 using System.Net;
 using System.Data;
 using System.Data.SqlTypes;
@@ -89,9 +89,9 @@ namespace FMB_CIS.Controllers
             }
         }
 
-        public ChainsawImporterController(IConfiguration configuration, 
-                                          LocalContext context, 
-                                          IEmailSender emailSender, 
+        public ChainsawImporterController(IConfiguration configuration,
+                                          LocalContext context,
+                                          IEmailSender emailSender,
                                           IWebHostEnvironment _environment,
                                           INotificationAbstract notificationService,
                                           IWorkflowAbstract workflowService)
@@ -114,7 +114,7 @@ namespace FMB_CIS.Controllers
             ViewModel model = new ViewModel();
 
             // Get Brands for DropdownList
-            var brandList = _context.tbl_brands.Where(c=> c.is_active == true).ToList();
+            var brandList = _context.tbl_brands.Where(c => c.is_active == true).ToList();
             ViewBag.brandList = brandList;
 
             model.tbl_Application_Group = new List<tbl_application_group>();
@@ -133,7 +133,7 @@ namespace FMB_CIS.Controllers
                 return RedirectToAction("Index", "Dashboard");
             }
 
-                return View(model);
+            return View(model);
             // if (usrRoleID == 1 || usrRoleID == 4 || usrRoleID == 5 || usrRoleID == 7)
             // {
             //     return View(model);
@@ -168,46 +168,47 @@ namespace FMB_CIS.Controllers
             //try
             //{
             if (ModelState.IsValid)
-                {
-                    int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-                    var usrDB = _context.tbl_user.Where(u => u.id == userID).FirstOrDefault();
-                    //Get email and subject from templates in DB
-                    var emailTemplates = _context.tbl_email_template.ToList();
-                    var brandList = _context.tbl_brands.ToList();
+            {
+                int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+                var usrDB = _context.tbl_user.Where(u => u.id == userID).FirstOrDefault();
+                //Get email and subject from templates in DB
+                var emailTemplates = _context.tbl_email_template.ToList();
+                var brandList = _context.tbl_brands.ToList();
                 //DAL dal = new DAL();
 
                 //SAVE permit application
-                    model.tbl_Application = new tbl_application();
-                    model.tbl_Application.tbl_application_type_id = 2;
-                    model.tbl_Application.status = 1;
-                    model.tbl_Application.tbl_user_id = userID;
-                    model.tbl_Application.tbl_permit_type_id = 1;
-                    model.tbl_Application.is_active = true;
-                    model.tbl_Application.created_by = userID;
-                    model.tbl_Application.modified_by = userID;
-                    model.tbl_Application.date_created = DateTime.Now;
-                    model.tbl_Application.date_modified = DateTime.Now;
-                    model.tbl_Application.date_due_for_officers = BusinessDays.AddBusinessDays(DateTime.Now, 2).AddHours(4).AddMinutes(30);
-                    _context.tbl_application.Add(model.tbl_Application);
-                    _context.SaveChanges();
-                    int? appID = model.tbl_Application.id;
+                model.tbl_Application = new tbl_application();
+                model.tbl_Application.tbl_application_type_id = 2;
+                model.tbl_Application.status = 1;
+                model.tbl_Application.tbl_user_id = userID;
+                model.tbl_Application.tbl_permit_type_id = 1;
+                model.tbl_Application.is_active = true;
+                model.tbl_Application.created_by = userID;
+                model.tbl_Application.modified_by = userID;
+                model.tbl_Application.date_created = DateTime.Now;
+                model.tbl_Application.date_modified = DateTime.Now;
+                model.tbl_Application.date_due_for_officers = BusinessDays.AddBusinessDays(DateTime.Now, 2).AddHours(4).AddMinutes(30);
+                _context.tbl_application.Add(model.tbl_Application);
+                _context.SaveChanges();
+                int? appID = model.tbl_Application.id;
 
                 //Generate Reference Number
 
-                    var referenceNo = string.Empty;
-                    var legend = string.Empty;
+                var referenceNo = string.Empty;
+                var legend = string.Empty;
 
-                if (model.tbl_Application.tbl_permit_type_id.HasValue && appID.HasValue) {
+                if (model.tbl_Application.tbl_permit_type_id.HasValue && appID.HasValue)
+                {
                     var legendEntity = _context.tbl_reference_legend.Where(a => a.permit_type_id == model.tbl_Application.tbl_permit_type_id.Value).FirstOrDefault();
 
                     legend = legendEntity.legend;
                     referenceNo = ReferenceNumberGenerator.GenerateTransactionReference(legend, appID.Value);
                 }
-                    
 
-                    var application = _context.tbl_application.Where(a => a.id == appID.Value).First<tbl_application>();
-                    application.ReferenceNo = referenceNo;
-                    _context.SaveChanges();
+
+                var application = _context.tbl_application.Where(a => a.id == appID.Value).First<tbl_application>();
+                application.ReferenceNo = referenceNo;
+                _context.SaveChanges();
 
                 //Application Grouping
 
@@ -269,7 +270,7 @@ namespace FMB_CIS.Controllers
                             //Matching of tbl_files to tbl_document_checklist
                             foreach (var item in model.fileChecklistViewModel)
                             {
-                                foreach(var item2 in item.FileNames)
+                                foreach (var item2 in item.FileNames)
                                 {
                                     if (item2 == file.FileName)
                                     {
@@ -280,7 +281,7 @@ namespace FMB_CIS.Controllers
                                         _context.tbl_files_checklist_bridge.Add(filesChecklistBridge);
                                         _context.SaveChanges();
                                     }
-                                }                                
+                                }
                             }
                         }
                         catch (ArgumentNullException e)
@@ -302,9 +303,9 @@ namespace FMB_CIS.Controllers
 
                     }
                 }
-                
+
                 //Email
-                
+
                 var emailTemplate = emailTemplates.Where(e => e.id == 14).FirstOrDefault();
                 var subject = emailTemplate.email_subject;
                 var BODY = emailTemplate.email_content.Replace("{FirstName}", usrDB.first_name);
@@ -336,17 +337,17 @@ namespace FMB_CIS.Controllers
                 foreach (var approver in approvers.Result)
                 {
 
-                    var notificationModel = ModelCreation.PermitNotificationForApproverModel("Permit to import for approval",
+                    var notificationModel = ModelCreation.PermitNotificationForApproverModel(permitName + " for approval",
                                                                                             "Please see the reference no: " + application.ReferenceNo,
                                                                                             approver,
                                                                                             userID);
                     var result = _notificationService.InsertRecord(notificationModel, userID);
                 }
-                
+
                 return RedirectToAction("ImportPermits", "Application");
-                
+
             }
-                return View(model);
+            return View(model);
             //}
             //catch
             //{
@@ -395,7 +396,7 @@ namespace FMB_CIS.Controllers
             mymodel.workflow = workflowModel;
 
             //CODE FOR FILE DOWNLOAD
-           // int applicID = Convert.ToInt32(appid);
+            // int applicID = Convert.ToInt32(appid);
             string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
             ViewData["BaseUrl"] = host;
             ViewBag.uid = uid;
@@ -412,7 +413,7 @@ namespace FMB_CIS.Controllers
             }
 
             mymodel.tbl_Files = files;
-            
+
             //FILES UPLOADED BY INSPECTOR
             var filesFromInspector = (from f in _context.tbl_files
                                       join usr in _context.tbl_user on f.created_by equals usr.id
@@ -501,14 +502,14 @@ namespace FMB_CIS.Controllers
                                                      tbl_files_status = br.status,
                                                      bridge_id = br.id
                                                      //comment = c.comment
-                                                 }).OrderBy(o=>o.filename).ToList();
+                                                 }).OrderBy(o => o.filename).ToList();
 
-            var requiredDocumentList = _context.tbl_document_checklist.Where(c=>c.permit_type_id==1 && c.is_active==true).ToList();
-            foreach(var reqList in requiredDocumentList)
+            var requiredDocumentList = _context.tbl_document_checklist.Where(c => c.permit_type_id == 1 && c.is_active == true).ToList();
+            foreach (var reqList in requiredDocumentList)
             {
                 //paymentFiles.Add(new tbl_files { Id = fileList.Id, filename = fileList.filename, path = fileList.path, tbl_file_type_id = fileList.tbl_file_type_id, file_size = fileList.file_size, date_created = fileList.date_created });
                 bool isReqAvailable = fileWithCommentsforDocTagging.Any(r => r.tbl_document_checklist_id == reqList.id);
-                if(isReqAvailable == false)
+                if (isReqAvailable == false)
                 {
                     fileWithCommentsforDocTagging.Add(new FilesWithComments
                     {
@@ -634,7 +635,7 @@ namespace FMB_CIS.Controllers
 
 
                 //Check if this application has applied for renewal
-                var checkRenewal = _context.tbl_application.Where(a=>a.renew_from == applid).FirstOrDefault();
+                var checkRenewal = _context.tbl_application.Where(a => a.renew_from == applid).FirstOrDefault();
                 if (checkRenewal != null)
                 {
                     ViewBag.hasRenewal = true;
@@ -646,11 +647,11 @@ namespace FMB_CIS.Controllers
                 }
                 //End of checking if this application has applied for renewal
                 string commentType = "";
-                if(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector"))
+                if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("Inspector"))
                 {
                     commentType = "User To Inspector";
                 }
-                else if(((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO"))
+                else if (((ClaimsIdentity)User.Identity).FindFirst("userRole").Value.Contains("CENRO"))
                 {
                     commentType = "User To CENRO";
                 }
@@ -675,22 +676,22 @@ namespace FMB_CIS.Controllers
 
                 //Display List of Comments for Application Approval (comments for CENRO and Inspector)
                 mymodel.commentsViewModels2ndList = (from c in _context.tbl_comments
-                                                  where c.tbl_application_id == applid
-                                                  //join f in _context.tbl_files on c.tbl_files_id equals f.Id
-                                                  join usr in _context.tbl_user on c.created_by equals usr.id
-                                                  select new CommentsViewModel
-                                                  {
-                                                      tbl_application_id = c.tbl_application_id.GetValueOrDefault(),
-                                                      //tbl_files_id = c.tbl_files_id,
-                                                      //fileName = f.filename,
-                                                      comment_to = c.comment_to,
-                                                      comment = c.comment,
-                                                      commenterName = usr.first_name + " " + usr.last_name + " " + usr.suffix,
-                                                      created_by = c.created_by,
-                                                      modified_by = c.modified_by,
-                                                      date_created = c.date_created,
-                                                      date_modified = c.date_modified
-                                                  }).Where(u => u.comment_to == "Inspector to CENRO").OrderByDescending(d => d.date_created);
+                                                     where c.tbl_application_id == applid
+                                                     //join f in _context.tbl_files on c.tbl_files_id equals f.Id
+                                                     join usr in _context.tbl_user on c.created_by equals usr.id
+                                                     select new CommentsViewModel
+                                                     {
+                                                         tbl_application_id = c.tbl_application_id.GetValueOrDefault(),
+                                                         //tbl_files_id = c.tbl_files_id,
+                                                         //fileName = f.filename,
+                                                         comment_to = c.comment_to,
+                                                         comment = c.comment,
+                                                         commenterName = usr.first_name + " " + usr.last_name + " " + usr.suffix,
+                                                         created_by = c.created_by,
+                                                         modified_by = c.modified_by,
+                                                         date_created = c.date_created,
+                                                         date_modified = c.date_modified
+                                                     }).Where(u => u.comment_to == "Inspector to CENRO").OrderByDescending(d => d.date_created);
 
                 //To dispalay requirements on approval page
                 var permitTypeOfThisApplication = _context.tbl_application.Where(a => a.id == applid).Select(a => a.tbl_permit_type_id).FirstOrDefault();
@@ -804,7 +805,7 @@ namespace FMB_CIS.Controllers
                     dateInspection = Convert.ToDateTime(viewMod.applicantViewModels.inspectionDate);
                     inspectDateToBeChanged = true;
                 }
-                
+
                 //File Upload
                 if (viewMod.filesUpload != null)
                 {
@@ -1190,86 +1191,86 @@ namespace FMB_CIS.Controllers
             //}
             //else
             //{
-                int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-                var userRegion = _context.tbl_user.Where(u=>u.id == loggedUserID).Select(u=>u.tbl_region_id).FirstOrDefault();
+            int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            var userRegion = _context.tbl_user.Where(u => u.id == loggedUserID).Select(u => u.tbl_region_id).FirstOrDefault();
 
-                ViewModel mymodel = new ViewModel();
+            ViewModel mymodel = new ViewModel();
 
-                var applicationlist = from a in _context.tbl_application
-                                          //where a.tbl_user_id == userID
-                                      where a.tbl_application_type_id == 2
-                                      select a;
+            var applicationlist = from a in _context.tbl_application
+                                      //where a.tbl_user_id == userID
+                                  where a.tbl_application_type_id == 2
+                                  select a;
 
-                //HISTORY
-                var applicationtypelist = _context.tbl_application_type;
+            //HISTORY
+            var applicationtypelist = _context.tbl_application_type;
 
-                var applicationMod = (from a in applicationlist
-                                     join usr in _context.tbl_user on a.tbl_user_id equals usr.id
-                                     join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
-                                     join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
-                                     //join pS in _context.tbl_permit_status on a.status equals pS.id
-                                    //  join pSS in _context.tbl_permit_statuses on a.status equals pSS.id
-                                    //  join wf in _context.tbl_permit_workflow on pT.id.ToString() equals wf.permit_type_code
-                                     join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code } 
-                                     where usr.tbl_region_id == userRegion
-                                     //where a.tbl_user_id == userID
-                                     let current_step_count = (int)Math.Ceiling((decimal)a.status / 2) // Soon be dynamic
-                                     let current_max_count = usr.tbl_region_id == 13 ? 6 : 10// Soon be dynamic 
-                                     select new ApplicantListViewModel
-                                     {
-                                         ReferenceNo = a.ReferenceNo,
-                                         id = a.id, 
-                                         applicationDate = a.date_created,
-                                         qty = a.qty,
-                                         full_name = usr.user_classification == "Individual"? usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix: usr.company_name,
-                                         email = usr.email,
-                                         contact = usr.contact_no,
-                                         address = usr.street_address,
-                                         application_type = appt.name,
-                                         permit_type = pT.name,
-                                         permit_statuses = wfs.name,
-                                         tbl_user_id = (int)usr.id,
-                                         date_due_for_officers = a.date_due_for_officers,
-                                         currentStepCount = current_step_count,
-                                         currentMaxCount = current_max_count,
-                                         isRead = _context.tbl_application_read.Any(r => r.tbl_application_id == a.id && r.tbl_user_id == loggedUserID && r.is_read),
-                                         currentPercentage = (current_step_count * 100 / current_max_count),
-                                         date_of_expiration = a.date_of_expiration
-                                     }).ToList();
-                                
-                //bool isReadExist;
-                //bool isAppRead;
+            var applicationMod = (from a in applicationlist
+                                  join usr in _context.tbl_user on a.tbl_user_id equals usr.id
+                                  join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
+                                  join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
+                                  //join pS in _context.tbl_permit_status on a.status equals pS.id
+                                  //  join pSS in _context.tbl_permit_statuses on a.status equals pSS.id
+                                  //  join wf in _context.tbl_permit_workflow on pT.id.ToString() equals wf.permit_type_code
+                                  join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }
+                                  where usr.tbl_region_id == userRegion
+                                  //where a.tbl_user_id == userID
+                                  let current_step_count = (int)Math.Ceiling((decimal)a.status / 2) // Soon be dynamic
+                                  let current_max_count = usr.tbl_region_id == 13 ? 6 : 10// Soon be dynamic 
+                                  select new ApplicantListViewModel
+                                  {
+                                      ReferenceNo = a.ReferenceNo,
+                                      id = a.id,
+                                      applicationDate = a.date_created,
+                                      qty = a.qty,
+                                      full_name = usr.user_classification == "Individual" ? usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix : usr.company_name,
+                                      email = usr.email,
+                                      contact = usr.contact_no,
+                                      address = usr.street_address,
+                                      application_type = appt.name,
+                                      permit_type = pT.name,
+                                      permit_statuses = wfs.name,
+                                      tbl_user_id = (int)usr.id,
+                                      date_due_for_officers = a.date_due_for_officers,
+                                      currentStepCount = current_step_count,
+                                      currentMaxCount = current_max_count,
+                                      isRead = _context.tbl_application_read.Any(r => r.tbl_application_id == a.id && r.tbl_user_id == loggedUserID && r.is_read),
+                                      currentPercentage = (current_step_count * 100 / current_max_count),
+                                      date_of_expiration = a.date_of_expiration
+                                  }).ToList();
 
-                //for (int i = 0; i < applicationMod.Count(); i++)
-                //{
-                //    isReadExist = _context.tbl_application_read.Any(r => r.tbl_application_id == applicationMod[i].id && r.tbl_user_id == loggedUserID);
-                //    if (isReadExist)
-                //    {
-                //        isAppRead = _context.tbl_application_read.Where(r => r.tbl_application_id == applicationMod[i].id && r.tbl_user_id == loggedUserID).Select(r => r.is_read).FirstOrDefault();
-                //        if (isAppRead)
-                //        {
-                //            //true
-                //            applicationMod[i].isRead = true;
-                //        }
-                //        else
-                //        {
-                //            //false
-                //            applicationMod[i].isRead = false;
-                //        }
-                //    }
-                //    else
-                //    {
-                //        //false
-                //        applicationMod[i].isRead = false;
-                //    }
-                //}
-                //foreach(ApplicantListViewModel mod in applicationMod) {
-                //    mod.currentPercentage = (mod.currentStepCount * 100 / mod.currentMaxCount);
-                //}
-                mymodel.applicantListViewModels = applicationMod;
+            //bool isReadExist;
+            //bool isAppRead;
 
-                return View(mymodel);
-                //return RedirectToAction("Index", "Home");
+            //for (int i = 0; i < applicationMod.Count(); i++)
+            //{
+            //    isReadExist = _context.tbl_application_read.Any(r => r.tbl_application_id == applicationMod[i].id && r.tbl_user_id == loggedUserID);
+            //    if (isReadExist)
+            //    {
+            //        isAppRead = _context.tbl_application_read.Where(r => r.tbl_application_id == applicationMod[i].id && r.tbl_user_id == loggedUserID).Select(r => r.is_read).FirstOrDefault();
+            //        if (isAppRead)
+            //        {
+            //            //true
+            //            applicationMod[i].isRead = true;
+            //        }
+            //        else
+            //        {
+            //            //false
+            //            applicationMod[i].isRead = false;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        //false
+            //        applicationMod[i].isRead = false;
+            //    }
+            //}
+            //foreach(ApplicantListViewModel mod in applicationMod) {
+            //    mod.currentPercentage = (mod.currentStepCount * 100 / mod.currentMaxCount);
+            //}
+            mymodel.applicantListViewModels = applicationMod;
+
+            return View(mymodel);
+            //return RedirectToAction("Index", "Home");
             //}
 
         }
@@ -1341,7 +1342,7 @@ namespace FMB_CIS.Controllers
 
             return Json(true);
         }
-        
+
         [HttpGet, ActionName("DocumentHistory")]
         public JsonResult DocumentHistory(int tbl_files_id)
         {
@@ -1350,7 +1351,7 @@ namespace FMB_CIS.Controllers
 
             //var commentsTbl = _context.tbl_comments.Where(c => c.tbl_files_id == tbl_files_id).ToList();
             //var fileDB = _context.tbl_files.Where(f => f.Id == tbl_files_id).FirstOrDefault();
-            
+
             var documentHistoryDetails = (from c in _context.tbl_comments
                                           where c.tbl_files_id == tbl_files_id
                                           join usr in _context.tbl_user on c.created_by equals usr.id
@@ -1372,7 +1373,7 @@ namespace FMB_CIS.Controllers
         public JsonResult applicationRead(int appid)
         {
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            bool isExist = _context.tbl_application_read.Any(r=>r.tbl_user_id == loggedUserID && r.tbl_application_id == appid);
+            bool isExist = _context.tbl_application_read.Any(r => r.tbl_user_id == loggedUserID && r.tbl_application_id == appid);
 
             if (!isExist)
             {
@@ -1385,7 +1386,7 @@ namespace FMB_CIS.Controllers
                 _context.tbl_application_read.Add(applicRead);
                 _context.SaveChanges();
             }
-            
+
             return Json(true);
         }
         //file-delete
@@ -1393,7 +1394,7 @@ namespace FMB_CIS.Controllers
         public JsonResult filedelete()
         {
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-            
+
             return Json(true);
         }
 
