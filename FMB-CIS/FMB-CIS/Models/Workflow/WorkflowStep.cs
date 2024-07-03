@@ -8,6 +8,7 @@ namespace FMB_CIS.Models
         public string workflow_id { get; set; }
         public string permit_type_code { get; set; }
         public string workflow_code { get; set; }
+        public string workflow_step_id { get; set; }
         public string workflow_step_code { get; set; }
         public string permit_page_code { get; set; }
         public string name { get; set; }
