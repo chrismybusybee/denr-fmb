@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FMB_CIS.Services
 {
-    public class WorkflowStepService : IAbstractEntry<tbl_permit_workflow_step>
+    public class WorkflowStepService : IWorkflowStepAbstract
     {
         private readonly LocalContext _context;
         public WorkflowStepService(LocalContext context)
@@ -68,6 +68,12 @@ namespace FMB_CIS.Services
         {
             var selectedConsultantTypes = _context.tbl_permit_workflow_step.Where(x => modelList.Contains(x)).ExecuteDelete();
             await _context.SaveChangesAsync();
+        }
+
+        public List<tbl_permit_workflow_step> GetWorkflowStepsByWorkflowId(string workflowId)
+        {
+            var records = _context.tbl_permit_workflow_step.AsNoTracking().Where(o => o.workflow_id == workflowId.ToString()).ToList();
+            return records;
         }
     }
 }

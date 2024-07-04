@@ -110,6 +110,29 @@ namespace FMB_CIS.Services
             return distinctUserTypeIds;
 
         }
+
+        public tbl_permit_workflow GetWorkflowByPermitTypeId(int permitTypeId)
+        {
+            //if (permitTypeId != 0)
+            //{
+                var record = _context.tbl_permit_workflow.AsNoTracking().Where(o => o.permit_type_code == permitTypeId.ToString()).FirstOrDefault();
+                return record;
+            //}
+        }
+        public tbl_permit_workflow GetWorkflowByWorkflowCode(string workflowCode)
+        {
+            //if (permitTypeId != 0)
+            //{
+                var record = _context.tbl_permit_workflow.AsNoTracking().Where(o => o.workflow_code == workflowCode).FirstOrDefault();
+                return record;
+            //}
+        }
+
+        public async Task<List<tbl_permit_workflow>> GetWorkflowListByPermitTypeId(int permitTypeId)
+        {
+                var records = await _context.tbl_permit_workflow.AsNoTracking().Where(o => o.permit_type_code == permitTypeId.ToString()).ToListAsync();
+                return records;
+        }
         public async Task InsertRecord(tbl_permit_workflow model, int userId)
         {
             model.date_created = DateTime.UtcNow;

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FMB_CIS.Services
 {
-    public class WorkflowNextStepService : IAbstractEntry<tbl_permit_workflow_next_step>
+    public class WorkflowNextStepService : IWorkflowNextStepAbstract
     {
         private readonly LocalContext _context;
         public WorkflowNextStepService(LocalContext context)
@@ -65,6 +65,28 @@ namespace FMB_CIS.Services
         {
             var selectedConsultantTypes = _context.tbl_permit_workflow_next_step.Where(x => modelList.Contains(x)).ExecuteDelete();
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<tbl_permit_workflow_next_step>> GetWorkflowNextStepsByNextStepCode(int nextStepCode)
+        {
+            var records = await _context.tbl_permit_workflow_next_step.AsNoTracking().Where(o => o.next_step_code == nextStepCode.ToString()).ToListAsync();
+            return records;
+        }
+
+        public List<tbl_permit_workflow_next_step> GetWorkflowNextStepListByWorkflowStepIdList(List<string> workflowStepIds)
+        {
+            var records = _context.tbl_permit_workflow_next_step
+                                .AsNoTracking()
+                                .Where(o => workflowStepIds.Contains(o.workflow_step_id))
+                                .ToList();
+            return records;
+        }
+
+        public tbl_permit_workflow_next_step GetRecordByWorkflowNextStepId(string id)
+        {
+            var record = _context.tbl_permit_workflow_next_step.AsNoTracking().Where(o => o.workflow_next_step_id == id).FirstOrDefault();
+
+            return record;
         }
     }
 }

@@ -57,8 +57,10 @@ builder.Services.AddTransient(typeof(GoogleCaptchaService));
 // Services
 builder.Services.AddScoped<INotificationAbstract, NotificationService>();
 builder.Services.AddScoped<IWorkflowAbstract, WorkflowService>();
-builder.Services.AddScoped<IAbstractEntry<tbl_permit_workflow_step>, WorkflowStepService>();
-builder.Services.AddScoped<IAbstractEntry<tbl_permit_workflow_next_step>, WorkflowNextStepService>();
+builder.Services.AddScoped<IApplicationAbstract, ApplicationService>();
+builder.Services.AddScoped<IWorkflowStepAbstract, WorkflowStepService>();
+builder.Services.AddScoped<IWorkflowNextStepAbstract, WorkflowNextStepService>();
+builder.Services.AddScoped<IPermitStepCount, PermitStepCountService>();
 
 builder.Services.AddSession(options =>
 {

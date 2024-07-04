@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NuGet.Configuration;
+using Org.BouncyCastle.Ocsp;
 using Org.BouncyCastle.Pqc.Crypto.Lms;
 using Org.BouncyCastle.Tls;
 using Services.Utilities;
@@ -33,6 +34,7 @@ namespace FMB_CIS.Controllers
         private IWebHostEnvironment WebHostEnvironment;
         private readonly INotificationAbstract _notificationService;
         private readonly IWorkflowAbstract _workflowService;
+        private readonly IPermitStepCount _permitStepCountService;
         private IWebHostEnvironment EnvironmentHosting;
 
         public void LogUserActivity(string entity, string userAction, string remarks, int userId = 0, string source = "Web", DateTime? apkDateTime = null)
@@ -78,7 +80,8 @@ namespace FMB_CIS.Controllers
                                     IEmailSender emailSender,
                                     IWebHostEnvironment _environment,
                                     INotificationAbstract notificationService,
-                                    IWorkflowAbstract workflowService)
+                                    IWorkflowAbstract workflowService,
+                                    IPermitStepCount permitStepCountService)
         {
             this._configuration = configuration;
             _context = context;
@@ -86,6 +89,7 @@ namespace FMB_CIS.Controllers
             this.WebHostEnvironment = _environment;
             _notificationService = notificationService;
             _workflowService = workflowService;
+            _permitStepCountService = permitStepCountService;
             EnvironmentHosting = _environment;
         }
 
@@ -129,6 +133,8 @@ namespace FMB_CIS.Controllers
         {
 
             int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int loggedUserRegionId = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("regionID").Value);
+
             ViewModel mymodel = new ViewModel();
 
             var applicationlist = from a in _context.tbl_application
@@ -147,8 +153,8 @@ namespace FMB_CIS.Controllers
                                   //join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
                                   join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }
                                   where pT.name == "Permit to Re-sell/Transfer Ownership"
-                                  let current_step_count = (int)Math.Ceiling((decimal)a.status / 2) // Soon be dynamic
-                                  let current_max_count = usr.tbl_region_id == 13 ? 6 : 10// Soon be dynamic 
+                                  //let current_step_count = (int)Math.Ceiling((decimal)a.status / 2) // Soon be dynamic
+                                  //let current_max_count = usr.tbl_region_id == 13 ? 6 : 10// Soon be dynamic 
                                   select new ApplicantListViewModel
                                   {
                                       id = a.id,
@@ -163,20 +169,48 @@ namespace FMB_CIS.Controllers
                                       permit_status_id = a.status,//pS.id,
                                       permit_statuses = wfs.name,
                                       tbl_user_id = (int)usr.id,
+                                      status = (int)a.status,
                                       qty = a.qty,
                                       ReferenceNo = a.ReferenceNo,
-                                      currentStepCount = current_step_count,
-                                      currentMaxCount = current_max_count,
-                                      currentPercentage = (current_step_count * 100 / current_max_count),
+                                      //currentStepCount = current_step_count,
+                                      //currentMaxCount = current_max_count,
+                                      //currentPercentage = (current_step_count * 100 / current_max_count),
                                       date_of_expiration = a.date_of_expiration,
                                   }).ToList();
 
-            //foreach (ApplicantListViewModel mod in applicationMod)
-            //{
-            //    mod.currentPercentage = (mod.currentStepCount * 100 / mod.currentMaxCount);
-            //}
+            int permitTypeId = 14; //Permit to Resell/Transfer Ownership
+            List<PermitProgressStatusModel> permitPath = _permitStepCountService.MapPermitProgressStatus(permitTypeId, loggedUserRegionId);
+            var maxStepCount = permitPath.Count(p => p.isHappyPath);
 
-            mymodel.applicantListViewModels = applicationMod;
+            // I did this because an error occurs when I put the joins statements on applicationMod
+            var applicationModWithDynamicSteps = (from aMod in applicationMod
+                                                  join pPath in permitPath
+                                                  on aMod.status.ToString() equals pPath.ApplicationStatusCode into gj
+                                                  from subPPath in gj.DefaultIfEmpty()
+                                                  select new ApplicantListViewModel
+                                                  {
+                                                      id = aMod.id,
+                                                      applicationDate = aMod.applicationDate,
+                                                      full_name = aMod.full_name,
+                                                      email = aMod.email,
+                                                      contact = aMod.contact,
+                                                      address = aMod.address,
+                                                      application_type = aMod.application_type,
+                                                      permit_type = aMod.permit_type,
+                                                      permit_status = aMod.permit_status,
+                                                      permit_status_id = aMod.permit_status_id,
+                                                      permit_statuses = aMod.permit_statuses,
+                                                      tbl_user_id = aMod.tbl_user_id,
+                                                      status = aMod.status,
+                                                      qty = aMod.qty,
+                                                      ReferenceNo = aMod.ReferenceNo,
+                                                      currentStepCount = subPPath != null ? subPPath.Progress : null,
+                                                      currentMaxCount = subPPath != null ? maxStepCount : null,
+                                                      currentPercentage = subPPath != null ? (subPPath.Progress * 100 / maxStepCount) : null,
+                                                      date_of_expiration = aMod.date_of_expiration,
+                                                  }).ToList();
+
+            mymodel.applicantListViewModels = applicationModWithDynamicSteps;
 
             return View(mymodel);
 
@@ -186,6 +220,7 @@ namespace FMB_CIS.Controllers
         {
 
             int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int loggedUserRegionId = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("regionID").Value);
             ViewModel mymodel = new ViewModel();
 
             var applicationlist = from a in _context.tbl_application
@@ -204,8 +239,8 @@ namespace FMB_CIS.Controllers
                                   //join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
                                   join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }
                                   where pT.name == "Authority to Lend"
-                                  let current_step_count = (int)Math.Ceiling((decimal)a.status / 2) // Soon be dynamic
-                                  let current_max_count = usr.tbl_region_id == 13 ? 6 : 10// Soon be dynamic
+                                  //let current_step_count = (int)Math.Ceiling((decimal)a.status / 2) // Soon be dynamic
+                                  //let current_max_count = usr.tbl_region_id == 13 ? 6 : 10// Soon be dynamic
                                   select new ApplicantListViewModel
                                   {
                                       id = a.id,
@@ -220,20 +255,48 @@ namespace FMB_CIS.Controllers
                                       permit_status_id = a.status,//pS.id,
                                       permit_statuses = wfs.name,
                                       tbl_user_id = (int)usr.id,
+                                      status = (int)a.status,
                                       qty = a.qty,
                                       ReferenceNo = a.ReferenceNo,
-                                      currentStepCount = current_step_count,
-                                      currentMaxCount = current_max_count,
-                                      currentPercentage = (current_step_count * 100 / current_max_count),
+                                      //currentStepCount = current_step_count,
+                                      //currentMaxCount = current_max_count,
+                                      //currentPercentage = (current_step_count * 100 / current_max_count),
                                       date_of_expiration = a.date_of_expiration,
                                   }).ToList();
 
-            //foreach (ApplicantListViewModel mod in applicationMod)
-            //{
-            //    mod.currentPercentage = (mod.currentStepCount * 100 / mod.currentMaxCount);
-            //}
+            int permitTypeId = 7; //Authority to Lend
+            List<PermitProgressStatusModel> permitPath = _permitStepCountService.MapPermitProgressStatus(permitTypeId, loggedUserRegionId);
+            var maxStepCount = permitPath.Count(p => p.isHappyPath);
 
-            mymodel.applicantListViewModels = applicationMod;
+            // I did this because an error occurs when I put the joins statements on applicationMod
+            var applicationModWithDynamicSteps = (from aMod in applicationMod
+                                                  join pPath in permitPath
+                                                  on aMod.status.ToString() equals pPath.ApplicationStatusCode into gj
+                                                  from subPPath in gj.DefaultIfEmpty()
+                                                  select new ApplicantListViewModel
+                                                  {
+                                                      id = aMod.id,
+                                                      applicationDate = aMod.applicationDate,
+                                                      full_name = aMod.full_name,
+                                                      email = aMod.email,
+                                                      contact = aMod.contact,
+                                                      address = aMod.address,
+                                                      application_type = aMod.application_type,
+                                                      permit_type = aMod.permit_type,
+                                                      permit_status = aMod.permit_status,
+                                                      permit_status_id = aMod.permit_status_id,
+                                                      permit_statuses = aMod.permit_statuses,
+                                                      tbl_user_id = aMod.tbl_user_id,
+                                                      status = aMod.status,
+                                                      qty = aMod.qty,
+                                                      ReferenceNo = aMod.ReferenceNo,
+                                                      currentStepCount = subPPath != null ? subPPath.Progress : null,
+                                                      currentMaxCount = subPPath != null ? maxStepCount : null,
+                                                      currentPercentage = subPPath != null ? (subPPath.Progress * 100 / maxStepCount) : null,
+                                                      date_of_expiration = aMod.date_of_expiration,
+                                                  }).ToList();
+
+            mymodel.applicantListViewModels = applicationModWithDynamicSteps;
 
             return View(mymodel);
 
@@ -243,6 +306,7 @@ namespace FMB_CIS.Controllers
         {
 
             int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int loggedUserRegionId = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("regionID").Value);
             ViewModel mymodel = new ViewModel();
 
             var applicationlist = from a in _context.tbl_application
@@ -261,8 +325,8 @@ namespace FMB_CIS.Controllers
                                   //join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
                                   join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }
                                   where pT.name == "Certificate of Registration"
-                                  let current_step_count = (int)Math.Ceiling((decimal)a.status / 2) // Soon be dynamic
-                                  let current_max_count = usr.tbl_region_id == 13 ? 6 : 10// Soon be dynamic 
+                                  //let current_step_count = (int)Math.Ceiling((decimal)a.status / 2) // Soon be dynamic
+                                  //let current_max_count = usr.tbl_region_id == 13 ? 6 : 10// Soon be dynamic 
                                   select new ApplicantListViewModel
                                   {
                                       id = a.id,
@@ -277,20 +341,54 @@ namespace FMB_CIS.Controllers
                                       permit_status_id = a.status,//pS.id,
                                       permit_statuses = wfs.name,
                                       tbl_user_id = (int)usr.id,
+                                      status = (int)a.status,
                                       date_of_expiration = a.date_of_expiration,
                                       qty = a.qty,
                                       ReferenceNo = a.ReferenceNo,
-                                      currentStepCount = current_step_count,
-                                      currentMaxCount = current_max_count,
-                                      currentPercentage = (current_step_count * 100 / current_max_count)
+                                      //currentStepCount = current_step_count,
+                                      //currentMaxCount = current_max_count,
+                                      //currentPercentage = (current_step_count * 100 / current_max_count)
                                   }).ToList();
+
+
+            int permitTypeId = 13; //Certificate of Registration
+            List<PermitProgressStatusModel> permitPath = _permitStepCountService.MapPermitProgressStatus(permitTypeId, loggedUserRegionId);
+            var maxStepCount = permitPath.Count(p => p.isHappyPath);
+
+            // I did this because an error occurs when I put the joins statements on applicationMod
+            var applicationModWithDynamicSteps = (from aMod in applicationMod
+                                                  join pPath in permitPath
+                                                  on aMod.status.ToString() equals pPath.ApplicationStatusCode into gj
+                                                  from subPPath in gj.DefaultIfEmpty()
+                                                  select new ApplicantListViewModel
+                                                  {
+                                                      id = aMod.id,
+                                                      applicationDate = aMod.applicationDate,
+                                                      full_name = aMod.full_name,
+                                                      email = aMod.email,
+                                                      contact = aMod.contact,
+                                                      address = aMod.address,
+                                                      application_type = aMod.application_type,
+                                                      permit_type = aMod.permit_type,
+                                                      permit_status = aMod.permit_status,
+                                                      permit_status_id = aMod.permit_status_id,
+                                                      permit_statuses = aMod.permit_statuses,
+                                                      tbl_user_id = aMod.tbl_user_id,
+                                                      status = aMod.status,
+                                                      qty = aMod.qty,
+                                                      ReferenceNo = aMod.ReferenceNo,
+                                                      currentStepCount = subPPath != null ? subPPath.Progress : null,
+                                                      currentMaxCount = subPPath != null ? maxStepCount : null,
+                                                      currentPercentage = subPPath != null ? (subPPath.Progress * 100 / maxStepCount) : null,
+                                                      date_of_expiration = aMod.date_of_expiration,
+                                                  }).ToList();
 
             //foreach (ApplicantListViewModel mod in applicationMod)
             //{
             //    mod.currentPercentage = (mod.currentStepCount * 100 / mod.currentMaxCount);
             //}
 
-            mymodel.applicantListViewModels = applicationMod;
+            mymodel.applicantListViewModels = applicationModWithDynamicSteps;
 
             return View(mymodel);
 
@@ -300,6 +398,8 @@ namespace FMB_CIS.Controllers
         {
 
             int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int loggedUserRegionId = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("regionID").Value);
+
             ViewModel mymodel = new ViewModel();
 
             var applicationlist = from a in _context.tbl_application
@@ -318,8 +418,8 @@ namespace FMB_CIS.Controllers
                                   //join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
                                   join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }
                                   where pT.name == "Authority to Rent"
-                                  let current_step_count = (int)Math.Ceiling((decimal)a.status / 2) // Soon be dynamic
-                                  let current_max_count = usr.tbl_region_id == 13 ? 6 : 10// Soon be dynamic 
+                                  //let current_step_count = (int)Math.Ceiling((decimal)a.status / 2) // Soon be dynamic
+                                  //let current_max_count = usr.tbl_region_id == 13 ? 6 : 10// Soon be dynamic 
                                   select new ApplicantListViewModel
                                   {
                                       id = a.id,
@@ -334,20 +434,48 @@ namespace FMB_CIS.Controllers
                                       permit_status_id = a.status,//pS.id,
                                       permit_statuses = wfs.name,
                                       tbl_user_id = (int)usr.id,
+                                      status = (int)a.status,
                                       qty = a.qty,
                                       ReferenceNo = a.ReferenceNo,
-                                      currentStepCount = current_step_count,
-                                      currentMaxCount = current_max_count,
-                                      currentPercentage = (current_step_count * 100 / current_max_count),
+                                      //currentStepCount = current_step_count,
+                                      //currentMaxCount = current_max_count,
+                                      //currentPercentage = (current_step_count * 100 / current_max_count),
                                       date_of_expiration = a.date_of_expiration,
                                   }).ToList();
 
-            //foreach (ApplicantListViewModel mod in applicationMod)
-            //{
-            //    mod.currentPercentage = (mod.currentStepCount * 100 / mod.currentMaxCount);
-            //}
+            int permitTypeId = 6; //Authority to Rent
+            List<PermitProgressStatusModel> permitPath = _permitStepCountService.MapPermitProgressStatus(permitTypeId, loggedUserRegionId);
+            var maxStepCount = permitPath.Count(p => p.isHappyPath);
 
-            mymodel.applicantListViewModels = applicationMod;
+            // I did this because an error occurs when I put the joins statements on applicationMod
+            var applicationModWithDynamicSteps = (from aMod in applicationMod
+                                                  join pPath in permitPath
+                                                  on aMod.status.ToString() equals pPath.ApplicationStatusCode into gj
+                                                  from subPPath in gj.DefaultIfEmpty()
+                                                  select new ApplicantListViewModel
+                                                  {
+                                                      id = aMod.id,
+                                                      applicationDate = aMod.applicationDate,
+                                                      full_name = aMod.full_name,
+                                                      email = aMod.email,
+                                                      contact = aMod.contact,
+                                                      address = aMod.address,
+                                                      application_type = aMod.application_type,
+                                                      permit_type = aMod.permit_type,
+                                                      permit_status = aMod.permit_status,
+                                                      permit_status_id = aMod.permit_status_id,
+                                                      permit_statuses = aMod.permit_statuses,
+                                                      tbl_user_id = aMod.tbl_user_id,
+                                                      status = aMod.status,
+                                                      qty = aMod.qty,
+                                                      ReferenceNo = aMod.ReferenceNo,
+                                                      currentStepCount = subPPath != null ? subPPath.Progress : null,
+                                                      currentMaxCount = subPPath != null ? maxStepCount : null,
+                                                      currentPercentage = subPPath != null ? (subPPath.Progress * 100 / maxStepCount) : null,
+                                                      date_of_expiration = aMod.date_of_expiration,
+                                                  }).ToList();
+
+            mymodel.applicantListViewModels = applicationModWithDynamicSteps;
 
             return View(mymodel);
 
@@ -357,6 +485,8 @@ namespace FMB_CIS.Controllers
         {
 
             int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int loggedUserRegionId = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("regionID").Value);
+
             ViewModel mymodel = new ViewModel();
 
             var applicationlist = from a in _context.tbl_application
@@ -375,8 +505,8 @@ namespace FMB_CIS.Controllers
                                   //join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
                                   join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }
                                   where pT.name == "Authority to Lease"
-                                  let current_step_count = (int)Math.Ceiling((decimal)a.status / 2) // Soon be dynamic
-                                  let current_max_count = usr.tbl_region_id == 13 ? 6 : 10// Soon be dynamic 
+                                  //let current_step_count = (int)Math.Ceiling((decimal)a.status / 2) // Soon be dynamic
+                                  //let current_max_count = usr.tbl_region_id == 13 ? 6 : 10// Soon be dynamic 
                                   select new ApplicantListViewModel
                                   {
                                       id = a.id,
@@ -391,20 +521,48 @@ namespace FMB_CIS.Controllers
                                       permit_status_id = a.status,//pS.id,
                                       permit_statuses = wfs.name,
                                       tbl_user_id = (int)usr.id,
+                                      status = (int)a.status,
                                       qty = a.qty,
                                       ReferenceNo = a.ReferenceNo,
-                                      currentStepCount = current_step_count,
-                                      currentMaxCount = current_max_count,
-                                      currentPercentage = (current_step_count * 100 / current_max_count),
+                                      //currentStepCount = current_step_count,
+                                      //currentMaxCount = current_max_count,
+                                      //currentPercentage = (current_step_count * 100 / current_max_count),
                                       date_of_expiration = a.date_of_expiration
                                   }).ToList();
 
-            //foreach (ApplicantListViewModel mod in applicationMod)
-            //{
-            //    mod.currentPercentage = (mod.currentStepCount * 100 / mod.currentMaxCount);
-            //}
+            int permitTypeId = 5; //Authority to Lease
+            List<PermitProgressStatusModel> permitPath = _permitStepCountService.MapPermitProgressStatus(permitTypeId, loggedUserRegionId);
+            var maxStepCount = permitPath.Count(p => p.isHappyPath);
 
-            mymodel.applicantListViewModels = applicationMod;
+            // I did this because an error occurs when I put the joins statements on applicationMod
+            var applicationModWithDynamicSteps = (from aMod in applicationMod
+                                                  join pPath in permitPath
+                                                  on aMod.status.ToString() equals pPath.ApplicationStatusCode into gj
+                                                  from subPPath in gj.DefaultIfEmpty()
+                                                  select new ApplicantListViewModel
+                                                  {
+                                                      id = aMod.id,
+                                                      applicationDate = aMod.applicationDate,
+                                                      full_name = aMod.full_name,
+                                                      email = aMod.email,
+                                                      contact = aMod.contact,
+                                                      address = aMod.address,
+                                                      application_type = aMod.application_type,
+                                                      permit_type = aMod.permit_type,
+                                                      permit_status = aMod.permit_status,
+                                                      permit_status_id = aMod.permit_status_id,
+                                                      permit_statuses = aMod.permit_statuses,
+                                                      tbl_user_id = aMod.tbl_user_id,
+                                                      status = aMod.status,
+                                                      qty = aMod.qty,
+                                                      ReferenceNo = aMod.ReferenceNo,
+                                                      currentStepCount = subPPath != null ? subPPath.Progress : null,
+                                                      currentMaxCount = subPPath != null ? maxStepCount : null,
+                                                      currentPercentage = subPPath != null ? (subPPath.Progress * 100 / maxStepCount) : null,
+                                                      date_of_expiration = aMod.date_of_expiration,
+                                                  }).ToList();
+
+            mymodel.applicantListViewModels = applicationModWithDynamicSteps;
 
             return View(mymodel);
 
@@ -414,6 +572,8 @@ namespace FMB_CIS.Controllers
         {
 
             int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int loggedUserRegionId = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("regionID").Value);
+
             ViewModel mymodel = new ViewModel();
 
             var applicationlist = from a in _context.tbl_application
@@ -432,8 +592,8 @@ namespace FMB_CIS.Controllers
                                   //join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
                                   join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }
                                   where pT.name == "Permit to Sell"
-                                  let current_step_count = (int)Math.Ceiling((decimal)a.status / 2) // Soon be dynamic
-                                  let current_max_count = usr.tbl_region_id == 13 ? 6 : 10// Soon be dynamic 
+                                  //let current_step_count = (int)Math.Ceiling((decimal)a.status / 2) // Soon be dynamic
+                                  //let current_max_count = usr.tbl_region_id == 13 ? 6 : 10// Soon be dynamic 
                                   select new ApplicantListViewModel
                                   {
                                       id = a.id,
@@ -448,20 +608,48 @@ namespace FMB_CIS.Controllers
                                       permit_status_id = a.status,//pS.id,
                                       permit_statuses = wfs.name,
                                       tbl_user_id = (int)usr.id,
+                                      status = (int)a.status,
                                       qty = a.qty,
                                       ReferenceNo = a.ReferenceNo,
-                                      currentStepCount = current_step_count,
-                                      currentMaxCount = current_max_count,
-                                      currentPercentage = (current_step_count * 100 / current_max_count),
+                                      //currentStepCount = current_step_count,
+                                      //currentMaxCount = current_max_count,
+                                      //currentPercentage = (current_step_count * 100 / current_max_count),
                                       date_of_expiration = a.date_of_expiration,
                                   }).ToList();
 
-            //foreach (ApplicantListViewModel mod in applicationMod)
-            //{
-            //    mod.currentPercentage = (mod.currentStepCount * 100 / mod.currentMaxCount);
-            //}
+            int permitTypeId = 3; //Permit to Sell
+            List<PermitProgressStatusModel> permitPath = _permitStepCountService.MapPermitProgressStatus(permitTypeId, loggedUserRegionId);
+            var maxStepCount = permitPath.Count(p => p.isHappyPath);
 
-            mymodel.applicantListViewModels = applicationMod;
+            // I did this because an error occurs when I put the joins statements on applicationMod
+            var applicationModWithDynamicSteps = (from aMod in applicationMod
+                                                  join pPath in permitPath
+                                                  on aMod.status.ToString() equals pPath.ApplicationStatusCode into gj
+                                                  from subPPath in gj.DefaultIfEmpty()
+                                                  select new ApplicantListViewModel
+                                                  {
+                                                      id = aMod.id,
+                                                      applicationDate = aMod.applicationDate,
+                                                      full_name = aMod.full_name,
+                                                      email = aMod.email,
+                                                      contact = aMod.contact,
+                                                      address = aMod.address,
+                                                      application_type = aMod.application_type,
+                                                      permit_type = aMod.permit_type,
+                                                      permit_status = aMod.permit_status,
+                                                      permit_status_id = aMod.permit_status_id,
+                                                      permit_statuses = aMod.permit_statuses,
+                                                      tbl_user_id = aMod.tbl_user_id,
+                                                      status = aMod.status,
+                                                      qty = aMod.qty,
+                                                      ReferenceNo = aMod.ReferenceNo,
+                                                      currentStepCount = subPPath != null ? subPPath.Progress : null,
+                                                      currentMaxCount = subPPath != null ? maxStepCount : null,
+                                                      currentPercentage = subPPath != null ? (subPPath.Progress * 100 / maxStepCount) : null,
+                                                      date_of_expiration = aMod.date_of_expiration,
+                                                  }).ToList();
+
+            mymodel.applicantListViewModels = applicationModWithDynamicSteps;
 
             return View(mymodel);
 
@@ -472,6 +660,8 @@ namespace FMB_CIS.Controllers
         {
 
             int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int loggedUserRegionId = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("regionID").Value);
+
             ViewModel mymodel = new ViewModel();
 
             var applicationlist = from a in _context.tbl_application
@@ -490,8 +680,8 @@ namespace FMB_CIS.Controllers
                                   //join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
                                   join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }
                                   where pT.name == "Permit to Purchase"
-                                  let current_step_count = (int)Math.Ceiling((decimal)a.status / 2) // Soon be dynamic
-                                  let current_max_count = usr.tbl_region_id == 13 ? 6 : 10// Soon be dynamic 
+                                  //let current_step_count = (int)Math.Ceiling((decimal)a.status / 2) // Soon be dynamic
+                                  //let current_max_count = usr.tbl_region_id == 13 ? 6 : 10// Soon be dynamic 
                                   select new ApplicantListViewModel
                                   {
                                       id = a.id,
@@ -506,20 +696,48 @@ namespace FMB_CIS.Controllers
                                       permit_status_id = a.status,//pS.id,
                                       permit_statuses = wfs.name,
                                       tbl_user_id = (int)usr.id,
+                                      status = (int)a.status,
                                       qty = a.qty,
                                       ReferenceNo = a.ReferenceNo,
-                                      currentStepCount = current_step_count,
-                                      currentMaxCount = current_max_count,
-                                      currentPercentage = (current_step_count * 100 / current_max_count),
+                                      //currentStepCount = current_step_count,
+                                      //currentMaxCount = current_max_count,
+                                      //currentPercentage = (current_step_count * 100 / current_max_count),
                                       date_of_expiration = a.date_of_expiration,
                                   }).ToList();
 
-            //foreach (ApplicantListViewModel mod in applicationMod)
-            //{
-            //    mod.currentPercentage = (mod.currentStepCount * 100 / mod.currentMaxCount);
-            //}
+            int permitTypeId = 2; //Permit to Purchase
+            List<PermitProgressStatusModel> permitPath = _permitStepCountService.MapPermitProgressStatus(permitTypeId, loggedUserRegionId);
+            var maxStepCount = permitPath.Count(p => p.isHappyPath);
 
-            mymodel.applicantListViewModels = applicationMod;
+            // I did this because an error occurs when I put the joins statements on applicationMod
+            var applicationModWithDynamicSteps = (from aMod in applicationMod
+                                                  join pPath in permitPath
+                                                  on aMod.status.ToString() equals pPath.ApplicationStatusCode into gj
+                                                  from subPPath in gj.DefaultIfEmpty()
+                                                  select new ApplicantListViewModel
+                                                  {
+                                                      id = aMod.id,
+                                                      applicationDate = aMod.applicationDate,
+                                                      full_name = aMod.full_name,
+                                                      email = aMod.email,
+                                                      contact = aMod.contact,
+                                                      address = aMod.address,
+                                                      application_type = aMod.application_type,
+                                                      permit_type = aMod.permit_type,
+                                                      permit_status = aMod.permit_status,
+                                                      permit_status_id = aMod.permit_status_id,
+                                                      permit_statuses = aMod.permit_statuses,
+                                                      tbl_user_id = aMod.tbl_user_id,
+                                                      status = aMod.status,
+                                                      qty = aMod.qty,
+                                                      ReferenceNo = aMod.ReferenceNo,
+                                                      currentStepCount = subPPath != null ? subPPath.Progress : null,
+                                                      currentMaxCount = subPPath != null ? maxStepCount : null,
+                                                      currentPercentage = subPPath != null ? (subPPath.Progress * 100 / maxStepCount) : null,
+                                                      date_of_expiration = aMod.date_of_expiration,
+                                                  }).ToList();
+
+            mymodel.applicantListViewModels = applicationModWithDynamicSteps;
 
             return View(mymodel);
 
@@ -529,12 +747,14 @@ namespace FMB_CIS.Controllers
         {
 
             int userID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int loggedUserRegionId = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("regionID").Value);
             ViewModel mymodel = new ViewModel();
 
             var applicationlist = from a in _context.tbl_application
                                   where a.tbl_user_id == userID
                                   //where a.tbl_application_type_id == 3
                                   select a;
+
 
             //HISTORY
             var applicationtypelist = _context.tbl_application_type;
@@ -547,8 +767,8 @@ namespace FMB_CIS.Controllers
                                   //join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
                                   join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }
                                   where pT.name == "Permit to Import"
-                                  let current_step_count = (int)Math.Ceiling((decimal)a.status / 2) // Soon be dynamic
-                                  let current_max_count = usr.tbl_region_id == 13 ? 6 : 10// Soon be dynamic 
+                                  //let current_step_count = pStatPath.Progress//(int)Math.Ceiling((decimal)a.status / 2) // Soon be dynamic
+                                  //let current_max_count = Convert.ToInt32(maxStepCount)//usr.tbl_region_id == 13 ? 6 : 10// Soon be dynamic 
                                   select new ApplicantListViewModel
                                   {
                                       id = a.id,
@@ -566,16 +786,45 @@ namespace FMB_CIS.Controllers
                                       status = (int)a.status,
                                       qty = a.qty,
                                       ReferenceNo = a.ReferenceNo,
-                                      currentStepCount = current_step_count,
-                                      currentMaxCount = current_max_count,
-                                      currentPercentage = (current_step_count * 100 / current_max_count),
+                                      //currentStepCount = current_step_count,
+                                      //currentMaxCount = current_max_count,
+                                      //currentPercentage = (current_step_count * 100 / current_max_count),
                                       date_of_expiration = a.date_of_expiration,
                                   }).ToList();
-            //foreach (ApplicantListViewModel mod in applicationMod)
-            //{
-            //    mod.currentPercentage = (mod.currentStepCount * 100 / mod.currentMaxCount);
-            //}
-            mymodel.applicantListViewModels = applicationMod;
+
+            int permitTypeId = 1; //Permit to Import
+            List<PermitProgressStatusModel> permitPath = _permitStepCountService.MapPermitProgressStatus(permitTypeId, loggedUserRegionId);
+            var maxStepCount = permitPath.Count(p => p.isHappyPath);
+
+            // I did this because an error occurs when I put the joins statements on applicationMod
+            var applicationModWithDynamicSteps = (from aMod in applicationMod
+                                                  join pPath in permitPath
+                                                  on aMod.status.ToString() equals pPath.ApplicationStatusCode into gj
+                                                  from subPPath in gj.DefaultIfEmpty()
+                                                  select new ApplicantListViewModel
+                                                  {
+                                                      id = aMod.id,
+                                                      applicationDate = aMod.applicationDate,
+                                                      full_name = aMod.full_name,
+                                                      email = aMod.email,
+                                                      contact = aMod.contact,
+                                                      address = aMod.address,
+                                                      application_type = aMod.application_type,
+                                                      permit_type = aMod.permit_type,
+                                                      permit_status = aMod.permit_status,
+                                                      permit_status_id = aMod.permit_status_id,
+                                                      permit_statuses = aMod.permit_statuses,
+                                                      tbl_user_id = aMod.tbl_user_id,
+                                                      status = aMod.status,
+                                                      qty = aMod.qty,
+                                                      ReferenceNo = aMod.ReferenceNo,
+                                                      currentStepCount = subPPath != null ? subPPath.Progress : null,
+                                                      currentMaxCount = subPPath != null ? maxStepCount : null,
+                                                      currentPercentage = subPPath != null ? (subPPath.Progress * 100 / maxStepCount) : null,
+                                                      date_of_expiration = aMod.date_of_expiration,
+                                                  }).ToList();
+
+            mymodel.applicantListViewModels = applicationModWithDynamicSteps;
 
             return View(mymodel);
 
@@ -586,6 +835,7 @@ namespace FMB_CIS.Controllers
         {
             ViewModel mymodel = new ViewModel();
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int loggedUserRegionId = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("regionID").Value);
             //tbl_user user = _context.tbl_user.Find(uid);
             string host = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
             ViewData["BaseUrl"] = host;
@@ -761,73 +1011,73 @@ namespace FMB_CIS.Controllers
                 //End for Document Tagging and Checklist
 
                 var permitTypeOfThisApplication = _context.tbl_application.Where(a => a.id == applid).Select(a => a.tbl_permit_type_id).FirstOrDefault();
-                if (permitTypeOfThisApplication == 13) //For Certificate of Registration
-                {
-                    //HISTORY
-                    var applicationtypelist = _context.tbl_application_type;
-                    var applicationMod = (from a in applicationlist
-                                          join usr in _context.tbl_user on a.tbl_user_id equals usr.id
-                                          //join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
-                                          join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
-                                          join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
-                                          //join pS in _context.tbl_permit_status on a.status equals pS.id
-                                          //join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
-                                          join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }
-                                          join reg in _context.tbl_region on usr.tbl_region_id equals reg.id
-                                          join prov in _context.tbl_province on usr.tbl_province_id equals prov.id
-                                          join ct in _context.tbl_city on usr.tbl_city_id equals ct.id
-                                          join brngy in _context.tbl_brgy on usr.tbl_brgy_id equals brngy.id
-                                          join csaw in _context.tbl_chainsaw on a.id equals csaw.tbl_application_id
-                                          where a.tbl_user_id == usid && a.id == applid
-                                          select new ApplicantListViewModel
-                                          {
-                                              id = a.id,
-                                              tbl_user_id = usid,
-                                              full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
-                                              full_address = usr.street_address + " " + brngy.name + " " + ct.name + " " + prov.name + " " + reg.name,
-                                              email = usr.email,
-                                              permit_type = pT.name,
-                                              permit_status = wfs.name, //pS.status,
-                                              permit_status_id = a.status,
-                                              //permit_statuses = pSs.status,
-                                              permit_statuses = wfs.name,
-                                              status = Convert.ToInt32(a.status),
-                                              //user_type = usrtyps.name,
-                                              comment = usr.comment,
-                                              qty = a.qty,
-                                              specification = a.tbl_specification_id,
-                                              initial_date_of_inspection = a.initial_date_of_inspection,
-                                              inspectionDate = a.date_of_inspection,
-                                              address = usr.street_address,
-                                              //expectedTimeArrived = a.expected_time_arrival,
-                                              //expectedTimeRelease = a.expected_time_release,
-                                              purpose = a.purpose,
-                                              date_of_registration = a.date_of_registration,
-                                              date_of_expiration = a.date_of_expiration,
-                                              chainsawBrand = csaw.Brand,
-                                              chainsawModel = csaw.Model,
-                                              Engine = csaw.Engine,
-                                              powerSource = csaw.Power,
-                                              //Watt = csaw.watt,
-                                              //hp = csaw.hp,
-                                              watt_dec = csaw.watt_dec,
-                                              hp_dec = csaw.hp_dec,
-                                              gb = csaw.gb,
-                                              chainsaw_serial_number = csaw.chainsaw_serial_number,
-                                              chainsawSupplier = csaw.supplier,
-                                              date_purchase = csaw.date_purchase,
-                                              renew_from = a.renew_from,
-                                              ReferenceNo = a.ReferenceNo,
-                                              currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
-                                              currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic 
-                                          }).FirstOrDefault();
-                    applicationMod.currentPercentage = (applicationMod.currentStepCount * 100 / applicationMod.currentMaxCount);
-                    mymodel.applicantViewModels = applicationMod;
+                //if (permitTypeOfThisApplication == 13) //For Certificate of Registration
+                //{
+                //    //HISTORY
+                //    var applicationtypelist = _context.tbl_application_type;
+                //    var applicationMod = (from a in applicationlist
+                //                          join usr in _context.tbl_user on a.tbl_user_id equals usr.id
+                //                          //join usrtyps in _context.tbl_user_types on usr.tbl_user_types_id equals usrtyps.id
+                //                          join appt in applicationtypelist on a.tbl_application_type_id equals appt.id
+                //                          join pT in _context.tbl_permit_type on a.tbl_permit_type_id equals pT.id
+                //                          //join pS in _context.tbl_permit_status on a.status equals pS.id
+                //                          //join pSs in _context.tbl_permit_statuses on a.status equals pSs.id
+                //                          join wfs in _context.tbl_permit_workflow_step on new { permitType = pT.id.ToString(), status = a.status.ToString() } equals new { permitType = wfs.permit_type_code, status = wfs.workflow_step_code }
+                //                          join reg in _context.tbl_region on usr.tbl_region_id equals reg.id
+                //                          join prov in _context.tbl_province on usr.tbl_province_id equals prov.id
+                //                          join ct in _context.tbl_city on usr.tbl_city_id equals ct.id
+                //                          join brngy in _context.tbl_brgy on usr.tbl_brgy_id equals brngy.id
+                //                          join csaw in _context.tbl_chainsaw on a.id equals csaw.tbl_application_id
+                //                          where a.tbl_user_id == usid && a.id == applid
+                //                          select new ApplicantListViewModel
+                //                          {
+                //                              id = a.id,
+                //                              tbl_user_id = usid,
+                //                              full_name = usr.first_name + " " + usr.middle_name + " " + usr.last_name + " " + usr.suffix,
+                //                              full_address = usr.street_address + " " + brngy.name + " " + ct.name + " " + prov.name + " " + reg.name,
+                //                              email = usr.email,
+                //                              permit_type = pT.name,
+                //                              permit_status = wfs.name, //pS.status,
+                //                              permit_status_id = a.status,
+                //                              //permit_statuses = pSs.status,
+                //                              permit_statuses = wfs.name,
+                //                              status = Convert.ToInt32(a.status),
+                //                              //user_type = usrtyps.name,
+                //                              comment = usr.comment,
+                //                              qty = a.qty,
+                //                              specification = a.tbl_specification_id,
+                //                              initial_date_of_inspection = a.initial_date_of_inspection,
+                //                              inspectionDate = a.date_of_inspection,
+                //                              address = usr.street_address,
+                //                              //expectedTimeArrived = a.expected_time_arrival,
+                //                              //expectedTimeRelease = a.expected_time_release,
+                //                              purpose = a.purpose,
+                //                              date_of_registration = a.date_of_registration,
+                //                              date_of_expiration = a.date_of_expiration,
+                //                              chainsawBrand = csaw.Brand,
+                //                              chainsawModel = csaw.Model,
+                //                              Engine = csaw.Engine,
+                //                              powerSource = csaw.Power,
+                //                              //Watt = csaw.watt,
+                //                              //hp = csaw.hp,
+                //                              watt_dec = csaw.watt_dec,
+                //                              hp_dec = csaw.hp_dec,
+                //                              gb = csaw.gb,
+                //                              chainsaw_serial_number = csaw.chainsaw_serial_number,
+                //                              chainsawSupplier = csaw.supplier,
+                //                              date_purchase = csaw.date_purchase,
+                //                              renew_from = a.renew_from,
+                //                              ReferenceNo = a.ReferenceNo,
+                //                              currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
+                //                              currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic 
+                //                          }).FirstOrDefault();
+                //    applicationMod.currentPercentage = (applicationMod.currentStepCount * 100 / applicationMod.currentMaxCount);
+                //    mymodel.applicantViewModels = applicationMod;
 
 
-                }
-                else
-                {
+                //}
+                //else
+                //{
                     //HISTORY
                     var applicationtypelist = _context.tbl_application_type;
                     var applicationMod = (from a in applicationlist
@@ -870,15 +1120,54 @@ namespace FMB_CIS.Controllers
                                               date_of_expiration = a.date_of_expiration,
                                               renew_from = a.renew_from,
                                               ReferenceNo = a.ReferenceNo,
-                                              currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
-                                              currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic
+                                              //currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
+                                              //currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic
                                               //coordinatedWithEnforcementDivision = a.coordinatedWithEnforcementDivision
-                                          }).FirstOrDefault();
-                    applicationMod.currentPercentage = (applicationMod.currentStepCount * 100 / applicationMod.currentMaxCount);
-                    //mymodel.email = UserList.email;
-                    mymodel.applicantViewModels = applicationMod;
+                                          }).ToList();
+
+                //Dynamic Progress Step Count
+                List<PermitProgressStatusModel> permitPath = _permitStepCountService.MapPermitProgressStatus((int)permitTypeOfThisApplication, loggedUserRegionId);
+                var maxStepCount = permitPath.Count(p => p.isHappyPath);
+
+                    // I did this because an error occurs when I put the joins statements on applicationMod
+                    var applicationModWithDynamicSteps = (from aMod in applicationMod
+                                                          join pPath in permitPath
+                                                          on aMod.status.ToString() equals pPath.ApplicationStatusCode into gj
+                                                          from subPPath in gj.DefaultIfEmpty()
+                                                          select new ApplicantListViewModel
+                                                          {
+                                                              id = aMod.id,
+                                                              tbl_user_id = aMod.tbl_user_id,
+                                                              full_name = aMod.full_name,
+                                                              full_address = aMod.full_name,
+                                                              email = aMod.email,
+                                                              permit_type = aMod.permit_type,
+                                                              permit_status = aMod.permit_status,
+                                                              permit_status_id = aMod.permit_status_id,
+                                                              permit_statuses = aMod.permit_statuses,
+                                                              status = aMod.status,
+                                                              comment = aMod.comment,
+                                                              qty = aMod.qty,
+                                                              specification = aMod.specification,
+                                                              initial_date_of_inspection = aMod.initial_date_of_inspection,
+                                                              inspectionDate = aMod.inspectionDate,
+                                                              address = aMod.address,
+                                                              //expectedTimeArrived = a.expected_time_arrival,
+                                                              //expectedTimeRelease = a.expected_time_release,
+                                                              purpose = aMod.purpose,
+                                                              date_of_registration = aMod.date_of_registration,
+                                                              date_of_expiration = aMod.date_of_expiration,
+                                                              renew_from = aMod.renew_from,
+                                                              ReferenceNo = aMod.ReferenceNo,
+                                                              currentStepCount = subPPath != null ? subPPath.Progress : null,
+                                                              currentMaxCount = subPPath != null ? maxStepCount : null,
+                                                              currentPercentage = subPPath != null ? (subPPath.Progress * 100 / maxStepCount) : null,
+                                                          }).FirstOrDefault();
+
+                    mymodel.applicantViewModels = applicationModWithDynamicSteps;
+                
                     //mymodel.tbl_Users = UserInfo;
-                }
+                //}
 
                 //Proof of Payment
                 var paymentDetails = _context.tbl_application_payment.Where(p => p.tbl_application_id == applid).FirstOrDefault();

@@ -42,6 +42,7 @@ namespace FMB_CIS.Controllers
         private IWebHostEnvironment WebHostEnvironment;
         private readonly INotificationAbstract _notificationService;
         private readonly IWorkflowAbstract _workflowService;
+        private readonly IPermitStepCount _permitStepCountService;
 
         public void LogUserActivity(string entity, string userAction, string remarks, int userId = 0, string source = "Web", DateTime? apkDateTime = null)
         {
@@ -87,7 +88,8 @@ namespace FMB_CIS.Controllers
                                         IEmailSender emailSender, 
                                         IWebHostEnvironment _environment,
                                         INotificationAbstract notificationService,
-                                        IWorkflowAbstract workflowService)
+                                        IWorkflowAbstract workflowService,
+                                        IPermitStepCount permitStepCountService)
         {
             this._configuration = configuration;
             _context = context;
@@ -95,6 +97,7 @@ namespace FMB_CIS.Controllers
             this.WebHostEnvironment = _environment;
             _notificationService = notificationService;
             _workflowService = workflowService;
+            _permitStepCountService = permitStepCountService;
         }
 
         // Chainsaw Permit to Sell
@@ -569,6 +572,7 @@ namespace FMB_CIS.Controllers
         public IActionResult ChainsawSellerApproval(string uid, string appid)
         {
             int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int loggedUserRegionId = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("regionID").Value);
             string Role = ((ClaimsIdentity)User.Identity).FindFirst("userRole").Value;
             //if(Role!= "DENR CENRO" && Role != "DENR Implementing PENRO" && Role != "DENR Inspector" && Role != "DENR Regional Executive Director (RED)")
             //{
@@ -797,12 +801,30 @@ namespace FMB_CIS.Controllers
                                           date_of_expiration = a.date_of_expiration,
                                           renew_from = a.renew_from,
                                           
-                                         currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
-                                         currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic   
+                                         //currentStepCount = (int)Math.Ceiling((decimal)a.status / 2), // Soon be dynamic
+                                         //currentMaxCount = usr.tbl_region_id == 13 ? 6 : 10,// Soon be dynamic   
                                           //coordinatedWithEnforcementDivision = a.coordinatedWithEnforcementDivision
                                          ReferenceNo = a.ReferenceNo
                                       }).FirstOrDefault();
-                                                                               applicationMod.currentPercentage = (applicationMod.currentStepCount * 100 / applicationMod.currentMaxCount);
+
+
+                //Dynamic Progress Step Count
+                List<PermitProgressStatusModel> permitPath = _permitStepCountService.MapPermitProgressStatus(permitTypeID, loggedUserRegionId).ToList();
+                var maxStepCount = permitPath.Count(p => p.isHappyPath);
+
+
+                applicationMod.currentStepCount = permitPath.Where(x => x.ApplicationStatusCode == applicationMod.status.ToString()).Select(x => x.Progress).FirstOrDefault();//(applicationMod.currentStepCount * 100 / applicationMod.currentMaxCount);
+                applicationMod.currentMaxCount = maxStepCount;//(applicationMod.currentStepCount * 100 / applicationMod.currentMaxCount);
+                if (applicationMod.currentStepCount != null && applicationMod.currentStepCount != 0 && applicationMod.currentMaxCount != null && applicationMod.currentMaxCount != 0)
+                {
+                    applicationMod.currentPercentage = (applicationMod.currentStepCount * 100 / applicationMod.currentMaxCount);
+                }
+                else
+                {
+                    applicationMod.currentStepCount = null;
+                    applicationMod.currentMaxCount = null;
+                    applicationMod.currentPercentage = null;
+                }
                 mymodel.applicantViewModels = applicationMod;
 
                 //Check if this application has applied for renewal
@@ -1425,11 +1447,12 @@ namespace FMB_CIS.Controllers
             //    return RedirectToAction("Index", "ChainsawSeller");
             //}
             //else
-            //{
-                int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
-                var userRegion = _context.tbl_user.Where(u => u.id == loggedUserID).Select(u => u.tbl_region_id).FirstOrDefault();
+            //{ 
+            int loggedUserID = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("userID").Value);
+            int loggedUserRegionId = Convert.ToInt32(((ClaimsIdentity)User.Identity).FindFirst("regionID").Value);
+            var userRegion = loggedUserRegionId;// _context.tbl_user.Where(u => u.id == loggedUserID).Select(u => u.tbl_region_id).FirstOrDefault();
 
-                ViewModel mymodel = new ViewModel();
+            ViewModel mymodel = new ViewModel();
 
                 var applicationlist = from a in _context.tbl_application
                                           //where a.tbl_user_id == userID
@@ -1463,7 +1486,9 @@ namespace FMB_CIS.Controllers
                                          address = usr.street_address,
                                          application_type = appt.name, 
                                          permit_type = pT.name,
+                                         permit_type_id = a.tbl_permit_type_id,
                                          permit_statuses = wfs.name,
+                                         status = (int)a.status,
                                          tbl_user_id = (int)usr.id,
                                          date_due_for_officers = a.date_due_for_officers,
                                          currentStepCount = current_step_count,
@@ -1473,36 +1498,108 @@ namespace FMB_CIS.Controllers
                                          date_of_expiration = a.date_of_expiration
                                      }).ToList();
 
-                //bool isReadExist;
-                //bool isAppRead;
 
-                //for (int i = 0; i < applicationMod.Count(); i++)
-                //{
-                //    isReadExist = _context.tbl_application_read.Any(r => r.tbl_application_id == applicationMod[i].id && r.tbl_user_id == loggedUserID);
-                //    if (isReadExist)
-                //    {
-                //        isAppRead = _context.tbl_application_read.Where(r => r.tbl_application_id == applicationMod[i].id && r.tbl_user_id == loggedUserID).Select(r => r.is_read).FirstOrDefault();
-                //        if (isAppRead)
-                //        {
-                //            //true
-                //            applicationMod[i].isRead = true;
-                //        }
-                //        else
-                //        {
-                //            //false
-                //            applicationMod[i].isRead = false;
-                //        }
-                //    }
-                //    else
-                //    {
-                //        //false
-                //        applicationMod[i].isRead = false;
-                //    }
-                //}
-                //foreach(ApplicantListViewModel mod in applicationMod) {
-                //    mod.currentPercentage = (mod.currentStepCount * 100 / mod.currentMaxCount);
-                //}
-                mymodel.applicantListViewModels = applicationMod;
+            int permitToPurchaseId = 2;
+            int permitToSellId = 3;
+
+            List<PermitProgressStatusModel> permitToPurchasePath = _permitStepCountService.MapPermitProgressStatus(permitToPurchaseId, loggedUserRegionId);
+            var maxPermitToPurchaseStepCount = permitToPurchasePath.Count(p => p.isHappyPath);
+
+            List<PermitProgressStatusModel> permitToSellPath = _permitStepCountService.MapPermitProgressStatus(permitToSellId, loggedUserRegionId);
+            var maxPermitToSellStepCount = permitToSellPath.Count(p => p.isHappyPath);
+
+            var permitToPurchaseApplications = (from aMod in applicationMod
+                                                join pPath in permitToPurchasePath
+                                                on aMod.status.ToString() equals pPath.ApplicationStatusCode into gj
+                                                from subPPath in gj.DefaultIfEmpty()
+                                                where aMod.permit_type_id == permitToPurchaseId
+                                                select new ApplicantListViewModel
+                                                {
+                                                    ReferenceNo = aMod.ReferenceNo,
+                                                    id = aMod.id,
+                                                    applicationDate = aMod.applicationDate,
+                                                    qty = aMod.qty,
+                                                    full_name = aMod.full_name,
+                                                    email = aMod.email,
+                                                    contact = aMod.contact,
+                                                    address = aMod.address,
+                                                    application_type = aMod.application_type,
+                                                    permit_type = aMod.permit_type,
+                                                    permit_statuses = aMod.permit_statuses,
+                                                    tbl_user_id = aMod.tbl_user_id,
+                                                    status = aMod.status,
+                                                    date_due_for_officers = aMod.date_due_for_officers,
+                                                    currentStepCount = subPPath != null ? subPPath.Progress : null,
+                                                    currentMaxCount = subPPath != null ? maxPermitToPurchaseStepCount : null,
+                                                    currentPercentage = subPPath != null ? (subPPath.Progress * 100 / maxPermitToPurchaseStepCount) : null,
+                                                    isRead = aMod.isRead,
+                                                    date_of_expiration = aMod.date_of_expiration,
+                                                }).ToList();
+
+            var permitToSellApplications = (from aMod in applicationMod
+                                                join pPath in permitToSellPath
+                                                on aMod.status.ToString() equals pPath.ApplicationStatusCode into gj
+                                                from subPPath in gj.DefaultIfEmpty()
+                                                where aMod.permit_type_id == permitToSellId
+                                                select new ApplicantListViewModel
+                                                {
+                                                    ReferenceNo = aMod.ReferenceNo,
+                                                    id = aMod.id,
+                                                    applicationDate = aMod.applicationDate,
+                                                    qty = aMod.qty,
+                                                    full_name = aMod.full_name,
+                                                    email = aMod.email,
+                                                    contact = aMod.contact,
+                                                    address = aMod.address,
+                                                    application_type = aMod.application_type,
+                                                    permit_type = aMod.permit_type,
+                                                    permit_statuses = aMod.permit_statuses,
+                                                    tbl_user_id = aMod.tbl_user_id,
+                                                    status = aMod.status,
+                                                    date_due_for_officers = aMod.date_due_for_officers,
+                                                    currentStepCount = subPPath != null ? subPPath.Progress : null,
+                                                    currentMaxCount = subPPath != null ? maxPermitToSellStepCount : null,
+                                                    currentPercentage = subPPath != null ? (subPPath.Progress * 100 / maxPermitToSellStepCount) : null,
+                                                    isRead = aMod.isRead,
+                                                    date_of_expiration = aMod.date_of_expiration,
+                                                }).ToList();
+
+            var applicationModWithDynamicSteps = new List<ApplicantListViewModel>(permitToPurchaseApplications.Count +
+                                    permitToSellApplications.Count);
+            applicationModWithDynamicSteps.AddRange(permitToPurchaseApplications);
+            applicationModWithDynamicSteps.AddRange(permitToSellApplications);
+            mymodel.applicantListViewModels = applicationModWithDynamicSteps;
+
+            //bool isReadExist;
+            //bool isAppRead;
+
+            //for (int i = 0; i < applicationMod.Count(); i++)
+            //{
+            //    isReadExist = _context.tbl_application_read.Any(r => r.tbl_application_id == applicationMod[i].id && r.tbl_user_id == loggedUserID);
+            //    if (isReadExist)
+            //    {
+            //        isAppRead = _context.tbl_application_read.Where(r => r.tbl_application_id == applicationMod[i].id && r.tbl_user_id == loggedUserID).Select(r => r.is_read).FirstOrDefault();
+            //        if (isAppRead)
+            //        {
+            //            //true
+            //            applicationMod[i].isRead = true;
+            //        }
+            //        else
+            //        {
+            //            //false
+            //            applicationMod[i].isRead = false;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        //false
+            //        applicationMod[i].isRead = false;
+            //    }
+            //}
+            //foreach(ApplicantListViewModel mod in applicationMod) {
+            //    mod.currentPercentage = (mod.currentStepCount * 100 / mod.currentMaxCount);
+            //}
+           // mymodel.applicantListViewModels = applicationMod;
 
                 return View(mymodel);
                 //return RedirectToAction("Index", "Home");

@@ -14,6 +14,7 @@ namespace FMB_CIS.Models
         public int? permit_status_id { get; set; }
         public string permit_statuses { get; set; }
         public string permit_type { get; set; }
+        public int? permit_type_id { get; set; }
         public int status { get; set; }
         public string full_name { get; set; }
         public string first_name { get; set; }
